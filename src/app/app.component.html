@@ -1,2 +1,11 @@
-<h1>{{ title }}</h1>
+<mat-toolbar color="primary">
+  <span>{{ title }}</span>
+  <span class="spacer"></span>
+  @if ((isAuthenticated$ | async)?.isAuthenticated) {
+    <button mat-button (click)="logout()">Sair</button>
+  } @else {
+    <button mat-button (click)="login()">Entrar</button>
+  }
+</mat-toolbar>
+
 <router-outlet />

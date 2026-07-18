@@ -1,0 +1,6 @@
+@if (currentUser) {
+  <p>Bem-vindo, {{ currentUser.email }}</p>
+  <p>Perfis: {{ currentUser.roles.join(', ') }}</p>
+} @else {
+  <p>Carregando usuário autenticado…</p>
+}
