@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -5,23 +6,30 @@ import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
 
+import { Addendum, AddendumRequest, AddendumService } from '../addendums/addendum.service';
+import { AuthService } from '../core/auth/auth.service';
 import { Supplier, SupplierService } from '../suppliers/supplier.service';
 import { MapPickerComponent } from './map-picker.component';
-import { WorkRequest, WorkService, WorkStatus } from './work.service';
+import { Work, WorkRequest, WorkService, WorkStatus } from './work.service';
 
 @Component({
   selector: 'app-work-form',
   standalone: true,
   imports: [
+    DatePipe,
     ReactiveFormsModule,
     MatButtonModule,
     MatDatepickerModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
     MatSelectModule,
+    MatTableModule,
     MapPickerComponent,
   ],
   providers: [provideNativeDateAdapter()],
@@ -30,14 +38,23 @@ import { WorkRequest, WorkService, WorkStatus } from './work.service';
 })
 export class WorkFormComponent implements OnInit {
   workId: string | null = null;
+  work: Work | null = null;
   suppliers: Supplier[] = [];
   statusOptions: WorkStatus[] = ['PLANNED', 'IN_PROGRESS', 'PAUSED', 'COMPLETED', 'CANCELLED'];
   form;
+
+  addendums: Addendum[] = [];
+  addendumColumns = ['amount', 'justification', 'status', 'requiredTier', 'decision', 'actions'];
+  addendumForm;
+  permissions: string[] = [];
+  resubmittingFrom: Addendum | null = null;
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly workService: WorkService,
     private readonly supplierService: SupplierService,
+    private readonly addendumService: AddendumService,
+    private readonly authService: AuthService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
   ) {
@@ -52,6 +69,10 @@ export class WorkFormComponent implements OnInit {
       longitude: this.fb.control<number | null>(null, Validators.required),
       status: this.fb.control<WorkStatus>('PLANNED'),
     });
+    this.addendumForm = this.fb.group({
+      amount: [0, [Validators.required, Validators.min(0.01)]],
+      justification: ['', Validators.required],
+    });
   }
 
   ngOnInit(): void {
@@ -59,20 +80,76 @@ export class WorkFormComponent implements OnInit {
 
     this.workId = this.route.snapshot.paramMap.get('id');
     if (this.workId) {
-      this.workService.get(this.workId).subscribe((work) => {
-        this.form.patchValue({
-          name: work.name,
-          supplierId: work.supplierId,
-          startDate: new Date(work.startDate),
-          expectedEndDate: new Date(work.expectedEndDate),
-          actualEndDate: work.actualEndDate ? new Date(work.actualEndDate) : null,
-          initialAmount: work.initialAmount,
-          latitude: work.latitude,
-          longitude: work.longitude,
-          status: work.status,
-        });
-      });
+      this.loadWork();
+      this.authService.loadMe().subscribe((user) => (this.permissions = user.permissions));
+      this.loadAddendums();
     }
+  }
+
+  loadWork(): void {
+    this.workService.get(this.workId!).subscribe((work) => {
+      this.work = work;
+      this.form.patchValue({
+        name: work.name,
+        supplierId: work.supplierId,
+        startDate: new Date(work.startDate),
+        expectedEndDate: new Date(work.expectedEndDate),
+        actualEndDate: work.actualEndDate ? new Date(work.actualEndDate) : null,
+        initialAmount: work.initialAmount,
+        latitude: work.latitude,
+        longitude: work.longitude,
+        status: work.status,
+      });
+    });
+  }
+
+  loadAddendums(): void {
+    this.addendumService.listByWork(this.workId!).subscribe((addendums) => (this.addendums = addendums));
+  }
+
+  /** Só é UX (esconder botão) - a validação de verdade é sempre revalidada no backend. */
+  canDecide(addendum: Addendum): boolean {
+    return this.permissions.includes(`ADITIVO_APPROVE_${addendum.requiredTier}`);
+  }
+
+  startResubmit(addendum: Addendum): void {
+    this.resubmittingFrom = addendum;
+    this.addendumForm.patchValue({ amount: addendum.amount, justification: addendum.justification });
+  }
+
+  cancelResubmit(): void {
+    this.resubmittingFrom = null;
+    this.addendumForm.reset({ amount: 0, justification: '' });
+  }
+
+  submitAddendum(): void {
+    if (this.addendumForm.invalid) {
+      this.addendumForm.markAllAsTouched();
+      return;
+    }
+
+    const value = this.addendumForm.getRawValue();
+    const request: AddendumRequest = {
+      amount: value.amount!,
+      justification: value.justification!,
+      supersedesId: this.resubmittingFrom?.id ?? null,
+    };
+
+    this.addendumService.submit(this.workId!, request).subscribe(() => {
+      this.cancelResubmit();
+      this.loadAddendums();
+    });
+  }
+
+  approve(addendum: Addendum, decisionNote: string): void {
+    this.addendumService.approve(addendum.id, { decisionNote: decisionNote || null }).subscribe(() => {
+      this.loadAddendums();
+      this.loadWork();
+    });
+  }
+
+  reject(addendum: Addendum, decisionNote: string): void {
+    this.addendumService.reject(addendum.id, { decisionNote: decisionNote || null }).subscribe(() => this.loadAddendums());
   }
 
   onPositionChange(position: { latitude: number; longitude: number }): void {

@@ -41,6 +41,13 @@
     <input matInput type="number" step="0.01" formControlName="initialAmount" required />
   </mat-form-field>
 
+  @if (work) {
+    <mat-form-field appearance="outline">
+      <mat-label>Valor total atualizado (inicial + aditivos aprovados)</mat-label>
+      <input matInput [value]="work.totalAmount" disabled />
+    </mat-form-field>
+  }
+
   @if (workId) {
     <mat-form-field appearance="outline">
       <mat-label>Status</mat-label>
@@ -64,3 +71,89 @@
     <button mat-raised-button color="primary" type="submit">Salvar</button>
   </div>
 </form>
+
+@if (workId) {
+  <section class="addendums">
+    <h3>Aditivos</h3>
+
+    <div class="table-container">
+      <table mat-table [dataSource]="addendums">
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>Valor</th>
+          <td mat-cell *matCellDef="let a">{{ a.amount }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="justification">
+          <th mat-header-cell *matHeaderCellDef>Justificativa</th>
+          <td mat-cell *matCellDef="let a">{{ a.justification }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let a">{{ a.status }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="requiredTier">
+          <th mat-header-cell *matHeaderCellDef>Alçada</th>
+          <td mat-cell *matCellDef="let a">{{ a.requiredTier }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="decision">
+          <th mat-header-cell *matHeaderCellDef>Decisão</th>
+          <td mat-cell *matCellDef="let a">
+            @if (a.approvedById) {
+              {{ a.approvedById }} em {{ a.decisionDate | date: 'short' }}
+              @if (a.decisionNote) {
+                <br />{{ a.decisionNote }}
+              }
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let a">
+            @if (a.status === 'PENDING' && canDecide(a)) {
+              <input #note type="text" placeholder="Observação (opcional)" class="decision-note" />
+              <button mat-icon-button color="primary" (click)="approve(a, note.value)" aria-label="Aprovar">
+                <mat-icon>check</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="reject(a, note.value)" aria-label="Reprovar">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+            @if (a.status === 'REJECTED') {
+              <button mat-button (click)="startResubmit(a)">Reenviar</button>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="addendumColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: addendumColumns"></tr>
+      </table>
+    </div>
+
+    <h4>Solicitar aditivo</h4>
+    @if (resubmittingFrom) {
+      <p>
+        Reenvio referente ao aditivo reprovado de {{ resubmittingFrom.amount }}.
+        <button mat-button type="button" (click)="cancelResubmit()">Cancelar reenvio</button>
+      </p>
+    }
+    <form [formGroup]="addendumForm" (ngSubmit)="submitAddendum()" class="form">
+      <mat-form-field appearance="outline">
+        <mat-label>Valor do acréscimo</mat-label>
+        <input matInput type="number" step="0.01" formControlName="amount" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Justificativa</mat-label>
+        <textarea matInput formControlName="justification" required></textarea>
+      </mat-form-field>
+
+      <div class="actions">
+        <button mat-raised-button color="accent" type="submit">Solicitar aditivo</button>
+      </div>
+    </form>
+  </section>
+}
