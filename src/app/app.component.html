@@ -1,5 +1,10 @@
 <mat-toolbar color="primary">
   <span>{{ title }}</span>
+  @if (currentUser?.authenticated) {
+    <a mat-button routerLink="/">Início</a>
+    <a mat-button routerLink="/suppliers">Fornecedores</a>
+    <a mat-button routerLink="/works">Obras</a>
+  }
   <span class="spacer"></span>
   @if (currentUser?.authenticated) {
     <button mat-button (click)="logout()">Sair</button>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
@@ -8,7 +8,7 @@ import { AuthService, CurrentUser } from './core/auth/auth.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatToolbarModule, MatButtonModule],
+  imports: [RouterOutlet, RouterLink, MatToolbarModule, MatButtonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

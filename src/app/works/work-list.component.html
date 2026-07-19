@@ -1,0 +1,50 @@
+<div class="page-header">
+  <h2>Obras</h2>
+  <a mat-raised-button color="primary" routerLink="/works/new">Nova obra</a>
+</div>
+
+<div class="table-container">
+  <table mat-table [dataSource]="works">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nome</th>
+      <td mat-cell *matCellDef="let work">{{ work.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="supplierName">
+      <th mat-header-cell *matHeaderCellDef>Fornecedor</th>
+      <td mat-cell *matCellDef="let work">{{ work.supplierName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let work">{{ work.status }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="startDate">
+      <th mat-header-cell *matHeaderCellDef>Início</th>
+      <td mat-cell *matCellDef="let work">{{ work.startDate }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="expectedEndDate">
+      <th mat-header-cell *matHeaderCellDef>Fim previsto</th>
+      <td mat-cell *matCellDef="let work">{{ work.expectedEndDate }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalAmount">
+      <th mat-header-cell *matHeaderCellDef>Valor total</th>
+      <td mat-cell *matCellDef="let work">{{ work.totalAmount | number: '1.2-2' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let work">
+        <a mat-icon-button [routerLink]="['/works', work.id, 'edit']" aria-label="Editar">
+          <mat-icon>edit</mat-icon>
+        </a>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

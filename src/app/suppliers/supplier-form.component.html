@@ -1,0 +1,98 @@
+<h2>{{ supplierId ? 'Editar fornecedor' : 'Novo fornecedor' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()" class="form">
+  <mat-form-field appearance="outline">
+    <mat-label>Razão social</mat-label>
+    <input matInput formControlName="companyName" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Nome fantasia</mat-label>
+    <input matInput formControlName="tradeName" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>CNPJ/CPF</mat-label>
+    <input matInput formControlName="taxId" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Telefone</mat-label>
+    <input matInput formControlName="phone" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>E-mail</mat-label>
+    <input matInput type="email" formControlName="email" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Responsável comercial</mat-label>
+    <input matInput formControlName="commercialContact" />
+  </mat-form-field>
+
+  <h3>Endereço</h3>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Rua</mat-label>
+    <input matInput formControlName="addressStreet" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Número</mat-label>
+    <input matInput formControlName="addressNumber" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Complemento</mat-label>
+    <input matInput formControlName="addressComplement" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Bairro</mat-label>
+    <input matInput formControlName="addressNeighborhood" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Cidade</mat-label>
+    <input matInput formControlName="addressCity" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>UF</mat-label>
+    <input matInput formControlName="addressState" maxlength="2" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>CEP</mat-label>
+    <input matInput formControlName="addressZipCode" />
+  </mat-form-field>
+
+  <h3>Dados bancários</h3>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Banco</mat-label>
+    <input matInput formControlName="bankName" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Agência</mat-label>
+    <input matInput formControlName="bankAgency" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Conta</mat-label>
+    <input matInput formControlName="bankAccount" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Tipo de conta</mat-label>
+    <input matInput formControlName="bankAccountType" />
+  </mat-form-field>
+
+  <mat-checkbox formControlName="active">Ativo</mat-checkbox>
+
+  <div class="actions">
+    <button mat-raised-button color="primary" type="submit">Salvar</button>
+  </div>
+</form>

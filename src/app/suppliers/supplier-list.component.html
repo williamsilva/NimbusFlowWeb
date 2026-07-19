@@ -1,0 +1,50 @@
+<div class="page-header">
+  <h2>Fornecedores</h2>
+  <a mat-raised-button color="primary" routerLink="/suppliers/new">Novo fornecedor</a>
+</div>
+
+<div class="table-container">
+  <table mat-table [dataSource]="suppliers">
+    <ng-container matColumnDef="companyName">
+      <th mat-header-cell *matHeaderCellDef>Razão social</th>
+      <td mat-cell *matCellDef="let supplier">{{ supplier.companyName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="taxId">
+      <th mat-header-cell *matHeaderCellDef>CNPJ/CPF</th>
+      <td mat-cell *matCellDef="let supplier">{{ supplier.taxId }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <th mat-header-cell *matHeaderCellDef>Telefone</th>
+      <td mat-cell *matCellDef="let supplier">{{ supplier.phone }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>E-mail</th>
+      <td mat-cell *matCellDef="let supplier">{{ supplier.email }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="active">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let supplier">{{ supplier.active ? 'Ativo' : 'Inativo' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let supplier">
+        <a mat-icon-button [routerLink]="['/suppliers', supplier.id, 'edit']" aria-label="Editar">
+          <mat-icon>edit</mat-icon>
+        </a>
+        @if (supplier.active) {
+          <button mat-icon-button (click)="deactivate(supplier)" aria-label="Desativar">
+            <mat-icon>block</mat-icon>
+          </button>
+        }
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

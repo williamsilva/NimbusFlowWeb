@@ -1,0 +1,66 @@
+<h2>{{ workId ? 'Editar obra' : 'Nova obra' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()" class="form">
+  <mat-form-field appearance="outline">
+    <mat-label>Nome/descrição</mat-label>
+    <input matInput formControlName="name" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Fornecedor</mat-label>
+    <mat-select formControlName="supplierId" required>
+      @for (supplier of suppliers; track supplier.id) {
+        <mat-option [value]="supplier.id">{{ supplier.companyName }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Data de início</mat-label>
+    <input matInput [matDatepicker]="startPicker" formControlName="startDate" required />
+    <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+    <mat-datepicker #startPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Data de fim prevista</mat-label>
+    <input matInput [matDatepicker]="expectedEndPicker" formControlName="expectedEndDate" required />
+    <mat-datepicker-toggle matIconSuffix [for]="expectedEndPicker"></mat-datepicker-toggle>
+    <mat-datepicker #expectedEndPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Data de fim real</mat-label>
+    <input matInput [matDatepicker]="actualEndPicker" formControlName="actualEndDate" />
+    <mat-datepicker-toggle matIconSuffix [for]="actualEndPicker"></mat-datepicker-toggle>
+    <mat-datepicker #actualEndPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Valor inicial contratado</mat-label>
+    <input matInput type="number" step="0.01" formControlName="initialAmount" required />
+  </mat-form-field>
+
+  @if (workId) {
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        @for (status of statusOptions; track status) {
+          <mat-option [value]="status">{{ status }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+
+  <h3>Geolocalização</h3>
+  <p>Clique no mapa para marcar a localização da obra.</p>
+  <app-map-picker
+    [latitude]="form.controls.latitude.value"
+    [longitude]="form.controls.longitude.value"
+    (positionChange)="onPositionChange($event)"
+  ></app-map-picker>
+
+  <div class="actions">
+    <button mat-raised-button color="primary" type="submit">Salvar</button>
+  </div>
+</form>
