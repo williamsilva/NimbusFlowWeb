@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
   <span>{{ title }}</span>
   <span class="spacer"></span>
-  @if ((isAuthenticated$ | async)?.isAuthenticated) {
+  @if (currentUser?.authenticated) {
     <button mat-button (click)="logout()">Sair</button>
   } @else {
     <button mat-button (click)="login()">Entrar</button>

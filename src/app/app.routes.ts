@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 
+import { authGuard } from './core/auth/auth.guard';
 import { HomeComponent } from './home/home.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [autoLoginPartialRoutesGuard] },
+  { path: '', component: HomeComponent, canActivate: [authGuard] },
 ];

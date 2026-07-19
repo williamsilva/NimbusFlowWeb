@@ -1,21 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 import { AppComponent } from './app.component';
+import { AuthService } from './core/auth/auth.service';
 
 describe('AppComponent', () => {
-  const oidcSecurityServiceMock = {
-    isAuthenticated$: of({ isAuthenticated: false }),
-    checkAuth: () => of({ isAuthenticated: false }),
-    authorize: jasmine.createSpy('authorize'),
-    logoff: () => of(undefined),
+  const authServiceMock = {
+    loadMe: () => of({ authenticated: false }),
+    startLogin: jasmine.createSpy('startLogin'),
+    logout: jasmine.createSpy('logout'),
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
-      providers: [{ provide: OidcSecurityService, useValue: oidcSecurityServiceMock }],
+      providers: [{ provide: AuthService, useValue: authServiceMock }],
     }).compileComponents();
   });
 

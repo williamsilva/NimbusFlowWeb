@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CurrentUser, MeService } from './me.service';
+import { AuthService, CurrentUser } from '../core/auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -11,9 +11,9 @@ import { CurrentUser, MeService } from './me.service';
 export class HomeComponent implements OnInit {
   currentUser: CurrentUser | null = null;
 
-  constructor(private readonly meService: MeService) {}
+  constructor(private readonly authService: AuthService) {}
 
   ngOnInit(): void {
-    this.meService.getCurrentUser().subscribe((user) => (this.currentUser = user));
+    this.authService.loadMe().subscribe((user) => (this.currentUser = user));
   }
 }

@@ -1,34 +1,32 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+
+import { AuthService, CurrentUser } from './core/auth/auth.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, AsyncPipe, MatToolbarModule, MatButtonModule],
+  imports: [RouterOutlet, MatToolbarModule, MatButtonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
   title = 'NimbusFlow';
-  isAuthenticated$;
+  currentUser: CurrentUser | null = null;
 
-  constructor(private readonly oidcSecurityService: OidcSecurityService) {
-    this.isAuthenticated$ = this.oidcSecurityService.isAuthenticated$;
-  }
+  constructor(private readonly authService: AuthService) {}
 
   ngOnInit(): void {
-    this.oidcSecurityService.checkAuth().subscribe();
+    this.authService.loadMe().subscribe((user) => (this.currentUser = user));
   }
 
   login(): void {
-    this.oidcSecurityService.authorize();
+    this.authService.startLogin();
   }
 
   logout(): void {
-    this.oidcSecurityService.logoff().subscribe();
+    this.authService.logout();
   }
 }

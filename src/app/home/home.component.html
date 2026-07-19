@@ -1,6 +1,7 @@
-@if (currentUser) {
-  <p>Bem-vindo, {{ currentUser.email }}</p>
-  <p>Perfis: {{ currentUser.roles.join(', ') }}</p>
+@if (currentUser?.authenticated) {
+  <p>Bem-vindo, {{ currentUser?.name }} ({{ currentUser?.username }})</p>
+  <p>Grupos: {{ currentUser?.groups?.join(', ') }}</p>
+  <p>Permissões: {{ currentUser?.permissions?.join(', ') }}</p>
 } @else {
   <p>Carregando usuário autenticado…</p>
 }
