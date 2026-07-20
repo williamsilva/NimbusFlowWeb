@@ -1,30 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { SupplierRequest, SupplierService } from './supplier.service';
+import { Supplier, SupplierRequest, SupplierService } from './supplier.service';
+
+export interface SupplierFormDialogData {
+  supplier: Supplier | null;
+}
 
 @Component({
   selector: 'app-supplier-form',
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   templateUrl: './supplier-form.component.html',
   styleUrl: './supplier-form.component.scss',
 })
 export class SupplierFormComponent implements OnInit {
   supplierId: string | null = null;
+  saving = false;
   form;
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly supplierService: SupplierService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
+    private readonly dialogRef: MatDialogRef<SupplierFormComponent>,
+    @Inject(MAT_DIALOG_DATA) private readonly data: SupplierFormDialogData,
   ) {
     this.form = this.fb.group({
       companyName: ['', Validators.required],
@@ -49,10 +60,14 @@ export class SupplierFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.supplierId = this.route.snapshot.paramMap.get('id');
-    if (this.supplierId) {
-      this.supplierService.get(this.supplierId).subscribe((supplier) => this.form.patchValue(supplier));
+    if (this.data.supplier) {
+      this.supplierId = this.data.supplier.id;
+      this.form.patchValue(this.data.supplier);
     }
+  }
+
+  cancel(): void {
+    this.dialogRef.close(false);
   }
 
   save(): void {
@@ -83,10 +98,14 @@ export class SupplierFormComponent implements OnInit {
       active: value.active ?? true,
     };
 
+    this.saving = true;
     const request$ = this.supplierId
       ? this.supplierService.update(this.supplierId, request)
       : this.supplierService.create(request);
 
-    request$.subscribe(() => this.router.navigateByUrl('/suppliers'));
+    request$.subscribe({
+      next: () => this.dialogRef.close(true),
+      error: () => (this.saving = false),
+    });
   }
 }

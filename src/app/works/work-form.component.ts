@@ -1,7 +1,7 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -73,7 +73,6 @@ export class WorkFormComponent implements OnInit {
     private readonly measurementService: MeasurementService,
     private readonly authService: AuthService,
     private readonly route: ActivatedRoute,
-    private readonly router: Router,
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -275,8 +274,7 @@ export class WorkFormComponent implements OnInit {
       status: value.status,
     };
 
-    const request$ = this.workId ? this.workService.update(this.workId, request) : this.workService.create(request);
-    request$.subscribe(() => this.router.navigateByUrl('/works'));
+    this.workService.update(this.workId!, request).subscribe(() => this.loadWork());
   }
 
   private toIsoDate(date: Date): string {

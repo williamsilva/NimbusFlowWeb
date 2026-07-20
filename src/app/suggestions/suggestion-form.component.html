@@ -1,21 +1,20 @@
-<div class="page-container">
-  <div class="page-header">
-    <h2>Nova sugestão</h2>
-  </div>
+<h2 mat-dialog-title>Nova sugestão</h2>
 
-  <mat-card class="content-card">
-    <form [formGroup]="form" (ngSubmit)="save()" class="form">
-      <mat-form-field appearance="outline">
-        <mat-label>Descrição</mat-label>
-        <textarea matInput formControlName="description" required rows="4"></textarea>
-      </mat-form-field>
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Descrição</mat-label>
+      <textarea matInput formControlName="description" required rows="4"></textarea>
+    </mat-form-field>
 
-      <h4>Anexo (opcional)</h4>
-      <input type="file" (change)="onFileSelected($event)" />
+    <h4>Anexo (opcional)</h4>
+    <input type="file" (change)="onFileSelected($event)" />
+  </form>
+</mat-dialog-content>
 
-      <div class="actions">
-        <button mat-raised-button color="primary" type="submit">Enviar sugestão</button>
-      </div>
-    </form>
-  </mat-card>
-</div>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()" [disabled]="saving">Cancelar</button>
+  <button mat-raised-button color="primary" type="button" (click)="save()" [disabled]="saving">
+    {{ saving ? 'Enviando…' : 'Enviar sugestão' }}
+  </button>
+</mat-dialog-actions>

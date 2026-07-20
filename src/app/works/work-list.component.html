@@ -1,57 +1,80 @@
 <div class="page-container">
   <div class="page-header">
     <h2>Obras</h2>
-    <a mat-raised-button color="primary" routerLink="/works/new">
+    <button mat-raised-button color="primary" (click)="openCreate()">
       <mat-icon>add</mat-icon>
       Nova obra
-    </a>
+    </button>
   </div>
 
   <mat-card class="content-card">
+    <div class="list-toolbar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Buscar</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput [(ngModel)]="search" placeholder="Nome da obra, fornecedor…" />
+      </mat-form-field>
+
+      <button mat-icon-button (click)="load()" aria-label="Atualizar" matTooltip="Atualizar">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+
     <div class="table-container">
-      <table mat-table [dataSource]="works">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Nome</th>
-      <td mat-cell *matCellDef="let work">{{ work.name }}</td>
-    </ng-container>
+      <table mat-table [dataSource]="filteredWorks">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Nome</th>
+          <td mat-cell *matCellDef="let work">{{ work.name }}</td>
+        </ng-container>
 
-    <ng-container matColumnDef="supplierName">
-      <th mat-header-cell *matHeaderCellDef>Fornecedor</th>
-      <td mat-cell *matCellDef="let work">{{ work.supplierName }}</td>
-    </ng-container>
+        <ng-container matColumnDef="supplierName">
+          <th mat-header-cell *matHeaderCellDef>Fornecedor</th>
+          <td mat-cell *matCellDef="let work">{{ work.supplierName }}</td>
+        </ng-container>
 
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
-      <td mat-cell *matCellDef="let work">{{ work.status }}</td>
-    </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let work">
+            <app-status-badge [label]="statusLabel(work.status)" [tone]="statusTone(work.status)"></app-status-badge>
+          </td>
+        </ng-container>
 
-    <ng-container matColumnDef="startDate">
-      <th mat-header-cell *matHeaderCellDef>Início</th>
-      <td mat-cell *matCellDef="let work">{{ work.startDate }}</td>
-    </ng-container>
+        <ng-container matColumnDef="startDate">
+          <th mat-header-cell *matHeaderCellDef>Início</th>
+          <td mat-cell *matCellDef="let work">{{ work.startDate }}</td>
+        </ng-container>
 
-    <ng-container matColumnDef="expectedEndDate">
-      <th mat-header-cell *matHeaderCellDef>Fim previsto</th>
-      <td mat-cell *matCellDef="let work">{{ work.expectedEndDate }}</td>
-    </ng-container>
+        <ng-container matColumnDef="expectedEndDate">
+          <th mat-header-cell *matHeaderCellDef>Fim previsto</th>
+          <td mat-cell *matCellDef="let work">{{ work.expectedEndDate }}</td>
+        </ng-container>
 
-    <ng-container matColumnDef="totalAmount">
-      <th mat-header-cell *matHeaderCellDef>Valor total</th>
-      <td mat-cell *matCellDef="let work">{{ work.totalAmount | number: '1.2-2' }}</td>
-    </ng-container>
+        <ng-container matColumnDef="totalAmount">
+          <th mat-header-cell *matHeaderCellDef>Valor total</th>
+          <td mat-cell *matCellDef="let work">{{ work.totalAmount | number: '1.2-2' }}</td>
+        </ng-container>
 
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let work">
-        <a mat-icon-button [routerLink]="['/works', work.id, 'edit']" aria-label="Editar">
-          <mat-icon>edit</mat-icon>
-        </a>
-      </td>
-    </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let work">
+            <a
+              mat-icon-button
+              [routerLink]="['/works', work.id, 'edit']"
+              aria-label="Gerenciar"
+              matTooltip="Gerenciar"
+            >
+              <mat-icon>edit</mat-icon>
+            </a>
+          </td>
+        </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
+
+      @if (filteredWorks.length === 0) {
+        <div class="empty-state">Nenhuma obra encontrada.</div>
+      }
     </div>
   </mat-card>
 </div>

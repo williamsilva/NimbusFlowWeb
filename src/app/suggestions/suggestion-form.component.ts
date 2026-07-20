@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
@@ -11,18 +10,19 @@ import { SuggestionRequest, SuggestionService } from './suggestion.service';
 @Component({
   selector: 'app-suggestion-form',
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule],
+  imports: [ReactiveFormsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule],
   templateUrl: './suggestion-form.component.html',
   styleUrl: './suggestion-form.component.scss',
 })
 export class SuggestionFormComponent {
   selectedFile: File | null = null;
+  saving = false;
   form;
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly suggestionService: SuggestionService,
-    private readonly router: Router,
+    private readonly dialogRef: MatDialogRef<SuggestionFormComponent>,
   ) {
     this.form = this.fb.group({
       description: ['', Validators.required],
@@ -34,6 +34,10 @@ export class SuggestionFormComponent {
     this.selectedFile = input.files && input.files.length > 0 ? input.files[0] : null;
   }
 
+  cancel(): void {
+    this.dialogRef.close(false);
+  }
+
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -41,6 +45,10 @@ export class SuggestionFormComponent {
     }
 
     const request: SuggestionRequest = { description: this.form.getRawValue().description! };
-    this.suggestionService.create(request, this.selectedFile).subscribe(() => this.router.navigateByUrl('/suggestions'));
+    this.saving = true;
+    this.suggestionService.create(request, this.selectedFile).subscribe({
+      next: () => this.dialogRef.close(true),
+      error: () => (this.saving = false),
+    });
   }
 }

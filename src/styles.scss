@@ -176,3 +176,60 @@ table.mat-mdc-table {
   align-items: center;
   margin-top: 8px;
 }
+
+// ===== Dialogs (mat-dialog) usados pelos cadastros (fornecedor, sugestao, obra) =====
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: min(560px, 80vw);
+
+  h4 {
+    margin: 20px 0 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--nf-text-muted);
+
+    &:first-child {
+      margin-top: 4px;
+    }
+  }
+}
+
+.dialog-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 4px 16px;
+}
+
+.dialog-form-grid mat-form-field {
+  width: 100%;
+}
+
+// ===== Barra de busca + atualizar no topo das listas =====
+.list-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+
+  .search-field {
+    flex: 1 1 320px;
+    max-width: 420px;
+  }
+}
+
+// ===== Realce de linha nas tabelas =====
+tr.mat-mdc-row:hover {
+  background: rgba(59, 130, 246, 0.05);
+}
+
+:root.dark tr.mat-mdc-row:hover {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.empty-state {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--nf-text-muted);
+}
