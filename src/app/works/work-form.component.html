@@ -157,3 +157,160 @@
     </form>
   </section>
 }
+
+@if (workId) {
+  <section class="installments">
+    <h3>Parcelas</h3>
+
+    <div class="table-container">
+      <table mat-table [dataSource]="installments">
+        <ng-container matColumnDef="number">
+          <th mat-header-cell *matHeaderCellDef>Nº</th>
+          <td mat-cell *matCellDef="let i">{{ i.number }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>Valor</th>
+          <td mat-cell *matCellDef="let i">{{ i.amount }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>Vencimento</th>
+          <td mat-cell *matCellDef="let i">{{ i.dueDate | date: 'shortDate' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let i">{{ i.status }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let i">
+            @if (i.status === 'PLANNED' && canCreateMeasurement()) {
+              <a mat-button [routerLink]="['/installments', i.id, 'measurements', 'new']">Registrar medição</a>
+            }
+            @if (i.status === 'MEASUREMENT_APPROVED' && canRelease()) {
+              <button mat-button color="primary" (click)="release(i)">Liberar</button>
+            }
+            @if (i.status === 'RELEASED' && canMarkAsPaid()) {
+              <button mat-button color="accent" (click)="markAsPaid(i)">Marcar como paga</button>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="installmentColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: installmentColumns"></tr>
+      </table>
+    </div>
+
+    <h4>Adicionar parcela ao cronograma</h4>
+    @if (pendingSchedule.length > 0) {
+      <ul>
+        @for (item of pendingSchedule; track $index) {
+          <li>
+            {{ item.amount }} — {{ item.dueDate }}
+            <button mat-icon-button (click)="removeInstallmentRow($index)" aria-label="Remover">
+              <mat-icon>close</mat-icon>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+    <form [formGroup]="installmentDraftForm" class="form">
+      <mat-form-field appearance="outline">
+        <mat-label>Valor da parcela</mat-label>
+        <input matInput type="number" step="0.01" formControlName="amount" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data prevista</mat-label>
+        <input matInput [matDatepicker]="installmentDuePicker" formControlName="dueDate" required />
+        <mat-datepicker-toggle matIconSuffix [for]="installmentDuePicker"></mat-datepicker-toggle>
+        <mat-datepicker #installmentDuePicker></mat-datepicker>
+      </mat-form-field>
+
+      <div class="actions">
+        <button mat-stroked-button type="button" (click)="addInstallmentRow()">Adicionar à lista</button>
+        <button mat-raised-button color="accent" type="button" (click)="submitSchedule()">Enviar cronograma</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="measurements">
+    <h3>Medições</h3>
+
+    <div class="table-container">
+      <table mat-table [dataSource]="measurements">
+        <ng-container matColumnDef="installmentNumber">
+          <th mat-header-cell *matHeaderCellDef>Parcela</th>
+          <td mat-cell *matCellDef="let m">{{ installmentNumber(m) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Descrição</th>
+          <td mat-cell *matCellDef="let m">{{ m.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let m">{{ m.status }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="distance">
+          <th mat-header-cell *matHeaderCellDef>Distância da obra</th>
+          <td mat-cell *matCellDef="let m">
+            @if (m.distanceFromWorkMeters !== null) {
+              {{ m.distanceFromWorkMeters | number: '1.0-0' }} m
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="decision">
+          <th mat-header-cell *matHeaderCellDef>Decisão</th>
+          <td mat-cell *matCellDef="let m">
+            @if (m.approvedById) {
+              {{ m.approvedById }} em {{ m.decisionDate | date: 'short' }}
+              @if (m.decisionNote) {
+                <br />{{ m.decisionNote }}
+              }
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="media">
+          <th mat-header-cell *matHeaderCellDef>Mídia</th>
+          <td mat-cell *matCellDef="let m">
+            @for (media of m.media; track media.id) {
+              <a [href]="media.url" target="_blank" rel="noopener">{{ media.type }}</a>
+              <br />
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let m">
+            @if (m.status === 'PENDING' && canDecideMeasurement()) {
+              <input #note type="text" placeholder="Observação (opcional)" class="decision-note" />
+              <button mat-icon-button color="primary" (click)="approveMeasurement(m, note.value)" aria-label="Aprovar">
+                <mat-icon>check</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="rejectMeasurement(m, note.value)" aria-label="Reprovar">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+            @if (m.status === 'REJECTED') {
+              <a mat-button [routerLink]="['/installments', m.installmentId, 'measurements', 'new']" [queryParams]="{ supersedes: m.id }">
+                Reenviar
+              </a>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="measurementColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: measurementColumns"></tr>
+      </table>
+    </div>
+  </section>
+}

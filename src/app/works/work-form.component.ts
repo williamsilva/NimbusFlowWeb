@@ -1,7 +1,7 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -10,9 +10,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
+import { forkJoin } from 'rxjs';
 
 import { Addendum, AddendumRequest, AddendumService } from '../addendums/addendum.service';
 import { AuthService } from '../core/auth/auth.service';
+import { Installment, InstallmentScheduleItem, InstallmentService } from '../installments/installment.service';
+import { Measurement, MeasurementService } from '../measurements/measurement.service';
 import { Supplier, SupplierService } from '../suppliers/supplier.service';
 import { MapPickerComponent } from './map-picker.component';
 import { Work, WorkRequest, WorkService, WorkStatus } from './work.service';
@@ -22,7 +25,9 @@ import { Work, WorkRequest, WorkService, WorkStatus } from './work.service';
   standalone: true,
   imports: [
     DatePipe,
+    DecimalPipe,
     ReactiveFormsModule,
+    RouterLink,
     MatButtonModule,
     MatDatepickerModule,
     MatFormFieldModule,
@@ -49,11 +54,21 @@ export class WorkFormComponent implements OnInit {
   permissions: string[] = [];
   resubmittingFrom: Addendum | null = null;
 
+  installments: Installment[] = [];
+  installmentColumns = ['number', 'amount', 'dueDate', 'status', 'actions'];
+  pendingSchedule: InstallmentScheduleItem[] = [];
+  installmentDraftForm;
+
+  measurements: Measurement[] = [];
+  measurementColumns = ['installmentNumber', 'description', 'status', 'distance', 'decision', 'media', 'actions'];
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly workService: WorkService,
     private readonly supplierService: SupplierService,
     private readonly addendumService: AddendumService,
+    private readonly installmentService: InstallmentService,
+    private readonly measurementService: MeasurementService,
     private readonly authService: AuthService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -73,6 +88,10 @@ export class WorkFormComponent implements OnInit {
       amount: [0, [Validators.required, Validators.min(0.01)]],
       justification: ['', Validators.required],
     });
+    this.installmentDraftForm = this.fb.group({
+      amount: [0, [Validators.required, Validators.min(0.01)]],
+      dueDate: this.fb.control<Date | null>(null, Validators.required),
+    });
   }
 
   ngOnInit(): void {
@@ -83,6 +102,7 @@ export class WorkFormComponent implements OnInit {
       this.loadWork();
       this.authService.loadMe().subscribe((user) => (this.permissions = user.permissions));
       this.loadAddendums();
+      this.loadInstallments();
     }
   }
 
@@ -150,6 +170,84 @@ export class WorkFormComponent implements OnInit {
 
   reject(addendum: Addendum, decisionNote: string): void {
     this.addendumService.reject(addendum.id, { decisionNote: decisionNote || null }).subscribe(() => this.loadAddendums());
+  }
+
+  loadInstallments(): void {
+    this.installmentService.listByWork(this.workId!).subscribe((installments) => {
+      this.installments = installments;
+      this.loadMeasurements();
+    });
+  }
+
+  loadMeasurements(): void {
+    if (this.installments.length === 0) {
+      this.measurements = [];
+      return;
+    }
+    forkJoin(this.installments.map((i) => this.measurementService.listByInstallment(i.id))).subscribe((results) => {
+      this.measurements = results.flat();
+    });
+  }
+
+  installmentNumber(measurement: Measurement): number | null {
+    return this.installments.find((i) => i.id === measurement.installmentId)?.number ?? null;
+  }
+
+  addInstallmentRow(): void {
+    if (this.installmentDraftForm.invalid) {
+      this.installmentDraftForm.markAllAsTouched();
+      return;
+    }
+    const value = this.installmentDraftForm.getRawValue();
+    this.pendingSchedule.push({ amount: value.amount!, dueDate: this.toIsoDate(value.dueDate!) });
+    this.installmentDraftForm.reset({ amount: 0, dueDate: null });
+  }
+
+  removeInstallmentRow(index: number): void {
+    this.pendingSchedule.splice(index, 1);
+  }
+
+  submitSchedule(): void {
+    if (this.pendingSchedule.length === 0) {
+      return;
+    }
+    this.installmentService.schedule(this.workId!, { installments: this.pendingSchedule }).subscribe(() => {
+      this.pendingSchedule = [];
+      this.loadInstallments();
+    });
+  }
+
+  /** Só é UX (esconder botão) - a validação de verdade é sempre revalidada no backend. */
+  canCreateMeasurement(): boolean {
+    return this.permissions.includes('MEDICAO_CREATE');
+  }
+
+  canDecideMeasurement(): boolean {
+    return this.permissions.includes('MEDICAO_APPROVE');
+  }
+
+  canRelease(): boolean {
+    return this.permissions.includes('PARCELA_LIBERAR');
+  }
+
+  canMarkAsPaid(): boolean {
+    return this.permissions.includes('PARCELA_PAGAR');
+  }
+
+  release(installment: Installment): void {
+    this.installmentService.release(installment.id).subscribe(() => this.loadInstallments());
+  }
+
+  markAsPaid(installment: Installment): void {
+    this.installmentService.markAsPaid(installment.id).subscribe(() => this.loadInstallments());
+  }
+
+  approveMeasurement(measurement: Measurement, decisionNote: string): void {
+    this.measurementService.approve(measurement.id, { decisionNote: decisionNote || null }).subscribe(() => this.loadInstallments());
+  }
+
+  rejectMeasurement(measurement: Measurement, decisionNote: string): void {
+    this.measurementService.reject(measurement.id, { decisionNote: decisionNote || null }).subscribe(() => this.loadInstallments());
   }
 
   onPositionChange(position: { latitude: number; longitude: number }): void {

@@ -1,0 +1,14 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  gap: 4px;
+}
+
+.actions {
+  margin-top: 16px;
+}
+
+.error {
+  color: var(--mat-sys-error, #b3261e);
+}

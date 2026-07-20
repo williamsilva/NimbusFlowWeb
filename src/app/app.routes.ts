@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './core/auth/auth.guard';
 import { HomeComponent } from './home/home.component';
+import { MeasurementFormComponent } from './measurements/measurement-form.component';
 import { SupplierFormComponent } from './suppliers/supplier-form.component';
 import { SupplierListComponent } from './suppliers/supplier-list.component';
 import { WorkFormComponent } from './works/work-form.component';
@@ -15,4 +16,5 @@ export const routes: Routes = [
   { path: 'works', component: WorkListComponent, canActivate: [authGuard] },
   { path: 'works/new', component: WorkFormComponent, canActivate: [authGuard] },
   { path: 'works/:id/edit', component: WorkFormComponent, canActivate: [authGuard] },
+  { path: 'installments/:id/measurements/new', component: MeasurementFormComponent, canActivate: [authGuard] },
 ];
