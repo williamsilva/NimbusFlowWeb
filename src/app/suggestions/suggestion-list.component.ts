@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 
@@ -10,7 +12,7 @@ import { Suggestion, SuggestionService, SuggestionStatus } from './suggestion.se
 @Component({
   selector: 'app-suggestion-list',
   standalone: true,
-  imports: [RouterLink, MatButtonModule, MatSelectModule, MatTableModule],
+  imports: [RouterLink, MatButtonModule, MatCardModule, MatIconModule, MatSelectModule, MatTableModule],
   templateUrl: './suggestion-list.component.html',
   styleUrl: './suggestion-list.component.scss',
 })

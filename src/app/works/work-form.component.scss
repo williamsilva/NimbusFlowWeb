@@ -1,25 +1,19 @@
-.form {
-  display: flex;
-  flex-direction: column;
-  max-width: 480px;
-  gap: 4px;
-}
-
-.actions {
-  margin-top: 16px;
-}
-
-.addendums,
-.installments,
-.measurements {
-  margin-top: 32px;
-  max-width: 800px;
-}
-
-.table-container {
-  overflow-x: auto;
-}
+/* .form/.actions/.table-container ficam em src/styles.scss */
 
 .decision-note {
   margin-right: 8px;
+}
+
+.pending-schedule {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+app-map-picker {
+  display: block;
+  margin-bottom: 16px;
 }

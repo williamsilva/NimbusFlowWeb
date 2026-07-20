@@ -1,17 +1,36 @@
-<mat-toolbar color="primary">
-  <span>{{ title }}</span>
+<mat-toolbar color="primary" class="app-toolbar">
+  <span class="app-toolbar__title">{{ title }}</span>
   @if (currentUser?.authenticated) {
-    <a mat-button routerLink="/">Início</a>
-    <a mat-button routerLink="/suppliers">Fornecedores</a>
-    <a mat-button routerLink="/works">Obras</a>
-    <a mat-button routerLink="/suggestions">Sugestões</a>
+    <nav class="app-toolbar__nav">
+      <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon>home</mat-icon>
+        Início
+      </a>
+      <a mat-button routerLink="/suppliers" routerLinkActive="active">
+        <mat-icon>storefront</mat-icon>
+        Fornecedores
+      </a>
+      <a mat-button routerLink="/works" routerLinkActive="active">
+        <mat-icon>construction</mat-icon>
+        Obras
+      </a>
+      <a mat-button routerLink="/suggestions" routerLinkActive="active">
+        <mat-icon>lightbulb</mat-icon>
+        Sugestões
+      </a>
+    </nav>
   }
   <span class="spacer"></span>
   @if (currentUser?.authenticated) {
-    <button mat-button (click)="logout()">Sair</button>
+    <button mat-button (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      Sair
+    </button>
   } @else {
-    <button mat-button (click)="login()">Entrar</button>
+    <button mat-raised-button color="accent" (click)="login()">Entrar</button>
   }
 </mat-toolbar>
 
-<router-outlet />
+<main class="app-shell">
+  <router-outlet />
+</main>

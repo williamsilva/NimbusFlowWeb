@@ -1,15 +1,21 @@
-<h2>Nova sugestão</h2>
-
-<form [formGroup]="form" (ngSubmit)="save()" class="form">
-  <mat-form-field appearance="outline">
-    <mat-label>Descrição</mat-label>
-    <textarea matInput formControlName="description" required></textarea>
-  </mat-form-field>
-
-  <h3>Anexo (opcional)</h3>
-  <input type="file" (change)="onFileSelected($event)" />
-
-  <div class="actions">
-    <button mat-raised-button color="primary" type="submit">Enviar sugestão</button>
+<div class="page-container">
+  <div class="page-header">
+    <h2>Nova sugestão</h2>
   </div>
-</form>
+
+  <mat-card class="content-card">
+    <form [formGroup]="form" (ngSubmit)="save()" class="form">
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição</mat-label>
+        <textarea matInput formControlName="description" required rows="4"></textarea>
+      </mat-form-field>
+
+      <h4>Anexo (opcional)</h4>
+      <input type="file" (change)="onFileSelected($event)" />
+
+      <div class="actions">
+        <button mat-raised-button color="primary" type="submit">Enviar sugestão</button>
+      </div>
+    </form>
+  </mat-card>
+</div>

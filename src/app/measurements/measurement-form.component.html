@@ -1,35 +1,41 @@
-<h2>Registrar medição</h2>
+<div class="page-container">
+  <div class="page-header">
+    <h2>Registrar medição</h2>
+  </div>
 
-@if (supersedesId) {
-  <p>Reenvio referente à medição reprovada anterior.</p>
-}
-
-<form [formGroup]="form" (ngSubmit)="submit()" class="form">
-  <mat-form-field appearance="outline">
-    <mat-label>Descrição</mat-label>
-    <textarea matInput formControlName="description" required></textarea>
-  </mat-form-field>
-
-  <h3>Geolocalização</h3>
-  <button mat-stroked-button type="button" (click)="captureLocation()">Capturar localização atual</button>
-  @if (locationError) {
-    <p class="error">{{ locationError }}</p>
+  @if (supersedesId) {
+    <p>Reenvio referente à medição reprovada anterior.</p>
   }
 
-  <mat-form-field appearance="outline">
-    <mat-label>Latitude</mat-label>
-    <input matInput [value]="form.controls.latitude.value" disabled />
-  </mat-form-field>
+  <mat-card class="content-card">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição</mat-label>
+        <textarea matInput formControlName="description" required rows="3"></textarea>
+      </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Longitude</mat-label>
-    <input matInput [value]="form.controls.longitude.value" disabled />
-  </mat-form-field>
+      <h4>Geolocalização</h4>
+      <button mat-stroked-button type="button" (click)="captureLocation()">Capturar localização atual</button>
+      @if (locationError) {
+        <p class="error">{{ locationError }}</p>
+      }
 
-  <h3>Fotos/vídeos</h3>
-  <input type="file" multiple accept="image/*,video/*" (change)="onFilesSelected($event)" />
+      <mat-form-field appearance="outline">
+        <mat-label>Latitude</mat-label>
+        <input matInput [value]="form.controls.latitude.value" disabled />
+      </mat-form-field>
 
-  <div class="actions">
-    <button mat-raised-button color="primary" type="submit">Enviar medição</button>
-  </div>
-</form>
+      <mat-form-field appearance="outline">
+        <mat-label>Longitude</mat-label>
+        <input matInput [value]="form.controls.longitude.value" disabled />
+      </mat-form-field>
+
+      <h4>Fotos/vídeos</h4>
+      <input type="file" multiple accept="image/*,video/*" (change)="onFilesSelected($event)" />
+
+      <div class="actions">
+        <button mat-raised-button color="primary" type="submit">Enviar medição</button>
+      </div>
+    </form>
+  </mat-card>
+</div>

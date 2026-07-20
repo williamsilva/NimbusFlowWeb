@@ -1,316 +1,323 @@
-<h2>{{ workId ? 'Editar obra' : 'Nova obra' }}</h2>
+<div class="page-container">
+  <div class="page-header">
+    <h2>{{ workId ? 'Editar obra' : 'Nova obra' }}</h2>
+  </div>
 
-<form [formGroup]="form" (ngSubmit)="save()" class="form">
-  <mat-form-field appearance="outline">
-    <mat-label>Nome/descrição</mat-label>
-    <input matInput formControlName="name" required />
-  </mat-form-field>
+  <mat-card class="content-card">
+    <h3>Dados da obra</h3>
+    <form [formGroup]="form" (ngSubmit)="save()" class="form">
+      <mat-form-field appearance="outline">
+        <mat-label>Nome/descrição</mat-label>
+        <input matInput formControlName="name" required />
+      </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Fornecedor</mat-label>
-    <mat-select formControlName="supplierId" required>
-      @for (supplier of suppliers; track supplier.id) {
-        <mat-option [value]="supplier.id">{{ supplier.companyName }}</mat-option>
+      <mat-form-field appearance="outline">
+        <mat-label>Fornecedor</mat-label>
+        <mat-select formControlName="supplierId" required>
+          @for (supplier of suppliers; track supplier.id) {
+            <mat-option [value]="supplier.id">{{ supplier.companyName }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data de início</mat-label>
+        <input matInput [matDatepicker]="startPicker" formControlName="startDate" required />
+        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data de fim prevista</mat-label>
+        <input matInput [matDatepicker]="expectedEndPicker" formControlName="expectedEndDate" required />
+        <mat-datepicker-toggle matIconSuffix [for]="expectedEndPicker"></mat-datepicker-toggle>
+        <mat-datepicker #expectedEndPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Data de fim real</mat-label>
+        <input matInput [matDatepicker]="actualEndPicker" formControlName="actualEndDate" />
+        <mat-datepicker-toggle matIconSuffix [for]="actualEndPicker"></mat-datepicker-toggle>
+        <mat-datepicker #actualEndPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Valor inicial contratado</mat-label>
+        <input matInput type="number" step="0.01" formControlName="initialAmount" required />
+      </mat-form-field>
+
+      @if (work) {
+        <mat-form-field appearance="outline">
+          <mat-label>Valor total atualizado (inicial + aditivos aprovados)</mat-label>
+          <input matInput [value]="work.totalAmount" disabled />
+        </mat-form-field>
       }
-    </mat-select>
-  </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Data de início</mat-label>
-    <input matInput [matDatepicker]="startPicker" formControlName="startDate" required />
-    <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
-    <mat-datepicker #startPicker></mat-datepicker>
-  </mat-form-field>
+      @if (workId) {
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            @for (status of statusOptions; track status) {
+              <mat-option [value]="status">{{ status }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
 
-  <mat-form-field appearance="outline">
-    <mat-label>Data de fim prevista</mat-label>
-    <input matInput [matDatepicker]="expectedEndPicker" formControlName="expectedEndDate" required />
-    <mat-datepicker-toggle matIconSuffix [for]="expectedEndPicker"></mat-datepicker-toggle>
-    <mat-datepicker #expectedEndPicker></mat-datepicker>
-  </mat-form-field>
+      <h4>Geolocalização</h4>
+      <p>Clique no mapa para marcar a localização da obra.</p>
+      <app-map-picker
+        [latitude]="form.controls.latitude.value"
+        [longitude]="form.controls.longitude.value"
+        (positionChange)="onPositionChange($event)"
+      ></app-map-picker>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Data de fim real</mat-label>
-    <input matInput [matDatepicker]="actualEndPicker" formControlName="actualEndDate" />
-    <mat-datepicker-toggle matIconSuffix [for]="actualEndPicker"></mat-datepicker-toggle>
-    <mat-datepicker #actualEndPicker></mat-datepicker>
-  </mat-form-field>
+      <div class="actions">
+        <button mat-raised-button color="primary" type="submit">Salvar</button>
+      </div>
+    </form>
+  </mat-card>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Valor inicial contratado</mat-label>
-    <input matInput type="number" step="0.01" formControlName="initialAmount" required />
-  </mat-form-field>
+  @if (workId) {
+    <mat-card class="content-card">
+      <h3>Aditivos</h3>
 
-  @if (work) {
-    <mat-form-field appearance="outline">
-      <mat-label>Valor total atualizado (inicial + aditivos aprovados)</mat-label>
-      <input matInput [value]="work.totalAmount" disabled />
-    </mat-form-field>
+      <div class="table-container">
+        <table mat-table [dataSource]="addendums">
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef>Valor</th>
+            <td mat-cell *matCellDef="let a">{{ a.amount }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="justification">
+            <th mat-header-cell *matHeaderCellDef>Justificativa</th>
+            <td mat-cell *matCellDef="let a">{{ a.justification }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let a">{{ a.status }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="requiredTier">
+            <th mat-header-cell *matHeaderCellDef>Alçada</th>
+            <td mat-cell *matCellDef="let a">{{ a.requiredTier }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="decision">
+            <th mat-header-cell *matHeaderCellDef>Decisão</th>
+            <td mat-cell *matCellDef="let a">
+              @if (a.approvedById) {
+                {{ a.approvedById }} em {{ a.decisionDate | date: 'short' }}
+                @if (a.decisionNote) {
+                  <br />{{ a.decisionNote }}
+                }
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let a">
+              @if (a.status === 'PENDING' && canDecide(a)) {
+                <input #note type="text" placeholder="Observação (opcional)" class="decision-note" />
+                <button mat-icon-button color="primary" (click)="approve(a, note.value)" aria-label="Aprovar">
+                  <mat-icon>check</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="reject(a, note.value)" aria-label="Reprovar">
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+              @if (a.status === 'REJECTED') {
+                <button mat-button (click)="startResubmit(a)">Reenviar</button>
+              }
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="addendumColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: addendumColumns"></tr>
+        </table>
+      </div>
+
+      <h4>Solicitar aditivo</h4>
+      @if (resubmittingFrom) {
+        <p>
+          Reenvio referente ao aditivo reprovado de {{ resubmittingFrom.amount }}.
+          <button mat-button type="button" (click)="cancelResubmit()">Cancelar reenvio</button>
+        </p>
+      }
+      <form [formGroup]="addendumForm" (ngSubmit)="submitAddendum()" class="form">
+        <mat-form-field appearance="outline">
+          <mat-label>Valor do acréscimo</mat-label>
+          <input matInput type="number" step="0.01" formControlName="amount" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Justificativa</mat-label>
+          <textarea matInput formControlName="justification" required></textarea>
+        </mat-form-field>
+
+        <div class="actions">
+          <button mat-raised-button color="accent" type="submit">Solicitar aditivo</button>
+        </div>
+      </form>
+    </mat-card>
   }
 
   @if (workId) {
-    <mat-form-field appearance="outline">
-      <mat-label>Status</mat-label>
-      <mat-select formControlName="status">
-        @for (status of statusOptions; track status) {
-          <mat-option [value]="status">{{ status }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+    <mat-card class="content-card">
+      <h3>Parcelas</h3>
+
+      <div class="table-container">
+        <table mat-table [dataSource]="installments">
+          <ng-container matColumnDef="number">
+            <th mat-header-cell *matHeaderCellDef>Nº</th>
+            <td mat-cell *matCellDef="let i">{{ i.number }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef>Valor</th>
+            <td mat-cell *matCellDef="let i">{{ i.amount }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="dueDate">
+            <th mat-header-cell *matHeaderCellDef>Vencimento</th>
+            <td mat-cell *matCellDef="let i">{{ i.dueDate | date: 'shortDate' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let i">{{ i.status }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let i">
+              @if (i.status === 'PLANNED' && canCreateMeasurement()) {
+                <a mat-button [routerLink]="['/installments', i.id, 'measurements', 'new']">Registrar medição</a>
+              }
+              @if (i.status === 'MEASUREMENT_APPROVED' && canRelease()) {
+                <button mat-button color="primary" (click)="release(i)">Liberar</button>
+              }
+              @if (i.status === 'RELEASED' && canMarkAsPaid()) {
+                <button mat-button color="accent" (click)="markAsPaid(i)">Marcar como paga</button>
+              }
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="installmentColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: installmentColumns"></tr>
+        </table>
+      </div>
+
+      <h4>Adicionar parcela ao cronograma</h4>
+      @if (pendingSchedule.length > 0) {
+        <ul class="pending-schedule">
+          @for (item of pendingSchedule; track $index) {
+            <li>
+              {{ item.amount }} — {{ item.dueDate }}
+              <button mat-icon-button (click)="removeInstallmentRow($index)" aria-label="Remover">
+                <mat-icon>close</mat-icon>
+              </button>
+            </li>
+          }
+        </ul>
+      }
+      <form [formGroup]="installmentDraftForm" class="form">
+        <mat-form-field appearance="outline">
+          <mat-label>Valor da parcela</mat-label>
+          <input matInput type="number" step="0.01" formControlName="amount" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data prevista</mat-label>
+          <input matInput [matDatepicker]="installmentDuePicker" formControlName="dueDate" required />
+          <mat-datepicker-toggle matIconSuffix [for]="installmentDuePicker"></mat-datepicker-toggle>
+          <mat-datepicker #installmentDuePicker></mat-datepicker>
+        </mat-form-field>
+
+        <div class="actions">
+          <button mat-stroked-button type="button" (click)="addInstallmentRow()">Adicionar à lista</button>
+          <button mat-raised-button color="accent" type="button" (click)="submitSchedule()">Enviar cronograma</button>
+        </div>
+      </form>
+    </mat-card>
+
+    <mat-card class="content-card">
+      <h3>Medições</h3>
+
+      <div class="table-container">
+        <table mat-table [dataSource]="measurements">
+          <ng-container matColumnDef="installmentNumber">
+            <th mat-header-cell *matHeaderCellDef>Parcela</th>
+            <td mat-cell *matCellDef="let m">{{ installmentNumber(m) }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Descrição</th>
+            <td mat-cell *matCellDef="let m">{{ m.description }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let m">{{ m.status }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="distance">
+            <th mat-header-cell *matHeaderCellDef>Distância da obra</th>
+            <td mat-cell *matCellDef="let m">
+              @if (m.distanceFromWorkMeters !== null) {
+                {{ m.distanceFromWorkMeters | number: '1.0-0' }} m
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="decision">
+            <th mat-header-cell *matHeaderCellDef>Decisão</th>
+            <td mat-cell *matCellDef="let m">
+              @if (m.approvedById) {
+                {{ m.approvedById }} em {{ m.decisionDate | date: 'short' }}
+                @if (m.decisionNote) {
+                  <br />{{ m.decisionNote }}
+                }
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="media">
+            <th mat-header-cell *matHeaderCellDef>Mídia</th>
+            <td mat-cell *matCellDef="let m">
+              @for (media of m.media; track media.id) {
+                <a [href]="media.url" target="_blank" rel="noopener">{{ media.type }}</a>
+                <br />
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let m">
+              @if (m.status === 'PENDING' && canDecideMeasurement()) {
+                <input #note type="text" placeholder="Observação (opcional)" class="decision-note" />
+                <button mat-icon-button color="primary" (click)="approveMeasurement(m, note.value)" aria-label="Aprovar">
+                  <mat-icon>check</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="rejectMeasurement(m, note.value)" aria-label="Reprovar">
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+              @if (m.status === 'REJECTED') {
+                <a mat-button [routerLink]="['/installments', m.installmentId, 'measurements', 'new']" [queryParams]="{ supersedes: m.id }">
+                  Reenviar
+                </a>
+              }
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="measurementColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: measurementColumns"></tr>
+        </table>
+      </div>
+    </mat-card>
   }
-
-  <h3>Geolocalização</h3>
-  <p>Clique no mapa para marcar a localização da obra.</p>
-  <app-map-picker
-    [latitude]="form.controls.latitude.value"
-    [longitude]="form.controls.longitude.value"
-    (positionChange)="onPositionChange($event)"
-  ></app-map-picker>
-
-  <div class="actions">
-    <button mat-raised-button color="primary" type="submit">Salvar</button>
-  </div>
-</form>
-
-@if (workId) {
-  <section class="addendums">
-    <h3>Aditivos</h3>
-
-    <div class="table-container">
-      <table mat-table [dataSource]="addendums">
-        <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef>Valor</th>
-          <td mat-cell *matCellDef="let a">{{ a.amount }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="justification">
-          <th mat-header-cell *matHeaderCellDef>Justificativa</th>
-          <td mat-cell *matCellDef="let a">{{ a.justification }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let a">{{ a.status }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="requiredTier">
-          <th mat-header-cell *matHeaderCellDef>Alçada</th>
-          <td mat-cell *matCellDef="let a">{{ a.requiredTier }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="decision">
-          <th mat-header-cell *matHeaderCellDef>Decisão</th>
-          <td mat-cell *matCellDef="let a">
-            @if (a.approvedById) {
-              {{ a.approvedById }} em {{ a.decisionDate | date: 'short' }}
-              @if (a.decisionNote) {
-                <br />{{ a.decisionNote }}
-              }
-            }
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let a">
-            @if (a.status === 'PENDING' && canDecide(a)) {
-              <input #note type="text" placeholder="Observação (opcional)" class="decision-note" />
-              <button mat-icon-button color="primary" (click)="approve(a, note.value)" aria-label="Aprovar">
-                <mat-icon>check</mat-icon>
-              </button>
-              <button mat-icon-button color="warn" (click)="reject(a, note.value)" aria-label="Reprovar">
-                <mat-icon>close</mat-icon>
-              </button>
-            }
-            @if (a.status === 'REJECTED') {
-              <button mat-button (click)="startResubmit(a)">Reenviar</button>
-            }
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="addendumColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: addendumColumns"></tr>
-      </table>
-    </div>
-
-    <h4>Solicitar aditivo</h4>
-    @if (resubmittingFrom) {
-      <p>
-        Reenvio referente ao aditivo reprovado de {{ resubmittingFrom.amount }}.
-        <button mat-button type="button" (click)="cancelResubmit()">Cancelar reenvio</button>
-      </p>
-    }
-    <form [formGroup]="addendumForm" (ngSubmit)="submitAddendum()" class="form">
-      <mat-form-field appearance="outline">
-        <mat-label>Valor do acréscimo</mat-label>
-        <input matInput type="number" step="0.01" formControlName="amount" required />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Justificativa</mat-label>
-        <textarea matInput formControlName="justification" required></textarea>
-      </mat-form-field>
-
-      <div class="actions">
-        <button mat-raised-button color="accent" type="submit">Solicitar aditivo</button>
-      </div>
-    </form>
-  </section>
-}
-
-@if (workId) {
-  <section class="installments">
-    <h3>Parcelas</h3>
-
-    <div class="table-container">
-      <table mat-table [dataSource]="installments">
-        <ng-container matColumnDef="number">
-          <th mat-header-cell *matHeaderCellDef>Nº</th>
-          <td mat-cell *matCellDef="let i">{{ i.number }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef>Valor</th>
-          <td mat-cell *matCellDef="let i">{{ i.amount }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="dueDate">
-          <th mat-header-cell *matHeaderCellDef>Vencimento</th>
-          <td mat-cell *matCellDef="let i">{{ i.dueDate | date: 'shortDate' }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let i">{{ i.status }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let i">
-            @if (i.status === 'PLANNED' && canCreateMeasurement()) {
-              <a mat-button [routerLink]="['/installments', i.id, 'measurements', 'new']">Registrar medição</a>
-            }
-            @if (i.status === 'MEASUREMENT_APPROVED' && canRelease()) {
-              <button mat-button color="primary" (click)="release(i)">Liberar</button>
-            }
-            @if (i.status === 'RELEASED' && canMarkAsPaid()) {
-              <button mat-button color="accent" (click)="markAsPaid(i)">Marcar como paga</button>
-            }
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="installmentColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: installmentColumns"></tr>
-      </table>
-    </div>
-
-    <h4>Adicionar parcela ao cronograma</h4>
-    @if (pendingSchedule.length > 0) {
-      <ul>
-        @for (item of pendingSchedule; track $index) {
-          <li>
-            {{ item.amount }} — {{ item.dueDate }}
-            <button mat-icon-button (click)="removeInstallmentRow($index)" aria-label="Remover">
-              <mat-icon>close</mat-icon>
-            </button>
-          </li>
-        }
-      </ul>
-    }
-    <form [formGroup]="installmentDraftForm" class="form">
-      <mat-form-field appearance="outline">
-        <mat-label>Valor da parcela</mat-label>
-        <input matInput type="number" step="0.01" formControlName="amount" required />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Data prevista</mat-label>
-        <input matInput [matDatepicker]="installmentDuePicker" formControlName="dueDate" required />
-        <mat-datepicker-toggle matIconSuffix [for]="installmentDuePicker"></mat-datepicker-toggle>
-        <mat-datepicker #installmentDuePicker></mat-datepicker>
-      </mat-form-field>
-
-      <div class="actions">
-        <button mat-stroked-button type="button" (click)="addInstallmentRow()">Adicionar à lista</button>
-        <button mat-raised-button color="accent" type="button" (click)="submitSchedule()">Enviar cronograma</button>
-      </div>
-    </form>
-  </section>
-
-  <section class="measurements">
-    <h3>Medições</h3>
-
-    <div class="table-container">
-      <table mat-table [dataSource]="measurements">
-        <ng-container matColumnDef="installmentNumber">
-          <th mat-header-cell *matHeaderCellDef>Parcela</th>
-          <td mat-cell *matCellDef="let m">{{ installmentNumber(m) }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef>Descrição</th>
-          <td mat-cell *matCellDef="let m">{{ m.description }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let m">{{ m.status }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="distance">
-          <th mat-header-cell *matHeaderCellDef>Distância da obra</th>
-          <td mat-cell *matCellDef="let m">
-            @if (m.distanceFromWorkMeters !== null) {
-              {{ m.distanceFromWorkMeters | number: '1.0-0' }} m
-            }
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="decision">
-          <th mat-header-cell *matHeaderCellDef>Decisão</th>
-          <td mat-cell *matCellDef="let m">
-            @if (m.approvedById) {
-              {{ m.approvedById }} em {{ m.decisionDate | date: 'short' }}
-              @if (m.decisionNote) {
-                <br />{{ m.decisionNote }}
-              }
-            }
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="media">
-          <th mat-header-cell *matHeaderCellDef>Mídia</th>
-          <td mat-cell *matCellDef="let m">
-            @for (media of m.media; track media.id) {
-              <a [href]="media.url" target="_blank" rel="noopener">{{ media.type }}</a>
-              <br />
-            }
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let m">
-            @if (m.status === 'PENDING' && canDecideMeasurement()) {
-              <input #note type="text" placeholder="Observação (opcional)" class="decision-note" />
-              <button mat-icon-button color="primary" (click)="approveMeasurement(m, note.value)" aria-label="Aprovar">
-                <mat-icon>check</mat-icon>
-              </button>
-              <button mat-icon-button color="warn" (click)="rejectMeasurement(m, note.value)" aria-label="Reprovar">
-                <mat-icon>close</mat-icon>
-              </button>
-            }
-            @if (m.status === 'REJECTED') {
-              <a mat-button [routerLink]="['/installments', m.installmentId, 'measurements', 'new']" [queryParams]="{ supersedes: m.id }">
-                Reenviar
-              </a>
-            }
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="measurementColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: measurementColumns"></tr>
-      </table>
-    </div>
-  </section>
-}
+</div>

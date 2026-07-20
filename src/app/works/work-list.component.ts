@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
 import { Work, WorkService } from './work.service';
@@ -10,7 +11,7 @@ import { Work, WorkService } from './work.service';
 @Component({
   selector: 'app-work-list',
   standalone: true,
-  imports: [RouterLink, DecimalPipe, MatTableModule, MatButtonModule, MatIconModule],
+  imports: [RouterLink, DecimalPipe, MatTableModule, MatButtonModule, MatCardModule, MatIconModule],
   templateUrl: './work-list.component.html',
   styleUrl: './work-list.component.scss',
 })
