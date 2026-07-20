@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "nimbusflow-frontend": {
+    "nimbusflow-web": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/nimbusflow-frontend",
+            "outputPath": "dist/nimbusflow-web",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -78,10 +78,10 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "nimbusflow-frontend:build:production"
+              "buildTarget": "nimbusflow-web:build:production"
             },
             "development": {
-              "buildTarget": "nimbusflow-frontend:build:development"
+              "buildTarget": "nimbusflow-web:build:development"
             }
           },
           "defaultConfiguration": "development"

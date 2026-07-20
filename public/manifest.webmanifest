@@ -1,6 +1,6 @@
 {
-  "name": "nimbusflow-frontend",
-  "short_name": "nimbusflow-frontend",
+  "name": "nimbusflow-web",
+  "short_name": "nimbusflow-web",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
