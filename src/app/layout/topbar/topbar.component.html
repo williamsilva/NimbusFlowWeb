@@ -34,6 +34,13 @@
     </button>
 
     @if (currentUser?.authenticated) {
+      @if (sessionLabel) {
+        <div class="session-timer" [class]="'session-timer--' + sessionTone" matTooltip="Tempo restante da sessão">
+          <mat-icon>schedule</mat-icon>
+          <span>{{ sessionLabel }}</span>
+        </div>
+      }
+
       <button
         type="button"
         class="account-trigger"
@@ -55,8 +62,6 @@
           <span>Sair</span>
         </button>
       </mat-menu>
-    } @else {
-      <button mat-raised-button color="accent" (click)="login.emit()">Entrar</button>
     }
   </div>
 </header>

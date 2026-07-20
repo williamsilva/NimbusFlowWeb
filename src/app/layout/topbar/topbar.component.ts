@@ -8,6 +8,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CurrentUser } from '../../core/auth/auth.service';
 import { ThemeService } from '../../core/theme/theme.service';
 
+export type SessionTone = 'normal' | 'warning' | 'danger';
+
 @Component({
   selector: 'app-topbar',
   standalone: true,
@@ -18,9 +20,10 @@ import { ThemeService } from '../../core/theme/theme.service';
 export class TopbarComponent {
   @Input() currentUser: CurrentUser | null = null;
   @Input() sidebarVisible = true;
+  @Input() sessionLabel: string | null = null;
+  @Input() sessionTone: SessionTone = 'normal';
 
   @Output() toggleSidebar = new EventEmitter<void>();
-  @Output() login = new EventEmitter<void>();
   @Output() logout = new EventEmitter<void>();
 
   constructor(readonly theme: ThemeService) {}
