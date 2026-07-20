@@ -1,0 +1,38 @@
+<aside class="sidebar glass">
+  <nav class="nav">
+    @for (item of navItems; track item.link) {
+      <a
+        class="nav-item"
+        [routerLink]="item.link"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.exact }"
+      >
+        <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+
+  <div class="sidebar-profile">
+    <div class="profile-card">
+      <div class="avatar">
+        <span class="avatar-text">{{ initials }}</span>
+      </div>
+
+      <div class="profile-info">
+        <div class="profile-name" [title]="currentUser?.name || ''">{{ currentUser?.name }}</div>
+      </div>
+
+      <button
+        mat-icon-button
+        type="button"
+        class="logout"
+        (click)="logout.emit()"
+        aria-label="Sair"
+        matTooltip="Sair"
+      >
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </div>
+</aside>

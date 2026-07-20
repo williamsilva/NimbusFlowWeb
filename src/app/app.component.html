@@ -1,36 +1,25 @@
-<mat-toolbar color="primary" class="app-toolbar">
-  <span class="app-toolbar__title">{{ title }}</span>
-  @if (currentUser?.authenticated) {
-    <nav class="app-toolbar__nav">
-      <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <mat-icon>home</mat-icon>
-        Início
-      </a>
-      <a mat-button routerLink="/suppliers" routerLinkActive="active">
-        <mat-icon>storefront</mat-icon>
-        Fornecedores
-      </a>
-      <a mat-button routerLink="/works" routerLinkActive="active">
-        <mat-icon>construction</mat-icon>
-        Obras
-      </a>
-      <a mat-button routerLink="/suggestions" routerLinkActive="active">
-        <mat-icon>lightbulb</mat-icon>
-        Sugestões
-      </a>
-    </nav>
-  }
-  <span class="spacer"></span>
-  @if (currentUser?.authenticated) {
-    <button mat-button (click)="logout()">
-      <mat-icon>logout</mat-icon>
-      Sair
-    </button>
-  } @else {
-    <button mat-raised-button color="accent" (click)="login()">Entrar</button>
-  }
-</mat-toolbar>
+<app-topbar
+  class="topbar-wrapper"
+  [currentUser]="currentUser"
+  [sidebarVisible]="sidebarVisible()"
+  (toggleSidebar)="toggleSidebar()"
+  (login)="login()"
+  (logout)="logout()"
+></app-topbar>
 
-<main class="app-shell">
-  <router-outlet />
-</main>
+<div class="shell" [class.sidebar-collapsed]="!sidebarVisible() || !currentUser?.authenticated">
+  @if (currentUser?.authenticated && sidebarVisible()) {
+    <app-sidebar class="sidebar-host" [currentUser]="currentUser" (logout)="logout()"></app-sidebar>
+  }
+
+  <main class="content">
+    <div class="content-inner">
+      <router-outlet />
+    </div>
+  </main>
+</div>
+
+<app-footer
+  class="footer-fixed"
+  [class.sidebar-collapsed]="!sidebarVisible() || !currentUser?.authenticated"
+></app-footer>

@@ -1,0 +1,62 @@
+<header class="topbar glass">
+  <div class="left">
+    @if (currentUser?.authenticated) {
+      <button
+        mat-icon-button
+        type="button"
+        class="sidebar-toggle"
+        (click)="toggleSidebar.emit()"
+        [attr.aria-label]="sidebarVisible ? 'Ocultar menu' : 'Mostrar menu'"
+        [matTooltip]="sidebarVisible ? 'Ocultar menu' : 'Mostrar menu'"
+      >
+        <mat-icon>{{ sidebarVisible ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+    }
+
+    <a class="brand" routerLink="/">
+      <mat-icon class="brand-icon">cloud</mat-icon>
+      <div class="brand-text">
+        <div class="name">NimbusFlow</div>
+        <div class="sub">Obras &amp; Pagamentos</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="right">
+    <button
+      mat-icon-button
+      type="button"
+      (click)="theme.toggle()"
+      [matTooltip]="theme.mode() === 'dark' ? 'Tema claro' : 'Tema escuro'"
+      aria-label="Alternar tema"
+    >
+      <mat-icon>{{ theme.mode() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+
+    @if (currentUser?.authenticated) {
+      <button
+        type="button"
+        class="account-trigger"
+        [matMenuTriggerFor]="accountMenu"
+        aria-haspopup="true"
+        aria-label="Menu da conta"
+      >
+        <span class="account-avatar">{{ initials }}</span>
+        <mat-icon class="chevron">expand_more</mat-icon>
+      </button>
+
+      <mat-menu #accountMenu="matMenu">
+        <div class="account-menu-header">
+          <div class="account-menu-name">{{ currentUser?.name }}</div>
+          <div class="account-menu-username">{{ currentUser?.username }}</div>
+        </div>
+        <button mat-menu-item (click)="logout.emit()">
+          <mat-icon>logout</mat-icon>
+          <span>Sair</span>
+        </button>
+      </mat-menu>
+    } @else {
+      <button mat-raised-button color="accent" (click)="login.emit()">Entrar</button>
+    }
+  </div>
+</header>

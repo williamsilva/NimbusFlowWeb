@@ -1,0 +1,139 @@
+.topbar {
+  height: 56px;
+  margin: 0 8px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 14px;
+  box-sizing: border-box;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand:hover {
+  opacity: 0.92;
+}
+
+.brand-icon {
+  color: var(--nf-glow-a, #3b82f6);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  min-width: 0;
+}
+
+.brand-text .name {
+  font-weight: 900;
+  letter-spacing: 0.15px;
+  font-size: 0.95rem;
+}
+
+.brand-text .sub {
+  font-size: 0.75rem;
+  opacity: 0.65;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.account-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 6px 0 4px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.03);
+  color: inherit;
+  cursor: pointer;
+
+  transition:
+    background 140ms ease,
+    border-color 140ms ease;
+}
+
+.account-trigger:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+:root.dark .account-trigger {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+:root.dark .account-trigger:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(59, 130, 246, 0.28);
+}
+
+.account-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 900;
+  background: rgba(59, 130, 246, 0.16);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+:root.dark .account-avatar {
+  background: rgba(59, 130, 246, 0.24);
+  border: 1px solid rgba(59, 130, 246, 0.24);
+}
+
+.chevron {
+  opacity: 0.6;
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.account-menu-header {
+  padding: 8px 16px;
+  min-width: 180px;
+}
+
+.account-menu-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.account-menu-username {
+  font-size: 0.78rem;
+  opacity: 0.65;
+}
+
+@media (max-width: 640px) {
+  .brand-text .sub {
+    display: none;
+  }
+}

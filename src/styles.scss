@@ -1,10 +1,99 @@
+@use '@angular/material' as mat;
+
+// ===== Tema Material (claro + escuro via classe .dark na <html>) =====
+// Substitui o prebuilt-theme azure-blue.css antigo por um tema custom, unico jeito de ter
+// dark mode de verdade nos componentes Material (botoes, campos, tabelas, cards, etc.).
+$nf-primary: mat.m2-define-palette(mat.$m2-blue-palette);
+$nf-accent: mat.m2-define-palette(mat.$m2-cyan-palette, A700, A400, A700);
+$nf-warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+$nf-light-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $nf-primary,
+    accent: $nf-accent,
+    warn: $nf-warn,
+  ),
+  density: 0,
+));
+
+$nf-dark-theme: mat.m2-define-dark-theme((
+  color: (
+    primary: $nf-primary,
+    accent: $nf-accent,
+    warn: $nf-warn,
+  ),
+  density: 0,
+));
+
+@include mat.core();
+@include mat.all-component-themes($nf-light-theme);
+
+.dark {
+  @include mat.all-component-colors($nf-dark-theme);
+}
+
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
+
+:root {
+  color-scheme: light;
+
+  // Paleta "tech glass" inspirada no CardSync: glows azul/roxo/teal, cards translucidos.
+  --nf-glow-a: rgba(59, 130, 246, 0.35);
+  --nf-glow-b: rgba(168, 85, 247, 0.28);
+  --nf-glow-c: rgba(20, 184, 166, 0.22);
+  --nf-card-light: rgba(255, 255, 255, 0.66);
+  --nf-card-dark: rgba(17, 24, 39, 0.55);
+  --nf-border-light: rgba(0, 0, 0, 0.08);
+  --nf-border-dark: rgba(255, 255, 255, 0.12);
+  --nf-text-muted: rgba(0, 0, 0, 0.6);
+}
+
+:root.dark {
+  color-scheme: dark;
+  --nf-text-muted: rgba(255, 255, 255, 0.65);
+}
+
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background: #f4f5f7;
+  color: #1a1b1f;
+
+  background:
+    radial-gradient(1100px 650px at 12% -8%, var(--nf-glow-a), transparent 58%),
+    radial-gradient(900px 520px at 90% 2%, var(--nf-glow-b), transparent 55%),
+    radial-gradient(900px 520px at 50% 110%, var(--nf-glow-c), transparent 55%),
+    #eef0f4;
+  background-attachment: fixed;
+}
+
+:root.dark body {
+  color: #e8eaed;
+  background:
+    radial-gradient(1100px 650px at 12% -8%, var(--nf-glow-a), transparent 58%),
+    radial-gradient(900px 520px at 90% 2%, var(--nf-glow-b), transparent 55%),
+    radial-gradient(900px 520px at 50% 110%, var(--nf-glow-c), transparent 55%),
+    #0f1115;
+}
+
+// Vidro fosco (glassmorphism) reutilizado por cards/topbar/sidebar/footer.
+.glass {
+  background: var(--nf-card-light);
+  border: 1px solid var(--nf-border-light);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.22) inset;
+}
+
+:root.dark .glass {
+  background: var(--nf-card-dark);
+  border: 1px solid var(--nf-border-dark);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset;
 }
 
 // Container padrão de página: centraliza o conteúdo e evita que ele fique colado nas
@@ -29,10 +118,12 @@ body {
   }
 }
 
-// Cards de conteúdo (listas, formulários, seções) - espaçamento e sombra consistentes.
+// Cards de conteúdo (listas, formulários, seções) - espaçamento consistente + visual glass.
 .content-card {
+  @extend .glass;
   padding: 24px;
   margin-bottom: 24px;
+  border-radius: 14px;
 
   h3 {
     margin: 0 0 16px;
@@ -44,7 +135,7 @@ body {
     margin: 24px 0 12px;
     font-size: 1rem;
     font-weight: 500;
-    color: rgba(0, 0, 0, 0.7);
+    color: var(--nf-text-muted);
   }
 }
 
@@ -55,6 +146,7 @@ body {
 
 table.mat-mdc-table {
   width: 100%;
+  background: transparent;
 }
 
 // Envolve varios <mat-card> de secao de um mesmo formulario (ex.: dados gerais / endereco /
