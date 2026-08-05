@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 import { AuthService } from '../core/auth/auth.service';
@@ -22,7 +23,8 @@ describe('HomeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HomeComponent],
-      providers: [{ provide: AuthService, useValue: authServiceMock }],
+      // RouterLink dos "quick links" precisa de um Router configurado no TestBed.
+      providers: [{ provide: AuthService, useValue: authServiceMock }, provideRouter([])],
     }).compileComponents();
   });
 

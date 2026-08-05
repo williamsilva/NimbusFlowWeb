@@ -1,6 +1,7 @@
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
@@ -21,5 +22,7 @@ export const appConfig: ApplicationConfig = {
       registrationStrategy: 'registerWhenStable:30000',
     }),
     provideAnimationsAsync(),
+    // Dashboard (Fase 6): gráficos via ng2-charts/Chart.js.
+    provideCharts(withDefaultRegisterables()),
   ],
 };

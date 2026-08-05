@@ -1,0 +1,138 @@
+.page-header__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.dashboard-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 0;
+  color: var(--nf-text-secondary, #6b7280);
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.kpi-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+}
+
+.kpi-card__label {
+  font-size: 12px;
+  color: var(--nf-text-secondary, #6b7280);
+}
+
+.kpi-card__value {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.kpi-card--warn .kpi-card__value {
+  color: #f57c00;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.dashboard-grid--charts mat-card {
+  min-height: 320px;
+}
+
+.chart-container {
+  position: relative;
+  height: 260px;
+}
+
+.chart-container--doughnut {
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.empty-state {
+  color: var(--nf-text-secondary, #6b7280);
+  font-size: 13px;
+}
+
+.pending-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pending-list__meta {
+  display: block;
+  font-size: 12px;
+  color: var(--nf-text-secondary, #6b7280);
+}
+
+.map-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.status-filter,
+.timeline-select {
+  width: 220px;
+}
+
+.dashboard-map {
+  height: 360px;
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.timeline {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-left: 2px solid #e0e0e0;
+  padding-left: 16px;
+}
+
+.timeline__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.timeline__date {
+  font-size: 11px;
+  color: var(--nf-text-secondary, #6b7280);
+}
+
+.timeline__label {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.timeline__description {
+  font-size: 13px;
+}
+
+.timeline__amount {
+  font-size: 12px;
+  color: #1976d2;
+}

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -44,8 +44,10 @@ export class WorkService {
 
   constructor(private readonly http: HttpClient) {}
 
-  list(): Observable<Work[]> {
-    return this.http.get<Work[]>(this.baseUrl);
+  /** status opcional - usado pelo mapa de obras do dashboard (Fase 6) pra filtrar por status. */
+  list(status?: WorkStatus): Observable<Work[]> {
+    const params = status ? new HttpParams().set('status', status) : undefined;
+    return this.http.get<Work[]>(this.baseUrl, { params });
   }
 
   get(id: string): Observable<Work> {

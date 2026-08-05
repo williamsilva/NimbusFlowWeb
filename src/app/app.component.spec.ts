@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 import { AppComponent } from './app.component';
@@ -14,7 +15,8 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
-      providers: [{ provide: AuthService, useValue: authServiceMock }],
+      // RouterOutlet/RouterLink no template do AppComponent precisam de um Router configurado.
+      providers: [{ provide: AuthService, useValue: authServiceMock }, provideRouter([])],
     }).compileComponents();
   });
 
@@ -24,17 +26,13 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'NimbusFlow' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('NimbusFlow');
-  });
-
-  it('should render the title and a login button when not authenticated', () => {
+  it('should render the app chrome and redirect straight to login when not authenticated', () => {
+    // Não há mais botão de "Entrar" na tela - usuário não autenticado (ou sessão expirada) vai
+    // direto pro login do nimbusAuth (ver ngOnInit/AuthService.startLogin).
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.textContent).toContain('NimbusFlow');
-    expect(compiled.textContent).toContain('Entrar');
+    expect(authServiceMock.startLogin).toHaveBeenCalled();
   });
 });
