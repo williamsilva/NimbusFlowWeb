@@ -13,6 +13,7 @@ import { forkJoin } from 'rxjs';
 
 import { AuthService, CurrentUser } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
+import { TaxIdPipe } from '../shared/pipes/tax-id.pipe';
 import { AccountService, Profile } from './account.service';
 
 @Component({
@@ -28,6 +29,7 @@ import { AccountService, Profile } from './account.service';
     MatIconModule,
     MatProgressSpinnerModule,
     TranslatePipe,
+    TaxIdPipe,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',

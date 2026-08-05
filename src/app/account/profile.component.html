@@ -68,7 +68,7 @@
           </div>
           <div class="stat">
             <span class="stat-label">{{ 'account.profile.document' | translate }}</span>
-            <span class="stat-value">{{ profile.document || ('common.notInformed' | translate) }}</span>
+            <span class="stat-value">{{ (profile.document | taxId) || ('common.notInformed' | translate) }}</span>
           </div>
         </div>
 
