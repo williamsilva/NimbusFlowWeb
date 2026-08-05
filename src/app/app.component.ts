@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { Subscription, interval, startWith } from 'rxjs';
 
 import { AuthService, CurrentUser } from './core/auth/auth.service';
@@ -7,6 +8,7 @@ import { ThemeService } from './core/theme/theme.service';
 import { FooterComponent } from './layout/footer/footer.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { SessionTone, TopbarComponent } from './layout/topbar/topbar.component';
+import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private readonly authService: AuthService,
     private readonly themeService: ThemeService,
+    private readonly dialog: MatDialog,
   ) {
     this.themeService.init();
   }
@@ -54,8 +57,23 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.sessionWatchSub?.unsubscribe();
-    this.authService.logout();
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      autoFocus: false,
+      data: {
+        title: 'Encerrar sessão',
+        message: 'Deseja realmente sair do NimbusFlow?',
+        confirmLabel: 'Sair',
+        icon: 'logout',
+        danger: true,
+      },
+    });
+
+    ref.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.sessionWatchSub?.unsubscribe();
+        this.authService.logout();
+      }
+    });
   }
 
   get sessionLabel(): string | null {
