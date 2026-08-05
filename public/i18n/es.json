@@ -1,0 +1,349 @@
+{
+  "works": {
+    "list": {
+      "title": "Obras",
+      "create": "Nueva obra",
+      "searchPlaceholder": "Nombre de la obra, proveedor…",
+      "columns": {
+        "name": "Nombre",
+        "supplier": "Proveedor",
+        "status": "Estado",
+        "startDate": "Inicio",
+        "expectedEndDate": "Fin previsto",
+        "totalAmount": "Monto total"
+      },
+      "manageAria": "Gestionar",
+      "empty": "No se encontraron obras."
+    },
+    "status": {
+      "PLANNED": "Planificada",
+      "IN_PROGRESS": "En curso",
+      "PAUSED": "Pausada",
+      "COMPLETED": "Concluida",
+      "CANCELLED": "Cancelada"
+    },
+    "fields": {
+      "name": "Nombre/descripción",
+      "nameRequired": "Ingrese el nombre de la obra.",
+      "supplier": "Proveedor",
+      "supplierRequired": "Seleccione un proveedor.",
+      "startDate": "Fecha de inicio",
+      "startDateRequired": "Ingrese la fecha de inicio.",
+      "expectedEndDate": "Fecha de fin prevista",
+      "expectedEndDateRequired": "Ingrese la fecha de fin prevista.",
+      "actualEndDate": "Fecha de fin real",
+      "initialAmount": "Monto inicial contratado",
+      "initialAmountRequired": "Ingrese el monto inicial.",
+      "totalAmount": "Monto total actualizado (inicial + adicionales aprobados)",
+      "status": "Estado",
+      "geolocationTitle": "Geolocalización",
+      "geolocationHint": "Haga clic en el mapa para marcar la ubicación de la obra."
+    },
+    "form": {
+      "title": "Gestionar obra",
+      "dataSection": "Datos de la obra",
+      "decisionNotePlaceholder": "Observación (opcional)",
+      "tabs": { "addendums": "Adicionales", "installments": "Cuotas", "measurements": "Mediciones" },
+      "addendum": {
+        "columns": { "amount": "Monto", "justification": "Justificación", "status": "Estado", "requiredTier": "Nivel de aprobación", "decision": "Decisión" },
+        "decisionBy": "{{by}} el {{date}}",
+        "request": "Solicitar adicional",
+        "amountLabel": "Monto del adicional",
+        "justificationLabel": "Justificación",
+        "resubmitNotice": "Reenvío referente al adicional rechazado de {{amount}}.",
+        "cancelResubmit": "Cancelar reenvío",
+        "resend": "Reenviar",
+        "approve": "Aprobar",
+        "reject": "Rechazar"
+      },
+      "installment": {
+        "columns": { "number": "N.º", "amount": "Monto", "dueDate": "Vencimiento", "status": "Estado" },
+        "registerMeasurement": "Registrar medición",
+        "release": "Liberar",
+        "markPaid": "Marcar como pagada",
+        "addToSchedule": "Agregar cuota al cronograma",
+        "amountLabel": "Monto de la cuota",
+        "dueDateLabel": "Fecha prevista",
+        "addToList": "Agregar a la lista",
+        "schedule": "Enviar cronograma",
+        "removeAria": "Quitar"
+      },
+      "measurement": {
+        "columns": { "installment": "Cuota", "description": "Descripción", "status": "Estado", "distance": "Distancia de la obra", "decision": "Decisión", "media": "Medios" },
+        "decisionBy": "{{by}} el {{date}}",
+        "approve": "Aprobar",
+        "reject": "Rechazar",
+        "resend": "Reenviar"
+      }
+    },
+    "createDialog": {
+      "title": "Nueva obra",
+      "reviewFields": "Revise los campos resaltados antes de guardar.",
+      "saveError": "No fue posible guardar la obra. Intente de nuevo."
+    },
+    "mapPicker": {
+      "hint": "Seleccione la ubicación dentro del área del parque Acquamania (Guarapari/ES).",
+      "outOfBounds": "Punto fuera del área de Acquamania - clic no registrado.",
+      "areaTooltip": "Área de Acquamania"
+    }
+  },
+  "measurements": {
+    "form": {
+      "title": "Registrar medición",
+      "resubmitNotice": "Reenvío referente a la medición rechazada anterior.",
+      "description": "Descripción",
+      "geolocationTitle": "Geolocalización",
+      "captureLocation": "Capturar ubicación actual",
+      "locationError": "No fue posible obtener la ubicación: {{message}}",
+      "latitude": "Latitud",
+      "longitude": "Longitud",
+      "mediaTitle": "Fotos/videos",
+      "submit": "Enviar medición"
+    }
+  },
+  "topbar": {
+    "brandName": "NimbusFlow",
+    "brandSub": "Obras y Pagos",
+    "online": "En línea",
+    "sessionExpireTooltip": "Tiempo restante de la sesión",
+    "sidebarShowTooltip": "Mostrar menú",
+    "sidebarHideTooltip": "Ocultar menú",
+    "themeToggleDark": "Tema oscuro",
+    "themeToggleLight": "Tema claro",
+    "themeToggleAria": "Cambiar tema",
+    "langAria": "Idioma",
+    "accountMenuAria": "Menú de la cuenta"
+  },
+  "menu": {
+    "dashboard": "Dashboard",
+    "suppliers": "Proveedores",
+    "works": "Obras",
+    "suggestions": "Sugerencias",
+    "me": "Mi cuenta",
+    "changePassword": "Cambiar Contraseña",
+    "logout": "Salir"
+  },
+  "common": {
+    "save": "Guardar",
+    "saving": "Guardando…",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "deactivate": "Desactivar",
+    "back": "Volver",
+    "refresh": "Actualizar",
+    "search": "Buscar",
+    "yes": "Sí",
+    "no": "No",
+    "loading": "Cargando…",
+    "notInformed": "No informado",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "actions": "Acciones",
+    "ok": "Ok",
+    "confirm": "Confirmar"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados."
+  },
+  "dialogs": {
+    "logout": {
+      "title": "Cerrar sesión",
+      "message": "¿Seguro que desea salir de NimbusFlow?"
+    }
+  },
+  "account": {
+    "profile": {
+      "title": "Perfil",
+      "subtitle": "Consulte sus datos de perfil y registro.",
+      "changePassword": "Cambiar contraseña",
+      "groups": "Grupos",
+      "permissions": "Permisos",
+      "items": "{{count}} elemento",
+      "items_plural": "{{count}} elementos",
+      "userDataTitle": "Datos del usuario",
+      "sectionIdentification": "Identificación",
+      "sectionSecurity": "Seguridad",
+      "sectionAudit": "Auditoría",
+      "name": "Nombre",
+      "username": "Usuario",
+      "document": "Documento",
+      "status": "Estado",
+      "blocked": "Bloqueado",
+      "blockedUntil": "Bloqueado hasta",
+      "password": "Contraseña",
+      "passwordExpiresIn": "{{days}} días",
+      "passwordExpiresAt": "La contraseña vence el",
+      "issuer": "Issuer",
+      "createdAt": "Creado el",
+      "lastLogin": "Último acceso",
+      "status1": "Activo",
+      "status2": "Inactivo",
+      "status3": "Bloqueado",
+      "status4": "Desactivado",
+      "status5": "Contraseña pendiente",
+      "loadError": "No fue posible cargar su perfil."
+    },
+    "password": {
+      "title": "Cambiar contraseña",
+      "subtitle": "Ingrese su contraseña actual y defina una nueva contraseña segura.",
+      "changeDataTitle": "Datos del cambio",
+      "currentPassword": "Contraseña actual",
+      "newPassword": "Nueva contraseña",
+      "confirmPassword": "Confirmar nueva contraseña",
+      "policyTitle": "Política de contraseña",
+      "policySubtitle": "La contraseña debe cumplir las reglas de seguridad a continuación.",
+      "strength": "Seguridad de la contraseña",
+      "strengthNotInformed": "No informada",
+      "strengthWeak": "Débil",
+      "strengthMedium": "Media",
+      "strengthStrong": "Fuerte",
+      "rulesTotal": "Reglas",
+      "rulesValid": "Reglas válidas",
+      "rulesInvalid": "Reglas inválidas",
+      "rulesSatisfied": "{{valid}}/{{total}} reglas cumplidas",
+      "minLength": "Longitud mínima",
+      "profileLink": "Perfil",
+      "save": "Guardar contraseña",
+      "success": "Contraseña cambiada con éxito.",
+      "mismatch": "Las contraseñas no coinciden.",
+      "policyLoadError": "No fue posible cargar la política de contraseña."
+    }
+  },
+  "passwordRule": {
+    "PASSWORD_TOO_SHORT": "Mínimo {{minLen}} caracteres",
+    "PASSWORD_MISSING_LOWER": "Al menos 1 letra minúscula",
+    "PASSWORD_MISSING_UPPER": "Al menos 1 letra mayúscula",
+    "PASSWORD_MISSING_DIGIT": "Al menos 1 número",
+    "PASSWORD_MISSING_SPECIAL": "Al menos 1 símbolo",
+    "PASSWORD_HAS_WHITESPACE": "Sin espacios",
+    "PASSWORD_HAS_SEQUENCE": "Evitar secuencias (ej: 123 / abc)",
+    "PASSWORD_HAS_REPETITION": "Evitar repetición (ej: aaa)",
+    "PASSWORD_COMMON": "No usar una contraseña común",
+    "PASSWORD_CONTAINS_USERNAME": "No debe contener el usuario",
+    "PASSWORD_NOT_MATCH": "Las contraseñas deben coincidir",
+    "PASSWORD_REUSED_FROM_HISTORY": "No reutilizar las últimas {{historySize}} contraseñas",
+    "PASSWORD_SAME_AS_CURRENT": "La nueva contraseña debe ser diferente de la actual"
+  },
+  "errors": {
+    "PASSWORD_CURRENT_INVALID": "La contraseña actual es incorrecta.",
+    "PASSWORD_POLICY_INVALID": "La nueva contraseña no cumple la política de seguridad.",
+    "NIMBUS_AUTH_ERROR": "No fue posible completar la operación. Intente de nuevo.",
+    "GENERIC": "Ocurrió un error inesperado."
+  },
+  "suppliers": {
+    "list": {
+      "title": "Proveedores",
+      "create": "Nuevo proveedor",
+      "searchPlaceholder": "Razón social, CNPJ/CPF, correo…",
+      "empty": "No se encontraron proveedores.",
+      "columns": { "companyName": "Razón social", "taxId": "CNPJ/CPF", "phone": "Teléfono", "email": "Correo electrónico", "status": "Estado" }
+    },
+    "form": {
+      "createTitle": "Nuevo proveedor",
+      "editTitle": "Editar proveedor",
+      "sectionGeneral": "Datos generales",
+      "sectionAddress": "Dirección",
+      "sectionBank": "Datos bancarios",
+      "companyName": "Razón social",
+      "companyNameRequired": "Indique la razón social.",
+      "tradeName": "Nombre comercial",
+      "taxId": "CNPJ/CPF",
+      "taxIdPlaceholder": "Con o sin puntuación",
+      "taxIdRequired": "Indique el CNPJ o CPF.",
+      "taxIdInvalid": "Debe tener 11 (CPF) o 14 (CNPJ) dígitos.",
+      "phone": "Teléfono",
+      "email": "Correo electrónico",
+      "commercialContact": "Responsable comercial",
+      "addressStreet": "Calle",
+      "addressNumber": "Número",
+      "addressComplement": "Complemento",
+      "addressNeighborhood": "Barrio",
+      "addressCity": "Ciudad",
+      "addressState": "Provincia",
+      "addressZipCode": "Código postal",
+      "bankName": "Banco",
+      "bankAgency": "Agencia",
+      "bankAccount": "Cuenta",
+      "bankAccountType": "Tipo de cuenta",
+      "reviewFields": "Revise los campos resaltados antes de guardar.",
+      "saveError": "No se pudo guardar el proveedor. Intente nuevamente."
+    }
+  },
+  "suggestions": {
+    "list": {
+      "title": "Sugerencias de mejora",
+      "create": "Nueva sugerencia",
+      "searchPlaceholder": "Descripción…",
+      "empty": "No se encontraron sugerencias.",
+      "viewAttachment": "Ver adjunto",
+      "columns": { "description": "Descripción", "status": "Estado", "attachment": "Adjunto", "createdBy": "Autor" }
+    },
+    "status": { "RECEIVED": "Recibida", "IN_ANALYSIS": "En análisis", "IMPLEMENTED": "Implementada", "REJECTED": "Rechazada" },
+    "form": {
+      "createTitle": "Nueva sugerencia",
+      "description": "Descripción",
+      "descriptionRequired": "Describa la sugerencia.",
+      "attachmentOptional": "Adjunto (opcional)",
+      "send": "Enviar sugerencia",
+      "sending": "Enviando…",
+      "reviewFields": "Revise los campos resaltados antes de guardar.",
+      "saveError": "No se pudo enviar la sugerencia. Intente nuevamente."
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "loadingIndicators": "Cargando indicadores…",
+    "loadError": "No fue posible cargar los datos del panel.",
+    "timelineLoadError": "No fue posible cargar la línea de tiempo de la obra.",
+    "kpi": {
+      "totalContracted": "Total contratado",
+      "totalPaid": "Total pagado",
+      "balance": "Saldo por pagar",
+      "addendumIncrease": "Evolución de adicionales",
+      "overdueWorks": "Obras atrasadas",
+      "pendingAddendums": "Adicionales pendientes",
+      "pendingMeasurements": "Mediciones pendientes"
+    },
+    "statusChart": { "title": "Obras por estado" },
+    "rankingChart": { "title": "Ranking de proveedores", "contracted": "Contratado", "paid": "Pagado" },
+    "overdueTable": {
+      "title": "Obras atrasadas",
+      "empty": "No hay obras atrasadas. 🎉",
+      "columns": { "work": "Obra", "supplier": "Proveedor", "expectedEndDate": "Fin previsto", "status": "Estado" }
+    },
+    "pendingApprovals": {
+      "title": "Aprobaciones pendientes",
+      "addendums": "Adicionales",
+      "measurements": "Mediciones",
+      "emptyAddendums": "No hay adicionales pendientes.",
+      "emptyMeasurements": "No hay mediciones pendientes.",
+      "installment": "Cuota {{number}}"
+    },
+    "map": { "title": "Mapa de obras", "filterLabel": "Filtrar por estado", "filterAll": "Todos" },
+    "timeline": {
+      "title": "Línea de tiempo de la obra",
+      "selectWork": "Seleccione la obra",
+      "empty": "Aún no hay eventos registrados para esta obra."
+    },
+    "timelineEvent": {
+      "WORK_STARTED": "Inicio de la obra",
+      "WORK_COMPLETED": "Finalización de la obra",
+      "ADDENDUM_REQUESTED": "Adicional solicitado",
+      "ADDENDUM_APPROVED": "Adicional aprobado",
+      "ADDENDUM_REJECTED": "Adicional rechazado",
+      "MEASUREMENT_SUBMITTED": "Medición enviada",
+      "MEASUREMENT_APPROVED": "Medición aprobada",
+      "MEASUREMENT_REJECTED": "Medición rechazada",
+      "INSTALLMENT_RELEASED": "Cuota liberada",
+      "INSTALLMENT_PAID": "Cuota pagada"
+    },
+    "export": {
+      "pdf": "Exportar PDF",
+      "excel": "Exportar Excel",
+      "generating": "Generando…",
+      "pdfError": "No fue posible generar el informe en PDF.",
+      "excelError": "No fue posible generar el informe en Excel."
+    }
+  }
+}

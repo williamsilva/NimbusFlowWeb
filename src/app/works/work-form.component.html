@@ -1,18 +1,18 @@
 <div class="page-container">
   <div class="page-header">
-    <h2>Gerenciar obra</h2>
+    <h2>{{ 'works.form.title' | translate }}</h2>
   </div>
 
   <mat-card class="content-card">
-    <h3>Dados da obra</h3>
+    <h3>{{ 'works.form.dataSection' | translate }}</h3>
     <form [formGroup]="form" (ngSubmit)="save()" class="form">
       <mat-form-field appearance="outline">
-        <mat-label>Nome/descrição</mat-label>
+        <mat-label>{{ 'works.fields.name' | translate }}</mat-label>
         <input matInput formControlName="name" required />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Fornecedor</mat-label>
+        <mat-label>{{ 'works.fields.supplier' | translate }}</mat-label>
         <mat-select formControlName="supplierId" required>
           @for (supplier of suppliers; track supplier.id) {
             <mat-option [value]="supplier.id">{{ supplier.companyName }}</mat-option>
@@ -21,51 +21,51 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Data de início</mat-label>
+        <mat-label>{{ 'works.fields.startDate' | translate }}</mat-label>
         <input matInput [matDatepicker]="startPicker" formControlName="startDate" required />
         <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
         <mat-datepicker #startPicker></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Data de fim prevista</mat-label>
+        <mat-label>{{ 'works.fields.expectedEndDate' | translate }}</mat-label>
         <input matInput [matDatepicker]="expectedEndPicker" formControlName="expectedEndDate" required />
         <mat-datepicker-toggle matIconSuffix [for]="expectedEndPicker"></mat-datepicker-toggle>
         <mat-datepicker #expectedEndPicker></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Data de fim real</mat-label>
+        <mat-label>{{ 'works.fields.actualEndDate' | translate }}</mat-label>
         <input matInput [matDatepicker]="actualEndPicker" formControlName="actualEndDate" />
         <mat-datepicker-toggle matIconSuffix [for]="actualEndPicker"></mat-datepicker-toggle>
         <mat-datepicker #actualEndPicker></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Valor inicial contratado</mat-label>
+        <mat-label>{{ 'works.fields.initialAmount' | translate }}</mat-label>
         <input matInput type="number" step="0.01" formControlName="initialAmount" required />
       </mat-form-field>
 
       @if (work) {
         <mat-form-field appearance="outline">
-          <mat-label>Valor total atualizado (inicial + aditivos aprovados)</mat-label>
+          <mat-label>{{ 'works.fields.totalAmount' | translate }}</mat-label>
           <input matInput [value]="work.totalAmount" disabled />
         </mat-form-field>
       }
 
       @if (workId) {
         <mat-form-field appearance="outline">
-          <mat-label>Status</mat-label>
+          <mat-label>{{ 'works.fields.status' | translate }}</mat-label>
           <mat-select formControlName="status">
             @for (status of statusOptions; track status) {
-              <mat-option [value]="status">{{ status }}</mat-option>
+              <mat-option [value]="status">{{ statusLabelKey(status) | translate }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
       }
 
-      <h4>Geolocalização</h4>
-      <p>Clique no mapa para marcar a localização da obra.</p>
+      <h4>{{ 'works.fields.geolocationTitle' | translate }}</h4>
+      <p>{{ 'works.fields.geolocationHint' | translate }}</p>
       <app-map-picker
         [latitude]="form.controls.latitude.value"
         [longitude]="form.controls.longitude.value"
@@ -73,42 +73,42 @@
       ></app-map-picker>
 
       <div class="actions">
-        <button mat-raised-button color="primary" type="submit">Salvar</button>
+        <button mat-raised-button color="primary" type="submit">{{ 'common.save' | translate }}</button>
       </div>
     </form>
   </mat-card>
 
   @if (workId) {
     <mat-card class="content-card">
-      <h3>Aditivos</h3>
+      <h3>{{ 'works.form.tabs.addendums' | translate }}</h3>
 
       <div class="table-container">
         <table mat-table [dataSource]="addendums">
           <ng-container matColumnDef="amount">
-            <th mat-header-cell *matHeaderCellDef>Valor</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.addendum.columns.amount' | translate }}</th>
             <td mat-cell *matCellDef="let a">{{ a.amount }}</td>
           </ng-container>
 
           <ng-container matColumnDef="justification">
-            <th mat-header-cell *matHeaderCellDef>Justificativa</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.addendum.columns.justification' | translate }}</th>
             <td mat-cell *matCellDef="let a">{{ a.justification }}</td>
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.addendum.columns.status' | translate }}</th>
             <td mat-cell *matCellDef="let a">{{ a.status }}</td>
           </ng-container>
 
           <ng-container matColumnDef="requiredTier">
-            <th mat-header-cell *matHeaderCellDef>Alçada</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.addendum.columns.requiredTier' | translate }}</th>
             <td mat-cell *matCellDef="let a">{{ a.requiredTier }}</td>
           </ng-container>
 
           <ng-container matColumnDef="decision">
-            <th mat-header-cell *matHeaderCellDef>Decisão</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.addendum.columns.decision' | translate }}</th>
             <td mat-cell *matCellDef="let a">
               @if (a.approvedById) {
-                {{ a.approvedById }} em {{ a.decisionDate | date: 'short' }}
+                {{ addendumDecisionLabel(a) }}
                 @if (a.decisionNote) {
                   <br />{{ a.decisionNote }}
                 }
@@ -120,16 +120,26 @@
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let a">
               @if (a.status === 'PENDING' && canDecide(a)) {
-                <input #note type="text" placeholder="Observação (opcional)" class="decision-note" />
-                <button mat-icon-button color="primary" (click)="approve(a, note.value)" aria-label="Aprovar">
+                <input #note type="text" [placeholder]="'works.form.decisionNotePlaceholder' | translate" class="decision-note" />
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="approve(a, note.value)"
+                  [attr.aria-label]="'works.form.addendum.approve' | translate"
+                >
                   <mat-icon>check</mat-icon>
                 </button>
-                <button mat-icon-button color="warn" (click)="reject(a, note.value)" aria-label="Reprovar">
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="reject(a, note.value)"
+                  [attr.aria-label]="'works.form.addendum.reject' | translate"
+                >
                   <mat-icon>close</mat-icon>
                 </button>
               }
               @if (a.status === 'REJECTED') {
-                <button mat-button (click)="startResubmit(a)">Reenviar</button>
+                <button mat-button (click)="startResubmit(a)">{{ 'works.form.addendum.resend' | translate }}</button>
               }
             </td>
           </ng-container>
@@ -139,26 +149,26 @@
         </table>
       </div>
 
-      <h4>Solicitar aditivo</h4>
+      <h4>{{ 'works.form.addendum.request' | translate }}</h4>
       @if (resubmittingFrom) {
         <p>
-          Reenvio referente ao aditivo reprovado de {{ resubmittingFrom.amount }}.
-          <button mat-button type="button" (click)="cancelResubmit()">Cancelar reenvio</button>
+          {{ 'works.form.addendum.resubmitNotice' | translate: { amount: resubmittingFrom.amount } }}
+          <button mat-button type="button" (click)="cancelResubmit()">{{ 'works.form.addendum.cancelResubmit' | translate }}</button>
         </p>
       }
       <form [formGroup]="addendumForm" (ngSubmit)="submitAddendum()" class="form">
         <mat-form-field appearance="outline">
-          <mat-label>Valor do acréscimo</mat-label>
+          <mat-label>{{ 'works.form.addendum.amountLabel' | translate }}</mat-label>
           <input matInput type="number" step="0.01" formControlName="amount" required />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Justificativa</mat-label>
+          <mat-label>{{ 'works.form.addendum.justificationLabel' | translate }}</mat-label>
           <textarea matInput formControlName="justification" required></textarea>
         </mat-form-field>
 
         <div class="actions">
-          <button mat-raised-button color="accent" type="submit">Solicitar aditivo</button>
+          <button mat-raised-button color="accent" type="submit">{{ 'works.form.addendum.request' | translate }}</button>
         </div>
       </form>
     </mat-card>
@@ -166,27 +176,27 @@
 
   @if (workId) {
     <mat-card class="content-card">
-      <h3>Parcelas</h3>
+      <h3>{{ 'works.form.tabs.installments' | translate }}</h3>
 
       <div class="table-container">
         <table mat-table [dataSource]="installments">
           <ng-container matColumnDef="number">
-            <th mat-header-cell *matHeaderCellDef>Nº</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.installment.columns.number' | translate }}</th>
             <td mat-cell *matCellDef="let i">{{ i.number }}</td>
           </ng-container>
 
           <ng-container matColumnDef="amount">
-            <th mat-header-cell *matHeaderCellDef>Valor</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.installment.columns.amount' | translate }}</th>
             <td mat-cell *matCellDef="let i">{{ i.amount }}</td>
           </ng-container>
 
           <ng-container matColumnDef="dueDate">
-            <th mat-header-cell *matHeaderCellDef>Vencimento</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.installment.columns.dueDate' | translate }}</th>
             <td mat-cell *matCellDef="let i">{{ i.dueDate | date: 'shortDate' }}</td>
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.installment.columns.status' | translate }}</th>
             <td mat-cell *matCellDef="let i">{{ i.status }}</td>
           </ng-container>
 
@@ -194,13 +204,13 @@
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let i">
               @if (i.status === 'PLANNED' && canCreateMeasurement()) {
-                <a mat-button [routerLink]="['/installments', i.id, 'measurements', 'new']">Registrar medição</a>
+                <a mat-button [routerLink]="['/installments', i.id, 'measurements', 'new']">{{ 'works.form.installment.registerMeasurement' | translate }}</a>
               }
               @if (i.status === 'MEASUREMENT_APPROVED' && canRelease()) {
-                <button mat-button color="primary" (click)="release(i)">Liberar</button>
+                <button mat-button color="primary" (click)="release(i)">{{ 'works.form.installment.release' | translate }}</button>
               }
               @if (i.status === 'RELEASED' && canMarkAsPaid()) {
-                <button mat-button color="accent" (click)="markAsPaid(i)">Marcar como paga</button>
+                <button mat-button color="accent" (click)="markAsPaid(i)">{{ 'works.form.installment.markPaid' | translate }}</button>
               }
             </td>
           </ng-container>
@@ -210,13 +220,13 @@
         </table>
       </div>
 
-      <h4>Adicionar parcela ao cronograma</h4>
+      <h4>{{ 'works.form.installment.addToSchedule' | translate }}</h4>
       @if (pendingSchedule.length > 0) {
         <ul class="pending-schedule">
           @for (item of pendingSchedule; track $index) {
             <li>
               {{ item.amount }} — {{ item.dueDate }}
-              <button mat-icon-button (click)="removeInstallmentRow($index)" aria-label="Remover">
+              <button mat-icon-button (click)="removeInstallmentRow($index)" [attr.aria-label]="'works.form.installment.removeAria' | translate">
                 <mat-icon>close</mat-icon>
               </button>
             </li>
@@ -225,46 +235,46 @@
       }
       <form [formGroup]="installmentDraftForm" class="form">
         <mat-form-field appearance="outline">
-          <mat-label>Valor da parcela</mat-label>
+          <mat-label>{{ 'works.form.installment.amountLabel' | translate }}</mat-label>
           <input matInput type="number" step="0.01" formControlName="amount" required />
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Data prevista</mat-label>
+          <mat-label>{{ 'works.form.installment.dueDateLabel' | translate }}</mat-label>
           <input matInput [matDatepicker]="installmentDuePicker" formControlName="dueDate" required />
           <mat-datepicker-toggle matIconSuffix [for]="installmentDuePicker"></mat-datepicker-toggle>
           <mat-datepicker #installmentDuePicker></mat-datepicker>
         </mat-form-field>
 
         <div class="actions">
-          <button mat-stroked-button type="button" (click)="addInstallmentRow()">Adicionar à lista</button>
-          <button mat-raised-button color="accent" type="button" (click)="submitSchedule()">Enviar cronograma</button>
+          <button mat-stroked-button type="button" (click)="addInstallmentRow()">{{ 'works.form.installment.addToList' | translate }}</button>
+          <button mat-raised-button color="accent" type="button" (click)="submitSchedule()">{{ 'works.form.installment.schedule' | translate }}</button>
         </div>
       </form>
     </mat-card>
 
     <mat-card class="content-card">
-      <h3>Medições</h3>
+      <h3>{{ 'works.form.tabs.measurements' | translate }}</h3>
 
       <div class="table-container">
         <table mat-table [dataSource]="measurements">
           <ng-container matColumnDef="installmentNumber">
-            <th mat-header-cell *matHeaderCellDef>Parcela</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.measurement.columns.installment' | translate }}</th>
             <td mat-cell *matCellDef="let m">{{ installmentNumber(m) }}</td>
           </ng-container>
 
           <ng-container matColumnDef="description">
-            <th mat-header-cell *matHeaderCellDef>Descrição</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.measurement.columns.description' | translate }}</th>
             <td mat-cell *matCellDef="let m">{{ m.description }}</td>
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.measurement.columns.status' | translate }}</th>
             <td mat-cell *matCellDef="let m">{{ m.status }}</td>
           </ng-container>
 
           <ng-container matColumnDef="distance">
-            <th mat-header-cell *matHeaderCellDef>Distância da obra</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.measurement.columns.distance' | translate }}</th>
             <td mat-cell *matCellDef="let m">
               @if (m.distanceFromWorkMeters !== null) {
                 {{ m.distanceFromWorkMeters | number: '1.0-0' }} m
@@ -273,10 +283,10 @@
           </ng-container>
 
           <ng-container matColumnDef="decision">
-            <th mat-header-cell *matHeaderCellDef>Decisão</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.measurement.columns.decision' | translate }}</th>
             <td mat-cell *matCellDef="let m">
               @if (m.approvedById) {
-                {{ m.approvedById }} em {{ m.decisionDate | date: 'short' }}
+                {{ measurementDecisionLabel(m) }}
                 @if (m.decisionNote) {
                   <br />{{ m.decisionNote }}
                 }
@@ -285,7 +295,7 @@
           </ng-container>
 
           <ng-container matColumnDef="media">
-            <th mat-header-cell *matHeaderCellDef>Mídia</th>
+            <th mat-header-cell *matHeaderCellDef>{{ 'works.form.measurement.columns.media' | translate }}</th>
             <td mat-cell *matCellDef="let m">
               @for (media of m.media; track media.id) {
                 <a [href]="media.url" target="_blank" rel="noopener">{{ media.type }}</a>
@@ -298,17 +308,27 @@
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let m">
               @if (m.status === 'PENDING' && canDecideMeasurement()) {
-                <input #note type="text" placeholder="Observação (opcional)" class="decision-note" />
-                <button mat-icon-button color="primary" (click)="approveMeasurement(m, note.value)" aria-label="Aprovar">
+                <input #note type="text" [placeholder]="'works.form.decisionNotePlaceholder' | translate" class="decision-note" />
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="approveMeasurement(m, note.value)"
+                  [attr.aria-label]="'works.form.measurement.approve' | translate"
+                >
                   <mat-icon>check</mat-icon>
                 </button>
-                <button mat-icon-button color="warn" (click)="rejectMeasurement(m, note.value)" aria-label="Reprovar">
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="rejectMeasurement(m, note.value)"
+                  [attr.aria-label]="'works.form.measurement.reject' | translate"
+                >
                   <mat-icon>close</mat-icon>
                 </button>
               }
               @if (m.status === 'REJECTED') {
                 <a mat-button [routerLink]="['/installments', m.installmentId, 'measurements', 'new']" [queryParams]="{ supersedes: m.id }">
-                  Reenviar
+                  {{ 'works.form.measurement.resend' | translate }}
                 </a>
               }
             </td>

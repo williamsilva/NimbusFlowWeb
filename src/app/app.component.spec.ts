@@ -1,9 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideTranslateLoader, provideTranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
 import { AppComponent } from './app.component';
 import { AuthService } from './core/auth/auth.service';
+
+/** Loader mínimo só com o necessário pra essa suíte (i18n real é testado à parte). */
+class StubTranslateLoader {
+  getTranslation() {
+    return of({ topbar: { brandName: 'NimbusFlow' }, dialogs: { logout: { title: '', message: '' } }, menu: { logout: '' } });
+  }
+}
 
 describe('AppComponent', () => {
   const authServiceMock = {
@@ -16,7 +24,11 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       // RouterOutlet/RouterLink no template do AppComponent precisam de um Router configurado.
-      providers: [{ provide: AuthService, useValue: authServiceMock }, provideRouter([])],
+      providers: [
+        { provide: AuthService, useValue: authServiceMock },
+        provideRouter([]),
+        provideTranslateService({ loader: provideTranslateLoader(StubTranslateLoader), fallbackLang: 'pt-BR' }),
+      ],
     }).compileComponents();
   });
 

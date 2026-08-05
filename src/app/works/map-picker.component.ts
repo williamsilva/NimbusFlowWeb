@@ -1,5 +1,8 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import * as L from 'leaflet';
+
+import { I18nService } from '../core/i18n/i18n.service';
 
 // Leaflet's default marker icon URLs are built relative to the bundler's asset resolution, which
 // breaks under Angular's build - point them at the copies angular.json copies into /leaflet/.
@@ -29,13 +32,14 @@ const ALLOWED_BOUNDS: L.LatLngBounds = L.latLngBounds(
 @Component({
   selector: 'app-map-picker',
   standalone: true,
+  imports: [TranslatePipe],
   template: `
     <div class="map-picker" [id]="mapId"></div>
     <p class="map-hint" [class.map-hint--error]="lastClickOutOfBounds">
       @if (lastClickOutOfBounds) {
-        Ponto fora da área do Acquamania - clique não registrado.
+        {{ 'works.mapPicker.outOfBounds' | translate }}
       } @else {
-        Selecione a localização dentro da área do parque Acquamania (Guarapari/ES).
+        {{ 'works.mapPicker.hint' | translate }}
       }
     </p>
   `,
@@ -70,6 +74,8 @@ export class MapPickerComponent implements AfterViewInit, OnChanges, OnDestroy {
   private map?: L.Map;
   private marker?: L.Marker;
 
+  constructor(private readonly i18n: I18nService) {}
+
   ngAfterViewInit(): void {
     const hasInitialPosition = this.latitude != null && this.longitude != null;
 
@@ -98,7 +104,7 @@ export class MapPickerComponent implements AfterViewInit, OnChanges, OnDestroy {
       fillOpacity: 0.05,
     })
       .addTo(this.map)
-      .bindTooltip('Área do Acquamania');
+      .bindTooltip(this.i18n.tUi('works.mapPicker.areaTooltip'));
 
     this.map.on('click', (event: L.LeafletMouseEvent) => {
       const { lat, lng } = event.latlng;

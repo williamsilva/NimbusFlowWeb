@@ -1,0 +1,119 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>{{ 'account.profile.title' | translate }}</h2>
+  </div>
+  <p class="page-subtitle">{{ 'account.profile.subtitle' | translate }}</p>
+
+  @if (loading) {
+    <div class="profile-loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else if (profile) {
+    <div class="profile-grid">
+      <mat-card class="content-card hero-card">
+        <div class="avatar">{{ initials }}</div>
+        <div class="hero-name">{{ profile.name }}</div>
+        <div class="hero-username">{{ profile.userName }}</div>
+
+        <mat-chip-set class="status-chip">
+          @if (isBlocked) {
+            <mat-chip color="warn">{{ 'account.profile.status3' | translate }}</mat-chip>
+          } @else {
+            <mat-chip>{{ statusKey(profile.status) | translate }}</mat-chip>
+          }
+        </mat-chip-set>
+
+        <mat-expansion-panel class="hero-expansion">
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ 'account.profile.groups' | translate }}</mat-panel-title>
+            <mat-panel-description>{{ me?.groups?.length ?? 0 }}</mat-panel-description>
+          </mat-expansion-panel-header>
+          <ul class="chip-list">
+            @for (group of me?.groups; track group) {
+              <li>{{ group }}</li>
+            }
+          </ul>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="hero-expansion">
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ 'account.profile.permissions' | translate }}</mat-panel-title>
+            <mat-panel-description>{{ me?.permissions?.length ?? 0 }}</mat-panel-description>
+          </mat-expansion-panel-header>
+          <ul class="chip-list">
+            @for (permission of me?.permissions; track permission) {
+              <li>{{ permission }}</li>
+            }
+          </ul>
+        </mat-expansion-panel>
+
+        <button mat-raised-button color="primary" class="change-password-btn" routerLink="/account/password">
+          <mat-icon>vpn_key</mat-icon>
+          {{ 'account.profile.changePassword' | translate }}
+        </button>
+      </mat-card>
+
+      <mat-card class="content-card data-card">
+        <h4>{{ 'account.profile.userDataTitle' | translate }}</h4>
+
+        <div class="section-title">{{ 'account.profile.sectionIdentification' | translate }}</div>
+        <div class="stat-grid">
+          <div class="stat">
+            <span class="stat-label">{{ 'account.profile.name' | translate }}</span>
+            <span class="stat-value">{{ profile.name }}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">{{ 'account.profile.username' | translate }}</span>
+            <span class="stat-value">{{ profile.userName }}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">{{ 'account.profile.document' | translate }}</span>
+            <span class="stat-value">{{ profile.document || ('common.notInformed' | translate) }}</span>
+          </div>
+        </div>
+
+        <div class="section-title">{{ 'account.profile.sectionSecurity' | translate }}</div>
+        <div class="stat-grid">
+          <div class="stat">
+            <span class="stat-label">{{ 'account.profile.status' | translate }}</span>
+            <span class="stat-value">{{ statusKey(profile.status) | translate }}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">{{ 'account.profile.blocked' | translate }}</span>
+            <span class="stat-value">{{ (isBlocked ? 'common.yes' : 'common.no') | translate }}</span>
+          </div>
+          @if (profile.blockedUntil) {
+            <div class="stat">
+              <span class="stat-label">{{ 'account.profile.blockedUntil' | translate }}</span>
+              <span class="stat-value">{{ profile.blockedUntil | date: 'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+          }
+          @if (profile.passwordExpiresAt) {
+            <div class="stat">
+              <span class="stat-label">{{ 'account.profile.passwordExpiresAt' | translate }}</span>
+              <span class="stat-value">{{ profile.passwordExpiresAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+          }
+          <div class="stat">
+            <span class="stat-label">{{ 'account.profile.issuer' | translate }}</span>
+            <span class="stat-value">{{ me?.iss || ('common.notInformed' | translate) }}</span>
+          </div>
+        </div>
+
+        <div class="section-title">{{ 'account.profile.sectionAudit' | translate }}</div>
+        <div class="stat-grid">
+          <div class="stat">
+            <span class="stat-label">{{ 'account.profile.createdAt' | translate }}</span>
+            <span class="stat-value">{{ profile.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">{{ 'account.profile.lastLogin' | translate }}</span>
+            <span class="stat-value">
+              {{ profile.lastLoginAt ? (profile.lastLoginAt | date: 'dd/MM/yyyy HH:mm') : ('common.notInformed' | translate) }}
+            </span>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  }
+</div>

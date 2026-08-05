@@ -9,18 +9,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { AuthService } from '../core/auth/auth.service';
 import { StatusBadgeComponent, StatusTone } from '../shared/status-badge/status-badge.component';
 import { Suggestion, SuggestionService, SuggestionStatus } from './suggestion.service';
 import { SuggestionFormComponent } from './suggestion-form.component';
-
-const STATUS_LABELS: Record<SuggestionStatus, string> = {
-  RECEIVED: 'Recebida',
-  IN_ANALYSIS: 'Em análise',
-  IMPLEMENTED: 'Implementada',
-  REJECTED: 'Rejeitada',
-};
 
 const STATUS_TONES: Record<SuggestionStatus, StatusTone> = {
   RECEIVED: 'info',
@@ -44,6 +38,7 @@ const STATUS_TONES: Record<SuggestionStatus, StatusTone> = {
     MatTableModule,
     MatTooltipModule,
     StatusBadgeComponent,
+    TranslatePipe,
   ],
   templateUrl: './suggestion-list.component.html',
   styleUrl: './suggestion-list.component.scss',
@@ -90,8 +85,8 @@ export class SuggestionListComponent implements OnInit {
     });
   }
 
-  statusLabel(status: SuggestionStatus): string {
-    return STATUS_LABELS[status];
+  statusLabelKey(status: SuggestionStatus): string {
+    return `suggestions.status.${status}`;
   }
 
   statusTone(status: SuggestionStatus): StatusTone {

@@ -11,10 +11,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
+import { TranslatePipe } from '@ngx-translate/core';
 import { forkJoin } from 'rxjs';
 
 import { Addendum, AddendumRequest, AddendumService } from '../addendums/addendum.service';
 import { AuthService } from '../core/auth/auth.service';
+import { I18nService } from '../core/i18n/i18n.service';
 import { Installment, InstallmentScheduleItem, InstallmentService } from '../installments/installment.service';
 import { Measurement, MeasurementService } from '../measurements/measurement.service';
 import { Supplier, SupplierService } from '../suppliers/supplier.service';
@@ -38,6 +40,7 @@ import { Work, WorkRequest, WorkService, WorkStatus } from './work.service';
     MatSelectModule,
     MatTableModule,
     MapPickerComponent,
+    TranslatePipe,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './work-form.component.html',
@@ -73,6 +76,8 @@ export class WorkFormComponent implements OnInit {
     private readonly measurementService: MeasurementService,
     private readonly authService: AuthService,
     private readonly route: ActivatedRoute,
+    private readonly i18n: I18nService,
+    private readonly datePipe: DatePipe,
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -126,6 +131,24 @@ export class WorkFormComponent implements OnInit {
 
   loadAddendums(): void {
     this.addendumService.listByWork(this.workId!).subscribe((addendums) => (this.addendums = addendums));
+  }
+
+  statusLabelKey(status: WorkStatus): string {
+    return `works.status.${status}`;
+  }
+
+  addendumDecisionLabel(addendum: Addendum): string {
+    return this.i18n.tUi('works.form.addendum.decisionBy', {
+      by: addendum.approvedById,
+      date: this.datePipe.transform(addendum.decisionDate, 'short') ?? '',
+    });
+  }
+
+  measurementDecisionLabel(measurement: Measurement): string {
+    return this.i18n.tUi('works.form.measurement.decisionBy', {
+      by: measurement.approvedById,
+      date: this.datePipe.transform(measurement.decisionDate, 'short') ?? '',
+    });
   }
 
   /** Só é UX (esconder botão) - a validação de verdade é sempre revalidada no backend. */

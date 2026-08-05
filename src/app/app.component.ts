@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, interval, startWith } from 'rxjs';
 
 import { AuthService, CurrentUser } from './core/auth/auth.service';
+import { I18nService } from './core/i18n/i18n.service';
 import { ThemeService } from './core/theme/theme.service';
 import { FooterComponent } from './layout/footer/footer.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
@@ -28,6 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private readonly authService: AuthService,
     private readonly themeService: ThemeService,
     private readonly dialog: MatDialog,
+    private readonly i18n: I18nService,
   ) {
     this.themeService.init();
   }
@@ -60,9 +62,9 @@ export class AppComponent implements OnInit, OnDestroy {
     const ref = this.dialog.open(ConfirmDialogComponent, {
       autoFocus: false,
       data: {
-        title: 'Encerrar sessão',
-        message: 'Deseja realmente sair do NimbusFlow?',
-        confirmLabel: 'Sair',
+        title: this.i18n.tUi('dialogs.logout.title'),
+        message: this.i18n.tUi('dialogs.logout.message'),
+        confirmLabel: this.i18n.tUi('menu.logout'),
         icon: 'logout',
         danger: true,
       },

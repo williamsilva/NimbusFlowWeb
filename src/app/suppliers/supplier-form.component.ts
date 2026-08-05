@@ -6,7 +6,9 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslatePipe } from '@ngx-translate/core';
 
+import { I18nService } from '../core/i18n/i18n.service';
 import { formatPhone, formatTaxId, onlyDigits } from '../shared/utils/br-format';
 import { Supplier, SupplierRequest, SupplierService } from './supplier.service';
 
@@ -35,6 +37,7 @@ function taxIdValidator(): ValidatorFn {
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
+    TranslatePipe,
   ],
   templateUrl: './supplier-form.component.html',
   styleUrl: './supplier-form.component.scss',
@@ -49,6 +52,7 @@ export class SupplierFormComponent implements OnInit {
     private readonly supplierService: SupplierService,
     private readonly dialogRef: MatDialogRef<SupplierFormComponent>,
     private readonly snackBar: MatSnackBar,
+    private readonly i18n: I18nService,
     @Inject(MAT_DIALOG_DATA) private readonly data: SupplierFormDialogData,
   ) {
     this.form = this.fb.group({
@@ -107,7 +111,7 @@ export class SupplierFormComponent implements OnInit {
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.snackBar.open('Revise os campos destacados antes de salvar.', 'Ok', { duration: 4000 });
+      this.snackBar.open(this.i18n.tUi('suppliers.form.reviewFields'), this.i18n.tUi('common.ok'), { duration: 4000 });
       return;
     }
 
@@ -143,7 +147,7 @@ export class SupplierFormComponent implements OnInit {
       next: () => this.dialogRef.close(true),
       error: () => {
         this.saving = false;
-        this.snackBar.open('Não foi possível salvar o fornecedor. Tente novamente.', 'Ok', { duration: 5000 });
+        this.snackBar.open(this.i18n.tUi('suppliers.form.saveError'), this.i18n.tUi('common.ok'), { duration: 5000 });
       },
     });
   }

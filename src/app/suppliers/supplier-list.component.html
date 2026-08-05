@@ -1,10 +1,10 @@
 <div class="page-container">
   <div class="page-header">
-    <h2>Fornecedores</h2>
+    <h2>{{ 'suppliers.list.title' | translate }}</h2>
     @if (canManageSuppliers) {
       <button mat-raised-button color="primary" (click)="openCreate()">
         <mat-icon>add</mat-icon>
-        Novo fornecedor
+        {{ 'suppliers.list.create' | translate }}
       </button>
     }
   </div>
@@ -12,12 +12,17 @@
   <mat-card class="content-card">
     <div class="list-toolbar">
       <mat-form-field appearance="outline" class="search-field">
-        <mat-label>Buscar</mat-label>
+        <mat-label>{{ 'common.search' | translate }}</mat-label>
         <mat-icon matPrefix>search</mat-icon>
-        <input matInput [(ngModel)]="search" placeholder="Razão social, CNPJ/CPF, e-mail…" />
+        <input matInput [(ngModel)]="search" [placeholder]="'suppliers.list.searchPlaceholder' | translate" />
       </mat-form-field>
 
-      <button mat-icon-button (click)="load()" aria-label="Atualizar" matTooltip="Atualizar">
+      <button
+        mat-icon-button
+        (click)="load()"
+        [attr.aria-label]="'common.refresh' | translate"
+        [matTooltip]="'common.refresh' | translate"
+      >
         <mat-icon>refresh</mat-icon>
       </button>
     </div>
@@ -25,30 +30,30 @@
     <div class="table-container">
       <table mat-table [dataSource]="filteredSuppliers">
         <ng-container matColumnDef="companyName">
-          <th mat-header-cell *matHeaderCellDef>Razão social</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'suppliers.list.columns.companyName' | translate }}</th>
           <td mat-cell *matCellDef="let supplier">{{ supplier.companyName }}</td>
         </ng-container>
 
         <ng-container matColumnDef="taxId">
-          <th mat-header-cell *matHeaderCellDef>CNPJ/CPF</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'suppliers.list.columns.taxId' | translate }}</th>
           <td mat-cell *matCellDef="let supplier">{{ supplier.taxId | taxId }}</td>
         </ng-container>
 
         <ng-container matColumnDef="phone">
-          <th mat-header-cell *matHeaderCellDef>Telefone</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'suppliers.list.columns.phone' | translate }}</th>
           <td mat-cell *matCellDef="let supplier">{{ supplier.phone | phone }}</td>
         </ng-container>
 
         <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef>E-mail</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'suppliers.list.columns.email' | translate }}</th>
           <td mat-cell *matCellDef="let supplier">{{ supplier.email }}</td>
         </ng-container>
 
         <ng-container matColumnDef="active">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'suppliers.list.columns.status' | translate }}</th>
           <td mat-cell *matCellDef="let supplier">
             <app-status-badge
-              [label]="supplier.active ? 'Ativo' : 'Inativo'"
+              [label]="(supplier.active ? 'common.active' : 'common.inactive') | translate"
               [tone]="supplier.active ? 'success' : 'neutral'"
             ></app-status-badge>
           </td>
@@ -58,15 +63,20 @@
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let supplier">
             @if (canManageSuppliers) {
-              <button mat-icon-button (click)="openEdit(supplier)" aria-label="Editar" matTooltip="Editar">
+              <button
+                mat-icon-button
+                (click)="openEdit(supplier)"
+                [attr.aria-label]="'common.edit' | translate"
+                [matTooltip]="'common.edit' | translate"
+              >
                 <mat-icon>edit</mat-icon>
               </button>
               @if (supplier.active) {
                 <button
                   mat-icon-button
                   (click)="deactivate(supplier)"
-                  aria-label="Desativar"
-                  matTooltip="Desativar"
+                  [attr.aria-label]="'common.deactivate' | translate"
+                  [matTooltip]="'common.deactivate' | translate"
                 >
                   <mat-icon>block</mat-icon>
                 </button>
@@ -80,7 +90,7 @@
       </table>
 
       @if (filteredSuppliers.length === 0) {
-        <div class="empty-state">Nenhum fornecedor encontrado.</div>
+        <div class="empty-state">{{ 'suppliers.list.empty' | translate }}</div>
       }
     </div>
   </mat-card>

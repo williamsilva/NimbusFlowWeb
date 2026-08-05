@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -15,6 +15,7 @@ import { ChartConfiguration, ChartData } from 'chart.js';
 import * as L from 'leaflet';
 import { BaseChartDirective } from 'ng2-charts';
 import { forkJoin } from 'rxjs';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import {
   DashboardService,
@@ -24,6 +25,7 @@ import {
   WorkTimelineEvent,
 } from './dashboard.service';
 import { Work, WorkService, WorkStatus } from '../works/work.service';
+import { I18nService } from '../core/i18n/i18n.service';
 
 // Mesmo fix de ícone do map-picker.component.ts (Leaflet resolve os assets errado sob o build do Angular).
 delete (L.Icon.Default.prototype as unknown as { _getIconUrl?: unknown })._getIconUrl;
@@ -36,33 +38,15 @@ L.Icon.Default.mergeOptions({
 // Mesmo ponto usado em map-picker.component.ts - ver PROJECT_SPEC.md seção 3.2/geolocalização.
 const ACQUAMANIA_CENTER: L.LatLngTuple = [-20.5358896, -40.4557522];
 
-const STATUS_LABELS: Record<WorkStatus, string> = {
-  PLANNED: 'Planejada',
-  IN_PROGRESS: 'Em andamento',
-  PAUSED: 'Paralisada',
-  COMPLETED: 'Concluída',
-  CANCELLED: 'Cancelada',
-};
-
+// Rótulos de status (works.status.*) e de eventos da timeline (dashboard.timelineEvent.*) agora
+// vêm do dicionário de i18n (I18nService.tUi) - ver statusLabel()/timelineLabel() abaixo. Cores
+// não são texto, então continuam como constante fixa.
 const STATUS_COLORS: Record<WorkStatus, string> = {
   PLANNED: '#9e9e9e',
   IN_PROGRESS: '#1976d2',
   PAUSED: '#f57c00',
   COMPLETED: '#388e3c',
   CANCELLED: '#c62828',
-};
-
-const TIMELINE_LABELS: Record<string, string> = {
-  WORK_STARTED: 'Início da obra',
-  WORK_COMPLETED: 'Conclusão da obra',
-  ADDENDUM_REQUESTED: 'Aditivo solicitado',
-  ADDENDUM_APPROVED: 'Aditivo aprovado',
-  ADDENDUM_REJECTED: 'Aditivo reprovado',
-  MEASUREMENT_SUBMITTED: 'Medição enviada',
-  MEASUREMENT_APPROVED: 'Medição aprovada',
-  MEASUREMENT_REJECTED: 'Medição reprovada',
-  INSTALLMENT_RELEASED: 'Parcela liberada',
-  INSTALLMENT_PAID: 'Parcela paga',
 };
 
 @Component({
@@ -81,6 +65,7 @@ const TIMELINE_LABELS: Record<string, string> = {
     MatTableModule,
     MatTooltipModule,
     BaseChartDirective,
+    TranslatePipe,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -93,7 +78,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   supplierRanking: SupplierRanking[] = [];
   works: Work[] = [];
 
-  readonly statusOptions = Object.keys(STATUS_LABELS) as WorkStatus[];
+  readonly statusOptions = Object.keys(STATUS_COLORS) as WorkStatus[];
   readonly overdueColumns = ['name', 'supplierName', 'expectedEndDate', 'status'];
   readonly rankingColumns = ['supplierName', 'totalContracted', 'totalPaid'];
 
@@ -126,7 +111,28 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly dashboardService: DashboardService,
     private readonly workService: WorkService,
     private readonly snackBar: MatSnackBar,
-  ) {}
+    private readonly i18n: I18nService,
+  ) {
+    // Os labels dos gráficos (chart.js) e dos popups do Leaflet são strings imperativas, não
+    // bindings de template - o pipe "| translate" reativo não os alcança. Sem isso, trocar de
+    // idioma DEPOIS que o dashboard já carregou deixaria a legenda/popup "congelados" no idioma
+    // anterior (achado real durante a verificação visual). Reconstrói com os dados já em cache
+    // (gráficos, sem nova chamada HTTP) ou recarrega (mapa, popup precisa ser refeito) sempre que
+    // o idioma aplicado mudar - a primeira execução do effect (dados ainda não carregados/mapa
+    // ainda não inicializado) é inofensiva, as guardas abaixo não fazem nada nesse caso.
+    effect(() => {
+      this.i18n.appliedLang();
+      if (this.summary) {
+        this.buildStatusChart(this.summary);
+      }
+      if (this.supplierRanking.length) {
+        this.buildRankingChart(this.supplierRanking);
+      }
+      if (this.map) {
+        this.loadMapMarkers();
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.loadDashboardData();
@@ -162,7 +168,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: () => {
         this.loading = false;
-        this.snackBar.open('Não foi possível carregar os dados do dashboard.', 'Ok', { duration: 5000 });
+        this.snackBar.open(this.i18n.tUi('dashboard.loadError'), this.i18n.tUi('common.ok'), { duration: 5000 });
       },
     });
   }
@@ -170,7 +176,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private buildStatusChart(summary: DashboardSummary): void {
     const entries = Object.entries(summary.worksByStatus) as [WorkStatus, number][];
     this.statusChartData = {
-      labels: entries.map(([status]) => STATUS_LABELS[status]),
+      labels: entries.map(([status]) => this.statusLabel(status)),
       datasets: [
         {
           data: entries.map(([, count]) => count),
@@ -185,8 +191,16 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.rankingChartData = {
       labels: top.map((r) => r.supplierName),
       datasets: [
-        { label: 'Contratado', data: top.map((r) => r.totalContracted), backgroundColor: '#1976d2' },
-        { label: 'Pago', data: top.map((r) => r.totalPaid), backgroundColor: '#388e3c' },
+        {
+          label: this.i18n.tUi('dashboard.rankingChart.contracted'),
+          data: top.map((r) => r.totalContracted),
+          backgroundColor: '#1976d2',
+        },
+        {
+          label: this.i18n.tUi('dashboard.rankingChart.paid'),
+          data: top.map((r) => r.totalPaid),
+          backgroundColor: '#388e3c',
+        },
       ],
     };
   }
@@ -219,7 +233,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
           fillOpacity: 0.8,
         })
           .bindPopup(
-            `<strong>${this.escapeHtml(work.name)}</strong><br>${this.escapeHtml(STATUS_LABELS[work.status])}<br>${this.escapeHtml(work.supplierName)}`,
+            `<strong>${this.escapeHtml(work.name)}</strong><br>${this.escapeHtml(this.statusLabel(work.status))}<br>${this.escapeHtml(work.supplierName)}`,
           )
           .addTo(this.markersLayer!);
       });
@@ -247,17 +261,19 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: () => {
         this.loadingTimeline = false;
-        this.snackBar.open('Não foi possível carregar a linha do tempo da obra.', 'Ok', { duration: 4000 });
+        this.snackBar.open(this.i18n.tUi('dashboard.timelineLoadError'), this.i18n.tUi('common.ok'), {
+          duration: 4000,
+        });
       },
     });
   }
 
   timelineLabel(type: string): string {
-    return TIMELINE_LABELS[type] ?? type;
+    return this.i18n.tUi(`dashboard.timelineEvent.${type}`, undefined, type);
   }
 
   statusLabel(status: WorkStatus): string {
-    return STATUS_LABELS[status];
+    return this.i18n.tUi(`works.status.${status}`);
   }
 
   // ------------------------- Exportação -------------------------
@@ -271,7 +287,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: () => {
         this.exportingPdf = false;
-        this.snackBar.open('Não foi possível gerar o relatório em PDF.', 'Ok', { duration: 4000 });
+        this.snackBar.open(this.i18n.tUi('dashboard.export.pdfError'), this.i18n.tUi('common.ok'), {
+          duration: 4000,
+        });
       },
     });
   }
@@ -285,7 +303,9 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: () => {
         this.exportingExcel = false;
-        this.snackBar.open('Não foi possível gerar o relatório em Excel.', 'Ok', { duration: 4000 });
+        this.snackBar.open(this.i18n.tUi('dashboard.export.excelError'), this.i18n.tUi('common.ok'), {
+          duration: 4000,
+        });
       },
     });
   }

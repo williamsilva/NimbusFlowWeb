@@ -1,23 +1,23 @@
-<h2 mat-dialog-title>Nova sugestão</h2>
+<h2 mat-dialog-title>{{ 'suggestions.form.createTitle' | translate }}</h2>
 
 <mat-dialog-content>
   <form [formGroup]="form" class="dialog-form">
     <mat-form-field appearance="outline">
-      <mat-label>Descrição</mat-label>
+      <mat-label>{{ 'suggestions.form.description' | translate }}</mat-label>
       <textarea matInput formControlName="description" required rows="4"></textarea>
       @if (form.controls.description.hasError('required')) {
-        <mat-error>Descreva a sugestão.</mat-error>
+        <mat-error>{{ 'suggestions.form.descriptionRequired' | translate }}</mat-error>
       }
     </mat-form-field>
 
-    <h4>Anexo (opcional)</h4>
+    <h4>{{ 'suggestions.form.attachmentOptional' | translate }}</h4>
     <input type="file" (change)="onFileSelected($event)" />
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button type="button" (click)="cancel()" [disabled]="saving">Cancelar</button>
+  <button mat-button type="button" (click)="cancel()" [disabled]="saving">{{ 'common.cancel' | translate }}</button>
   <button mat-raised-button color="primary" type="button" (click)="save()" [disabled]="saving">
-    {{ saving ? 'Enviando…' : 'Enviar sugestão' }}
+    {{ (saving ? 'suggestions.form.sending' : 'suggestions.form.send') | translate }}
   </button>
 </mat-dialog-actions>

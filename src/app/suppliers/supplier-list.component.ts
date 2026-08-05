@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { AuthService } from '../core/auth/auth.service';
 import { PhonePipe } from '../shared/pipes/phone.pipe';
@@ -32,6 +33,7 @@ import { SupplierFormComponent, SupplierFormDialogData } from './supplier-form.c
     PhonePipe,
     TaxIdPipe,
     StatusBadgeComponent,
+    TranslatePipe,
   ],
   templateUrl: './supplier-list.component.html',
   styleUrl: './supplier-list.component.scss',

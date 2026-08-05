@@ -10,19 +10,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { AuthService } from '../core/auth/auth.service';
 import { StatusBadgeComponent, StatusTone } from '../shared/status-badge/status-badge.component';
 import { Work, WorkService, WorkStatus } from './work.service';
 import { WorkCreateDialogComponent } from './work-create-dialog.component';
-
-const STATUS_LABELS: Record<WorkStatus, string> = {
-  PLANNED: 'Planejada',
-  IN_PROGRESS: 'Em andamento',
-  PAUSED: 'Pausada',
-  COMPLETED: 'Concluída',
-  CANCELLED: 'Cancelada',
-};
 
 const STATUS_TONES: Record<WorkStatus, StatusTone> = {
   PLANNED: 'info',
@@ -48,6 +41,7 @@ const STATUS_TONES: Record<WorkStatus, StatusTone> = {
     MatInputModule,
     MatTooltipModule,
     StatusBadgeComponent,
+    TranslatePipe,
   ],
   templateUrl: './work-list.component.html',
   styleUrl: './work-list.component.scss',
@@ -98,8 +92,8 @@ export class WorkListComponent implements OnInit {
     });
   }
 
-  statusLabel(status: WorkStatus): string {
-    return STATUS_LABELS[status];
+  statusLabelKey(status: WorkStatus): string {
+    return `works.status.${status}`;
   }
 
   statusTone(status: WorkStatus): StatusTone {

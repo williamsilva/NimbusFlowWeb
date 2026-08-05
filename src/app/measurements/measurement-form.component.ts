@@ -6,13 +6,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { TranslatePipe } from '@ngx-translate/core';
 
+import { I18nService } from '../core/i18n/i18n.service';
 import { MeasurementRequest, MeasurementService } from './measurement.service';
 
 @Component({
   selector: 'app-measurement-form',
   standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule],
+  imports: [ReactiveFormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, TranslatePipe],
   templateUrl: './measurement-form.component.html',
   styleUrl: './measurement-form.component.scss',
 })
@@ -28,6 +30,7 @@ export class MeasurementFormComponent implements OnInit {
     private readonly measurementService: MeasurementService,
     private readonly route: ActivatedRoute,
     private readonly location: Location,
+    private readonly i18n: I18nService,
   ) {
     this.form = this.fb.group({
       description: ['', Validators.required],
@@ -48,7 +51,7 @@ export class MeasurementFormComponent implements OnInit {
         this.form.patchValue({ latitude: position.coords.latitude, longitude: position.coords.longitude });
       },
       (error) => {
-        this.locationError = 'Não foi possível obter a localização: ' + error.message;
+        this.locationError = this.i18n.tUi('measurements.form.locationError', { message: error.message });
       },
     );
   }

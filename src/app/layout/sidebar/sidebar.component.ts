@@ -3,11 +3,12 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { CurrentUser } from '../../core/auth/auth.service';
 
 interface NavItem {
-  label: string;
+  labelKey: string;
   icon: string;
   link: string;
   exact: boolean;
@@ -16,7 +17,7 @@ interface NavItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [RouterLink, RouterLinkActive, MatButtonModule, MatIconModule, MatTooltipModule, TranslatePipe],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })
@@ -25,10 +26,10 @@ export class SidebarComponent {
   @Output() logout = new EventEmitter<void>();
 
   readonly navItems: NavItem[] = [
-    { label: 'Dashboard', icon: 'dashboard', link: '/', exact: true },
-    { label: 'Fornecedores', icon: 'storefront', link: '/suppliers', exact: false },
-    { label: 'Obras', icon: 'construction', link: '/works', exact: false },
-    { label: 'Sugestões', icon: 'lightbulb', link: '/suggestions', exact: false },
+    { labelKey: 'menu.dashboard', icon: 'dashboard', link: '/', exact: true },
+    { labelKey: 'menu.suppliers', icon: 'storefront', link: '/suppliers', exact: false },
+    { labelKey: 'menu.works', icon: 'construction', link: '/works', exact: false },
+    { labelKey: 'menu.suggestions', icon: 'lightbulb', link: '/suggestions', exact: false },
   ];
 
   get initials(): string {

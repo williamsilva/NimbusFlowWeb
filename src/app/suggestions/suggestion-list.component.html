@@ -1,21 +1,26 @@
 <div class="page-container">
   <div class="page-header">
-    <h2>Sugestões de melhoria</h2>
+    <h2>{{ 'suggestions.list.title' | translate }}</h2>
     <button mat-raised-button color="primary" (click)="openCreate()">
       <mat-icon>add</mat-icon>
-      Nova sugestão
+      {{ 'suggestions.list.create' | translate }}
     </button>
   </div>
 
   <mat-card class="content-card">
     <div class="list-toolbar">
       <mat-form-field appearance="outline" class="search-field">
-        <mat-label>Buscar</mat-label>
+        <mat-label>{{ 'common.search' | translate }}</mat-label>
         <mat-icon matPrefix>search</mat-icon>
-        <input matInput [(ngModel)]="search" placeholder="Descrição…" />
+        <input matInput [(ngModel)]="search" [placeholder]="'suggestions.list.searchPlaceholder' | translate" />
       </mat-form-field>
 
-      <button mat-icon-button (click)="load()" aria-label="Atualizar" matTooltip="Atualizar">
+      <button
+        mat-icon-button
+        (click)="load()"
+        [attr.aria-label]="'common.refresh' | translate"
+        [matTooltip]="'common.refresh' | translate"
+      >
         <mat-icon>refresh</mat-icon>
       </button>
     </div>
@@ -23,36 +28,39 @@
     <div class="table-container">
       <table mat-table [dataSource]="filteredSuggestions">
         <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef>Descrição</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'suggestions.list.columns.description' | translate }}</th>
           <td mat-cell *matCellDef="let s">{{ s.description }}</td>
         </ng-container>
 
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'suggestions.list.columns.status' | translate }}</th>
           <td mat-cell *matCellDef="let s">
             @if (canManage()) {
               <mat-select [value]="s.status" (selectionChange)="changeStatus(s, $event.value)">
                 @for (status of statusOptions; track status) {
-                  <mat-option [value]="status">{{ statusLabel(status) }}</mat-option>
+                  <mat-option [value]="status">{{ statusLabelKey(status) | translate }}</mat-option>
                 }
               </mat-select>
             } @else {
-              <app-status-badge [label]="statusLabel(s.status)" [tone]="statusTone(s.status)"></app-status-badge>
+              <app-status-badge
+                [label]="statusLabelKey(s.status) | translate"
+                [tone]="statusTone(s.status)"
+              ></app-status-badge>
             }
           </td>
         </ng-container>
 
         <ng-container matColumnDef="attachment">
-          <th mat-header-cell *matHeaderCellDef>Anexo</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'suggestions.list.columns.attachment' | translate }}</th>
           <td mat-cell *matCellDef="let s">
             @if (s.attachmentUrl) {
-              <a [href]="s.attachmentUrl" target="_blank" rel="noopener">Ver anexo</a>
+              <a [href]="s.attachmentUrl" target="_blank" rel="noopener">{{ 'suggestions.list.viewAttachment' | translate }}</a>
             }
           </td>
         </ng-container>
 
         <ng-container matColumnDef="createdBy">
-          <th mat-header-cell *matHeaderCellDef>Autor</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'suggestions.list.columns.createdBy' | translate }}</th>
           <td mat-cell *matCellDef="let s">{{ s.createdById }}</td>
         </ng-container>
 
@@ -61,7 +69,7 @@
       </table>
 
       @if (filteredSuggestions.length === 0) {
-        <div class="empty-state">Nenhuma sugestão encontrada.</div>
+        <div class="empty-state">{{ 'suggestions.list.empty' | translate }}</div>
       }
     </div>
   </mat-card>

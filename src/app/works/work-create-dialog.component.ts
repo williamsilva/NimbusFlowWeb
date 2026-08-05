@@ -8,7 +8,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslatePipe } from '@ngx-translate/core';
 
+import { I18nService } from '../core/i18n/i18n.service';
 import { Supplier, SupplierService } from '../suppliers/supplier.service';
 import { MapPickerComponent } from './map-picker.component';
 import { Work, WorkRequest, WorkService } from './work.service';
@@ -25,6 +27,7 @@ import { Work, WorkRequest, WorkService } from './work.service';
     MatInputModule,
     MatSelectModule,
     MapPickerComponent,
+    TranslatePipe,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './work-create-dialog.component.html',
@@ -41,6 +44,7 @@ export class WorkCreateDialogComponent implements OnInit {
     private readonly supplierService: SupplierService,
     private readonly dialogRef: MatDialogRef<WorkCreateDialogComponent>,
     private readonly snackBar: MatSnackBar,
+    private readonly i18n: I18nService,
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -68,7 +72,7 @@ export class WorkCreateDialogComponent implements OnInit {
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.snackBar.open('Revise os campos destacados antes de salvar.', 'Ok', { duration: 4000 });
+      this.snackBar.open(this.i18n.tUi('works.createDialog.reviewFields'), this.i18n.tUi('common.ok'), { duration: 4000 });
       return;
     }
 
@@ -90,7 +94,7 @@ export class WorkCreateDialogComponent implements OnInit {
       next: (work: Work) => this.dialogRef.close(work),
       error: () => {
         this.saving = false;
-        this.snackBar.open('Não foi possível salvar a obra. Tente novamente.', 'Ok', { duration: 5000 });
+        this.snackBar.open(this.i18n.tUi('works.createDialog.saveError'), this.i18n.tUi('common.ok'), { duration: 5000 });
       },
     });
   }

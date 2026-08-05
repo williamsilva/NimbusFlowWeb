@@ -1,113 +1,113 @@
-<h2 mat-dialog-title>{{ supplierId ? 'Editar fornecedor' : 'Novo fornecedor' }}</h2>
+<h2 mat-dialog-title>{{ (supplierId ? 'suppliers.form.editTitle' : 'suppliers.form.createTitle') | translate }}</h2>
 
 <mat-dialog-content>
   <form [formGroup]="form" class="dialog-form">
-    <h4>Dados gerais</h4>
+    <h4>{{ 'suppliers.form.sectionGeneral' | translate }}</h4>
     <div class="dialog-form-grid">
       <mat-form-field appearance="outline">
-        <mat-label>Razão social</mat-label>
+        <mat-label>{{ 'suppliers.form.companyName' | translate }}</mat-label>
         <input matInput formControlName="companyName" required />
         @if (form.controls.companyName.hasError('required')) {
-          <mat-error>Informe a razão social.</mat-error>
+          <mat-error>{{ 'suppliers.form.companyNameRequired' | translate }}</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Nome fantasia</mat-label>
+        <mat-label>{{ 'suppliers.form.tradeName' | translate }}</mat-label>
         <input matInput formControlName="tradeName" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>CNPJ/CPF</mat-label>
+        <mat-label>{{ 'suppliers.form.taxId' | translate }}</mat-label>
         <input
           matInput
           formControlName="taxId"
           required
           maxlength="18"
-          placeholder="Com ou sem pontuação"
+          [placeholder]="'suppliers.form.taxIdPlaceholder' | translate"
           (input)="onTaxIdInput($event)"
         />
         @if (form.controls.taxId.hasError('required')) {
-          <mat-error>Informe o CNPJ ou CPF.</mat-error>
+          <mat-error>{{ 'suppliers.form.taxIdRequired' | translate }}</mat-error>
         } @else if (form.controls.taxId.hasError('taxId')) {
-          <mat-error>Deve ter 11 (CPF) ou 14 (CNPJ) dígitos.</mat-error>
+          <mat-error>{{ 'suppliers.form.taxIdInvalid' | translate }}</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Telefone</mat-label>
+        <mat-label>{{ 'suppliers.form.phone' | translate }}</mat-label>
         <input matInput formControlName="phone" maxlength="15" (input)="onPhoneInput($event)" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>E-mail</mat-label>
+        <mat-label>{{ 'suppliers.form.email' | translate }}</mat-label>
         <input matInput type="email" formControlName="email" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Responsável comercial</mat-label>
+        <mat-label>{{ 'suppliers.form.commercialContact' | translate }}</mat-label>
         <input matInput formControlName="commercialContact" />
       </mat-form-field>
     </div>
-    <mat-checkbox formControlName="active">Ativo</mat-checkbox>
+    <mat-checkbox formControlName="active">{{ 'common.active' | translate }}</mat-checkbox>
 
-    <h4>Endereço</h4>
+    <h4>{{ 'suppliers.form.sectionAddress' | translate }}</h4>
     <div class="dialog-form-grid">
       <mat-form-field appearance="outline">
-        <mat-label>Rua</mat-label>
+        <mat-label>{{ 'suppliers.form.addressStreet' | translate }}</mat-label>
         <input matInput formControlName="addressStreet" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Número</mat-label>
+        <mat-label>{{ 'suppliers.form.addressNumber' | translate }}</mat-label>
         <input matInput formControlName="addressNumber" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Complemento</mat-label>
+        <mat-label>{{ 'suppliers.form.addressComplement' | translate }}</mat-label>
         <input matInput formControlName="addressComplement" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Bairro</mat-label>
+        <mat-label>{{ 'suppliers.form.addressNeighborhood' | translate }}</mat-label>
         <input matInput formControlName="addressNeighborhood" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Cidade</mat-label>
+        <mat-label>{{ 'suppliers.form.addressCity' | translate }}</mat-label>
         <input matInput formControlName="addressCity" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>UF</mat-label>
+        <mat-label>{{ 'suppliers.form.addressState' | translate }}</mat-label>
         <input matInput formControlName="addressState" maxlength="2" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>CEP</mat-label>
+        <mat-label>{{ 'suppliers.form.addressZipCode' | translate }}</mat-label>
         <input matInput formControlName="addressZipCode" />
       </mat-form-field>
     </div>
 
-    <h4>Dados bancários</h4>
+    <h4>{{ 'suppliers.form.sectionBank' | translate }}</h4>
     <div class="dialog-form-grid">
       <mat-form-field appearance="outline">
-        <mat-label>Banco</mat-label>
+        <mat-label>{{ 'suppliers.form.bankName' | translate }}</mat-label>
         <input matInput formControlName="bankName" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Agência</mat-label>
+        <mat-label>{{ 'suppliers.form.bankAgency' | translate }}</mat-label>
         <input matInput formControlName="bankAgency" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Conta</mat-label>
+        <mat-label>{{ 'suppliers.form.bankAccount' | translate }}</mat-label>
         <input matInput formControlName="bankAccount" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Tipo de conta</mat-label>
+        <mat-label>{{ 'suppliers.form.bankAccountType' | translate }}</mat-label>
         <input matInput formControlName="bankAccountType" />
       </mat-form-field>
     </div>
@@ -115,8 +115,8 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button type="button" (click)="cancel()" [disabled]="saving">Cancelar</button>
+  <button mat-button type="button" (click)="cancel()" [disabled]="saving">{{ 'common.cancel' | translate }}</button>
   <button mat-raised-button color="primary" type="button" (click)="save()" [disabled]="saving">
-    {{ saving ? 'Salvando…' : 'Salvar' }}
+    {{ (saving ? 'common.saving' : 'common.save') | translate }}
   </button>
 </mat-dialog-actions>
