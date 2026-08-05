@@ -19,7 +19,7 @@
   color: var(--nf-glow-a, #3b82f6);
 }
 
-:root.dark .confirm-dialog__icon {
+:host-context(.dark) .confirm-dialog__icon {
   background: rgba(59, 130, 246, 0.22);
   border: 1px solid rgba(59, 130, 246, 0.26);
 }
@@ -30,7 +30,7 @@
   color: #ef4444;
 }
 
-:root.dark .confirm-dialog__icon--danger {
+:host-context(.dark) .confirm-dialog__icon--danger {
   background: rgba(239, 68, 68, 0.22);
   border: 1px solid rgba(239, 68, 68, 0.28);
 }
