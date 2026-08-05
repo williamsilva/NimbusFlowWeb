@@ -60,20 +60,58 @@
   gap: 6px;
 }
 
-.session-timer {
+// Pill único (mesmo componente visual) contendo a bolinha, "Online" e o timer de sessão
+// aninhado - antes o timer tinha seu próprio fundo/borda arredondada e o "Online" não tinha
+// nenhum, dando a impressão de dois elementos separados.
+.status {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   height: 32px;
   padding: 0 10px;
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.2px;
   white-space: nowrap;
 
   background: rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+:host-context(.dark) .status {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+  flex-shrink: 0;
+}
+
+.status-text {
+  color: #16a34a;
+}
+
+:host-context(.dark) .status-text {
+  color: #4ade80;
+}
+
+// Fica DENTRO do pill .status (não tem mais fundo/borda próprios) - só o ícone+texto do timer.
+.session-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 8px;
+  margin-left: 2px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
   color: rgba(0, 0, 0, 0.7);
 
   mat-icon {
@@ -84,33 +122,24 @@
 }
 
 :host-context(.dark) .session-timer {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left-color: rgba(255, 255, 255, 0.14);
   color: rgba(255, 255, 255, 0.75);
 }
 
 .session-timer--warning {
-  background: rgba(245, 158, 11, 0.14);
-  border-color: rgba(245, 158, 11, 0.24);
   color: #b45309;
 }
 
 :host-context(.dark) .session-timer--warning {
-  background: rgba(245, 158, 11, 0.2);
-  border-color: rgba(245, 158, 11, 0.3);
   color: #fbbf24;
 }
 
 .session-timer--danger {
-  background: rgba(239, 68, 68, 0.14);
-  border-color: rgba(239, 68, 68, 0.26);
   color: #b91c1c;
   animation: nf-session-pulse 1.1s ease-in-out infinite;
 }
 
 :host-context(.dark) .session-timer--danger {
-  background: rgba(239, 68, 68, 0.22);
-  border-color: rgba(239, 68, 68, 0.32);
   color: #fca5a5;
 }
 
@@ -128,6 +157,60 @@
   .session-timer span {
     display: none;
   }
+}
+
+// Mesmo estilo do .account-trigger/.account-avatar abaixo - faltava por completo (o botão de
+// idioma ficava sem nenhum arredondamento, só o estilo padrão do browser).
+.lang-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 6px 0 4px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.03);
+  color: inherit;
+  cursor: pointer;
+
+  transition:
+    background 140ms ease,
+    border-color 140ms ease;
+}
+
+.lang-trigger:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+:host-context(.dark) .lang-trigger {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+:host-context(.dark) .lang-trigger:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(59, 130, 246, 0.28);
+}
+
+.lang-badge {
+  min-width: 26px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  background: rgba(59, 130, 246, 0.16);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+:host-context(.dark) .lang-badge {
+  background: rgba(59, 130, 246, 0.24);
+  border: 1px solid rgba(59, 130, 246, 0.24);
 }
 
 .account-trigger {
