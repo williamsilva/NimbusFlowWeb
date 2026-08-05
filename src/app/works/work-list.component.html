@@ -1,10 +1,12 @@
 <div class="page-container">
   <div class="page-header">
     <h2>Obras</h2>
-    <button mat-raised-button color="primary" (click)="openCreate()">
-      <mat-icon>add</mat-icon>
-      Nova obra
-    </button>
+    @if (canManageWorks) {
+      <button mat-raised-button color="primary" (click)="openCreate()">
+        <mat-icon>add</mat-icon>
+        Nova obra
+      </button>
+    }
   </div>
 
   <mat-card class="content-card">

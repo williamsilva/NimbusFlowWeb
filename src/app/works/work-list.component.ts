@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+import { AuthService } from '../core/auth/auth.service';
 import { StatusBadgeComponent, StatusTone } from '../shared/status-badge/status-badge.component';
 import { Work, WorkService, WorkStatus } from './work.service';
 import { WorkCreateDialogComponent } from './work-create-dialog.component';
@@ -55,14 +56,20 @@ export class WorkListComponent implements OnInit {
   works: Work[] = [];
   search = '';
   displayedColumns = ['name', 'supplierName', 'status', 'startDate', 'expectedEndDate', 'totalAmount', 'actions'];
+  /** OBRA_MANAGE (Fase 7) - só gateia o botão "Nova obra" (só UX, validação real é 100% backend);
+   *  a ação "Gerenciar" fica visível pra todos porque a tela de detalhe também dá acesso a
+   *  aditivo/medição/parcela, cada um com seu próprio gate de permissão dentro dela. */
+  canManageWorks = false;
 
   constructor(
     private readonly workService: WorkService,
     private readonly dialog: MatDialog,
+    private readonly authService: AuthService,
   ) {}
 
   ngOnInit(): void {
     this.load();
+    this.authService.loadMe().subscribe((user) => (this.canManageWorks = user.permissions.includes('OBRA_MANAGE')));
   }
 
   get filteredWorks(): Work[] {
