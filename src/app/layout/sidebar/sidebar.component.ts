@@ -25,8 +25,7 @@ export class SidebarComponent {
   @Output() logout = new EventEmitter<void>();
 
   readonly navItems: NavItem[] = [
-    { label: 'Início', icon: 'home', link: '/', exact: true },
-    { label: 'Dashboard', icon: 'dashboard', link: '/dashboard', exact: false },
+    { label: 'Dashboard', icon: 'dashboard', link: '/', exact: true },
     { label: 'Fornecedores', icon: 'storefront', link: '/suppliers', exact: false },
     { label: 'Obras', icon: 'construction', link: '/works', exact: false },
     { label: 'Sugestões', icon: 'lightbulb', link: '/suggestions', exact: false },

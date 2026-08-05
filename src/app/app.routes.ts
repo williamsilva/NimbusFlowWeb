@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './core/auth/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { HomeComponent } from './home/home.component';
 import { MeasurementFormComponent } from './measurements/measurement-form.component';
 import { SuggestionListComponent } from './suggestions/suggestion-list.component';
 import { SupplierListComponent } from './suppliers/supplier-list.component';
@@ -10,8 +9,7 @@ import { WorkFormComponent } from './works/work-form.component';
 import { WorkListComponent } from './works/work-list.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [authGuard] },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
+  { path: '', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'suppliers', component: SupplierListComponent, canActivate: [authGuard] },
   { path: 'works', component: WorkListComponent, canActivate: [authGuard] },
   { path: 'works/:id/edit', component: WorkFormComponent, canActivate: [authGuard] },
