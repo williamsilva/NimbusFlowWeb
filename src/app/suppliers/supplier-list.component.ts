@@ -9,6 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
+import { PhonePipe } from '../shared/pipes/phone.pipe';
+import { TaxIdPipe } from '../shared/pipes/tax-id.pipe';
 import { StatusBadgeComponent } from '../shared/status-badge/status-badge.component';
 import { Supplier, SupplierService } from './supplier.service';
 import { SupplierFormComponent, SupplierFormDialogData } from './supplier-form.component';
@@ -26,6 +28,8 @@ import { SupplierFormComponent, SupplierFormDialogData } from './supplier-form.c
     MatIconModule,
     MatInputModule,
     MatTooltipModule,
+    PhonePipe,
+    TaxIdPipe,
     StatusBadgeComponent,
   ],
   templateUrl: './supplier-list.component.html',

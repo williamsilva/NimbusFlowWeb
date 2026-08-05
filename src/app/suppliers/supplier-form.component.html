@@ -19,7 +19,14 @@
 
       <mat-form-field appearance="outline">
         <mat-label>CNPJ/CPF</mat-label>
-        <input matInput formControlName="taxId" required placeholder="Com ou sem pontuação" />
+        <input
+          matInput
+          formControlName="taxId"
+          required
+          maxlength="18"
+          placeholder="Com ou sem pontuação"
+          (input)="onTaxIdInput($event)"
+        />
         @if (form.controls.taxId.hasError('required')) {
           <mat-error>Informe o CNPJ ou CPF.</mat-error>
         } @else if (form.controls.taxId.hasError('taxId')) {
@@ -29,7 +36,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Telefone</mat-label>
-        <input matInput formControlName="phone" />
+        <input matInput formControlName="phone" maxlength="15" (input)="onPhoneInput($event)" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
