@@ -5,6 +5,9 @@
     <mat-form-field appearance="outline">
       <mat-label>Descrição</mat-label>
       <textarea matInput formControlName="description" required rows="4"></textarea>
+      @if (form.controls.description.hasError('required')) {
+        <mat-error>Descreva a sugestão.</mat-error>
+      }
     </mat-form-field>
 
     <h4>Anexo (opcional)</h4>

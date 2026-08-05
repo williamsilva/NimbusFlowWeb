@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { SuggestionRequest, SuggestionService } from './suggestion.service';
 
@@ -23,6 +24,7 @@ export class SuggestionFormComponent {
     private readonly fb: FormBuilder,
     private readonly suggestionService: SuggestionService,
     private readonly dialogRef: MatDialogRef<SuggestionFormComponent>,
+    private readonly snackBar: MatSnackBar,
   ) {
     this.form = this.fb.group({
       description: ['', Validators.required],
@@ -41,6 +43,7 @@ export class SuggestionFormComponent {
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.snackBar.open('Revise os campos destacados antes de salvar.', 'Ok', { duration: 4000 });
       return;
     }
 
@@ -48,7 +51,10 @@ export class SuggestionFormComponent {
     this.saving = true;
     this.suggestionService.create(request, this.selectedFile).subscribe({
       next: () => this.dialogRef.close(true),
-      error: () => (this.saving = false),
+      error: () => {
+        this.saving = false;
+        this.snackBar.open('Não foi possível enviar a sugestão. Tente novamente.', 'Ok', { duration: 5000 });
+      },
     });
   }
 }

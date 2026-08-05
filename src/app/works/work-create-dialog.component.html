@@ -6,6 +6,9 @@
       <mat-form-field appearance="outline">
         <mat-label>Nome/descrição</mat-label>
         <input matInput formControlName="name" required />
+        @if (form.controls.name.hasError('required')) {
+          <mat-error>Informe o nome da obra.</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -15,6 +18,9 @@
             <mat-option [value]="supplier.id">{{ supplier.companyName }}</mat-option>
           }
         </mat-select>
+        @if (form.controls.supplierId.hasError('required')) {
+          <mat-error>Selecione um fornecedor.</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -22,6 +28,9 @@
         <input matInput [matDatepicker]="startPicker" formControlName="startDate" required />
         <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
         <mat-datepicker #startPicker></mat-datepicker>
+        @if (form.controls.startDate.hasError('required')) {
+          <mat-error>Informe a data de início.</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -29,11 +38,17 @@
         <input matInput [matDatepicker]="expectedEndPicker" formControlName="expectedEndDate" required />
         <mat-datepicker-toggle matIconSuffix [for]="expectedEndPicker"></mat-datepicker-toggle>
         <mat-datepicker #expectedEndPicker></mat-datepicker>
+        @if (form.controls.expectedEndDate.hasError('required')) {
+          <mat-error>Informe a data de fim prevista.</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Valor inicial contratado</mat-label>
         <input matInput type="number" step="0.01" formControlName="initialAmount" required />
+        @if (form.controls.initialAmount.hasError('required')) {
+          <mat-error>Informe o valor inicial.</mat-error>
+        }
       </mat-form-field>
     </div>
 

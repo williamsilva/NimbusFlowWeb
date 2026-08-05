@@ -1,15 +1,34 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Supplier, SupplierRequest, SupplierService } from './supplier.service';
 
 export interface SupplierFormDialogData {
   supplier: Supplier | null;
+}
+
+/** Aceita CNPJ/CPF com ou sem máscara (pontos, barra, hífen) - valida so a quantidade de dígitos. */
+function taxIdValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const digits = String(control.value ?? '').replace(/\D/g, '');
+    if (!digits) {
+      return null; // required cuida do caso vazio
+    }
+    return digits.length === 11 || digits.length === 14 ? null : { taxId: true };
+  };
 }
 
 @Component({
@@ -35,12 +54,13 @@ export class SupplierFormComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly supplierService: SupplierService,
     private readonly dialogRef: MatDialogRef<SupplierFormComponent>,
+    private readonly snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) private readonly data: SupplierFormDialogData,
   ) {
     this.form = this.fb.group({
       companyName: ['', Validators.required],
       tradeName: [''],
-      taxId: ['', [Validators.required, Validators.pattern(/^\d{11}(\d{3})?$/)]],
+      taxId: ['', [Validators.required, taxIdValidator()]],
       phone: [''],
       email: ['', Validators.email],
       commercialContact: [''],
@@ -73,6 +93,7 @@ export class SupplierFormComponent implements OnInit {
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.snackBar.open('Revise os campos destacados antes de salvar.', 'Ok', { duration: 4000 });
       return;
     }
 
@@ -80,7 +101,8 @@ export class SupplierFormComponent implements OnInit {
     const request: SupplierRequest = {
       companyName: value.companyName!,
       tradeName: value.tradeName,
-      taxId: value.taxId!,
+      // Backend so aceita digitos puros (11 ou 14) - remove pontos/barra/hifen digitados com mascara.
+      taxId: value.taxId!.replace(/\D/g, ''),
       phone: value.phone,
       email: value.email,
       commercialContact: value.commercialContact,
@@ -105,7 +127,10 @@ export class SupplierFormComponent implements OnInit {
 
     request$.subscribe({
       next: () => this.dialogRef.close(true),
-      error: () => (this.saving = false),
+      error: () => {
+        this.saving = false;
+        this.snackBar.open('Não foi possível salvar o fornecedor. Tente novamente.', 'Ok', { duration: 5000 });
+      },
     });
   }
 }

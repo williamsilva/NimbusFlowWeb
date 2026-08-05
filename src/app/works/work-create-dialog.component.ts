@@ -7,6 +7,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Supplier, SupplierService } from '../suppliers/supplier.service';
 import { MapPickerComponent } from './map-picker.component';
@@ -39,6 +40,7 @@ export class WorkCreateDialogComponent implements OnInit {
     private readonly workService: WorkService,
     private readonly supplierService: SupplierService,
     private readonly dialogRef: MatDialogRef<WorkCreateDialogComponent>,
+    private readonly snackBar: MatSnackBar,
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -66,6 +68,7 @@ export class WorkCreateDialogComponent implements OnInit {
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.snackBar.open('Revise os campos destacados antes de salvar.', 'Ok', { duration: 4000 });
       return;
     }
 
@@ -85,7 +88,10 @@ export class WorkCreateDialogComponent implements OnInit {
     this.saving = true;
     this.workService.create(request).subscribe({
       next: (work: Work) => this.dialogRef.close(work),
-      error: () => (this.saving = false),
+      error: () => {
+        this.saving = false;
+        this.snackBar.open('Não foi possível salvar a obra. Tente novamente.', 'Ok', { duration: 5000 });
+      },
     });
   }
 

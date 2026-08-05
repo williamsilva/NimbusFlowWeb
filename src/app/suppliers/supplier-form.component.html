@@ -7,6 +7,9 @@
       <mat-form-field appearance="outline">
         <mat-label>Razão social</mat-label>
         <input matInput formControlName="companyName" required />
+        @if (form.controls.companyName.hasError('required')) {
+          <mat-error>Informe a razão social.</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -16,7 +19,12 @@
 
       <mat-form-field appearance="outline">
         <mat-label>CNPJ/CPF</mat-label>
-        <input matInput formControlName="taxId" required />
+        <input matInput formControlName="taxId" required placeholder="Com ou sem pontuação" />
+        @if (form.controls.taxId.hasError('required')) {
+          <mat-error>Informe o CNPJ ou CPF.</mat-error>
+        } @else if (form.controls.taxId.hasError('taxId')) {
+          <mat-error>Deve ter 11 (CPF) ou 14 (CNPJ) dígitos.</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
