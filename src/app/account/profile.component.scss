@@ -64,22 +64,57 @@
   margin: 4px 0;
 }
 
-.hero-expansion {
+// Botão único com a contagem (ex: "Grupos" + "1 item") que abre o ListDialogComponent - antes
+// era um mat-expansion-panel com a lista inline; trocado por pedido do usuário pra bater com o
+// padrão do CardSync (botão + modal, ver src/app/shared/list-dialog/).
+.hero-chip-trigger {
   width: 100%;
-  box-shadow: none !important;
-  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.03);
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  transition: background 140ms ease, border-color 140ms ease;
 }
 
-.chip-list {
-  list-style: none;
-  margin: 0;
-  padding: 4px 0;
-  max-height: 220px;
-  overflow-y: auto;
-  font-size: 0.82rem;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.hero-chip-trigger:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+:host-context(.dark) .hero-chip-trigger {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+:host-context(.dark) .hero-chip-trigger:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(59, 130, 246, 0.28);
+}
+
+.hero-chip-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.hero-chip-count {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--nf-text-secondary, #6b7280);
+}
+
+.hero-chip-caret {
+  opacity: 0.6;
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+  flex-shrink: 0;
 }
 
 .change-password-btn {

@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -13,6 +13,7 @@ import { forkJoin } from 'rxjs';
 
 import { AuthService, CurrentUser } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
+import { ListDialogComponent } from '../shared/list-dialog/list-dialog.component';
 import { TaxIdPipe } from '../shared/pipes/tax-id.pipe';
 import { AccountService, Profile } from './account.service';
 
@@ -25,7 +26,6 @@ import { AccountService, Profile } from './account.service';
     MatButtonModule,
     MatCardModule,
     MatChipsModule,
-    MatExpansionModule,
     MatIconModule,
     MatProgressSpinnerModule,
     TranslatePipe,
@@ -44,6 +44,7 @@ export class ProfileComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly i18n: I18nService,
     private readonly snackBar: MatSnackBar,
+    private readonly dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -80,5 +81,37 @@ export class ProfileComponent implements OnInit {
 
   statusKey(status: number | undefined): string {
     return `account.profile.status${status ?? 0}`;
+  }
+
+  // Sem suporte a ICU/plural no I18nService.tUi() (só interpolação simples) - escolhe entre as
+  // duas chaves manualmente, mesma convenção "items"/"items_plural" já presente nos 3 dicionários.
+  countLabel(count: number): string {
+    return this.i18n.tUi(count === 1 ? 'account.profile.items' : 'account.profile.items_plural', { count });
+  }
+
+  openGroupsDialog(): void {
+    this.dialog.open(ListDialogComponent, {
+      autoFocus: false,
+      maxWidth: '700px',
+      width: '92vw',
+      data: {
+        title: this.i18n.tUi('account.profile.groups'),
+        subtitle: this.i18n.tUi('account.profile.groupsSubtitle'),
+        items: this.me?.groups ?? [],
+      },
+    });
+  }
+
+  openPermissionsDialog(): void {
+    this.dialog.open(ListDialogComponent, {
+      autoFocus: false,
+      maxWidth: '1100px',
+      width: '92vw',
+      data: {
+        title: this.i18n.tUi('account.profile.permissions'),
+        subtitle: this.i18n.tUi('account.profile.permissionsSubtitle'),
+        items: this.me?.permissions ?? [],
+      },
+    });
   }
 }

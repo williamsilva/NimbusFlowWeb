@@ -141,7 +141,8 @@
     "inactive": "Inactivo",
     "actions": "Acciones",
     "ok": "Ok",
-    "confirm": "Confirmar"
+    "confirm": "Confirmar",
+    "close": "Cerrar"
   },
   "footer": {
     "rights": "Todos los derechos reservados."
@@ -158,7 +159,9 @@
       "subtitle": "Consulte sus datos de perfil y registro.",
       "changePassword": "Cambiar contraseña",
       "groups": "Grupos",
+      "groupsSubtitle": "Perfiles organizacionales vinculados al usuario.",
       "permissions": "Permisos",
+      "permissionsSubtitle": "Accesos disponibles para el usuario autenticado.",
       "items": "{{count}} elemento",
       "items_plural": "{{count}} elementos",
       "userDataTitle": "Datos del usuario",

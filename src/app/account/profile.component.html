@@ -23,29 +23,17 @@
           }
         </mat-chip-set>
 
-        <mat-expansion-panel class="hero-expansion">
-          <mat-expansion-panel-header>
-            <mat-panel-title>{{ 'account.profile.groups' | translate }}</mat-panel-title>
-            <mat-panel-description>{{ me?.groups?.length ?? 0 }}</mat-panel-description>
-          </mat-expansion-panel-header>
-          <ul class="chip-list">
-            @for (group of me?.groups; track group) {
-              <li>{{ group }}</li>
-            }
-          </ul>
-        </mat-expansion-panel>
+        <button type="button" class="hero-chip-trigger" (click)="openGroupsDialog()">
+          <span class="hero-chip-label">{{ 'account.profile.groups' | translate }}</span>
+          <span class="hero-chip-count">{{ countLabel(me?.groups?.length ?? 0) }}</span>
+          <mat-icon class="hero-chip-caret">chevron_right</mat-icon>
+        </button>
 
-        <mat-expansion-panel class="hero-expansion">
-          <mat-expansion-panel-header>
-            <mat-panel-title>{{ 'account.profile.permissions' | translate }}</mat-panel-title>
-            <mat-panel-description>{{ me?.permissions?.length ?? 0 }}</mat-panel-description>
-          </mat-expansion-panel-header>
-          <ul class="chip-list">
-            @for (permission of me?.permissions; track permission) {
-              <li>{{ permission }}</li>
-            }
-          </ul>
-        </mat-expansion-panel>
+        <button type="button" class="hero-chip-trigger" (click)="openPermissionsDialog()">
+          <span class="hero-chip-label">{{ 'account.profile.permissions' | translate }}</span>
+          <span class="hero-chip-count">{{ countLabel(me?.permissions?.length ?? 0) }}</span>
+          <mat-icon class="hero-chip-caret">chevron_right</mat-icon>
+        </button>
 
         <button mat-raised-button color="primary" class="change-password-btn" routerLink="/account/password">
           <mat-icon>vpn_key</mat-icon>
