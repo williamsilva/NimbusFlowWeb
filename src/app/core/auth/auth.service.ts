@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 
@@ -36,9 +36,11 @@ export class AuthService {
   }
 
   logout(): void {
-    this.http
-      .post<LogoutResponse>(`${environment.apiUrl}/bff/logout`, {})
-      .pipe(tap((response) => (window.location.href = response.logoutUrl)))
-      .subscribe();
+    this.http.post<LogoutResponse>(`${environment.apiUrl}/bff/logout`, {}).subscribe({
+      next: (response) => (window.location.href = response.logoutUrl),
+      // Se o /bff/logout falhar por qualquer motivo, ainda assim manda pro login em vez de
+      // deixar o usuário "preso" numa sessão que pode já estar inválida.
+      error: () => this.startLogin(),
+    });
   }
 }

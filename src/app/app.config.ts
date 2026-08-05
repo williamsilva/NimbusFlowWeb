@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptors, withXsrfConfiguration } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
@@ -11,12 +11,11 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(
-      withInterceptors([withCredentialsInterceptor]),
-      // Nomes já são o default do Angular, mas explícitos aqui por clareza — precisam bater com
-      // o CookieCsrfTokenRepository do backend (cookie XSRF-TOKEN, header X-XSRF-TOKEN).
-      withXsrfConfiguration({ cookieName: 'XSRF-TOKEN', headerName: 'X-XSRF-TOKEN' }),
-    ),
+    // withXsrfConfiguration (nativo do Angular) nao entra aqui: o Angular nunca anexa o header em
+    // URLs absolutas (so relativas, assumindo mesma origem) - como environment.apiUrl e sempre
+    // absoluto (front/back em origens diferentes), seria um no-op. O token e lido do cookie
+    // XSRF-TOKEN e anexado manualmente em withCredentialsInterceptor.
+    provideHttpClient(withInterceptors([withCredentialsInterceptor])),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
