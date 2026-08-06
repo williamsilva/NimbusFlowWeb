@@ -18,21 +18,20 @@ import { TaxIdPipe } from '../shared/pipes/tax-id.pipe';
 import { AccountService, Profile } from './account.service';
 
 @Component({
-  selector: 'app-profile',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    MatButtonModule,
-    MatCardModule,
-    MatChipsModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    TranslatePipe,
-    TaxIdPipe,
-  ],
-  templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss',
+    selector: 'app-profile',
+    imports: [
+        CommonModule,
+        RouterLink,
+        MatButtonModule,
+        MatCardModule,
+        MatChipsModule,
+        MatIconModule,
+        MatProgressSpinnerModule,
+        TranslatePipe,
+        TaxIdPipe,
+    ],
+    templateUrl: './profile.component.html',
+    styleUrl: './profile.component.scss'
 })
 export class ProfileComponent implements OnInit {
   loading = true;

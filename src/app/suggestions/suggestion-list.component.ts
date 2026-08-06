@@ -24,24 +24,23 @@ const STATUS_TONES: Record<SuggestionStatus, StatusTone> = {
 };
 
 @Component({
-  selector: 'app-suggestion-list',
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatSelectModule,
-    MatTableModule,
-    MatTooltipModule,
-    StatusBadgeComponent,
-    TranslatePipe,
-  ],
-  templateUrl: './suggestion-list.component.html',
-  styleUrl: './suggestion-list.component.scss',
+    selector: 'app-suggestion-list',
+    imports: [
+        FormsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatSelectModule,
+        MatTableModule,
+        MatTooltipModule,
+        StatusBadgeComponent,
+        TranslatePipe,
+    ],
+    templateUrl: './suggestion-list.component.html',
+    styleUrl: './suggestion-list.component.scss'
 })
 export class SuggestionListComponent implements OnInit {
   suggestions: Suggestion[] = [];

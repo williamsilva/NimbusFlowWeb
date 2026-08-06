@@ -19,11 +19,10 @@ export interface ListDialogData {
  * si (grupos/permissões) são códigos brutos, não chaves de i18n.
  */
 @Component({
-  selector: 'app-list-dialog',
-  standalone: true,
-  imports: [CommonModule, MatButtonModule, MatDialogModule, MatIconModule, TranslatePipe],
-  templateUrl: './list-dialog.component.html',
-  styleUrl: './list-dialog.component.scss',
+    selector: 'app-list-dialog',
+    imports: [CommonModule, MatButtonModule, MatDialogModule, MatIconModule, TranslatePipe],
+    templateUrl: './list-dialog.component.html',
+    styleUrl: './list-dialog.component.scss'
 })
 export class ListDialogComponent {
   constructor(

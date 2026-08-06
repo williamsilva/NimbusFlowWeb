@@ -36,29 +36,28 @@ function emptyFilter(): GroupsFilterState {
 }
 
 @Component({
-  selector: 'app-group-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink,
-    MatButtonModule,
-    MatCardModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatPaginatorModule,
-    MatSelectModule,
-    MatSortModule,
-    MatTableModule,
-    MatTooltipModule,
-    FilterPanelComponent,
-    TranslatePipe,
-  ],
-  providers: [{ provide: MatPaginatorIntl, useClass: NfPaginatorIntl }],
-  templateUrl: './group-list.component.html',
-  styleUrl: './group-list.component.scss',
+    selector: 'app-group-list',
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterLink,
+        MatButtonModule,
+        MatCardModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatPaginatorModule,
+        MatSelectModule,
+        MatSortModule,
+        MatTableModule,
+        MatTooltipModule,
+        FilterPanelComponent,
+        TranslatePipe,
+    ],
+    providers: [{ provide: MatPaginatorIntl, useClass: NfPaginatorIntl }],
+    templateUrl: './group-list.component.html',
+    styleUrl: './group-list.component.scss'
 })
 export class GroupListComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<GroupSummary>([]);

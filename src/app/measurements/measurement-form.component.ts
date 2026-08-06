@@ -12,11 +12,10 @@ import { I18nService } from '../core/i18n/i18n.service';
 import { MeasurementRequest, MeasurementService } from './measurement.service';
 
 @Component({
-  selector: 'app-measurement-form',
-  standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, TranslatePipe],
-  templateUrl: './measurement-form.component.html',
-  styleUrl: './measurement-form.component.scss',
+    selector: 'app-measurement-form',
+    imports: [ReactiveFormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, TranslatePipe],
+    templateUrl: './measurement-form.component.html',
+    styleUrl: './measurement-form.component.scss'
 })
 export class MeasurementFormComponent implements OnInit {
   installmentId: string | null = null;

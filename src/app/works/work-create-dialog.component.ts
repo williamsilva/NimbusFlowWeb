@@ -16,22 +16,21 @@ import { MapPickerComponent } from './map-picker.component';
 import { Work, WorkRequest, WorkService } from './work.service';
 
 @Component({
-  selector: 'app-work-create-dialog',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MapPickerComponent,
-    TranslatePipe,
-  ],
-  providers: [provideNativeDateAdapter()],
-  templateUrl: './work-create-dialog.component.html',
-  styleUrl: './work-create-dialog.component.scss',
+    selector: 'app-work-create-dialog',
+    imports: [
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatDatepickerModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MapPickerComponent,
+        TranslatePipe,
+    ],
+    providers: [provideNativeDateAdapter()],
+    templateUrl: './work-create-dialog.component.html',
+    styleUrl: './work-create-dialog.component.scss'
 })
 export class WorkCreateDialogComponent implements OnInit {
   suppliers: Supplier[] = [];

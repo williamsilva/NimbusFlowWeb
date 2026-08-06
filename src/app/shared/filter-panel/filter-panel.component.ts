@@ -21,11 +21,10 @@ export interface ActiveFilterEntry {
  * disso era só uma dica estática (matTooltip), não mostrava o que de fato estava filtrando.
  */
 @Component({
-  selector: 'app-filter-panel',
-  standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatMenuModule, TranslatePipe],
-  templateUrl: './filter-panel.component.html',
-  styleUrl: './filter-panel.component.scss',
+    selector: 'app-filter-panel',
+    imports: [MatButtonModule, MatIconModule, MatMenuModule, TranslatePipe],
+    templateUrl: './filter-panel.component.html',
+    styleUrl: './filter-panel.component.scss'
 })
 export class FilterPanelComponent {
   @Input() activeFilters: ActiveFilterEntry[] = [];

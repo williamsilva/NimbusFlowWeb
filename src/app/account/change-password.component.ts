@@ -20,22 +20,21 @@ import { AccountService, PasswordPolicy } from './account.service';
 const KNOWN_ERROR_CODES = ['PASSWORD_CURRENT_INVALID', 'PASSWORD_POLICY_INVALID', 'NIMBUS_AUTH_ERROR'];
 
 @Component({
-  selector: 'app-change-password',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterLink,
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    TranslatePipe,
-  ],
-  templateUrl: './change-password.component.html',
-  styleUrl: './change-password.component.scss',
+    selector: 'app-change-password',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        RouterLink,
+        MatButtonModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        TranslatePipe,
+    ],
+    templateUrl: './change-password.component.html',
+    styleUrl: './change-password.component.scss'
 })
 export class ChangePasswordComponent implements OnInit, OnDestroy {
   readonly form: ReturnType<FormBuilder['group']>;

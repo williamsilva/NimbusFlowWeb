@@ -11,11 +11,10 @@ import { I18nService } from '../core/i18n/i18n.service';
 import { SuggestionRequest, SuggestionService } from './suggestion.service';
 
 @Component({
-  selector: 'app-suggestion-form',
-  standalone: true,
-  imports: [ReactiveFormsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, TranslatePipe],
-  templateUrl: './suggestion-form.component.html',
-  styleUrl: './suggestion-form.component.scss',
+    selector: 'app-suggestion-form',
+    imports: [ReactiveFormsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, TranslatePipe],
+    templateUrl: './suggestion-form.component.html',
+    styleUrl: './suggestion-form.component.scss'
 })
 export class SuggestionFormComponent {
   selectedFile: File | null = null;

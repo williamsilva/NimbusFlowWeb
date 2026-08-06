@@ -15,11 +15,10 @@ import { ThemeService } from '../../core/theme/theme.service';
 export type SessionTone = 'normal' | 'warning' | 'danger';
 
 @Component({
-  selector: 'app-topbar',
-  standalone: true,
-  imports: [RouterLink, MatButtonModule, MatDividerModule, MatIconModule, MatMenuModule, MatTooltipModule, TranslatePipe],
-  templateUrl: './topbar.component.html',
-  styleUrl: './topbar.component.scss',
+    selector: 'app-topbar',
+    imports: [RouterLink, MatButtonModule, MatDividerModule, MatIconModule, MatMenuModule, MatTooltipModule, TranslatePipe],
+    templateUrl: './topbar.component.html',
+    styleUrl: './topbar.component.scss'
 })
 export class TopbarComponent {
   @Input() currentUser: CurrentUser | null = null;

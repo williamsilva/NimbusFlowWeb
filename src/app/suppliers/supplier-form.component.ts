@@ -28,19 +28,18 @@ function taxIdValidator(): ValidatorFn {
 }
 
 @Component({
-  selector: 'app-supplier-form',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    TranslatePipe,
-  ],
-  templateUrl: './supplier-form.component.html',
-  styleUrl: './supplier-form.component.scss',
+    selector: 'app-supplier-form',
+    imports: [
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        TranslatePipe,
+    ],
+    templateUrl: './supplier-form.component.html',
+    styleUrl: './supplier-form.component.scss'
 })
 export class SupplierFormComponent implements OnInit {
   supplierId: string | null = null;

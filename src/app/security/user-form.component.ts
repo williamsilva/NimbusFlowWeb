@@ -36,19 +36,18 @@ function cpfValidator(): ValidatorFn {
  * users.list.resendInvite na listagem pra reenviar caso o convite expire/se perca.
  */
 @Component({
-  selector: 'app-user-form',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    TranslatePipe,
-  ],
-  templateUrl: './user-form.component.html',
-  styleUrl: './user-form.component.scss',
+    selector: 'app-user-form',
+    imports: [
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        TranslatePipe,
+    ],
+    templateUrl: './user-form.component.html',
+    styleUrl: './user-form.component.scss'
 })
 export class UserFormComponent implements OnInit {
   userId: string | null = null;

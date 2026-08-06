@@ -24,27 +24,26 @@ import { MapPickerComponent } from './map-picker.component';
 import { Work, WorkRequest, WorkService, WorkStatus } from './work.service';
 
 @Component({
-  selector: 'app-work-form',
-  standalone: true,
-  imports: [
-    DatePipe,
-    DecimalPipe,
-    ReactiveFormsModule,
-    RouterLink,
-    MatButtonModule,
-    MatCardModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatSelectModule,
-    MatTableModule,
-    MapPickerComponent,
-    TranslatePipe,
-  ],
-  providers: [provideNativeDateAdapter()],
-  templateUrl: './work-form.component.html',
-  styleUrl: './work-form.component.scss',
+    selector: 'app-work-form',
+    imports: [
+        DatePipe,
+        DecimalPipe,
+        ReactiveFormsModule,
+        RouterLink,
+        MatButtonModule,
+        MatCardModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatSelectModule,
+        MatTableModule,
+        MapPickerComponent,
+        TranslatePipe,
+    ],
+    providers: [provideNativeDateAdapter()],
+    templateUrl: './work-form.component.html',
+    styleUrl: './work-form.component.scss'
 })
 export class WorkFormComponent implements OnInit {
   workId: string | null = null;

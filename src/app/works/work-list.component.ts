@@ -26,25 +26,24 @@ const STATUS_TONES: Record<WorkStatus, StatusTone> = {
 };
 
 @Component({
-  selector: 'app-work-list',
-  standalone: true,
-  imports: [
-    RouterLink,
-    DecimalPipe,
-    FormsModule,
-    MatTableModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatTooltipModule,
-    StatusBadgeComponent,
-    TranslatePipe,
-  ],
-  templateUrl: './work-list.component.html',
-  styleUrl: './work-list.component.scss',
+    selector: 'app-work-list',
+    imports: [
+        RouterLink,
+        DecimalPipe,
+        FormsModule,
+        MatTableModule,
+        MatButtonModule,
+        MatCardModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatTooltipModule,
+        StatusBadgeComponent,
+        TranslatePipe,
+    ],
+    templateUrl: './work-list.component.html',
+    styleUrl: './work-list.component.scss'
 })
 export class WorkListComponent implements OnInit {
   works: Work[] = [];

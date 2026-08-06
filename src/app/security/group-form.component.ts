@@ -28,20 +28,19 @@ export interface GroupFormDialogData {
  * essa associação já é feita pela tela de Usuário (groupIds), não duplicada aqui.
  */
 @Component({
-  selector: 'app-group-form',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    MatSelectModule,
-    TranslatePipe,
-  ],
-  templateUrl: './group-form.component.html',
-  styleUrl: './group-form.component.scss',
+    selector: 'app-group-form',
+    imports: [
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        MatSelectModule,
+        TranslatePipe,
+    ],
+    templateUrl: './group-form.component.html',
+    styleUrl: './group-form.component.scss'
 })
 export class GroupFormComponent implements OnInit {
   groupId: string | null = null;

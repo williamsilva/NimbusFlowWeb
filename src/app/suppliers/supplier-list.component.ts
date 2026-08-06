@@ -18,25 +18,24 @@ import { Supplier, SupplierService } from './supplier.service';
 import { SupplierFormComponent, SupplierFormDialogData } from './supplier-form.component';
 
 @Component({
-  selector: 'app-supplier-list',
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatTableModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatTooltipModule,
-    PhonePipe,
-    TaxIdPipe,
-    StatusBadgeComponent,
-    TranslatePipe,
-  ],
-  templateUrl: './supplier-list.component.html',
-  styleUrl: './supplier-list.component.scss',
+    selector: 'app-supplier-list',
+    imports: [
+        FormsModule,
+        MatTableModule,
+        MatButtonModule,
+        MatCardModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatTooltipModule,
+        PhonePipe,
+        TaxIdPipe,
+        StatusBadgeComponent,
+        TranslatePipe,
+    ],
+    templateUrl: './supplier-list.component.html',
+    styleUrl: './supplier-list.component.scss'
 })
 export class SupplierListComponent implements OnInit {
   suppliers: Supplier[] = [];

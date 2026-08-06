@@ -30,10 +30,9 @@ const ALLOWED_BOUNDS: L.LatLngBounds = L.latLngBounds(
 );
 
 @Component({
-  selector: 'app-map-picker',
-  standalone: true,
-  imports: [TranslatePipe],
-  template: `
+    selector: 'app-map-picker',
+    imports: [TranslatePipe],
+    template: `
     <div class="map-picker" [id]="mapId"></div>
     <p class="map-hint" [class.map-hint--error]="lastClickOutOfBounds">
       @if (lastClickOutOfBounds) {
@@ -43,8 +42,8 @@ const ALLOWED_BOUNDS: L.LatLngBounds = L.latLngBounds(
       }
     </p>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .map-picker {
         height: 320px;
         width: 100%;
@@ -61,7 +60,7 @@ const ALLOWED_BOUNDS: L.LatLngBounds = L.latLngBounds(
         color: #d32f2f;
       }
     `,
-  ],
+    ]
 })
 export class MapPickerComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() latitude: number | null = null;
