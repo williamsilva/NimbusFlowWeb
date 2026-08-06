@@ -129,11 +129,10 @@
   font-size: 0.8rem;
 }
 
-// A classe .filter-field--wide existe como hook (sem largura definida aqui de propósito) - cada
-// tela que usa <app-filter-panel> define a própria largura no seu .component.scss (ex.:
-// user-list.component.scss), sem precisar tocar neste componente compartilhado. Funciona sem
-// ::ng-deep porque o campo é elemento do template da tela (carrega o _ngcontent dela, não deste
-// componente) - só este componente precisa de ::ng-deep pra alcançar os campos projetados.
+// Campo precisando de largura diferente da padrão (ex.: Nome/Usuário em user-list.component.html)
+// define isso via style inline no próprio <mat-form-field> - um style inline sempre vence esta
+// regra (especificidade máxima, sem depender de ordem de carregamento entre stylesheets), e fica
+// visível direto no HTML da tela, sem precisar tocar neste componente compartilhado.
 
 // Remove o espaço reservado embaixo do campo pra hint/erro - nunca usado aqui (sem validação nos
 // filtros), mas por padrão o Material reserva essa faixa sempre, deixando o campo bem mais alto

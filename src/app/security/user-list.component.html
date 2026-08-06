@@ -52,12 +52,12 @@
   <mat-card class="content-card">
     <app-filter-panel [activeFilters]="activeFilters" (search)="applyFilters()" (clear)="clearFilters()">
       <div class="filter-row">
-        <mat-form-field appearance="outline" class="filter-field--wide">
+        <mat-form-field appearance="outline" style="flex: 0 1 460px; min-width: 340px">
           <mat-label>{{ 'users.list.filters.name' | translate }}</mat-label>
           <input matInput [(ngModel)]="filter.name" />
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="filter-field--wide">
+        <mat-form-field appearance="outline" style="flex: 0 1 460px; min-width: 340px">
           <mat-label>{{ 'users.list.filters.userName' | translate }}</mat-label>
           <input matInput [(ngModel)]="filter.userName" />
         </mat-form-field>
