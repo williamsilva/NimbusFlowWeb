@@ -51,59 +51,63 @@
 
   <mat-card class="content-card">
     <app-filter-panel [activeFilters]="activeFilters" (search)="applyFilters()" (clear)="clearFilters()">
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'users.list.filters.name' | translate }}</mat-label>
-        <input matInput [(ngModel)]="filter.name" />
-      </mat-form-field>
+      <div class="filter-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'users.list.filters.name' | translate }}</mat-label>
+          <input matInput [(ngModel)]="filter.name" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'users.list.filters.userName' | translate }}</mat-label>
-        <input matInput [(ngModel)]="filter.userName" />
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'users.list.filters.userName' | translate }}</mat-label>
+          <input matInput [(ngModel)]="filter.userName" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'users.list.filters.document' | translate }}</mat-label>
-        <input matInput [(ngModel)]="filter.document" />
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'users.list.filters.document' | translate }}</mat-label>
+          <input matInput [(ngModel)]="filter.document" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'users.list.filters.status' | translate }}</mat-label>
-        <mat-select [(ngModel)]="filter.status" multiple>
-          @for (s of statusOptions; track s) {
-            <mat-option [value]="s">{{ statusLabel(s) }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'users.list.filters.status' | translate }}</mat-label>
+          <mat-select [(ngModel)]="filter.status" multiple>
+            @for (s of statusOptions; track s) {
+              <mat-option [value]="s">{{ statusLabel(s) }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'users.list.filters.lastLoginAt' | translate }}</mat-label>
-        <input matInput type="date" [(ngModel)]="filter.lastLoginAt" />
-      </mat-form-field>
+      <div class="filter-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'users.list.filters.lastLoginAt' | translate }}</mat-label>
+          <input matInput type="date" [(ngModel)]="filter.lastLoginAt" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'users.list.filters.blockedUntil' | translate }}</mat-label>
-        <input matInput type="date" [(ngModel)]="filter.blockedUntil" />
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'users.list.filters.blockedUntil' | translate }}</mat-label>
+          <input matInput type="date" [(ngModel)]="filter.blockedUntil" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'users.list.filters.passwordExpiresAt' | translate }}</mat-label>
-        <input matInput type="date" [(ngModel)]="filter.passwordExpiresAt" />
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'users.list.filters.passwordExpiresAt' | translate }}</mat-label>
+          <input matInput type="date" [(ngModel)]="filter.passwordExpiresAt" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'users.list.filters.createdAt' | translate }}</mat-label>
-        <input matInput type="date" [(ngModel)]="filter.createdAt" />
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'users.list.filters.createdAt' | translate }}</mat-label>
+          <input matInput type="date" [(ngModel)]="filter.createdAt" />
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'users.list.filters.createdBy' | translate }}</mat-label>
-        <mat-select [(ngModel)]="filter.createdBy">
-          <mat-option value="">{{ 'common.all' | translate }}</mat-option>
-          @for (name of createdByOptions; track name) {
-            <mat-option [value]="name">{{ name }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'users.list.filters.createdBy' | translate }}</mat-label>
+          <mat-select [(ngModel)]="filter.createdBy">
+            <mat-option value="">{{ 'common.all' | translate }}</mat-option>
+            @for (name of createdByOptions; track name) {
+              <mat-option [value]="name">{{ name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
     </app-filter-panel>
 
     @if (canActiveOrInactive) {

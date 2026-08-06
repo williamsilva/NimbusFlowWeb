@@ -96,18 +96,26 @@
   border-top-color: rgba(255, 255, 255, 0.08);
 }
 
-// flex (não grid) de propósito - grid com 1fr estica cada campo pra preencher a linha inteira
-// quando há poucos campos; aqui cada campo tem uma largura-alvo fixa (ver ::ng-deep abaixo) e só
-// quebra linha quando não cabe mais, batendo com o visual mais compacto do CardSyncWeb.
+// Coluna de linhas - cada linha é um .filter-row (abaixo), montado explicitamente pelo componente
+// pai (não deixa o próprio flex-wrap decidir onde quebra) - permite pedidos como "esses 4 campos
+// numa linha, o resto na linha de baixo", que dependeria da largura da tela se fosse só wrap.
 .filter-panel__fields {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px 12px;
+  flex-direction: column;
+  gap: 10px;
 
   // Densidade oficial do Material (-4, mais compacta suportada) - ajusta a geometria interna do
   // form-field corretamente (ao contrário de forçar altura/padding manualmente nos elementos
   // internos do MDC, que quebra o posicionamento do label - já tentado e revertido).
   @include mat.form-field-density(-4);
+}
+
+// Linha de campos - ainda com flex-wrap (quebra só se a tela for estreita demais pros campos
+// daquela linha específica, não redistribui entre linhas diferentes).
+.filter-panel__fields ::ng-deep .filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
 }
 
 // ::ng-deep necessário pq os campos vêm via <ng-content> (template do componente pai) - sem isso,
