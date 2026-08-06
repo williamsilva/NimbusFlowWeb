@@ -12,10 +12,13 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
-import { GroupAdminService, GroupOption, GroupRequest, PermissionOption } from './group.service';
+import { GroupAdminService, GroupRef, GroupRequest, PermissionOption } from './group.service';
 
 export interface GroupFormDialogData {
-  group: GroupOption | null;
+  group: GroupRef | null;
+  /** Abre o dialog sem permitir edição (form inteiro desabilitado, sem botão Salvar) - usado
+   *  quando o usuário só tem GROUPS_CONSULT (pode ver, não pode alterar) - ver "view" na listagem. */
+  readOnly?: boolean;
 }
 
 /**
@@ -46,6 +49,7 @@ export class GroupFormComponent implements OnInit {
   loadingDetail = false;
   permissionOptions: PermissionOption[] = [];
   canManagePermissions = false;
+  readonly readOnly: boolean;
   form;
 
   constructor(
@@ -57,6 +61,7 @@ export class GroupFormComponent implements OnInit {
     private readonly i18n: I18nService,
     @Inject(MAT_DIALOG_DATA) private readonly data: GroupFormDialogData,
   ) {
+    this.readOnly = !!data.readOnly;
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(120)]],
       description: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(1204)]],
@@ -79,9 +84,23 @@ export class GroupFormComponent implements OnInit {
         next: (detail) => {
           this.form.patchValue({ permissionIds: detail.permissions.map((p) => p.id) });
           this.loadingDetail = false;
+          // Só desabilita depois do patchValue - form.disable() ainda deixa os valores visíveis,
+          // só bloqueia edição (mat-select/input ficam com aparência "read-only" do Material).
+          if (this.readOnly) {
+            this.form.disable();
+          }
         },
-        error: () => (this.loadingDetail = false),
+        error: () => {
+          this.loadingDetail = false;
+          if (this.readOnly) {
+            this.form.disable();
+          }
+        },
       });
+    }
+
+    if (this.readOnly && !this.groupId) {
+      this.form.disable();
     }
   }
 
@@ -90,6 +109,9 @@ export class GroupFormComponent implements OnInit {
   }
 
   save(): void {
+    if (this.readOnly) {
+      return;
+    }
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.snackBar.open(this.i18n.tUi('groups.form.reviewFields'), this.i18n.tUi('common.ok'), { duration: 4000 });

@@ -1,4 +1,6 @@
-<h2 mat-dialog-title>{{ (groupId ? 'groups.form.editTitle' : 'groups.form.createTitle') | translate }}</h2>
+<h2 mat-dialog-title>
+  {{ (readOnly ? 'groups.form.viewTitle' : groupId ? 'groups.form.editTitle' : 'groups.form.createTitle') | translate }}
+</h2>
 
 <mat-dialog-content>
   <form [formGroup]="form" class="dialog-form">
@@ -25,7 +27,7 @@
     </div>
 
     <h4>{{ 'groups.form.sectionPermissions' | translate }}</h4>
-    @if (!canManagePermissions) {
+    @if (!canManagePermissions && !readOnly) {
       <p class="form-hint">{{ 'groups.form.permissionsReadOnlyHint' | translate }}</p>
     }
 
@@ -47,8 +49,12 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button type="button" (click)="cancel()" [disabled]="saving">{{ 'common.cancel' | translate }}</button>
-  <button mat-raised-button color="primary" type="button" (click)="save()" [disabled]="saving || loadingDetail">
-    {{ (saving ? 'common.saving' : 'common.save') | translate }}
-  </button>
+  @if (readOnly) {
+    <button mat-raised-button color="primary" type="button" (click)="cancel()">{{ 'common.close' | translate }}</button>
+  } @else {
+    <button mat-button type="button" (click)="cancel()" [disabled]="saving">{{ 'common.cancel' | translate }}</button>
+    <button mat-raised-button color="primary" type="button" (click)="save()" [disabled]="saving || loadingDetail">
+      {{ (saving ? 'common.saving' : 'common.save') | translate }}
+    </button>
+  }
 </mat-dialog-actions>

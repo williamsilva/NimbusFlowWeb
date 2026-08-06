@@ -233,3 +233,51 @@ tr.mat-mdc-row:hover {
   text-align: center;
   color: var(--nf-text-muted);
 }
+
+// ===== Botões de ação coloridos nas listas (Usuários/Grupos) - pedido explícito de bater com o
+// visual do CardSyncWeb (ícones circulares coloridos por tipo de ação, não outline neutro). =====
+.action-btn {
+  border-radius: 999px;
+}
+
+.action-btn--edit mat-icon {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.action-btn--view mat-icon {
+  color: #0891b2;
+}
+
+.action-btn--activate mat-icon {
+  color: #16a34a;
+}
+
+.action-btn--deactivate mat-icon,
+.action-btn--delete mat-icon {
+  color: #dc2626;
+}
+
+.action-btn--invite mat-icon {
+  color: #2563eb;
+}
+
+:root.dark .action-btn--edit mat-icon {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+:root.dark .action-btn--view mat-icon {
+  color: #22d3ee;
+}
+
+:root.dark .action-btn--activate mat-icon {
+  color: #4ade80;
+}
+
+:root.dark .action-btn--deactivate mat-icon,
+:root.dark .action-btn--delete mat-icon {
+  color: #f87171;
+}
+
+:root.dark .action-btn--invite mat-icon {
+  color: #60a5fa;
+}

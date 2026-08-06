@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { GroupOption } from './group.service';
+import { GroupRef } from './group.service';
 
 /** 1=Ativo 2=Inativo 3=Bloqueado 4=Desativado 5=Senha pendente (StatusUserEnum do NimbusAuth) -
  *  mesmo enum de account.service.ts (Profile.status), reaproveita as chaves account.profile.status*. */
@@ -17,9 +17,10 @@ export interface AdminUser {
   lastLoginAt: string | null;
   blockedUntil: string | null;
   passwordExpiresAt: string | null;
+  createdBy: string | null;
   /** Só os grupos do NimbusFlow - ver AdminUserService no backend (usuário pode ter outros grupos
    *  de outros apps Nimbus, não expostos aqui). */
-  groups: GroupOption[];
+  groups: GroupRef[];
 }
 
 export interface AdminUserRequest {

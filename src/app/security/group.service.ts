@@ -4,12 +4,21 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 
-/** Versão "leve" (sem contadores/permissões) - usada na listagem e no multiselect de grupos do
- *  formulário de usuário. */
-export interface GroupOption {
+/** Versão "leve" (sem contadores/data) - usada dentro de AdminUser.groups e no multiselect de
+ *  grupos do formulário de usuário. */
+export interface GroupRef {
   id: string;
   name: string;
   description: string;
+}
+
+/** Versão da listagem (GET /bff/v1/groups) - GroupSummary é estruturalmente um GroupRef (mesmos
+ *  campos + mais), então serve nos dois usos sem precisar de tipo/chamada separada. */
+export interface GroupSummary extends GroupRef {
+  usersCount: number;
+  permissionsCount: number;
+  createdAt: string;
+  createdBy: string | null;
 }
 
 export interface PermissionOption {
@@ -18,7 +27,7 @@ export interface PermissionOption {
   description: string;
 }
 
-export interface GroupDetail extends GroupOption {
+export interface GroupDetail extends GroupRef {
   usersCount: number;
   permissionsCount: number;
   createdAt: string;
@@ -37,8 +46,8 @@ export class GroupAdminService {
 
   constructor(private readonly http: HttpClient) {}
 
-  list(): Observable<GroupOption[]> {
-    return this.http.get<GroupOption[]>(this.baseUrl);
+  list(): Observable<GroupSummary[]> {
+    return this.http.get<GroupSummary[]>(this.baseUrl);
   }
 
   get(id: string): Observable<GroupDetail> {

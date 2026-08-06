@@ -15,7 +15,7 @@
       <mat-form-field appearance="outline" class="search-field">
         <mat-label>{{ 'common.search' | translate }}</mat-label>
         <mat-icon matPrefix>search</mat-icon>
-        <input matInput [(ngModel)]="search" [placeholder]="'users.list.searchPlaceholder' | translate" />
+        <input matInput [(ngModel)]="search" (ngModelChange)="applyFilter()" [placeholder]="'users.list.searchPlaceholder' | translate" />
       </mat-form-field>
 
       <button
@@ -29,32 +29,54 @@
     </div>
 
     <div class="table-container">
-      <table mat-table [dataSource]="filteredUsers">
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>{{ 'users.list.columns.name' | translate }}</th>
-          <td mat-cell *matCellDef="let user">{{ user.name }}</td>
-        </ng-container>
-
+      <table mat-table matSort [dataSource]="dataSource">
         <ng-container matColumnDef="userName">
-          <th mat-header-cell *matHeaderCellDef>{{ 'users.list.columns.userName' | translate }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.userName' | translate }}</th>
           <td mat-cell *matCellDef="let user">{{ user.userName }}</td>
         </ng-container>
 
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.name' | translate }}</th>
+          <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+        </ng-container>
+
         <ng-container matColumnDef="document">
-          <th mat-header-cell *matHeaderCellDef>{{ 'users.list.columns.document' | translate }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.document' | translate }}</th>
           <td mat-cell *matCellDef="let user">{{ user.document | taxId }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="groups">
-          <th mat-header-cell *matHeaderCellDef>{{ 'users.list.columns.groups' | translate }}</th>
-          <td mat-cell *matCellDef="let user">{{ groupNames(user) }}</td>
-        </ng-container>
-
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>{{ 'users.list.columns.status' | translate }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.status' | translate }}</th>
           <td mat-cell *matCellDef="let user">
             <app-status-badge [label]="statusLabel(user.status)" [tone]="statusTone(user.status)"></app-status-badge>
           </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastLoginAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.lastLoginAt' | translate }}</th>
+          <td mat-cell *matCellDef="let user">{{ user.lastLoginAt ? (user.lastLoginAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="blockedUntil">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.blockedUntil' | translate }}</th>
+          <td mat-cell *matCellDef="let user">{{ user.blockedUntil ? (user.blockedUntil | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="passwordExpiresAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.passwordExpiresAt' | translate }}</th>
+          <td mat-cell *matCellDef="let user">
+            {{ user.passwordExpiresAt ? (user.passwordExpiresAt | date: 'dd/MM/yyyy HH:mm') : '—' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.createdAt' | translate }}</th>
+          <td mat-cell *matCellDef="let user">{{ user.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdBy">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.createdBy' | translate }}</th>
+          <td mat-cell *matCellDef="let user">{{ user.createdBy || '—' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
@@ -63,6 +85,7 @@
             @if (canChange) {
               <button
                 mat-icon-button
+                class="action-btn action-btn--edit"
                 (click)="openEdit(user)"
                 [attr.aria-label]="'common.edit' | translate"
                 [matTooltip]="'common.edit' | translate"
@@ -73,6 +96,7 @@
             @if (canResendInvite && isPendingPassword(user)) {
               <button
                 mat-icon-button
+                class="action-btn action-btn--invite"
                 (click)="resendInvite(user)"
                 [attr.aria-label]="'users.list.resendInvite' | translate"
                 [matTooltip]="'users.list.resendInvite' | translate"
@@ -84,6 +108,7 @@
               @if (user.status === 1) {
                 <button
                   mat-icon-button
+                  class="action-btn action-btn--deactivate"
                   (click)="deactivate(user)"
                   [attr.aria-label]="'common.deactivate' | translate"
                   [matTooltip]="'common.deactivate' | translate"
@@ -93,6 +118,7 @@
               } @else if (user.status === 2) {
                 <button
                   mat-icon-button
+                  class="action-btn action-btn--activate"
                   (click)="activate(user)"
                   [attr.aria-label]="'users.list.activate' | translate"
                   [matTooltip]="'users.list.activate' | translate"
@@ -108,9 +134,11 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
 
-      @if (filteredUsers.length === 0) {
+      @if (dataSource.filteredData.length === 0) {
         <div class="empty-state">{{ 'users.list.empty' | translate }}</div>
       }
+
+      <mat-paginator [pageSizeOptions]="[10, 20, 50]" [pageSize]="20" showFirstLastButtons></mat-paginator>
     </div>
   </mat-card>
 </div>

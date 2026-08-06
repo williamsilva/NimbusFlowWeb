@@ -133,6 +133,7 @@
     "saving": "Guardando…",
     "cancel": "Cancelar",
     "edit": "Editar",
+    "view": "Ver",
     "delete": "Eliminar",
     "deactivate": "Desactivar",
     "back": "Volver",
@@ -147,7 +148,16 @@
     "actions": "Acciones",
     "ok": "Ok",
     "confirm": "Confirmar",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "paginator": {
+      "itemsPerPage": "Registros por página:",
+      "nextPage": "Página siguiente",
+      "previousPage": "Página anterior",
+      "firstPage": "Primera página",
+      "lastPage": "Última página",
+      "range": "Mostrando {{start}} a {{end}} de {{length}} registros",
+      "rangeEmpty": "Ningún registro"
+    }
   },
   "footer": {
     "rights": "Todos los derechos reservados."
@@ -254,10 +264,14 @@
       "empty": "No se encontraron usuarios.",
       "columns": {
         "name": "Nombre",
-        "userName": "Correo",
+        "userName": "Usuario",
         "document": "Documento",
-        "groups": "Grupos",
-        "status": "Estado"
+        "status": "Estado",
+        "lastLoginAt": "Último acceso",
+        "blockedUntil": "Bloqueado hasta",
+        "passwordExpiresAt": "Contraseña vence",
+        "createdAt": "Creado el",
+        "createdBy": "Creado por"
       },
       "activate": "Activar",
       "resendInvite": "Reenviar invitación",
@@ -294,7 +308,11 @@
       "empty": "No se encontraron grupos.",
       "columns": {
         "name": "Nombre",
-        "description": "Descripción"
+        "description": "Descripción",
+        "createdAt": "Creado el",
+        "createdBy": "Creado por",
+        "usersCount": "Usuarios",
+        "permissionsCount": "Permisos"
       },
       "deleteConfirmTitle": "Eliminar grupo",
       "deleteConfirmMessage": "¿Seguro que desea eliminar el grupo \"{{name}}\"? Esta acción no se puede deshacer.",
@@ -303,6 +321,7 @@
     "form": {
       "createTitle": "Nuevo grupo",
       "editTitle": "Editar grupo",
+      "viewTitle": "Ver grupo",
       "name": "Nombre",
       "nameRequired": "Ingrese el nombre.",
       "nameTooShort": "El nombre debe tener al menos 3 caracteres.",

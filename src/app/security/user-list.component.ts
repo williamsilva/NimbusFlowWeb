@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -6,30 +7,36 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
+import { NfPaginatorIntl } from '../shared/paginator/nf-paginator-intl';
 import { TaxIdPipe } from '../shared/pipes/tax-id.pipe';
 import { StatusBadgeComponent, StatusTone } from '../shared/status-badge/status-badge.component';
 import { AdminUser, UserAdminService } from './user.service';
 import { UserFormComponent, UserFormDialogData } from './user-form.component';
 
+/** Status5 (senha pendente) em "info" (azul), não "warn" (âmbar) - bate com o tom usado no
+ *  CardSyncWeb (tag azul "Pendente de senha" na referência visual). */
 const STATUS_TONE: Record<number, StatusTone> = {
   1: 'success',
   2: 'neutral',
   3: 'danger',
   4: 'neutral',
-  5: 'warn',
+  5: 'info',
 };
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     MatButtonModule,
     MatCardModule,
@@ -37,24 +44,41 @@ const STATUS_TONE: Record<number, StatusTone> = {
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatPaginatorModule,
+    MatSortModule,
     MatTableModule,
     MatTooltipModule,
     TaxIdPipe,
     StatusBadgeComponent,
     TranslatePipe,
   ],
+  providers: [{ provide: MatPaginatorIntl, useClass: NfPaginatorIntl }],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
 })
-export class UserListComponent implements OnInit {
-  users: AdminUser[] = [];
+export class UserListComponent implements OnInit, AfterViewInit {
+  dataSource = new MatTableDataSource<AdminUser>([]);
   search = '';
-  displayedColumns = ['name', 'userName', 'document', 'groups', 'status', 'actions'];
+  displayedColumns = [
+    'userName',
+    'name',
+    'document',
+    'status',
+    'lastLoginAt',
+    'blockedUntil',
+    'passwordExpiresAt',
+    'createdAt',
+    'createdBy',
+    'actions',
+  ];
 
   canCreate = false;
   canChange = false;
   canActiveOrInactive = false;
   canResendInvite = false;
+
+  @ViewChild(MatSort) private readonly sort!: MatSort;
+  @ViewChild(MatPaginator) private readonly paginator!: MatPaginator;
 
   constructor(
     private readonly userAdminService: UserAdminService,
@@ -74,18 +98,17 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  get filteredUsers(): AdminUser[] {
-    const term = this.search.trim().toLowerCase();
-    if (!term) {
-      return this.users;
-    }
-    return this.users.filter((user) =>
-      [user.name, user.userName, user.document].filter(Boolean).some((value) => value.toLowerCase().includes(term)),
-    );
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
+  applyFilter(): void {
+    this.dataSource.filter = this.search.trim().toLowerCase();
   }
 
   load(): void {
-    this.userAdminService.list().subscribe((users) => (this.users = users));
+    this.userAdminService.list().subscribe((users) => (this.dataSource.data = users));
   }
 
   statusTone(status: number): StatusTone {
@@ -98,12 +121,6 @@ export class UserListComponent implements OnInit {
 
   isPendingPassword(user: AdminUser): boolean {
     return user.status === 5;
-  }
-
-  // Angular não suporta arrow function (.map((g) => g.name)) direto na expressão do template -
-  // por isso esse helper fica no componente (aqui, TS puro, arrow function normal funciona).
-  groupNames(user: AdminUser): string {
-    return user.groups.length ? user.groups.map((group) => group.name).join(', ') : '—';
   }
 
   openCreate(): void {

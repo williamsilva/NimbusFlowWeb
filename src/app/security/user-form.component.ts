@@ -11,7 +11,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 import { I18nService } from '../core/i18n/i18n.service';
 import { formatTaxId, onlyDigits } from '../shared/utils/br-format';
-import { GroupAdminService, GroupOption } from './group.service';
+import { GroupAdminService, GroupRef } from './group.service';
 import { AdminUser, AdminUserRequest, UserAdminService } from './user.service';
 
 export interface UserFormDialogData {
@@ -53,7 +53,7 @@ function cpfValidator(): ValidatorFn {
 export class UserFormComponent implements OnInit {
   userId: string | null = null;
   saving = false;
-  groupOptions: GroupOption[] = [];
+  groupOptions: GroupRef[] = [];
   form;
 
   constructor(

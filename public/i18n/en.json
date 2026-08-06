@@ -133,6 +133,7 @@
     "saving": "Saving…",
     "cancel": "Cancel",
     "edit": "Edit",
+    "view": "View",
     "delete": "Delete",
     "deactivate": "Deactivate",
     "back": "Back",
@@ -147,7 +148,16 @@
     "actions": "Actions",
     "ok": "Ok",
     "confirm": "Confirm",
-    "close": "Close"
+    "close": "Close",
+    "paginator": {
+      "itemsPerPage": "Records per page:",
+      "nextPage": "Next page",
+      "previousPage": "Previous page",
+      "firstPage": "First page",
+      "lastPage": "Last page",
+      "range": "Showing {{start}} to {{end}} of {{length}} records",
+      "rangeEmpty": "No records"
+    }
   },
   "footer": {
     "rights": "All rights reserved."
@@ -254,10 +264,14 @@
       "empty": "No users found.",
       "columns": {
         "name": "Name",
-        "userName": "Email",
+        "userName": "Username",
         "document": "Document",
-        "groups": "Groups",
-        "status": "Status"
+        "status": "Status",
+        "lastLoginAt": "Last login",
+        "blockedUntil": "Blocked until",
+        "passwordExpiresAt": "Password expires",
+        "createdAt": "Created on",
+        "createdBy": "Created by"
       },
       "activate": "Activate",
       "resendInvite": "Resend invite",
@@ -294,7 +308,11 @@
       "empty": "No groups found.",
       "columns": {
         "name": "Name",
-        "description": "Description"
+        "description": "Description",
+        "createdAt": "Created on",
+        "createdBy": "Created by",
+        "usersCount": "Users",
+        "permissionsCount": "Permissions"
       },
       "deleteConfirmTitle": "Delete group",
       "deleteConfirmMessage": "Are you sure you want to delete the group \"{{name}}\"? This action cannot be undone.",
@@ -303,6 +321,7 @@
     "form": {
       "createTitle": "New group",
       "editTitle": "Edit group",
+      "viewTitle": "View group",
       "name": "Name",
       "nameRequired": "Enter the name.",
       "nameTooShort": "The name must be at least 3 characters long.",
