@@ -1,4 +1,4 @@
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -22,17 +22,16 @@ const KNOWN_ERROR_CODES = ['PASSWORD_CURRENT_INVALID', 'PASSWORD_POLICY_INVALID'
 @Component({
     selector: 'app-change-password',
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        RouterLink,
-        MatButtonModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatProgressSpinnerModule,
-        TranslatePipe,
-    ],
+    ReactiveFormsModule,
+    RouterLink,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    TranslatePipe
+],
     templateUrl: './change-password.component.html',
     styleUrl: './change-password.component.scss'
 })

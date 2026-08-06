@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -20,7 +20,7 @@ export interface ListDialogData {
  */
 @Component({
     selector: 'app-list-dialog',
-    imports: [CommonModule, MatButtonModule, MatDialogModule, MatIconModule, TranslatePipe],
+    imports: [MatButtonModule, MatDialogModule, MatIconModule, TranslatePipe],
     templateUrl: './list-dialog.component.html',
     styleUrl: './list-dialog.component.scss'
 })
