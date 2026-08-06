@@ -41,8 +41,12 @@ export class FilterPanelComponent {
   }
 
   get statusLabel(): string {
-    return this.activeFilters.length > 0
-      ? this.i18n.tUi('common.filters.activeCount', { count: this.activeFilters.length })
-      : this.i18n.tUi('common.filters.none');
+    const count = this.activeFilters.length;
+    if (count === 0) {
+      return this.i18n.tUi('common.filters.none');
+    }
+    // Sem suporte a ICU/plural no I18nService.tUi() (só interpolação simples) - escolhe entre as
+    // duas chaves manualmente, mesma convenção "items"/"items_plural" já usada em account.profile.
+    return this.i18n.tUi(count === 1 ? 'common.filters.activeCount' : 'common.filters.activeCount_plural', { count });
   }
 }

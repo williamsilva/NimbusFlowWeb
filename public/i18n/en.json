@@ -162,7 +162,8 @@
     "filters": {
       "title": "Filter",
       "none": "No active filters",
-      "activeCount": "{{count}} active filter(s)",
+      "activeCount": "{{count}} active filter",
+      "activeCount_plural": "{{count}} active filters",
       "hint": "Fill in the fields and click Search to filter the list.",
       "clear": "Clear",
       "search": "Search"
