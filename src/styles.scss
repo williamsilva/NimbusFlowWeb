@@ -104,6 +104,85 @@ body {
   padding: 24px 24px 48px;
 }
 
+// Variante que ocupa a largura toda do painel (sem centralizar/limitar) - telas administrativas
+// densas (Usuários/Grupos) com tabelas largas de muitas colunas, ao contrário das telas de
+// cadastro comuns (Fornecedores/Obras) que continuam com .page-container centralizado.
+.page-container--full {
+  max-width: none;
+}
+
+// Breadcrumb "Dashboard > Usuários" no topo das telas administrativas (padrão CardSyncWeb).
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  margin-bottom: 2px;
+
+  a {
+    color: var(--nf-glow-a, #3b82f6);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb__separator {
+    opacity: 0.5;
+  }
+
+  .breadcrumb__current {
+    opacity: 0.75;
+  }
+}
+
+// Botões compactos (Atualizar/Ativar/Inativar/Novo no header, Buscar/Limpar no filtro) - o padrão
+// mat-raised-button/mat-stroked-button do Material é alto demais pro visual denso pedido.
+.btn-sm {
+  height: 30px !important;
+  padding: 0 12px !important;
+  font-size: 0.78rem !important;
+  line-height: 30px !important;
+
+  .mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+    margin-right: 4px;
+  }
+}
+
+// Tabela densa (linhas mais baixas, fonte menor) - telas administrativas com muitas colunas
+// (Usuários/Grupos). Sobrescreve os tokens de densidade do Material Design 3 pro mat-table.
+.compact-table {
+  th.mat-mdc-header-cell,
+  td.mat-mdc-cell {
+    padding: 0 10px;
+    font-size: 0.78rem;
+  }
+
+  tr.mat-mdc-header-row {
+    height: 38px;
+  }
+
+  tr.mat-mdc-row {
+    height: 42px;
+  }
+
+  .mat-mdc-icon-button {
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+
+    .mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+    }
+  }
+}
+
 .page-header {
   display: flex;
   justify-content: space-between;

@@ -59,4 +59,12 @@ export class UserAdminService {
   resendInvite(id: string): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/${id}/resend-invite`, {});
   }
+
+  activateBulk(ids: string[]): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/activate`, { ids });
+  }
+
+  deactivateBulk(ids: string[]): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/deactivate`, { ids });
+  }
 }

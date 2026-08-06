@@ -1,1 +1,12 @@
-/* estilos globais de .page-header/.table-container ficam em src/styles.scss */
+.page-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.selection-mode {
+  font-size: 0.78rem;
+  color: var(--nf-text-secondary, #6b7280);
+  margin: 0 0 10px;
+}

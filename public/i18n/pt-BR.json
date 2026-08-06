@@ -149,6 +149,7 @@
     "ok": "Ok",
     "confirm": "Confirmar",
     "close": "Fechar",
+    "all": "Todos",
     "paginator": {
       "itemsPerPage": "Registros por página:",
       "nextPage": "Próxima página",
@@ -157,6 +158,14 @@
       "lastPage": "Última página",
       "range": "Mostrando {{start}} a {{end}} de {{length}} registros",
       "rangeEmpty": "Nenhum registro"
+    },
+    "filters": {
+      "title": "Filtrar",
+      "none": "Nenhum filtro ativo",
+      "activeCount": "{{count}} filtro(s) ativo(s)",
+      "hint": "Preencha os campos e clique em Buscar para filtrar a lista.",
+      "clear": "Limpar",
+      "search": "Buscar"
     }
   },
   "footer": {
@@ -274,11 +283,27 @@
         "createdBy": "Cadastrado por"
       },
       "activate": "Ativar",
+      "deactivateBulk": "Inativar",
       "resendInvite": "Reenviar convite",
       "resendInviteSuccess": "Convite reenviado com sucesso.",
       "resendInviteError": "Não foi possível reenviar o convite.",
       "activateError": "Não foi possível ativar o usuário.",
-      "deactivateError": "Não foi possível desativar o usuário."
+      "deactivateError": "Não foi possível desativar o usuário.",
+      "selectionMode": "Modo da seleção",
+      "selectionModeNone": "Nenhum",
+      "selectionModeActivate": "Ativação",
+      "selectionModeDeactivate": "Inativação",
+      "filters": {
+        "name": "Nome",
+        "userName": "Usuário",
+        "document": "Documento",
+        "status": "Status",
+        "lastLoginAt": "Último login",
+        "blockedUntil": "Bloqueado até",
+        "passwordExpiresAt": "Senha expira",
+        "createdAt": "Cadastrado em",
+        "createdBy": "Cadastrado por"
+      }
     },
     "form": {
       "createTitle": "Novo usuário",
@@ -306,6 +331,12 @@
       "create": "Novo grupo",
       "searchPlaceholder": "Nome ou descrição…",
       "empty": "Nenhum grupo encontrado.",
+      "filters": {
+        "name": "Nome",
+        "description": "Descrição",
+        "createdAt": "Cadastrado em",
+        "createdBy": "Cadastrado por"
+      },
       "columns": {
         "name": "Nome",
         "description": "Descrição",

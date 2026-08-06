@@ -149,6 +149,7 @@
     "ok": "Ok",
     "confirm": "Confirm",
     "close": "Close",
+    "all": "All",
     "paginator": {
       "itemsPerPage": "Records per page:",
       "nextPage": "Next page",
@@ -157,6 +158,14 @@
       "lastPage": "Last page",
       "range": "Showing {{start}} to {{end}} of {{length}} records",
       "rangeEmpty": "No records"
+    },
+    "filters": {
+      "title": "Filter",
+      "none": "No active filters",
+      "activeCount": "{{count}} active filter(s)",
+      "hint": "Fill in the fields and click Search to filter the list.",
+      "clear": "Clear",
+      "search": "Search"
     }
   },
   "footer": {
@@ -274,11 +283,27 @@
         "createdBy": "Created by"
       },
       "activate": "Activate",
+      "deactivateBulk": "Deactivate",
       "resendInvite": "Resend invite",
       "resendInviteSuccess": "Invite resent successfully.",
       "resendInviteError": "Could not resend the invite.",
       "activateError": "Could not activate the user.",
-      "deactivateError": "Could not deactivate the user."
+      "deactivateError": "Could not deactivate the user.",
+      "selectionMode": "Selection mode",
+      "selectionModeNone": "None",
+      "selectionModeActivate": "Activation",
+      "selectionModeDeactivate": "Deactivation",
+      "filters": {
+        "name": "Name",
+        "userName": "Username",
+        "document": "Document",
+        "status": "Status",
+        "lastLoginAt": "Last login",
+        "blockedUntil": "Blocked until",
+        "passwordExpiresAt": "Password expires",
+        "createdAt": "Created on",
+        "createdBy": "Created by"
+      }
     },
     "form": {
       "createTitle": "New user",
@@ -306,6 +331,12 @@
       "create": "New group",
       "searchPlaceholder": "Name or description…",
       "empty": "No groups found.",
+      "filters": {
+        "name": "Name",
+        "description": "Description",
+        "createdAt": "Created on",
+        "createdBy": "Created by"
+      },
       "columns": {
         "name": "Name",
         "description": "Description",

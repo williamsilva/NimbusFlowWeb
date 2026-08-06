@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -8,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -17,9 +19,21 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { FilterPanelComponent } from '../shared/filter-panel/filter-panel.component';
 import { NfPaginatorIntl } from '../shared/paginator/nf-paginator-intl';
 import { GroupAdminService, GroupRef, GroupSummary } from './group.service';
 import { GroupFormComponent, GroupFormDialogData } from './group-form.component';
+
+interface GroupsFilterState {
+  name: string;
+  description: string;
+  createdAt: string;
+  createdBy: string;
+}
+
+function emptyFilter(): GroupsFilterState {
+  return { name: '', description: '', createdAt: '', createdBy: '' };
+}
 
 @Component({
   selector: 'app-group-list',
@@ -27,6 +41,7 @@ import { GroupFormComponent, GroupFormDialogData } from './group-form.component'
   imports: [
     CommonModule,
     FormsModule,
+    RouterLink,
     MatButtonModule,
     MatCardModule,
     MatDialogModule,
@@ -34,9 +49,11 @@ import { GroupFormComponent, GroupFormDialogData } from './group-form.component'
     MatIconModule,
     MatInputModule,
     MatPaginatorModule,
+    MatSelectModule,
     MatSortModule,
     MatTableModule,
     MatTooltipModule,
+    FilterPanelComponent,
     TranslatePipe,
   ],
   providers: [{ provide: MatPaginatorIntl, useClass: NfPaginatorIntl }],
@@ -45,7 +62,8 @@ import { GroupFormComponent, GroupFormDialogData } from './group-form.component'
 })
 export class GroupListComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<GroupSummary>([]);
-  search = '';
+  filter = emptyFilter();
+  createdByOptions: string[] = [];
   displayedColumns = ['name', 'description', 'createdAt', 'createdBy', 'usersCount', 'permissionsCount', 'actions'];
 
   canChange = false;
@@ -61,7 +79,10 @@ export class GroupListComponent implements OnInit, AfterViewInit {
     private readonly authService: AuthService,
     private readonly snackBar: MatSnackBar,
     private readonly i18n: I18nService,
-  ) {}
+  ) {
+    this.dataSource.filterPredicate = (row, filterJson) =>
+      this.matchesFilter(row, JSON.parse(filterJson) as GroupsFilterState);
+  }
 
   ngOnInit(): void {
     this.load();
@@ -77,12 +98,33 @@ export class GroupListComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  applyFilter(): void {
-    this.dataSource.filter = this.search.trim().toLowerCase();
+  get activeFilterCount(): number {
+    const f = this.filter;
+    return [f.name, f.description, f.createdAt, f.createdBy].filter((v) => !!v).length;
+  }
+
+  applyFilters(): void {
+    this.dataSource.filter = JSON.stringify(this.filter);
+  }
+
+  clearFilters(): void {
+    this.filter = emptyFilter();
+    this.dataSource.filter = '';
+  }
+
+  private matchesFilter(row: GroupSummary, f: GroupsFilterState): boolean {
+    if (f.name && !row.name.toLowerCase().includes(f.name.toLowerCase())) return false;
+    if (f.description && !row.description.toLowerCase().includes(f.description.toLowerCase())) return false;
+    if (f.createdAt && row.createdAt.slice(0, 10) !== f.createdAt) return false;
+    if (f.createdBy && row.createdBy !== f.createdBy) return false;
+    return true;
   }
 
   load(): void {
-    this.groupAdminService.list().subscribe((groups) => (this.dataSource.data = groups));
+    this.groupAdminService.list().subscribe((groups) => {
+      this.dataSource.data = groups;
+      this.createdByOptions = Array.from(new Set(groups.map((g) => g.createdBy).filter((v): v is string => !!v))).sort();
+    });
   }
 
   openCreate(): void {

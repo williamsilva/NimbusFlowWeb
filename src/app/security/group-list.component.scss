@@ -1,1 +1,6 @@
-/* estilos globais de .page-header/.table-container ficam em src/styles.scss */
+.page-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
