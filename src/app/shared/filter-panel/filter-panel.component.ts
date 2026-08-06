@@ -1,26 +1,34 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { I18nService } from '../../core/i18n/i18n.service';
+
+export interface ActiveFilterEntry {
+  label: string;
+  value: string;
+}
 
 /**
  * Painel "Filtrar" colapsável (cabeçalho + campos via content projection + Buscar/Limpar) - casca
  * genérica reaproveitada pelas telas de Usuários/Grupos (cada uma define seus próprios campos),
  * padrão visual do CardSyncWeb. Não sabe nada sobre os campos em si, só orquestra
  * expandir/colapsar e emitir search()/clear() pro componente pai aplicar o filtro.
+ *
+ * O ícone (i) abre um popup (mat-menu) com o resumo "label: valor" de cada filtro ativo - antes
+ * disso era só uma dica estática (matTooltip), não mostrava o que de fato estava filtrando.
  */
 @Component({
   selector: 'app-filter-panel',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatTooltipModule, TranslatePipe],
+  imports: [MatButtonModule, MatIconModule, MatMenuModule, TranslatePipe],
   templateUrl: './filter-panel.component.html',
   styleUrl: './filter-panel.component.scss',
 })
 export class FilterPanelComponent {
-  @Input() activeCount = 0;
+  @Input() activeFilters: ActiveFilterEntry[] = [];
   @Output() search = new EventEmitter<void>();
   @Output() clear = new EventEmitter<void>();
 
@@ -33,8 +41,8 @@ export class FilterPanelComponent {
   }
 
   get statusLabel(): string {
-    return this.activeCount > 0
-      ? this.i18n.tUi('common.filters.activeCount', { count: this.activeCount })
+    return this.activeFilters.length > 0
+      ? this.i18n.tUi('common.filters.activeCount', { count: this.activeFilters.length })
       : this.i18n.tUi('common.filters.none');
   }
 }

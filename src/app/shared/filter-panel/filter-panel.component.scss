@@ -42,16 +42,34 @@
 .filter-panel__status {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   font-size: 0.76rem;
   color: var(--nf-text-secondary, #6b7280);
 }
 
+// Botão (não mat-icon puro, como antes) - abre o mat-menu com o resumo dos filtros ativos.
 .filter-panel__info {
-  font-size: 15px;
-  height: 15px;
-  width: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
   opacity: 0.7;
+
+  mat-icon {
+    font-size: 15px;
+    height: 15px;
+    width: 15px;
+  }
+}
+
+.filter-panel__info:hover {
+  opacity: 1;
 }
 
 .filter-panel__chevron {
@@ -72,10 +90,21 @@
   border-top-color: rgba(255, 255, 255, 0.08);
 }
 
+// flex (não grid) de propósito - grid com 1fr estica cada campo pra preencher a linha inteira
+// quando há poucos campos; aqui cada campo tem uma largura-alvo fixa (ver ::ng-deep abaixo) e só
+// quebra linha quando não cabe mais, batendo com o visual mais compacto do CardSyncWeb.
 .filter-panel__fields {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 8px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
+// ::ng-deep necessário pq os campos vêm via <ng-content> (template do componente pai) - sem isso,
+// o encapsulamento de view do Angular não deixaria esse seletor alcançar os mat-form-field
+// projetados (eles carregam o _ngcontent do PAI, não deste componente).
+.filter-panel__fields ::ng-deep mat-form-field {
+  flex: 0 1 210px;
+  min-width: 150px;
 }
 
 .filter-panel__actions {

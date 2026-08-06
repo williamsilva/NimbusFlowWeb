@@ -228,6 +228,38 @@ table.mat-mdc-table {
   background: transparent;
 }
 
+// ===== Popup do ícone (i) do painel de filtros (FilterPanelComponent) - o mat-menu é portado pro
+// cdk-overlay-container (fora do componente), então precisa ser estilizado aqui, global. =====
+.filter-panel-menu-panel .mat-mdc-menu-content {
+  padding: 0;
+}
+
+.filter-panel__menu-content {
+  padding: 12px 16px;
+  min-width: 220px;
+  max-width: 320px;
+
+  h4 {
+    margin: 0 0 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0 0 4px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.filter-panel__menu-empty {
+  color: var(--nf-text-secondary, #6b7280);
+}
+
 // Envolve varios <mat-card> de secao de um mesmo formulario (ex.: dados gerais / endereco /
 // dados bancarios), todos dentro de uma unica tag <form>.
 .form-sections {

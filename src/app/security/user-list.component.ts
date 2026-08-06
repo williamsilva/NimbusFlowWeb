@@ -20,7 +20,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
-import { FilterPanelComponent } from '../shared/filter-panel/filter-panel.component';
+import { ActiveFilterEntry, FilterPanelComponent } from '../shared/filter-panel/filter-panel.component';
 import { NfPaginatorIntl } from '../shared/paginator/nf-paginator-intl';
 import { onlyDigits } from '../shared/utils/br-format';
 import { TaxIdPipe } from '../shared/pipes/tax-id.pipe';
@@ -162,10 +162,22 @@ export class UserListComponent implements OnInit, AfterViewInit {
 
   // ------------------------- Filtros avançados -------------------------
 
-  get activeFilterCount(): number {
+  /** "label: valor" de cada filtro preenchido - alimenta o popup do ícone (i) do painel. */
+  get activeFilters(): ActiveFilterEntry[] {
     const f = this.filter;
-    const textFields = [f.name, f.userName, f.document, f.lastLoginAt, f.blockedUntil, f.passwordExpiresAt, f.createdAt, f.createdBy];
-    return textFields.filter((v) => !!v).length + (f.status.length ? 1 : 0);
+    const entries: ActiveFilterEntry[] = [];
+    if (f.name) entries.push({ label: this.i18n.tUi('users.list.filters.name'), value: f.name });
+    if (f.userName) entries.push({ label: this.i18n.tUi('users.list.filters.userName'), value: f.userName });
+    if (f.document) entries.push({ label: this.i18n.tUi('users.list.filters.document'), value: f.document });
+    if (f.status.length) {
+      entries.push({ label: this.i18n.tUi('users.list.filters.status'), value: f.status.map((s) => this.statusLabel(s)).join(', ') });
+    }
+    if (f.lastLoginAt) entries.push({ label: this.i18n.tUi('users.list.filters.lastLoginAt'), value: f.lastLoginAt });
+    if (f.blockedUntil) entries.push({ label: this.i18n.tUi('users.list.filters.blockedUntil'), value: f.blockedUntil });
+    if (f.passwordExpiresAt) entries.push({ label: this.i18n.tUi('users.list.filters.passwordExpiresAt'), value: f.passwordExpiresAt });
+    if (f.createdAt) entries.push({ label: this.i18n.tUi('users.list.filters.createdAt'), value: f.createdAt });
+    if (f.createdBy) entries.push({ label: this.i18n.tUi('users.list.filters.createdBy'), value: f.createdBy });
+    return entries;
   }
 
   applyFilters(): void {

@@ -50,7 +50,7 @@
   </div>
 
   <mat-card class="content-card">
-    <app-filter-panel [activeCount]="activeFilterCount" (search)="applyFilters()" (clear)="clearFilters()">
+    <app-filter-panel [activeFilters]="activeFilters" (search)="applyFilters()" (clear)="clearFilters()">
       <mat-form-field appearance="outline">
         <mat-label>{{ 'users.list.filters.name' | translate }}</mat-label>
         <input matInput [(ngModel)]="filter.name" />

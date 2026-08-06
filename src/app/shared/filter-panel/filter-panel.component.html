@@ -1,12 +1,33 @@
 <div class="filter-panel">
-  <button type="button" class="filter-panel__header" (click)="toggle()">
+  <div class="filter-panel__header" role="button" tabindex="0" (click)="toggle()" (keydown.enter)="toggle()">
     <span class="filter-panel__title">{{ 'common.filters.title' | translate }}</span>
     <span class="filter-panel__status">
       {{ statusLabel }}
-      <mat-icon class="filter-panel__info" [matTooltip]="'common.filters.hint' | translate">info</mat-icon>
+      <button
+        type="button"
+        class="filter-panel__info"
+        (click)="$event.stopPropagation()"
+        [matMenuTriggerFor]="filtersMenu"
+        [attr.aria-label]="'common.filters.title' | translate"
+      >
+        <mat-icon>info</mat-icon>
+      </button>
     </span>
     <mat-icon class="filter-panel__chevron">{{ expanded ? 'remove' : 'add' }}</mat-icon>
-  </button>
+  </div>
+
+  <mat-menu #filtersMenu="matMenu" class="filter-panel-menu-panel">
+    <div class="filter-panel__menu-content">
+      @if (activeFilters.length) {
+        <h4>{{ 'common.filters.title' | translate }}</h4>
+        @for (f of activeFilters; track f.label) {
+          <p><strong>{{ f.label }}:</strong> {{ f.value }}</p>
+        }
+      } @else {
+        <p class="filter-panel__menu-empty">{{ 'common.filters.none' | translate }}</p>
+      }
+    </div>
+  </mat-menu>
 
   @if (expanded) {
     <div class="filter-panel__body">

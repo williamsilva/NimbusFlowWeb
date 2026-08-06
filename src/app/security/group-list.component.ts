@@ -19,7 +19,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
-import { FilterPanelComponent } from '../shared/filter-panel/filter-panel.component';
+import { ActiveFilterEntry, FilterPanelComponent } from '../shared/filter-panel/filter-panel.component';
 import { NfPaginatorIntl } from '../shared/paginator/nf-paginator-intl';
 import { GroupAdminService, GroupRef, GroupSummary } from './group.service';
 import { GroupFormComponent, GroupFormDialogData } from './group-form.component';
@@ -98,9 +98,15 @@ export class GroupListComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  get activeFilterCount(): number {
+  /** "label: valor" de cada filtro preenchido - alimenta o popup do ícone (i) do painel. */
+  get activeFilters(): ActiveFilterEntry[] {
     const f = this.filter;
-    return [f.name, f.description, f.createdAt, f.createdBy].filter((v) => !!v).length;
+    const entries: ActiveFilterEntry[] = [];
+    if (f.name) entries.push({ label: this.i18n.tUi('groups.list.filters.name'), value: f.name });
+    if (f.description) entries.push({ label: this.i18n.tUi('groups.list.filters.description'), value: f.description });
+    if (f.createdAt) entries.push({ label: this.i18n.tUi('groups.list.filters.createdAt'), value: f.createdAt });
+    if (f.createdBy) entries.push({ label: this.i18n.tUi('groups.list.filters.createdBy'), value: f.createdBy });
+    return entries;
   }
 
   applyFilters(): void {
