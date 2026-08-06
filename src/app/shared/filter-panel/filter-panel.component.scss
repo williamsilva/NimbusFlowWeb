@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 .filter-panel {
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.08);
@@ -101,14 +103,29 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px 12px;
+
+  // Densidade oficial do Material (-4, mais compacta suportada) - ajusta a geometria interna do
+  // form-field corretamente (ao contrário de forçar altura/padding manualmente nos elementos
+  // internos do MDC, que quebra o posicionamento do label - já tentado e revertido).
+  @include mat.form-field-density(-4);
 }
 
 // ::ng-deep necessário pq os campos vêm via <ng-content> (template do componente pai) - sem isso,
 // o encapsulamento de view do Angular não deixaria esse seletor alcançar os mat-form-field
-// projetados (eles carregam o _ngcontent do PAI, não deste componente).
+// projetados (eles carregam o _ngcontent do PAI, não deste componente). Versão mais compacta -
+// a primeira tentativa (210px de largura, altura padrão do Material) ainda ficava bem maior que
+// o print de referência do CardSyncWeb.
 .filter-panel__fields ::ng-deep mat-form-field {
-  flex: 0 1 210px;
-  min-width: 150px;
+  flex: 0 1 170px;
+  min-width: 130px;
+  font-size: 0.8rem;
+}
+
+// Remove o espaço reservado embaixo do campo pra hint/erro - nunca usado aqui (sem validação nos
+// filtros), mas por padrão o Material reserva essa faixa sempre, deixando o campo bem mais alto
+// do que precisa. Seguro (não afeta a posição do label, só o espaço abaixo do campo).
+.filter-panel__fields ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none;
 }
 
 .filter-panel__actions {
