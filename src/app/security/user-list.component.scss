@@ -10,3 +10,13 @@
   color: var(--nf-text-secondary, #6b7280);
   margin: 0 0 10px;
 }
+
+// Nome e Usuário concentram o conteúdo mais longo dos filtros - dobro da largura padrão (230px)
+// definida no filter-panel compartilhado. Ajustável aqui, sem precisar tocar no filter-panel.
+// Precisa do ancestor .filter-row pra ganhar especificidade da regra base do filter-panel (que
+// usa a mesma especificidade combinando ::ng-deep + mat-form-field) - sem isso, quem vence
+// depende da ordem de carregamento dos dois component stylesheets, não é confiável.
+.filter-row mat-form-field.filter-field--wide {
+  flex: 0 1 460px;
+  min-width: 340px;
+}

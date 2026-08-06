@@ -129,12 +129,11 @@
   font-size: 0.8rem;
 }
 
-// Campos que precisam de mais espaço pro conteúdo típico (ex.: Nome/E-mail podem ser bem longos) -
-// o dobro da largura padrão (460px em vez de 230px).
-.filter-panel__fields ::ng-deep mat-form-field.filter-field--wide {
-  flex-basis: 460px;
-  min-width: 340px;
-}
+// A classe .filter-field--wide existe como hook (sem largura definida aqui de propósito) - cada
+// tela que usa <app-filter-panel> define a própria largura no seu .component.scss (ex.:
+// user-list.component.scss), sem precisar tocar neste componente compartilhado. Funciona sem
+// ::ng-deep porque o campo é elemento do template da tela (carrega o _ngcontent dela, não deste
+// componente) - só este componente precisa de ::ng-deep pra alcançar os campos projetados.
 
 // Remove o espaço reservado embaixo do campo pra hint/erro - nunca usado aqui (sem validação nos
 // filtros), mas por padrão o Material reserva essa faixa sempre, deixando o campo bem mais alto
