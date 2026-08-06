@@ -11,12 +11,16 @@
   background: rgba(255, 255, 255, 0.04);
 }
 
+// flex-direction: column de propósito - título "Filtrar" numa linha, status+ícone (i) na linha
+// de baixo (mesmo padrão do CardSyncWeb) - antes disso os dois eram flex row siblings, sem
+// garantia de que ficariam empilhados (dependia só de quebra acidental por falta de espaço).
 .filter-panel__header {
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 2px;
   padding: 10px 16px;
   border: none;
   background: transparent;
