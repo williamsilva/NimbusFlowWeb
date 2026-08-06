@@ -40,13 +40,9 @@ export class FilterPanelComponent {
     this.expanded = !this.expanded;
   }
 
+  // common.filters.activeCount é uma expressão ICU plural (=0/one/other, ver icu-plural.ts) - já
+  // cobre o caso de zero, não precisa de um "if (count === 0)" separado aqui.
   get statusLabel(): string {
-    const count = this.activeFilters.length;
-    if (count === 0) {
-      return this.i18n.tUi('common.filters.none');
-    }
-    // Sem suporte a ICU/plural no I18nService.tUi() (só interpolação simples) - escolhe entre as
-    // duas chaves manualmente, mesma convenção "items"/"items_plural" já usada em account.profile.
-    return this.i18n.tUi(count === 1 ? 'common.filters.activeCount' : 'common.filters.activeCount_plural', { count });
+    return this.i18n.tUi('common.filters.activeCount', { count: this.activeFilters.length });
   }
 }

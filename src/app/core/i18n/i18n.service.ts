@@ -16,6 +16,7 @@ import {
   LOCALE_COOKIE,
   normalizeLang,
 } from './i18n.config';
+import { resolveIcuPlural } from './icu-plural';
 
 type I18nSyncMessage = {
   type: 'lang-changed';
@@ -186,7 +187,16 @@ export class I18nService {
 
   private instantOrFallback(key: string, params?: Record<string, unknown>, fallback?: string): string {
     const value = this.translate.instant(key, params);
-    return value && value !== key ? value : fallback ?? key;
+    if (value && value !== key) {
+      if (typeof value === 'string') {
+        const plural = resolveIcuPlural(value, params);
+        if (plural !== null) {
+          return plural;
+        }
+      }
+      return value;
+    }
+    return fallback ?? key;
   }
 
   private readLang(): Lang {
