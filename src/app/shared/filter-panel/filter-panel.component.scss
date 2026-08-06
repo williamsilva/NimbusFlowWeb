@@ -129,6 +129,13 @@
   font-size: 0.8rem;
 }
 
+// Campos que precisam de mais espaço pro conteúdo típico (ex.: Nome/E-mail podem ser bem longos) -
+// o dobro da largura padrão (460px em vez de 230px).
+.filter-panel__fields ::ng-deep mat-form-field.filter-field--wide {
+  flex-basis: 460px;
+  min-width: 340px;
+}
+
 // Remove o espaço reservado embaixo do campo pra hint/erro - nunca usado aqui (sem validação nos
 // filtros), mas por padrão o Material reserva essa faixa sempre, deixando o campo bem mais alto
 // do que precisa. Seguro (não afeta a posição do label, só o espaço abaixo do campo).
