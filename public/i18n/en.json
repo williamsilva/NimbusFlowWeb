@@ -46,11 +46,11 @@
       "tabs": { "addendums": "Addendums", "installments": "Installments", "measurements": "Measurements" },
       "addendum": {
         "columns": { "amount": "Amount", "justification": "Justification", "status": "Status", "requiredTier": "Approval tier", "decision": "Decision" },
-        "decisionBy": "{{by}} on {{date}}",
+        "decisionBy": "{by} on {date}",
         "request": "Request addendum",
         "amountLabel": "Addendum amount",
         "justificationLabel": "Justification",
-        "resubmitNotice": "Resubmission for the rejected addendum of {{amount}}.",
+        "resubmitNotice": "Resubmission for the rejected addendum of {amount}.",
         "cancelResubmit": "Cancel resubmission",
         "resend": "Resend",
         "approve": "Approve",
@@ -70,7 +70,7 @@
       },
       "measurement": {
         "columns": { "installment": "Installment", "description": "Description", "status": "Status", "distance": "Distance from work", "decision": "Decision", "media": "Media" },
-        "decisionBy": "{{by}} on {{date}}",
+        "decisionBy": "{by} on {date}",
         "approve": "Approve",
         "reject": "Reject",
         "resend": "Resend"
@@ -94,7 +94,7 @@
       "description": "Description",
       "geolocationTitle": "Geolocation",
       "captureLocation": "Capture current location",
-      "locationError": "Could not get the location: {{message}}",
+      "locationError": "Could not get the location: {message}",
       "latitude": "Latitude",
       "longitude": "Longitude",
       "mediaTitle": "Photos/videos",
@@ -156,7 +156,7 @@
       "previousPage": "Previous page",
       "firstPage": "First page",
       "lastPage": "Last page",
-      "range": "Showing {{start}} to {{end}} of {{length}} records",
+      "range": "Showing {start} to {end} of {length} records",
       "rangeEmpty": "No records"
     },
     "filters": {
@@ -186,8 +186,7 @@
       "groupsSubtitle": "Organizational groups linked to the user.",
       "permissions": "Permissions",
       "permissionsSubtitle": "Access available to the authenticated user.",
-      "items": "{{count}} item",
-      "items_plural": "{{count}} items",
+      "items": "{count, plural, one {# item} other {# items}}",
       "userDataTitle": "User data",
       "sectionIdentification": "Identification",
       "sectionSecurity": "Security",
@@ -199,7 +198,7 @@
       "blocked": "Blocked",
       "blockedUntil": "Blocked until",
       "password": "Password",
-      "passwordExpiresIn": "{{days}} days",
+      "passwordExpiresIn": "{days} days",
       "passwordExpiresAt": "Password expires on",
       "issuer": "Issuer",
       "createdAt": "Created on",
@@ -228,7 +227,7 @@
       "rulesTotal": "Rules",
       "rulesValid": "Valid rules",
       "rulesInvalid": "Invalid rules",
-      "rulesSatisfied": "{{valid}}/{{total}} rules met",
+      "rulesSatisfied": "{valid}/{total} rules met",
       "minLength": "Minimum length",
       "profileLink": "Profile",
       "save": "Save password",
@@ -238,7 +237,7 @@
     }
   },
   "passwordRule": {
-    "PASSWORD_TOO_SHORT": "At least {{minLen}} characters",
+    "PASSWORD_TOO_SHORT": "At least {minLen} characters",
     "PASSWORD_MISSING_LOWER": "At least 1 lowercase letter",
     "PASSWORD_MISSING_UPPER": "At least 1 uppercase letter",
     "PASSWORD_MISSING_DIGIT": "At least 1 number",
@@ -249,7 +248,7 @@
     "PASSWORD_COMMON": "Don't use a common password",
     "PASSWORD_CONTAINS_USERNAME": "Must not contain your username",
     "PASSWORD_NOT_MATCH": "Passwords must match",
-    "PASSWORD_REUSED_FROM_HISTORY": "Don't reuse the last {{historySize}} passwords",
+    "PASSWORD_REUSED_FROM_HISTORY": "Don't reuse the last {historySize} passwords",
     "PASSWORD_SAME_AS_CURRENT": "New password must differ from the current one"
   },
   "errors": {
@@ -346,7 +345,7 @@
         "permissionsCount": "Permissions"
       },
       "deleteConfirmTitle": "Delete group",
-      "deleteConfirmMessage": "Are you sure you want to delete the group \"{{name}}\"? This action cannot be undone.",
+      "deleteConfirmMessage": "Are you sure you want to delete the group \"{name}\"? This action cannot be undone.",
       "deleteError": "Could not delete the group."
     },
     "form": {
@@ -453,7 +452,7 @@
       "measurements": "Measurements",
       "emptyAddendums": "No pending addendums.",
       "emptyMeasurements": "No pending measurements.",
-      "installment": "Installment {{number}}"
+      "installment": "Installment {number}"
     },
     "map": { "title": "Works map", "filterLabel": "Filter by status", "filterAll": "All" },
     "timeline": {

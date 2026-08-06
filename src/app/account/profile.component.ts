@@ -82,10 +82,8 @@ export class ProfileComponent implements OnInit {
     return `account.profile.status${status ?? 0}`;
   }
 
-  // Sem suporte a ICU/plural no I18nService.tUi() (só interpolação simples) - escolhe entre as
-  // duas chaves manualmente, mesma convenção "items"/"items_plural" já presente nos 3 dicionários.
   countLabel(count: number): string {
-    return this.i18n.tUi(count === 1 ? 'account.profile.items' : 'account.profile.items_plural', { count });
+    return this.i18n.tUi('account.profile.items', { count });
   }
 
   openGroupsDialog(): void {

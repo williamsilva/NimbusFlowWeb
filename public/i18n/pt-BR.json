@@ -46,11 +46,11 @@
       "tabs": { "addendums": "Aditivos", "installments": "Parcelas", "measurements": "Medições" },
       "addendum": {
         "columns": { "amount": "Valor", "justification": "Justificativa", "status": "Status", "requiredTier": "Alçada", "decision": "Decisão" },
-        "decisionBy": "{{by}} em {{date}}",
+        "decisionBy": "{by} em {date}",
         "request": "Solicitar aditivo",
         "amountLabel": "Valor do acréscimo",
         "justificationLabel": "Justificativa",
-        "resubmitNotice": "Reenvio referente ao aditivo reprovado de {{amount}}.",
+        "resubmitNotice": "Reenvio referente ao aditivo reprovado de {amount}.",
         "cancelResubmit": "Cancelar reenvio",
         "resend": "Reenviar",
         "approve": "Aprovar",
@@ -70,7 +70,7 @@
       },
       "measurement": {
         "columns": { "installment": "Parcela", "description": "Descrição", "status": "Status", "distance": "Distância da obra", "decision": "Decisão", "media": "Mídia" },
-        "decisionBy": "{{by}} em {{date}}",
+        "decisionBy": "{by} em {date}",
         "approve": "Aprovar",
         "reject": "Reprovar",
         "resend": "Reenviar"
@@ -94,7 +94,7 @@
       "description": "Descrição",
       "geolocationTitle": "Geolocalização",
       "captureLocation": "Capturar localização atual",
-      "locationError": "Não foi possível obter a localização: {{message}}",
+      "locationError": "Não foi possível obter a localização: {message}",
       "latitude": "Latitude",
       "longitude": "Longitude",
       "mediaTitle": "Fotos/vídeos",
@@ -156,7 +156,7 @@
       "previousPage": "Página anterior",
       "firstPage": "Primeira página",
       "lastPage": "Última página",
-      "range": "Mostrando {{start}} a {{end}} de {{length}} registros",
+      "range": "Mostrando {start} a {end} de {length} registros",
       "rangeEmpty": "Nenhum registro"
     },
     "filters": {
@@ -186,8 +186,7 @@
       "groupsSubtitle": "Perfis organizacionais vinculados ao usuário.",
       "permissions": "Permissões",
       "permissionsSubtitle": "Acessos disponíveis para o usuário autenticado.",
-      "items": "{{count}} item",
-      "items_plural": "{{count}} itens",
+      "items": "{count, plural, one {# item} other {# itens}}",
       "userDataTitle": "Dados do usuário",
       "sectionIdentification": "Identificação",
       "sectionSecurity": "Segurança",
@@ -199,7 +198,7 @@
       "blocked": "Bloqueado",
       "blockedUntil": "Bloqueado até",
       "password": "Senha",
-      "passwordExpiresIn": "{{days}} dias",
+      "passwordExpiresIn": "{days} dias",
       "passwordExpiresAt": "Senha expira em",
       "issuer": "Issuer",
       "createdAt": "Criado em",
@@ -228,7 +227,7 @@
       "rulesTotal": "Regras",
       "rulesValid": "Regras válidas",
       "rulesInvalid": "Regras inválidas",
-      "rulesSatisfied": "{{valid}}/{{total}} regras atendidas",
+      "rulesSatisfied": "{valid}/{total} regras atendidas",
       "minLength": "Tamanho mínimo",
       "profileLink": "Perfil",
       "save": "Salvar senha",
@@ -238,7 +237,7 @@
     }
   },
   "passwordRule": {
-    "PASSWORD_TOO_SHORT": "Mínimo {{minLen}} caracteres",
+    "PASSWORD_TOO_SHORT": "Mínimo {minLen} caracteres",
     "PASSWORD_MISSING_LOWER": "Ao menos 1 letra minúscula",
     "PASSWORD_MISSING_UPPER": "Ao menos 1 letra maiúscula",
     "PASSWORD_MISSING_DIGIT": "Ao menos 1 número",
@@ -249,7 +248,7 @@
     "PASSWORD_COMMON": "Não usar senha comum",
     "PASSWORD_CONTAINS_USERNAME": "Não conter o usuário",
     "PASSWORD_NOT_MATCH": "As senhas devem ser iguais",
-    "PASSWORD_REUSED_FROM_HISTORY": "Não reutilizar últimas {{historySize}} senhas",
+    "PASSWORD_REUSED_FROM_HISTORY": "Não reutilizar últimas {historySize} senhas",
     "PASSWORD_SAME_AS_CURRENT": "Nova senha diferente da atual"
   },
   "errors": {
@@ -346,7 +345,7 @@
         "permissionsCount": "Permissões"
       },
       "deleteConfirmTitle": "Excluir grupo",
-      "deleteConfirmMessage": "Deseja realmente excluir o grupo \"{{name}}\"? Essa ação não pode ser desfeita.",
+      "deleteConfirmMessage": "Deseja realmente excluir o grupo \"{name}\"? Essa ação não pode ser desfeita.",
       "deleteError": "Não foi possível excluir o grupo."
     },
     "form": {
@@ -469,7 +468,7 @@
       "measurements": "Medições",
       "emptyAddendums": "Nenhum aditivo pendente.",
       "emptyMeasurements": "Nenhuma medição pendente.",
-      "installment": "Parcela {{number}}"
+      "installment": "Parcela {number}"
     },
     "map": { "title": "Mapa de obras", "filterLabel": "Filtrar por status", "filterAll": "Todos" },
     "timeline": {

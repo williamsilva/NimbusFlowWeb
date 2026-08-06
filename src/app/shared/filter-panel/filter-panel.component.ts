@@ -39,8 +39,9 @@ export class FilterPanelComponent {
     this.expanded = !this.expanded;
   }
 
-  // common.filters.activeCount é uma expressão ICU plural (=0/one/other, ver icu-plural.ts) - já
-  // cobre o caso de zero, não precisa de um "if (count === 0)" separado aqui.
+  // common.filters.activeCount é uma expressão ICU plural (=0/one/other, resolvida pelo
+  // TranslateMessageFormatCompiler) - já cobre o caso de zero, não precisa de um "if (count === 0)"
+  // separado aqui.
   get statusLabel(): string {
     return this.i18n.tUi('common.filters.activeCount', { count: this.activeFilters.length });
   }

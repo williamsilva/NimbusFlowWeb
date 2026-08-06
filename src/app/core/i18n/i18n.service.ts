@@ -1,9 +1,12 @@
 import { DestroyRef, Injectable, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 
 import { filter } from 'rxjs/operators';
 import { fromEvent, firstValueFrom } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { PrimeNG } from 'primeng/config';
+import type { Translation } from 'primeng/api';
 
 import { Lang } from './i18n.types';
 import {
@@ -16,7 +19,6 @@ import {
   LOCALE_COOKIE,
   normalizeLang,
 } from './i18n.config';
-import { resolveIcuPlural } from './icu-plural';
 
 type I18nSyncMessage = {
   type: 'lang-changed';
@@ -26,16 +28,20 @@ type I18nSyncMessage = {
 };
 
 /**
- * Mesmo padrão do CardSyncWeb (core/i18n/i18n.service.ts), simplificado: sem PrimeNG (NimbusFlow
- * usa Angular Material - não há dicionário de widget pra trocar) e sem os helpers de tradução de
- * código de erro de backend (tErrorCode/tFieldError) - o backend do NimbusFlow não tem esse
- * catálogo de erros ainda. tUi() usa string simples, não um UiKey tipado (evita manter um
- * registro de ~1800 linhas gerado só pra isso).
+ * Mesmo padrão do CardSyncWeb (core/i18n/i18n.service.ts), simplificado: sem os helpers de
+ * tradução de código de erro de backend (tErrorCode/tFieldError) - o backend do NimbusFlow não
+ * tem esse catálogo de erros ainda. tUi() usa string simples, não um UiKey tipado (evita manter
+ * um registro de ~1800 linhas gerado só pra isso).
  */
 @Injectable({ providedIn: 'root' })
 export class I18nService {
   private readonly destroyRef = inject(DestroyRef);
   private readonly translate = inject(TranslateService);
+  private readonly primeng = inject(PrimeNG);
+  // HttpClient sem interceptors (mesmo motivo do AssetsTranslateLoader: evita recursão, já que o
+  // languageInterceptor depende deste serviço).
+  private readonly http = new HttpClient(inject(HttpBackend));
+  private readonly primengTranslationCache = new Map<Lang, Translation>();
 
   private readonly tabId = this.createTabId();
 
@@ -109,13 +115,32 @@ export class I18nService {
   private async applyAll(lang: Lang, syncAcrossTabs: boolean): Promise<void> {
     const normalized = normalizeLang(lang);
 
-    await firstValueFrom(this.translate.use(normalized));
+    await Promise.all([firstValueFrom(this.translate.use(normalized)), this.applyPrimeNgTranslation(normalized)]);
     this.applyDocumentSideEffects(normalized);
     this.lang.set(normalized);
     this.appliedLang.set(normalized);
 
     if (syncAcrossTabs) {
       this.publishLangChange(normalized);
+    }
+  }
+
+  /** Dicionário de textos do PrimeNG (p-table, p-datepicker, etc.) - arquivo próprio, separado das
+   * chaves do app (public/i18n/primeng/{lang}.json), mesmo padrão do CardSyncWeb. */
+  private async applyPrimeNgTranslation(lang: Lang): Promise<void> {
+    const cached = this.primengTranslationCache.get(lang);
+    if (cached) {
+      this.primeng.setTranslation(cached);
+      return;
+    }
+
+    try {
+      const file = LANG_CONFIG[lang].primengFile;
+      const translation = await firstValueFrom(this.http.get<Translation>(`/i18n/primeng/${file}.json`));
+      this.primengTranslationCache.set(lang, translation);
+      this.primeng.setTranslation(translation);
+    } catch {
+      // Sem tradução do PrimeNG: mantém o dicionário em inglês já embutido no componente.
     }
   }
 
@@ -188,12 +213,6 @@ export class I18nService {
   private instantOrFallback(key: string, params?: Record<string, unknown>, fallback?: string): string {
     const value = this.translate.instant(key, params);
     if (value && value !== key) {
-      if (typeof value === 'string') {
-        const plural = resolveIcuPlural(value, params);
-        if (plural !== null) {
-          return plural;
-        }
-      }
       return value;
     }
     return fallback ?? key;
