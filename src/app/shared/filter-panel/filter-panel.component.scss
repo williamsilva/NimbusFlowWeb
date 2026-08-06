@@ -104,10 +104,10 @@
   flex-direction: column;
   gap: 10px;
 
-  // Densidade oficial do Material (-4, mais compacta suportada) - ajusta a geometria interna do
+  // Densidade oficial do Material (-5, a mais compacta da escala) - ajusta a geometria interna do
   // form-field corretamente (ao contrário de forçar altura/padding manualmente nos elementos
   // internos do MDC, que quebra o posicionamento do label - já tentado e revertido).
-  @include mat.form-field-density(-4);
+  @include mat.form-field-density(-5);
 }
 
 // Linha de campos - ainda com flex-wrap (quebra só se a tela for estreita demais pros campos
@@ -124,8 +124,8 @@
 // a primeira tentativa (210px de largura, altura padrão do Material) ainda ficava bem maior que
 // o print de referência do CardSyncWeb.
 .filter-panel__fields ::ng-deep mat-form-field {
-  flex: 0 1 170px;
-  min-width: 130px;
+  flex: 0 1 230px;
+  min-width: 170px;
   font-size: 0.8rem;
 }
 
