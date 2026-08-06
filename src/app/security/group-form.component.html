@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>{{ (groupId ? 'groups.form.editTitle' : 'groups.form.createTitle') | translate }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <div class="dialog-form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'groups.form.name' | translate }}</mat-label>
+        <input matInput formControlName="name" required maxlength="120" />
+        @if (form.controls.name.hasError('required')) {
+          <mat-error>{{ 'groups.form.nameRequired' | translate }}</mat-error>
+        } @else if (form.controls.name.hasError('minlength')) {
+          <mat-error>{{ 'groups.form.nameTooShort' | translate }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'groups.form.description' | translate }}</mat-label>
+        <input matInput formControlName="description" required maxlength="1204" />
+        @if (form.controls.description.hasError('required')) {
+          <mat-error>{{ 'groups.form.descriptionRequired' | translate }}</mat-error>
+        } @else if (form.controls.description.hasError('minlength')) {
+          <mat-error>{{ 'groups.form.descriptionTooShort' | translate }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <h4>{{ 'groups.form.sectionPermissions' | translate }}</h4>
+    @if (!canManagePermissions) {
+      <p class="form-hint">{{ 'groups.form.permissionsReadOnlyHint' | translate }}</p>
+    }
+
+    @if (loadingDetail) {
+      <div class="permissions-loading">
+        <mat-spinner diameter="28"></mat-spinner>
+      </div>
+    } @else {
+      <mat-form-field appearance="outline" class="permissions-field">
+        <mat-label>{{ 'groups.form.permissions' | translate }}</mat-label>
+        <mat-select formControlName="permissionIds" multiple [disabled]="!canManagePermissions">
+          @for (permission of permissionOptions; track permission.id) {
+            <mat-option [value]="permission.id">{{ permission.description || permission.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()" [disabled]="saving">{{ 'common.cancel' | translate }}</button>
+  <button mat-raised-button color="primary" type="button" (click)="save()" [disabled]="saving || loadingDetail">
+    {{ (saving ? 'common.saving' : 'common.save') | translate }}
+  </button>
+</mat-dialog-actions>

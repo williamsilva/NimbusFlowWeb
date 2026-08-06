@@ -1,15 +1,33 @@
 <aside class="sidebar glass">
   <nav class="nav">
-    @for (item of navItems; track item.link) {
-      <a
-        class="nav-item"
-        [routerLink]="item.link"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: item.exact }"
-      >
-        <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
-        <span class="nav-label">{{ item.labelKey | translate }}</span>
-      </a>
+    @for (item of visibleNavItems; track item.labelKey) {
+      @if (item.children) {
+        <div class="nav-group-label">
+          <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+          <span class="nav-label">{{ item.labelKey | translate }}</span>
+        </div>
+        @for (child of item.children; track child.link) {
+          <a
+            class="nav-item nav-item--child"
+            [routerLink]="child.link"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: !!child.exact }"
+          >
+            <mat-icon class="nav-icon">{{ child.icon }}</mat-icon>
+            <span class="nav-label">{{ child.labelKey | translate }}</span>
+          </a>
+        }
+      } @else {
+        <a
+          class="nav-item"
+          [routerLink]="item.link"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: !!item.exact }"
+        >
+          <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+          <span class="nav-label">{{ item.labelKey | translate }}</span>
+        </a>
+      }
     }
   </nav>
 

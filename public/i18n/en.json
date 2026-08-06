@@ -119,6 +119,11 @@
     "suppliers": "Suppliers",
     "works": "Works",
     "suggestions": "Suggestions",
+    "security": {
+      "title": "Security",
+      "users": "Users",
+      "groups": "Groups"
+    },
     "me": "My account",
     "changePassword": "Change Password",
     "logout": "Log out"
@@ -232,7 +237,84 @@
     "PASSWORD_CURRENT_INVALID": "Current password is incorrect.",
     "PASSWORD_POLICY_INVALID": "The new password does not meet the security policy.",
     "NIMBUS_AUTH_ERROR": "Could not complete the operation. Please try again.",
+    "USER_USERNAME_ALREADY_EXISTS": "A user with this email already exists.",
+    "USER_DOCUMENT_ALREADY_EXISTS": "A user with this document already exists.",
+    "USER_DEACTIVATE_SELF_NOT_ALLOWED": "You cannot deactivate your own account.",
+    "GROUP_NAME_ALREADY_EXISTS": "A group with this name already exists.",
+    "GROUP_DELETE_IN_USE": "This group cannot be deleted: it still has users assigned to it.",
+    "ACCESS_DENIED": "You do not have permission to perform this action.",
     "GENERIC": "An unexpected error occurred."
+  },
+  "users": {
+    "list": {
+      "title": "Users",
+      "subtitle": "Users with access to NimbusFlow.",
+      "create": "New user",
+      "searchPlaceholder": "Name, email, document…",
+      "empty": "No users found.",
+      "columns": {
+        "name": "Name",
+        "userName": "Email",
+        "document": "Document",
+        "groups": "Groups",
+        "status": "Status"
+      },
+      "activate": "Activate",
+      "resendInvite": "Resend invite",
+      "resendInviteSuccess": "Invite resent successfully.",
+      "resendInviteError": "Could not resend the invite.",
+      "activateError": "Could not activate the user.",
+      "deactivateError": "Could not deactivate the user."
+    },
+    "form": {
+      "createTitle": "New user",
+      "editTitle": "Edit user",
+      "inviteHint": "The user receives an invite email to set their own password.",
+      "name": "Name",
+      "nameRequired": "Enter the name.",
+      "userName": "Email (login)",
+      "userNamePlaceholder": "user@company.com",
+      "userNameRequired": "Enter the email.",
+      "userNameInvalid": "Enter a valid email.",
+      "document": "Document",
+      "documentRequired": "Enter the document.",
+      "documentInvalid": "Invalid document.",
+      "groups": "Groups",
+      "groupsRequired": "Select at least one group.",
+      "reviewFields": "Review the highlighted fields.",
+      "saveError": "Could not save the user."
+    }
+  },
+  "groups": {
+    "list": {
+      "title": "Groups",
+      "subtitle": "NimbusFlow access groups and their permissions.",
+      "create": "New group",
+      "searchPlaceholder": "Name or description…",
+      "empty": "No groups found.",
+      "columns": {
+        "name": "Name",
+        "description": "Description"
+      },
+      "deleteConfirmTitle": "Delete group",
+      "deleteConfirmMessage": "Are you sure you want to delete the group \"{{name}}\"? This action cannot be undone.",
+      "deleteError": "Could not delete the group."
+    },
+    "form": {
+      "createTitle": "New group",
+      "editTitle": "Edit group",
+      "name": "Name",
+      "nameRequired": "Enter the name.",
+      "nameTooShort": "The name must be at least 3 characters long.",
+      "description": "Description",
+      "descriptionRequired": "Enter the description.",
+      "descriptionTooShort": "The description must be at least 3 characters long.",
+      "sectionPermissions": "Permissions",
+      "permissions": "Group permissions",
+      "permissionsReadOnlyHint": "You do not have permission to change this group's permissions.",
+      "reviewFields": "Review the highlighted fields.",
+      "saveError": "Could not save the group."
+    }
   },
   "suppliers": {
     "list": {

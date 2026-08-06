@@ -1,0 +1,15 @@
+.form-hint {
+  margin: -4px 0 12px;
+  font-size: 0.82rem;
+  color: var(--nf-text-secondary, #6b7280);
+}
+
+.permissions-field {
+  width: 100%;
+}
+
+.permissions-loading {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+}

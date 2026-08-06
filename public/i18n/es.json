@@ -119,6 +119,11 @@
     "suppliers": "Proveedores",
     "works": "Obras",
     "suggestions": "Sugerencias",
+    "security": {
+      "title": "Seguridad",
+      "users": "Usuarios",
+      "groups": "Grupos"
+    },
     "me": "Mi cuenta",
     "changePassword": "Cambiar Contraseña",
     "logout": "Salir"
@@ -232,7 +237,84 @@
     "PASSWORD_CURRENT_INVALID": "La contraseña actual es incorrecta.",
     "PASSWORD_POLICY_INVALID": "La nueva contraseña no cumple la política de seguridad.",
     "NIMBUS_AUTH_ERROR": "No fue posible completar la operación. Intente de nuevo.",
+    "USER_USERNAME_ALREADY_EXISTS": "Ya existe un usuario con ese correo.",
+    "USER_DOCUMENT_ALREADY_EXISTS": "Ya existe un usuario con ese documento.",
+    "USER_DEACTIVATE_SELF_NOT_ALLOWED": "No puede desactivar su propia cuenta.",
+    "GROUP_NAME_ALREADY_EXISTS": "Ya existe un grupo con ese nombre.",
+    "GROUP_DELETE_IN_USE": "Este grupo no se puede eliminar: todavía tiene usuarios vinculados.",
+    "ACCESS_DENIED": "No tiene permiso para realizar esta acción.",
     "GENERIC": "Ocurrió un error inesperado."
+  },
+  "users": {
+    "list": {
+      "title": "Usuarios",
+      "subtitle": "Usuarios con acceso al NimbusFlow.",
+      "create": "Nuevo usuario",
+      "searchPlaceholder": "Nombre, correo, documento…",
+      "empty": "No se encontraron usuarios.",
+      "columns": {
+        "name": "Nombre",
+        "userName": "Correo",
+        "document": "Documento",
+        "groups": "Grupos",
+        "status": "Estado"
+      },
+      "activate": "Activar",
+      "resendInvite": "Reenviar invitación",
+      "resendInviteSuccess": "Invitación reenviada con éxito.",
+      "resendInviteError": "No fue posible reenviar la invitación.",
+      "activateError": "No fue posible activar el usuario.",
+      "deactivateError": "No fue posible desactivar el usuario."
+    },
+    "form": {
+      "createTitle": "Nuevo usuario",
+      "editTitle": "Editar usuario",
+      "inviteHint": "El usuario recibe un correo de invitación para definir su propia contraseña.",
+      "name": "Nombre",
+      "nameRequired": "Ingrese el nombre.",
+      "userName": "Correo (usuario)",
+      "userNamePlaceholder": "usuario@empresa.com",
+      "userNameRequired": "Ingrese el correo.",
+      "userNameInvalid": "Ingrese un correo válido.",
+      "document": "Documento",
+      "documentRequired": "Ingrese el documento.",
+      "documentInvalid": "Documento inválido.",
+      "groups": "Grupos",
+      "groupsRequired": "Seleccione al menos un grupo.",
+      "reviewFields": "Revise los campos resaltados.",
+      "saveError": "No fue posible guardar el usuario."
+    }
+  },
+  "groups": {
+    "list": {
+      "title": "Grupos",
+      "subtitle": "Grupos de acceso del NimbusFlow y sus permisos.",
+      "create": "Nuevo grupo",
+      "searchPlaceholder": "Nombre o descripción…",
+      "empty": "No se encontraron grupos.",
+      "columns": {
+        "name": "Nombre",
+        "description": "Descripción"
+      },
+      "deleteConfirmTitle": "Eliminar grupo",
+      "deleteConfirmMessage": "¿Seguro que desea eliminar el grupo \"{{name}}\"? Esta acción no se puede deshacer.",
+      "deleteError": "No fue posible eliminar el grupo."
+    },
+    "form": {
+      "createTitle": "Nuevo grupo",
+      "editTitle": "Editar grupo",
+      "name": "Nombre",
+      "nameRequired": "Ingrese el nombre.",
+      "nameTooShort": "El nombre debe tener al menos 3 caracteres.",
+      "description": "Descripción",
+      "descriptionRequired": "Ingrese la descripción.",
+      "descriptionTooShort": "La descripción debe tener al menos 3 caracteres.",
+      "sectionPermissions": "Permisos",
+      "permissions": "Permisos del grupo",
+      "permissionsReadOnlyHint": "No tiene permiso para cambiar los permisos de este grupo.",
+      "reviewFields": "Revise los campos resaltados.",
+      "saveError": "No fue posible guardar el grupo."
+    }
   },
   "suppliers": {
     "list": {

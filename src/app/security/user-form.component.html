@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>{{ (userId ? 'users.form.editTitle' : 'users.form.createTitle') | translate }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    @if (!userId) {
+      <p class="form-hint">{{ 'users.form.inviteHint' | translate }}</p>
+    }
+
+    <div class="dialog-form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'users.form.name' | translate }}</mat-label>
+        <input matInput formControlName="name" required />
+        @if (form.controls.name.hasError('required')) {
+          <mat-error>{{ 'users.form.nameRequired' | translate }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'users.form.userName' | translate }}</mat-label>
+        <input matInput formControlName="userName" required type="email" [placeholder]="'users.form.userNamePlaceholder' | translate" />
+        @if (form.controls.userName.hasError('required')) {
+          <mat-error>{{ 'users.form.userNameRequired' | translate }}</mat-error>
+        } @else if (form.controls.userName.hasError('email')) {
+          <mat-error>{{ 'users.form.userNameInvalid' | translate }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'users.form.document' | translate }}</mat-label>
+        <input matInput formControlName="document" required maxlength="14" (input)="onDocumentInput($event)" />
+        @if (form.controls.document.hasError('required')) {
+          <mat-error>{{ 'users.form.documentRequired' | translate }}</mat-error>
+        } @else if (form.controls.document.hasError('cpf')) {
+          <mat-error>{{ 'users.form.documentInvalid' | translate }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'users.form.groups' | translate }}</mat-label>
+        <mat-select formControlName="groupIds" multiple required>
+          @for (group of groupOptions; track group.id) {
+            <mat-option [value]="group.id">{{ group.name }}</mat-option>
+          }
+        </mat-select>
+        @if (form.controls.groupIds.hasError('required') || form.controls.groupIds.hasError('minlength')) {
+          <mat-error>{{ 'users.form.groupsRequired' | translate }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()" [disabled]="saving">{{ 'common.cancel' | translate }}</button>
+  <button mat-raised-button color="primary" type="button" (click)="save()" [disabled]="saving">
+    {{ (saving ? 'common.saving' : 'common.save') | translate }}
+  </button>
+</mat-dialog-actions>
