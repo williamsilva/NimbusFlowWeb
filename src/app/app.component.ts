@@ -6,6 +6,7 @@ import { ToastModule } from 'primeng/toast';
 import { Subscription, interval, startWith } from 'rxjs';
 
 import { AuthService, CurrentUser } from './core/auth/auth.service';
+import { MeStore } from './core/auth/me.store';
 import { I18nService } from './core/i18n/i18n.service';
 import { ThemeService } from './core/theme/theme.service';
 import { FooterComponent } from './layout/footer/footer.component';
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly authService: AuthService,
+    private readonly meStore: MeStore,
     private readonly themeService: ThemeService,
     private readonly confirmationService: ConfirmationService,
     private readonly i18n: I18nService,
@@ -42,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
           return;
         }
         this.currentUser = user;
+        this.meStore.setMe(user);
         this.watchSession(user.expiresAt);
       },
       // /bff/me responde 401 (nao um 200 com authenticated:false) quando nao ha sessao valida

@@ -5,6 +5,7 @@ import { ProfileComponent } from './account/profile.component';
 import { authGuard } from './core/auth/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MeasurementFormComponent } from './measurements/measurement-form.component';
+import { GroupDetailComponent } from './security/group-detail.component';
 import { GroupListComponent } from './security/group-list.component';
 import { UserListComponent } from './security/user-list.component';
 import { SuggestionListComponent } from './suggestions/suggestion-list.component';
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'suggestions', component: SuggestionListComponent, canActivate: [authGuard] },
   { path: 'security/users', component: UserListComponent, canActivate: [authGuard] },
   { path: 'security/groups', component: GroupListComponent, canActivate: [authGuard] },
+  { path: 'security/groups/:id', component: GroupDetailComponent, canActivate: [authGuard] },
   { path: 'account/profile', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'account/password', component: ChangePasswordComponent, canActivate: [authGuard] },
 ];

@@ -153,6 +153,7 @@
     "confirm": "Confirmar",
     "close": "Fechar",
     "all": "Todos",
+    "noData": "Nenhum dado encontrado.",
     "paginator": {
       "itemsPerPage": "Registros por página:",
       "nextPage": "Próxima página",
@@ -366,6 +367,22 @@
       "permissionsReadOnlyHint": "Você não tem permissão para alterar as permissões deste grupo.",
       "reviewFields": "Revise os campos destacados.",
       "saveError": "Não foi possível salvar o grupo."
+    },
+    "detail": {
+      "title": "Detalhe do grupo",
+      "subtitle": "Resumo e permissões do grupo",
+      "tabs": {
+        "summary": "Resumo",
+        "permissions": "Permissões"
+      },
+      "permissions": {
+        "title": "Permissões",
+        "subtitle": "Associe ou desassocie permissões deste grupo.",
+        "placeholder": "Selecione as permissões",
+        "empty": "Nenhuma permissão associada.",
+        "saved": "Permissões atualizadas com sucesso.",
+        "saveError": "Não foi possível atualizar as permissões."
+      }
     }
   },
   "suppliers": {

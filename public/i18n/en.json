@@ -153,6 +153,7 @@
     "confirm": "Confirm",
     "close": "Close",
     "all": "All",
+    "noData": "No data found.",
     "paginator": {
       "itemsPerPage": "Records per page:",
       "nextPage": "Next page",
@@ -366,6 +367,22 @@
       "permissionsReadOnlyHint": "You do not have permission to change this group's permissions.",
       "reviewFields": "Review the highlighted fields.",
       "saveError": "Could not save the group."
+    },
+    "detail": {
+      "title": "Group detail",
+      "subtitle": "Group summary and permissions",
+      "tabs": {
+        "summary": "Summary",
+        "permissions": "Permissions"
+      },
+      "permissions": {
+        "title": "Permissions",
+        "subtitle": "Associate or remove permissions from this group.",
+        "placeholder": "Select the permissions",
+        "empty": "No permission associated.",
+        "saved": "Permissions updated successfully.",
+        "saveError": "Could not update the permissions."
+      }
     }
   },
   "suppliers": {

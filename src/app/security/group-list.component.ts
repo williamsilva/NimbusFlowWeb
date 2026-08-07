@@ -1,22 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { DialogService } from 'primeng/dynamicdialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 
-import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
+import { PermissionService } from '../core/auth/permission.service';
 import { ActiveFilterEntry, FilterPanelComponent } from '../shared/filter-panel/filter-panel.component';
 import { GroupAdminService, GroupRef, GroupSummary } from './group.service';
-import { GroupFormComponent, GroupFormDialogData } from './group-form.component';
+import { GroupsPermissionPolicy } from './policy/groups-permission.policy';
+import { GroupFormComponent } from './group-form.component';
 
 interface GroupsFilterState {
   name: string;
@@ -30,73 +30,73 @@ function emptyFilter(): GroupsFilterState {
 }
 
 @Component({
-    selector: 'app-group-list',
-    imports: [
-        CommonModule,
-        FormsModule,
-        RouterLink,
-        ButtonModule,
-        FloatLabelModule,
-        InputTextModule,
-        SelectModule,
-        TableModule,
-        TooltipModule,
-        FilterPanelComponent,
-        TranslatePipe,
-    ],
-    templateUrl: './group-list.component.html',
-    styleUrl: './group-list.component.scss'
+  standalone: true,
+  selector: 'app-group-list',
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    ButtonModule,
+    FloatLabelModule,
+    InputTextModule,
+    SelectModule,
+    TableModule,
+    TooltipModule,
+    FilterPanelComponent,
+    TranslatePipe,
+    GroupFormComponent,
+  ],
+  templateUrl: './group-list.component.html',
+  styleUrl: './group-list.component.scss',
 })
 export class GroupListComponent implements OnInit {
-  groups: GroupSummary[] = [];
-  filter = emptyFilter();
-  private appliedFilter = emptyFilter();
-  createdByOptions: string[] = [];
+  private readonly groupAdminService = inject(GroupAdminService);
+  private readonly messageService = inject(MessageService);
+  private readonly confirmationService = inject(ConfirmationService);
 
-  canChange = false;
-  canDelete = false;
-  canCreate = false;
+  readonly i18n = inject(I18nService);
+  readonly perms = inject(PermissionService);
+  readonly secPolicy = inject(GroupsPermissionPolicy);
 
-  constructor(
-    private readonly groupAdminService: GroupAdminService,
-    private readonly dialogService: DialogService,
-    private readonly authService: AuthService,
-    private readonly messageService: MessageService,
-    private readonly confirmationService: ConfirmationService,
-    private readonly i18n: I18nService,
-  ) {}
+  readonly groups = signal<GroupSummary[]>([]);
+  readonly filter = signal<GroupsFilterState>(emptyFilter());
+  private readonly appliedFilter = signal<GroupsFilterState>(emptyFilter());
+  readonly createdByOptions = signal<string[]>([]);
+
+  readonly upsertVisible = signal(false);
+  readonly editingGroup = signal<GroupRef | null>(null);
 
   ngOnInit(): void {
     this.load();
-    this.authService.loadMe().subscribe((user) => {
-      this.canCreate = user.permissions.includes('GROUPS_CREATE');
-      this.canChange = user.permissions.includes('GROUPS_CHANGE');
-      this.canDelete = user.permissions.includes('GROUPS_DELETE');
-    });
   }
 
-  get filteredGroups(): GroupSummary[] {
-    return this.groups.filter((row) => this.matchesFilter(row, this.appliedFilter));
-  }
+  readonly filteredGroups = computed(() => {
+    const applied = this.appliedFilter();
+    return this.groups().filter((row) => this.matchesFilter(row, applied));
+  });
 
   /** "label: valor" de cada filtro preenchido - alimenta o popup do ícone (i) do painel. */
-  get activeFilters(): ActiveFilterEntry[] {
-    const f = this.appliedFilter;
+  readonly activeFilters = computed<ActiveFilterEntry[]>(() => {
+    const f = this.appliedFilter();
     const entries: ActiveFilterEntry[] = [];
     if (f.name) entries.push({ label: this.i18n.tUi('groups.list.filters.name'), value: f.name });
     if (f.description) entries.push({ label: this.i18n.tUi('groups.list.filters.description'), value: f.description });
     if (f.createdAt) entries.push({ label: this.i18n.tUi('groups.list.filters.createdAt'), value: f.createdAt });
     if (f.createdBy) entries.push({ label: this.i18n.tUi('groups.list.filters.createdBy'), value: f.createdBy });
     return entries;
-  }
+  });
 
   applyFilters(): void {
-    this.appliedFilter = { ...this.filter };
+    this.appliedFilter.set({ ...this.filter() });
   }
 
   clearFilters(): void {
-    this.filter = emptyFilter();
-    this.appliedFilter = emptyFilter();
+    this.filter.set(emptyFilter());
+    this.appliedFilter.set(emptyFilter());
+  }
+
+  updateFilter<K extends keyof GroupsFilterState>(key: K, value: GroupsFilterState[K]): void {
+    this.filter.set({ ...this.filter(), [key]: value });
   }
 
   private matchesFilter(row: GroupSummary, f: GroupsFilterState): boolean {
@@ -109,41 +109,39 @@ export class GroupListComponent implements OnInit {
 
   load(): void {
     this.groupAdminService.list().subscribe((groups) => {
-      this.groups = groups;
-      this.createdByOptions = Array.from(new Set(groups.map((g) => g.createdBy).filter((v): v is string => !!v))).sort();
+      this.groups.set(groups);
+      this.createdByOptions.set(
+        Array.from(new Set(groups.map((g) => g.createdBy).filter((v): v is string => !!v))).sort(),
+      );
     });
   }
 
-  openCreate(): void {
-    this.openDialog(null, false);
+  goNew(): void {
+    if (!this.secPolicy.canCreate()) return;
+    this.editingGroup.set(null);
+    this.upsertVisible.set(true);
   }
 
-  openEdit(group: GroupRef): void {
-    this.openDialog(group, false);
+  edit(group: GroupRef): void {
+    if (!this.secPolicy.canEdit(group)) return;
+    this.editingGroup.set(group);
+    this.upsertVisible.set(true);
   }
 
-  /** Sempre disponível pra quem lista (GROUPS_CONSULT já é exigido pra chegar nesta tela) - cobre
-   *  quem não tem GROUPS_CHANGE mas ainda precisa inspecionar nome/descrição/permissões. */
-  openView(group: GroupRef): void {
-    this.openDialog(group, true);
+  onUpsertVisibleChange(visible: boolean): void {
+    this.upsertVisible.set(visible);
+    if (!visible) {
+      this.editingGroup.set(null);
+    }
   }
 
-  private openDialog(group: GroupRef | null, readOnly: boolean): void {
-    const ref = this.dialogService.open<GroupFormComponent, GroupFormDialogData>(GroupFormComponent, {
-      data: { group, readOnly },
-      header: this.i18n.tUi(readOnly ? 'groups.form.viewTitle' : group ? 'groups.form.editTitle' : 'groups.form.createTitle'),
-      width: '640px',
-      modal: true,
-    });
-
-    ref?.onClose.subscribe((saved) => {
-      if (saved) {
-        this.load();
-      }
-    });
+  onSaved(): void {
+    this.load();
   }
 
   delete(group: GroupSummary): void {
+    if (!this.secPolicy.canDelete(group)) return;
+
     this.confirmationService.confirm({
       header: this.i18n.tUi('groups.list.deleteConfirmTitle'),
       message: this.i18n.tUi('groups.list.deleteConfirmMessage', { name: group.name }),

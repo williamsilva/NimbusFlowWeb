@@ -1,0 +1,153 @@
+<div class="page-container page-container--full">
+  <div class="page-header">
+    <div>
+      <div class="breadcrumb">
+        <a routerLink="/">{{ 'menu.dashboard' | translate }}</a>
+        <i class="pi pi-angle-right breadcrumb__separator"></i>
+        <a routerLink="/security/groups">{{ 'groups.list.title' | translate }}</a>
+        <i class="pi pi-angle-right breadcrumb__separator"></i>
+        <span class="breadcrumb__current">{{ 'groups.detail.title' | translate }}</span>
+      </div>
+      <p class="page-subtitle">{{ 'groups.detail.subtitle' | translate }}</p>
+    </div>
+
+    <div class="page-header__actions">
+      <button pButton severity="secondary" [outlined]="true" type="button" class="btn-sm" (click)="back()">
+        <i class="pi pi-arrow-left"></i>
+        {{ 'common.back' | translate }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="group-detail-loading">
+      <p-progressSpinner strokeWidth="4" ariaLabel="loading" />
+    </div>
+  } @else if (group(); as g) {
+    <div class="group-detail-grid">
+      <div class="content-card group-detail-summary">
+        <div class="group-detail-avatar">{{ initials() }}</div>
+        <div class="group-detail-name">{{ g.name }}</div>
+        <div class="group-detail-description">{{ g.description }}</div>
+
+        <div class="group-detail-badges">
+          <span class="group-detail-badge group-detail-badge--info">
+            {{ 'groups.detail.permissions.title' | translate }}: {{ g.permissionsCount }}
+          </span>
+          <span class="group-detail-badge group-detail-badge--success">
+            {{ 'groups.list.columns.usersCount' | translate }}: {{ g.usersCount }}
+          </span>
+        </div>
+
+        <div class="group-detail-side-actions">
+          <button pButton type="button" class="p-button-text w-full" routerLink="/security/groups">
+            <i class="pi pi-users"></i>
+            {{ 'groups.list.title' | translate }}
+          </button>
+          <button pButton type="button" class="w-full" (click)="back()">
+            <i class="pi pi-arrow-left"></i>
+            {{ 'common.back' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div class="group-detail-main">
+        <div class="group-detail-tabs">
+          <button
+            type="button"
+            class="group-detail-tab"
+            [class.group-detail-tab--active]="tab() === 'summary'"
+            (click)="setTab('summary')"
+          >
+            <i class="pi pi-id-card"></i>
+            {{ 'groups.detail.tabs.summary' | translate }}
+          </button>
+          <button
+            type="button"
+            class="group-detail-tab"
+            [class.group-detail-tab--active]="tab() === 'permissions'"
+            (click)="setTab('permissions')"
+          >
+            <i class="pi pi-shield"></i>
+            {{ 'groups.detail.tabs.permissions' | translate }}
+            <span class="group-detail-tab-count">{{ g.permissionsCount }}</span>
+          </button>
+        </div>
+
+        @if (tab() === 'summary') {
+          <div class="content-card">
+            <h3>{{ 'groups.detail.permissions.title' | translate }}</h3>
+            @if (g.permissions.length) {
+              <div class="group-detail-entity-grid">
+                @for (item of g.permissions; track trackById($index, item)) {
+                  <div class="group-detail-entity-card">
+                    <i class="pi pi-shield"></i>
+                    <div>
+                      <strong>{{ item.description || item.name }}</strong>
+                      <small>{{ item.name }}</small>
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="empty-state">{{ 'groups.detail.permissions.empty' | translate }}</div>
+            }
+          </div>
+        }
+
+        @if (tab() === 'permissions') {
+          <div class="content-card">
+            <div class="group-detail-section-head">
+              <p>{{ 'groups.detail.permissions.subtitle' | translate }}</p>
+              <button
+                pButton
+                type="button"
+                class="btn-sm"
+                (click)="savePermissions()"
+                [loading]="saving()"
+                [disabled]="!canManagePermissions()"
+              >
+                <i class="pi pi-save"></i>
+                {{ 'common.save' | translate }}
+              </button>
+            </div>
+
+            <p-multiselect
+              display="chip"
+              appendTo="body"
+              [filter]="true"
+              optionValue="id"
+              [showClear]="true"
+              optionLabel="description"
+              class="group-detail-multiselect"
+              [options]="permissionOptions()"
+              [ngModel]="selectedPermissionIds()"
+              (ngModelChange)="selectedPermissionIds.set($event ?? [])"
+              [disabled]="!canManagePermissions() || saving()"
+              [placeholder]="'groups.detail.permissions.placeholder' | translate"
+            />
+
+            <h4>{{ 'groups.detail.permissions.title' | translate }}</h4>
+            @if (g.permissions.length) {
+              <div class="group-detail-entity-grid">
+                @for (item of g.permissions; track trackById($index, item)) {
+                  <div class="group-detail-entity-card">
+                    <i class="pi pi-shield"></i>
+                    <div>
+                      <strong>{{ item.description || item.name }}</strong>
+                      <small>{{ item.name }}</small>
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="empty-state">{{ 'groups.detail.permissions.empty' | translate }}</div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="empty-state">{{ 'common.noData' | translate }}</div>
+  }
+</div>

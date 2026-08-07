@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
-import { DialogService } from 'primeng/dynamicdialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
@@ -14,14 +13,15 @@ import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 
-import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
+import { PermissionService } from '../core/auth/permission.service';
 import { ActiveFilterEntry, FilterPanelComponent } from '../shared/filter-panel/filter-panel.component';
 import { onlyDigits } from '../shared/utils/br-format';
 import { TaxIdPipe } from '../shared/pipes/tax-id.pipe';
 import { StatusBadgeComponent, StatusTone } from '../shared/status-badge/status-badge.component';
+import { SecurityPermissionPolicy } from './policy/security-permission.policy';
 import { AdminUser, UserAdminService } from './user.service';
-import { UserFormComponent, UserFormDialogData } from './user-form.component';
+import { UserFormComponent } from './user-form.component';
 
 /** Status5 (senha pendente) em "info" (azul) - bate com o tom usado no CardSyncWeb. */
 const STATUS_TONE: Record<number, StatusTone> = {
@@ -61,67 +61,62 @@ function emptyFilter(): UsersFilterState {
 }
 
 @Component({
-    selector: 'app-user-list',
-    imports: [
-        CommonModule,
-        FormsModule,
-        RouterLink,
-        ButtonModule,
-        CheckboxModule,
-        FloatLabelModule,
-        InputTextModule,
-        MultiSelectModule,
-        SelectModule,
-        TableModule,
-        TooltipModule,
-        FilterPanelComponent,
-        TaxIdPipe,
-        StatusBadgeComponent,
-        TranslatePipe,
-    ],
-    templateUrl: './user-list.component.html',
-    styleUrl: './user-list.component.scss'
+  standalone: true,
+  selector: 'app-user-list',
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    ButtonModule,
+    CheckboxModule,
+    FloatLabelModule,
+    InputTextModule,
+    MultiSelectModule,
+    SelectModule,
+    TableModule,
+    TooltipModule,
+    FilterPanelComponent,
+    TaxIdPipe,
+    StatusBadgeComponent,
+    TranslatePipe,
+    UserFormComponent,
+  ],
+  templateUrl: './user-list.component.html',
+  styleUrl: './user-list.component.scss',
 })
 export class UserListComponent implements OnInit {
-  users: AdminUser[] = [];
-  selected: AdminUser[] = [];
-  filter = emptyFilter();
-  private appliedFilter = emptyFilter();
+  private readonly userAdminService = inject(UserAdminService);
+  private readonly messageService = inject(MessageService);
+
+  readonly i18n = inject(I18nService);
+  readonly perms = inject(PermissionService);
+  readonly secPolicy = inject(SecurityPermissionPolicy);
+
+  readonly users = signal<AdminUser[]>([]);
+  readonly selected = signal<AdminUser[]>([]);
+  readonly filter = signal<UsersFilterState>(emptyFilter());
+  private readonly appliedFilter = signal<UsersFilterState>(emptyFilter());
   readonly statusOptions = STATUS_OPTIONS;
-  createdByOptions: string[] = [];
+  readonly createdByOptions = signal<string[]>([]);
 
-  canCreate = false;
-  canChange = false;
-  canActiveOrInactive = false;
-  canResendInvite = false;
-  private currentUserName = '';
+  readonly upsertVisible = signal(false);
+  readonly editingUser = signal<AdminUser | null>(null);
 
-  constructor(
-    private readonly userAdminService: UserAdminService,
-    private readonly dialogService: DialogService,
-    private readonly authService: AuthService,
-    private readonly messageService: MessageService,
-    private readonly i18n: I18nService,
-  ) {}
+  constructor() {
+    this.load();
+  }
 
   ngOnInit(): void {
     this.load();
-    this.authService.loadMe().subscribe((user) => {
-      this.currentUserName = user.username ?? '';
-      this.canCreate = user.permissions.includes('USERS_CREATE');
-      this.canChange = user.permissions.includes('USERS_CHANGE');
-      this.canActiveOrInactive = user.permissions.includes('USERS_ACTIVE_OR_INACTIVE');
-      this.canResendInvite = user.permissions.includes('USERS_RESEND_INVITE');
-    });
   }
 
   load(): void {
     this.userAdminService.list().subscribe((users) => {
-      this.users = users;
-      this.createdByOptions = Array.from(
-        new Set(users.map((u) => u.createdBy).filter((v): v is string => !!v)),
-      ).sort();
-      this.selected = [];
+      this.users.set(users);
+      this.createdByOptions.set(
+        Array.from(new Set(users.map((u) => u.createdBy).filter((v): v is string => !!v))).sort(),
+      );
+      this.selected.set([]);
     });
   }
 
@@ -131,16 +126,16 @@ export class UserListComponent implements OnInit {
     return this.statusOptions.map((s) => ({ label: this.statusLabel(s), value: s }));
   }
 
-  /** Filtragem client-side, aplicada só ao clicar "Buscar" (this.appliedFilter), não a cada
-   *  tecla digitada em this.filter - mesmo comportamento "deferred" de antes (MatTableDataSource
-   *  com filter setado só em applyFilters()), agora sobre um array puro pro p-table. */
-  get filteredUsers(): AdminUser[] {
-    return this.users.filter((row) => this.matchesFilter(row, this.appliedFilter));
-  }
+  /** Filtragem client-side, aplicada só ao clicar "Buscar" (appliedFilter), não a cada tecla
+   *  digitada em filter - comportamento "deferred" já existente, agora sobre signals. */
+  readonly filteredUsers = computed(() => {
+    const applied = this.appliedFilter();
+    return this.users().filter((row) => this.matchesFilter(row, applied));
+  });
 
   /** "label: valor" de cada filtro preenchido - alimenta o popup do ícone (i) do painel. */
-  get activeFilters(): ActiveFilterEntry[] {
-    const f = this.appliedFilter;
+  readonly activeFilters = computed<ActiveFilterEntry[]>(() => {
+    const f = this.appliedFilter();
     const entries: ActiveFilterEntry[] = [];
     if (f.name) entries.push({ label: this.i18n.tUi('users.list.filters.name'), value: f.name });
     if (f.userName) entries.push({ label: this.i18n.tUi('users.list.filters.userName'), value: f.userName });
@@ -154,15 +149,19 @@ export class UserListComponent implements OnInit {
     if (f.createdAt) entries.push({ label: this.i18n.tUi('users.list.filters.createdAt'), value: f.createdAt });
     if (f.createdBy) entries.push({ label: this.i18n.tUi('users.list.filters.createdBy'), value: f.createdBy });
     return entries;
-  }
+  });
 
   applyFilters(): void {
-    this.appliedFilter = { ...this.filter, status: [...this.filter.status] };
+    this.appliedFilter.set({ ...this.filter(), status: [...this.filter().status] });
   }
 
   clearFilters(): void {
-    this.filter = emptyFilter();
-    this.appliedFilter = emptyFilter();
+    this.filter.set(emptyFilter());
+    this.appliedFilter.set(emptyFilter());
+  }
+
+  updateFilter<K extends keyof UsersFilterState>(key: K, value: UsersFilterState[K]): void {
+    this.filter.set({ ...this.filter(), [key]: value });
   }
 
   private matchesFilter(row: AdminUser, f: UsersFilterState): boolean {
@@ -184,22 +183,19 @@ export class UserListComponent implements OnInit {
 
   // ------------------------- Seleção em massa -------------------------
 
-  /** Mesma regra do CardSyncWeb: a seleção só habilita um "modo" por vez (ativar OU desativar),
-   *  nunca os dois - evita misturar transições inválidas numa única chamada em lote. Desativar a
-   *  própria conta nunca é permitido (bloqueado no NimbusAuth), então nem oferece o botão. */
-  get selectionMode(): 'activate' | 'deactivate' | null {
-    const selected = this.selected;
+  readonly selectionMode = computed(() => {
+    const selected = this.selected();
     if (!selected.length) return null;
-    if (selected.every((u) => u.status === 2)) return 'activate';
-    if (selected.every((u) => u.status === 1 && u.userName !== this.currentUserName)) return 'deactivate';
+    if (selected.every((u) => this.secPolicy.modeForRow(u) === 'activate')) return 'activate';
+    if (selected.every((u) => this.secPolicy.modeForRow(u) === 'deactivate')) return 'deactivate';
     return null;
-  }
+  });
 
   activateSelected(): void {
-    const ids = this.selected.map((u) => u.id);
+    const ids = this.selected().map((u) => u.id);
     this.userAdminService.activateBulk(ids).subscribe({
       next: () => {
-        this.selected = [];
+        this.selected.set([]);
         this.load();
       },
       error: () => this.notifyError('users.list.activateError'),
@@ -207,10 +203,10 @@ export class UserListComponent implements OnInit {
   }
 
   deactivateSelected(): void {
-    const ids = this.selected.map((u) => u.id);
+    const ids = this.selected().map((u) => u.id);
     this.userAdminService.deactivateBulk(ids).subscribe({
       next: () => {
-        this.selected = [];
+        this.selected.set([]);
         this.load();
       },
       error: () => this.notifyError('users.list.deactivateError'),
@@ -233,27 +229,27 @@ export class UserListComponent implements OnInit {
 
   // ------------------------- CRUD -------------------------
 
-  openCreate(): void {
-    this.openDialog(null);
+  goNew(): void {
+    if (!this.secPolicy.canCreate()) return;
+    this.editingUser.set(null);
+    this.upsertVisible.set(true);
   }
 
-  openEdit(user: AdminUser): void {
-    this.openDialog(user);
+  edit(user: AdminUser): void {
+    if (!this.secPolicy.canEdit(user)) return;
+    this.editingUser.set(user);
+    this.upsertVisible.set(true);
   }
 
-  private openDialog(user: AdminUser | null): void {
-    const ref = this.dialogService.open<UserFormComponent, UserFormDialogData>(UserFormComponent, {
-      data: { user },
-      header: this.i18n.tUi(user ? 'users.form.editTitle' : 'users.form.createTitle'),
-      width: '560px',
-      modal: true,
-    });
+  onUpsertVisibleChange(visible: boolean): void {
+    this.upsertVisible.set(visible);
+    if (!visible) {
+      this.editingUser.set(null);
+    }
+  }
 
-    ref?.onClose.subscribe((saved) => {
-      if (saved) {
-        this.load();
-      }
-    });
+  onSaved(): void {
+    this.load();
   }
 
   activate(user: AdminUser): void {
