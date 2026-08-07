@@ -1,3 +1,10 @@
+<app-group-form
+  [visible]="upsertVisible()"
+  [group]="editingGroup()"
+  (visibleChange)="onUpsertVisibleChange($event)"
+  (saved)="onSaved()"
+></app-group-form>
+
 <div class="page-container page-container--full">
   <div class="page-header">
     <div>
@@ -15,8 +22,8 @@
         {{ 'common.refresh' | translate }}
       </button>
 
-      @if (canCreate) {
-        <button pButton type="button" class="btn-sm" (click)="openCreate()">
+      @if (secPolicy.canCreate()) {
+        <button pButton type="button" class="btn-sm" (click)="goNew()">
           <i class="pi pi-plus"></i>
           {{ 'groups.list.create' | translate }}
         </button>
@@ -25,41 +32,87 @@
   </div>
 
   <div class="content-card">
-    <app-filter-panel [activeFilters]="activeFilters" (search)="applyFilters()" (clear)="clearFilters()">
+    <app-filter-panel [activeFilters]="activeFilters()" (search)="applyFilters()" (clear)="clearFilters()">
       <div class="filter-row">
         <p-floatlabel variant="on">
-          <input pInputText id="f-name" [(ngModel)]="filter.name" />
+          <input pInputText id="f-name" [ngModel]="filter().name" (ngModelChange)="updateFilter('name', $event)" />
           <label for="f-name">{{ 'groups.list.filters.name' | translate }}</label>
         </p-floatlabel>
 
         <p-floatlabel variant="on">
-          <input pInputText id="f-description" [(ngModel)]="filter.description" />
+          <input pInputText id="f-description" [ngModel]="filter().description" (ngModelChange)="updateFilter('description', $event)" />
           <label for="f-description">{{ 'groups.list.filters.description' | translate }}</label>
         </p-floatlabel>
 
         <div class="filter-field-plain">
           <label for="f-createdAt">{{ 'groups.list.filters.createdAt' | translate }}</label>
-          <input pInputText id="f-createdAt" type="date" [(ngModel)]="filter.createdAt" />
+          <input pInputText id="f-createdAt" type="date" [ngModel]="filter().createdAt" (ngModelChange)="updateFilter('createdAt', $event)" />
         </div>
 
         <div class="filter-field-plain">
           <label for="f-createdBy">{{ 'groups.list.filters.createdBy' | translate }}</label>
-          <p-select inputId="f-createdBy" [(ngModel)]="filter.createdBy" [options]="createdByOptions" [showClear]="true" [placeholder]="'common.all' | translate" />
+          <p-select inputId="f-createdBy" [ngModel]="filter().createdBy" (ngModelChange)="updateFilter('createdBy', $event)" [options]="createdByOptions()" [showClear]="true" [placeholder]="'common.all' | translate" />
         </div>
       </div>
     </app-filter-panel>
 
     <div class="table-container">
-      <p-table [value]="filteredGroups" size="small" class="compact-table" [paginator]="true" [rows]="20" [rowsPerPageOptions]="[10, 20, 50]">
+      <p-table [value]="filteredGroups()" size="small" stripedRows showGridlines class="cs-admin-table" [tableStyle]="{ 'min-width': '70rem' }" [paginator]="true" [rows]="20" [rowsPerPageOptions]="[10, 20, 50]">
+        <ng-template #colgroup>
+          <colgroup>
+            <col style="width: 200px" />
+            <col style="width: 260px" />
+            <col style="width: 170px" />
+            <col style="width: 170px" />
+            <col style="width: 100px" />
+            <col style="width: 120px" />
+            <col style="width: 90px" />
+          </colgroup>
+        </ng-template>
+
         <ng-template #header>
           <tr>
-            <th pSortableColumn="name">{{ 'groups.list.columns.name' | translate }} <p-sortIcon field="name" /></th>
-            <th pSortableColumn="description">{{ 'groups.list.columns.description' | translate }} <p-sortIcon field="description" /></th>
-            <th pSortableColumn="createdAt">{{ 'groups.list.columns.createdAt' | translate }} <p-sortIcon field="createdAt" /></th>
-            <th pSortableColumn="createdBy">{{ 'groups.list.columns.createdBy' | translate }} <p-sortIcon field="createdBy" /></th>
-            <th pSortableColumn="usersCount">{{ 'groups.list.columns.usersCount' | translate }} <p-sortIcon field="usersCount" /></th>
-            <th pSortableColumn="permissionsCount">{{ 'groups.list.columns.permissionsCount' | translate }} <p-sortIcon field="permissionsCount" /></th>
-            <th></th>
+            <th pSortableColumn="name">
+              <div class="th-flex">
+                <span class="th-label">{{ 'groups.list.columns.name' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="name" /></span>
+              </div>
+            </th>
+            <th pSortableColumn="description">
+              <div class="th-flex">
+                <span class="th-label">{{ 'groups.list.columns.description' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="description" /></span>
+              </div>
+            </th>
+            <th pSortableColumn="createdAt">
+              <div class="th-flex">
+                <span class="th-label">{{ 'groups.list.columns.createdAt' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="createdAt" /></span>
+              </div>
+            </th>
+            <th pSortableColumn="createdBy">
+              <div class="th-flex">
+                <span class="th-label">{{ 'groups.list.columns.createdBy' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="createdBy" /></span>
+              </div>
+            </th>
+            <th pSortableColumn="usersCount">
+              <div class="th-flex">
+                <span class="th-label">{{ 'groups.list.columns.usersCount' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="usersCount" /></span>
+              </div>
+            </th>
+            <th pSortableColumn="permissionsCount">
+              <div class="th-flex">
+                <span class="th-label">{{ 'groups.list.columns.permissionsCount' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="permissionsCount" /></span>
+              </div>
+            </th>
+            <th class="text-center">
+              <div class="th-flex justify-content-center">
+                <span class="th-label">{{ 'common.actions' | translate }}</span>
+              </div>
+            </th>
           </tr>
         </ng-template>
 
@@ -67,45 +120,53 @@
           <tr>
             <td>{{ group.name }}</td>
             <td>{{ group.description }}</td>
-            <td>{{ group.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
-            <td>{{ group.createdBy || '—' }}</td>
-            <td>{{ group.usersCount }}</td>
-            <td>{{ group.permissionsCount }}</td>
-            <td>
-              <button
-                pButton
-                [text]="true"
-                class="action-btn action-btn--view"
-                (click)="openView(group)"
-                [attr.aria-label]="'common.view' | translate"
-                [pTooltip]="'common.view' | translate"
-              >
-                <i class="pi pi-eye"></i>
-              </button>
-              @if (canChange) {
+            <td class="text-center">{{ group.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td class="text-center">{{ group.createdBy || '—' }}</td>
+            <td class="text-center">{{ group.usersCount }}</td>
+            <td class="text-center">{{ group.permissionsCount }}</td>
+            <td class="text-center">
+              <div class="table-actions">
                 <button
                   pButton
+                  type="button"
                   [text]="true"
-                  class="action-btn action-btn--edit"
-                  (click)="openEdit(group)"
-                  [attr.aria-label]="'common.edit' | translate"
-                  [pTooltip]="'common.edit' | translate"
+                  class="p-button-sm"
+                  tooltipPosition="top"
+                  [routerLink]="['/security/groups', group.id]"
+                  [attr.aria-label]="'common.view' | translate"
+                  [pTooltip]="'common.view' | translate"
                 >
-                  <i class="pi pi-pencil"></i>
+                  <i class="pi pi-eye"></i>
                 </button>
-              }
-              @if (canDelete) {
-                <button
-                  pButton
-                  [text]="true"
-                  class="action-btn action-btn--delete"
-                  (click)="delete(group)"
-                  [attr.aria-label]="'common.delete' | translate"
-                  [pTooltip]="'common.delete' | translate"
-                >
-                  <i class="pi pi-trash"></i>
-                </button>
-              }
+                @if (secPolicy.canEdit(group)) {
+                  <button
+                    pButton
+                    type="button"
+                    [text]="true"
+                    class="p-button-sm"
+                    (click)="edit(group)"
+                    tooltipPosition="top"
+                    [attr.aria-label]="'common.edit' | translate"
+                    [pTooltip]="'common.edit' | translate"
+                  >
+                    <i class="pi pi-pencil"></i>
+                  </button>
+                }
+                @if (secPolicy.canDelete(group)) {
+                  <button
+                    pButton
+                    type="button"
+                    [text]="true"
+                    class="p-button-sm"
+                    (click)="delete(group)"
+                    tooltipPosition="top"
+                    [attr.aria-label]="'common.delete' | translate"
+                    [pTooltip]="'common.delete' | translate"
+                  >
+                    <i class="pi pi-trash"></i>
+                  </button>
+                }
+              </div>
             </td>
           </tr>
         </ng-template>

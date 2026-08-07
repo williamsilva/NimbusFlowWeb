@@ -4,10 +4,14 @@ import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
+import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { DividerModule } from 'primeng/divider';
 import { MessageService } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TagModule } from 'primeng/tag';
 
 import { I18nService } from '../core/i18n/i18n.service';
 import { PermissionService } from '../core/auth/permission.service';
@@ -29,9 +33,13 @@ type DetailTab = 'summary' | 'permissions';
     CommonModule,
     FormsModule,
     RouterLink,
+    BadgeModule,
     ButtonModule,
+    CardModule,
+    DividerModule,
     MultiSelectModule,
     ProgressSpinnerModule,
+    TagModule,
     TranslatePipe,
   ],
   templateUrl: './group-detail.component.html',

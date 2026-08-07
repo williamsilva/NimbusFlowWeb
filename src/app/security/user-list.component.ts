@@ -11,6 +11,7 @@ import { MessageService } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 
 import { I18nService } from '../core/i18n/i18n.service';
@@ -18,17 +19,18 @@ import { PermissionService } from '../core/auth/permission.service';
 import { ActiveFilterEntry, FilterPanelComponent } from '../shared/filter-panel/filter-panel.component';
 import { onlyDigits } from '../shared/utils/br-format';
 import { TaxIdPipe } from '../shared/pipes/tax-id.pipe';
-import { StatusBadgeComponent, StatusTone } from '../shared/status-badge/status-badge.component';
 import { SecurityPermissionPolicy } from './policy/security-permission.policy';
 import { AdminUser, UserAdminService } from './user.service';
 import { UserFormComponent } from './user-form.component';
 
+type TagSeverity = 'success' | 'info' | 'warn' | 'danger' | 'secondary';
+
 /** Status5 (senha pendente) em "info" (azul) - bate com o tom usado no CardSyncWeb. */
-const STATUS_TONE: Record<number, StatusTone> = {
+const STATUS_SEVERITY: Record<number, TagSeverity> = {
   1: 'success',
-  2: 'neutral',
+  2: 'secondary',
   3: 'danger',
-  4: 'neutral',
+  4: 'secondary',
   5: 'info',
 };
 
@@ -74,10 +76,10 @@ function emptyFilter(): UsersFilterState {
     MultiSelectModule,
     SelectModule,
     TableModule,
+    TagModule,
     TooltipModule,
     FilterPanelComponent,
     TaxIdPipe,
-    StatusBadgeComponent,
     TranslatePipe,
     UserFormComponent,
   ],
@@ -215,8 +217,8 @@ export class UserListComponent implements OnInit {
 
   // ------------------------- Status -------------------------
 
-  statusTone(status: number): StatusTone {
-    return STATUS_TONE[status] ?? 'neutral';
+  statusSeverity(status: number): TagSeverity {
+    return STATUS_SEVERITY[status] ?? 'secondary';
   }
 
   statusLabel(status: number): string {

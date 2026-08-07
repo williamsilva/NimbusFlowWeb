@@ -1,3 +1,10 @@
+<app-user-form
+  [visible]="upsertVisible()"
+  [user]="editingUser()"
+  (visibleChange)="onUpsertVisibleChange($event)"
+  (saved)="onSaved()"
+></app-user-form>
+
 <div class="page-container page-container--full">
   <div class="page-header">
     <div>
@@ -15,12 +22,12 @@
         {{ 'common.refresh' | translate }}
       </button>
 
-      @if (canActiveOrInactive) {
+      @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
         <button
           pButton
           type="button"
           class="btn-sm"
-          [disabled]="selectionMode !== 'activate'"
+          [disabled]="selectionMode() !== 'activate'"
           (click)="activateSelected()"
         >
           <i class="pi pi-check-circle"></i>
@@ -31,7 +38,7 @@
           severity="danger"
           type="button"
           class="btn-sm"
-          [disabled]="selectionMode !== 'deactivate'"
+          [disabled]="selectionMode() !== 'deactivate'"
           (click)="deactivateSelected()"
         >
           <i class="pi pi-ban"></i>
@@ -39,8 +46,8 @@
         </button>
       }
 
-      @if (canCreate) {
-        <button pButton type="button" class="btn-sm" (click)="openCreate()">
+      @if (secPolicy.canCreate()) {
+        <button pButton type="button" class="btn-sm" (click)="goNew()">
           <i class="pi pi-plus"></i>
           {{ 'users.list.create' | translate }}
         </button>
@@ -49,25 +56,25 @@
   </div>
 
   <div class="content-card">
-    <app-filter-panel [activeFilters]="activeFilters" (search)="applyFilters()" (clear)="clearFilters()">
+    <app-filter-panel [activeFilters]="activeFilters()" (search)="applyFilters()" (clear)="clearFilters()">
       <div class="filter-row">
         <p-floatlabel variant="on" style="flex: 0 1 460px; min-width: 340px">
-          <input pInputText id="f-name" [(ngModel)]="filter.name" />
+          <input pInputText id="f-name" [ngModel]="filter().name" (ngModelChange)="updateFilter('name', $event)" />
           <label for="f-name">{{ 'users.list.filters.name' | translate }}</label>
         </p-floatlabel>
 
         <p-floatlabel variant="on" style="flex: 0 1 460px; min-width: 340px">
-          <input pInputText id="f-userName" [(ngModel)]="filter.userName" />
+          <input pInputText id="f-userName" [ngModel]="filter().userName" (ngModelChange)="updateFilter('userName', $event)" />
           <label for="f-userName">{{ 'users.list.filters.userName' | translate }}</label>
         </p-floatlabel>
 
         <p-floatlabel variant="on">
-          <input pInputText id="f-document" [(ngModel)]="filter.document" />
+          <input pInputText id="f-document" [ngModel]="filter().document" (ngModelChange)="updateFilter('document', $event)" />
           <label for="f-document">{{ 'users.list.filters.document' | translate }}</label>
         </p-floatlabel>
 
         <p-floatlabel variant="on">
-          <p-multiselect inputId="f-status" [(ngModel)]="filter.status" [options]="statusSelectOptions" optionLabel="label" optionValue="value" display="chip" />
+          <p-multiselect inputId="f-status" [ngModel]="filter().status" (ngModelChange)="updateFilter('status', $event)" [options]="statusSelectOptions" optionLabel="label" optionValue="value" display="chip" />
           <label for="f-status">{{ 'users.list.filters.status' | translate }}</label>
         </p-floatlabel>
       </div>
@@ -75,129 +82,206 @@
       <div class="filter-row">
         <div class="filter-field-plain">
           <label for="f-lastLoginAt">{{ 'users.list.filters.lastLoginAt' | translate }}</label>
-          <input pInputText id="f-lastLoginAt" type="date" [(ngModel)]="filter.lastLoginAt" />
+          <input pInputText id="f-lastLoginAt" type="date" [ngModel]="filter().lastLoginAt" (ngModelChange)="updateFilter('lastLoginAt', $event)" />
         </div>
 
         <div class="filter-field-plain">
           <label for="f-blockedUntil">{{ 'users.list.filters.blockedUntil' | translate }}</label>
-          <input pInputText id="f-blockedUntil" type="date" [(ngModel)]="filter.blockedUntil" />
+          <input pInputText id="f-blockedUntil" type="date" [ngModel]="filter().blockedUntil" (ngModelChange)="updateFilter('blockedUntil', $event)" />
         </div>
 
         <div class="filter-field-plain">
           <label for="f-passwordExpiresAt">{{ 'users.list.filters.passwordExpiresAt' | translate }}</label>
-          <input pInputText id="f-passwordExpiresAt" type="date" [(ngModel)]="filter.passwordExpiresAt" />
+          <input pInputText id="f-passwordExpiresAt" type="date" [ngModel]="filter().passwordExpiresAt" (ngModelChange)="updateFilter('passwordExpiresAt', $event)" />
         </div>
 
         <div class="filter-field-plain">
           <label for="f-createdAt">{{ 'users.list.filters.createdAt' | translate }}</label>
-          <input pInputText id="f-createdAt" type="date" [(ngModel)]="filter.createdAt" />
+          <input pInputText id="f-createdAt" type="date" [ngModel]="filter().createdAt" (ngModelChange)="updateFilter('createdAt', $event)" />
         </div>
 
         <div class="filter-field-plain">
           <label for="f-createdBy">{{ 'users.list.filters.createdBy' | translate }}</label>
-          <p-select inputId="f-createdBy" [(ngModel)]="filter.createdBy" [options]="createdByOptions" [showClear]="true" [placeholder]="'common.all' | translate" />
+          <p-select inputId="f-createdBy" [ngModel]="filter().createdBy" (ngModelChange)="updateFilter('createdBy', $event)" [options]="createdByOptions()" [showClear]="true" [placeholder]="'common.all' | translate" />
         </div>
       </div>
     </app-filter-panel>
 
-    @if (canActiveOrInactive) {
+    @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
       <div class="selection-mode">
         {{ 'users.list.selectionMode' | translate }}:
-        {{ (selectionMode === 'activate' ? 'users.list.selectionModeActivate' : selectionMode === 'deactivate' ? 'users.list.selectionModeDeactivate' : 'users.list.selectionModeNone') | translate }}
+        {{ (selectionMode() === 'activate' ? 'users.list.selectionModeActivate' : selectionMode() === 'deactivate' ? 'users.list.selectionModeDeactivate' : 'users.list.selectionModeNone') | translate }}
       </div>
     }
 
     <div class="table-container">
-      <p-table [value]="filteredUsers" [(selection)]="selected" dataKey="id" size="small" class="compact-table" [paginator]="true" [rows]="20" [rowsPerPageOptions]="[10, 20, 50]">
+      <p-table [value]="filteredUsers()" [selection]="selected()" (selectionChange)="selected.set($event)" dataKey="id" size="small" stripedRows showGridlines class="cs-admin-table" [tableStyle]="{ 'min-width': '90rem' }" [paginator]="true" [rows]="20" [rowsPerPageOptions]="[10, 20, 50]">
+        <ng-template #colgroup>
+          <colgroup>
+            @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
+              <col style="width: 44px" />
+            }
+            <col style="width: 150px" />
+            <col style="width: 170px" />
+            <col style="width: 130px" />
+            <col style="width: 110px" />
+            <col style="width: 150px" />
+            <col style="width: 150px" />
+            <col style="width: 150px" />
+            <col style="width: 150px" />
+            <col style="width: 140px" />
+            <col style="width: 90px" />
+          </colgroup>
+        </ng-template>
+
         <ng-template #header>
           <tr>
-            @if (canActiveOrInactive) {
-              <th style="width: 2.5rem"><p-tableHeaderCheckbox /></th>
+            @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
+              <th class="text-center"><p-tableHeaderCheckbox /></th>
             }
-            <th pSortableColumn="userName">{{ 'users.list.columns.userName' | translate }} <p-sortIcon field="userName" /></th>
-            <th pSortableColumn="name">{{ 'users.list.columns.name' | translate }} <p-sortIcon field="name" /></th>
-            <th pSortableColumn="document">{{ 'users.list.columns.document' | translate }} <p-sortIcon field="document" /></th>
-            <th pSortableColumn="status">{{ 'users.list.columns.status' | translate }} <p-sortIcon field="status" /></th>
-            <th pSortableColumn="lastLoginAt">{{ 'users.list.columns.lastLoginAt' | translate }} <p-sortIcon field="lastLoginAt" /></th>
-            <th pSortableColumn="blockedUntil">{{ 'users.list.columns.blockedUntil' | translate }} <p-sortIcon field="blockedUntil" /></th>
-            <th pSortableColumn="passwordExpiresAt">{{ 'users.list.columns.passwordExpiresAt' | translate }} <p-sortIcon field="passwordExpiresAt" /></th>
-            <th pSortableColumn="createdAt">{{ 'users.list.columns.createdAt' | translate }} <p-sortIcon field="createdAt" /></th>
-            <th pSortableColumn="createdBy">{{ 'users.list.columns.createdBy' | translate }} <p-sortIcon field="createdBy" /></th>
-            <th></th>
+            <th pSortableColumn="userName">
+              <div class="th-flex">
+                <span class="th-label">{{ 'users.list.columns.userName' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="userName" /></span>
+              </div>
+            </th>
+            <th pSortableColumn="name">
+              <div class="th-flex">
+                <span class="th-label">{{ 'users.list.columns.name' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="name" /></span>
+              </div>
+            </th>
+            <th pSortableColumn="document">
+              <div class="th-flex">
+                <span class="th-label">{{ 'users.list.columns.document' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="document" /></span>
+              </div>
+            </th>
+            <th pSortableColumn="status">
+              <div class="th-flex">
+                <span class="th-label">{{ 'users.list.columns.status' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="status" /></span>
+              </div>
+            </th>
+            <th pSortableColumn="lastLoginAt">
+              <div class="th-flex">
+                <span class="th-label">{{ 'users.list.columns.lastLoginAt' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="lastLoginAt" /></span>
+              </div>
+            </th>
+            <th pSortableColumn="blockedUntil">
+              <div class="th-flex">
+                <span class="th-label">{{ 'users.list.columns.blockedUntil' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="blockedUntil" /></span>
+              </div>
+            </th>
+            <th pSortableColumn="passwordExpiresAt">
+              <div class="th-flex">
+                <span class="th-label">{{ 'users.list.columns.passwordExpiresAt' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="passwordExpiresAt" /></span>
+              </div>
+            </th>
+            <th pSortableColumn="createdAt">
+              <div class="th-flex">
+                <span class="th-label">{{ 'users.list.columns.createdAt' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="createdAt" /></span>
+              </div>
+            </th>
+            <th pSortableColumn="createdBy">
+              <div class="th-flex">
+                <span class="th-label">{{ 'users.list.columns.createdBy' | translate }}</span>
+                <span class="th-icons"><p-sortIcon field="createdBy" /></span>
+              </div>
+            </th>
+            <th class="text-center">
+              <div class="th-flex justify-content-center">
+                <span class="th-label">{{ 'common.actions' | translate }}</span>
+              </div>
+            </th>
           </tr>
         </ng-template>
 
         <ng-template #body let-user>
           <tr>
-            @if (canActiveOrInactive) {
-              <td><p-tableCheckbox [value]="user" /></td>
+            @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
+              <td class="text-center"><p-tableCheckbox [value]="user" /></td>
             }
             <td>{{ user.userName }}</td>
             <td>{{ user.name }}</td>
-            <td>{{ user.document | taxId }}</td>
-            <td><app-status-badge [label]="statusLabel(user.status)" [tone]="statusTone(user.status)"></app-status-badge></td>
-            <td>{{ user.lastLoginAt ? (user.lastLoginAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
-            <td>{{ user.blockedUntil ? (user.blockedUntil | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
-            <td>{{ user.passwordExpiresAt ? (user.passwordExpiresAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
-            <td>{{ user.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
-            <td>{{ user.createdBy || '—' }}</td>
-            <td>
-              @if (canChange) {
-                <button
-                  pButton
-                  [text]="true"
-                  class="action-btn action-btn--edit"
-                  (click)="openEdit(user)"
-                  [attr.aria-label]="'common.edit' | translate"
-                  [pTooltip]="'common.edit' | translate"
-                >
-                  <i class="pi pi-pencil"></i>
-                </button>
-              }
-              @if (canResendInvite && isPendingPassword(user)) {
-                <button
-                  pButton
-                  [text]="true"
-                  class="action-btn action-btn--invite"
-                  (click)="resendInvite(user)"
-                  [attr.aria-label]="'users.list.resendInvite' | translate"
-                  [pTooltip]="'users.list.resendInvite' | translate"
-                >
-                  <i class="pi pi-envelope"></i>
-                </button>
-              }
-              @if (canActiveOrInactive) {
-                @if (user.status === 1) {
+            <td class="text-center">{{ user.document | taxId }}</td>
+            <td class="text-center"><p-tag [value]="statusLabel(user.status)" [severity]="statusSeverity(user.status)" /></td>
+            <td class="text-center">{{ user.lastLoginAt ? (user.lastLoginAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+            <td class="text-center">{{ user.blockedUntil ? (user.blockedUntil | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+            <td class="text-center">{{ user.passwordExpiresAt ? (user.passwordExpiresAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+            <td class="text-center">{{ user.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td class="text-center">{{ user.createdBy || '—' }}</td>
+            <td class="text-center">
+              <div class="table-actions">
+                @if (secPolicy.canEdit(user)) {
                   <button
                     pButton
+                    type="button"
                     [text]="true"
-                    class="action-btn action-btn--deactivate"
-                    (click)="deactivate(user)"
-                    [attr.aria-label]="'common.deactivate' | translate"
-                    [pTooltip]="'common.deactivate' | translate"
+                    class="p-button-sm"
+                    (click)="edit(user)"
+                    tooltipPosition="top"
+                    [attr.aria-label]="'common.edit' | translate"
+                    [pTooltip]="'common.edit' | translate"
                   >
-                    <i class="pi pi-ban"></i>
-                  </button>
-                } @else if (user.status === 2) {
-                  <button
-                    pButton
-                    [text]="true"
-                    class="action-btn action-btn--activate"
-                    (click)="activate(user)"
-                    [attr.aria-label]="'users.list.activate' | translate"
-                    [pTooltip]="'users.list.activate' | translate"
-                  >
-                    <i class="pi pi-check-circle"></i>
+                    <i class="pi pi-pencil"></i>
                   </button>
                 }
-              }
+                @if (secPolicy.canResendInvite(user)) {
+                  <button
+                    pButton
+                    type="button"
+                    [text]="true"
+                    class="p-button-sm"
+                    (click)="resendInvite(user)"
+                    tooltipPosition="top"
+                    [attr.aria-label]="'users.list.resendInvite' | translate"
+                    [pTooltip]="'users.list.resendInvite' | translate"
+                  >
+                    <i class="pi pi-envelope"></i>
+                  </button>
+                }
+                @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
+                  @if (user.status === 1) {
+                    <button
+                      pButton
+                      type="button"
+                      [text]="true"
+                      class="p-button-sm"
+                      (click)="deactivate(user)"
+                      tooltipPosition="top"
+                      [attr.aria-label]="'common.deactivate' | translate"
+                      [pTooltip]="'common.deactivate' | translate"
+                    >
+                      <i class="pi pi-ban"></i>
+                    </button>
+                  } @else if (user.status === 2) {
+                    <button
+                      pButton
+                      type="button"
+                      [text]="true"
+                      class="p-button-sm"
+                      (click)="activate(user)"
+                      tooltipPosition="top"
+                      [attr.aria-label]="'users.list.activate' | translate"
+                      [pTooltip]="'users.list.activate' | translate"
+                    >
+                      <i class="pi pi-check-circle"></i>
+                    </button>
+                  }
+                }
+              </div>
             </td>
           </tr>
         </ng-template>
 
         <ng-template #emptymessage>
           <tr>
-            <td [attr.colspan]="canActiveOrInactive ? 10 : 9" class="empty-state">{{ 'users.list.empty' | translate }}</td>
+            <td [attr.colspan]="perms.has('USERS_ACTIVE_OR_INACTIVE') ? 10 : 9" class="empty-state">{{ 'users.list.empty' | translate }}</td>
           </tr>
         </ng-template>
       </p-table>
