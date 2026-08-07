@@ -234,9 +234,9 @@ table.mat-mdc-table {
   background: transparent;
 }
 
-// ===== Popup do ícone (i) do painel de filtros (FilterPanelComponent) - o mat-menu é portado pro
-// cdk-overlay-container (fora do componente), então precisa ser estilizado aqui, global. =====
-.filter-panel-menu-panel .mat-mdc-menu-content {
+// ===== Popup do ícone (i) do painel de filtros (FilterPanelComponent) - o p-popover é portado pra
+// fora do componente (overlay), então precisa ser estilizado aqui, global. =====
+.filter-panel-popover .p-popover-content {
   padding: 0;
 }
 

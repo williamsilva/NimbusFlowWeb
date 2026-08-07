@@ -53,7 +53,7 @@
   color: var(--nf-text-secondary, #6b7280);
 }
 
-// Botão (não mat-icon puro, como antes) - abre o mat-menu com o resumo dos filtros ativos.
+// Botão que abre o p-popover com o resumo dos filtros ativos.
 .filter-panel__info {
   display: inline-flex;
   align-items: center;
@@ -67,10 +67,8 @@
   cursor: pointer;
   opacity: 0.7;
 
-  mat-icon {
+  i.pi {
     font-size: 15px;
-    height: 15px;
-    width: 15px;
   }
 }
 
@@ -82,9 +80,7 @@
   position: absolute;
   right: 12px;
   opacity: 0.7;
-  font-size: 20px;
-  height: 20px;
-  width: 20px;
+  font-size: 16px;
 }
 
 .filter-panel__body {

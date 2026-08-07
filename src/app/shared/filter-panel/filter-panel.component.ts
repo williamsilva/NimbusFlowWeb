@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
+import { ButtonModule } from 'primeng/button';
+import { PopoverModule } from 'primeng/popover';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { I18nService } from '../../core/i18n/i18n.service';
@@ -22,7 +21,7 @@ export interface ActiveFilterEntry {
  */
 @Component({
     selector: 'app-filter-panel',
-    imports: [MatButtonModule, MatIconModule, MatMenuModule, TranslatePipe],
+    imports: [ButtonModule, PopoverModule, TranslatePipe],
     templateUrl: './filter-panel.component.html',
     styleUrl: './filter-panel.component.scss'
 })

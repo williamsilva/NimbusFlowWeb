@@ -6,17 +6,16 @@
       <button
         type="button"
         class="filter-panel__info"
-        (click)="$event.stopPropagation()"
-        [matMenuTriggerFor]="filtersMenu"
+        (click)="$event.stopPropagation(); filtersPopover.toggle($event)"
         [attr.aria-label]="'common.filters.title' | translate"
       >
-        <mat-icon>info</mat-icon>
+        <i class="pi pi-info-circle"></i>
       </button>
     </span>
-    <mat-icon class="filter-panel__chevron">{{ expanded ? 'remove' : 'add' }}</mat-icon>
+    <i class="pi filter-panel__chevron" [class.pi-minus]="expanded" [class.pi-plus]="!expanded"></i>
   </div>
 
-  <mat-menu #filtersMenu="matMenu" class="filter-panel-menu-panel">
+  <p-popover #filtersPopover styleClass="filter-panel-popover">
     <div class="filter-panel__menu-content">
       @if (activeFilters.length) {
         <h4>{{ 'common.filters.title' | translate }}</h4>
@@ -27,7 +26,7 @@
         <p class="filter-panel__menu-empty">{{ 'common.filters.none' | translate }}</p>
       }
     </div>
-  </mat-menu>
+  </p-popover>
 
   @if (expanded) {
     <div class="filter-panel__body">
@@ -35,10 +34,10 @@
         <ng-content></ng-content>
       </div>
       <div class="filter-panel__actions">
-        <button mat-stroked-button type="button" class="btn-sm" (click)="clear.emit()">
+        <button pButton type="button" severity="secondary" [outlined]="true" class="btn-sm" (click)="clear.emit()">
           {{ 'common.filters.clear' | translate }}
         </button>
-        <button mat-raised-button color="primary" type="button" class="btn-sm" (click)="search.emit()">
+        <button pButton type="button" class="btn-sm" (click)="search.emit()">
           {{ 'common.filters.search' | translate }}
         </button>
       </div>
