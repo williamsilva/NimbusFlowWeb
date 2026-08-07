@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { FloatLabelModule } from 'primeng/floatlabel';
 import { MessageService } from 'primeng/api';
+import { TextareaModule } from 'primeng/textarea';
 
 import { I18nService } from '../core/i18n/i18n.service';
 import { SuggestionRequest, SuggestionService } from './suggestion.service';
 
 @Component({
     selector: 'app-suggestion-form',
-    imports: [ReactiveFormsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, TranslatePipe],
+    imports: [ReactiveFormsModule, ButtonModule, FloatLabelModule, TextareaModule, TranslatePipe],
     templateUrl: './suggestion-form.component.html',
     styleUrl: './suggestion-form.component.scss'
 })
@@ -24,7 +24,7 @@ export class SuggestionFormComponent {
   constructor(
     private readonly fb: FormBuilder,
     private readonly suggestionService: SuggestionService,
-    private readonly dialogRef: MatDialogRef<SuggestionFormComponent>,
+    private readonly dialogRef: DynamicDialogRef,
     private readonly messageService: MessageService,
     private readonly i18n: I18nService,
   ) {

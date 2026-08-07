@@ -1,23 +1,19 @@
-<h2 mat-dialog-title>{{ 'suggestions.form.createTitle' | translate }}</h2>
+<form [formGroup]="form" class="dialog-form">
+  <p-floatlabel variant="on">
+    <textarea pTextarea id="description" formControlName="description" required rows="4" style="width: 100%"></textarea>
+    <label for="description">{{ 'suggestions.form.description' | translate }}</label>
+  </p-floatlabel>
+  @if (form.controls.description.touched && form.controls.description.hasError('required')) {
+    <small class="field-error">{{ 'suggestions.form.descriptionRequired' | translate }}</small>
+  }
 
-<mat-dialog-content>
-  <form [formGroup]="form" class="dialog-form">
-    <mat-form-field appearance="outline">
-      <mat-label>{{ 'suggestions.form.description' | translate }}</mat-label>
-      <textarea matInput formControlName="description" required rows="4"></textarea>
-      @if (form.controls.description.hasError('required')) {
-        <mat-error>{{ 'suggestions.form.descriptionRequired' | translate }}</mat-error>
-      }
-    </mat-form-field>
+  <h4>{{ 'suggestions.form.attachmentOptional' | translate }}</h4>
+  <input type="file" (change)="onFileSelected($event)" />
 
-    <h4>{{ 'suggestions.form.attachmentOptional' | translate }}</h4>
-    <input type="file" (change)="onFileSelected($event)" />
-  </form>
-</mat-dialog-content>
-
-<mat-dialog-actions align="end">
-  <button mat-button type="button" (click)="cancel()" [disabled]="saving">{{ 'common.cancel' | translate }}</button>
-  <button mat-raised-button color="primary" type="button" (click)="save()" [disabled]="saving">
-    {{ (saving ? 'suggestions.form.sending' : 'suggestions.form.send') | translate }}
-  </button>
-</mat-dialog-actions>
+  <div class="dialog-actions">
+    <button pButton type="button" severity="secondary" [outlined]="true" (click)="cancel()" [disabled]="saving">{{ 'common.cancel' | translate }}</button>
+    <button pButton type="button" (click)="save()" [disabled]="saving">
+      {{ (saving ? 'suggestions.form.sending' : 'suggestions.form.send') | translate }}
+    </button>
+  </div>
+</form>

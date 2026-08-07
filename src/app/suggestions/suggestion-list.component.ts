@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
+import { DialogService } from 'primeng/dynamicdialog';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { AuthService } from '../core/auth/auth.service';
+import { I18nService } from '../core/i18n/i18n.service';
 import { StatusBadgeComponent, StatusTone } from '../shared/status-badge/status-badge.component';
 import { Suggestion, SuggestionService, SuggestionStatus } from './suggestion.service';
 import { SuggestionFormComponent } from './suggestion-form.component';
@@ -27,15 +27,13 @@ const STATUS_TONES: Record<SuggestionStatus, StatusTone> = {
     selector: 'app-suggestion-list',
     imports: [
         FormsModule,
-        MatButtonModule,
-        MatCardModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatSelectModule,
-        MatTableModule,
-        MatTooltipModule,
+        ButtonModule,
+        IconFieldModule,
+        InputIconModule,
+        InputTextModule,
+        SelectModule,
+        TableModule,
+        TooltipModule,
         StatusBadgeComponent,
         TranslatePipe,
     ],
@@ -45,14 +43,14 @@ const STATUS_TONES: Record<SuggestionStatus, StatusTone> = {
 export class SuggestionListComponent implements OnInit {
   suggestions: Suggestion[] = [];
   search = '';
-  displayedColumns = ['description', 'status', 'attachment', 'createdBy'];
   statusOptions: SuggestionStatus[] = ['RECEIVED', 'IN_ANALYSIS', 'IMPLEMENTED', 'REJECTED'];
   permissions: string[] = [];
 
   constructor(
     private readonly suggestionService: SuggestionService,
     private readonly authService: AuthService,
-    private readonly dialog: MatDialog,
+    private readonly dialogService: DialogService,
+    private readonly i18n: I18nService,
   ) {}
 
   ngOnInit(): void {
@@ -68,16 +66,22 @@ export class SuggestionListComponent implements OnInit {
     return this.suggestions.filter((suggestion) => suggestion.description.toLowerCase().includes(term));
   }
 
+  get statusSelectOptions(): { label: string; value: SuggestionStatus }[] {
+    return this.statusOptions.map((status) => ({ label: this.i18n.tUi(this.statusLabelKey(status)), value: status }));
+  }
+
   load(): void {
     this.suggestionService.list().subscribe((suggestions) => (this.suggestions = suggestions));
   }
 
   openCreate(): void {
-    const ref = this.dialog.open<SuggestionFormComponent, void, boolean>(SuggestionFormComponent, {
-      autoFocus: false,
+    const ref = this.dialogService.open<SuggestionFormComponent, void>(SuggestionFormComponent, {
+      header: this.i18n.tUi('suggestions.form.createTitle'),
+      width: '560px',
+      modal: true,
     });
 
-    ref.afterClosed().subscribe((saved) => {
+    ref?.onClose.subscribe((saved) => {
       if (saved) {
         this.load();
       }
