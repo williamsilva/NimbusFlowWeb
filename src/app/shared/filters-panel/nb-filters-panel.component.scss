@@ -1,6 +1,4 @@
 .filter-panel {
-  width: fit-content;
-  max-width: 100%;
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.08);
   background: rgba(0, 0, 0, 0.03);
@@ -23,7 +21,7 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  padding: 10px 16px;
+  padding: 5px 16px;
   border: none;
   background: transparent;
   color: inherit;
@@ -84,7 +82,7 @@
 }
 
 .filter-panel__body {
-  padding: 14px 16px 16px;
+  padding: 10px 16px 12px;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
@@ -98,7 +96,7 @@
 .filter-panel__fields {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 // Linha de campos - ainda com flex-wrap (quebra só se a tela for estreita demais pros campos
@@ -154,7 +152,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .filter-panel__actions--start {
