@@ -13,12 +13,19 @@
       { label: ('users.list.title' | translate) },
     ]"
   >
-    <button pButton severity="secondary" [outlined]="true" type="button" class="btn-sm" (click)="load()">
+    <button
+      pButton
+      severity="secondary"
+      [outlined]="true"
+      type="button"
+      class="btn-sm"
+      (click)="load()"
+    >
       <i class="pi pi-refresh"></i>
-      {{ 'common.refresh' | translate }}
+      {{ "common.refresh" | translate }}
     </button>
 
-    @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
+    @if (perms.has("USERS_ACTIVE_OR_INACTIVE")) {
       <button
         pButton
         type="button"
@@ -27,7 +34,7 @@
         (click)="activateSelected()"
       >
         <i class="pi pi-check-circle"></i>
-        {{ 'users.list.activate' | translate }}
+        {{ "users.list.activate" | translate }}
       </button>
       <button
         pButton
@@ -38,46 +45,88 @@
         (click)="deactivateSelected()"
       >
         <i class="pi pi-ban"></i>
-        {{ 'users.list.deactivateBulk' | translate }}
+        {{ "users.list.deactivateBulk" | translate }}
       </button>
     }
 
     @if (secPolicy.canCreate()) {
       <button pButton type="button" class="btn-sm" (click)="goNew()">
         <i class="pi pi-plus"></i>
-        {{ 'users.list.create' | translate }}
+        {{ "users.list.create" | translate }}
       </button>
     }
   </nb-page-header>
 
   <div class="content-card">
-    <nb-filters-panel [activeFilters]="activeFilters()" [actionsAlign]="'start'" (search)="search()" (clear)="clear()">
+    <nb-filters-panel
+      [activeFilters]="activeFilters()"
+      [actionsAlign]="'start'"
+      (search)="search()"
+      (clear)="clear()"
+    >
       <div class="grid formgrid gap-0 align-items-end">
         <div class="col-12 md:col-3 p-1">
           <p-floatlabel variant="on" class="w-full">
-            <input pInputText id="f-name" class="w-full" [ngModel]="filter().name" (ngModelChange)="updateFilter('name', $event)" />
-            <label for="f-name">{{ 'users.list.filters.name' | translate }}</label>
+            <input
+              pInputText
+              id="f-name"
+              class="w-full p-inputtext-sm"
+              [ngModel]="filter().name"
+              (ngModelChange)="updateFilter('name', $event)"
+            />
+            <label for="f-name">{{
+              "users.list.filters.name" | translate
+            }}</label>
           </p-floatlabel>
         </div>
 
         <div class="col-12 md:col-3 p-1">
           <p-floatlabel variant="on" class="w-full">
-            <input pInputText id="f-userName" class="w-full" [ngModel]="filter().userName" (ngModelChange)="updateFilter('userName', $event)" />
-            <label for="f-userName">{{ 'users.list.filters.userName' | translate }}</label>
+            <input
+              pInputText
+              id="f-userName"
+              class="w-full p-inputtext-sm"
+              [ngModel]="filter().userName"
+              (ngModelChange)="updateFilter('userName', $event)"
+            />
+            <label for="f-userName">{{
+              "users.list.filters.userName" | translate
+            }}</label>
           </p-floatlabel>
         </div>
 
         <div class="col-12 md:col-2 p-1">
           <p-floatlabel variant="on" class="w-full">
-            <input pInputText id="f-document" class="w-full" [ngModel]="filter().document" (ngModelChange)="updateFilter('document', $event)" />
-            <label for="f-document">{{ 'users.list.filters.document' | translate }}</label>
+            <input
+              pInputText
+              id="f-document"
+              class="w-full p-inputtext-sm"
+              [ngModel]="filter().document"
+              (ngModelChange)="updateFilter('document', $event)"
+            />
+            <label for="f-document">{{
+              "users.list.filters.document" | translate
+            }}</label>
           </p-floatlabel>
         </div>
 
         <div class="col-12 md:col-4 p-1">
           <p-floatlabel variant="on" class="w-full">
-            <p-multiselect inputId="f-status" class="w-full" [showClear]="true" [ngModel]="filter().status" (ngModelChange)="updateFilter('status', $event)" [options]="statusSelectOptions" optionLabel="label" optionValue="value" display="chip" />
-            <label for="f-status">{{ 'users.list.filters.status' | translate }}</label>
+            <p-multiselect
+              inputId="f-status"
+              size="small"
+              class="w-full"
+              [showClear]="true"
+              [ngModel]="filter().status"
+              (ngModelChange)="updateFilter('status', $event)"
+              [options]="statusSelectOptions"
+              optionLabel="label"
+              optionValue="value"
+              display="chip"
+            />
+            <label for="f-status">{{
+              "users.list.filters.status" | translate
+            }}</label>
           </p-floatlabel>
         </div>
       </div>
@@ -95,9 +144,13 @@
               dateFormat="dd/mm/yy"
               [readonlyInput]="true"
               [ngModel]="dateRangeToModel(filter().lastLoginAtRange)"
-              (ngModelChange)="updateFilter('lastLoginAtRange', dateRangeFromModel($event))"
+              (ngModelChange)="
+                updateFilter('lastLoginAtRange', dateRangeFromModel($event))
+              "
             />
-            <label for="f-lastLoginAt">{{ 'users.list.filters.lastLoginAt' | translate }}</label>
+            <label for="f-lastLoginAt">{{
+              "users.list.filters.lastLoginAt" | translate
+            }}</label>
           </p-floatlabel>
         </div>
 
@@ -113,9 +166,13 @@
               dateFormat="dd/mm/yy"
               [readonlyInput]="true"
               [ngModel]="dateRangeToModel(filter().blockedUntilRange)"
-              (ngModelChange)="updateFilter('blockedUntilRange', dateRangeFromModel($event))"
+              (ngModelChange)="
+                updateFilter('blockedUntilRange', dateRangeFromModel($event))
+              "
             />
-            <label for="f-blockedUntil">{{ 'users.list.filters.blockedUntil' | translate }}</label>
+            <label for="f-blockedUntil">{{
+              "users.list.filters.blockedUntil" | translate
+            }}</label>
           </p-floatlabel>
         </div>
 
@@ -131,9 +188,16 @@
               dateFormat="dd/mm/yy"
               [readonlyInput]="true"
               [ngModel]="dateRangeToModel(filter().passwordExpiresAtRange)"
-              (ngModelChange)="updateFilter('passwordExpiresAtRange', dateRangeFromModel($event))"
+              (ngModelChange)="
+                updateFilter(
+                  'passwordExpiresAtRange',
+                  dateRangeFromModel($event)
+                )
+              "
             />
-            <label for="f-passwordExpiresAt">{{ 'users.list.filters.passwordExpiresAt' | translate }}</label>
+            <label for="f-passwordExpiresAt">{{
+              "users.list.filters.passwordExpiresAt" | translate
+            }}</label>
           </p-floatlabel>
         </div>
 
@@ -149,9 +213,13 @@
               dateFormat="dd/mm/yy"
               [readonlyInput]="true"
               [ngModel]="dateRangeToModel(filter().createdAtRange)"
-              (ngModelChange)="updateFilter('createdAtRange', dateRangeFromModel($event))"
+              (ngModelChange)="
+                updateFilter('createdAtRange', dateRangeFromModel($event))
+              "
             />
-            <label for="f-createdAt">{{ 'users.list.filters.createdAt' | translate }}</label>
+            <label for="f-createdAt">{{
+              "users.list.filters.createdAt" | translate
+            }}</label>
           </p-floatlabel>
         </div>
 
@@ -159,6 +227,7 @@
           <p-floatlabel variant="on" class="w-full">
             <p-multiselect
               inputId="f-createdBy"
+              size="small"
               class="w-full"
               [filter]="true"
               [showClear]="true"
@@ -166,24 +235,46 @@
               (ngModelChange)="updateFilter('createdBy', $event)"
               [options]="createdByOptions()"
             />
-            <label for="f-createdBy">{{ 'users.list.filters.createdBy' | translate }}</label>
+            <label for="f-createdBy">{{
+              "users.list.filters.createdBy" | translate
+            }}</label>
           </p-floatlabel>
         </div>
       </div>
     </nb-filters-panel>
 
-    @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
+    @if (perms.has("USERS_ACTIVE_OR_INACTIVE")) {
       <div class="selection-mode">
-        {{ 'users.list.selectionMode' | translate }}:
-        {{ (selectionMode() === 'activate' ? 'users.list.selectionModeActivate' : selectionMode() === 'deactivate' ? 'users.list.selectionModeDeactivate' : 'users.list.selectionModeNone') | translate }}
+        {{ "users.list.selectionMode" | translate }}:
+        {{
+          (selectionMode() === "activate"
+            ? "users.list.selectionModeActivate"
+            : selectionMode() === "deactivate"
+              ? "users.list.selectionModeDeactivate"
+              : "users.list.selectionModeNone"
+          ) | translate
+        }}
       </div>
     }
 
     <div class="table-container">
-      <p-table [value]="filteredUsers()" [selection]="selected()" (selectionChange)="selected.set($event)" dataKey="id" size="small" stripedRows showGridlines class="cs-admin-table" [tableStyle]="{ 'min-width': '90rem' }" [paginator]="true" [rows]="20" [rowsPerPageOptions]="[10, 20, 50]">
+      <p-table
+        [value]="filteredUsers()"
+        [selection]="selected()"
+        (selectionChange)="selected.set($event)"
+        dataKey="id"
+        size="small"
+        stripedRows
+        showGridlines
+        class="cs-admin-table"
+        [tableStyle]="{ 'min-width': '90rem' }"
+        [paginator]="true"
+        [rows]="20"
+        [rowsPerPageOptions]="[10, 20, 50]"
+      >
         <ng-template #colgroup>
           <colgroup>
-            @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
+            @if (perms.has("USERS_ACTIVE_OR_INACTIVE")) {
               <col style="width: 44px" />
             }
             <col style="width: 150px" />
@@ -201,66 +292,88 @@
 
         <ng-template #header>
           <tr>
-            @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
+            @if (perms.has("USERS_ACTIVE_OR_INACTIVE")) {
               <th class="text-center"><p-tableHeaderCheckbox /></th>
             }
             <th pSortableColumn="userName">
               <div class="th-flex">
-                <span class="th-label">{{ 'users.list.columns.userName' | translate }}</span>
+                <span class="th-label">{{
+                  "users.list.columns.userName" | translate
+                }}</span>
                 <span class="th-icons"><p-sortIcon field="userName" /></span>
               </div>
             </th>
             <th pSortableColumn="name">
               <div class="th-flex">
-                <span class="th-label">{{ 'users.list.columns.name' | translate }}</span>
+                <span class="th-label">{{
+                  "users.list.columns.name" | translate
+                }}</span>
                 <span class="th-icons"><p-sortIcon field="name" /></span>
               </div>
             </th>
             <th pSortableColumn="document">
               <div class="th-flex">
-                <span class="th-label">{{ 'users.list.columns.document' | translate }}</span>
+                <span class="th-label">{{
+                  "users.list.columns.document" | translate
+                }}</span>
                 <span class="th-icons"><p-sortIcon field="document" /></span>
               </div>
             </th>
             <th pSortableColumn="status">
               <div class="th-flex">
-                <span class="th-label">{{ 'users.list.columns.status' | translate }}</span>
+                <span class="th-label">{{
+                  "users.list.columns.status" | translate
+                }}</span>
                 <span class="th-icons"><p-sortIcon field="status" /></span>
               </div>
             </th>
             <th pSortableColumn="lastLoginAt">
               <div class="th-flex">
-                <span class="th-label">{{ 'users.list.columns.lastLoginAt' | translate }}</span>
+                <span class="th-label">{{
+                  "users.list.columns.lastLoginAt" | translate
+                }}</span>
                 <span class="th-icons"><p-sortIcon field="lastLoginAt" /></span>
               </div>
             </th>
             <th pSortableColumn="blockedUntil">
               <div class="th-flex">
-                <span class="th-label">{{ 'users.list.columns.blockedUntil' | translate }}</span>
-                <span class="th-icons"><p-sortIcon field="blockedUntil" /></span>
+                <span class="th-label">{{
+                  "users.list.columns.blockedUntil" | translate
+                }}</span>
+                <span class="th-icons"
+                  ><p-sortIcon field="blockedUntil"
+                /></span>
               </div>
             </th>
             <th pSortableColumn="passwordExpiresAt">
               <div class="th-flex">
-                <span class="th-label">{{ 'users.list.columns.passwordExpiresAt' | translate }}</span>
-                <span class="th-icons"><p-sortIcon field="passwordExpiresAt" /></span>
+                <span class="th-label">{{
+                  "users.list.columns.passwordExpiresAt" | translate
+                }}</span>
+                <span class="th-icons"
+                  ><p-sortIcon field="passwordExpiresAt"
+                /></span>
               </div>
             </th>
             <th pSortableColumn="createdAt">
               <div class="th-flex">
-                <span class="th-label">{{ 'users.list.columns.createdAt' | translate }}</span>
+                <span class="th-label">{{
+                  "users.list.columns.createdAt" | translate
+                }}</span>
                 <span class="th-icons"><p-sortIcon field="createdAt" /></span>
               </div>
             </th>
             <th pSortableColumn="createdBy">
               <div class="th-flex">
-                <span class="th-label">{{ 'users.list.columns.createdBy' | translate }}</span>
+                <span class="th-label">{{
+                  "users.list.columns.createdBy" | translate
+                }}</span>
                 <span class="th-icons"><p-sortIcon field="createdBy" /></span>
               </div>
             </th>
             <th class="text-center">
               <div class="th-flex justify-content-center">
-                <span class="th-label">{{ 'common.actions' | translate }}</span>
+                <span class="th-label">{{ "common.actions" | translate }}</span>
               </div>
             </th>
           </tr>
@@ -268,18 +381,43 @@
 
         <ng-template #body let-user>
           <tr>
-            @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
+            @if (perms.has("USERS_ACTIVE_OR_INACTIVE")) {
               <td class="text-center"><p-tableCheckbox [value]="user" /></td>
             }
             <td>{{ user.userName }}</td>
             <td>{{ user.name }}</td>
             <td class="text-center">{{ user.document | taxId }}</td>
-            <td class="text-center"><p-tag [value]="statusLabel(user.status)" [severity]="statusSeverity(user.status)" /></td>
-            <td class="text-center">{{ user.lastLoginAt ? (user.lastLoginAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
-            <td class="text-center">{{ user.blockedUntil ? (user.blockedUntil | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
-            <td class="text-center">{{ user.passwordExpiresAt ? (user.passwordExpiresAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
-            <td class="text-center">{{ user.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
-            <td class="text-center">{{ user.createdBy || '—' }}</td>
+            <td class="text-center">
+              <p-tag
+                [value]="statusLabel(user.status)"
+                [severity]="statusSeverity(user.status)"
+              />
+            </td>
+            <td class="text-center">
+              {{
+                user.lastLoginAt
+                  ? (user.lastLoginAt | date: "dd/MM/yyyy HH:mm")
+                  : "—"
+              }}
+            </td>
+            <td class="text-center">
+              {{
+                user.blockedUntil
+                  ? (user.blockedUntil | date: "dd/MM/yyyy HH:mm")
+                  : "—"
+              }}
+            </td>
+            <td class="text-center">
+              {{
+                user.passwordExpiresAt
+                  ? (user.passwordExpiresAt | date: "dd/MM/yyyy HH:mm")
+                  : "—"
+              }}
+            </td>
+            <td class="text-center">
+              {{ user.createdAt | date: "dd/MM/yyyy HH:mm" }}
+            </td>
+            <td class="text-center">{{ user.createdBy || "—" }}</td>
             <td class="text-center">
               <div class="table-actions">
                 @if (secPolicy.canEdit(user)) {
@@ -310,7 +448,7 @@
                     <i class="pi pi-envelope"></i>
                   </button>
                 }
-                @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
+                @if (perms.has("USERS_ACTIVE_OR_INACTIVE")) {
                   @if (user.status === 1) {
                     <button
                       pButton
@@ -346,7 +484,12 @@
 
         <ng-template #emptymessage>
           <tr>
-            <td [attr.colspan]="perms.has('USERS_ACTIVE_OR_INACTIVE') ? 10 : 9" class="empty-state">{{ 'users.list.empty' | translate }}</td>
+            <td
+              [attr.colspan]="perms.has('USERS_ACTIVE_OR_INACTIVE') ? 10 : 9"
+              class="empty-state"
+            >
+              {{ "users.list.empty" | translate }}
+            </td>
           </tr>
         </ng-template>
       </p-table>

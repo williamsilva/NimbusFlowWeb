@@ -31,14 +31,14 @@
       <div class="grid formgrid gap-0 align-items-end">
         <div class="col-12 md:col-3 p-1">
           <p-floatlabel variant="on" class="w-full">
-            <input pInputText id="f-name" class="w-full" [ngModel]="filter().name" (ngModelChange)="updateFilter('name', $event)" />
+            <input pInputText id="f-name" class="w-full p-inputtext-sm" [ngModel]="filter().name" (ngModelChange)="updateFilter('name', $event)" />
             <label for="f-name">{{ 'groups.list.filters.name' | translate }}</label>
           </p-floatlabel>
         </div>
 
         <div class="col-12 md:col-4 p-1">
           <p-floatlabel variant="on" class="w-full">
-            <input pInputText id="f-description" class="w-full" [ngModel]="filter().description" (ngModelChange)="updateFilter('description', $event)" />
+            <input pInputText id="f-description" class="w-full p-inputtext-sm" [ngModel]="filter().description" (ngModelChange)="updateFilter('description', $event)" />
             <label for="f-description">{{ 'groups.list.filters.description' | translate }}</label>
           </p-floatlabel>
         </div>
@@ -65,6 +65,7 @@
           <p-floatlabel variant="on" class="w-full">
             <p-multiselect
               inputId="f-createdBy"
+              size="small"
               class="w-full"
               [filter]="true"
               [showClear]="true"

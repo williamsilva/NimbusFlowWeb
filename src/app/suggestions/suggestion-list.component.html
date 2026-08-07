@@ -20,7 +20,7 @@
     <nb-filters-panel [activeFilters]="activeFilters()" (search)="search()" (clear)="clear()">
       <div class="filter-row">
         <p-floatlabel variant="on" style="flex: 0 1 340px; min-width: 260px">
-          <input pInputText id="f-search" [ngModel]="filter().search" (ngModelChange)="updateFilter('search', $event)" />
+          <input pInputText id="f-search" class="p-inputtext-sm" [ngModel]="filter().search" (ngModelChange)="updateFilter('search', $event)" />
           <label for="f-search">{{ 'suggestions.list.searchPlaceholder' | translate }}</label>
         </p-floatlabel>
       </div>
