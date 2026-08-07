@@ -1,6 +1,7 @@
-import { APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
+import { ApplicationConfig, provideAppInitializer, provideZoneChangeDetection, inject, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { provideTranslateService } from '@ngx-translate/core';
 import { MESSAGE_FORMAT_CONFIG, TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
@@ -11,7 +12,6 @@ import Lara from '@primeng/themes/lara';
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { withCredentialsInterceptor } from './core/auth/with-credentials.interceptor';
 import { AssetsTranslateLoader } from './core/i18n/assets-translate.loader';
 import { I18nService } from './core/i18n/i18n.service';
@@ -30,7 +30,7 @@ export const appConfig: ApplicationConfig = {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }),
-    provideAnimationsAsync(),
+    provideAnimations(),
     // Dashboard (Fase 6): gráficos via ng2-charts/Chart.js.
     provideCharts(withDefaultRegisterables()),
     // PrimeNG (migração Material -> PrimeNG): mesmo preset/tema do CardSyncWeb (Lara, dark mode via
@@ -56,12 +56,6 @@ export const appConfig: ApplicationConfig = {
       fallbackLang: 'pt-BR',
     }),
     { provide: MESSAGE_FORMAT_CONFIG, useValue: { throwOnError: true, strictPluralKeys: true } },
-    // Angular 18 ainda não tem provideAppInitializer() (chegou na v19) - usa o token clássico.
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (i18n: I18nService) => () => i18n.init(),
-      deps: [I18nService],
-      multi: true,
-    },
+    provideAppInitializer(() => inject(I18nService).init()),
   ],
 };

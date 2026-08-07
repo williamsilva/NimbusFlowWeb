@@ -1,7 +1,7 @@
 {
   "name": "nimbusflow-web",
   "short_name": "nimbusflow-web",
-  "theme_color": "#1976d2",
+  "theme_color": "#3b82f6",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "./",

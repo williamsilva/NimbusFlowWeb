@@ -1,42 +1,8 @@
-@use '@angular/material' as mat;
-
-// PrimeNG (migração Material -> PrimeNG): ícones e utilitários de layout, mesmas libs do
-// CardSyncWeb. O tema em si (Lara) é registrado via providePrimeNG em app.config.ts, não aqui.
+// PrimeNG: ícones e utilitários de layout, mesmas libs do CardSyncWeb. O tema em si (Lara,
+// incluindo dark mode via classe .dark na <html>) é registrado via providePrimeNG em
+// app.config.ts, não aqui.
 @import 'primeicons/primeicons.css';
 @import 'primeflex/primeflex.css';
-
-// ===== Tema Material (claro + escuro via classe .dark na <html>) =====
-// Substitui o prebuilt-theme azure-blue.css antigo por um tema custom, unico jeito de ter
-// dark mode de verdade nos componentes Material (botoes, campos, tabelas, cards, etc.).
-$nf-primary: mat.m2-define-palette(mat.$m2-blue-palette);
-$nf-accent: mat.m2-define-palette(mat.$m2-cyan-palette, A700, A400, A700);
-$nf-warn: mat.m2-define-palette(mat.$m2-red-palette);
-
-$nf-light-theme: mat.m2-define-light-theme((
-  color: (
-    primary: $nf-primary,
-    accent: $nf-accent,
-    warn: $nf-warn,
-  ),
-  density: 0,
-));
-
-$nf-dark-theme: mat.m2-define-dark-theme((
-  color: (
-    primary: $nf-primary,
-    accent: $nf-accent,
-    warn: $nf-warn,
-  ),
-  density: 0,
-));
-
-@include mat.elevation-classes();
-@include mat.app-background();
-@include mat.all-component-themes($nf-light-theme);
-
-.dark {
-  @include mat.all-component-colors($nf-dark-theme);
-}
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -143,20 +109,12 @@ body {
   }
 }
 
-// Botões compactos (Atualizar/Ativar/Inativar/Novo no header, Buscar/Limpar no filtro) - o padrão
-// mat-raised-button/mat-stroked-button do Material é alto demais pro visual denso pedido.
+// Botões compactos (Atualizar/Ativar/Inativar/Novo no header, Buscar/Limpar no filtro).
 .btn-sm {
   height: 30px !important;
   padding: 0 12px !important;
   font-size: 0.78rem !important;
   line-height: 30px !important;
-
-  .mat-icon {
-    font-size: 16px;
-    height: 16px;
-    width: 16px;
-    margin-right: 4px;
-  }
 
   i.pi {
     font-size: 14px;
@@ -165,37 +123,8 @@ body {
 }
 
 // Tabela densa (linhas mais baixas, fonte menor) - telas administrativas com muitas colunas
-// (Usuários/Grupos). Sobrescreve os tokens de densidade do Material Design 3 pro mat-table.
-.compact-table {
-  th.mat-mdc-header-cell,
-  td.mat-mdc-cell {
-    padding: 0 10px;
-    font-size: 0.78rem;
-  }
-
-  tr.mat-mdc-header-row {
-    height: 38px;
-  }
-
-  tr.mat-mdc-row {
-    height: 42px;
-  }
-
-  .mat-mdc-icon-button {
-    width: 32px;
-    height: 32px;
-    padding: 4px;
-
-    .mat-icon {
-      font-size: 18px;
-      height: 18px;
-      width: 18px;
-    }
-  }
-}
-
-// Mesma densidade acima, versão PrimeNG (p-table com [size]="'small'" já ajuda, isso refina mais
-// pro padrão visual do CardSyncWeb - linhas baixas, fonte pequena).
+// (Usuários/Grupos). p-table com [size]="'small'" já ajuda, isso refina mais pro padrão visual
+// do CardSyncWeb - linhas baixas, fonte pequena.
 p-table.compact-table {
   .p-datatable-thead > tr > th,
   .p-datatable-tbody > tr > td {
@@ -253,11 +182,6 @@ p-table.compact-table {
   border-radius: 4px;
 }
 
-table.mat-mdc-table {
-  width: 100%;
-  background: transparent;
-}
-
 // ===== Popup do ícone (i) do painel de filtros (FilterPanelComponent) - o p-popover é portado pra
 // fora do componente (overlay), então precisa ser estilizado aqui, global. =====
 .filter-panel-popover .p-popover-content {
@@ -307,11 +231,6 @@ table.mat-mdc-table {
   max-width: 520px;
 }
 
-.form mat-form-field {
-  width: 100%;
-}
-
-// Equivalente PrimeNG (telas ja migradas: Obras, Medicoes).
 .form p-floatlabel {
   display: flex;
   width: 100%;
@@ -360,13 +279,8 @@ table.mat-mdc-table {
   gap: 4px 16px;
 }
 
-.dialog-form-grid mat-form-field {
-  width: 100%;
-}
-
-// p-floatlabel (PrimeNG) equivalente ao "width: 100%" do mat-form-field acima - o <input>/
-// p-multiselect projetado dentro precisa da largura explícita tambem, floatlabel só herda a do
-// pai por padrão.
+// O <input>/p-multiselect projetado dentro do p-floatlabel precisa da largura explícita também,
+// floatlabel só herda a do pai por padrão.
 .dialog-form-grid p-floatlabel {
   display: block;
   width: 100%;
@@ -410,15 +324,6 @@ table.mat-mdc-table {
   }
 }
 
-// ===== Realce de linha nas tabelas =====
-tr.mat-mdc-row:hover {
-  background: rgba(59, 130, 246, 0.05);
-}
-
-:root.dark tr.mat-mdc-row:hover {
-  background: rgba(59, 130, 246, 0.08);
-}
-
 .empty-state {
   padding: 32px 16px;
   text-align: center;
@@ -431,56 +336,44 @@ tr.mat-mdc-row:hover {
   border-radius: 999px;
 }
 
-.action-btn--edit mat-icon,
 .action-btn--edit i.pi {
   color: rgba(0, 0, 0, 0.6);
 }
 
-.action-btn--view mat-icon,
 .action-btn--view i.pi {
   color: #0891b2;
 }
 
-.action-btn--activate mat-icon,
 .action-btn--activate i.pi {
   color: #16a34a;
 }
 
-.action-btn--deactivate mat-icon,
-.action-btn--delete mat-icon,
 .action-btn--deactivate i.pi,
 .action-btn--delete i.pi {
   color: #dc2626;
 }
 
-.action-btn--invite mat-icon,
 .action-btn--invite i.pi {
   color: #2563eb;
 }
 
-:root.dark .action-btn--edit mat-icon,
 :root.dark .action-btn--edit i.pi {
   color: rgba(255, 255, 255, 0.7);
 }
 
-:root.dark .action-btn--view mat-icon,
 :root.dark .action-btn--view i.pi {
   color: #22d3ee;
 }
 
-:root.dark .action-btn--activate mat-icon,
 :root.dark .action-btn--activate i.pi {
   color: #4ade80;
 }
 
-:root.dark .action-btn--deactivate mat-icon,
-:root.dark .action-btn--delete mat-icon,
 :root.dark .action-btn--deactivate i.pi,
 :root.dark .action-btn--delete i.pi {
   color: #f87171;
 }
 
-:root.dark .action-btn--invite mat-icon,
 :root.dark .action-btn--invite i.pi {
   color: #60a5fa;
 }

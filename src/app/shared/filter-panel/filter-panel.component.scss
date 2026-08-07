@@ -1,5 +1,3 @@
-@use '@angular/material' as mat;
-
 .filter-panel {
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.08);
@@ -99,11 +97,6 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-
-  // Densidade oficial do Material (-5, a mais compacta da escala) - ajusta a geometria interna do
-  // form-field corretamente (ao contrário de forçar altura/padding manualmente nos elementos
-  // internos do MDC, que quebra o posicionamento do label - já tentado e revertido).
-  @include mat.form-field-density(-5);
 }
 
 // Linha de campos - ainda com flex-wrap (quebra só se a tela for estreita demais pros campos
@@ -115,31 +108,12 @@
 }
 
 // ::ng-deep necessário pq os campos vêm via <ng-content> (template do componente pai) - sem isso,
-// o encapsulamento de view do Angular não deixaria esse seletor alcançar os mat-form-field
-// projetados (eles carregam o _ngcontent do PAI, não deste componente). Versão mais compacta -
-// a primeira tentativa (210px de largura, altura padrão do Material) ainda ficava bem maior que
-// o print de referência do CardSyncWeb.
-.filter-panel__fields ::ng-deep mat-form-field {
-  flex: 0 1 230px;
-  min-width: 170px;
-  font-size: 0.8rem;
-}
-
+// o encapsulamento de view do Angular não deixaria esse seletor alcançar os campos projetados
+// (eles carregam o _ngcontent do PAI, não deste componente).
 // Campo precisando de largura diferente da padrão (ex.: Nome/Usuário em user-list.component.html)
-// define isso via style inline no próprio <mat-form-field>/<p-floatlabel> - um style inline sempre
-// vence esta regra (especificidade máxima, sem depender de ordem de carregamento entre
-// stylesheets), e fica visível direto no HTML da tela, sem precisar tocar neste componente
-// compartilhado.
-
-// Remove o espaço reservado embaixo do campo pra hint/erro - nunca usado aqui (sem validação nos
-// filtros), mas por padrão o Material reserva essa faixa sempre, deixando o campo bem mais alto
-// do que precisa. Seguro (não afeta a posição do label, só o espaço abaixo do campo).
-.filter-panel__fields ::ng-deep .mat-mdc-form-field-subscript-wrapper {
-  display: none;
-}
-
-// Equivalente PrimeNG da regra ::ng-deep mat-form-field acima (mesma largura padrão) - telas já
-// migradas pra PrimeNG (Usuários) usam p-floatlabel no lugar de mat-form-field.
+// define isso via style inline no próprio <p-floatlabel> - um style inline sempre vence esta
+// regra (especificidade máxima, sem depender de ordem de carregamento entre stylesheets), e fica
+// visível direto no HTML da tela, sem precisar tocar neste componente compartilhado.
 .filter-panel__fields ::ng-deep p-floatlabel {
   display: flex;
   flex: 0 1 230px;
