@@ -1,6 +1,7 @@
 import { computed, signal } from '@angular/core';
 
 import { ActiveFilterEntry } from '../filters-panel/nb-filters-panel.component';
+import { DateRange } from '../utils/date-range';
 
 /**
  * Base reutilizável pras telas de lista (Usuários/Grupos/Fornecedores/Obras/Sugestões) - mesmo
@@ -89,5 +90,18 @@ export abstract class NbStatefulListPage<TFilter extends object> {
     } catch {
       localStorage.removeItem(this.filtersKey());
     }
+  }
+
+  /**
+   * TFilter guarda datas como string ISO (JSON-safe, sobrevive ao localStorage sem revive
+   * especial) - esses dois helpers convertem só na borda do template, onde o p-datepicker
+   * (selectionMode="range") precisa de Date[] de verdade.
+   */
+  protected dateRangeToModel(range: DateRange): Date[] | null {
+    return range ? [new Date(range[0]), new Date(range[1])] : null;
+  }
+
+  protected dateRangeFromModel(value: Date[] | null | undefined): DateRange {
+    return value?.[0] && value?.[1] ? [value[0].toISOString(), value[1].toISOString()] : null;
   }
 }

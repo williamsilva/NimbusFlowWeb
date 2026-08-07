@@ -4,11 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DatePickerModule } from 'primeng/datepicker';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
@@ -19,6 +19,7 @@ import { ActiveFilterEntry, NbFiltersPanelComponent } from '../shared/filters-pa
 import { NbPageHeaderComponent } from '../shared/page-header/nb-page-header.component';
 import { NbStatefulListPage } from '../shared/list-base/nb-stateful-list-page';
 import { onlyDigits } from '../shared/utils/br-format';
+import { DateRange, isWithinDateRange } from '../shared/utils/date-range';
 import { TaxIdPipe } from '../shared/pipes/tax-id.pipe';
 import { SecurityPermissionPolicy } from './policy/security-permission.policy';
 import { AdminUser, UserAdminService } from './user.service';
@@ -42,11 +43,11 @@ interface UsersFilterState {
   userName: string;
   document: string;
   status: number[];
-  lastLoginAt: string;
-  blockedUntil: string;
-  passwordExpiresAt: string;
-  createdAt: string;
-  createdBy: string;
+  lastLoginAtRange: DateRange;
+  blockedUntilRange: DateRange;
+  passwordExpiresAtRange: DateRange;
+  createdAtRange: DateRange;
+  createdBy: string[];
 }
 
 @Component({
@@ -57,10 +58,10 @@ interface UsersFilterState {
     FormsModule,
     ButtonModule,
     CheckboxModule,
+    DatePickerModule,
     FloatLabelModule,
     InputTextModule,
     MultiSelectModule,
-    SelectModule,
     TableModule,
     TagModule,
     TooltipModule,
@@ -134,11 +135,11 @@ export class UserListComponent extends NbStatefulListPage<UsersFilterState> impl
       userName: '',
       document: '',
       status: [],
-      lastLoginAt: '',
-      blockedUntil: '',
-      passwordExpiresAt: '',
-      createdAt: '',
-      createdBy: '',
+      lastLoginAtRange: null,
+      blockedUntilRange: null,
+      passwordExpiresAtRange: null,
+      createdAtRange: null,
+      createdBy: [],
     };
   }
 
@@ -151,12 +152,21 @@ export class UserListComponent extends NbStatefulListPage<UsersFilterState> impl
     if (f.status.length) {
       entries.push({ label: this.i18n.tUi('users.list.filters.status'), value: f.status.map((s) => this.statusLabel(s)).join(', ') });
     }
-    if (f.lastLoginAt) entries.push({ label: this.i18n.tUi('users.list.filters.lastLoginAt'), value: f.lastLoginAt });
-    if (f.blockedUntil) entries.push({ label: this.i18n.tUi('users.list.filters.blockedUntil'), value: f.blockedUntil });
-    if (f.passwordExpiresAt) entries.push({ label: this.i18n.tUi('users.list.filters.passwordExpiresAt'), value: f.passwordExpiresAt });
-    if (f.createdAt) entries.push({ label: this.i18n.tUi('users.list.filters.createdAt'), value: f.createdAt });
-    if (f.createdBy) entries.push({ label: this.i18n.tUi('users.list.filters.createdBy'), value: f.createdBy });
+    this.pushRangeFilter(entries, f.lastLoginAtRange, 'users.list.filters.lastLoginAt');
+    this.pushRangeFilter(entries, f.blockedUntilRange, 'users.list.filters.blockedUntil');
+    this.pushRangeFilter(entries, f.passwordExpiresAtRange, 'users.list.filters.passwordExpiresAt');
+    this.pushRangeFilter(entries, f.createdAtRange, 'users.list.filters.createdAt');
+    if (f.createdBy.length) entries.push({ label: this.i18n.tUi('users.list.filters.createdBy'), value: f.createdBy.join(', ') });
     return entries;
+  }
+
+  private pushRangeFilter(entries: ActiveFilterEntry[], range: DateRange, labelKey: string): void {
+    if (!range) return;
+    entries.push({ label: this.i18n.tUi(labelKey), value: `${this.formatDate(range[0])} – ${this.formatDate(range[1])}` });
+  }
+
+  private formatDate(value: string): string {
+    return new Intl.DateTimeFormat(this.i18n.getLocale(), { dateStyle: 'short' }).format(new Date(value));
   }
 
   private matchesFilter(row: AdminUser, f: UsersFilterState): boolean {
@@ -164,16 +174,12 @@ export class UserListComponent extends NbStatefulListPage<UsersFilterState> impl
     if (f.userName && !row.userName.toLowerCase().includes(f.userName.toLowerCase())) return false;
     if (f.document && !row.document.includes(onlyDigits(f.document))) return false;
     if (f.status.length && !f.status.includes(row.status)) return false;
-    if (f.lastLoginAt && !this.sameDay(row.lastLoginAt, f.lastLoginAt)) return false;
-    if (f.blockedUntil && !this.sameDay(row.blockedUntil, f.blockedUntil)) return false;
-    if (f.passwordExpiresAt && !this.sameDay(row.passwordExpiresAt, f.passwordExpiresAt)) return false;
-    if (f.createdAt && !this.sameDay(row.createdAt, f.createdAt)) return false;
-    if (f.createdBy && row.createdBy !== f.createdBy) return false;
+    if (!isWithinDateRange(row.lastLoginAt, f.lastLoginAtRange)) return false;
+    if (!isWithinDateRange(row.blockedUntil, f.blockedUntilRange)) return false;
+    if (!isWithinDateRange(row.passwordExpiresAt, f.passwordExpiresAtRange)) return false;
+    if (!isWithinDateRange(row.createdAt, f.createdAtRange)) return false;
+    if (f.createdBy.length && !f.createdBy.includes(row.createdBy ?? '')) return false;
     return true;
-  }
-
-  private sameDay(value: string | null, filterDate: string): boolean {
-    return !!value && value.slice(0, 10) === filterDate;
   }
 
   // ------------------------- Seleção em massa -------------------------

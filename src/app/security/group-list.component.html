@@ -27,26 +27,53 @@
   </nb-page-header>
 
   <div class="content-card">
-    <nb-filters-panel [activeFilters]="activeFilters()" (search)="search()" (clear)="clear()">
-      <div class="filter-row">
-        <p-floatlabel variant="on">
-          <input pInputText id="f-name" [ngModel]="filter().name" (ngModelChange)="updateFilter('name', $event)" />
-          <label for="f-name">{{ 'groups.list.filters.name' | translate }}</label>
-        </p-floatlabel>
-
-        <p-floatlabel variant="on">
-          <input pInputText id="f-description" [ngModel]="filter().description" (ngModelChange)="updateFilter('description', $event)" />
-          <label for="f-description">{{ 'groups.list.filters.description' | translate }}</label>
-        </p-floatlabel>
-
-        <div class="filter-field-plain">
-          <label for="f-createdAt">{{ 'groups.list.filters.createdAt' | translate }}</label>
-          <input pInputText id="f-createdAt" type="date" [ngModel]="filter().createdAt" (ngModelChange)="updateFilter('createdAt', $event)" />
+    <nb-filters-panel [activeFilters]="activeFilters()" [actionsAlign]="'start'" (search)="search()" (clear)="clear()">
+      <div class="grid formgrid gap-0 align-items-end">
+        <div class="col-12 md:col-3 p-1">
+          <p-floatlabel variant="on" class="w-full">
+            <input pInputText id="f-name" class="w-full" [ngModel]="filter().name" (ngModelChange)="updateFilter('name', $event)" />
+            <label for="f-name">{{ 'groups.list.filters.name' | translate }}</label>
+          </p-floatlabel>
         </div>
 
-        <div class="filter-field-plain">
-          <label for="f-createdBy">{{ 'groups.list.filters.createdBy' | translate }}</label>
-          <p-select inputId="f-createdBy" [ngModel]="filter().createdBy" (ngModelChange)="updateFilter('createdBy', $event)" [options]="createdByOptions()" [showClear]="true" [placeholder]="'common.all' | translate" />
+        <div class="col-12 md:col-4 p-1">
+          <p-floatlabel variant="on" class="w-full">
+            <input pInputText id="f-description" class="w-full" [ngModel]="filter().description" (ngModelChange)="updateFilter('description', $event)" />
+            <label for="f-description">{{ 'groups.list.filters.description' | translate }}</label>
+          </p-floatlabel>
+        </div>
+
+        <div class="col-12 md:col-2 p-1">
+          <p-floatlabel variant="on" class="w-full">
+            <p-datepicker
+              inputId="f-createdAt"
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [showIcon]="true"
+              selectionMode="range"
+              dateFormat="dd/mm/yy"
+              [readonlyInput]="true"
+              [ngModel]="dateRangeToModel(filter().createdAtRange)"
+              (ngModelChange)="updateFilter('createdAtRange', dateRangeFromModel($event))"
+            />
+            <label for="f-createdAt">{{ 'groups.list.filters.createdAt' | translate }}</label>
+          </p-floatlabel>
+        </div>
+
+        <div class="col-12 md:col-3 p-1">
+          <p-floatlabel variant="on" class="w-full">
+            <p-multiselect
+              inputId="f-createdBy"
+              class="w-full"
+              [filter]="true"
+              [showClear]="true"
+              [ngModel]="filter().createdBy"
+              (ngModelChange)="updateFilter('createdBy', $event)"
+              [options]="createdByOptions()"
+            />
+            <label for="f-createdBy">{{ 'groups.list.filters.createdBy' | translate }}</label>
+          </p-floatlabel>
         </div>
       </div>
     </nb-filters-panel>

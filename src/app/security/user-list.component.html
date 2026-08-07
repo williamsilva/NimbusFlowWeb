@@ -51,53 +51,123 @@
   </nb-page-header>
 
   <div class="content-card">
-    <nb-filters-panel [activeFilters]="activeFilters()" (search)="search()" (clear)="clear()">
-      <div class="filter-row">
-        <p-floatlabel variant="on" style="flex: 0 1 460px; min-width: 340px">
-          <input pInputText id="f-name" [ngModel]="filter().name" (ngModelChange)="updateFilter('name', $event)" />
-          <label for="f-name">{{ 'users.list.filters.name' | translate }}</label>
-        </p-floatlabel>
+    <nb-filters-panel [activeFilters]="activeFilters()" [actionsAlign]="'start'" (search)="search()" (clear)="clear()">
+      <div class="grid formgrid gap-0 align-items-end">
+        <div class="col-12 md:col-3 p-1">
+          <p-floatlabel variant="on" class="w-full">
+            <input pInputText id="f-name" class="w-full" [ngModel]="filter().name" (ngModelChange)="updateFilter('name', $event)" />
+            <label for="f-name">{{ 'users.list.filters.name' | translate }}</label>
+          </p-floatlabel>
+        </div>
 
-        <p-floatlabel variant="on" style="flex: 0 1 460px; min-width: 340px">
-          <input pInputText id="f-userName" [ngModel]="filter().userName" (ngModelChange)="updateFilter('userName', $event)" />
-          <label for="f-userName">{{ 'users.list.filters.userName' | translate }}</label>
-        </p-floatlabel>
+        <div class="col-12 md:col-3 p-1">
+          <p-floatlabel variant="on" class="w-full">
+            <input pInputText id="f-userName" class="w-full" [ngModel]="filter().userName" (ngModelChange)="updateFilter('userName', $event)" />
+            <label for="f-userName">{{ 'users.list.filters.userName' | translate }}</label>
+          </p-floatlabel>
+        </div>
 
-        <p-floatlabel variant="on">
-          <input pInputText id="f-document" [ngModel]="filter().document" (ngModelChange)="updateFilter('document', $event)" />
-          <label for="f-document">{{ 'users.list.filters.document' | translate }}</label>
-        </p-floatlabel>
+        <div class="col-12 md:col-2 p-1">
+          <p-floatlabel variant="on" class="w-full">
+            <input pInputText id="f-document" class="w-full" [ngModel]="filter().document" (ngModelChange)="updateFilter('document', $event)" />
+            <label for="f-document">{{ 'users.list.filters.document' | translate }}</label>
+          </p-floatlabel>
+        </div>
 
-        <p-floatlabel variant="on">
-          <p-multiselect inputId="f-status" [ngModel]="filter().status" (ngModelChange)="updateFilter('status', $event)" [options]="statusSelectOptions" optionLabel="label" optionValue="value" display="chip" />
-          <label for="f-status">{{ 'users.list.filters.status' | translate }}</label>
-        </p-floatlabel>
+        <div class="col-12 md:col-4 p-1">
+          <p-floatlabel variant="on" class="w-full">
+            <p-multiselect inputId="f-status" class="w-full" [showClear]="true" [ngModel]="filter().status" (ngModelChange)="updateFilter('status', $event)" [options]="statusSelectOptions" optionLabel="label" optionValue="value" display="chip" />
+            <label for="f-status">{{ 'users.list.filters.status' | translate }}</label>
+          </p-floatlabel>
+        </div>
       </div>
 
-      <div class="filter-row">
-        <div class="filter-field-plain">
-          <label for="f-lastLoginAt">{{ 'users.list.filters.lastLoginAt' | translate }}</label>
-          <input pInputText id="f-lastLoginAt" type="date" [ngModel]="filter().lastLoginAt" (ngModelChange)="updateFilter('lastLoginAt', $event)" />
+      <div class="grid formgrid gap-0 align-items-end mt-2">
+        <div class="col-12 md:col-3 p-1">
+          <p-floatlabel variant="on" class="w-full">
+            <p-datepicker
+              inputId="f-lastLoginAt"
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [showIcon]="true"
+              selectionMode="range"
+              dateFormat="dd/mm/yy"
+              [readonlyInput]="true"
+              [ngModel]="dateRangeToModel(filter().lastLoginAtRange)"
+              (ngModelChange)="updateFilter('lastLoginAtRange', dateRangeFromModel($event))"
+            />
+            <label for="f-lastLoginAt">{{ 'users.list.filters.lastLoginAt' | translate }}</label>
+          </p-floatlabel>
         </div>
 
-        <div class="filter-field-plain">
-          <label for="f-blockedUntil">{{ 'users.list.filters.blockedUntil' | translate }}</label>
-          <input pInputText id="f-blockedUntil" type="date" [ngModel]="filter().blockedUntil" (ngModelChange)="updateFilter('blockedUntil', $event)" />
+        <div class="col-12 md:col-2 p-1">
+          <p-floatlabel variant="on" class="w-full">
+            <p-datepicker
+              inputId="f-blockedUntil"
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [showIcon]="true"
+              selectionMode="range"
+              dateFormat="dd/mm/yy"
+              [readonlyInput]="true"
+              [ngModel]="dateRangeToModel(filter().blockedUntilRange)"
+              (ngModelChange)="updateFilter('blockedUntilRange', dateRangeFromModel($event))"
+            />
+            <label for="f-blockedUntil">{{ 'users.list.filters.blockedUntil' | translate }}</label>
+          </p-floatlabel>
         </div>
 
-        <div class="filter-field-plain">
-          <label for="f-passwordExpiresAt">{{ 'users.list.filters.passwordExpiresAt' | translate }}</label>
-          <input pInputText id="f-passwordExpiresAt" type="date" [ngModel]="filter().passwordExpiresAt" (ngModelChange)="updateFilter('passwordExpiresAt', $event)" />
+        <div class="col-12 md:col-2 p-1">
+          <p-floatlabel variant="on" class="w-full">
+            <p-datepicker
+              inputId="f-passwordExpiresAt"
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [showIcon]="true"
+              selectionMode="range"
+              dateFormat="dd/mm/yy"
+              [readonlyInput]="true"
+              [ngModel]="dateRangeToModel(filter().passwordExpiresAtRange)"
+              (ngModelChange)="updateFilter('passwordExpiresAtRange', dateRangeFromModel($event))"
+            />
+            <label for="f-passwordExpiresAt">{{ 'users.list.filters.passwordExpiresAt' | translate }}</label>
+          </p-floatlabel>
         </div>
 
-        <div class="filter-field-plain">
-          <label for="f-createdAt">{{ 'users.list.filters.createdAt' | translate }}</label>
-          <input pInputText id="f-createdAt" type="date" [ngModel]="filter().createdAt" (ngModelChange)="updateFilter('createdAt', $event)" />
+        <div class="col-12 md:col-2 p-1">
+          <p-floatlabel variant="on" class="w-full">
+            <p-datepicker
+              inputId="f-createdAt"
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [showIcon]="true"
+              selectionMode="range"
+              dateFormat="dd/mm/yy"
+              [readonlyInput]="true"
+              [ngModel]="dateRangeToModel(filter().createdAtRange)"
+              (ngModelChange)="updateFilter('createdAtRange', dateRangeFromModel($event))"
+            />
+            <label for="f-createdAt">{{ 'users.list.filters.createdAt' | translate }}</label>
+          </p-floatlabel>
         </div>
 
-        <div class="filter-field-plain">
-          <label for="f-createdBy">{{ 'users.list.filters.createdBy' | translate }}</label>
-          <p-select inputId="f-createdBy" [ngModel]="filter().createdBy" (ngModelChange)="updateFilter('createdBy', $event)" [options]="createdByOptions()" [showClear]="true" [placeholder]="'common.all' | translate" />
+        <div class="col-12 md:col-3 p-1">
+          <p-floatlabel variant="on" class="w-full">
+            <p-multiselect
+              inputId="f-createdBy"
+              class="w-full"
+              [filter]="true"
+              [showClear]="true"
+              [ngModel]="filter().createdBy"
+              (ngModelChange)="updateFilter('createdBy', $event)"
+              [options]="createdByOptions()"
+            />
+            <label for="f-createdBy">{{ 'users.list.filters.createdBy' | translate }}</label>
+          </p-floatlabel>
         </div>
       </div>
     </nb-filters-panel>
@@ -110,7 +180,7 @@
     }
 
     <div class="table-container">
-      <p-table [value]="filteredUsers()" [selection]="selected()" (selectionChange)="selected.set($event)" dataKey="id" size="small" stripedRows showGridlines class="cs-admin-table" [tableStyle]="{ 'min-width': '90rem' }" [paginator]="true" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions" (onPage)="onRowsChange($event.rows)">
+      <p-table [value]="filteredUsers()" [selection]="selected()" (selectionChange)="selected.set($event)" dataKey="id" size="small" stripedRows showGridlines class="cs-admin-table" [tableStyle]="{ 'min-width': '90rem' }" [paginator]="true" [rows]="20" [rowsPerPageOptions]="[10, 20, 50]">
         <ng-template #colgroup>
           <colgroup>
             @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {

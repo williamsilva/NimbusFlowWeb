@@ -5,9 +5,10 @@ import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { DatePickerModule } from 'primeng/datepicker';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -16,6 +17,7 @@ import { PermissionService } from '../core/auth/permission.service';
 import { ActiveFilterEntry, NbFiltersPanelComponent } from '../shared/filters-panel/nb-filters-panel.component';
 import { NbPageHeaderComponent } from '../shared/page-header/nb-page-header.component';
 import { NbStatefulListPage } from '../shared/list-base/nb-stateful-list-page';
+import { DateRange, isWithinDateRange } from '../shared/utils/date-range';
 import { GroupAdminService, GroupRef, GroupSummary } from './group.service';
 import { GroupsPermissionPolicy } from './policy/groups-permission.policy';
 import { GroupFormComponent } from './group-form.component';
@@ -23,8 +25,8 @@ import { GroupFormComponent } from './group-form.component';
 interface GroupsFilterState {
   name: string;
   description: string;
-  createdAt: string;
-  createdBy: string;
+  createdAtRange: DateRange;
+  createdBy: string[];
 }
 
 @Component({
@@ -35,9 +37,10 @@ interface GroupsFilterState {
     FormsModule,
     RouterLink,
     ButtonModule,
+    DatePickerModule,
     FloatLabelModule,
     InputTextModule,
-    SelectModule,
+    MultiSelectModule,
     TableModule,
     TooltipModule,
     NbFiltersPanelComponent,
@@ -80,7 +83,7 @@ export class GroupListComponent extends NbStatefulListPage<GroupsFilterState> im
   }
 
   protected override emptyFilter(): GroupsFilterState {
-    return { name: '', description: '', createdAt: '', createdBy: '' };
+    return { name: '', description: '', createdAtRange: null, createdBy: [] };
   }
 
   readonly filteredGroups = computed(() => {
@@ -93,16 +96,25 @@ export class GroupListComponent extends NbStatefulListPage<GroupsFilterState> im
     const entries: ActiveFilterEntry[] = [];
     if (f.name) entries.push({ label: this.i18n.tUi('groups.list.filters.name'), value: f.name });
     if (f.description) entries.push({ label: this.i18n.tUi('groups.list.filters.description'), value: f.description });
-    if (f.createdAt) entries.push({ label: this.i18n.tUi('groups.list.filters.createdAt'), value: f.createdAt });
-    if (f.createdBy) entries.push({ label: this.i18n.tUi('groups.list.filters.createdBy'), value: f.createdBy });
+    if (f.createdAtRange) {
+      entries.push({
+        label: this.i18n.tUi('groups.list.filters.createdAt'),
+        value: `${this.formatDate(f.createdAtRange[0])} – ${this.formatDate(f.createdAtRange[1])}`,
+      });
+    }
+    if (f.createdBy.length) entries.push({ label: this.i18n.tUi('groups.list.filters.createdBy'), value: f.createdBy.join(', ') });
     return entries;
+  }
+
+  private formatDate(value: string): string {
+    return new Intl.DateTimeFormat(this.i18n.getLocale(), { dateStyle: 'short' }).format(new Date(value));
   }
 
   private matchesFilter(row: GroupSummary, f: GroupsFilterState): boolean {
     if (f.name && !row.name.toLowerCase().includes(f.name.toLowerCase())) return false;
     if (f.description && !row.description.toLowerCase().includes(f.description.toLowerCase())) return false;
-    if (f.createdAt && row.createdAt.slice(0, 10) !== f.createdAt) return false;
-    if (f.createdBy && row.createdBy !== f.createdBy) return false;
+    if (!isWithinDateRange(row.createdAt, f.createdAtRange)) return false;
+    if (f.createdBy.length && !f.createdBy.includes(row.createdBy ?? '')) return false;
     return true;
   }
 
