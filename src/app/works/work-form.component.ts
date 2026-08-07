@@ -2,16 +2,14 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
+import { DatePickerModule } from 'primeng/datepicker';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
+import { TableModule } from 'primeng/table';
+import { TextareaModule } from 'primeng/textarea';
 import { forkJoin } from 'rxjs';
 
 import { Addendum, AddendumRequest, AddendumService } from '../addendums/addendum.service';
@@ -30,18 +28,19 @@ import { Work, WorkRequest, WorkService, WorkStatus } from './work.service';
         DecimalPipe,
         ReactiveFormsModule,
         RouterLink,
-        MatButtonModule,
-        MatCardModule,
-        MatDatepickerModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatSelectModule,
-        MatTableModule,
+        ButtonModule,
+        DatePickerModule,
+        FloatLabelModule,
+        InputTextModule,
+        SelectModule,
+        TableModule,
+        TextareaModule,
         MapPickerComponent,
         TranslatePipe,
     ],
-    providers: [provideNativeDateAdapter()],
+    // DatePipe é injetado no construtor (não só usado como pipe de template) - precisa estar em
+    // providers, "imports" só resolve o uso como pipe/diretiva/componente no template.
+    providers: [DatePipe],
     templateUrl: './work-form.component.html',
     styleUrl: './work-form.component.scss'
 })

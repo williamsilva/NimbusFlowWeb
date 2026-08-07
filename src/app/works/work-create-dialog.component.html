@@ -1,70 +1,58 @@
-<h2 mat-dialog-title>{{ 'works.createDialog.title' | translate }}</h2>
+<form [formGroup]="form" class="dialog-form">
+  <div class="dialog-form-grid">
+    <p-floatlabel variant="on">
+      <input pInputText id="name" formControlName="name" required />
+      <label for="name">{{ 'works.fields.name' | translate }}</label>
+    </p-floatlabel>
+    @if (form.controls.name.touched && form.controls.name.hasError('required')) {
+      <small class="field-error">{{ 'works.fields.nameRequired' | translate }}</small>
+    }
 
-<mat-dialog-content>
-  <form [formGroup]="form" class="dialog-form">
-    <div class="dialog-form-grid">
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'works.fields.name' | translate }}</mat-label>
-        <input matInput formControlName="name" required />
-        @if (form.controls.name.hasError('required')) {
-          <mat-error>{{ 'works.fields.nameRequired' | translate }}</mat-error>
-        }
-      </mat-form-field>
+    <p-floatlabel variant="on">
+      <p-select inputId="supplierId" formControlName="supplierId" [options]="suppliers" optionLabel="companyName" optionValue="id" />
+      <label for="supplierId">{{ 'works.fields.supplier' | translate }}</label>
+    </p-floatlabel>
+    @if (form.controls.supplierId.touched && form.controls.supplierId.hasError('required')) {
+      <small class="field-error">{{ 'works.fields.supplierRequired' | translate }}</small>
+    }
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'works.fields.supplier' | translate }}</mat-label>
-        <mat-select formControlName="supplierId" required>
-          @for (supplier of suppliers; track supplier.id) {
-            <mat-option [value]="supplier.id">{{ supplier.companyName }}</mat-option>
-          }
-        </mat-select>
-        @if (form.controls.supplierId.hasError('required')) {
-          <mat-error>{{ 'works.fields.supplierRequired' | translate }}</mat-error>
-        }
-      </mat-form-field>
+    <p-floatlabel variant="on">
+      <p-datepicker inputId="startDate" formControlName="startDate" dateFormat="dd/mm/yy" [showIcon]="true" />
+      <label for="startDate">{{ 'works.fields.startDate' | translate }}</label>
+    </p-floatlabel>
+    @if (form.controls.startDate.touched && form.controls.startDate.hasError('required')) {
+      <small class="field-error">{{ 'works.fields.startDateRequired' | translate }}</small>
+    }
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'works.fields.startDate' | translate }}</mat-label>
-        <input matInput [matDatepicker]="startPicker" formControlName="startDate" required />
-        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
-        <mat-datepicker #startPicker></mat-datepicker>
-        @if (form.controls.startDate.hasError('required')) {
-          <mat-error>{{ 'works.fields.startDateRequired' | translate }}</mat-error>
-        }
-      </mat-form-field>
+    <p-floatlabel variant="on">
+      <p-datepicker inputId="expectedEndDate" formControlName="expectedEndDate" dateFormat="dd/mm/yy" [showIcon]="true" />
+      <label for="expectedEndDate">{{ 'works.fields.expectedEndDate' | translate }}</label>
+    </p-floatlabel>
+    @if (form.controls.expectedEndDate.touched && form.controls.expectedEndDate.hasError('required')) {
+      <small class="field-error">{{ 'works.fields.expectedEndDateRequired' | translate }}</small>
+    }
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'works.fields.expectedEndDate' | translate }}</mat-label>
-        <input matInput [matDatepicker]="expectedEndPicker" formControlName="expectedEndDate" required />
-        <mat-datepicker-toggle matIconSuffix [for]="expectedEndPicker"></mat-datepicker-toggle>
-        <mat-datepicker #expectedEndPicker></mat-datepicker>
-        @if (form.controls.expectedEndDate.hasError('required')) {
-          <mat-error>{{ 'works.fields.expectedEndDateRequired' | translate }}</mat-error>
-        }
-      </mat-form-field>
+    <p-floatlabel variant="on">
+      <input pInputText id="initialAmount" type="number" step="0.01" formControlName="initialAmount" required />
+      <label for="initialAmount">{{ 'works.fields.initialAmount' | translate }}</label>
+    </p-floatlabel>
+    @if (form.controls.initialAmount.touched && form.controls.initialAmount.hasError('required')) {
+      <small class="field-error">{{ 'works.fields.initialAmountRequired' | translate }}</small>
+    }
+  </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'works.fields.initialAmount' | translate }}</mat-label>
-        <input matInput type="number" step="0.01" formControlName="initialAmount" required />
-        @if (form.controls.initialAmount.hasError('required')) {
-          <mat-error>{{ 'works.fields.initialAmountRequired' | translate }}</mat-error>
-        }
-      </mat-form-field>
-    </div>
+  <h4>{{ 'works.fields.geolocationTitle' | translate }}</h4>
+  <p class="hint">{{ 'works.fields.geolocationHint' | translate }}</p>
+  <app-map-picker
+    [latitude]="form.controls.latitude.value"
+    [longitude]="form.controls.longitude.value"
+    (positionChange)="onPositionChange($event)"
+  ></app-map-picker>
 
-    <h4>{{ 'works.fields.geolocationTitle' | translate }}</h4>
-    <p class="hint">{{ 'works.fields.geolocationHint' | translate }}</p>
-    <app-map-picker
-      [latitude]="form.controls.latitude.value"
-      [longitude]="form.controls.longitude.value"
-      (positionChange)="onPositionChange($event)"
-    ></app-map-picker>
-  </form>
-</mat-dialog-content>
-
-<mat-dialog-actions align="end">
-  <button mat-button type="button" (click)="cancel()" [disabled]="saving">{{ 'common.cancel' | translate }}</button>
-  <button mat-raised-button color="primary" type="button" (click)="save()" [disabled]="saving">
-    {{ (saving ? 'common.saving' : 'common.save') | translate }}
-  </button>
-</mat-dialog-actions>
+  <div class="dialog-actions">
+    <button pButton type="button" severity="secondary" [outlined]="true" (click)="cancel()" [disabled]="saving">{{ 'common.cancel' | translate }}</button>
+    <button pButton type="button" (click)="save()" [disabled]="saving">
+      {{ (saving ? 'common.saving' : 'common.save') | translate }}
+    </button>
+  </div>
+</form>

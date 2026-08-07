@@ -2,18 +2,18 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { TextareaModule } from 'primeng/textarea';
 
 import { I18nService } from '../core/i18n/i18n.service';
 import { MeasurementRequest, MeasurementService } from './measurement.service';
 
 @Component({
     selector: 'app-measurement-form',
-    imports: [ReactiveFormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, TranslatePipe],
+    imports: [ReactiveFormsModule, ButtonModule, FloatLabelModule, InputTextModule, TextareaModule, TranslatePipe],
     templateUrl: './measurement-form.component.html',
     styleUrl: './measurement-form.component.scss'
 })

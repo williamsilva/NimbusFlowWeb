@@ -311,6 +311,19 @@ table.mat-mdc-table {
   width: 100%;
 }
 
+// Equivalente PrimeNG (telas ja migradas: Obras, Medicoes).
+.form p-floatlabel {
+  display: flex;
+  width: 100%;
+
+  input,
+  textarea,
+  p-select,
+  p-datepicker {
+    width: 100%;
+  }
+}
+
 .actions {
   display: flex;
   gap: 12px;

@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
+import { DatePickerModule } from 'primeng/datepicker';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
+import { SelectModule } from 'primeng/select';
 
 import { I18nService } from '../core/i18n/i18n.service';
 import { Supplier, SupplierService } from '../suppliers/supplier.service';
@@ -19,16 +18,14 @@ import { Work, WorkRequest, WorkService } from './work.service';
     selector: 'app-work-create-dialog',
     imports: [
         ReactiveFormsModule,
-        MatButtonModule,
-        MatDatepickerModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
+        ButtonModule,
+        DatePickerModule,
+        FloatLabelModule,
+        InputTextModule,
+        SelectModule,
         MapPickerComponent,
         TranslatePipe,
     ],
-    providers: [provideNativeDateAdapter()],
     templateUrl: './work-create-dialog.component.html',
     styleUrl: './work-create-dialog.component.scss'
 })
@@ -41,7 +38,7 @@ export class WorkCreateDialogComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly workService: WorkService,
     private readonly supplierService: SupplierService,
-    private readonly dialogRef: MatDialogRef<WorkCreateDialogComponent>,
+    private readonly dialogRef: DynamicDialogRef,
     private readonly messageService: MessageService,
     private readonly i18n: I18nService,
   ) {
