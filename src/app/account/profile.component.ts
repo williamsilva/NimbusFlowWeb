@@ -1,14 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDialog } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
+import { DialogService } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TagModule } from 'primeng/tag';
 import { forkJoin } from 'rxjs';
 
 import { AuthService, CurrentUser } from '../core/auth/auth.service';
@@ -19,17 +17,7 @@ import { AccountService, Profile } from './account.service';
 
 @Component({
     selector: 'app-profile',
-    imports: [
-        CommonModule,
-        RouterLink,
-        MatButtonModule,
-        MatCardModule,
-        MatChipsModule,
-        MatIconModule,
-        MatProgressSpinnerModule,
-        TranslatePipe,
-        TaxIdPipe,
-    ],
+    imports: [CommonModule, RouterLink, ButtonModule, ProgressSpinnerModule, TagModule, TranslatePipe, TaxIdPipe],
     templateUrl: './profile.component.html',
     styleUrl: './profile.component.scss'
 })
@@ -43,7 +31,7 @@ export class ProfileComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly i18n: I18nService,
     private readonly messageService: MessageService,
-    private readonly dialog: MatDialog,
+    private readonly dialogService: DialogService,
   ) {}
 
   ngOnInit(): void {
@@ -91,10 +79,10 @@ export class ProfileComponent implements OnInit {
   }
 
   openGroupsDialog(): void {
-    this.dialog.open(ListDialogComponent, {
-      autoFocus: false,
-      maxWidth: '700px',
-      width: '92vw',
+    this.dialogService.open(ListDialogComponent, {
+      header: this.i18n.tUi('account.profile.groups'),
+      width: 'min(700px, 92vw)',
+      modal: true,
       data: {
         title: this.i18n.tUi('account.profile.groups'),
         subtitle: this.i18n.tUi('account.profile.groupsSubtitle'),
@@ -104,10 +92,10 @@ export class ProfileComponent implements OnInit {
   }
 
   openPermissionsDialog(): void {
-    this.dialog.open(ListDialogComponent, {
-      autoFocus: false,
-      maxWidth: '1100px',
-      width: '92vw',
+    this.dialogService.open(ListDialogComponent, {
+      header: this.i18n.tUi('account.profile.permissions'),
+      width: 'min(1100px, 92vw)',
+      modal: true,
       data: {
         title: this.i18n.tUi('account.profile.permissions'),
         subtitle: this.i18n.tUi('account.profile.permissionsSubtitle'),

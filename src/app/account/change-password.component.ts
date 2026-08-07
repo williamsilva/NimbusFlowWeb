@@ -3,14 +3,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 
@@ -24,12 +23,11 @@ const KNOWN_ERROR_CODES = ['PASSWORD_CURRENT_INVALID', 'PASSWORD_POLICY_INVALID'
     imports: [
     ReactiveFormsModule,
     RouterLink,
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
+    ButtonModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
+    ProgressSpinnerModule,
     TranslatePipe
 ],
     templateUrl: './change-password.component.html',
@@ -115,9 +113,9 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   }
 
   ruleIcon(state: string): string {
-    if (state === 'OK') return 'check_circle';
-    if (state === 'FAIL') return 'cancel';
-    return 'remove_circle_outline';
+    if (state === 'OK') return 'pi pi-check-circle';
+    if (state === 'FAIL') return 'pi pi-times-circle';
+    return 'pi pi-minus-circle';
   }
 
   save(): void {

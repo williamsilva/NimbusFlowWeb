@@ -1,33 +1,18 @@
 <div class="list-dialog">
-  <div class="list-dialog__header">
-    <h2 mat-dialog-title>{{ data.title }}</h2>
-    <button
-      mat-icon-button
-      type="button"
-      class="list-dialog__close"
-      [attr.aria-label]="'common.close' | translate"
-      (click)="close()"
-    >
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
+  @if (data.subtitle) {
+    <p class="list-dialog__subtitle">{{ data.subtitle }}</p>
+  }
 
-  <mat-dialog-content>
-    @if (data.subtitle) {
-      <p class="list-dialog__subtitle">{{ data.subtitle }}</p>
-    }
-
-    @if (data.items.length) {
-      <div class="list-dialog__grid">
-        @for (item of data.items; track item; let i = $index) {
-          <div class="list-dialog__item" [class]="'list-dialog__item--c' + (i % 6)">
-            <span class="list-dialog__index">{{ i + 1 }}</span>
-            <span class="list-dialog__text">{{ item }}</span>
-          </div>
-        }
-      </div>
-    } @else {
-      <p class="list-dialog__empty">{{ 'common.notInformed' | translate }}</p>
-    }
-  </mat-dialog-content>
+  @if (data.items.length) {
+    <div class="list-dialog__grid">
+      @for (item of data.items; track item; let i = $index) {
+        <div class="list-dialog__item" [class]="'list-dialog__item--c' + (i % 6)">
+          <span class="list-dialog__index">{{ i + 1 }}</span>
+          <span class="list-dialog__text">{{ item }}</span>
+        </div>
+      }
+    </div>
+  } @else {
+    <p class="list-dialog__empty">{{ 'common.notInformed' | translate }}</p>
+  }
 </div>

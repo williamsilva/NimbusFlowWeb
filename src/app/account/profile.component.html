@@ -6,42 +6,42 @@
 
   @if (loading) {
     <div class="profile-loading">
-      <mat-spinner diameter="40"></mat-spinner>
+      <p-progressSpinner [style]="{ width: '40px', height: '40px' }" strokeWidth="4" />
     </div>
   } @else if (profile) {
     <div class="profile-grid">
-      <mat-card class="content-card hero-card">
+      <div class="content-card hero-card">
         <div class="avatar">{{ initials }}</div>
         <div class="hero-name">{{ profile.name }}</div>
         <div class="hero-username">{{ profile.userName }}</div>
 
-        <mat-chip-set class="status-chip">
+        <div class="status-chip">
           @if (isBlocked) {
-            <mat-chip color="warn">{{ 'account.profile.status3' | translate }}</mat-chip>
+            <p-tag severity="danger" [value]="'account.profile.status3' | translate" />
           } @else {
-            <mat-chip>{{ statusKey(profile.status) | translate }}</mat-chip>
+            <p-tag severity="secondary" [value]="statusKey(profile.status) | translate" />
           }
-        </mat-chip-set>
+        </div>
 
         <button type="button" class="hero-chip-trigger" (click)="openGroupsDialog()">
           <span class="hero-chip-label">{{ 'account.profile.groups' | translate }}</span>
           <span class="hero-chip-count">{{ countLabel(me?.groups?.length ?? 0) }}</span>
-          <mat-icon class="hero-chip-caret">chevron_right</mat-icon>
+          <i class="pi pi-chevron-right hero-chip-caret"></i>
         </button>
 
         <button type="button" class="hero-chip-trigger" (click)="openPermissionsDialog()">
           <span class="hero-chip-label">{{ 'account.profile.permissions' | translate }}</span>
           <span class="hero-chip-count">{{ countLabel(me?.permissions?.length ?? 0) }}</span>
-          <mat-icon class="hero-chip-caret">chevron_right</mat-icon>
+          <i class="pi pi-chevron-right hero-chip-caret"></i>
         </button>
 
-        <button mat-raised-button color="primary" class="change-password-btn" routerLink="/account/password">
-          <mat-icon>vpn_key</mat-icon>
+        <button pButton class="change-password-btn" routerLink="/account/password">
+          <i class="pi pi-key"></i>
           {{ 'account.profile.changePassword' | translate }}
         </button>
-      </mat-card>
+      </div>
 
-      <mat-card class="content-card data-card">
+      <div class="content-card data-card">
         <h4>{{ 'account.profile.userDataTitle' | translate }}</h4>
 
         <div class="section-title">{{ 'account.profile.sectionIdentification' | translate }}</div>
@@ -101,7 +101,7 @@
             </span>
           </div>
         </div>
-      </mat-card>
+      </div>
     </div>
   }
 </div>
