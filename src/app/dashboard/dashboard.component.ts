@@ -2,20 +2,17 @@ import { AfterViewInit, Component, OnDestroy, OnInit, effect } from '@angular/co
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import * as L from 'leaflet';
 import { BaseChartDirective } from 'ng2-charts';
 import { forkJoin } from 'rxjs';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
+import { FloatLabelModule } from 'primeng/floatlabel';
 import { MessageService } from 'primeng/api';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SelectModule } from 'primeng/select';
+import { TableModule } from 'primeng/table';
 
 import {
   DashboardService,
@@ -55,14 +52,11 @@ const STATUS_COLORS: Record<WorkStatus, string> = {
         CommonModule,
         FormsModule,
         RouterLink,
-        MatButtonModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatProgressSpinnerModule,
-        MatSelectModule,
-        MatTableModule,
-        MatTooltipModule,
+        ButtonModule,
+        FloatLabelModule,
+        ProgressSpinnerModule,
+        SelectModule,
+        TableModule,
         BaseChartDirective,
         TranslatePipe,
     ],
@@ -80,6 +74,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly statusOptions = Object.keys(STATUS_COLORS) as WorkStatus[];
   readonly overdueColumns = ['name', 'supplierName', 'expectedEndDate', 'status'];
   readonly rankingColumns = ['supplierName', 'totalContracted', 'totalPaid'];
+
+  get mapStatusSelectOptions(): { label: string; value: WorkStatus | 'ALL' }[] {
+    return [
+      { label: this.i18n.tUi('dashboard.map.filterAll'), value: 'ALL' },
+      ...this.statusOptions.map((status) => ({ label: this.statusLabel(status), value: status })),
+    ];
+  }
 
   statusChartData: ChartData<'doughnut'> = { labels: [], datasets: [{ data: [] }] };
   readonly statusChartOptions: ChartConfiguration<'doughnut'>['options'] = {

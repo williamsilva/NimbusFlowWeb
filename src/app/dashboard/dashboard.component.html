@@ -2,12 +2,12 @@
   <div class="page-header">
     <h2>{{ 'dashboard.title' | translate }}</h2>
     <div class="page-header__actions">
-      <button mat-stroked-button (click)="exportExcel()" [disabled]="exportingExcel">
-        <mat-icon>grid_on</mat-icon>
+      <button pButton severity="secondary" [outlined]="true" [loading]="exportingExcel" (click)="exportExcel()" [disabled]="exportingExcel">
+        <i class="pi pi-table"></i>
         {{ (exportingExcel ? 'dashboard.export.generating' : 'dashboard.export.excel') | translate }}
       </button>
-      <button mat-stroked-button (click)="exportPdf()" [disabled]="exportingPdf">
-        <mat-icon>picture_as_pdf</mat-icon>
+      <button pButton severity="secondary" [outlined]="true" [loading]="exportingPdf" (click)="exportPdf()" [disabled]="exportingPdf">
+        <i class="pi pi-file-pdf"></i>
         {{ (exportingPdf ? 'dashboard.export.generating' : 'dashboard.export.pdf') | translate }}
       </button>
     </div>
@@ -15,92 +15,86 @@
 
   @if (loading) {
     <div class="dashboard-loading">
-      <mat-spinner diameter="40"></mat-spinner>
+      <p-progressSpinner [style]="{ width: '40px', height: '40px' }" strokeWidth="4" />
       <p>{{ 'dashboard.loadingIndicators' | translate }}</p>
     </div>
   } @else if (summary) {
     <div class="kpi-grid">
-      <mat-card class="content-card kpi-card">
+      <div class="content-card kpi-card">
         <span class="kpi-card__label">{{ 'dashboard.kpi.totalContracted' | translate }}</span>
         <span class="kpi-card__value">R$ {{ summary.totalContracted | number: '1.2-2' }}</span>
-      </mat-card>
-      <mat-card class="content-card kpi-card">
+      </div>
+      <div class="content-card kpi-card">
         <span class="kpi-card__label">{{ 'dashboard.kpi.totalPaid' | translate }}</span>
         <span class="kpi-card__value">R$ {{ summary.totalPaid | number: '1.2-2' }}</span>
-      </mat-card>
-      <mat-card class="content-card kpi-card">
+      </div>
+      <div class="content-card kpi-card">
         <span class="kpi-card__label">{{ 'dashboard.kpi.balance' | translate }}</span>
         <span class="kpi-card__value">R$ {{ summary.totalBalance | number: '1.2-2' }}</span>
-      </mat-card>
-      <mat-card class="content-card kpi-card">
+      </div>
+      <div class="content-card kpi-card">
         <span class="kpi-card__label">{{ 'dashboard.kpi.addendumIncrease' | translate }}</span>
         <span class="kpi-card__value">{{ summary.addendumIncreasePercentage | number: '1.1-1' }}%</span>
-      </mat-card>
-      <mat-card class="content-card kpi-card kpi-card--warn">
+      </div>
+      <div class="content-card kpi-card kpi-card--warn">
         <span class="kpi-card__label">{{ 'dashboard.kpi.overdueWorks' | translate }}</span>
         <span class="kpi-card__value">{{ summary.overdueWorksCount }}</span>
-      </mat-card>
-      <mat-card class="content-card kpi-card kpi-card--warn">
+      </div>
+      <div class="content-card kpi-card kpi-card--warn">
         <span class="kpi-card__label">{{ 'dashboard.kpi.pendingAddendums' | translate }}</span>
         <span class="kpi-card__value">{{ summary.pendingAddendumsCount }}</span>
-      </mat-card>
-      <mat-card class="content-card kpi-card kpi-card--warn">
+      </div>
+      <div class="content-card kpi-card kpi-card--warn">
         <span class="kpi-card__label">{{ 'dashboard.kpi.pendingMeasurements' | translate }}</span>
         <span class="kpi-card__value">{{ summary.pendingMeasurementsCount }}</span>
-      </mat-card>
+      </div>
     </div>
 
     <div class="dashboard-grid dashboard-grid--charts">
-      <mat-card class="content-card">
+      <div class="content-card">
         <h4>{{ 'dashboard.statusChart.title' | translate }}</h4>
         <div class="chart-container chart-container--doughnut">
           <canvas baseChart [data]="statusChartData" [options]="statusChartOptions" type="doughnut"></canvas>
         </div>
-      </mat-card>
+      </div>
 
-      <mat-card class="content-card">
+      <div class="content-card">
         <h4>{{ 'dashboard.rankingChart.title' | translate }}</h4>
         <div class="chart-container">
           <canvas baseChart [data]="rankingChartData" [options]="rankingChartOptions" type="bar"></canvas>
         </div>
-      </mat-card>
+      </div>
     </div>
 
-    <mat-card class="content-card">
+    <div class="content-card">
       <h4>{{ 'dashboard.overdueTable.title' | translate }}</h4>
       @if (overdueWorks.length === 0) {
         <p class="empty-state">{{ 'dashboard.overdueTable.empty' | translate }}</p>
       } @else {
         <div class="table-container">
-          <table mat-table [dataSource]="overdueWorks">
-            <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef>{{ 'dashboard.overdueTable.columns.work' | translate }}</th>
-              <td mat-cell *matCellDef="let work">
-                <a [routerLink]="['/works', work.id, 'edit']">{{ work.name }}</a>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="supplierName">
-              <th mat-header-cell *matHeaderCellDef>{{ 'dashboard.overdueTable.columns.supplier' | translate }}</th>
-              <td mat-cell *matCellDef="let work">{{ work.supplierName }}</td>
-            </ng-container>
-            <ng-container matColumnDef="expectedEndDate">
-              <th mat-header-cell *matHeaderCellDef>
-                {{ 'dashboard.overdueTable.columns.expectedEndDate' | translate }}
-              </th>
-              <td mat-cell *matCellDef="let work">{{ work.expectedEndDate }}</td>
-            </ng-container>
-            <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef>{{ 'dashboard.overdueTable.columns.status' | translate }}</th>
-              <td mat-cell *matCellDef="let work">{{ statusLabel(work.status) }}</td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="overdueColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: overdueColumns"></tr>
-          </table>
+          <p-table [value]="overdueWorks" size="small" class="compact-table">
+            <ng-template #header>
+              <tr>
+                <th>{{ 'dashboard.overdueTable.columns.work' | translate }}</th>
+                <th>{{ 'dashboard.overdueTable.columns.supplier' | translate }}</th>
+                <th>{{ 'dashboard.overdueTable.columns.expectedEndDate' | translate }}</th>
+                <th>{{ 'dashboard.overdueTable.columns.status' | translate }}</th>
+              </tr>
+            </ng-template>
+            <ng-template #body let-work>
+              <tr>
+                <td><a [routerLink]="['/works', work.id, 'edit']">{{ work.name }}</a></td>
+                <td>{{ work.supplierName }}</td>
+                <td>{{ work.expectedEndDate }}</td>
+                <td>{{ statusLabel(work.status) }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
         </div>
       }
-    </mat-card>
+    </div>
 
-    <mat-card class="content-card">
+    <div class="content-card">
       <h4>{{ 'dashboard.pendingApprovals.title' | translate }}</h4>
       <div class="dashboard-grid">
         <div>
@@ -139,7 +133,7 @@
           }
         </div>
       </div>
-    </mat-card>
+    </div>
   }
 
   <!--
@@ -150,35 +144,26 @@
     ficasse dentro do bloco condicional acima, a div ainda não existiria nesse momento e o
     Leaflet falharia com "Map container not found".
   -->
-  <mat-card class="content-card">
+  <div class="content-card">
     <div class="map-card-header">
       <h4>{{ 'dashboard.map.title' | translate }}</h4>
-      <mat-form-field appearance="outline" class="status-filter">
-        <mat-label>{{ 'dashboard.map.filterLabel' | translate }}</mat-label>
-        <mat-select [(ngModel)]="mapStatusFilter" (selectionChange)="onMapStatusFilterChange()">
-          <mat-option value="ALL">{{ 'dashboard.map.filterAll' | translate }}</mat-option>
-          @for (status of statusOptions; track status) {
-            <mat-option [value]="status">{{ statusLabel(status) }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+      <p-floatlabel variant="on" class="status-filter">
+        <p-select inputId="mapStatusFilter" [(ngModel)]="mapStatusFilter" [options]="mapStatusSelectOptions" optionLabel="label" optionValue="value" (onChange)="onMapStatusFilterChange()" />
+        <label for="mapStatusFilter">{{ 'dashboard.map.filterLabel' | translate }}</label>
+      </p-floatlabel>
     </div>
     <div class="dashboard-map" [id]="mapId"></div>
-  </mat-card>
+  </div>
 
-  <mat-card class="content-card">
+  <div class="content-card">
     <h4>{{ 'dashboard.timeline.title' | translate }}</h4>
-    <mat-form-field appearance="outline" class="timeline-select">
-      <mat-label>{{ 'dashboard.timeline.selectWork' | translate }}</mat-label>
-      <mat-select [(ngModel)]="selectedWorkIdForTimeline" (selectionChange)="onTimelineWorkChange()">
-        @for (work of works; track work.id) {
-          <mat-option [value]="work.id">{{ work.name }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+    <p-floatlabel variant="on" class="timeline-select">
+      <p-select inputId="timelineWork" [(ngModel)]="selectedWorkIdForTimeline" [options]="works" optionLabel="name" optionValue="id" (onChange)="onTimelineWorkChange()" />
+      <label for="timelineWork">{{ 'dashboard.timeline.selectWork' | translate }}</label>
+    </p-floatlabel>
 
     @if (loadingTimeline) {
-      <mat-spinner diameter="30"></mat-spinner>
+      <p-progressSpinner [style]="{ width: '30px', height: '30px' }" strokeWidth="4" />
     } @else if (timelineEvents.length > 0) {
       <ul class="timeline">
         @for (event of timelineEvents; track $index) {
@@ -195,5 +180,5 @@
     } @else if (selectedWorkIdForTimeline) {
       <p class="empty-state">{{ 'dashboard.timeline.empty' | translate }}</p>
     }
-  </mat-card>
+  </div>
 </div>

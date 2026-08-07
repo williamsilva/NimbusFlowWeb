@@ -47,7 +47,7 @@
   margin-bottom: 16px;
 }
 
-.dashboard-grid--charts mat-card {
+.dashboard-grid--charts .content-card {
   min-height: 320px;
 }
 
@@ -91,7 +91,12 @@
 
 .status-filter,
 .timeline-select {
+  display: flex;
   width: 220px;
+
+  p-select {
+    width: 100%;
+  }
 }
 
 .dashboard-map {
