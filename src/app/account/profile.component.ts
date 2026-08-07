@@ -7,8 +7,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
 import { forkJoin } from 'rxjs';
 
 import { AuthService, CurrentUser } from '../core/auth/auth.service';
@@ -42,7 +42,7 @@ export class ProfileComponent implements OnInit {
     private readonly accountService: AccountService,
     private readonly authService: AuthService,
     private readonly i18n: I18nService,
-    private readonly snackBar: MatSnackBar,
+    private readonly messageService: MessageService,
     private readonly dialog: MatDialog,
   ) {}
 
@@ -58,7 +58,11 @@ export class ProfileComponent implements OnInit {
       },
       error: () => {
         this.loading = false;
-        this.snackBar.open(this.i18n.tUi('account.profile.loadError'), this.i18n.tUi('common.ok'), { duration: 5000 });
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('account.profile.loadError'),
+        });
       },
     });
   }

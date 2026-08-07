@@ -4,8 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
 
 import { I18nService } from '../core/i18n/i18n.service';
 import { SuggestionRequest, SuggestionService } from './suggestion.service';
@@ -25,7 +25,7 @@ export class SuggestionFormComponent {
     private readonly fb: FormBuilder,
     private readonly suggestionService: SuggestionService,
     private readonly dialogRef: MatDialogRef<SuggestionFormComponent>,
-    private readonly snackBar: MatSnackBar,
+    private readonly messageService: MessageService,
     private readonly i18n: I18nService,
   ) {
     this.form = this.fb.group({
@@ -45,7 +45,11 @@ export class SuggestionFormComponent {
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.snackBar.open(this.i18n.tUi('suggestions.form.reviewFields'), this.i18n.tUi('common.ok'), { duration: 4000 });
+      this.messageService.add({
+        severity: 'warn',
+        summary: this.i18n.tUi('common.warning'),
+        detail: this.i18n.tUi('suggestions.form.reviewFields'),
+      });
       return;
     }
 
@@ -55,7 +59,11 @@ export class SuggestionFormComponent {
       next: () => this.dialogRef.close(true),
       error: () => {
         this.saving = false;
-        this.snackBar.open(this.i18n.tUi('suggestions.form.saveError'), this.i18n.tUi('common.ok'), { duration: 5000 });
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('suggestions.form.saveError'),
+        });
       },
     });
   }

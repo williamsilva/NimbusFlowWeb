@@ -9,8 +9,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
 
@@ -53,7 +53,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder,
     private readonly accountService: AccountService,
     private readonly i18n: I18nService,
-    private readonly snackBar: MatSnackBar,
+    private readonly messageService: MessageService,
     private readonly location: Location,
   ) {
     this.form = this.fb.group({
@@ -73,7 +73,12 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (policy) => (this.policy = policy),
-        error: () => this.snackBar.open(this.i18n.tUi('account.password.policyLoadError'), this.i18n.tUi('common.ok'), { duration: 4000 }),
+        error: () =>
+          this.messageService.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('account.password.policyLoadError'),
+          }),
       });
 
     this.valueChangesSub = this.form.valueChanges.subscribe(() => this.triggerCheck());
@@ -123,7 +128,11 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
     const { currentPassword, newPassword, confirmPassword } = this.form.getRawValue();
     if (newPassword !== confirmPassword) {
-      this.snackBar.open(this.i18n.tUi('account.password.mismatch'), this.i18n.tUi('common.ok'), { duration: 4000 });
+      this.messageService.add({
+        severity: 'warn',
+        summary: this.i18n.tUi('common.warning'),
+        detail: this.i18n.tUi('account.password.mismatch'),
+      });
       return;
     }
 
@@ -133,13 +142,21 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.saving = false;
-          this.snackBar.open(this.i18n.tUi('account.password.success'), this.i18n.tUi('common.ok'), { duration: 4000 });
+          this.messageService.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi('account.password.success'),
+          });
           this.form.reset();
           this.loadIdlePolicy();
         },
         error: (err: HttpErrorResponse) => {
           this.saving = false;
-          this.snackBar.open(this.i18n.tUi(this.errorKeyFor(err)), this.i18n.tUi('common.ok'), { duration: 5000 });
+          this.messageService.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi(this.errorKeyFor(err)),
+          });
         },
       });
   }
@@ -164,7 +181,11 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       },
       error: () => {
         this.loadingPolicy = false;
-        this.snackBar.open(this.i18n.tUi('account.password.policyLoadError'), this.i18n.tUi('common.ok'), { duration: 4000 });
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('account.password.policyLoadError'),
+        });
       },
     });
   }

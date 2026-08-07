@@ -2,19 +2,20 @@
   <div class="left">
     @if (currentUser?.authenticated) {
       <button
-        mat-icon-button
+        pButton
+        [text]="true"
         type="button"
         class="sidebar-toggle"
         (click)="toggleSidebar.emit()"
         [attr.aria-label]="(sidebarVisible ? 'topbar.sidebarHideTooltip' : 'topbar.sidebarShowTooltip') | translate"
-        [matTooltip]="(sidebarVisible ? 'topbar.sidebarHideTooltip' : 'topbar.sidebarShowTooltip') | translate"
+        [pTooltip]="(sidebarVisible ? 'topbar.sidebarHideTooltip' : 'topbar.sidebarShowTooltip') | translate"
       >
-        <mat-icon>{{ sidebarVisible ? 'menu_open' : 'menu' }}</mat-icon>
+        <i class="pi" [class.pi-angle-double-left]="sidebarVisible" [class.pi-bars]="!sidebarVisible"></i>
       </button>
     }
 
     <a class="brand" routerLink="/">
-      <mat-icon class="brand-icon">cloud</mat-icon>
+      <i class="pi pi-cloud brand-icon"></i>
       <div class="brand-text">
         <div class="name">{{ 'topbar.brandName' | translate }}</div>
         <div class="sub">{{ 'topbar.brandSub' | translate }}</div>
@@ -24,13 +25,13 @@
 
   <div class="right">
     @if (currentUser?.authenticated) {
-      <div class="status" [matTooltip]="'topbar.sessionExpireTooltip' | translate">
+      <div class="status" [pTooltip]="'topbar.sessionExpireTooltip' | translate">
         <span class="dot"></span>
         <span class="status-text">{{ 'topbar.online' | translate }}</span>
 
         @if (sessionLabel) {
           <span class="session-timer" [class]="'session-timer--' + sessionTone">
-            <mat-icon>schedule</mat-icon>
+            <i class="pi pi-clock"></i>
             {{ sessionLabel }}
           </span>
         }
@@ -38,65 +39,49 @@
     }
 
     <button
-      mat-icon-button
+      pButton
+      [text]="true"
       type="button"
       (click)="theme.toggle()"
-      [matTooltip]="(theme.mode() === 'dark' ? 'topbar.themeToggleLight' : 'topbar.themeToggleDark') | translate"
+      [pTooltip]="(theme.mode() === 'dark' ? 'topbar.themeToggleLight' : 'topbar.themeToggleDark') | translate"
       [attr.aria-label]="'topbar.themeToggleAria' | translate"
     >
-      <mat-icon>{{ theme.mode() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      <i class="pi" [class.pi-sun]="theme.mode() === 'dark'" [class.pi-moon]="theme.mode() !== 'dark'"></i>
     </button>
 
     <button
       type="button"
       class="lang-trigger"
-      [matMenuTriggerFor]="langMenu"
+      (click)="langMenu.toggle($event)"
       aria-haspopup="true"
       [attr.aria-label]="'topbar.langAria' | translate"
     >
       <span class="lang-badge">{{ currentLangLabel }}</span>
-      <mat-icon class="chevron">expand_more</mat-icon>
+      <i class="pi pi-angle-down chevron"></i>
     </button>
 
-    <mat-menu #langMenu="matMenu">
-      @for (option of langOptions; track option.value) {
-        <button mat-menu-item [disabled]="option.value === i18n.appliedLang()" (click)="onLangChange(option.value)">
-          <span>{{ option.label }}</span>
-        </button>
-      }
-    </mat-menu>
+    <p-menu #langMenu [model]="langMenuItems" [popup]="true" />
 
     @if (currentUser?.authenticated) {
       <button
         type="button"
         class="account-trigger"
-        [matMenuTriggerFor]="accountMenu"
+        (click)="accountMenu.toggle($event)"
         aria-haspopup="true"
         [attr.aria-label]="'topbar.accountMenuAria' | translate"
       >
         <span class="account-avatar">{{ initials }}</span>
-        <mat-icon class="chevron">expand_more</mat-icon>
+        <i class="pi pi-angle-down chevron"></i>
       </button>
 
-      <mat-menu #accountMenu="matMenu">
-        <div class="account-menu-header">
-          <div class="account-menu-name">{{ currentUser?.name }}</div>
-          <div class="account-menu-username">{{ currentUser?.username }}</div>
-        </div>
-        <button mat-menu-item (click)="goToProfile()">
-          <mat-icon>person</mat-icon>
-          <span>{{ 'menu.me' | translate }}</span>
-        </button>
-        <button mat-menu-item (click)="goToChangePassword()">
-          <mat-icon>vpn_key</mat-icon>
-          <span>{{ 'menu.changePassword' | translate }}</span>
-        </button>
-        <mat-divider></mat-divider>
-        <button mat-menu-item (click)="logout.emit()">
-          <mat-icon>logout</mat-icon>
-          <span>{{ 'menu.logout' | translate }}</span>
-        </button>
-      </mat-menu>
+      <p-menu #accountMenu [model]="accountMenuItems" [popup]="true">
+        <ng-template #start>
+          <div class="account-menu-header">
+            <div class="account-menu-name">{{ currentUser?.name }}</div>
+            <div class="account-menu-username">{{ currentUser?.username }}</div>
+          </div>
+        </ng-template>
+      </p-menu>
     }
   </div>
 </header>

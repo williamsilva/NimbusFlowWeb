@@ -10,15 +10,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
-import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { ActiveFilterEntry, FilterPanelComponent } from '../shared/filter-panel/filter-panel.component';
 import { NfPaginatorIntl } from '../shared/paginator/nf-paginator-intl';
 import { GroupAdminService, GroupRef, GroupSummary } from './group.service';
@@ -76,7 +75,8 @@ export class GroupListComponent implements OnInit, AfterViewInit {
     private readonly groupAdminService: GroupAdminService,
     private readonly dialog: MatDialog,
     private readonly authService: AuthService,
-    private readonly snackBar: MatSnackBar,
+    private readonly messageService: MessageService,
+    private readonly confirmationService: ConfirmationService,
     private readonly i18n: I18nService,
   ) {
     this.dataSource.filterPredicate = (row, filterJson) =>
@@ -161,31 +161,25 @@ export class GroupListComponent implements OnInit, AfterViewInit {
   }
 
   delete(group: GroupSummary): void {
-    const ref = this.dialog.open(ConfirmDialogComponent, {
-      autoFocus: false,
-      data: {
-        title: this.i18n.tUi('groups.list.deleteConfirmTitle'),
-        message: this.i18n.tUi('groups.list.deleteConfirmMessage', { name: group.name }),
-        confirmLabel: this.i18n.tUi('common.delete'),
-        icon: 'delete',
-        danger: true,
+    this.confirmationService.confirm({
+      header: this.i18n.tUi('groups.list.deleteConfirmTitle'),
+      message: this.i18n.tUi('groups.list.deleteConfirmMessage', { name: group.name }),
+      acceptLabel: this.i18n.tUi('common.delete'),
+      rejectLabel: this.i18n.tUi('common.cancel'),
+      acceptButtonProps: { severity: 'danger' },
+      rejectButtonProps: { severity: 'secondary', outlined: true },
+      accept: () => {
+        this.groupAdminService.delete(group.id).subscribe({
+          next: () => this.load(),
+          error: (err) => {
+            const code = (err?.error?.detail as string | undefined) ?? undefined;
+            const message = code
+              ? this.i18n.tUi(`errors.${code}`, undefined, this.i18n.tUi('groups.list.deleteError'))
+              : this.i18n.tUi('groups.list.deleteError');
+            this.messageService.add({ severity: 'error', summary: this.i18n.tUi('common.error'), detail: message });
+          },
+        });
       },
-    });
-
-    ref.afterClosed().subscribe((confirmed) => {
-      if (!confirmed) {
-        return;
-      }
-      this.groupAdminService.delete(group.id).subscribe({
-        next: () => this.load(),
-        error: (err) => {
-          const code = (err?.error?.detail as string | undefined) ?? undefined;
-          const message = code
-            ? this.i18n.tUi(`errors.${code}`, undefined, this.i18n.tUi('groups.list.deleteError'))
-            : this.i18n.tUi('groups.list.deleteError');
-          this.snackBar.open(message, this.i18n.tUi('common.ok'), { duration: 5000 });
-        },
-      });
     });
   }
 }

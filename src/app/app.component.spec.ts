@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideTranslateLoader, provideTranslateService } from '@ngx-translate/core';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 
 import { AppComponent } from './app.component';
@@ -28,6 +29,8 @@ describe('AppComponent', () => {
         { provide: AuthService, useValue: authServiceMock },
         provideRouter([]),
         provideTranslateService({ loader: provideTranslateLoader(StubTranslateLoader), fallbackLang: 'pt-BR' }),
+        MessageService,
+        ConfirmationService,
       ],
     }).compileComponents();
   });

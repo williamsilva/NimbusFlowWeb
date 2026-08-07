@@ -13,10 +13,10 @@ export interface ListDialogData {
 
 /**
  * Dialog genérico pra listar itens com badge numerado - usado em "Minha conta" pros modais de
- * Grupos/Permissões (mesmo padrão visual do CardSyncWeb - profile.component.html lá, que usa
- * p-dialog/PrimeNG; aqui é MatDialog porque este projeto usa Angular Material). title/subtitle já
- * chegam traduzidos via I18nService.tUi() (mesma convenção do ConfirmDialogComponent), os itens em
- * si (grupos/permissões) são códigos brutos, não chaves de i18n.
+ * Grupos/Permissões (mesmo padrão visual do CardSyncWeb). Ainda em MatDialog - migração pra
+ * p-dialog fica pra fase de telas de feature (account), junto com o resto do módulo. title/subtitle
+ * já chegam traduzidos via I18nService.tUi(), os itens em si (grupos/permissões) são códigos
+ * brutos, não chaves de i18n.
  */
 @Component({
     selector: 'app-list-dialog',

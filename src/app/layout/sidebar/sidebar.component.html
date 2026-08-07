@@ -3,7 +3,7 @@
     @for (item of visibleNavItems; track item.labelKey) {
       @if (item.children) {
         <div class="nav-group-label">
-          <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+          <i class="nav-icon" [class]="item.icon"></i>
           <span class="nav-label">{{ item.labelKey | translate }}</span>
         </div>
         @for (child of item.children; track child.link) {
@@ -13,7 +13,7 @@
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: !!child.exact }"
           >
-            <mat-icon class="nav-icon">{{ child.icon }}</mat-icon>
+            <i class="nav-icon" [class]="child.icon"></i>
             <span class="nav-label">{{ child.labelKey | translate }}</span>
           </a>
         }
@@ -24,7 +24,7 @@
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: !!item.exact }"
         >
-          <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+          <i class="nav-icon" [class]="item.icon"></i>
           <span class="nav-label">{{ item.labelKey | translate }}</span>
         </a>
       }
@@ -42,14 +42,15 @@
       </div>
 
       <button
-        mat-icon-button
+        pButton
+        [text]="true"
         type="button"
         class="logout"
         (click)="logout.emit()"
         [attr.aria-label]="'menu.logout' | translate"
-        [matTooltip]="'menu.logout' | translate"
+        [pTooltip]="'menu.logout' | translate"
       >
-        <mat-icon>logout</mat-icon>
+        <i class="pi pi-sign-out"></i>
       </button>
     </div>
   </div>

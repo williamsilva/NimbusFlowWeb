@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { CurrentUser } from '../../core/auth/auth.service';
@@ -23,7 +22,7 @@ interface NavItem {
 
 @Component({
     selector: 'app-sidebar',
-    imports: [RouterLink, RouterLinkActive, MatButtonModule, MatIconModule, MatTooltipModule, TranslatePipe],
+    imports: [RouterLink, RouterLinkActive, ButtonModule, TooltipModule, TranslatePipe],
     templateUrl: './sidebar.component.html',
     styleUrl: './sidebar.component.scss'
 })
@@ -32,16 +31,16 @@ export class SidebarComponent {
   @Output() logout = new EventEmitter<void>();
 
   readonly navItems: NavItem[] = [
-    { labelKey: 'menu.dashboard', icon: 'dashboard', link: '/', exact: true },
-    { labelKey: 'menu.suppliers', icon: 'storefront', link: '/suppliers', exact: false },
-    { labelKey: 'menu.works', icon: 'construction', link: '/works', exact: false },
-    { labelKey: 'menu.suggestions', icon: 'lightbulb', link: '/suggestions', exact: false },
+    { labelKey: 'menu.dashboard', icon: 'pi pi-home', link: '/', exact: true },
+    { labelKey: 'menu.suppliers', icon: 'pi pi-shop', link: '/suppliers', exact: false },
+    { labelKey: 'menu.works', icon: 'pi pi-hammer', link: '/works', exact: false },
+    { labelKey: 'menu.suggestions', icon: 'pi pi-lightbulb', link: '/suggestions', exact: false },
     {
       labelKey: 'menu.security.title',
-      icon: 'shield',
+      icon: 'pi pi-shield',
       children: [
-        { labelKey: 'menu.security.users', icon: 'group', link: '/security/users', exact: false, permission: 'USERS_CONSULT' },
-        { labelKey: 'menu.security.groups', icon: 'badge', link: '/security/groups', exact: false, permission: 'GROUPS_CONSULT' },
+        { labelKey: 'menu.security.users', icon: 'pi pi-users', link: '/security/users', exact: false, permission: 'USERS_CONSULT' },
+        { labelKey: 'menu.security.groups', icon: 'pi pi-id-card', link: '/security/groups', exact: false, permission: 'GROUPS_CONSULT' },
       ],
     },
   ];

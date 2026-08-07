@@ -12,11 +12,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
 
 import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
@@ -126,7 +126,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
     private readonly userAdminService: UserAdminService,
     private readonly dialog: MatDialog,
     private readonly authService: AuthService,
-    private readonly snackBar: MatSnackBar,
+    private readonly messageService: MessageService,
     private readonly i18n: I18nService,
   ) {
     this.dataSource.filterPredicate = (row, filterJson) =>
@@ -307,12 +307,17 @@ export class UserListComponent implements OnInit, AfterViewInit {
 
   resendInvite(user: AdminUser): void {
     this.userAdminService.resendInvite(user.id).subscribe({
-      next: () => this.snackBar.open(this.i18n.tUi('users.list.resendInviteSuccess'), this.i18n.tUi('common.ok'), { duration: 4000 }),
+      next: () =>
+        this.messageService.add({
+          severity: 'success',
+          summary: this.i18n.tUi('common.success'),
+          detail: this.i18n.tUi('users.list.resendInviteSuccess'),
+        }),
       error: () => this.notifyError('users.list.resendInviteError'),
     });
   }
 
   private notifyError(key: string): void {
-    this.snackBar.open(this.i18n.tUi(key), this.i18n.tUi('common.ok'), { duration: 5000 });
+    this.messageService.add({ severity: 'error', summary: this.i18n.tUi('common.error'), detail: this.i18n.tUi(key) });
   }
 }

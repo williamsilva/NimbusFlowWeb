@@ -5,9 +5,9 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
 
 import { I18nService } from '../core/i18n/i18n.service';
 import { formatTaxId, onlyDigits } from '../shared/utils/br-format';
@@ -60,7 +60,7 @@ export class UserFormComponent implements OnInit {
     private readonly userAdminService: UserAdminService,
     private readonly groupAdminService: GroupAdminService,
     private readonly dialogRef: MatDialogRef<UserFormComponent>,
-    private readonly snackBar: MatSnackBar,
+    private readonly messageService: MessageService,
     private readonly i18n: I18nService,
     @Inject(MAT_DIALOG_DATA) private readonly data: UserFormDialogData,
   ) {
@@ -101,7 +101,11 @@ export class UserFormComponent implements OnInit {
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.snackBar.open(this.i18n.tUi('users.form.reviewFields'), this.i18n.tUi('common.ok'), { duration: 4000 });
+      this.messageService.add({
+        severity: 'warn',
+        summary: this.i18n.tUi('common.warning'),
+        detail: this.i18n.tUi('users.form.reviewFields'),
+      });
       return;
     }
 
@@ -122,7 +126,7 @@ export class UserFormComponent implements OnInit {
       next: () => this.dialogRef.close(true),
       error: (err: HttpErrorResponse) => {
         this.saving = false;
-        this.snackBar.open(this.errorMessage(err), this.i18n.tUi('common.ok'), { duration: 5000 });
+        this.messageService.add({ severity: 'error', summary: this.i18n.tUi('common.error'), detail: this.errorMessage(err) });
       },
     });
   }

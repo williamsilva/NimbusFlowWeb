@@ -7,8 +7,8 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
 
 import { I18nService } from '../core/i18n/i18n.service';
 import { Supplier, SupplierService } from '../suppliers/supplier.service';
@@ -42,7 +42,7 @@ export class WorkCreateDialogComponent implements OnInit {
     private readonly workService: WorkService,
     private readonly supplierService: SupplierService,
     private readonly dialogRef: MatDialogRef<WorkCreateDialogComponent>,
-    private readonly snackBar: MatSnackBar,
+    private readonly messageService: MessageService,
     private readonly i18n: I18nService,
   ) {
     this.form = this.fb.group({
@@ -71,7 +71,11 @@ export class WorkCreateDialogComponent implements OnInit {
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.snackBar.open(this.i18n.tUi('works.createDialog.reviewFields'), this.i18n.tUi('common.ok'), { duration: 4000 });
+      this.messageService.add({
+        severity: 'warn',
+        summary: this.i18n.tUi('common.warning'),
+        detail: this.i18n.tUi('works.createDialog.reviewFields'),
+      });
       return;
     }
 
@@ -93,7 +97,11 @@ export class WorkCreateDialogComponent implements OnInit {
       next: (work: Work) => this.dialogRef.close(work),
       error: () => {
         this.saving = false;
-        this.snackBar.open(this.i18n.tUi('works.createDialog.saveError'), this.i18n.tUi('common.ok'), { duration: 5000 });
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('works.createDialog.saveError'),
+        });
       },
     });
   }

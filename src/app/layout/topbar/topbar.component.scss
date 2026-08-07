@@ -114,10 +114,8 @@
   white-space: nowrap;
   color: rgba(0, 0, 0, 0.7);
 
-  mat-icon {
+  i.pi {
     font-size: 16px;
-    height: 16px;
-    width: 16px;
   }
 }
 
@@ -265,9 +263,7 @@
 
 .chevron {
   opacity: 0.6;
-  font-size: 20px;
-  height: 20px;
-  width: 20px;
+  font-size: 14px;
 }
 
 .account-menu-header {

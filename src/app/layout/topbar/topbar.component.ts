@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { ButtonModule } from 'primeng/button';
+import { MenuModule } from 'primeng/menu';
+import { TooltipModule } from 'primeng/tooltip';
+import { MenuItem } from 'primeng/api';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { CurrentUser } from '../../core/auth/auth.service';
@@ -16,7 +15,7 @@ export type SessionTone = 'normal' | 'warning' | 'danger';
 
 @Component({
     selector: 'app-topbar',
-    imports: [RouterLink, MatButtonModule, MatDividerModule, MatIconModule, MatMenuModule, MatTooltipModule, TranslatePipe],
+    imports: [RouterLink, ButtonModule, MenuModule, TooltipModule, TranslatePipe],
     templateUrl: './topbar.component.html',
     styleUrl: './topbar.component.scss'
 })
@@ -63,6 +62,23 @@ export class TopbarComponent {
       default:
         return 'PT';
     }
+  }
+
+  get langMenuItems(): MenuItem[] {
+    return this.langOptions.map((option) => ({
+      label: option.label,
+      disabled: option.value === this.i18n.appliedLang(),
+      command: () => this.onLangChange(option.value),
+    }));
+  }
+
+  get accountMenuItems(): MenuItem[] {
+    return [
+      { label: this.i18n.tUi('menu.me'), icon: 'pi pi-user', command: () => this.goToProfile() },
+      { label: this.i18n.tUi('menu.changePassword'), icon: 'pi pi-key', command: () => this.goToChangePassword() },
+      { separator: true },
+      { label: this.i18n.tUi('menu.logout'), icon: 'pi pi-sign-out', command: () => this.logout.emit() },
+    ];
   }
 
   onLangChange(lang: Lang): void {

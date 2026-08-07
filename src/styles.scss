@@ -1,5 +1,10 @@
 @use '@angular/material' as mat;
 
+// PrimeNG (migração Material -> PrimeNG): ícones e utilitários de layout, mesmas libs do
+// CardSyncWeb. O tema em si (Lara) é registrado via providePrimeNG em app.config.ts, não aqui.
+@import 'primeicons/primeicons.css';
+@import 'primeflex/primeflex.css';
+
 // ===== Tema Material (claro + escuro via classe .dark na <html>) =====
 // Substitui o prebuilt-theme azure-blue.css antigo por um tema custom, unico jeito de ter
 // dark mode de verdade nos componentes Material (botoes, campos, tabelas, cards, etc.).

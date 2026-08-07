@@ -5,8 +5,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
 
 import { I18nService } from '../core/i18n/i18n.service';
 import { formatPhone, formatTaxId, onlyDigits } from '../shared/utils/br-format';
@@ -50,7 +50,7 @@ export class SupplierFormComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly supplierService: SupplierService,
     private readonly dialogRef: MatDialogRef<SupplierFormComponent>,
-    private readonly snackBar: MatSnackBar,
+    private readonly messageService: MessageService,
     private readonly i18n: I18nService,
     @Inject(MAT_DIALOG_DATA) private readonly data: SupplierFormDialogData,
   ) {
@@ -110,7 +110,11 @@ export class SupplierFormComponent implements OnInit {
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.snackBar.open(this.i18n.tUi('suppliers.form.reviewFields'), this.i18n.tUi('common.ok'), { duration: 4000 });
+      this.messageService.add({
+        severity: 'warn',
+        summary: this.i18n.tUi('common.warning'),
+        detail: this.i18n.tUi('suppliers.form.reviewFields'),
+      });
       return;
     }
 
@@ -146,7 +150,11 @@ export class SupplierFormComponent implements OnInit {
       next: () => this.dialogRef.close(true),
       error: () => {
         this.saving = false;
-        this.snackBar.open(this.i18n.tUi('suppliers.form.saveError'), this.i18n.tUi('common.ok'), { duration: 5000 });
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('suppliers.form.saveError'),
+        });
       },
     });
   }

@@ -7,8 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
 
 import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
@@ -56,7 +56,7 @@ export class GroupFormComponent implements OnInit {
     private readonly groupAdminService: GroupAdminService,
     private readonly authService: AuthService,
     private readonly dialogRef: MatDialogRef<GroupFormComponent>,
-    private readonly snackBar: MatSnackBar,
+    private readonly messageService: MessageService,
     private readonly i18n: I18nService,
     @Inject(MAT_DIALOG_DATA) private readonly data: GroupFormDialogData,
   ) {
@@ -113,7 +113,11 @@ export class GroupFormComponent implements OnInit {
     }
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.snackBar.open(this.i18n.tUi('groups.form.reviewFields'), this.i18n.tUi('common.ok'), { duration: 4000 });
+      this.messageService.add({
+        severity: 'warn',
+        summary: this.i18n.tUi('common.warning'),
+        detail: this.i18n.tUi('groups.form.reviewFields'),
+      });
       return;
     }
 
@@ -146,6 +150,6 @@ export class GroupFormComponent implements OnInit {
     const message = code
       ? this.i18n.tUi(`errors.${code}`, undefined, this.i18n.tUi('groups.form.saveError'))
       : this.i18n.tUi('groups.form.saveError');
-    this.snackBar.open(message, this.i18n.tUi('common.ok'), { duration: 5000 });
+    this.messageService.add({ severity: 'error', summary: this.i18n.tUi('common.error'), detail: message });
   }
 }

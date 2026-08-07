@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 import { Subscription, interval, startWith } from 'rxjs';
 
 import { AuthService, CurrentUser } from './core/auth/auth.service';
@@ -9,11 +11,10 @@ import { ThemeService } from './core/theme/theme.service';
 import { FooterComponent } from './layout/footer/footer.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { SessionTone, TopbarComponent } from './layout/topbar/topbar.component';
-import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, TopbarComponent, SidebarComponent, FooterComponent],
+    imports: [RouterOutlet, TopbarComponent, SidebarComponent, FooterComponent, ToastModule, ConfirmDialogModule],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private readonly authService: AuthService,
     private readonly themeService: ThemeService,
-    private readonly dialog: MatDialog,
+    private readonly confirmationService: ConfirmationService,
     private readonly i18n: I18nService,
   ) {
     this.themeService.init();
@@ -58,22 +59,17 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    const ref = this.dialog.open(ConfirmDialogComponent, {
-      autoFocus: false,
-      data: {
-        title: this.i18n.tUi('dialogs.logout.title'),
-        message: this.i18n.tUi('dialogs.logout.message'),
-        confirmLabel: this.i18n.tUi('menu.logout'),
-        icon: 'logout',
-        danger: true,
-      },
-    });
-
-    ref.afterClosed().subscribe((confirmed) => {
-      if (confirmed) {
+    this.confirmationService.confirm({
+      header: this.i18n.tUi('dialogs.logout.title'),
+      message: this.i18n.tUi('dialogs.logout.message'),
+      acceptLabel: this.i18n.tUi('menu.logout'),
+      rejectLabel: this.i18n.tUi('common.cancel'),
+      acceptButtonProps: { severity: 'danger' },
+      rejectButtonProps: { severity: 'secondary', outlined: true },
+      accept: () => {
         this.sessionWatchSub?.unsubscribe();
         this.authService.logout();
-      }
+      },
     });
   }
 

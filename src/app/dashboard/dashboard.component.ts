@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ChartConfiguration, ChartData } from 'chart.js';
@@ -16,6 +15,7 @@ import * as L from 'leaflet';
 import { BaseChartDirective } from 'ng2-charts';
 import { forkJoin } from 'rxjs';
 import { TranslatePipe } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
 
 import {
   DashboardService,
@@ -109,7 +109,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly dashboardService: DashboardService,
     private readonly workService: WorkService,
-    private readonly snackBar: MatSnackBar,
+    private readonly messageService: MessageService,
     private readonly i18n: I18nService,
   ) {
     // Os labels dos gráficos (chart.js) e dos popups do Leaflet são strings imperativas, não
@@ -167,7 +167,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: () => {
         this.loading = false;
-        this.snackBar.open(this.i18n.tUi('dashboard.loadError'), this.i18n.tUi('common.ok'), { duration: 5000 });
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('dashboard.loadError'),
+        });
       },
     });
   }
@@ -260,8 +264,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: () => {
         this.loadingTimeline = false;
-        this.snackBar.open(this.i18n.tUi('dashboard.timelineLoadError'), this.i18n.tUi('common.ok'), {
-          duration: 4000,
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('dashboard.timelineLoadError'),
         });
       },
     });
@@ -286,8 +292,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: () => {
         this.exportingPdf = false;
-        this.snackBar.open(this.i18n.tUi('dashboard.export.pdfError'), this.i18n.tUi('common.ok'), {
-          duration: 4000,
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('dashboard.export.pdfError'),
         });
       },
     });
@@ -302,8 +310,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: () => {
         this.exportingExcel = false;
-        this.snackBar.open(this.i18n.tUi('dashboard.export.excelError'), this.i18n.tUi('common.ok'), {
-          duration: 4000,
+        this.messageService.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi('dashboard.export.excelError'),
         });
       },
     });
