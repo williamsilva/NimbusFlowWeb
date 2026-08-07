@@ -15,45 +15,43 @@
   >
     <button
       pButton
-      severity="secondary"
-      [outlined]="true"
       type="button"
-      class="btn-sm"
+      icon="pi pi-refresh"
       (click)="load()"
-    >
-      <i class="pi pi-refresh"></i>
-      {{ "common.refresh" | translate }}
-    </button>
+      class="p-button-text p-button-sm"
+      [label]="'common.refresh' | translate"
+    ></button>
 
     @if (perms.has("USERS_ACTIVE_OR_INACTIVE")) {
       <button
         pButton
         type="button"
-        class="btn-sm"
-        [disabled]="selectionMode() !== 'activate'"
+        icon="pi pi-check-circle"
         (click)="activateSelected()"
-      >
-        <i class="pi pi-check-circle"></i>
-        {{ "users.list.activate" | translate }}
-      </button>
+        class="p-button-success p-button-sm"
+        [disabled]="selectionMode() !== 'activate'"
+        [label]="'users.list.activate' | translate"
+      ></button>
       <button
         pButton
-        severity="danger"
         type="button"
-        class="btn-sm"
-        [disabled]="selectionMode() !== 'deactivate'"
+        icon="pi pi-ban"
+        class="p-button-danger p-button-sm"
         (click)="deactivateSelected()"
-      >
-        <i class="pi pi-ban"></i>
-        {{ "users.list.deactivateBulk" | translate }}
-      </button>
+        [disabled]="selectionMode() !== 'deactivate'"
+        [label]="'users.list.deactivateBulk' | translate"
+      ></button>
     }
 
     @if (secPolicy.canCreate()) {
-      <button pButton type="button" class="btn-sm" (click)="goNew()">
-        <i class="pi pi-plus"></i>
-        {{ "users.list.create" | translate }}
-      </button>
+      <button
+        pButton
+        type="button"
+        (click)="goNew()"
+        icon="pi pi-plus"
+        class="p-button-info p-button-sm"
+        [label]="'users.list.create' | translate"
+      ></button>
     }
   </nb-page-header>
 

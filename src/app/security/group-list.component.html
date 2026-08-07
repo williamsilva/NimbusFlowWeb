@@ -13,16 +13,10 @@
       { label: ('groups.list.title' | translate) },
     ]"
   >
-    <button pButton severity="secondary" [outlined]="true" type="button" class="btn-sm" (click)="load()">
-      <i class="pi pi-refresh"></i>
-      {{ 'common.refresh' | translate }}
-    </button>
+    <button pButton type="button" icon="pi pi-refresh" (click)="load()" class="p-button-text p-button-sm" [label]="'common.refresh' | translate"></button>
 
     @if (secPolicy.canCreate()) {
-      <button pButton type="button" class="btn-sm" (click)="goNew()">
-        <i class="pi pi-plus"></i>
-        {{ 'groups.list.create' | translate }}
-      </button>
+      <button pButton type="button" (click)="goNew()" icon="pi pi-plus" class="p-button-info p-button-sm" [label]="'groups.list.create' | translate"></button>
     }
   </nb-page-header>
 

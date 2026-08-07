@@ -73,7 +73,10 @@ body {
 .page-container {
   max-width: 1080px;
   margin: 0 auto;
-  padding: 24px 24px 48px;
+  // 12px - mesmo total do CardSyncWeb (shell padding 8px + content-inner padding 12px = 20px do
+  // topo/laterais até o conteúdo). Antes eram 24px aqui (+ os 8px do shell = 32px, bem mais que
+  // os 20px de referência).
+  padding: 12px;
 }
 
 // Variante que ocupa a largura toda do painel (sem centralizar/limitar) - telas administrativas

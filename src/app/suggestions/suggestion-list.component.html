@@ -5,15 +5,9 @@
       { label: ('suggestions.list.title' | translate) },
     ]"
   >
-    <button pButton severity="secondary" [outlined]="true" type="button" class="btn-sm" (click)="load()">
-      <i class="pi pi-refresh"></i>
-      {{ 'common.refresh' | translate }}
-    </button>
+    <button pButton type="button" icon="pi pi-refresh" (click)="load()" class="p-button-text p-button-sm" [label]="'common.refresh' | translate"></button>
 
-    <button pButton type="button" class="btn-sm" (click)="openCreate()">
-      <i class="pi pi-plus"></i>
-      {{ 'suggestions.list.create' | translate }}
-    </button>
+    <button pButton type="button" (click)="openCreate()" icon="pi pi-plus" class="p-button-info p-button-sm" [label]="'suggestions.list.create' | translate"></button>
   </nb-page-header>
 
     <nb-filters-panel [activeFilters]="activeFilters()" (search)="search()" (clear)="clear()">
