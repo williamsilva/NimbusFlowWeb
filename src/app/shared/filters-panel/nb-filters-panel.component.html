@@ -33,7 +33,11 @@
       <div class="filter-panel__fields">
         <ng-content></ng-content>
       </div>
-      <div class="filter-panel__actions">
+      <div
+        class="filter-panel__actions"
+        [class.filter-panel__actions--start]="actionsAlign === 'start'"
+        [class.filter-panel__actions--center]="actionsAlign === 'center'"
+      >
         <button pButton type="button" severity="secondary" [outlined]="true" class="btn-sm" (click)="clear.emit()">
           {{ 'common.filters.clear' | translate }}
         </button>

@@ -15,6 +15,7 @@ import { TagModule } from 'primeng/tag';
 
 import { I18nService } from '../core/i18n/i18n.service';
 import { PermissionService } from '../core/auth/permission.service';
+import { NbPageHeaderComponent } from '../shared/page-header/nb-page-header.component';
 import { GroupAdminService, GroupDetail, PermissionOption } from './group.service';
 import { GroupsPermissionPolicy } from './policy/groups-permission.policy';
 
@@ -38,6 +39,7 @@ type DetailTab = 'summary' | 'permissions';
     CardModule,
     DividerModule,
     MultiSelectModule,
+    NbPageHeaderComponent,
     ProgressSpinnerModule,
     TagModule,
     TranslatePipe,

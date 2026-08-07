@@ -6,57 +6,52 @@
 ></app-user-form>
 
 <div class="page-container page-container--full">
-  <div class="page-header">
-    <div>
-      <div class="breadcrumb">
-        <a routerLink="/">{{ 'menu.dashboard' | translate }}</a>
-        <i class="pi pi-angle-right breadcrumb__separator"></i>
-        <span class="breadcrumb__current">{{ 'users.list.title' | translate }}</span>
-      </div>
-      <p class="page-subtitle">{{ 'users.list.subtitle' | translate }}</p>
-    </div>
+  <nb-page-header
+    [subtitle]="'users.list.subtitle' | translate"
+    [breadcrumb]="[
+      { label: ('menu.dashboard' | translate), url: '/' },
+      { label: ('users.list.title' | translate) },
+    ]"
+  >
+    <button pButton severity="secondary" [outlined]="true" type="button" class="btn-sm" (click)="load()">
+      <i class="pi pi-refresh"></i>
+      {{ 'common.refresh' | translate }}
+    </button>
 
-    <div class="page-header__actions">
-      <button pButton severity="secondary" [outlined]="true" type="button" class="btn-sm" (click)="load()">
-        <i class="pi pi-refresh"></i>
-        {{ 'common.refresh' | translate }}
+    @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
+      <button
+        pButton
+        type="button"
+        class="btn-sm"
+        [disabled]="selectionMode() !== 'activate'"
+        (click)="activateSelected()"
+      >
+        <i class="pi pi-check-circle"></i>
+        {{ 'users.list.activate' | translate }}
       </button>
+      <button
+        pButton
+        severity="danger"
+        type="button"
+        class="btn-sm"
+        [disabled]="selectionMode() !== 'deactivate'"
+        (click)="deactivateSelected()"
+      >
+        <i class="pi pi-ban"></i>
+        {{ 'users.list.deactivateBulk' | translate }}
+      </button>
+    }
 
-      @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
-        <button
-          pButton
-          type="button"
-          class="btn-sm"
-          [disabled]="selectionMode() !== 'activate'"
-          (click)="activateSelected()"
-        >
-          <i class="pi pi-check-circle"></i>
-          {{ 'users.list.activate' | translate }}
-        </button>
-        <button
-          pButton
-          severity="danger"
-          type="button"
-          class="btn-sm"
-          [disabled]="selectionMode() !== 'deactivate'"
-          (click)="deactivateSelected()"
-        >
-          <i class="pi pi-ban"></i>
-          {{ 'users.list.deactivateBulk' | translate }}
-        </button>
-      }
-
-      @if (secPolicy.canCreate()) {
-        <button pButton type="button" class="btn-sm" (click)="goNew()">
-          <i class="pi pi-plus"></i>
-          {{ 'users.list.create' | translate }}
-        </button>
-      }
-    </div>
-  </div>
+    @if (secPolicy.canCreate()) {
+      <button pButton type="button" class="btn-sm" (click)="goNew()">
+        <i class="pi pi-plus"></i>
+        {{ 'users.list.create' | translate }}
+      </button>
+    }
+  </nb-page-header>
 
   <div class="content-card">
-    <app-filter-panel [activeFilters]="activeFilters()" (search)="applyFilters()" (clear)="clearFilters()">
+    <nb-filters-panel [activeFilters]="activeFilters()" (search)="search()" (clear)="clear()">
       <div class="filter-row">
         <p-floatlabel variant="on" style="flex: 0 1 460px; min-width: 340px">
           <input pInputText id="f-name" [ngModel]="filter().name" (ngModelChange)="updateFilter('name', $event)" />
@@ -105,7 +100,7 @@
           <p-select inputId="f-createdBy" [ngModel]="filter().createdBy" (ngModelChange)="updateFilter('createdBy', $event)" [options]="createdByOptions()" [showClear]="true" [placeholder]="'common.all' | translate" />
         </div>
       </div>
-    </app-filter-panel>
+    </nb-filters-panel>
 
     @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {
       <div class="selection-mode">
@@ -115,7 +110,7 @@
     }
 
     <div class="table-container">
-      <p-table [value]="filteredUsers()" [selection]="selected()" (selectionChange)="selected.set($event)" dataKey="id" size="small" stripedRows showGridlines class="cs-admin-table" [tableStyle]="{ 'min-width': '90rem' }" [paginator]="true" [rows]="20" [rowsPerPageOptions]="[10, 20, 50]">
+      <p-table [value]="filteredUsers()" [selection]="selected()" (selectionChange)="selected.set($event)" dataKey="id" size="small" stripedRows showGridlines class="cs-admin-table" [tableStyle]="{ 'min-width': '90rem' }" [paginator]="true" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions" (onPage)="onRowsChange($event.rows)">
         <ng-template #colgroup>
           <colgroup>
             @if (perms.has('USERS_ACTIVE_OR_INACTIVE')) {

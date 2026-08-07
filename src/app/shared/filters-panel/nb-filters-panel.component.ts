@@ -11,22 +11,23 @@ export interface ActiveFilterEntry {
 }
 
 /**
- * Painel "Filtrar" colapsável (cabeçalho + campos via content projection + Buscar/Limpar) - casca
- * genérica reaproveitada pelas telas de Usuários/Grupos (cada uma define seus próprios campos),
- * padrão visual do CardSyncWeb. Não sabe nada sobre os campos em si, só orquestra
- * expandir/colapsar e emitir search()/clear() pro componente pai aplicar o filtro.
+ * Painel "Filtrar" colapsável (cabeçalho + campos via content projection + Buscar/Limpar) - mesmo
+ * papel do cs-filters-panel do CardSyncWeb, reaproveitado por todas as telas de lista. Não sabe
+ * nada sobre os campos em si, só orquestra expandir/colapsar e emitir search()/clear() pro
+ * componente pai aplicar o filtro (tipicamente via NbStatefulListPage).
  *
- * O ícone (i) abre um popup (mat-menu) com o resumo "label: valor" de cada filtro ativo - antes
- * disso era só uma dica estática (matTooltip), não mostrava o que de fato estava filtrando.
+ * O ícone (i) abre um popup com o resumo "label: valor" de cada filtro ativo.
  */
 @Component({
-    selector: 'app-filter-panel',
-    imports: [ButtonModule, PopoverModule, TranslatePipe],
-    templateUrl: './filter-panel.component.html',
-    styleUrl: './filter-panel.component.scss'
+  standalone: true,
+  selector: 'nb-filters-panel',
+  imports: [ButtonModule, PopoverModule, TranslatePipe],
+  templateUrl: './nb-filters-panel.component.html',
+  styleUrl: './nb-filters-panel.component.scss',
 })
-export class FilterPanelComponent {
+export class NbFiltersPanelComponent {
   @Input() activeFilters: ActiveFilterEntry[] = [];
+  @Input() actionsAlign: 'start' | 'center' | 'end' = 'end';
   @Output() search = new EventEmitter<void>();
   @Output() clear = new EventEmitter<void>();
 

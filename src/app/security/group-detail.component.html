@@ -1,23 +1,17 @@
 <div class="page-container page-container--full">
-  <div class="page-header">
-    <div>
-      <div class="breadcrumb">
-        <a routerLink="/">{{ 'menu.dashboard' | translate }}</a>
-        <i class="pi pi-angle-right breadcrumb__separator"></i>
-        <a routerLink="/security/groups">{{ 'groups.list.title' | translate }}</a>
-        <i class="pi pi-angle-right breadcrumb__separator"></i>
-        <span class="breadcrumb__current">{{ 'groups.detail.title' | translate }}</span>
-      </div>
-      <p class="page-subtitle">{{ 'groups.detail.subtitle' | translate }}</p>
-    </div>
-
-    <div class="page-header__actions">
-      <button pButton severity="secondary" [outlined]="true" type="button" class="btn-sm" (click)="back()">
-        <i class="pi pi-arrow-left"></i>
-        {{ 'common.back' | translate }}
-      </button>
-    </div>
-  </div>
+  <nb-page-header
+    [subtitle]="'groups.detail.subtitle' | translate"
+    [breadcrumb]="[
+      { label: ('menu.dashboard' | translate), url: '/' },
+      { label: ('groups.list.title' | translate), url: '/security/groups' },
+      { label: ('groups.detail.title' | translate) },
+    ]"
+  >
+    <button pButton severity="secondary" [outlined]="true" type="button" class="btn-sm" (click)="back()">
+      <i class="pi pi-arrow-left"></i>
+      {{ 'common.back' | translate }}
+    </button>
+  </nb-page-header>
 
   @if (loading()) {
     <div class="cs-loading-state">

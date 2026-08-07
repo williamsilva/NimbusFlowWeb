@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -16,7 +15,9 @@ import { TooltipModule } from 'primeng/tooltip';
 
 import { I18nService } from '../core/i18n/i18n.service';
 import { PermissionService } from '../core/auth/permission.service';
-import { ActiveFilterEntry, FilterPanelComponent } from '../shared/filter-panel/filter-panel.component';
+import { ActiveFilterEntry, NbFiltersPanelComponent } from '../shared/filters-panel/nb-filters-panel.component';
+import { NbPageHeaderComponent } from '../shared/page-header/nb-page-header.component';
+import { NbStatefulListPage } from '../shared/list-base/nb-stateful-list-page';
 import { onlyDigits } from '../shared/utils/br-format';
 import { TaxIdPipe } from '../shared/pipes/tax-id.pipe';
 import { SecurityPermissionPolicy } from './policy/security-permission.policy';
@@ -48,27 +49,12 @@ interface UsersFilterState {
   createdBy: string;
 }
 
-function emptyFilter(): UsersFilterState {
-  return {
-    name: '',
-    userName: '',
-    document: '',
-    status: [],
-    lastLoginAt: '',
-    blockedUntil: '',
-    passwordExpiresAt: '',
-    createdAt: '',
-    createdBy: '',
-  };
-}
-
 @Component({
   standalone: true,
   selector: 'app-user-list',
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink,
     ButtonModule,
     CheckboxModule,
     FloatLabelModule,
@@ -78,7 +64,8 @@ function emptyFilter(): UsersFilterState {
     TableModule,
     TagModule,
     TooltipModule,
-    FilterPanelComponent,
+    NbFiltersPanelComponent,
+    NbPageHeaderComponent,
     TaxIdPipe,
     TranslatePipe,
     UserFormComponent,
@@ -86,7 +73,7 @@ function emptyFilter(): UsersFilterState {
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent extends NbStatefulListPage<UsersFilterState> implements OnInit {
   private readonly userAdminService = inject(UserAdminService);
   private readonly messageService = inject(MessageService);
 
@@ -96,20 +83,14 @@ export class UserListComponent implements OnInit {
 
   readonly users = signal<AdminUser[]>([]);
   readonly selected = signal<AdminUser[]>([]);
-  readonly filter = signal<UsersFilterState>(emptyFilter());
-  private readonly appliedFilter = signal<UsersFilterState>(emptyFilter());
   readonly statusOptions = STATUS_OPTIONS;
   readonly createdByOptions = signal<string[]>([]);
 
   readonly upsertVisible = signal(false);
   readonly editingUser = signal<AdminUser | null>(null);
 
-  constructor() {
-    this.load();
-  }
-
   ngOnInit(): void {
-    this.load();
+    this.initStatefulList();
   }
 
   load(): void {
@@ -122,6 +103,18 @@ export class UserListComponent implements OnInit {
     });
   }
 
+  protected override refresh(): void {
+    this.load();
+  }
+
+  protected override tableRowsKey(): string {
+    return 'nimbusflow.users.table.rows.v1';
+  }
+
+  protected override filtersKey(): string {
+    return 'nimbusflow.users.filters.v1';
+  }
+
   // ------------------------- Filtros avançados -------------------------
 
   get statusSelectOptions(): { label: string; value: number }[] {
@@ -129,15 +122,28 @@ export class UserListComponent implements OnInit {
   }
 
   /** Filtragem client-side, aplicada só ao clicar "Buscar" (appliedFilter), não a cada tecla
-   *  digitada em filter - comportamento "deferred" já existente, agora sobre signals. */
+   *  digitada em filter - comportamento "deferred" do NbStatefulListPage. */
   readonly filteredUsers = computed(() => {
     const applied = this.appliedFilter();
     return this.users().filter((row) => this.matchesFilter(row, applied));
   });
 
-  /** "label: valor" de cada filtro preenchido - alimenta o popup do ícone (i) do painel. */
-  readonly activeFilters = computed<ActiveFilterEntry[]>(() => {
-    const f = this.appliedFilter();
+  protected override emptyFilter(): UsersFilterState {
+    return {
+      name: '',
+      userName: '',
+      document: '',
+      status: [],
+      lastLoginAt: '',
+      blockedUntil: '',
+      passwordExpiresAt: '',
+      createdAt: '',
+      createdBy: '',
+    };
+  }
+
+  /** "label: valor" de cada filtro preenchido - alimenta o popup do ícone (i) do nb-filters-panel. */
+  protected override buildActiveFilters(f: UsersFilterState): ActiveFilterEntry[] {
     const entries: ActiveFilterEntry[] = [];
     if (f.name) entries.push({ label: this.i18n.tUi('users.list.filters.name'), value: f.name });
     if (f.userName) entries.push({ label: this.i18n.tUi('users.list.filters.userName'), value: f.userName });
@@ -151,19 +157,6 @@ export class UserListComponent implements OnInit {
     if (f.createdAt) entries.push({ label: this.i18n.tUi('users.list.filters.createdAt'), value: f.createdAt });
     if (f.createdBy) entries.push({ label: this.i18n.tUi('users.list.filters.createdBy'), value: f.createdBy });
     return entries;
-  });
-
-  applyFilters(): void {
-    this.appliedFilter.set({ ...this.filter(), status: [...this.filter().status] });
-  }
-
-  clearFilters(): void {
-    this.filter.set(emptyFilter());
-    this.appliedFilter.set(emptyFilter());
-  }
-
-  updateFilter<K extends keyof UsersFilterState>(key: K, value: UsersFilterState[K]): void {
-    this.filter.set({ ...this.filter(), [key]: value });
   }
 
   private matchesFilter(row: AdminUser, f: UsersFilterState): boolean {

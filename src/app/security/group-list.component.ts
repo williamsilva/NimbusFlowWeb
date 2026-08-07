@@ -13,7 +13,9 @@ import { TooltipModule } from 'primeng/tooltip';
 
 import { I18nService } from '../core/i18n/i18n.service';
 import { PermissionService } from '../core/auth/permission.service';
-import { ActiveFilterEntry, FilterPanelComponent } from '../shared/filter-panel/filter-panel.component';
+import { ActiveFilterEntry, NbFiltersPanelComponent } from '../shared/filters-panel/nb-filters-panel.component';
+import { NbPageHeaderComponent } from '../shared/page-header/nb-page-header.component';
+import { NbStatefulListPage } from '../shared/list-base/nb-stateful-list-page';
 import { GroupAdminService, GroupRef, GroupSummary } from './group.service';
 import { GroupsPermissionPolicy } from './policy/groups-permission.policy';
 import { GroupFormComponent } from './group-form.component';
@@ -23,10 +25,6 @@ interface GroupsFilterState {
   description: string;
   createdAt: string;
   createdBy: string;
-}
-
-function emptyFilter(): GroupsFilterState {
-  return { name: '', description: '', createdAt: '', createdBy: '' };
 }
 
 @Component({
@@ -42,14 +40,15 @@ function emptyFilter(): GroupsFilterState {
     SelectModule,
     TableModule,
     TooltipModule,
-    FilterPanelComponent,
+    NbFiltersPanelComponent,
+    NbPageHeaderComponent,
     TranslatePipe,
     GroupFormComponent,
   ],
   templateUrl: './group-list.component.html',
   styleUrl: './group-list.component.scss',
 })
-export class GroupListComponent implements OnInit {
+export class GroupListComponent extends NbStatefulListPage<GroupsFilterState> implements OnInit {
   private readonly groupAdminService = inject(GroupAdminService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
@@ -59,15 +58,29 @@ export class GroupListComponent implements OnInit {
   readonly secPolicy = inject(GroupsPermissionPolicy);
 
   readonly groups = signal<GroupSummary[]>([]);
-  readonly filter = signal<GroupsFilterState>(emptyFilter());
-  private readonly appliedFilter = signal<GroupsFilterState>(emptyFilter());
   readonly createdByOptions = signal<string[]>([]);
 
   readonly upsertVisible = signal(false);
   readonly editingGroup = signal<GroupRef | null>(null);
 
   ngOnInit(): void {
+    this.initStatefulList();
+  }
+
+  protected override refresh(): void {
     this.load();
+  }
+
+  protected override tableRowsKey(): string {
+    return 'nimbusflow.groups.table.rows.v1';
+  }
+
+  protected override filtersKey(): string {
+    return 'nimbusflow.groups.filters.v1';
+  }
+
+  protected override emptyFilter(): GroupsFilterState {
+    return { name: '', description: '', createdAt: '', createdBy: '' };
   }
 
   readonly filteredGroups = computed(() => {
@@ -75,28 +88,14 @@ export class GroupListComponent implements OnInit {
     return this.groups().filter((row) => this.matchesFilter(row, applied));
   });
 
-  /** "label: valor" de cada filtro preenchido - alimenta o popup do ícone (i) do painel. */
-  readonly activeFilters = computed<ActiveFilterEntry[]>(() => {
-    const f = this.appliedFilter();
+  /** "label: valor" de cada filtro preenchido - alimenta o popup do ícone (i) do nb-filters-panel. */
+  protected override buildActiveFilters(f: GroupsFilterState): ActiveFilterEntry[] {
     const entries: ActiveFilterEntry[] = [];
     if (f.name) entries.push({ label: this.i18n.tUi('groups.list.filters.name'), value: f.name });
     if (f.description) entries.push({ label: this.i18n.tUi('groups.list.filters.description'), value: f.description });
     if (f.createdAt) entries.push({ label: this.i18n.tUi('groups.list.filters.createdAt'), value: f.createdAt });
     if (f.createdBy) entries.push({ label: this.i18n.tUi('groups.list.filters.createdBy'), value: f.createdBy });
     return entries;
-  });
-
-  applyFilters(): void {
-    this.appliedFilter.set({ ...this.filter() });
-  }
-
-  clearFilters(): void {
-    this.filter.set(emptyFilter());
-    this.appliedFilter.set(emptyFilter());
-  }
-
-  updateFilter<K extends keyof GroupsFilterState>(key: K, value: GroupsFilterState[K]): void {
-    this.filter.set({ ...this.filter(), [key]: value });
   }
 
   private matchesFilter(row: GroupSummary, f: GroupsFilterState): boolean {

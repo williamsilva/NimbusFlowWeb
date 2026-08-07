@@ -6,33 +6,28 @@
 ></app-group-form>
 
 <div class="page-container page-container--full">
-  <div class="page-header">
-    <div>
-      <div class="breadcrumb">
-        <a routerLink="/">{{ 'menu.dashboard' | translate }}</a>
-        <i class="pi pi-angle-right breadcrumb__separator"></i>
-        <span class="breadcrumb__current">{{ 'groups.list.title' | translate }}</span>
-      </div>
-      <p class="page-subtitle">{{ 'groups.list.subtitle' | translate }}</p>
-    </div>
+  <nb-page-header
+    [subtitle]="'groups.list.subtitle' | translate"
+    [breadcrumb]="[
+      { label: ('menu.dashboard' | translate), url: '/' },
+      { label: ('groups.list.title' | translate) },
+    ]"
+  >
+    <button pButton severity="secondary" [outlined]="true" type="button" class="btn-sm" (click)="load()">
+      <i class="pi pi-refresh"></i>
+      {{ 'common.refresh' | translate }}
+    </button>
 
-    <div class="page-header__actions">
-      <button pButton severity="secondary" [outlined]="true" type="button" class="btn-sm" (click)="load()">
-        <i class="pi pi-refresh"></i>
-        {{ 'common.refresh' | translate }}
+    @if (secPolicy.canCreate()) {
+      <button pButton type="button" class="btn-sm" (click)="goNew()">
+        <i class="pi pi-plus"></i>
+        {{ 'groups.list.create' | translate }}
       </button>
-
-      @if (secPolicy.canCreate()) {
-        <button pButton type="button" class="btn-sm" (click)="goNew()">
-          <i class="pi pi-plus"></i>
-          {{ 'groups.list.create' | translate }}
-        </button>
-      }
-    </div>
-  </div>
+    }
+  </nb-page-header>
 
   <div class="content-card">
-    <app-filter-panel [activeFilters]="activeFilters()" (search)="applyFilters()" (clear)="clearFilters()">
+    <nb-filters-panel [activeFilters]="activeFilters()" (search)="search()" (clear)="clear()">
       <div class="filter-row">
         <p-floatlabel variant="on">
           <input pInputText id="f-name" [ngModel]="filter().name" (ngModelChange)="updateFilter('name', $event)" />
@@ -54,10 +49,10 @@
           <p-select inputId="f-createdBy" [ngModel]="filter().createdBy" (ngModelChange)="updateFilter('createdBy', $event)" [options]="createdByOptions()" [showClear]="true" [placeholder]="'common.all' | translate" />
         </div>
       </div>
-    </app-filter-panel>
+    </nb-filters-panel>
 
     <div class="table-container">
-      <p-table [value]="filteredGroups()" size="small" stripedRows showGridlines class="cs-admin-table" [tableStyle]="{ 'min-width': '70rem' }" [paginator]="true" [rows]="20" [rowsPerPageOptions]="[10, 20, 50]">
+      <p-table [value]="filteredGroups()" size="small" stripedRows showGridlines class="cs-admin-table" [tableStyle]="{ 'min-width': '70rem' }" [paginator]="true" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions" (onPage)="onRowsChange($event.rows)">
         <ng-template #colgroup>
           <colgroup>
             <col style="width: 200px" />

@@ -1,34 +1,35 @@
 <div class="page-container">
-  <div class="page-header">
-    <h2>{{ 'suppliers.list.title' | translate }}</h2>
+  <nb-page-header
+    [breadcrumb]="[
+      { label: ('menu.dashboard' | translate), url: '/' },
+      { label: ('suppliers.list.title' | translate) },
+    ]"
+  >
+    <button pButton severity="secondary" [outlined]="true" type="button" class="btn-sm" (click)="load()">
+      <i class="pi pi-refresh"></i>
+      {{ 'common.refresh' | translate }}
+    </button>
+
     @if (canManageSuppliers) {
-      <button pButton (click)="openCreate()">
+      <button pButton type="button" class="btn-sm" (click)="openCreate()">
         <i class="pi pi-plus"></i>
         {{ 'suppliers.list.create' | translate }}
       </button>
     }
-  </div>
+  </nb-page-header>
 
   <div class="content-card">
-    <div class="list-toolbar">
-      <p-iconfield class="search-field">
-        <p-inputicon class="pi pi-search" />
-        <input pInputText [(ngModel)]="search" [placeholder]="'suppliers.list.searchPlaceholder' | translate" />
-      </p-iconfield>
-
-      <button
-        pButton
-        [text]="true"
-        (click)="load()"
-        [attr.aria-label]="'common.refresh' | translate"
-        [pTooltip]="'common.refresh' | translate"
-      >
-        <i class="pi pi-refresh"></i>
-      </button>
-    </div>
+    <nb-filters-panel [activeFilters]="activeFilters()" (search)="search()" (clear)="clear()">
+      <div class="filter-row">
+        <p-floatlabel variant="on" style="flex: 0 1 340px; min-width: 260px">
+          <input pInputText id="f-search" [ngModel]="filter().search" (ngModelChange)="updateFilter('search', $event)" />
+          <label for="f-search">{{ 'suppliers.list.searchPlaceholder' | translate }}</label>
+        </p-floatlabel>
+      </div>
+    </nb-filters-panel>
 
     <div class="table-container">
-      <p-table [value]="filteredSuppliers" size="small" class="compact-table">
+      <p-table [value]="filteredSuppliers()" size="small" class="compact-table" [paginator]="true" [rows]="rows" [rowsPerPageOptions]="rowsPerPageOptions" (onPage)="onRowsChange($event.rows)">
         <ng-template #header>
           <tr>
             <th>{{ 'suppliers.list.columns.companyName' | translate }}</th>

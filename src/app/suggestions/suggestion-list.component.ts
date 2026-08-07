@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogService } from 'primeng/dynamicdialog';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
+import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
@@ -12,6 +11,9 @@ import { TooltipModule } from 'primeng/tooltip';
 
 import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
+import { ActiveFilterEntry, NbFiltersPanelComponent } from '../shared/filters-panel/nb-filters-panel.component';
+import { NbPageHeaderComponent } from '../shared/page-header/nb-page-header.component';
+import { NbStatefulListPage } from '../shared/list-base/nb-stateful-list-page';
 import { StatusBadgeComponent, StatusTone } from '../shared/status-badge/status-badge.component';
 import { Suggestion, SuggestionService, SuggestionStatus } from './suggestion.service';
 import { SuggestionFormComponent } from './suggestion-form.component';
@@ -23,55 +25,77 @@ const STATUS_TONES: Record<SuggestionStatus, StatusTone> = {
   REJECTED: 'danger',
 };
 
+interface SuggestionsFilterState {
+  search: string;
+}
+
 @Component({
-    selector: 'app-suggestion-list',
-    imports: [
-        FormsModule,
-        ButtonModule,
-        IconFieldModule,
-        InputIconModule,
-        InputTextModule,
-        SelectModule,
-        TableModule,
-        TooltipModule,
-        StatusBadgeComponent,
-        TranslatePipe,
-    ],
-    templateUrl: './suggestion-list.component.html',
-    styleUrl: './suggestion-list.component.scss'
+  selector: 'app-suggestion-list',
+  imports: [
+    FormsModule,
+    ButtonModule,
+    FloatLabelModule,
+    InputTextModule,
+    SelectModule,
+    TableModule,
+    TooltipModule,
+    NbFiltersPanelComponent,
+    NbPageHeaderComponent,
+    StatusBadgeComponent,
+    TranslatePipe,
+  ],
+  templateUrl: './suggestion-list.component.html',
+  styleUrl: './suggestion-list.component.scss',
 })
-export class SuggestionListComponent implements OnInit {
-  suggestions: Suggestion[] = [];
-  search = '';
+export class SuggestionListComponent extends NbStatefulListPage<SuggestionsFilterState> implements OnInit {
+  private readonly suggestionService = inject(SuggestionService);
+  private readonly authService = inject(AuthService);
+  private readonly dialogService = inject(DialogService);
+  private readonly i18n = inject(I18nService);
+
+  private readonly suggestions = signal<Suggestion[]>([]);
   statusOptions: SuggestionStatus[] = ['RECEIVED', 'IN_ANALYSIS', 'IMPLEMENTED', 'REJECTED'];
   permissions: string[] = [];
 
-  constructor(
-    private readonly suggestionService: SuggestionService,
-    private readonly authService: AuthService,
-    private readonly dialogService: DialogService,
-    private readonly i18n: I18nService,
-  ) {}
-
   ngOnInit(): void {
-    this.load();
+    this.initStatefulList();
     this.authService.loadMe().subscribe((user) => (this.permissions = user.permissions));
   }
 
-  get filteredSuggestions(): Suggestion[] {
-    const term = this.search.trim().toLowerCase();
-    if (!term) {
-      return this.suggestions;
-    }
-    return this.suggestions.filter((suggestion) => suggestion.description.toLowerCase().includes(term));
+  protected override refresh(): void {
+    this.load();
   }
+
+  protected override tableRowsKey(): string {
+    return 'nimbusflow.suggestions.table.rows.v1';
+  }
+
+  protected override filtersKey(): string {
+    return 'nimbusflow.suggestions.filters.v1';
+  }
+
+  protected override emptyFilter(): SuggestionsFilterState {
+    return { search: '' };
+  }
+
+  protected override buildActiveFilters(f: SuggestionsFilterState): ActiveFilterEntry[] {
+    const entries: ActiveFilterEntry[] = [];
+    if (f.search) entries.push({ label: this.i18n.tUi('suggestions.list.searchPlaceholder'), value: f.search });
+    return entries;
+  }
+
+  readonly filteredSuggestions = computed(() => {
+    const term = this.appliedFilter().search.trim().toLowerCase();
+    if (!term) return this.suggestions();
+    return this.suggestions().filter((suggestion) => suggestion.description.toLowerCase().includes(term));
+  });
 
   get statusSelectOptions(): { label: string; value: SuggestionStatus }[] {
     return this.statusOptions.map((status) => ({ label: this.i18n.tUi(this.statusLabelKey(status)), value: status }));
   }
 
   load(): void {
-    this.suggestionService.list().subscribe((suggestions) => (this.suggestions = suggestions));
+    this.suggestionService.list().subscribe((suggestions) => this.suggestions.set(suggestions));
   }
 
   openCreate(): void {

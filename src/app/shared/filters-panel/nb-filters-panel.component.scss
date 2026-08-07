@@ -110,10 +110,9 @@
 // ::ng-deep necessário pq os campos vêm via <ng-content> (template do componente pai) - sem isso,
 // o encapsulamento de view do Angular não deixaria esse seletor alcançar os campos projetados
 // (eles carregam o _ngcontent do PAI, não deste componente).
-// Campo precisando de largura diferente da padrão (ex.: Nome/Usuário em user-list.component.html)
-// define isso via style inline no próprio <p-floatlabel> - um style inline sempre vence esta
-// regra (especificidade máxima, sem depender de ordem de carregamento entre stylesheets), e fica
-// visível direto no HTML da tela, sem precisar tocar neste componente compartilhado.
+// Campo precisando de largura diferente da padrão define isso via style inline no próprio
+// <p-floatlabel> - um style inline sempre vence esta regra (especificidade máxima, sem depender
+// de ordem de carregamento entre stylesheets).
 .filter-panel__fields ::ng-deep p-floatlabel {
   display: flex;
   flex: 0 1 230px;
@@ -129,8 +128,7 @@
 
 // Campos sem p-floatlabel (date/select cujo conteúdo nativo - "dd/mm/yyyy", placeholder do select -
 // sempre aparece preenchido mesmo vazio, o que faz o label flutuante do PrimeNG sobrepor esse
-// conteúdo em vez de flutuar pra fora - mesmo problema que o Material resolvia à parte pra esses
-// tipos de campo). Label estático acima do campo em vez de flutuante - sem ambiguidade.
+// conteúdo em vez de flutuar pra fora). Label estático acima do campo em vez de flutuante.
 .filter-panel__fields ::ng-deep .filter-field-plain {
   display: flex;
   flex-direction: column;
@@ -155,4 +153,12 @@
   justify-content: flex-end;
   gap: 8px;
   margin-top: 10px;
+}
+
+.filter-panel__actions--start {
+  justify-content: flex-start;
+}
+
+.filter-panel__actions--center {
+  justify-content: center;
 }
