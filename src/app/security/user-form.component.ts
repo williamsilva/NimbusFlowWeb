@@ -1,13 +1,13 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 import { I18nService } from '../core/i18n/i18n.service';
 import { formatTaxId, onlyDigits } from '../shared/utils/br-format';
@@ -37,15 +37,7 @@ function cpfValidator(): ValidatorFn {
  */
 @Component({
     selector: 'app-user-form',
-    imports: [
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        TranslatePipe,
-    ],
+    imports: [ReactiveFormsModule, ButtonModule, FloatLabelModule, InputTextModule, MultiSelectModule, TranslatePipe],
     templateUrl: './user-form.component.html',
     styleUrl: './user-form.component.scss'
 })
@@ -55,15 +47,18 @@ export class UserFormComponent implements OnInit {
   groupOptions: GroupRef[] = [];
   form;
 
+  private readonly data: UserFormDialogData;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly userAdminService: UserAdminService,
     private readonly groupAdminService: GroupAdminService,
-    private readonly dialogRef: MatDialogRef<UserFormComponent>,
+    private readonly dialogRef: DynamicDialogRef,
     private readonly messageService: MessageService,
     private readonly i18n: I18nService,
-    @Inject(MAT_DIALOG_DATA) private readonly data: UserFormDialogData,
+    config: DynamicDialogConfig<UserFormDialogData>,
   ) {
+    this.data = config.data!;
     this.form = this.fb.group({
       name: ['', Validators.required],
       userName: ['', [Validators.required, Validators.email]],

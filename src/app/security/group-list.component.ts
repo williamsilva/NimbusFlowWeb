@@ -1,25 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
 import { ActiveFilterEntry, FilterPanelComponent } from '../shared/filter-panel/filter-panel.component';
-import { NfPaginatorIntl } from '../shared/paginator/nf-paginator-intl';
 import { GroupAdminService, GroupRef, GroupSummary } from './group.service';
 import { GroupFormComponent, GroupFormDialogData } from './group-form.component';
 
@@ -40,48 +35,36 @@ function emptyFilter(): GroupsFilterState {
         CommonModule,
         FormsModule,
         RouterLink,
-        MatButtonModule,
-        MatCardModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatPaginatorModule,
-        MatSelectModule,
-        MatSortModule,
-        MatTableModule,
-        MatTooltipModule,
+        ButtonModule,
+        FloatLabelModule,
+        InputTextModule,
+        SelectModule,
+        TableModule,
+        TooltipModule,
         FilterPanelComponent,
         TranslatePipe,
     ],
-    providers: [{ provide: MatPaginatorIntl, useClass: NfPaginatorIntl }],
     templateUrl: './group-list.component.html',
     styleUrl: './group-list.component.scss'
 })
-export class GroupListComponent implements OnInit, AfterViewInit {
-  dataSource = new MatTableDataSource<GroupSummary>([]);
+export class GroupListComponent implements OnInit {
+  groups: GroupSummary[] = [];
   filter = emptyFilter();
+  private appliedFilter = emptyFilter();
   createdByOptions: string[] = [];
-  displayedColumns = ['name', 'description', 'createdAt', 'createdBy', 'usersCount', 'permissionsCount', 'actions'];
 
   canChange = false;
   canDelete = false;
   canCreate = false;
 
-  @ViewChild(MatSort) private readonly sort!: MatSort;
-  @ViewChild(MatPaginator) private readonly paginator!: MatPaginator;
-
   constructor(
     private readonly groupAdminService: GroupAdminService,
-    private readonly dialog: MatDialog,
+    private readonly dialogService: DialogService,
     private readonly authService: AuthService,
     private readonly messageService: MessageService,
     private readonly confirmationService: ConfirmationService,
     private readonly i18n: I18nService,
-  ) {
-    this.dataSource.filterPredicate = (row, filterJson) =>
-      this.matchesFilter(row, JSON.parse(filterJson) as GroupsFilterState);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.load();
@@ -92,14 +75,13 @@ export class GroupListComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+  get filteredGroups(): GroupSummary[] {
+    return this.groups.filter((row) => this.matchesFilter(row, this.appliedFilter));
   }
 
   /** "label: valor" de cada filtro preenchido - alimenta o popup do ícone (i) do painel. */
   get activeFilters(): ActiveFilterEntry[] {
-    const f = this.filter;
+    const f = this.appliedFilter;
     const entries: ActiveFilterEntry[] = [];
     if (f.name) entries.push({ label: this.i18n.tUi('groups.list.filters.name'), value: f.name });
     if (f.description) entries.push({ label: this.i18n.tUi('groups.list.filters.description'), value: f.description });
@@ -109,12 +91,12 @@ export class GroupListComponent implements OnInit, AfterViewInit {
   }
 
   applyFilters(): void {
-    this.dataSource.filter = JSON.stringify(this.filter);
+    this.appliedFilter = { ...this.filter };
   }
 
   clearFilters(): void {
     this.filter = emptyFilter();
-    this.dataSource.filter = '';
+    this.appliedFilter = emptyFilter();
   }
 
   private matchesFilter(row: GroupSummary, f: GroupsFilterState): boolean {
@@ -127,7 +109,7 @@ export class GroupListComponent implements OnInit, AfterViewInit {
 
   load(): void {
     this.groupAdminService.list().subscribe((groups) => {
-      this.dataSource.data = groups;
+      this.groups = groups;
       this.createdByOptions = Array.from(new Set(groups.map((g) => g.createdBy).filter((v): v is string => !!v))).sort();
     });
   }
@@ -147,13 +129,14 @@ export class GroupListComponent implements OnInit, AfterViewInit {
   }
 
   private openDialog(group: GroupRef | null, readOnly: boolean): void {
-    const ref = this.dialog.open<GroupFormComponent, GroupFormDialogData, boolean>(GroupFormComponent, {
+    const ref = this.dialogService.open<GroupFormComponent, GroupFormDialogData>(GroupFormComponent, {
       data: { group, readOnly },
-      autoFocus: false,
+      header: this.i18n.tUi(readOnly ? 'groups.form.viewTitle' : group ? 'groups.form.editTitle' : 'groups.form.createTitle'),
       width: '640px',
+      modal: true,
     });
 
-    ref.afterClosed().subscribe((saved) => {
+    ref?.onClose.subscribe((saved) => {
       if (saved) {
         this.load();
       }

@@ -157,6 +157,11 @@ body {
     width: 16px;
     margin-right: 4px;
   }
+
+  i.pi {
+    font-size: 14px;
+    margin-right: 4px;
+  }
 }
 
 // Tabela densa (linhas mais baixas, fonte menor) - telas administrativas com muitas colunas
@@ -185,6 +190,25 @@ body {
       font-size: 18px;
       height: 18px;
       width: 18px;
+    }
+  }
+}
+
+// Mesma densidade acima, versão PrimeNG (p-table com [size]="'small'" já ajuda, isso refina mais
+// pro padrão visual do CardSyncWeb - linhas baixas, fonte pequena).
+p-table.compact-table {
+  .p-datatable-thead > tr > th,
+  .p-datatable-tbody > tr > td {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.78rem;
+  }
+
+  .action-btn {
+    width: 30px;
+    height: 30px;
+
+    i.pi {
+      font-size: 15px;
     }
   }
 }
@@ -299,7 +323,11 @@ table.mat-mdc-table {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  min-width: min(560px, 80vw);
+  // Sem min-width fixo (era min(560px, 80vw), calibrado pro mat-dialog-container do Material,
+  // que sempre tinha espaço de sobra) - o DynamicDialogConfig.width já define a largura do dialog
+  // (p-dialog) em cada tela; forçar min-width aqui de novo overflowava o conteúdo pra fora do
+  // p-dialog-content (área útil menor que 560px depois do padding do PrimeNG).
+  width: 100%;
 
   h4 {
     margin: 20px 0 8px;
@@ -321,6 +349,39 @@ table.mat-mdc-table {
 
 .dialog-form-grid mat-form-field {
   width: 100%;
+}
+
+// p-floatlabel (PrimeNG) equivalente ao "width: 100%" do mat-form-field acima - o <input>/
+// p-multiselect projetado dentro precisa da largura explícita tambem, floatlabel só herda a do
+// pai por padrão.
+.dialog-form-grid p-floatlabel {
+  display: block;
+  width: 100%;
+
+  input,
+  p-multiselect,
+  p-select,
+  p-datepicker {
+    width: 100%;
+  }
+}
+
+// Texto de erro de validação de campo (substitui o <mat-error>, que tinha estilo próprio do
+// Material) - mesmo padrão em todos os formulários migrados pra PrimeNG.
+.field-error {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.75rem;
+  color: var(--p-red-500, #ef4444);
+}
+
+// Substitui <mat-dialog-actions align="end"> nos dialogs migrados pra PrimeNG (DynamicDialog não
+// tem uma área de rodapé própria - os botões ficam no fim do template do próprio componente).
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
 }
 
 // ===== Barra de busca + atualizar no topo das listas =====
@@ -357,44 +418,56 @@ tr.mat-mdc-row:hover {
   border-radius: 999px;
 }
 
-.action-btn--edit mat-icon {
+.action-btn--edit mat-icon,
+.action-btn--edit i.pi {
   color: rgba(0, 0, 0, 0.6);
 }
 
-.action-btn--view mat-icon {
+.action-btn--view mat-icon,
+.action-btn--view i.pi {
   color: #0891b2;
 }
 
-.action-btn--activate mat-icon {
+.action-btn--activate mat-icon,
+.action-btn--activate i.pi {
   color: #16a34a;
 }
 
 .action-btn--deactivate mat-icon,
-.action-btn--delete mat-icon {
+.action-btn--delete mat-icon,
+.action-btn--deactivate i.pi,
+.action-btn--delete i.pi {
   color: #dc2626;
 }
 
-.action-btn--invite mat-icon {
+.action-btn--invite mat-icon,
+.action-btn--invite i.pi {
   color: #2563eb;
 }
 
-:root.dark .action-btn--edit mat-icon {
+:root.dark .action-btn--edit mat-icon,
+:root.dark .action-btn--edit i.pi {
   color: rgba(255, 255, 255, 0.7);
 }
 
-:root.dark .action-btn--view mat-icon {
+:root.dark .action-btn--view mat-icon,
+:root.dark .action-btn--view i.pi {
   color: #22d3ee;
 }
 
-:root.dark .action-btn--activate mat-icon {
+:root.dark .action-btn--activate mat-icon,
+:root.dark .action-btn--activate i.pi {
   color: #4ade80;
 }
 
 :root.dark .action-btn--deactivate mat-icon,
-:root.dark .action-btn--delete mat-icon {
+:root.dark .action-btn--delete mat-icon,
+:root.dark .action-btn--deactivate i.pi,
+:root.dark .action-btn--delete i.pi {
   color: #f87171;
 }
 
-:root.dark .action-btn--invite mat-icon {
+:root.dark .action-btn--invite mat-icon,
+:root.dark .action-btn--invite i.pi {
   color: #60a5fa;
 }

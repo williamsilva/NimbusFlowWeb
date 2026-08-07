@@ -6,6 +6,7 @@ import { provideTranslateService } from '@ngx-translate/core';
 import { MESSAGE_FORMAT_CONFIG, TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { providePrimeNG } from 'primeng/config';
 import { MessageService, ConfirmationService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 import Lara from '@primeng/themes/lara';
 
 import { routes } from './app.routes';
@@ -42,6 +43,7 @@ export const appConfig: ApplicationConfig = {
     }),
     MessageService,
     ConfirmationService,
+    DialogService,
     // i18n (mesmo padrão do CardSyncWeb: ngx-translate + loader próprio via /assets/i18n/*.json).
     // @ngx-translate/core 18 não tem mais TranslateModule.forRoot() (API 100% standalone agora,
     // diferente da v17 usada no CardSyncWeb) - provideTranslateService() é o equivalente atual.

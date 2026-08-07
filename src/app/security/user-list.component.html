@@ -3,110 +3,100 @@
     <div>
       <div class="breadcrumb">
         <a routerLink="/">{{ 'menu.dashboard' | translate }}</a>
-        <mat-icon class="breadcrumb__separator">chevron_right</mat-icon>
+        <i class="pi pi-angle-right breadcrumb__separator"></i>
         <span class="breadcrumb__current">{{ 'users.list.title' | translate }}</span>
       </div>
       <p class="page-subtitle">{{ 'users.list.subtitle' | translate }}</p>
     </div>
 
     <div class="page-header__actions">
-      <button mat-stroked-button type="button" class="btn-sm" (click)="load()">
-        <mat-icon>refresh</mat-icon>
+      <button pButton severity="secondary" [outlined]="true" type="button" class="btn-sm" (click)="load()">
+        <i class="pi pi-refresh"></i>
         {{ 'common.refresh' | translate }}
       </button>
 
       @if (canActiveOrInactive) {
         <button
-          mat-raised-button
-          color="primary"
+          pButton
           type="button"
           class="btn-sm"
           [disabled]="selectionMode !== 'activate'"
           (click)="activateSelected()"
         >
-          <mat-icon>check_circle</mat-icon>
+          <i class="pi pi-check-circle"></i>
           {{ 'users.list.activate' | translate }}
         </button>
         <button
-          mat-raised-button
-          color="warn"
+          pButton
+          severity="danger"
           type="button"
           class="btn-sm"
           [disabled]="selectionMode !== 'deactivate'"
           (click)="deactivateSelected()"
         >
-          <mat-icon>block</mat-icon>
+          <i class="pi pi-ban"></i>
           {{ 'users.list.deactivateBulk' | translate }}
         </button>
       }
 
       @if (canCreate) {
-        <button mat-raised-button color="primary" type="button" class="btn-sm" (click)="openCreate()">
-          <mat-icon>add</mat-icon>
+        <button pButton type="button" class="btn-sm" (click)="openCreate()">
+          <i class="pi pi-plus"></i>
           {{ 'users.list.create' | translate }}
         </button>
       }
     </div>
   </div>
 
-  <mat-card class="content-card">
+  <div class="content-card">
     <app-filter-panel [activeFilters]="activeFilters" (search)="applyFilters()" (clear)="clearFilters()">
       <div class="filter-row">
-        <mat-form-field appearance="outline" style="flex: 0 1 460px; min-width: 340px">
-          <mat-label>{{ 'users.list.filters.name' | translate }}</mat-label>
-          <input matInput [(ngModel)]="filter.name" />
-        </mat-form-field>
+        <p-floatlabel variant="on" style="flex: 0 1 460px; min-width: 340px">
+          <input pInputText id="f-name" [(ngModel)]="filter.name" />
+          <label for="f-name">{{ 'users.list.filters.name' | translate }}</label>
+        </p-floatlabel>
 
-        <mat-form-field appearance="outline" style="flex: 0 1 460px; min-width: 340px">
-          <mat-label>{{ 'users.list.filters.userName' | translate }}</mat-label>
-          <input matInput [(ngModel)]="filter.userName" />
-        </mat-form-field>
+        <p-floatlabel variant="on" style="flex: 0 1 460px; min-width: 340px">
+          <input pInputText id="f-userName" [(ngModel)]="filter.userName" />
+          <label for="f-userName">{{ 'users.list.filters.userName' | translate }}</label>
+        </p-floatlabel>
 
-        <mat-form-field appearance="outline">
-          <mat-label>{{ 'users.list.filters.document' | translate }}</mat-label>
-          <input matInput [(ngModel)]="filter.document" />
-        </mat-form-field>
+        <p-floatlabel variant="on">
+          <input pInputText id="f-document" [(ngModel)]="filter.document" />
+          <label for="f-document">{{ 'users.list.filters.document' | translate }}</label>
+        </p-floatlabel>
 
-        <mat-form-field appearance="outline">
-          <mat-label>{{ 'users.list.filters.status' | translate }}</mat-label>
-          <mat-select [(ngModel)]="filter.status" multiple>
-            @for (s of statusOptions; track s) {
-              <mat-option [value]="s">{{ statusLabel(s) }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+        <p-floatlabel variant="on">
+          <p-multiselect inputId="f-status" [(ngModel)]="filter.status" [options]="statusSelectOptions" optionLabel="label" optionValue="value" display="chip" />
+          <label for="f-status">{{ 'users.list.filters.status' | translate }}</label>
+        </p-floatlabel>
       </div>
 
       <div class="filter-row">
-        <mat-form-field appearance="outline">
-          <mat-label>{{ 'users.list.filters.lastLoginAt' | translate }}</mat-label>
-          <input matInput type="date" [(ngModel)]="filter.lastLoginAt" />
-        </mat-form-field>
+        <div class="filter-field-plain">
+          <label for="f-lastLoginAt">{{ 'users.list.filters.lastLoginAt' | translate }}</label>
+          <input pInputText id="f-lastLoginAt" type="date" [(ngModel)]="filter.lastLoginAt" />
+        </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>{{ 'users.list.filters.blockedUntil' | translate }}</mat-label>
-          <input matInput type="date" [(ngModel)]="filter.blockedUntil" />
-        </mat-form-field>
+        <div class="filter-field-plain">
+          <label for="f-blockedUntil">{{ 'users.list.filters.blockedUntil' | translate }}</label>
+          <input pInputText id="f-blockedUntil" type="date" [(ngModel)]="filter.blockedUntil" />
+        </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>{{ 'users.list.filters.passwordExpiresAt' | translate }}</mat-label>
-          <input matInput type="date" [(ngModel)]="filter.passwordExpiresAt" />
-        </mat-form-field>
+        <div class="filter-field-plain">
+          <label for="f-passwordExpiresAt">{{ 'users.list.filters.passwordExpiresAt' | translate }}</label>
+          <input pInputText id="f-passwordExpiresAt" type="date" [(ngModel)]="filter.passwordExpiresAt" />
+        </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>{{ 'users.list.filters.createdAt' | translate }}</mat-label>
-          <input matInput type="date" [(ngModel)]="filter.createdAt" />
-        </mat-form-field>
+        <div class="filter-field-plain">
+          <label for="f-createdAt">{{ 'users.list.filters.createdAt' | translate }}</label>
+          <input pInputText id="f-createdAt" type="date" [(ngModel)]="filter.createdAt" />
+        </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>{{ 'users.list.filters.createdBy' | translate }}</mat-label>
-          <mat-select [(ngModel)]="filter.createdBy">
-            <mat-option value="">{{ 'common.all' | translate }}</mat-option>
-            @for (name of createdByOptions; track name) {
-              <mat-option [value]="name">{{ name }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+        <div class="filter-field-plain">
+          <label for="f-createdBy">{{ 'users.list.filters.createdBy' | translate }}</label>
+          <p-select inputId="f-createdBy" [(ngModel)]="filter.createdBy" [options]="createdByOptions" [showClear]="true" [placeholder]="'common.all' | translate" />
+        </div>
       </div>
     </app-filter-panel>
 
@@ -118,133 +108,99 @@
     }
 
     <div class="table-container">
-      <table mat-table matSort [dataSource]="dataSource" class="compact-table">
-        <ng-container matColumnDef="select">
-          <th mat-header-cell *matHeaderCellDef>
+      <p-table [value]="filteredUsers" [(selection)]="selected" dataKey="id" size="small" class="compact-table" [paginator]="true" [rows]="20" [rowsPerPageOptions]="[10, 20, 50]">
+        <ng-template #header>
+          <tr>
             @if (canActiveOrInactive) {
-              <mat-checkbox
-                (change)="masterToggle()"
-                [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()"
-              ></mat-checkbox>
+              <th style="width: 2.5rem"><p-tableHeaderCheckbox /></th>
             }
-          </th>
-          <td mat-cell *matCellDef="let user">
+            <th pSortableColumn="userName">{{ 'users.list.columns.userName' | translate }} <p-sortIcon field="userName" /></th>
+            <th pSortableColumn="name">{{ 'users.list.columns.name' | translate }} <p-sortIcon field="name" /></th>
+            <th pSortableColumn="document">{{ 'users.list.columns.document' | translate }} <p-sortIcon field="document" /></th>
+            <th pSortableColumn="status">{{ 'users.list.columns.status' | translate }} <p-sortIcon field="status" /></th>
+            <th pSortableColumn="lastLoginAt">{{ 'users.list.columns.lastLoginAt' | translate }} <p-sortIcon field="lastLoginAt" /></th>
+            <th pSortableColumn="blockedUntil">{{ 'users.list.columns.blockedUntil' | translate }} <p-sortIcon field="blockedUntil" /></th>
+            <th pSortableColumn="passwordExpiresAt">{{ 'users.list.columns.passwordExpiresAt' | translate }} <p-sortIcon field="passwordExpiresAt" /></th>
+            <th pSortableColumn="createdAt">{{ 'users.list.columns.createdAt' | translate }} <p-sortIcon field="createdAt" /></th>
+            <th pSortableColumn="createdBy">{{ 'users.list.columns.createdBy' | translate }} <p-sortIcon field="createdBy" /></th>
+            <th></th>
+          </tr>
+        </ng-template>
+
+        <ng-template #body let-user>
+          <tr>
             @if (canActiveOrInactive) {
-              <mat-checkbox (click)="$event.stopPropagation()" (change)="selection.toggle(user)" [checked]="selection.isSelected(user)"></mat-checkbox>
+              <td><p-tableCheckbox [value]="user" /></td>
             }
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="userName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.userName' | translate }}</th>
-          <td mat-cell *matCellDef="let user">{{ user.userName }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.name' | translate }}</th>
-          <td mat-cell *matCellDef="let user">{{ user.name }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="document">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.document' | translate }}</th>
-          <td mat-cell *matCellDef="let user">{{ user.document | taxId }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.status' | translate }}</th>
-          <td mat-cell *matCellDef="let user">
-            <app-status-badge [label]="statusLabel(user.status)" [tone]="statusTone(user.status)"></app-status-badge>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="lastLoginAt">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.lastLoginAt' | translate }}</th>
-          <td mat-cell *matCellDef="let user">{{ user.lastLoginAt ? (user.lastLoginAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="blockedUntil">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.blockedUntil' | translate }}</th>
-          <td mat-cell *matCellDef="let user">{{ user.blockedUntil ? (user.blockedUntil | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="passwordExpiresAt">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.passwordExpiresAt' | translate }}</th>
-          <td mat-cell *matCellDef="let user">
-            {{ user.passwordExpiresAt ? (user.passwordExpiresAt | date: 'dd/MM/yyyy HH:mm') : '—' }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.createdAt' | translate }}</th>
-          <td mat-cell *matCellDef="let user">{{ user.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="createdBy">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'users.list.columns.createdBy' | translate }}</th>
-          <td mat-cell *matCellDef="let user">{{ user.createdBy || '—' }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let user">
-            @if (canChange) {
-              <button
-                mat-icon-button
-                class="action-btn action-btn--edit"
-                (click)="openEdit(user)"
-                [attr.aria-label]="'common.edit' | translate"
-                [matTooltip]="'common.edit' | translate"
-              >
-                <mat-icon>edit</mat-icon>
-              </button>
-            }
-            @if (canResendInvite && isPendingPassword(user)) {
-              <button
-                mat-icon-button
-                class="action-btn action-btn--invite"
-                (click)="resendInvite(user)"
-                [attr.aria-label]="'users.list.resendInvite' | translate"
-                [matTooltip]="'users.list.resendInvite' | translate"
-              >
-                <mat-icon>forward_to_inbox</mat-icon>
-              </button>
-            }
-            @if (canActiveOrInactive) {
-              @if (user.status === 1) {
+            <td>{{ user.userName }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.document | taxId }}</td>
+            <td><app-status-badge [label]="statusLabel(user.status)" [tone]="statusTone(user.status)"></app-status-badge></td>
+            <td>{{ user.lastLoginAt ? (user.lastLoginAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+            <td>{{ user.blockedUntil ? (user.blockedUntil | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+            <td>{{ user.passwordExpiresAt ? (user.passwordExpiresAt | date: 'dd/MM/yyyy HH:mm') : '—' }}</td>
+            <td>{{ user.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ user.createdBy || '—' }}</td>
+            <td>
+              @if (canChange) {
                 <button
-                  mat-icon-button
-                  class="action-btn action-btn--deactivate"
-                  (click)="deactivate(user)"
-                  [attr.aria-label]="'common.deactivate' | translate"
-                  [matTooltip]="'common.deactivate' | translate"
+                  pButton
+                  [text]="true"
+                  class="action-btn action-btn--edit"
+                  (click)="openEdit(user)"
+                  [attr.aria-label]="'common.edit' | translate"
+                  [pTooltip]="'common.edit' | translate"
                 >
-                  <mat-icon>block</mat-icon>
-                </button>
-              } @else if (user.status === 2) {
-                <button
-                  mat-icon-button
-                  class="action-btn action-btn--activate"
-                  (click)="activate(user)"
-                  [attr.aria-label]="'users.list.activate' | translate"
-                  [matTooltip]="'users.list.activate' | translate"
-                >
-                  <mat-icon>check_circle</mat-icon>
+                  <i class="pi pi-pencil"></i>
                 </button>
               }
-            }
-          </td>
-        </ng-container>
+              @if (canResendInvite && isPendingPassword(user)) {
+                <button
+                  pButton
+                  [text]="true"
+                  class="action-btn action-btn--invite"
+                  (click)="resendInvite(user)"
+                  [attr.aria-label]="'users.list.resendInvite' | translate"
+                  [pTooltip]="'users.list.resendInvite' | translate"
+                >
+                  <i class="pi pi-envelope"></i>
+                </button>
+              }
+              @if (canActiveOrInactive) {
+                @if (user.status === 1) {
+                  <button
+                    pButton
+                    [text]="true"
+                    class="action-btn action-btn--deactivate"
+                    (click)="deactivate(user)"
+                    [attr.aria-label]="'common.deactivate' | translate"
+                    [pTooltip]="'common.deactivate' | translate"
+                  >
+                    <i class="pi pi-ban"></i>
+                  </button>
+                } @else if (user.status === 2) {
+                  <button
+                    pButton
+                    [text]="true"
+                    class="action-btn action-btn--activate"
+                    (click)="activate(user)"
+                    [attr.aria-label]="'users.list.activate' | translate"
+                    [pTooltip]="'users.list.activate' | translate"
+                  >
+                    <i class="pi pi-check-circle"></i>
+                  </button>
+                }
+              }
+            </td>
+          </tr>
+        </ng-template>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
-
-      @if (dataSource.filteredData.length === 0) {
-        <div class="empty-state">{{ 'users.list.empty' | translate }}</div>
-      }
-
-      <mat-paginator [pageSizeOptions]="[10, 20, 50]" [pageSize]="20" showFirstLastButtons></mat-paginator>
+        <ng-template #emptymessage>
+          <tr>
+            <td [attr.colspan]="canActiveOrInactive ? 10 : 9" class="empty-state">{{ 'users.list.empty' | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
-  </mat-card>
+  </div>
 </div>

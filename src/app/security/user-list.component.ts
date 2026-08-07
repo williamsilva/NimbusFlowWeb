@@ -1,27 +1,22 @@
-import { SelectionModel } from '@angular/cdk/collections';
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { DialogService } from 'primeng/dynamicdialog';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { SelectModule } from 'primeng/select';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
 import { ActiveFilterEntry, FilterPanelComponent } from '../shared/filter-panel/filter-panel.component';
-import { NfPaginatorIntl } from '../shared/paginator/nf-paginator-intl';
 import { onlyDigits } from '../shared/utils/br-format';
 import { TaxIdPipe } from '../shared/pipes/tax-id.pipe';
 import { StatusBadgeComponent, StatusTone } from '../shared/status-badge/status-badge.component';
@@ -71,47 +66,29 @@ function emptyFilter(): UsersFilterState {
         CommonModule,
         FormsModule,
         RouterLink,
-        MatButtonModule,
-        MatCardModule,
-        MatCheckboxModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatPaginatorModule,
-        MatSelectModule,
-        MatSortModule,
-        MatTableModule,
-        MatTooltipModule,
+        ButtonModule,
+        CheckboxModule,
+        FloatLabelModule,
+        InputTextModule,
+        MultiSelectModule,
+        SelectModule,
+        TableModule,
+        TooltipModule,
         FilterPanelComponent,
         TaxIdPipe,
         StatusBadgeComponent,
         TranslatePipe,
     ],
-    providers: [{ provide: MatPaginatorIntl, useClass: NfPaginatorIntl }],
     templateUrl: './user-list.component.html',
     styleUrl: './user-list.component.scss'
 })
-export class UserListComponent implements OnInit, AfterViewInit {
-  dataSource = new MatTableDataSource<AdminUser>([]);
-  selection = new SelectionModel<AdminUser>(true, []);
+export class UserListComponent implements OnInit {
+  users: AdminUser[] = [];
+  selected: AdminUser[] = [];
   filter = emptyFilter();
+  private appliedFilter = emptyFilter();
   readonly statusOptions = STATUS_OPTIONS;
   createdByOptions: string[] = [];
-
-  displayedColumns = [
-    'select',
-    'userName',
-    'name',
-    'document',
-    'status',
-    'lastLoginAt',
-    'blockedUntil',
-    'passwordExpiresAt',
-    'createdAt',
-    'createdBy',
-    'actions',
-  ];
 
   canCreate = false;
   canChange = false;
@@ -119,19 +96,13 @@ export class UserListComponent implements OnInit, AfterViewInit {
   canResendInvite = false;
   private currentUserName = '';
 
-  @ViewChild(MatSort) private readonly sort!: MatSort;
-  @ViewChild(MatPaginator) private readonly paginator!: MatPaginator;
-
   constructor(
     private readonly userAdminService: UserAdminService,
-    private readonly dialog: MatDialog,
+    private readonly dialogService: DialogService,
     private readonly authService: AuthService,
     private readonly messageService: MessageService,
     private readonly i18n: I18nService,
-  ) {
-    this.dataSource.filterPredicate = (row, filterJson) =>
-      this.matchesFilter(row, JSON.parse(filterJson) as UsersFilterState);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.load();
@@ -144,26 +115,32 @@ export class UserListComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-  }
-
   load(): void {
     this.userAdminService.list().subscribe((users) => {
-      this.dataSource.data = users;
+      this.users = users;
       this.createdByOptions = Array.from(
         new Set(users.map((u) => u.createdBy).filter((v): v is string => !!v)),
       ).sort();
-      this.selection.clear();
+      this.selected = [];
     });
   }
 
   // ------------------------- Filtros avançados -------------------------
 
+  get statusSelectOptions(): { label: string; value: number }[] {
+    return this.statusOptions.map((s) => ({ label: this.statusLabel(s), value: s }));
+  }
+
+  /** Filtragem client-side, aplicada só ao clicar "Buscar" (this.appliedFilter), não a cada
+   *  tecla digitada em this.filter - mesmo comportamento "deferred" de antes (MatTableDataSource
+   *  com filter setado só em applyFilters()), agora sobre um array puro pro p-table. */
+  get filteredUsers(): AdminUser[] {
+    return this.users.filter((row) => this.matchesFilter(row, this.appliedFilter));
+  }
+
   /** "label: valor" de cada filtro preenchido - alimenta o popup do ícone (i) do painel. */
   get activeFilters(): ActiveFilterEntry[] {
-    const f = this.filter;
+    const f = this.appliedFilter;
     const entries: ActiveFilterEntry[] = [];
     if (f.name) entries.push({ label: this.i18n.tUi('users.list.filters.name'), value: f.name });
     if (f.userName) entries.push({ label: this.i18n.tUi('users.list.filters.userName'), value: f.userName });
@@ -180,12 +157,12 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
   applyFilters(): void {
-    this.dataSource.filter = JSON.stringify(this.filter);
+    this.appliedFilter = { ...this.filter, status: [...this.filter.status] };
   }
 
   clearFilters(): void {
     this.filter = emptyFilter();
-    this.dataSource.filter = '';
+    this.appliedFilter = emptyFilter();
   }
 
   private matchesFilter(row: AdminUser, f: UsersFilterState): boolean {
@@ -207,24 +184,11 @@ export class UserListComponent implements OnInit, AfterViewInit {
 
   // ------------------------- Seleção em massa -------------------------
 
-  isAllSelected(): boolean {
-    const visible = this.dataSource.filteredData;
-    return visible.length > 0 && visible.every((row) => this.selection.isSelected(row));
-  }
-
-  masterToggle(): void {
-    if (this.isAllSelected()) {
-      this.dataSource.filteredData.forEach((row) => this.selection.deselect(row));
-    } else {
-      this.dataSource.filteredData.forEach((row) => this.selection.select(row));
-    }
-  }
-
   /** Mesma regra do CardSyncWeb: a seleção só habilita um "modo" por vez (ativar OU desativar),
    *  nunca os dois - evita misturar transições inválidas numa única chamada em lote. Desativar a
    *  própria conta nunca é permitido (bloqueado no NimbusAuth), então nem oferece o botão. */
   get selectionMode(): 'activate' | 'deactivate' | null {
-    const selected = this.selection.selected;
+    const selected = this.selected;
     if (!selected.length) return null;
     if (selected.every((u) => u.status === 2)) return 'activate';
     if (selected.every((u) => u.status === 1 && u.userName !== this.currentUserName)) return 'deactivate';
@@ -232,10 +196,10 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
   activateSelected(): void {
-    const ids = this.selection.selected.map((u) => u.id);
+    const ids = this.selected.map((u) => u.id);
     this.userAdminService.activateBulk(ids).subscribe({
       next: () => {
-        this.selection.clear();
+        this.selected = [];
         this.load();
       },
       error: () => this.notifyError('users.list.activateError'),
@@ -243,10 +207,10 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
   deactivateSelected(): void {
-    const ids = this.selection.selected.map((u) => u.id);
+    const ids = this.selected.map((u) => u.id);
     this.userAdminService.deactivateBulk(ids).subscribe({
       next: () => {
-        this.selection.clear();
+        this.selected = [];
         this.load();
       },
       error: () => this.notifyError('users.list.deactivateError'),
@@ -278,13 +242,14 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
   private openDialog(user: AdminUser | null): void {
-    const ref = this.dialog.open<UserFormComponent, UserFormDialogData, boolean>(UserFormComponent, {
+    const ref = this.dialogService.open<UserFormComponent, UserFormDialogData>(UserFormComponent, {
       data: { user },
-      autoFocus: false,
+      header: this.i18n.tUi(user ? 'users.form.editTitle' : 'users.form.createTitle'),
       width: '560px',
+      modal: true,
     });
 
-    ref.afterClosed().subscribe((saved) => {
+    ref?.onClose.subscribe((saved) => {
       if (saved) {
         this.load();
       }

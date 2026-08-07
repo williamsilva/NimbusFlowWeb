@@ -126,15 +126,54 @@
 }
 
 // Campo precisando de largura diferente da padrão (ex.: Nome/Usuário em user-list.component.html)
-// define isso via style inline no próprio <mat-form-field> - um style inline sempre vence esta
-// regra (especificidade máxima, sem depender de ordem de carregamento entre stylesheets), e fica
-// visível direto no HTML da tela, sem precisar tocar neste componente compartilhado.
+// define isso via style inline no próprio <mat-form-field>/<p-floatlabel> - um style inline sempre
+// vence esta regra (especificidade máxima, sem depender de ordem de carregamento entre
+// stylesheets), e fica visível direto no HTML da tela, sem precisar tocar neste componente
+// compartilhado.
 
 // Remove o espaço reservado embaixo do campo pra hint/erro - nunca usado aqui (sem validação nos
 // filtros), mas por padrão o Material reserva essa faixa sempre, deixando o campo bem mais alto
 // do que precisa. Seguro (não afeta a posição do label, só o espaço abaixo do campo).
 .filter-panel__fields ::ng-deep .mat-mdc-form-field-subscript-wrapper {
   display: none;
+}
+
+// Equivalente PrimeNG da regra ::ng-deep mat-form-field acima (mesma largura padrão) - telas já
+// migradas pra PrimeNG (Usuários) usam p-floatlabel no lugar de mat-form-field.
+.filter-panel__fields ::ng-deep p-floatlabel {
+  display: flex;
+  flex: 0 1 230px;
+  min-width: 170px;
+  font-size: 0.8rem;
+
+  input,
+  p-multiselect,
+  p-select {
+    width: 100%;
+  }
+}
+
+// Campos sem p-floatlabel (date/select cujo conteúdo nativo - "dd/mm/yyyy", placeholder do select -
+// sempre aparece preenchido mesmo vazio, o que faz o label flutuante do PrimeNG sobrepor esse
+// conteúdo em vez de flutuar pra fora - mesmo problema que o Material resolvia à parte pra esses
+// tipos de campo). Label estático acima do campo em vez de flutuante - sem ambiguidade.
+.filter-panel__fields ::ng-deep .filter-field-plain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 0 1 230px;
+  min-width: 170px;
+  font-size: 0.8rem;
+
+  label {
+    font-size: 0.7rem;
+    color: var(--nf-text-secondary, #6b7280);
+  }
+
+  input,
+  p-select {
+    width: 100%;
+  }
 }
 
 .filter-panel__actions {

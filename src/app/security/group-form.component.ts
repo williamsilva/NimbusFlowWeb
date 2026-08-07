@@ -1,14 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSelectModule } from '@angular/material/select';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { AuthService } from '../core/auth/auth.service';
 import { I18nService } from '../core/i18n/i18n.service';
@@ -29,16 +29,7 @@ export interface GroupFormDialogData {
  */
 @Component({
     selector: 'app-group-form',
-    imports: [
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatProgressSpinnerModule,
-        MatSelectModule,
-        TranslatePipe,
-    ],
+    imports: [ReactiveFormsModule, ButtonModule, FloatLabelModule, InputTextModule, MultiSelectModule, ProgressSpinnerModule, TranslatePipe],
     templateUrl: './group-form.component.html',
     styleUrl: './group-form.component.scss'
 })
@@ -51,16 +42,19 @@ export class GroupFormComponent implements OnInit {
   readonly readOnly: boolean;
   form;
 
+  private readonly data: GroupFormDialogData;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly groupAdminService: GroupAdminService,
     private readonly authService: AuthService,
-    private readonly dialogRef: MatDialogRef<GroupFormComponent>,
+    private readonly dialogRef: DynamicDialogRef,
     private readonly messageService: MessageService,
     private readonly i18n: I18nService,
-    @Inject(MAT_DIALOG_DATA) private readonly data: GroupFormDialogData,
+    config: DynamicDialogConfig<GroupFormDialogData>,
   ) {
-    this.readOnly = !!data.readOnly;
+    this.data = config.data!;
+    this.readOnly = !!this.data.readOnly;
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(120)]],
       description: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(1204)]],
@@ -84,7 +78,7 @@ export class GroupFormComponent implements OnInit {
           this.form.patchValue({ permissionIds: detail.permissions.map((p) => p.id) });
           this.loadingDetail = false;
           // Só desabilita depois do patchValue - form.disable() ainda deixa os valores visíveis,
-          // só bloqueia edição (mat-select/input ficam com aparência "read-only" do Material).
+          // só bloqueia edição.
           if (this.readOnly) {
             this.form.disable();
           }
