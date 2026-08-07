@@ -1,11 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
 
 import { I18nService } from '../core/i18n/i18n.service';
@@ -29,15 +29,7 @@ function taxIdValidator(): ValidatorFn {
 
 @Component({
     selector: 'app-supplier-form',
-    imports: [
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatCheckboxModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatInputModule,
-        TranslatePipe,
-    ],
+    imports: [ReactiveFormsModule, ButtonModule, CheckboxModule, FloatLabelModule, InputTextModule, TranslatePipe],
     templateUrl: './supplier-form.component.html',
     styleUrl: './supplier-form.component.scss'
 })
@@ -46,14 +38,17 @@ export class SupplierFormComponent implements OnInit {
   saving = false;
   form;
 
+  private readonly data: SupplierFormDialogData;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly supplierService: SupplierService,
-    private readonly dialogRef: MatDialogRef<SupplierFormComponent>,
+    private readonly dialogRef: DynamicDialogRef,
     private readonly messageService: MessageService,
     private readonly i18n: I18nService,
-    @Inject(MAT_DIALOG_DATA) private readonly data: SupplierFormDialogData,
+    config: DynamicDialogConfig<SupplierFormDialogData>,
   ) {
+    this.data = config.data!;
     this.form = this.fb.group({
       companyName: ['', Validators.required],
       tradeName: [''],

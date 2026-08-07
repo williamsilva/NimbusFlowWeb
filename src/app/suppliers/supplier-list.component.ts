@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatTableModule } from '@angular/material/table';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
+import { ButtonModule } from 'primeng/button';
+import { DialogService } from 'primeng/dynamicdialog';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { AuthService } from '../core/auth/auth.service';
+import { I18nService } from '../core/i18n/i18n.service';
 import { PhonePipe } from '../shared/pipes/phone.pipe';
 import { TaxIdPipe } from '../shared/pipes/tax-id.pipe';
 import { StatusBadgeComponent } from '../shared/status-badge/status-badge.component';
@@ -21,14 +21,12 @@ import { SupplierFormComponent, SupplierFormDialogData } from './supplier-form.c
     selector: 'app-supplier-list',
     imports: [
         FormsModule,
-        MatTableModule,
-        MatButtonModule,
-        MatCardModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        MatTooltipModule,
+        ButtonModule,
+        IconFieldModule,
+        InputIconModule,
+        InputTextModule,
+        TableModule,
+        TooltipModule,
         PhonePipe,
         TaxIdPipe,
         StatusBadgeComponent,
@@ -40,14 +38,14 @@ import { SupplierFormComponent, SupplierFormDialogData } from './supplier-form.c
 export class SupplierListComponent implements OnInit {
   suppliers: Supplier[] = [];
   search = '';
-  displayedColumns = ['companyName', 'taxId', 'phone', 'email', 'active', 'actions'];
   /** FORNECEDOR_MANAGE (Fase 7) - só UX, a validação real é 100% backend (SupplierService). */
   canManageSuppliers = false;
 
   constructor(
     private readonly supplierService: SupplierService,
-    private readonly dialog: MatDialog,
+    private readonly dialogService: DialogService,
     private readonly authService: AuthService,
+    private readonly i18n: I18nService,
   ) {}
 
   ngOnInit(): void {
@@ -80,12 +78,14 @@ export class SupplierListComponent implements OnInit {
   }
 
   private openDialog(supplier: Supplier | null): void {
-    const ref = this.dialog.open<SupplierFormComponent, SupplierFormDialogData, boolean>(SupplierFormComponent, {
+    const ref = this.dialogService.open<SupplierFormComponent, SupplierFormDialogData>(SupplierFormComponent, {
       data: { supplier },
-      autoFocus: false,
+      header: this.i18n.tUi(supplier ? 'suppliers.form.editTitle' : 'suppliers.form.createTitle'),
+      width: '720px',
+      modal: true,
     });
 
-    ref.afterClosed().subscribe((saved) => {
+    ref?.onClose.subscribe((saved) => {
       if (saved) {
         this.load();
       }
