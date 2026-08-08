@@ -1,0 +1,325 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '760px', maxWidth: '95vw' }"
+  [header]="isEditMode() ? ('suppliers.edit.title' | translate) : ('suppliers.new.title' | translate)"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <h4 class="mt-0 mb-2 text-sm font-semibold opacity-70">
+      {{ 'suppliers.sections.general' | translate }}
+    </h4>
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="companyName"
+            pInputText
+            type="text"
+            formControlName="companyName"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'companyName'"
+            [forId]="'companyName'"
+            [control]="form.controls.companyName"
+            [label]="'suppliers.fields.companyName' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="tradeName"
+            pInputText
+            type="text"
+            formControlName="tradeName"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [required]="false"
+            [field]="'tradeName'"
+            [forId]="'tradeName'"
+            [control]="form.controls.tradeName"
+            [label]="'suppliers.fields.tradeName' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="taxId"
+            pInputText
+            type="text"
+            maxlength="18"
+            formControlName="taxId"
+            class="w-full p-inputtext-sm"
+            (input)="onTaxIdInput($any($event.target).value)"
+          />
+          <app-error-msg
+            [field]="'taxId'"
+            [forId]="'taxId'"
+            [control]="form.controls.taxId"
+            [label]="'suppliers.fields.taxId' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="phone"
+            pInputText
+            type="text"
+            maxlength="15"
+            formControlName="phone"
+            class="w-full p-inputtext-sm"
+            (input)="onPhoneInput($any($event.target).value)"
+          />
+          <app-error-msg
+            [required]="false"
+            [field]="'phone'"
+            [forId]="'phone'"
+            [control]="form.controls.phone"
+            [label]="'suppliers.fields.phone' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="email"
+            pInputText
+            type="email"
+            formControlName="email"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [required]="false"
+            [field]="'email'"
+            [forId]="'email'"
+            [control]="form.controls.email"
+            [label]="'suppliers.fields.email' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="commercialContact"
+            pInputText
+            type="text"
+            formControlName="commercialContact"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [required]="false"
+            [field]="'commercialContact'"
+            [forId]="'commercialContact'"
+            [control]="form.controls.commercialContact"
+            [label]="'suppliers.fields.commercialContact' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2 flex align-items-center">
+        <p-checkbox
+          [binary]="true"
+          inputId="active"
+          formControlName="active"
+        ></p-checkbox>
+        <label for="active" class="ml-2">{{ 'suppliers.fields.status' | translate }}</label>
+      </div>
+    </div>
+
+    <h4 class="mb-2 text-sm font-semibold opacity-70">
+      {{ 'suppliers.sections.address' | translate }}
+    </h4>
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="addressStreet"
+            pInputText
+            type="text"
+            formControlName="addressStreet"
+            class="w-full p-inputtext-sm"
+          />
+          <label for="addressStreet">{{ 'suppliers.fields.addressStreet' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-2 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="addressNumber"
+            pInputText
+            type="text"
+            formControlName="addressNumber"
+            class="w-full p-inputtext-sm"
+          />
+          <label for="addressNumber">{{ 'suppliers.fields.addressNumber' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="addressComplement"
+            pInputText
+            type="text"
+            formControlName="addressComplement"
+            class="w-full p-inputtext-sm"
+          />
+          <label for="addressComplement">{{
+            'suppliers.fields.addressComplement' | translate
+          }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="addressNeighborhood"
+            pInputText
+            type="text"
+            formControlName="addressNeighborhood"
+            class="w-full p-inputtext-sm"
+          />
+          <label for="addressNeighborhood">{{
+            'suppliers.fields.addressNeighborhood' | translate
+          }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="addressCity"
+            pInputText
+            type="text"
+            formControlName="addressCity"
+            class="w-full p-inputtext-sm"
+          />
+          <label for="addressCity">{{ 'suppliers.fields.addressCity' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-2 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="addressState"
+            pInputText
+            type="text"
+            maxlength="2"
+            formControlName="addressState"
+            class="w-full p-inputtext-sm"
+            style="text-transform: uppercase"
+          />
+          <label for="addressState">{{ 'suppliers.fields.addressState' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-2 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="addressZipCode"
+            pInputText
+            type="text"
+            formControlName="addressZipCode"
+            class="w-full p-inputtext-sm"
+          />
+          <label for="addressZipCode">{{ 'suppliers.fields.addressZipCode' | translate }}</label>
+        </p-floatLabel>
+      </div>
+    </div>
+
+    <h4 class="mb-2 text-sm font-semibold opacity-70">
+      {{ 'suppliers.sections.bank' | translate }}
+    </h4>
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="bankName"
+            pInputText
+            type="text"
+            formControlName="bankName"
+            class="w-full p-inputtext-sm"
+          />
+          <label for="bankName">{{ 'suppliers.fields.bankName' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="bankAgency"
+            pInputText
+            type="text"
+            formControlName="bankAgency"
+            class="w-full p-inputtext-sm"
+          />
+          <label for="bankAgency">{{ 'suppliers.fields.bankAgency' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="bankAccount"
+            pInputText
+            type="text"
+            formControlName="bankAccount"
+            class="w-full p-inputtext-sm"
+          />
+          <label for="bankAccount">{{ 'suppliers.fields.bankAccount' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-2 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="bankAccountType"
+            pInputText
+            type="text"
+            formControlName="bankAccountType"
+            class="w-full p-inputtext-sm"
+          />
+          <label for="bankAccountType">{{ 'suppliers.fields.bankAccountType' | translate }}</label>
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving() || !canSubmit()"
+    ></button>
+  </ng-template>
+</p-dialog>

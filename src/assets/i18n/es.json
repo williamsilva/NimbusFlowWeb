@@ -1,0 +1,3752 @@
+{
+  "app": {
+    "name": "NimbusFlow Security"
+  },
+  "routes": {
+    "register": {
+      "company": {
+        "title": "Empresas"
+      },
+      "contract": {
+        "title": "Contratos"
+      },
+      "acquirer": {
+        "title": "Adquirentes"
+      },
+      "establishment": {
+        "title": "Establecimientos"
+      },
+      "flags": {
+        "title": "Banderas"
+      },
+      "contracts": {
+        "title": "Contratos"
+      },
+      "holidays": {
+        "title": "Festivos"
+      },
+      "banks": {
+        "title": "Bancos"
+      },
+      "bankingDomicile": {
+        "title": "Domicilios Bancarios"
+      },
+      "noFileDay": {
+        "title": "Días sin Archivo"
+      }
+    },
+    "security": {
+      "users": {
+        "title": "Usuarios"
+      },
+      "groups": {
+        "title": "Grupos"
+      },
+      "accountProfile": {
+        "title": "Mi cuenta"
+      },
+      "accountPassword": {
+        "title": "Cambiar contraseña"
+      },
+      "groupDetail": {
+        "title": "Detalle del grupo"
+      }
+    },
+    "adjustment": {
+      "chargebacks": {
+        "title": "Chargebacks"
+      },
+      "tariffs": {
+        "title": "Tarifas"
+      },
+      "cancellation": {
+        "title": "Cancelaciones"
+      },
+      "chargebackRequests": {
+        "title": "Solicitudes de Contracargo"
+      }
+    },
+    "conciliation": {
+      "fees": {},
+      "contractAudit": {
+        "title": "Tasas Aplicadas"
+      },
+      "sales": {
+        "title": "Ventas adquirente"
+      },
+      "erpVsAcquirer": {
+        "title": "ERP x adquirente",
+        "missingAcquirer": {
+          "title": "Ventas no localizadas en la adquirente"
+        },
+        "missingErp": {
+          "title": "Ventas no localizadas en el ERP"
+        },
+        "otherDivergences": {
+          "title": "Otras ventas no conciliadas"
+        }
+      },
+      "debits": {},
+      "chargebacks": {},
+      "bankSettlement": {},
+      "settings": {
+        "title": "Configuración de Conciliación"
+      },
+      "manualSalesSummary": {
+        "title": "Resumen de Ventas Manual"
+      },
+      "manualCreditOrder": {
+        "title": "Orden de Pago Manual"
+      },
+      "manualBankStatement": {
+        "title": "Lanzamiento Bancario Manual"
+      },
+      "manualBankReconciliation": {
+        "title": "Conciliación Bancaria Manual"
+      },
+      "manualTools": {
+        "title": "Conciliación Manual"
+      },
+      "reconciliationActions": {
+        "title": "Acciones de Conciliación"
+      },
+      "executionHistory": {
+        "title": "Historial de Ejecuciones"
+      },
+      "divergences": {}
+    },
+    "settings": {
+      "scheduler": {
+        "title": "Programación"
+      },
+      "reconciliation": {
+        "title": "Conciliación"
+      },
+      "email": {
+        "title": "E-mail"
+      },
+      "backup": {
+        "title": "Backup"
+      }
+    },
+    "transactions": {
+      "erp": {
+        "installments": {
+          "title": "Cuotas ERP"
+        },
+        "sales": {
+          "title": "Ventas ERP"
+        }
+      },
+      "acq": {
+        "installments": {
+          "title": "Cuotas ADQ"
+        },
+        "sales": {
+          "title": "Ventas ADQ"
+        }
+      },
+      "anticipation": {
+        "title": "Anticipaciones"
+      },
+      "saleSummary": {
+        "title": "Resumen de Ventas"
+      },
+      "creditOrder": {
+        "title": "Órdenes de Pago"
+      },
+      "bankStatement": {
+        "title": "Extracto Bancario"
+      },
+      "files": {
+        "title": "Archivos"
+      }
+    },
+    "audit": {
+      "title": "Registros de e-mail"
+    },
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "managementDashboard": {
+      "title": "Dashboard Gerencial"
+    },
+    "forbidden": {
+      "title": "Acceso denegado"
+    },
+    "notFound": {
+      "title": "Página no encontrada"
+    },
+    "suppliers": {
+      "title": "Proveedores"
+    },
+    "works": {
+      "title": "Obras"
+    },
+    "suggestions": {
+      "title": "Sugerencias"
+    }
+  },
+  "topbar": {
+    "online": "Online",
+    "brandName": "NimbusFlow",
+    "brandSub": "Seguridad y Acceso",
+    "sidebarToggleAria": "Mostrar/ocultar menú",
+    "sidebarShowTooltip": "Mostrar menú",
+    "sidebarHideTooltip": "Ocultar menú",
+    "themeToggleAria": "Alternar tema",
+    "langAria": "Seleccionar idioma",
+    "sessionExpired": "Sesión expirada",
+    "sessionExpireTooltip": "La sesión expira por inactividad",
+    "sessionExpiredTooltip": "Inicia sesión nuevamente"
+  },
+  "menu": {
+    "transactions": {
+      "erp": {
+        "title": "ERP",
+        "sales": "Ventas",
+        "installments": "Cuotas"
+      },
+      "acq": {
+        "title": "Adquirentes",
+        "sales": "Ventas",
+        "installments": "Cuotas"
+      },
+      "anticipation": {
+        "title": "Anticipaciones"
+      },
+      "saleSummary": {
+        "title": "Resumen de Ventas"
+      },
+      "creditOrder": {
+        "title": "Órdenes de Pago"
+      },
+      "banks": {
+        "title": "Bancos",
+        "bankStatement": "Extracto Bancario"
+      }
+    },
+    "me": "Mi cuenta",
+    "dashboard": "Dashboard",
+    "managementDashboard": "Dashboard Gerencial",
+    "dashboardManagement": "Gestión",
+    "dashboardAudit": "Auditoría",
+    "audit": {
+      "title": "Auditoría",
+      "mail": "Registros de e-mail"
+    },
+    "register": {
+      "title": "Registros",
+      "flags": "Banderas",
+      "company": "Empresas",
+      "contracts": "Contratos",
+      "acquirer": "Adquirentes",
+      "establishment": "Establecimientos",
+      "holidays": "Festivos",
+      "banks": "Bancos",
+      "bankingDomicile": "Domicilios Bancarios",
+      "noFileDay": "Días sin Archivo"
+    },
+    "conciliation": {
+      "contractAudit": "Tasas aplicadas",
+      "sales": "Ventas adquirente",
+      "title": "Conciliación",
+      "erpVsAcquirer": "ERP x adquirente",
+      "bankSettlement": "Liquidación bancaria",
+      "debits": "Débitos",
+      "divergences": "Divergencias",
+      "settings": "Configuración",
+      "erpMissingAcquirer": "No localizada en la adquirente",
+      "acquirerMissingErp": "No localizada en el ERP",
+      "erpVsAcquirerDivergences": "Otras no conciliadas",
+      "manualSalesSummary": "Resumen de Ventas Manual",
+      "manualCreditOrder": "Orden de Pago Manual",
+      "manualBankStatement": "Lanzamiento Bancario Manual",
+      "manualBankReconciliation": "Conciliación Bancaria Manual",
+      "manualTools": "Conciliación Manual",
+      "reconciliationActions": "Acciones de Conciliación",
+      "executionHistory": "Historial de Ejecuciones"
+    },
+    "adjustment": {
+      "title": "Ajustes",
+      "tariffs": {
+        "title": "Tarifas"
+      },
+      "cancellation": {
+        "title": "Cancelaciones"
+      },
+      "chargebackRequests": {
+        "title": "Solicitudes de Contracargo"
+      },
+      "chargebacks": {
+        "title": "Chargebacks"
+      }
+    },
+    "security": {
+      "title": "Seguridad",
+      "groups": "Grupos",
+      "users": "Usuarios",
+      "myAccount": "Mi cuenta",
+      "changePassword": "Cambiar contraseña"
+    },
+    "settings": {
+      "title": "Configuraciones",
+      "email": "E-mail",
+      "scheduler": "Programación",
+      "reconciliation": "Conciliación",
+      "backup": "Backup"
+    },
+    "file": {
+      "processing": {
+        "file": "Archivos",
+        "title": "Procesamiento",
+        "upload": "Subir Archivos",
+        "browser": "Archivos del Volumen",
+        "calendar": "Agenda de Archivos",
+        "dashboard": "Dashboard",
+        "erpPendent": "ERP pendientes",
+        "scheduler": "Scheduler",
+        "analysis": "Análisis de Procesamiento",
+        "totalizers": "Totalizadores",
+        "divergences": "Divergencias"
+      }
+    },
+    "works": {
+      "title": "Obras",
+      "suppliers": "Proveedores",
+      "works": "Obras",
+      "suggestions": "Sugerencias"
+    }
+  },
+  "sidebar": {
+    "userFallback": "Usuario",
+    "logout": "Salir"
+  },
+  "breadcrumb": {
+    "groups": "Grupos",
+    "users": "Usuarios",
+    "dashboard": {
+      "title": "Dashboard",
+      "management": {
+        "title": "Panel de Conciliación Bancaria",
+        "subtitle": "Análisis de operaciones, tasas y cuentas por cobrar"
+      }
+    },
+    "register": {
+      "flag": "Banderas",
+      "company": "Empresas",
+      "acquirer": "Adquirentes",
+      "contract": "Contratos",
+      "establishment": "Establecimientos",
+      "holiday": "Festivos",
+      "bank": "Bancos",
+      "bankingDomicile": "Domicilios Bancarios",
+      "noFileDay": "Días sin Archivo"
+    },
+    "transactions": {
+      "erp": {
+        "sales": "Ventas ERP",
+        "installment": "Cuotas ERP"
+      },
+      "acq": {
+        "sales": "Ventas adquirente",
+        "installment": "Parcelas adquirente"
+      }
+    },
+    "audit": {
+      "emailLog": "Registros de e-mail"
+    },
+    "conciliation": {
+      "title": "Conciliación"
+    },
+    "anticipation": {
+      "title": "Anticipaciones"
+    },
+    "bankStatement": {
+      "title": "Extracto Bancario"
+    },
+    "saleSummary": {
+      "title": "Resumen de Ventas"
+    },
+    "creditOrders": {
+      "title": "Órdenes de Pago"
+    },
+    "suppliers": "Proveedores",
+    "works": "Obras",
+    "suggestions": "Sugerencias"
+  },
+  "footer": {
+    "copyright": "NimbusFlow Tech",
+    "madeWith": "Todos los derechos reservados."
+  },
+  "filters": {
+    "activeCount": "{count, plural, =0 {Ningún filtro ativo} one {# filtro ativo} other {# filtros ativos}}",
+    "noneActive": "Ningún filtro activo"
+  },
+  "pagination": {
+    "emptymessage": "No se encontraron datos para mostrar!",
+    "report": "Mostrando '{first}' a '{last}' de '{totalRecords}' registros"
+  },
+  "validation": {
+    "invalid": "Valor inválido",
+    "required": "Obligatorio",
+    "minLength": "Mínimo de {requiredLength} caracteres",
+    "maxLength": "Máximo de {requiredLength} caracteres",
+    "email": "E-mail inválido",
+    "pattern": "Formato inválido",
+    "min": "El valor mínimo es {min}",
+    "max": "El valor máximo es {max}",
+    "uuid": "Identificador inválido",
+    "document": "Documento inválido",
+    "passwordPolicy": "La contraseña no cumple la política",
+    "server": "{message}"
+  },
+  "users": {
+    "subtitle": "Gestiona usuarios, estados e invitaciones",
+    "new": {
+      "title": "Nuevo usuario",
+      "subtitle": "Registro de usuario"
+    },
+    "edit": {
+      "title": "Editar usuario",
+      "subtitle": "Edición de usuario"
+    },
+    "fields": {
+      "name": "Nombre",
+      "status": "Estado",
+      "groups": "Grupos",
+      "userName": "Usuario",
+      "document": "Documento",
+      "createdAt": "Registrado el",
+      "lastLoginAt": "Último inicio de sesión",
+      "blockedUntil": "Bloqueado hasta",
+      "passwordExpiresAt": "Contraseña expira",
+      "createdBy": "Registrado por"
+    },
+    "columns": {
+      "name": "Nombre",
+      "status": "Estado",
+      "userName": "Nombre de usuario",
+      "document": "Documento",
+      "createdAt": "Registrado el",
+      "lastLoginAt": "Último inicio de sesión",
+      "blockedUntil": "Bloqueado hasta",
+      "passwordExpiresAt": "Contraseña expira",
+      "createdBy": "Registrado por"
+    },
+    "form": {
+      "loadError": "No fue posible cargar los datos del usuario",
+      "saveError": "No fue posible guardar el usuario.",
+      "created": "Usuario creado correctamente.",
+      "updated": "Usuario actualizado correctamente",
+      "resend": {
+        "button": "Reenviar e-mail de contraseña",
+        "header": "Reenviar e-mail",
+        "message": "¿Deseas reenviar el e-mail para registrar la contraseña?",
+        "sent": "E-mail enviado correctamente.",
+        "error": "No fue posible reenviar el e-mail.",
+        "todoServer": "Funcionalidad pendiente en el servidor."
+      }
+    },
+    "status": {
+      "null": "N/D",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "blocked": "Bloqueado",
+      "disabled": "Deshabilitado",
+      "pending_password": "Pendiente de contraseña",
+      "unknown": "Desconocido"
+    },
+    "invite": {
+      "resend": "Reenviar invitación",
+      "resent": "Invitación reenviada correctamente.",
+      "resendError": "No fue posible reenviar la invitación."
+    },
+    "delete": {
+      "header": "Confirmar eliminación",
+      "success": "Usuario desactivado correctamente",
+      "message": "¿Deseas eliminar el usuario {userName}?"
+    },
+    "activate": {
+      "selected": "Activar",
+      "header": "Confirmar activación",
+      "successSingle": "Usuario activado correctamente.",
+      "successBulk": "{count, plural, one {# usuario activado correctamente.} other {# usuarios activados correctamente.}}",
+      "messageSingle": "¿Deseas activar el usuario {userName}?",
+      "messageBulk": "{count, plural, one {¿Deseas activar # usuario seleccionado?} other {¿Deseas activar # usuarios seleccionados?}}"
+    },
+    "deactivate": {
+      "selected": "Inactivar",
+      "header": "Confirmar inactivación",
+      "successSingle": "Usuario inactivado correctamente.",
+      "successBulk": "{count, plural, one {# usuario inactivado correctamente.} other {# usuarios inactivados correctamente.}}",
+      "messageSingle": "¿Deseas inactivar el usuario {userName}?",
+      "messageBulk": "{count, plural, one {¿Deseas inactivar # usuario seleccionado?} other {¿Deseas inactivar # usuarios seleccionados?}}"
+    },
+    "selection": {
+      "currentMode": "Modo de selección",
+      "count": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "pickOneFirst": "Selecciona primero un usuario elegible para definir el contexto de la selección.",
+      "mode": {
+        "none": "Ninguno",
+        "activate": "Activación por lote",
+        "deactivate": "Inactivación por lote"
+      }
+    },
+    "action": {
+      "activate": {
+        "label": "Activar",
+        "noPermission": "No tienes permiso para activar usuarios.",
+        "protected": "El usuario protegido no puede ser activado por esta acción.",
+        "invalidStatus": "Solo los usuarios inactivos pueden ser activados."
+      },
+      "deactivate": {
+        "label": "Inactivar",
+        "noPermission": "No tienes permiso para inactivar usuarios.",
+        "self": "No puedes inactivar tu propio usuario.",
+        "protected": "El usuario protegido no puede ser inactivado.",
+        "invalidStatus": "Solo los usuarios activos pueden ser inactivados."
+      }
+    },
+    "empty": {
+      "title": "Ningún usuario encontrado"
+    }
+  },
+  "enum": {
+    "typeCompanyEnum": {
+      "matriz": "Matriz",
+      "filial": "Sucursal"
+    },
+    "typeEstablishmentEnum": {
+      "pdvTef": "PDV/TEF",
+      "ecommerce": "E-commerce"
+    },
+    "statusEnum": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "blocked": "Bloqueado"
+    },
+    "contractEnum": {
+      "expired": "Vencido",
+      "closed": "Cerrado",
+      "validity": "En vigencia"
+    },
+    "captureEnum": {
+      "pdv": "Caja",
+      "manual": "Manual",
+      "pos": "Máquina móvil",
+      "ecommerce": "E-commerce",
+      "unknown": "No informado"
+    },
+    "transactionReasonEnum": {
+      "unknown": "No informado",
+      "chargeBack": "Chargeback",
+      "canceled": "Venta cancelada",
+      "scheduled": "Venta programada",
+      "differentPlans": "Planes diferentes",
+      "valueMismatch": "Divergencia de valor",
+      "flagMismatch": "Divergencia de bandera",
+      "cvNotFoundErp": "CV no encontrado en el ERP",
+      "cvNotFoundAdq": "CV no encontrado en ADQ",
+      "ambiguousMatch": "Coincidencia ambigua",
+      "acquirerMismatch": "Divergencia de adquirente",
+      "cancellationFraud": "Cancelación fraude",
+      "cancellationReturn": "Cancelación devolución",
+      "cancellationRefound": "Cancelación reembolso",
+      "cancellationAcquirer": "Cancelación adquirente",
+      "cancellationDuplicate": "Cancelación duplicada",
+      "cancellationOperationalError": "Cancelación error operacional",
+      "manualSwapNotFound": "Sin coincidencia"
+    },
+    "statusTransactionEnum": {
+      "pending": "Pendiente",
+      "deleted": "Eliminado",
+      "canceled": "Cancelado",
+      "reconciled": "Conciliado",
+      "unknown": "No informado",
+      "excludedSale": "Venta eliminada",
+      "canceledSale": "Venta cancelada",
+      "naoTokenizadas": "No tokenizada",
+      "manuallyReconciled": "Conciliado manualmente",
+      "reconciledAutomatically": "Conciliado automáticamente"
+    },
+    "statusPaymentBankEnum": {
+      "paid": "Pagado",
+      "notPaid": "No pagado",
+      "pending": "Pendiente",
+      "deleted": "Eliminado",
+      "canceled": "Cancelado",
+      "unknown": "No informado",
+      "divergent": "Divergente",
+      "excludedSale": "Venta eliminada",
+      "canceledSale": "Venta cancelada",
+      "partiallyPaid": "Pago parcial",
+      "legacy": "Anterior a la implantación"
+    },
+    "modalityEnum": {
+      "outros": "Otros",
+      "cash_debit": "Débito",
+      "cash_credit": "Crédito al contado",
+      "digital_wallet": "Billetera digital",
+      "installment_2_6": "En cuotas 2 a 6x",
+      "installment_7_12": "En cuotas 7 a 12x",
+      "installment_13_21": "En cuotas 13 a 21x"
+    },
+    "periodEnum": {
+      "day": "Día",
+      "year": "Año",
+      "month": "Mes",
+      "end": "Final",
+      "start": "Inicio",
+      "interval": "Intervalo"
+    },
+    "adjustmentReasonEnum": {
+      "null": "N/A",
+      "unknown": "No informado",
+      "chargeback": "Contracargo",
+      "tarifaCbk": "Tarifa contracargo",
+      "saleDispute": "Disputa de venta",
+      "txManTef": "Tarifa mantenimiento TEF",
+      "cancelVendas": "Cancelación de ventas",
+      "naoTokenizadas": "No tokenizadas",
+      "salesAnticipation": "Anticipación de ventas",
+      "cancelVendaDebito": "Cancelación venta débito",
+      "cancelChbkMaestro": "Cancelación contracargo Maestro",
+      "posInativConecPin": "POS inactivo/conectividad",
+      "alPosPinpadTxConect": "Alquiler POS/PINPAD/conectividad",
+      "trfAdExcessoCback": "Transfer. exceso contracargo"
+    },
+    "adjustmentStatusEnum": {
+      "unknown": "No informado",
+      "adjusted": "Ajustado",
+      "analysis": "Análisis",
+      "pending": "Pendiente",
+      "favoredClient": "Favorecido Cliente",
+      "favoredCompany": "Favorecido Empresa",
+      "notLocatedErpAcq": "No localizado"
+    },
+    "chargebackRequestReasonEnum": {
+      "unknown": "No informado",
+      "documentationRequest": "Solicitud de comprobante/documentos",
+      "duplicateTransaction": "Transacción duplicada",
+      "fraud": "Fraude",
+      "productNotReceived": "Producto/servicio no recibido",
+      "creditNotProcessed": "Crédito no procesado",
+      "defectiveProduct": "Producto defectuoso",
+      "duplicateRequest": "Solicitud duplicada",
+      "serviceNotProvided": "Servicio no prestado",
+      "transactionCancellation": "Transacción cancelada",
+      "other": "Otros"
+    },
+    "releaseCategory": {
+      "unknown": "No informado",
+      "pix": "Pix",
+      "tfPix": "Tarifa Pix",
+      "payment": "Pago",
+      "receipt": "Cobro",
+      "aplAut": "Aplicación automática"
+    },
+    "modalityPaymentBank": {
+      "unknown": "No informado",
+      "pixEnv": "Pix Enviado",
+      "pixRec": "Pix Recibido",
+      "pixDev": "Pix Devuelto",
+      "cashDebit": "Tarjeta Débito",
+      "cashCredit": "Tarjeta Crédito",
+      "antecipCred": "Anticipo Crédito"
+    },
+    "chargebackRequestStatusEnum": {
+      "unknown": "No informado",
+      "aguardandoDecisao": "En espera de decisión",
+      "aprovado": "Aprobado",
+      "reprovado": "Rechazado",
+      "pendente": "Pendiente",
+      "cancelado": "Cancelado"
+    },
+    "deleteErpReasonEnum": {
+      "duplicity": "Duplicado",
+      "undone": "Deshecha",
+      "cvNotFoundAdq": "CV no encontrado en la Adquirente",
+      "cvNotFoundErp": "CV no encontrado en el ERP",
+      "transaction_already_conciliated": "Transacción ya conciliada",
+      "invalid_data": "Datos inválidos",
+      "canceled": "Cancelada",
+      "reversed": "Invertido",
+      "other": "Otros",
+      "unknown": "Desconocido"
+    },
+    "saleSummaryEnum": {
+      "unknown": "No informado"
+    },
+    "statusReconciliationEnum": {
+      "null": "N/A",
+      "unknown": "No informado",
+      "pending": "Pendiente",
+      "canceled": "Cancelado",
+      "divergent": "Divergente",
+      "reconciled": "Conciliado",
+      "partiallyReconciled": "Conciliado parcialmente"
+    },
+    "fileGroupEnum": {
+      "erp": "ERP",
+      "adq": "Adquirente",
+      "bank": "Banco",
+      "unknown": "-"
+    },
+    "noFileDayTypeEnum": {
+      "null": "N/A",
+      "noMovement": "Sin Movimiento",
+      "holiday": "Festivo",
+      "systemOutage": "Interrupción del Sistema",
+      "other": "Otros"
+    },
+    "acquirerFileTypeEnum": {
+      "generic": "Archivo diario",
+      "eevc": "EEVC - Extracto de movimiento de ventas",
+      "eevd": "EEVD - Movimiento diario de tarjetas de débito",
+      "eefi": "EEFI - Extracto de movimiento financiero",
+      "unknown": "-"
+    }
+  },
+  "company": {
+    "subtitle": "Gestiona empresas",
+    "new": {
+      "title": "Nueva empresa",
+      "subtitle": "Registro de empresa"
+    },
+    "edit": {
+      "title": "Editar empresa",
+      "subtitle": "Edición de empresa"
+    },
+    "columns": {
+      "cnpj": "CNPJ",
+      "statusEnum": "Estado",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
+      "socialReason": "Razón social",
+      "fantasyName": "Nombre comercial",
+      "typeCompanyEnum": "Tipo de empresa"
+    },
+    "action": {
+      "deactivate": {
+        "label": "Inactivar",
+        "invalidStatus": "Solo las empresas activas pueden ser inactivadas.",
+        "noPermission": "No tienes permiso para desactivar empresas."
+      },
+      "activate": {
+        "label": "Activar",
+        "noPermission": "No tienes permiso para activar empresas.",
+        "invalidStatus": "Solo las empresas inactivas pueden ser activadas."
+      },
+      "block": {
+        "label": "Bloquear",
+        "noPermission": "No tienes permiso para bloquear empresas.",
+        "invalidStatus": "Solo las empresas activas pueden ser bloqueadas."
+      }
+    },
+    "fields": {
+      "cnpj": "CNPJ",
+      "statusEnum": "Estado",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
+      "socialReason": "Razón social",
+      "fantasyName": "Nombre comercial",
+      "typeCompanyEnum": "Tipo de empresa"
+    },
+    "block": {
+      "selected": "Bloquear",
+      "header": "Confirmar bloqueo",
+      "successSingle": "Empresa bloqueada correctamente.",
+      "messageSingle": "¿Deseas bloquear la empresa {socialReason}?",
+      "successBulk": "{count, plural, one {# empresa bloqueada correctamente.} other {# empresas bloqueadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas bloquear # empresa seleccionada?} other {¿Deseas bloquear # empresas seleccionadas?}}"
+    },
+    "activate": {
+      "selected": "Activar",
+      "header": "Confirmar activación",
+      "successSingle": "Empresa activada correctamente.",
+      "messageSingle": "¿Deseas activar la empresa {socialReason}?",
+      "successBulk": "{count, plural, one {# empresa activada correctamente.} other {# empresas activadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas activar # empresa seleccionada?} other {¿Deseas activar # empresas seleccionadas?}}"
+    },
+    "deactivate": {
+      "selected": "Inactivar",
+      "header": "Confirmar inactivación",
+      "successSingle": "Empresa inactivada correctamente.",
+      "messageSingle": "¿Deseas inactivar la empresa {socialReason}?",
+      "successBulk": "{count, plural, one {# empresa inactivada correctamente.} other {# empresas inactivadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas inactivar # empresa seleccionada?} other {¿Deseas inactivar # empresas seleccionadas?}}"
+    },
+    "selection": {
+      "currentMode": "Modo de selección",
+      "count": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "pickOneFirst": "Selecciona primero una empresa elegible para definir el contexto de la selección.",
+      "mode": {
+        "none": "Ninguno",
+        "activate": "Activación por lote",
+        "deactivate": "Inactivación por lote"
+      }
+    },
+    "form": {
+      "created": "Empresa creada correctamente.",
+      "updated": "Empresa actualizada correctamente.",
+      "saveError": "No fue posible guardar la empresa.",
+      "loadError": "No fue posible cargar los datos de la empresa.",
+      "permissionDenied": "No tienes permiso para guardar empresas."
+    },
+    "empty": {
+      "title": "Ninguna empresa encontrada"
+    }
+  },
+  "holiday": {
+    "subtitle": "Consulte los festivos registrados",
+    "new": {
+      "title": "Nuevo Festivo"
+    },
+    "edit": {
+      "title": "Editar Festivo"
+    },
+    "form": {
+      "created": "Festivo creado exitosamente.",
+      "updated": "Festivo actualizado exitosamente."
+    },
+    "columns": {
+      "name": "Festivo",
+      "holidayDate": "Fecha",
+      "statusEnum": "Estado",
+      "statusDate": "Fecha de Estado",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el"
+    },
+    "fields": {
+      "name": "Festivo",
+      "holidayDate": "Fecha del Festivo",
+      "statusEnum": "Estado",
+      "statusDate": "Fecha de Estado",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el"
+    },
+    "selection": {
+      "mode": {
+        "none": "Ninguno"
+      },
+      "currentMode": "Modo de selección",
+      "count": "{{count}} seleccionados",
+      "pickOneFirst": "Seleccione un elemento primero"
+    },
+    "activate": {
+      "header": "Activar Festivo",
+      "messageSingle": "¿Desea activar el festivo <b>{{name}}</b>?",
+      "messageBulk": "¿Desea activar los <b>{{count}}</b> festivos seleccionados?",
+      "successSingle": "Festivo activado exitosamente.",
+      "successBulk": "{{count}} festivos activados exitosamente.",
+      "selected": "Activar seleccionados"
+    },
+    "deactivate": {
+      "header": "Inactivar Festivo",
+      "messageSingle": "¿Desea inactivar el festivo <b>{{name}}</b>?",
+      "messageBulk": "¿Desea inactivar los <b>{{count}}</b> festivos seleccionados?",
+      "successSingle": "Festivo inactivado exitosamente.",
+      "successBulk": "{{count}} festivos inactivados exitosamente.",
+      "selected": "Inactivar seleccionados"
+    },
+    "block": {
+      "header": "Bloquear Festivo",
+      "messageSingle": "¿Desea bloquear el festivo <b>{{name}}</b>?",
+      "messageBulk": "¿Desea bloquear los <b>{{count}}</b> festivos seleccionados?",
+      "successSingle": "Festivo bloqueado exitosamente.",
+      "successBulk": "{{count}} festivos bloqueados exitosamente.",
+      "selected": "Bloquear seleccionados"
+    }
+  },
+  "bank": {
+    "subtitle": "Consulte los bancos registrados",
+    "new": {
+      "title": "Nuevo Banco"
+    },
+    "edit": {
+      "title": "Editar Banco"
+    },
+    "form": {
+      "created": "Banco creado exitosamente.",
+      "updated": "Banco actualizado exitosamente."
+    },
+    "columns": {
+      "code": "Código",
+      "name": "Banco",
+      "ispb": "ISPB",
+      "statusEnum": "Estado",
+      "statusDate": "Fecha de Estado",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el"
+    },
+    "fields": {
+      "code": "Código",
+      "name": "Banco",
+      "ispb": "ISPB",
+      "statusEnum": "Estado",
+      "statusDate": "Fecha de Estado",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el"
+    },
+    "selection": {
+      "mode": {
+        "none": "Ninguno"
+      },
+      "currentMode": "Modo de selección",
+      "count": "{{count}} seleccionados",
+      "pickOneFirst": "Seleccione un elemento primero"
+    },
+    "activate": {
+      "header": "Activar Banco",
+      "messageSingle": "¿Desea activar el banco <b>{{name}}</b>?",
+      "messageBulk": "¿Desea activar los <b>{{count}}</b> bancos seleccionados?",
+      "successSingle": "Banco activado exitosamente.",
+      "successBulk": "{{count}} bancos activados exitosamente.",
+      "selected": "Activar seleccionados"
+    },
+    "deactivate": {
+      "header": "Inactivar Banco",
+      "messageSingle": "¿Desea inactivar el banco <b>{{name}}</b>?",
+      "messageBulk": "¿Desea inactivar los <b>{{count}}</b> bancos seleccionados?",
+      "successSingle": "Banco inactivado exitosamente.",
+      "successBulk": "{{count}} bancos inactivados exitosamente.",
+      "selected": "Inactivar seleccionados"
+    },
+    "block": {
+      "header": "Bloquear Banco",
+      "messageSingle": "¿Desea bloquear el banco <b>{{name}}</b>?",
+      "messageBulk": "¿Desea bloquear los <b>{{count}}</b> bancos seleccionados?",
+      "successSingle": "Banco bloqueado exitosamente.",
+      "successBulk": "{{count}} bancos bloqueados exitosamente.",
+      "selected": "Bloquear seleccionados"
+    }
+  },
+  "bankingDomicile": {
+    "subtitle": "Consulte los domicilios bancarios registrados",
+    "new": {
+      "title": "Nuevo Domicilio Bancario"
+    },
+    "edit": {
+      "title": "Editar Domicilio Bancario"
+    },
+    "form": {
+      "created": "Domicilio bancario creado exitosamente.",
+      "updated": "Domicilio bancario actualizado exitosamente."
+    },
+    "columns": {
+      "agency": "Agencia",
+      "currentAccount": "Cuenta Corriente",
+      "bank": "Banco",
+      "status": "Estado",
+      "company": "Empresa",
+      "agencyDigit": "Díg. Ag.",
+      "statusDateShort": "Estado",
+      "accountDigit": "Díg. Cc.",
+      "statusDate": "Fecha Estado",
+      "currentAccountShort": "Cuenta",
+      "accountOpeningDateShort": "Apertura",
+      "accountClosingDateShort": "Cierre",
+      "accountOpeningDate": "Fecha Apertura",
+      "accountClosingDate": "Fecha Cierre",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el",
+      "expectsFile": "Recibe Archivo"
+    },
+    "fields": {
+      "agency": "Agencia",
+      "agencyDigit": "Dígito de Agencia",
+      "currentAccount": "Cuenta Corriente",
+      "accountDigit": "Dígito de Cuenta",
+      "bank": "Banco",
+      "status": "Estado",
+      "company": "Empresa",
+      "accountOpeningDate": "Fecha de Apertura",
+      "accountClosingDate": "Fecha de Cierre",
+      "expectsFile": "Recibe Archivo"
+    },
+    "selection": {
+      "mode": {
+        "none": "Ninguno"
+      },
+      "currentMode": "Modo de selección",
+      "count": "{{count}} seleccionados",
+      "pickOneFirst": "Seleccione un elemento primero"
+    },
+    "activate": {
+      "header": "Activar Domicilio Bancario",
+      "messageSingle": "¿Desea activar el domicilio bancario de <b>{{name}}</b>?",
+      "messageBulk": "¿Desea activar los <b>{{count}}</b> domicilios seleccionados?",
+      "successSingle": "Domicilio bancario activado exitosamente.",
+      "successBulk": "{{count}} domicilios bancarios activados exitosamente.",
+      "selected": "Activar seleccionados"
+    },
+    "deactivate": {
+      "header": "Inactivar Domicilio Bancario",
+      "messageSingle": "¿Desea inactivar el domicilio bancario de <b>{{name}}</b>?",
+      "messageBulk": "¿Desea inactivar los <b>{{count}}</b> domicilios seleccionados?",
+      "successSingle": "Domicilio bancario inactivado exitosamente.",
+      "successBulk": "{{count}} domicilios bancarios inactivados exitosamente.",
+      "selected": "Inactivar seleccionados"
+    }
+  },
+  "noFileDay": {
+    "subtitle": "Consulte los días sin archivos registrados",
+    "new": {
+      "title": "Nuevo Día sin Archivo"
+    },
+    "edit": {
+      "title": "Editar Día sin Archivo"
+    },
+    "form": {
+      "created": "Día sin archivo creado exitosamente.",
+      "updated": "Día sin archivo actualizado exitosamente."
+    },
+    "columns": {
+      "description": "Descripción",
+      "noFileDate": "Fecha",
+      "fileGroup": "Grupo",
+      "dayType": "Tipo",
+      "statusEnum": "Estado",
+      "origen": "Origen",
+      "company": "Empresa",
+      "acquirer": "Adquirente",
+      "acquirerFileType": "Tipo de Archivo",
+      "bankingDomicile": "Domicilio Bancario",
+      "statusDate": "Fecha de Estado",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el"
+    },
+    "fields": {
+      "description": "Descripción",
+      "noFileDate": "Fecha sin Archivo",
+      "fileGroup": "Grupo de Archivo",
+      "dayType": "Tipo de Día",
+      "statusEnum": "Estado",
+      "statusDate": "Fecha de Estado",
+      "createdAt": "Registrado el",
+      "updatedAt": "Actualizado el"
+    },
+    "selection": {
+      "mode": {
+        "none": "Ninguno"
+      },
+      "currentMode": "Modo de selección",
+      "count": "{{count}} seleccionados",
+      "pickOneFirst": "Seleccione un elemento primero"
+    },
+    "activate": {
+      "header": "Activar Día sin Archivo",
+      "messageSingle": "¿Desea activar el día sin archivo <b>{{name}}</b>?",
+      "messageBulk": "¿Desea activar los <b>{{count}}</b> días seleccionados?",
+      "successSingle": "Día sin archivo activado exitosamente.",
+      "successBulk": "{{count}} días activados exitosamente.",
+      "selected": "Activar seleccionados"
+    },
+    "deactivate": {
+      "header": "Inactivar Día sin Archivo",
+      "messageSingle": "¿Desea inactivar el día sin archivo <b>{{name}}</b>?",
+      "messageBulk": "¿Desea inactivar los <b>{{count}}</b> días seleccionados?",
+      "successSingle": "Día sin archivo inactivado exitosamente.",
+      "successBulk": "{{count}} días inactivados exitosamente.",
+      "selected": "Inactivar seleccionados"
+    },
+    "delete": {
+      "header": "Eliminar Día sin Archivo",
+      "messageSingle": "¿Desea eliminar el día sin archivo <b>{{name}}</b>? Esta acción no se puede deshacer.",
+      "messageBulk": "¿Desea eliminar los <b>{{count}}</b> días seleccionados? Esta acción no se puede deshacer.",
+      "successSingle": "Día sin archivo eliminado exitosamente.",
+      "successBulk": "{{count}} días eliminados exitosamente.",
+      "selected": "Eliminar seleccionados"
+    }
+  },
+  "acquirer": {
+    "subtitle": "Gestioen la adquirentes",
+    "new": {
+      "title": "Nueva adquirente",
+      "subtitle": "Registro de adquirente"
+    },
+    "edit": {
+      "title": "Editar adquirente",
+      "subtitle": "Edición de adquirente"
+    },
+    "columns": {
+      "cnpj": "CNPJ",
+      "typeEnum": "Tipo",
+      "name": "Adquirente",
+      "company": "Empresas",
+      "statusEnum": "Estado",
+      "pvNumber": "Número PV",
+      "adqCode": "Código ADQ",
+      "closingDate": "Fecha de Cierre",
+      "closingDateShort": "Cierre",
+      "openingDate": "Fecha de Apertura",
+      "openingDateShort": "Apertura",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
+      "socialReason": "Razón social",
+      "fantasyName": "Nombre comercial",
+      "establishment": "Establecimientos"
+    },
+    "action": {
+      "deactivate": {
+        "label": "Inactivar",
+        "invalidStatus": "Solo las adquirentes activas pueden ser inactivadas.",
+        "noPermission": "No tienes permiso para desactivar adquirentes."
+      },
+      "activate": {
+        "label": "Activar",
+        "noPermission": "No tienes permiso para activar adquirentes.",
+        "invalidStatus": "Solo las adquirentes inactivas pueden ser activadas."
+      },
+      "block": {
+        "label": "Bloquear",
+        "noPermission": "No tienes permiso para bloquear adquirentes.",
+        "invalidStatus": "Solo las adquirentes activas pueden ser bloqueadas."
+      }
+    },
+    "fields": {
+      "cnpj": "CNPJ",
+      "company": "Empresa",
+      "statusEnum": "Estado",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
+      "socialReason": "Razón social",
+      "fantasyName": "Nombre comercial"
+    },
+    "block": {
+      "selected": "Bloquear",
+      "header": "Confirmar bloqueo",
+      "successSingle": "Adquirente bloqueada correctamente.",
+      "messageSingle": "¿Deseas bloquear la adquirente {socialReason}?",
+      "successBulk": "{count, plural, one {# adquirente bloqueada correctamente.} other {# adquirentes bloqueadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas bloquear # adquirente seleccionada?} other {¿Deseas bloquear # adquirentes seleccionadas?}}"
+    },
+    "activate": {
+      "selected": "Activar",
+      "header": "Confirmar activación",
+      "successSingle": "Adquirente activada correctamente.",
+      "messageSingle": "¿Deseas activar la adquirente {socialReason}?",
+      "successBulk": "{count, plural, one {# adquirente activada correctamente.} other {# adquirentes activadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas activar # adquirente seleccionada?} other {¿Deseas activar # adquirentes seleccionadas?}}"
+    },
+    "deactivate": {
+      "selected": "Inactivar",
+      "header": "Confirmar inactivación",
+      "successSingle": "Adquirente inactivada correctamente.",
+      "messageSingle": "¿Deseas inactivar la adquirente {socialReason}?",
+      "successBulk": "{count, plural, one {# adquirente inactivada correctamente.} other {# adquirentes inactivadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas inactivar # adquirente seleccionada?} other {¿Deseas inactivar # adquirentes seleccionadas?}}"
+    },
+    "selection": {
+      "currentMode": "Modo de selección",
+      "count": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "pickOneFirst": "Selecciona primero uen la adquirente elegible para definir el contexto de la selección.",
+      "mode": {
+        "none": "Ninguno",
+        "activate": "Activación por lote",
+        "deactivate": "Inactivación por lote"
+      }
+    },
+    "relationships": {
+      "add": "Agregar",
+      "companies": "Empresas",
+      "acquirers": "Adquirentes",
+      "saveLinks": "Guardar vínculos",
+      "linkedCompanies": "Empresas vinculadas",
+      "linkedEstablishments": "Establecimientos vinculados",
+      "addCompanyToAcquirer": "Agregar empresa a la adquirente",
+      "addEstablishmentToAcquirer": "Agregar establecimiento a la adquirente",
+      "removeCompany": {
+        "header": "Eliminar vínculo",
+        "message": "¿Deseas eliminar la empresa {company} de la adquirente {acquirer}?",
+        "success": "Empresa {company} eliminada de la adquirente {acquirer} correctamente."
+      },
+      "removeEstablishment": {
+        "header": "Eliminar vínculo",
+        "message": "¿Deseas eliminar el establecimiento {establishment} de la adquirente {acquirer}?",
+        "success": "Establecimiento {establishment} eliminado de la adquirente {acquirer} correctamente."
+      }
+    },
+    "form": {
+      "created": "Adquirente creada correctamente.",
+      "updated": "Adquirente actualizada correctamente.",
+      "saveError": "No fue posible guardar la adquirente.",
+      "loadError": "No fue posible cargar los datos de la adquirente.",
+      "permissionDenied": "No tienes permiso para guardar adquirentes."
+    },
+    "empty": {
+      "title": "Ninguen la adquirente encontrada"
+    }
+  },
+  "establishment": {
+    "subtitle": "Gestiona establecimientos",
+    "new": {
+      "title": "Nuevo establecimiento",
+      "subtitle": "Registro de establecimiento"
+    },
+    "edit": {
+      "title": "Editar establecimiento",
+      "subtitle": "Edición de establecimiento"
+    },
+    "columns": {
+      "typeEnum": "Tipo",
+      "company": "Empresa",
+      "statusEnum": "Estado",
+      "pvNumber": "Número PV",
+      "acquirer": "Adquirente",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
+      "establishment": "Establecimiento",
+      "closingDate": "Fecha de Cierre",
+      "openingDate": "Fecha de Apertura"
+    },
+    "fields": {
+      "typeEnum": "Tipo",
+      "company": "Empresa",
+      "pvNumber": "Número PV",
+      "statusEnum": "Estado",
+      "acquirer": "Adquirente",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por"
+    },
+    "action": {
+      "deactivate": {
+        "label": "Inactivar",
+        "invalidStatus": "Solo los establecimientos activos pueden ser inactivados.",
+        "noPermission": "No tienes permiso para desactivar establecimientos."
+      },
+      "activate": {
+        "label": "Activar",
+        "noPermission": "No tienes permiso para activar establecimientos.",
+        "invalidStatus": "Solo los establecimientos inactivos pueden ser activados."
+      },
+      "block": {
+        "label": "Bloquear",
+        "noPermission": "No tienes permiso para bloquear establecimientos.",
+        "invalidStatus": "Solo los establecimientos activos pueden ser bloqueados."
+      },
+      "delete": {
+        "label": "Eliminar",
+        "noPermission": "No tienes permiso para eliminar establecimientos.",
+        "invalidStatus": "Solo los establecimientos activos pueden ser eliminados."
+      }
+    },
+    "delete": {
+      "selected": "Eliminar",
+      "header": "Confirmar eliminación",
+      "successSingle": "Establecimiento eliminado correctamente.",
+      "messageSingle": "¿Deseas eliminar el establecimiento {pvNumber}?",
+      "successBulk": "{count, plural, one {# establecimiento eliminado correctamente.} other {# establecimientos eliminados correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas eliminar # establecimiento seleccionado?} other {¿Deseas eliminar # establecimientos seleccionados?}}"
+    },
+    "block": {
+      "selected": "Bloquear",
+      "header": "Confirmar bloqueo",
+      "successSingle": "Establecimiento bloqueado correctamente.",
+      "messageSingle": "¿Deseas bloquear el establecimiento {pvNumber}?",
+      "successBulk": "{count, plural, one {# establecimiento bloqueado correctamente.} other {# establecimientos bloqueados correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas bloquear # establecimiento seleccionado?} other {¿Deseas bloquear # establecimientos seleccionados?}}"
+    },
+    "activate": {
+      "selected": "Activar",
+      "header": "Confirmar activación",
+      "successSingle": "Establecimiento activado correctamente.",
+      "messageSingle": "¿Deseas activar el establecimiento {pvNumber}?",
+      "successBulk": "{count, plural, one {# establecimiento activado correctamente.} other {# establecimientos activados correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas activar # establecimiento seleccionado?} other {¿Deseas activar # establecimientos seleccionados?}}"
+    },
+    "deactivate": {
+      "selected": "Inactivar",
+      "header": "Confirmar inactivación",
+      "successSingle": "Establecimiento inactivado correctamente.",
+      "messageSingle": "¿Deseas inactivar el establecimiento {pvNumber}?",
+      "successBulk": "{count, plural, one {# establecimiento inactivado correctamente.} other {# establecimientos inactivados correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas inactivar # establecimiento seleccionado?} other {¿Deseas inactivar # establecimientos seleccionados?}}"
+    },
+    "selection": {
+      "currentMode": "Modo de selección",
+      "count": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "pickOneFirst": "Selecciona primero un establecimiento elegible para definir el contexto de la selección.",
+      "mode": {
+        "none": "Ninguno",
+        "activate": "Activación por lote",
+        "deactivate": "Inactivación por lote"
+      }
+    },
+    "form": {
+      "created": "Establecimiento creado correctamente.",
+      "updated": "Establecimiento actualizado correctamente.",
+      "saveError": "No fue posible guardar el establecimiento.",
+      "loadError": "No fue posible cargar los datos del establecimiento.",
+      "permissionDenied": "No tienes permiso para guardar establecimientos."
+    },
+    "empty": {
+      "title": "Ningún establecimiento encontrado"
+    }
+  },
+  "contract": {
+    "subtitle": "Gestiona contratos",
+    "new": {
+      "title": "Nuevo contrato",
+      "subtitle": "Registro de contrato"
+    },
+    "edit": {
+      "title": "Editar contrato",
+      "subtitle": "Edición de contrato"
+    },
+    "columns": {
+      "name": "Descripción",
+      "company": "Empresa",
+      "period": "Vigencia",
+      "flags": "Banderas",
+      "statusEnum": "Estado",
+      "acquirer": "Adquirente",
+      "description": "Descripción",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
+      "establishment": "Establecimiento"
+    },
+    "fields": {
+      "rate": "Tarifa",
+      "flag": "Bandera",
+      "name": "Descripción",
+      "company": "Empresa",
+      "flags": "Banderas",
+      "contractEnum": "Estado",
+      "modality": "Modalidad",
+      "acquirer": "Adquirente",
+      "description": "Descripción",
+      "endDate": "Vigencia final",
+      "createdBy": "Registrado por",
+      "paymentTermDays": "Transferencia",
+      "rateEcommerce": "E-commerce",
+      "periodEndDate": "Periodo final",
+      "startDate": "Vigencia inicial",
+      "establishment": "Establecimiento",
+      "periodStartDate": "Periodo inicial",
+      "paymentTermDaysEcommerce": "Transferencia e-commerce"
+    },
+    "modality": {
+      "CASH_DEBIT": "Débito al contado",
+      "CASH_CREDIT": "Crédito al contado",
+      "INSTALLMENT_CREDIT_2_6": "Crédito en cuotas 2 a 6x",
+      "INSTALLMENT_CREDIT_7_12": "Crédito en cuotas 7 a 12x"
+    },
+    "flags": {
+      "title": "Banderas y tarifas",
+      "add": "Agregar bandera",
+      "toggle": "Expandir / contraer",
+      "remove": "Eliminar bandera",
+      "emptyTitle": "Ninguna bandera agregada",
+      "emptySubtitle": "Selecciona una bandera arriba para comenzar a configurar las tarifas.",
+      "registeredModalitiesCount": "{count, plural, =0 {Ninguna modalidad registrada} =1 {1 modalidad registrada} other {# modalidades registradas}}",
+      "ratesCount": "{count, plural, =0 {Ninguna tarifa} =1 {1 tarifa} other {# tarifas}}"
+    },
+    "rates": {
+      "add": "Agregar tarifa",
+      "empty": "Ninguna tarifa agregada"
+    },
+    "validation": {
+      "invalidDateRange": "La fecha final debe ser mayor o igual que la fecha inicial."
+    },
+    "action": {
+      "expired": {
+        "label": "Expirar",
+        "invalidStatus": "Solo los contratos válidos pueden expirar.",
+        "noPermission": "No tienes permiso para expirar contratos."
+      },
+      "validity": {
+        "label": "Válido",
+        "noPermission": "No tienes permiso para activar contratos.",
+        "invalidStatus": "Solo los contratos vencidos pueden ser validados."
+      },
+      "closed": {
+        "label": "Cerrar",
+        "noPermission": "No tienes permiso para cerrar contratos.",
+        "invalidStatus": "Solo los contratos válidos pueden ser cerrados."
+      }
+    },
+    "closed": {
+      "selected": "Cerrar",
+      "header": "Confirmar cierre",
+      "successSingle": "Contrato cerrado correctamente.",
+      "messageSingle": "¿Deseas cerrar el contrato {description}?",
+      "successBulk": "{count, plural, one {# contrato cerrado correctamente.} other {# contratos cerrados correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas cerrar # contrato seleccionado?} other {¿Deseas cerrar # contratos seleccionados?}}"
+    },
+    "validity": {
+      "selected": "Activar",
+      "header": "Confirmar activación",
+      "successSingle": "Contrato activado correctamente.",
+      "messageSingle": "¿Deseas activar el contrato {description}?",
+      "successBulk": "{count, plural, one {# contrato activado correctamente.} other {# contratos activados correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas activar # contrato seleccionado?} other {¿Deseas activar # contratos seleccionados?}}"
+    },
+    "expired": {
+      "selected": "Expirado",
+      "header": "Confirmar expiración",
+      "successSingle": "Contrato expirado correctamente.",
+      "messageSingle": "¿Deseas expirar el contrato {description}?",
+      "successBulk": "{count, plural, one {# contrato expirado correctamente.} other {# contratos expirados correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas expirar # contrato seleccionado?} other {¿Deseas expirar # contratos seleccionados?}}"
+    },
+    "selection": {
+      "currentMode": "Modo de selección",
+      "count": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "pickOneFirst": "Selecciona primero un contrato elegible para definir el contexto de la selección.",
+      "mode": {
+        "none": "Ninguno",
+        "activate": "Activación por lote",
+        "deactivate": "Inactivación por lote"
+      }
+    },
+    "form": {
+      "loadError": "No fue posible cargar los datos del contrato.",
+      "saveError": "No fue posible guardar el contrato.",
+      "created": "Contrato creado correctamente.",
+      "updated": "Contrato actualizado correctamente.",
+      "permissionDenied": "No tienes permiso para guardar contratos."
+    },
+    "empty": {
+      "title": "Ningún contrato encontrado"
+    },
+    "view": {
+      "title": "Tarifas del contrato:",
+      "emptyRates": "Ninguna tarifa registrada para esta bandera.",
+      "days": "{count, plural, =0 {0 dias} one {# dia} other {# dias}}",
+      "emptyFlags": "Ninguna bandera/tarifa registrada para este contrato.",
+      "flag": {
+        "defaultName": "Bandera",
+        "modalitiesCount": "{count, plural, =0 {Ninguna modalidade} one {# modalidade} other {# modalidades}}"
+      },
+      "validity": {
+        "until": "hasta",
+        "since": "Vigente desde",
+        "rangePrefix": "En vigencia desde:",
+        "openEnded": "vigencia indeterminada"
+      }
+    }
+  },
+  "transactions": {
+    "search": {
+      "line": "Línea",
+      "Installments": "Cuotas",
+      "searchErp": "Buscar en ERP",
+      "process": "Buscar en el archivo",
+      "searchAcq": "Buscar en la adquirente"
+    },
+    "tooltip": {
+      "mdrRate": "Tarifa MDR",
+      "flexRate": "Tarifa FLEX"
+    },
+    "erp": {
+      "sales": {
+        "subtitle": "Consulta de ventas importadas del ERP"
+      },
+      "installment": {
+        "subtitle": "Consulta cuotas de ventas importadas del ERP"
+      }
+    },
+    "acq": {
+      "sales": {
+        "subtitle": "Consulta de ventas importadas de la adquirente"
+      },
+      "installment": {
+        "subtitle": "Consulta cuotas de ventas importadas de la adquirente"
+      }
+    },
+    "fields": {
+      "erp": "ERP",
+      "rate": "Tarifa",
+      "bank": "Banco",
+      "sale": "Venta",
+      "title": "Campo",
+      "cvNsu": "CV/NSU",
+      "reason": "Motivo",
+      "status": "Estado",
+      "account": "Cuenta",
+      "flag": "Bandera",
+      "agency": "Agencia",
+      "liquid": "Líquido",
+      "company": "Empresa",
+      "payment": "Pago",
+      "forecast": "Previsión",
+      "machine": "Terminales",
+      "saleDate": "Fecha venta",
+      "modality": "Modalidad",
+      "acquirer": "Adquirente",
+      "installment": "Parcela",
+      "capture": "Tipo captura",
+      "cardName": "Nombre tarjeta",
+      "issuer": "Emisor tarjeta",
+      "installments": "Cuotas",
+      "tid": "ID de transacción (TID)",
+      "grossValue": "Valor bruto",
+      "creditDate": "Fecha crédito",
+      "adjustmentValue": "Ajustes",
+      "netAmount": "Valor líquido",
+      "cardNumber": "Número tarjeta",
+      "conciliation": "Conciliación",
+      "liquidValue": "Valor líquido",
+      "authorization": "Autorización",
+      "paymentDate": "Fecha pago",
+      "discountValue": "Valor descuento",
+      "periodSaleDate": "Periodo venta",
+      "contractedFee": "Tarifa contratada",
+      "establishment": "Establecimiento",
+      "statusTransaction": "Estado venta",
+      "bankDomicile": "Domicilio bancario",
+      "conciliationDate": "Fecha conciliación",
+      "statusPaymentBank": "Estado de pago",
+      "expectedPaymentDate": "Prev. pago",
+      "periodPaymentDate": "Periodo pago",
+      "periodConciliationDate": "Periodo conciliación",
+      "periodExpectedPaymentDate": "Periodo prev. pago",
+      "totalValue": "Valor total",
+      "rvNumber": "Resumen de ventas",
+      "rateContract": "Tasa esperada",
+      "releaseValue": "Valor lanzamiento",
+      "statusTransactionReason": "Motivo"
+    },
+    "columns": {
+      "sale": "Venta",
+      "gross": "Bruto",
+      "cvNsu": "CV/NSU",
+      "flag": "Bandera",
+      "liquid": "Líquido",
+      "company": "Empresa",
+      "machine": "Terminales",
+      "discountValue": "Tarifa",
+      "saleDate": "Fecha venta",
+      "acquirer": "Adquirente",
+      "modality": "Modalidad",
+      "capture": "Tipo captura",
+      "installment": "Cuotas",
+      "grossValue": "Valor bruto",
+      "tid": "ID de transacción (TID)",
+      "adjustmentValue": "Ajustes",
+      "liquidValue": "Valor líquido",
+      "authorization": "Autorización",
+      "establishment": "Establecimiento",
+      "statusTransactionReason": "Motivo",
+      "expectedPaymentDate": "Prev. pago"
+    }
+  },
+  "flag": {
+    "subtitle": "Gestiona banderas",
+    "relationships": {
+      "add": "Agregar",
+      "companies": "Empresas",
+      "acquirers": "Adquirentes",
+      "saveLinks": "Guardar vínculos",
+      "establishment": "Establecimientos",
+      "linkedCompanies": "Empresas vinculadas",
+      "linkedAcquirers": "Adquirentes vinculadas",
+      "addCompanyToFlag": "Agregar empresa a la bandera",
+      "addAcquirerToFlag": "Agregar adquirente a la bandera",
+      "removeCompany": {
+        "header": "Eliminar vínculo",
+        "message": "¿Deseas eliminar la empresa {company} de la bandera {flag}?",
+        "success": "Empresa {company} eliminada de la bandera {flag} correctamente."
+      },
+      "removeAcquirer": {
+        "header": "Eliminar vínculo",
+        "message": "¿Deseas eliminar la adquirente {acquirer} de la bandera {flag}?",
+        "success": "Adquirente {acquirer} eliminada de la bandera {flag} correctamente."
+      }
+    },
+    "new": {
+      "title": "Nueva bandera",
+      "subtitle": "Registro de bandera"
+    },
+    "edit": {
+      "title": "Editar bandera",
+      "subtitle": "Edición de bandera"
+    },
+    "columns": {
+      "cnpj": "CNPJ",
+      "name": "Bandera",
+      "statusEnum": "Estado",
+      "company": "Empresas",
+      "erpCode": "Código ERP",
+      "acquirer": "Adquirentes",
+      "acquirerCode": "Código adquirente"
+    },
+    "fields": {
+      "name": "Bandera",
+      "erpCode": "Código",
+      "statusEnum": "Estado",
+      "company": "Empresas",
+      "acquirer": "Adquirentes"
+    },
+    "action": {
+      "deactivate": {
+        "label": "Inactivar",
+        "invalidStatus": "Solo las banderas activas pueden ser inactivadas.",
+        "noPermission": "No tienes permiso para desactivar banderas."
+      },
+      "activate": {
+        "label": "Activar",
+        "noPermission": "No tienes permiso para activar banderas.",
+        "invalidStatus": "Solo las banderas inactivas pueden ser activadas."
+      },
+      "block": {
+        "label": "Bloquear",
+        "noPermission": "No tienes permiso para bloquear banderas.",
+        "invalidStatus": "Solo las banderas activas pueden ser bloqueadas."
+      }
+    },
+    "block": {
+      "selected": "Bloquear",
+      "header": "Confirmar bloqueo",
+      "successSingle": "Bandera bloqueada correctamente.",
+      "messageSingle": "¿Deseas bloquear la bandera {name}?",
+      "successBulk": "{count, plural, one {# bandera bloqueada correctamente.} other {# banderas bloqueadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas bloquear # bandera seleccionada?} other {¿Deseas bloquear # banderas seleccionadas?}}"
+    },
+    "activate": {
+      "selected": "Activar",
+      "header": "Confirmar activación",
+      "successSingle": "Bandera activada correctamente.",
+      "messageSingle": "¿Deseas activar la bandera {name}?",
+      "successBulk": "{count, plural, one {# bandera activada correctamente.} other {# banderas activadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas activar # bandera seleccionada?} other {¿Deseas activar # banderas seleccionadas?}}"
+    },
+    "deactivate": {
+      "selected": "Inactivar",
+      "header": "Confirmar inactivación",
+      "successSingle": "Bandera inactivada correctamente.",
+      "messageSingle": "¿Deseas inactivar la bandera {name}?",
+      "successBulk": "{count, plural, one {# bandera inactivada correctamente.} other {# banderas inactivadas correctamente.}}",
+      "messageBulk": "{count, plural, one {¿Deseas inactivar # bandera seleccionada?} other {¿Deseas inactivar # banderas seleccionadas?}}"
+    },
+    "selection": {
+      "currentMode": "Modo de selección",
+      "count": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "pickOneFirst": "Selecciona primero una bandera elegible para definir el contexto de la selección.",
+      "mode": {
+        "none": "Ninguno",
+        "activate": "Activación por lote",
+        "deactivate": "Inactivación por lote"
+      }
+    },
+    "form": {
+      "created": "Bandera creada correctamente.",
+      "updated": "Bandera actualizada correctamente.",
+      "saveError": "No fue posible guardar la bandera.",
+      "loadError": "No fue posible cargar los datos de la bandera.",
+      "permissionDenied": "No tienes permiso para guardar banderas."
+    },
+    "empty": {
+      "title": "Ninguna bandera encontrada"
+    }
+  },
+  "accountPassword": {
+    "title": "Cambiar contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "passwordMismatch": "Las contraseñas deben ser iguales.",
+    "policyTitle": "Política de contraseña",
+    "submit": "Guardar contraseña",
+    "successTitle": "Contraseña cambiada",
+    "successMessage": "Tu contraseña se actualizó correctamente.",
+    "footer": "© 2026 NimbusFlow • Todos los derechos reservados",
+    "formSubtitle": "Ingresa tu contraseña actual y define una nueva contraseña segura.",
+    "policySubtitle": "La contraseña debe cumplir las reglas de seguridad a continuación.",
+    "formSectionTitle": "Datos del cambio",
+    "userFallback": "Usuario",
+    "usernameFallback": "Sin usuario",
+    "summary": {
+      "rules": "Reglas",
+      "strength": "Fuerza",
+      "valid": "Reglas válidas",
+      "invalid": "Reglas inválidas",
+      "minLength": "Tamaño mínimo"
+    },
+    "strength": {
+      "title": "Fortaleza de la contraseña",
+      "empty": "No informada",
+      "weak": "Débil",
+      "medium": "Media",
+      "strong": "Fuerte",
+      "rulesSatisfied": "reglas cumplidas"
+    }
+  },
+  "profile": {
+    "title": "Perfil",
+    "subtitle": "Consulta tus datos de perfil y registro.",
+    "card": {
+      "userData": "Datos del usuario",
+      "groups": "Grupos",
+      "permissions": "Permisos",
+      "groupsSubtitle": "Perfiles organizacionales vinculados al usuario.",
+      "permissionsSubtitle": "Accesos disponibles para el usuario autenticado."
+    },
+    "permissionDescription": {
+      "SUPPORT": "Soporte total del sistema",
+      "ERP_SALES_CONSULT": "Consultar ventas ERP",
+      "ERP_SALES_CREATE": "Crear ventas ERP",
+      "ERP_SALES_DELETE": "Eliminar ventas ERP",
+      "ERP_SALES_CHANGE": "Editar ventas ERP",
+      "ERP_SALES_ACTIVE_OR_INACTIVE": "Activar o desactivar ventas ERP",
+      "ERP_INSTALLMENTS_CONSULT": "Consultar cuotas ERP",
+      "ERP_INSTALLMENTS_CREATE": "Crear cuotas ERP",
+      "ERP_INSTALLMENTS_DELETE": "Eliminar cuotas ERP",
+      "ERP_INSTALLMENTS_CHANGE": "Editar cuotas ERP",
+      "ERP_INSTALLMENTS_ACTIVE_OR_INACTIVE": "Activar o desactivar cuotas ERP",
+      "ACQUIRERS_SALES_CONSULT": "Consultar ventas de adquirentes",
+      "ACQUIRERS_SALES_CREATE": "Crear ventas de adquirentes",
+      "ACQUIRERS_SALES_DELETE": "Eliminar ventas de adquirentes",
+      "ACQUIRERS_SALES_CHANGE": "Editar ventas de adquirentes",
+      "ACQUIRERS_SALES_ACTIVE_OR_INACTIVE": "Activar o desactivar ventas de adquirentes",
+      "ACQUIRERS_INSTALLMENTS_CONSULT": "Consultar cuotas de adquirentes",
+      "ACQUIRERS_INSTALLMENTS_CREATE": "Crear cuotas de adquirentes",
+      "ACQUIRERS_INSTALLMENTS_DELETE": "Eliminar cuotas de adquirentes",
+      "ACQUIRERS_INSTALLMENTS_CHANGE": "Editar cuotas de adquirentes",
+      "ACQUIRERS_INSTALLMENTS_ACTIVE_OR_INACTIVE": "Activar o desactivar cuotas de adquirentes",
+      "ANTICIPATION_CONSULT": "Listar transacciones anticipadas",
+      "SALES_SUMMARY_CONSULT": "Listar resumen de ventas",
+      "CREDIT_ORDER_CONSULT": "Listar órdenes de pago",
+      "USERS_CONSULT": "Consultar usuarios",
+      "USERS_CREATE": "Crear usuarios",
+      "USERS_DELETE": "Eliminar usuarios",
+      "USERS_CHANGE": "Editar usuarios",
+      "USERS_ACTIVE_OR_INACTIVE": "Activar o desactivar usuarios",
+      "COMPANIES_CONSULT": "Consultar empresas",
+      "COMPANIES_CREATE": "Crear empresas",
+      "COMPANIES_DELETE": "Eliminar empresas",
+      "COMPANIES_CHANGE": "Editar empresas",
+      "COMPANIES_ACTIVE_OR_INACTIVE": "Activar o desactivar empresas",
+      "ACQUIRER_CONSULT": "Consultar adquirentes",
+      "ACQUIRER_CREATE": "Crear adquirentes",
+      "ACQUIRER_DELETE": "Eliminar adquirentes",
+      "ACQUIRER_CHANGE": "Editar adquirentes",
+      "ACQUIRER_MANAGE_RELATIONS": "Relacionar adquirentes con establecimientos y empresas",
+      "ACQUIRER_ACTIVE_OR_INACTIVE": "Activar o desactivar adquirentes",
+      "ESTABLISHMENT_CONSULT": "Consultar establecimientos",
+      "ESTABLISHMENT_CREATE": "Crear establecimientos",
+      "ESTABLISHMENT_DELETE": "Eliminar establecimientos",
+      "ESTABLISHMENT_CHANGE": "Editar establecimientos",
+      "ESTABLISHMENT_ACTIVE_OR_INACTIVE": "Activar o desactivar establecimientos",
+      "FLAGS_CONSULT": "Consultar marcas de tarjeta",
+      "FLAGS_CREATE": "Crear marcas de tarjeta",
+      "FLAGS_DELETE": "Eliminar marcas de tarjeta",
+      "FLAGS_CHANGE": "Editar marcas de tarjeta",
+      "FLAGS_MANAGE_RELATIONS": "Relacionar marcas de tarjeta con adquirentes y empresas",
+      "FLAGS_ACTIVE_OR_INACTIVE": "Activar o desactivar marcas de tarjeta",
+      "CONTRACTS_CONSULT": "Consultar contratos",
+      "CONTRACTS_CREATE": "Crear contratos",
+      "CONTRACTS_DELETE": "Eliminar contratos",
+      "CONTRACTS_CHANGE": "Editar contratos",
+      "CONTRACTS_ACTIVE_OR_INACTIVE": "Activar o desactivar contratos",
+      "GROUPS_CONSULT": "Consultar grupos",
+      "GROUPS_CREATE": "Crear grupos",
+      "GROUPS_DELETE": "Eliminar grupos",
+      "GROUPS_CHANGE": "Editar grupos",
+      "GROUP_MANAGEMENT_USER": "Agregar usuario al grupo",
+      "GROUPS_MANAGEMENT_USER": "Agregar usuario al grupo",
+      "GROUPS_ACTIVE_OR_INACTIVE": "Activar o desactivar grupos",
+      "GROUP_MANAGEMENT_PERMISSION": "Agregar permiso al grupo",
+      "GROUPS_MANAGEMENT_PERMISSION": "Agregar permiso al grupo",
+      "USERS_CHANGE_PASSWORD": "Puede cambiar su propia contraseña",
+      "USERS_RESEND_INVITE": "Reenviar invitación de primer acceso",
+      "HOLIDAYS_CONSULT": "Listar feriados",
+      "HOLIDAYS_CREATE": "Crear feriados",
+      "HOLIDAYS_CHANGE": "Editar feriados",
+      "HOLIDAYS_DELETE": "Eliminar feriados",
+      "HOLIDAYS_ACTIVE_OR_INACTIVE": "Activar o desactivar feriados",
+      "BANK_CONSULT": "Listar bancos",
+      "BANK_CREATE": "Crear bancos",
+      "BANK_CHANGE": "Editar bancos",
+      "BANK_ACTIVE_OR_INACTIVE": "Activar o desactivar bancos",
+      "BANK_STATEMENT_CONSULT": "Listar movimientos bancarios",
+      "AUDIT_MAIL_CONSULT": "Consultar correos enviados",
+      "BANKING_DOMICILE_CONSULT": "Listar domicilios bancarios",
+      "BANKING_DOMICILE_CREATE": "Crear domicilios bancarios",
+      "BANKING_DOMICILE_CHANGE": "Editar domicilios bancarios",
+      "BANKING_DOMICILE_ACTIVE_OR_INACTIVE": "Activar o desactivar domicilios bancarios",
+      "NO_FILE_DAY_CONSULT": "Listar días sin archivos",
+      "NO_FILE_DAY_CREATE": "Crear días sin archivos",
+      "NO_FILE_DAY_CHANGE": "Editar días sin archivos",
+      "NO_FILE_DAY_DELETE": "Eliminar días sin archivos",
+      "NO_FILE_DAY_ACTIVE_OR_INACTIVE": "Activar o desactivar días sin archivos",
+      "FILE_PROCESSING_READ": "Consultar archivos procesados y errores de importación",
+      "FILE_PROCESSING_PROCESS": "Procesar archivos de importación",
+      "FILE_PROCESSING_REPROCESS": "Reprocesar pendientes de importación",
+      "ADJUSTMENT_TARIFFS_CONSULT": "Listar ajustes de tarifas",
+      "ADJUSTMENT_CANCELLATION_CONSULT": "Listar ajustes de cancelación",
+      "ADJUSTMENT_CHARGEBACK_REQUESTS_CONSULT": "Listar solicitudes de contracargo",
+      "CHARGEBACK_ANALYSIS_CONSULT": "Listar análisis/ciclo de vida de contracargos",
+      "CONTRACT_AUDIT_CONSULT": "Listar divergencias de tarifas de contrato",
+      "CONCILIATION_WAITING_CONSULT": "Listar pendientes de conciliación (divergencias)",
+      "CONCILIATION_WAITING_PROCESS": "Resolver pendientes de conciliación (vincular/conciliar manualmente)",
+      "CONCILIATION_DASHBOARD_CONSULT": "Consultar dashboard y antigüedad de conciliación",
+      "MANUAL_BANK_RECONCILIATION_PROCESS": "Conciliación manual de movimientos bancarios",
+      "BANK_ACQUIRER_CONCILIATION_PROCESS": "Disparar conciliación banco x adquirente",
+      "FINANCIAL_RECONCILIATION_PIPELINE_CONSULT": "Consultar historial de ejecuciones del proceso financiero",
+      "FINANCIAL_RECONCILIATION_PIPELINE_PROCESS": "Disparar etapas del proceso de conciliación financiera",
+      "SCHEDULER_SETTINGS_CONSULT": "Consultar configuración del programador de importación",
+      "SCHEDULER_SETTINGS_PROCESS": "Editar configuración del programador de importación",
+      "EMAIL_SETTINGS_CONSULT": "Consultar configuración de correo",
+      "EMAIL_SETTINGS_PROCESS": "Editar configuración de correo",
+      "RECONCILIATION_SETTINGS_CONSULT": "Consultar configuración de conciliación",
+      "RECONCILIATION_SETTINGS_PROCESS": "Editar configuración de conciliación",
+      "MANAGEMENT_DASHBOARD_CONSULT": "Consultar dashboard gerencial",
+      "DASHBOARD_AUDIT_CONSULT": "Consultar dashboard de auditoría (resumen de ventas/no conciliados)"
+    },
+    "section": {
+      "identification": "Identificación",
+      "security": "Seguridad",
+      "audit": "Auditoría"
+    },
+    "field": {
+      "id": "ID",
+      "name": "Nombre",
+      "username": "Usuario",
+      "document": "Documento",
+      "status": "Estado",
+      "blocked": "Bloqueado",
+      "blockedUntil": "Bloqueado hasta",
+      "password": "Contraseña",
+      "passwordExpires": "Contraseña expira el",
+      "issuer": "Emisor",
+      "createdAt": "Creado el",
+      "lastLogin": "Último inicio de sesión",
+      "groups": "Grupos",
+      "permissions": "Permisos"
+    },
+    "button": {
+      "changePassword": "Cambiar contraseña"
+    },
+    "fallback": {
+      "noName": "Usuario sin nombre",
+      "noUsername": "Usuario no informado"
+    },
+    "items": "{count, plural, =0 {0 itens} one {# item} other {# itens}}",
+    "empty": {
+      "groups": "Ningún grupo informado.",
+      "permissions": "Ningún permiso encontrado."
+    },
+    "loading": "Espera mientras cargamos los datos del perfil.",
+    "error": "No fue posible cargar el perfil."
+  },
+  "groups": {
+    "subtitle": "Gestiona grupos y permisos de acceso",
+    "new": {
+      "title": "Nuevo grupo",
+      "subtitle": "Registro de grupo"
+    },
+    "edit": {
+      "title": "Editar grupo",
+      "subtitle": "Edición de grupo"
+    },
+    "fields": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por"
+    },
+    "columns": {
+      "name": "Nombre",
+      "usersCount": "Usuarios",
+      "description": "Descripción",
+      "createdAt": "Registrado el",
+      "createdBy": "Registrado por",
+      "permissionsCount": "Permisos"
+    },
+    "form": {
+      "loadError": "No fue posible cargar los datos del grupo.",
+      "saveError": "No fue posible guardar el grupo.",
+      "created": "Grupo creado correctamente.",
+      "updated": "Grupo actualizado correctamente.",
+      "permissionDenied": "No tienes permiso para guardar grupos."
+    },
+    "empty": {
+      "title": "Ningún grupo encontrado"
+    },
+    "action": {
+      "create": {
+        "noPermission": "No tienes permiso para crear grupos."
+      },
+      "edit": {
+        "noPermission": "No tienes permiso para editar grupos."
+      },
+      "delete": {
+        "noPermission": "No tienes permiso para eliminar grupos."
+      }
+    },
+    "detail": {
+      "title": "Detalle del grupo",
+      "subtitle": "Resumen, permisos y usuarios del grupo",
+      "tabs": {
+        "summary": "Resumen",
+        "permissions": "Permisos",
+        "users": "Usuarios"
+      },
+      "permissions": {
+        "title": "Permisos",
+        "subtitle": "Asocia o desasocia permisos de este grupo.",
+        "placeholder": "Selecciona los permisos",
+        "saved": "Permisos actualizados correctamente.",
+        "saveError": "No fue posible guardar los permisos del grupo.",
+        "empty": "Ningún permiso asociado."
+      },
+      "users": {
+        "title": "Usuarios",
+        "manageHint": "Los miembros y la vinculación a grupos se gestionan desde la pantalla de Usuarios.",
+        "subtitle": "Asocia o desasocia usuarios de este grupo.",
+        "placeholder": "Selecciona los usuarios",
+        "saved": "Usuarios actualizados correctamente.",
+        "saveError": "No fue posible guardar los usuarios del grupo.",
+        "empty": "Ningún usuario asociado."
+      }
+    },
+    "delete": {
+      "header": "Eliminar grupo",
+      "message": "¿Deseas realmente eliminar el grupo {groupName}?",
+      "success": "Grupo eliminado correctamente."
+    }
+  },
+  "audit": {
+    "emailLog": {
+      "subtitle": "Gestiona registros de e-mail",
+      "fields": {
+        "recipient": "Destinatario",
+        "subject": "Asunto",
+        "template": "Plantilla",
+        "status": "Estado",
+        "sentAt": "Enviado el",
+        "eventType": "Tipo de evento"
+      },
+      "columns": {
+        "recipient": "Destinatario",
+        "subject": "Asunto",
+        "template": "Plantilla",
+        "status": "Estado",
+        "sentAt": "Enviado el",
+        "eventType": "Tipo de evento",
+        "errorMessage": "Error"
+      },
+      "status": {
+        "sent": "Enviado",
+        "failed": "Fallo en el envío"
+      },
+      "eventType": {
+        "firstPassword": "Primera contraseña",
+        "passwordReset": "Restablecimiento de contraseña"
+      },
+      "empty": {
+        "title": "Ningún registro encontrado"
+      }
+    }
+  },
+  "conciliation": {
+    "reconcileUsingERP": "Conciliar usando ERP",
+    "errorReconciliation": "Error en la conciliación",
+    "reconcileUsingAcquirer": "Conciliar usando adquirente",
+    "reconciliationFinalizedTitle": "Conciliación finalizada",
+    "reconciliationFinalized": "La conciliación ERP x adquirente fue procesada.",
+    "noDiscrepancyFound": "No se encontró ningún campo divergente en esta comparación.",
+    "processReconcileManualSwapped": "Conciliar NSU Invertido",
+    "processReconciliationErpVsAcquirer": "Conciliar ERP vs ADQ",
+    "textTooltipErpVsAcquirer": "Ejecuta manualmente la conciliación ERP x adquirente",
+    "processReconciliationErrorErpVsAcquirer": "No fue posible procesar la conciliación ERP x adquirente.",
+    "dialog": {
+      "compareSales": "Comparar ventas",
+      "displayingFieldsDiscrepancies": "Mostrando solo campos con divergencia.",
+      "divergence": "{count, plural, =0 {Ningún campo divergente} one {# divergente} other {# divergentes}}"
+    },
+    "pageTitle": {
+      "missingErp": "Ventas no localizadas en el ERP",
+      "missingOther": "Otras ventas no conciliadas",
+      "missingAcquirer": "Ventas no localizadas en la adquirente"
+    },
+    "pageDescription": {
+      "missingErp": "Ventas de la adquirente que no se encontraron en el ERP. Usa esta pantalla para crear ventas ERP por lote.",
+      "missingAcquirer": "Ventas del ERP que no tienen una venta correspondiente en la adquirente. Usa esta pantalla para marcarlas por lote como eliminadas.",
+      "missingOther": "Ventas con divergencia de valor, adquirente, bandera, modalidad o coincidencia ambigua para análisis y conciliación manual."
+    },
+    "action": {
+      "missingErp": "No encontrado en el ERP",
+      "missingOther": "Otras no conciliadas",
+      "missingAcquirer": "No localizada en la adquirente"
+    },
+    "result": {
+      "analyzed": "Analizadas",
+      "matched": "Conciliadas",
+      "updated": "Actualizadas",
+      "notMatched": "No conciliadas",
+      "flagUpdated": "Banderas actualizadas",
+      "valueDivergences": "Divergencias de valor",
+      "skippedDivergent": "Omitidas por divergencia",
+      "ambiguousMatches": "Coincidencias ambiguas",
+      "businessContextUpdated": "Contextos actualizados",
+      "acquirerDivergences": "Divergencias de adquirente",
+      "okRates": "Tasas correctas",
+      "divergentRates": "Tasas divergentes",
+      "updatedErpSales": "Ventas ERP actualizadas",
+      "missingValidContracts": "Contratos faltantes",
+      "skippedWithoutAcquire": "Omitidas sin adquirente",
+      "partiallyReconciled": "Parcialmente conciliadas",
+      "pending": "Pendientes",
+      "generatedCreditOrders": "Órdenes generadas"
+    },
+    "finishedTitle": "Lote finalizado",
+    "errorTitle": "Error al procesar lote",
+    "finishedWithWarningsTitle": "Lote finalizado con alertas",
+    "noEligibleSelectedTitle": "Ninguna venta elegible seleccionada",
+    "finishedMessage": "Éxito: {{ success }} · Fallas: {{ failed }} · Solicitadas: {{ requested }}",
+    "missingErp": {
+      "batch": {
+        "noEligibleSelectedDetail": "Selecciona ventas de la adquirente para crear ventas ERP por lote.",
+        "createErrorDetail": "No fue posible crear las ventas ERP seleccionadas.",
+        "description": "NimbusFlow creará ventas correspondientes en el ERP usando los datos de las ventas de la adquirente seleccionadas. Las ventas creadas ya quedarán vinculadas a las ventas de la adquirente.",
+        "actionSuffix": "creando ventas en el ERP",
+        "confirmLabel": "Crear ventas ERP"
+      },
+      "single": {
+        "acquirerNotFoundTitle": "Venta de la adquirente no localizada",
+        "acquirerNotFoundDetail": "La línea debe devolver el identificador de la venta de la adquirente para crear la venta ERP.",
+        "description": "NimbusFlow creará una venta correspondiente en el ERP usando los datos de la venta de la adquirente seleccionada. La venta creada ya quedará vinculada a la venta de la adquirente.",
+        "actionSuffix": "creando la venta en el ERP",
+        "confirmLabel": "Crear venta ERP",
+        "createErrorTitle": "Error al crear ERP",
+        "createErrorDetail": "No fue posible crear la venta ERP.",
+        "createdTitle": "Venta ERP creada",
+        "createdDetail": "Venta ERP creada a partir de la adquirente."
+      }
+    },
+    "missingAcq": {
+      "batch": {
+        "noEligibleSelectedDetail": "Selecciona ventas ERP para marcarlas como eliminadas por lote.",
+        "deleteErrorDetail": "No fue posible marcar las ventas ERP seleccionadas como eliminadas.",
+        "description": "Las ventas ERP seleccionadas se marcarán como eliminadas porque no fueron localizadas en la adquirente. Esta acción elimina esas ventas del flujo de conciliación ERP x adquirente.",
+        "actionSuffix": "como eliminadas en el ERP",
+        "confirmLabel": "Marcar como eliminadas"
+      },
+      "single": {
+        "erpNotFoundTitle": "Venta ERP no localizada",
+        "erpNotFoundDetail": "La línea debe devolver el identificador de la venta ERP para marcarla como eliminada.",
+        "description": "La venta ERP se marcará como eliminada porque no fue localizada en la adquirente. Esta acción elimina la venta del flujo de conciliación ERP x adquirente.",
+        "actionSuffix": "como eliminada en el ERP",
+        "confirmLabel": "Marcar como eliminada",
+        "deleteErrorTitle": "Error al eliminar ERP",
+        "deleteErrorDetail": "No fue posible marcar la venta ERP como eliminada.",
+        "deleteTitle": "Venta ERP marcada como eliminada",
+        "deleteDetail": "Venta ERP marcada como eliminada."
+      },
+      "editIdentity": {
+        "title": "Editar NSU y Autorización",
+        "nsu": "NSU",
+        "authorization": "Autorización",
+        "successTitle": "Actualizado",
+        "successDetail": "NSU y autorización actualizados con éxito.",
+        "errorTitle": "Error al actualizar",
+        "errorDetail": "No fue posible actualizar el NSU y la autorización de la venta ERP."
+      }
+    },
+    "batchDialog": {
+      "title": {
+        "createErp": "Crear ventas en el ERP",
+        "deleteErp": "Eliminar ventas",
+        "warning": "ATENCIÓN"
+      },
+      "mainText": {
+        "createErp": {
+          "one": "Seleccionaste { count } transacción de venta para criar venta correspondente en el ERP.",
+          "many": "Seleccionaste { count } transacciones de venta para criar ventas correspondentes en el ERP."
+        },
+        "deleteErp": {
+          "one": "Seleccionaste { count } transacción de venta para marcar como eliminada en el ERP.",
+          "many": "Seleccionaste { count } transacciones de venta para marcar como eliminadas en el ERP."
+        },
+        "generic": {
+          "one": "Seleccionaste { count } transacción de venta para confirmar a acción.",
+          "many": "Seleccionaste { count } transacciones de venta para confirmar a acción."
+        }
+      },
+      "description": {
+        "createErp": "NimbusFlow creará las ventas en el ERP con base en los datos de la adquirente y mantendrá el vínculo entre los dos orígenes.",
+        "deleteErp": "Las ventas ERP seleccionadas se eliminarán del flujo de conciliación porque no fueron localizadas en la adquirente.",
+        "generic": "Confirma para continuar con la acción seleccionada."
+      },
+      "confirm": {
+        "createErp": "Crear ventas ERP",
+        "deleteErp": "Marcar como eliminadas"
+      },
+      "securityAuditNotice": "Por seguridad, los datos del responsable de esta acción se almacenarán para futuras consultas.",
+      "deleteReason": {
+        "label": "Motivo",
+        "required": "es obligatorio.",
+        "observations": "Observaciones",
+        "observationsPlaceholder": "Describa detalles adicionales sobre el motivo (opcional)"
+      }
+    },
+    "selection": {
+      "createErp": "Crear venta ERP",
+      "editIdentity": "Editar NSU y Autorización",
+      "currentMode": "Modo de selección",
+      "deleteErp": "Para eliminar del ERP",
+      "deleteErpSelected": "Marcar ERP eliminados",
+      "createErpSelected": "Crear ERP seleccionados",
+      "count": "{count, plural, =0 {Ninguna seleccionada} one {# seleccionada} other {# seleccionadas}}",
+      "pickOneFirst": "Selecciona primero una transacción elegible para definir el contexto de la selección.",
+      "deleteErpSelectedTooltip": "Marca por lote ventas ERP no localizadas en la adquirente como eliminadas",
+      "createErpSelectedTooltip": "Crea ventas ERP por lote para ventas de la adquirente no localizadas en el ERP"
+    },
+    "otherDivergences": {
+      "compareTooltip": "Comparar ventas",
+      "compareErrorTitle": "Error al comparar ventas",
+      "manualResolvedTitle": "Divergencia resuelta",
+      "manualErrorTitle": "Error al conciliar ventas",
+      "compareUnavailableTitle": "Comparación no disponible",
+      "manualResolvedDetail": "Venta conciliada manualmente.",
+      "manualErrorDetail": "No fue posible concluir la conciliación manual.",
+      "compareUnavailableDetail": "La línea debe devolver los identificadores de la venta ERP y de la venta adquirente.",
+      "compareUnavailableTooltip": "Comparación no disponible: el backend no devolvió la venta de la adquirente vinculada a esta venta ERP.",
+      "compareErrorDetail": "No fue posible cargar la comparación detallada. Verifica que el endpoint de comparación esté disponible en el backend."
+    },
+    "actionDialog": {
+      "titles": {
+        "createErp": "Crear venta en el ERP",
+        "deleteErp": "Eliminar venta",
+        "warning": "ATENCIÓN"
+      },
+      "mainText": {
+        "createErp": "Has seleccionado 1 transacción de venta para crear la venta correspondiente en el ERP.",
+        "deleteErp": "Has seleccionado 1 transacción de venta para marcarla como eliminada en el ERP.",
+        "generic": "Has seleccionado 1 transacción de venta para confirmar la acción."
+      },
+      "deleteReason": {
+        "label": "Motivo",
+        "required": "es obligatorio.",
+        "observations": "Observaciones",
+        "observationsPlaceholder": "Describa detalles adicionales sobre el motivo (opcional)"
+      },
+      "description": {
+        "createErp": "NimbusFlow creará una venta en el ERP con base en los datos de la adquirente y mantendrá el vínculo entre ambos orígenes.",
+        "deleteErp": "La venta ERP se eliminará del flujo de conciliación porque no fue localizada en la adquirente.",
+        "generic": "Confirma para continuar con la acción seleccionada."
+      },
+      "confirm": {
+        "createErp": "Crear venta ERP",
+        "deleteErp": "Marcar como eliminada"
+      },
+      "securityAuditNotice": "Por seguridad, los datos del responsable de esta acción se almacenarán para futuras consultas."
+    },
+    "bank": {
+      "processReconciliation": "Conciliar Banco",
+      "textTooltip": "Ejecuta manualmente la conciliación bancaria"
+    },
+    "cancellationReprocess": {
+      "buttonLabel": "Reprocesar Cancelaciones ERP",
+      "textTooltip": "Reprocesa cancelaciones de la adquirente para un mes, propagando la cancelación a las ventas ERP vinculadas",
+      "dialogTitle": "Reprocesar Cancelaciones ERP",
+      "dialogDescription": "Seleccione el mes y año para reprocesar los cancelaciones de la adquirente y propagarlos a las ventas ERP vinculadas.",
+      "monthLabel": "Mes / Año",
+      "successTitle": "Reprocesamiento completado",
+      "successDetail": "ADQ canceladas: {{ acq }} · ERP canceladas: {{ erp }} · Vinculadas: {{ linked }} · Cuotas: {{ installments }} · Ya canceladas: {{ skipped }}",
+      "errorTitle": "Error en el reprocesamiento",
+      "errorDetail": "No fue posible reprocesar las cancelaciones ERP."
+    },
+    "settings": {
+      "eyebrow": "Conciliación",
+      "title": "Configuración de Conciliación",
+      "subtitle": "Parámetros del proceso de conciliación ERP x Adquirente.",
+      "schedulingTitle": "Programación",
+      "schedulingSubtitle": "Controla cuándo y cómo se ejecuta el pipeline automático de NimbusFlow.",
+      "processingTitle": "Procesamiento",
+      "processingSubtitle": "Ventana de búsqueda de transacciones para la conciliación ERP x Adquirente.",
+      "reconciliationTitle": "Conciliación",
+      "reconciliationSubtitle": "Tolerancias y reprocesamiento por etapa del pipeline de conciliación.",
+      "schedulerEnabled": "Programación automática",
+      "schedulerEnabledHint": "Habilita o deshabilita la ejecución automática del pipeline. Los endpoints manuales siguen funcionando incluso con esta opción desactivada.",
+      "completePipelineEnabled": "Pipeline completo habilitado",
+      "completePipelineEnabledHint": "Habilita la ejecución del pipeline completo (ERP → Adquirente → Banco → Conciliaciones). Cuando está desactivado, el scheduler se despierta pero no hace nada.",
+      "completePipelineCron": "Expressão cron",
+      "completePipelineCronHint": "Cron Spring de 6 campos (segundos minutos horas día mes día-semana). Los cambios se aplican solo después de reiniciar el servidor.",
+      "completePipelineStopOnStepError": "Detener en error de etapa",
+      "completePipelineStopOnStepErrorHint": "Cuando está habilitado, el pipeline interrumpe las etapas siguientes si una etapa lanza una excepción. Los conflictos de ejecución paralela nunca detienen el pipeline.",
+      "logIdleCycles": "Registrar ciclos ociosos",
+      "logIdleCyclesHint": "Emite un log de depuración en cada ciclo en que el scheduler se despierta pero está desactivado. Se recomienda desactivar en producción para evitar ruido en los logs.",
+      "schedulerSaved": "Configuración de programación guardada con éxito.",
+      "schedulerSaveError": "No se pudo guardar la configuración de programación.",
+      "erpAcquirerPreviousDaysLookback": "Días retroactivos en la adquirente",
+      "erpAcquirerPreviousDaysLookbackHint": "Define cuántos días antes de la fecha ERP puede haber registrado la transacción la adquirente. Use 0 para exigir el mismo día.",
+      "erpAcquirerFutureDaysLookback": "Días futuros en la adquirente",
+      "erpAcquirerFutureDaysLookbackHint": "Define cuántos días después de la fecha ERP puede haber registrado la transacción la adquirente. Use 0 para exigir el mismo día.",
+      "reconciliationLookbackMonths": "Meses retroactivos para conciliación",
+      "reconciliationLookbackMonthsHint": "Define cuántos meses anteriores a la fecha actual se deben considerar para buscar transacciones en la conciliación. Valor predeterminado: 120 meses.",
+      "creditOrderPendingDays": "Días de atraso para órdenes pendientes",
+      "creditOrderPendingDaysHint": "Los resúmenes con fecha de RV anterior a este número de días y sin órdenes de pago se listan como pendientes para creación en lote.",
+      "enabledTitle": "Habilitación de Etapas",
+      "enabledSubtitle": "Cuando está desactivada, la etapa se omite (SKIPPED) y las etapas siguientes continúan normalmente.",
+      "enabledErpAcquirer": "Etapa 1 — ADQ x ERP",
+      "enabledSalesSummaryTransactions": "Etapa 2 — Resumen x TransactionAcq",
+      "enabledAcquirerSaleCancellations": "Etapa 3 — Cancelaciones ADQ",
+      "enabledErpAcquirerFees": "Etapa 4 — Comisiones ERP x ADQ",
+      "enabledAcquirerSaleSummary": "Etapa 5 — Venta ADQ x Resumen",
+      "enabledSalesSummaryCreditOrder": "Etapa 6 — Resumen x Orden de Pago",
+      "enabledBankAcquirer": "Etapa 7 — Orden de Pago x Banco",
+      "reprocessTitle": "Reprocesamiento por Etapa del Pipeline",
+      "reprocessSubtitle": "Permite que cada etapa del pipeline procese registros ya conciliados. Use solo para auditorías o correcciones puntuales — desactive después del uso.",
+      "reprocessErpAcquirerSales": "Etapa 1 — ERP x Adquirente (Ventas)",
+      "reprocessErpAcquirerSalesHint": "Reprocesa ventas ERP ya conciliadas con la adquirente.",
+      "reprocessSalesSummaryTransactions": "Etapa 2 — Resumen x TransactionAcq",
+      "reprocessSalesSummaryTransactionsHint": "Reprocesa resúmenes de ventas cuyo transactionsStatus ya está conciliado.",
+      "reprocessAcquirerSaleCancellations": "Etapa 3 — Cancelaciones de la Adquirente",
+      "reprocessAcquirerSaleCancellationsHint": "Reprocesa ventas ya marcadas como canceladas por la adquirente.",
+      "reprocessErpAcquirerFees": "Etapa 4 — Tarifas ERP x Adquirente",
+      "reprocessErpAcquirerFeesHint": "Reprocesa transacciones cuyo feeReconciliationStatus ya está conciliado.",
+      "reprocessAcquirerSaleSummary": "Etapa 5 — Venta ADQ x Resumen de Ventas",
+      "reprocessAcquirerSaleSummaryHint": "Reprocesa resúmenes de ventas cuyo transactionsStatus ya está conciliado.",
+      "reprocessSalesSummaryCreditOrder": "Etapa 6 — Resumen x Orden de Pago",
+      "reprocessSalesSummaryCreditOrderHint": "Reprocesa resúmenes cuyo creditOrderStatus ya está conciliado.",
+      "reprocessBankAcquirer": "Etapa 7 — Orden de Pago x Extracto Bancario",
+      "reprocessBankAcquirerHint": "Reprocesa órdenes de crédito ya pagadas y lanzamientos bancarios ya conciliados.",
+      "strictMatchingTitle": "Rigidez del Matching (Etapa 7)",
+      "strictMatchingSubtitle": "Por defecto, bandera, establecimiento y modalidad son opcionales al emparejar un lanzamiento bancario con una orden de crédito/cuota — nulo o desconocido en cualquier lado se acepta. Actívelos para exigir cada campo y reducir conciliaciones incorrectas.",
+      "flagMatchRequired": "Bandera obligatoria",
+      "flagMatchRequiredHint": "Exige que la bandera del lanzamiento bancario y de la orden de crédito/cuota coincidan. Hoy, una bandera ausente en cualquier lado se acepta como comodín.",
+      "establishmentMatchRequired": "Establecimiento obligatorio",
+      "establishmentMatchRequiredHint": "Exige que el número de establecimiento (PV) del lanzamiento bancario y de la orden de crédito/cuota coincidan. Antes de activar, confirme que la extracción del PV desde el CNAB es confiable — vea el diagnóstico de impacto.",
+      "paymentKindMatchRequired": "Modalidad (débito/crédito) obligatoria",
+      "paymentKindMatchRequiredHint": "Exige que la modalidad (débito o crédito) del lanzamiento bancario y de la orden de crédito/cuota coincidan. Hoy, una modalidad desconocida en cualquier lado se acepta como comodín.",
+      "dateToleranceDaysBefore": "Antes (días)",
+      "dateToleranceDaysBeforeHint": "Días anteriores permitidos (banco). Días que el lanzamiento bancario puede ser ANTERIOR a la orden de crédito. Recomendado: 0 (evita falsos positivos).",
+      "dateToleranceDaysAfter": "Después (días)",
+      "dateToleranceDaysAfterHint": "Días posteriores permitidos (banco). Días que el lanzamiento bancario puede ser POSTERIOR a la orden de crédito. Recomendado: 5.",
+      "valueTolerance": "Tolerancia (R$)",
+      "valueToleranceHint": "Tolerancia de valor. Diferencia monetaria máxima tolerada en una conciliación. Ej: 0,05 acepta divergencias de hasta 5 centavos.",
+      "bankMarkNotReconciledAfterDays": "No conciliado (días)",
+      "bankMarkNotReconciledAfterDaysHint": "Días para marcar no conciliado. Lanzamientos bancarios sin coincidencia en los últimos N días permanecen pendientes. Después de ese plazo, pasan a no conciliados.",
+      "subsetDpMaxCents": "Tope combinación (R$)",
+      "subsetDpMaxCentsHint": "Tope de combinación. Valor máximo, indicado en R$ (convertido internamente a centavos), intentado en la búsqueda de combinación de órdenes de crédito (subset-sum) para cerrar un lanzamiento bancario. Por encima de este tope, el lanzamiento queda pendiente aunque existan órdenes compatibles. Ej: R$ 500.000,00.",
+      "legacyMarkingTitle": "Marcación de Legado",
+      "legacyMarkingSubtitle": "Controla qué lanzamientos bancarios pueden marcarse manualmente como anteriores a la implantación, según la fecha del lanzamiento.",
+      "goLiveDate": "Fecha de Go-Live",
+      "goLiveDateHint": "Fecha en que el sistema entró en operación. Usada por la conciliación para ignorar fechas anteriores y como referencia de la ventana de marcación de legado.",
+      "legacyMarkingMonths": "Legado (meses)",
+      "legacyMarkingMonthsHint": "Meses para Marcación de Legado. Solo los lanzamientos con fecha hasta go-live + N meses pueden marcarse como legado. Para lanzamientos posteriores, el botón se oculta en la conciliación manual.",
+      "saved": "Configuración guardada exitosamente.",
+      "saveError": "No fue posible guardar la configuración."
+    },
+    "manualSalesSummary": {
+      "eyebrow": "Conciliación",
+      "title": "Resumen de Ventas",
+      "subtitle": "Cree manualmente un resumen de ventas cuando el archivo EEVC no esté disponible, permitiendo que la conciliación con las órdenes de crédito continúe.",
+      "sectionSummaryRequired": "Resumen de ventas — datos obligatorios",
+      "sectionSummaryOptional": "Resumen de ventas — datos opcionales",
+      "sectionTransaction": "Transacción",
+      "establishmentPv": "Establecimiento (PV)",
+      "acquirer": "Adquirente",
+      "company": "Empresa",
+      "rvNumber": "Número de RV",
+      "rvDate": "Fecha de RV",
+      "grossValue": "Valor bruto",
+      "discountValue": "Valor descuento",
+      "liquidValue": "Valor neto",
+      "tipValue": "Propina / IATA",
+      "rejectedValue": "Valor rechazado",
+      "adjustedValue": "Valor ajustado",
+      "numberCvNsu": "Cant. CV/NSU",
+      "firstInstallmentCreditDate": "Fecha 1ª cuota",
+      "summaryType": "Tipo de resumen",
+      "submit": "Crear resumen y transacciones",
+      "saved": "Resumen de ventas y transacciones creados exitosamente.",
+      "addTransaction": "Agregar transacción",
+      "removeTransaction": "Eliminar",
+      "modeManual": "Ingreso Manual",
+      "modeCsv": "Importar CSV",
+      "tx": {
+        "label": "Transacción",
+        "nsu": "NSU",
+        "cardNumber": "Número de tarjeta",
+        "authorization": "Autorización",
+        "referenceNumber": "Número de referencia",
+        "saleDate": "Fecha de venta",
+        "creditDate": "Fecha de crédito",
+        "installment": "Nº de cuotas",
+        "modality": "Modalidad",
+        "flag": "Marca",
+        "tid": "TID",
+        "capture": "Tipo de captura"
+      },
+      "csv": {
+        "sectionConfig": "Configuración de importación",
+        "fileLabel": "Haga clic para seleccionar uno o más archivos CSV de Rede",
+        "fileHint": "Archivos .csv exportados desde el portal Rede",
+        "parsing": "Procesando archivos...",
+        "filesProcessed": "{{ count }} archivo(s) procesado(s)",
+        "fileErrorTitle": "Error al leer archivo",
+        "fileErrorDetail": "No fue posible leer el archivo {{ fileName }}. Los demás archivos seleccionados se procesaron normalmente.",
+        "noData": "Seleccione uno o más archivos CSV para previsualizar los resúmenes",
+        "preview": "Resúmenes identificados",
+        "colRv": "RV",
+        "colEstablishment": "Establecimiento",
+        "colDate": "Fecha",
+        "colGross": "Bruto (R$)",
+        "colDiscount": "Descuento (R$)",
+        "colLiquid": "Neto (R$)",
+        "colTxs": "Txs",
+        "colStatus": "Estado",
+        "statusPending": "Pendiente",
+        "statusSubmitting": "Enviando...",
+        "statusSuccess": "Importado",
+        "statusError": "Error",
+        "submit": "Importar todos",
+        "retryFailed": "Reintentar fallidos",
+        "importSuccess": "Todos los resúmenes fueron importados exitosamente."
+      }
+    },
+    "manualCreditOrder": {
+      "eyebrow": "Conciliación",
+      "title": "Orden de Pago",
+      "subtitle": "Busque resúmenes o cargue los pendientes y cree las órdenes de pago automáticamente para la próxima cuota sin orden.",
+      "searchSection": "Buscar resúmenes de ventas",
+      "rvNumber": "Número de RV",
+      "acquirer": "Adquirente",
+      "search": "Buscar",
+      "loadPending": "Cargar pendientes",
+      "results": "Resúmenes encontrados",
+      "noResults": "No se encontraron resúmenes con los filtros indicados.",
+      "selected": "{{count}} seleccionado(s)",
+      "selectAll": "Seleccionar todos",
+      "colRvNumber": "Nº RV",
+      "colRvDate": "Fecha RV",
+      "colAcquirer": "Adquirente",
+      "colCompany": "Empresa",
+      "colFlag": "Bandera",
+      "installmentSection": "Configuración de cuota",
+      "installmentNumber": "Número de cuota",
+      "installmentTotal": "Total de cuotas",
+      "releaseDate": "Fecha de lanzamiento (opcional)",
+      "installmentRangeError": "El número de cuota no puede ser mayor que el total",
+      "submit": "Crear órdenes de pago",
+      "saved": "{created} creada(s), {skipped} ignorada(s).",
+      "createdCount": "{count, plural, one {# orden creada} other {# órdenes creadas}}",
+      "skippedCount": "{count, plural, one {# ignorada} other {# ignoradas}}",
+      "skippedReasons": "Motivos de órdenes ignoradas",
+      "skipReason": {
+        "ALL_INSTALLMENTS_COVERED": "RV {rvNumber}: {installmentTotal, plural, =1 {la única cuota ya tiene orden de crédito} other {todas las # cuotas ya tienen órdenes de crédito}}.",
+        "FUTURE_RELEASE_DATE": "RV {rvNumber}: cuota {installmentTotal} ignorada — vencimiento futuro.",
+        "SUMMARY_NOT_FOUND": "Resumen no encontrado.",
+        "UNEXPECTED_ERROR": "RV {rvNumber}: error inesperado al crear la orden de crédito."
+      },
+      "selectedSection": "Resúmenes seleccionados",
+      "remove": "Eliminar",
+      "clearAll": "Limpiar selección",
+      "createSingle": "Crear orden de pago",
+      "createSelected": "Crear seleccionados ({{count}})",
+      "clearTable": "Limpiar tabla",
+      "emptyTable": "No hay resúmenes cargados. Use la búsqueda o cargue los pendientes.",
+      "colCreditOrderStatus": "Estado orden crédito",
+      "import": {
+        "button": "Importar informe del adquirente",
+        "previewTitle": "Confirmar importación",
+        "confirm": "Confirmar importación",
+        "totalValue": "Valor total",
+        "saved": "{analyzed} línea(s) analizada(s), {created} orden(es) creada(s), {skipped} ignorada(s).",
+        "analyzedCount": "{count, plural, one {# línea analizada} other {# líneas analizadas}}",
+        "wouldCreateCount": "{count, plural, one {Se creará # orden} other {Se crearán # órdenes}}",
+        "skippedReasons": "Motivos de las líneas ignoradas",
+        "skipReason": {
+          "SUMMARY_NOT_FOUND": "{fileName}, línea {lineNumber}: RV {rvNumber} no encontrado en el sistema.",
+          "AMBIGUOUS_RV": "{fileName}, línea {lineNumber}: RV {rvNumber} corresponde a más de un resumen de ventas — no fue posible identificar cuál.",
+          "ALREADY_HAS_CREDIT_ORDER": "{fileName}, línea {lineNumber}: RV {rvNumber}, cuota {installmentNumber} ya tiene orden de crédito.",
+          "PARSE_ERROR": "{fileName}, línea {lineNumber}: no fue posible leer los datos de la cuota (RV {rvNumber})."
+        }
+      }
+    },
+    "manualBankStatement": {
+      "eyebrow": "Conciliación",
+      "title": "Lanzamiento Bancario",
+      "subtitle": "Cree un lanzamiento bancario manualmente para domicilios bancarios sin archivo importado.",
+      "modeCsv": "Importar archivo",
+      "modeManual": "Lanzamiento manual",
+      "company": "Empresa",
+      "bankingDomicile": "Domicilio bancario",
+      "releaseDate": "Fecha del lanzamiento",
+      "releaseValue": "Valor del lanzamiento",
+      "releaseCategory": "Categoría",
+      "modalityPaymentBank": "Modalidad",
+      "description": "Descripción histórica",
+      "document": "Complemento del documento",
+      "historicalCodeBank": "Código histórico del banco",
+      "acquirer": "Adquirente",
+      "establishment": "Establecimiento (opcional)",
+      "flag": "Marca (opcional)",
+      "sectionRequired": "Datos obligatorios",
+      "sectionOptional": "Datos opcionales",
+      "submit": "Crear lanzamiento",
+      "saved": "Lanzamiento bancario creado con éxito.",
+      "saveError": "No se pudo crear el lanzamiento bancario.",
+      "csv": {
+        "sectionConfig": "Configuración de la importación",
+        "fileLabel": "Haga clic para seleccionar uno o más archivos de extracto",
+        "fileHint": "Archivos .txt/.csv exportados de la banca en línea (ej.: extracto Itaú)",
+        "parsing": "Procesando archivos...",
+        "filesProcessed": "{{ count }} archivo(s) procesado(s)",
+        "fileErrorTitle": "Error al leer el archivo",
+        "fileErrorDetail": "No se pudo leer el archivo {{ fileName }}. Los demás archivos seleccionados fueron procesados normalmente.",
+        "noData": "Seleccione uno o más archivos de extracto para ver los lanzamientos de tarjeta identificados",
+        "preview": "Lanzamientos identificados",
+        "colDate": "Fecha",
+        "colDescription": "Histórico",
+        "colValue": "Valor",
+        "colAcquirer": "Adquirente",
+        "colFlag": "Marca",
+        "colModality": "Modalidad",
+        "colStatus": "Estado",
+        "statusPending": "Pendiente",
+        "statusSubmitting": "Enviando...",
+        "statusSuccess": "Importado",
+        "statusError": "Error",
+        "statusDuplicate": "Duplicado",
+        "statusDuplicateHint": "Ya existe un lanzamiento con el mismo domicilio bancario, fecha, valor e histórico — no fue importado de nuevo.",
+        "submit": "Importar todos",
+        "retryFailed": "Reenviar con error",
+        "importSuccess": "Todos los lanzamientos fueron importados con éxito.",
+        "bankMismatchTitle": "Confirmar domicilio bancario",
+        "bankMismatchMessage": "El nombre del archivo {{fileName}} sugiere la agencia {{fileAgency}}, diferente de la agencia {{selectedAgency}} seleccionada ({{selectedBank}}). ¿Desea continuar de todos modos?",
+        "bankMismatchConfirm": "Continuar",
+        "bankMismatchCancel": "Cancelar"
+      }
+    },
+    "manualAdjustment": {
+      "title": "Ajuste",
+      "subtitle": "Registre ajustes financieros manualmente o importe un informe de ajustes de la adquirente.",
+      "modeCsv": "Importar CSV",
+      "modeManual": "Lanzamiento manual",
+      "sectionRequired": "Datos obligatorios",
+      "sectionOptional": "Datos opcionales",
+      "establishment": "Establecimiento (PV)",
+      "acquirer": "Adquirente",
+      "company": "Empresa",
+      "rvNumberOriginal": "RV/Lote ajustado",
+      "pvNumberOriginal": "PV de origen del cobro",
+      "adjustmentDate": "Fecha del ajuste",
+      "creditDate": "Fecha del lanzamiento",
+      "debitType": "Tipo",
+      "debitTypeDebit": "Cobro",
+      "debitTypeCredit": "Crédito",
+      "adjustmentType": "Forma de compensación",
+      "adjustmentDescription": "Motivo",
+      "adjustmentValue": "Valor total original",
+      "transactionValue": "Valor cobrado/acreditado en esta fecha",
+      "totalDebitValue": "Valor total ya cobrado",
+      "pendingValue": "Valor aún pendiente",
+      "flag": "Bandera ajustada",
+      "rawAdjustmentCode": "ID del ajuste (origen)",
+      "submit": "Crear ajuste",
+      "saved": "Ajuste creado con éxito.",
+      "csv": {
+        "sectionConfig": "Configuración de importación",
+        "fileLabel": "Haga clic para seleccionar uno o más archivos CSV de ajustes",
+        "fileHint": "Archivo de ajustes exportado desde el portal de la adquirente",
+        "parsing": "Procesando archivos...",
+        "filesProcessed": "{{ count }} archivo(s) procesado(s)",
+        "fileErrorTitle": "Error al leer archivo",
+        "fileErrorDetail": "No fue posible leer el archivo {{ fileName }}. Los demás archivos seleccionados se procesaron normalmente.",
+        "noData": "Seleccione uno o más archivos CSV para previsualizar los ajustes",
+        "preview": "Ajustes identificados",
+        "colDate": "Fecha del ajuste",
+        "colEstablishment": "Establecimiento",
+        "colRv": "RV",
+        "colType": "Tipo",
+        "colReason": "Motivo",
+        "colValue": "Valor",
+        "colStatus": "Status",
+        "statusPending": "Pendiente",
+        "statusSubmitting": "Enviando...",
+        "statusSuccess": "Importado",
+        "statusError": "Error",
+        "submit": "Importar todos",
+        "retryFailed": "Reenviar con error",
+        "importSuccess": "Todos los ajustes se importaron con éxito."
+      }
+    },
+    "manualBankReconciliation": {
+      "title": "Conciliación Bancaria",
+      "subtitle": "Vincule lanzamientos bancarios a órdenes de crédito manualmente.",
+      "releasesTitle": "Lanzamientos Bancarios",
+      "ordersTitle": "Órdenes de Crédito",
+      "link": "Vincular",
+      "linkSuccess": "{reconciled, plural, one {# orden vinculada con éxito} other {# órdenes vinculadas con éxito}}{zeroValueReconciled, plural, =0 {.} other { + # órdenes con valor cero conciliadas automáticamente.}}",
+      "confirmTitle": "Confirmar vinculación",
+      "confirmMessage": "{count, plural, one {¿Vincular # orden de crédito a este lanzamiento bancario?} other {¿Vincular # órdenes de crédito a este lanzamiento bancario?}}",
+      "divergenceDialogTitle": "Vincular con diferencia de valor",
+      "divergenceDialogMessage": "{count, plural, one {La orden seleccionada no coincide} other {Las # órdenes seleccionadas no coinciden}} exactamente con el lanzamiento bancario — diferencia de {difference}. Indique el motivo para vincular de todas formas.",
+      "divergenceReasonLabel": "Motivo de la diferencia (obligatorio para vincular sin coincidencia exacta)",
+      "divergenceReasonSelectPlaceholder": "Seleccione un motivo",
+      "divergenceReasonPlaceholder": "Describa el motivo de la diferencia",
+      "divergenceReasonPreset": {
+        "preImplantation": "El lanzamiento incluye ventas anteriores a la implantación, sin orden de crédito en el sistema",
+        "rounding": "Diferencia de redondeo",
+        "bankFee": "Tarifa bancaria no identificada en el sistema",
+        "other": "Otro (especificar)"
+      },
+      "selectReleaseFirst": "Seleccione un lanzamiento para habilitar",
+      "ordersSelected": "{count, plural, =0 {Ninguna seleccionada} one {# seleccionada} other {# seleccionadas}}",
+      "selectedOrdersTotal": "Total de órdenes seleccionadas",
+      "clearOrders": "Limpiar órdenes seleccionadas",
+      "valueDifference": "Diferencia entre los valores",
+      "markLegacy": "Marcar como Legado",
+      "markLegacyTooltip": "Marca el lanzamiento como anterior a la implantación (sin orden de crédito correspondiente en el sistema)",
+      "markLegacyConfirmTitle": "Marcar como legado",
+      "markLegacyConfirmMessage": "{count, plural, one {¿Marcar este lanzamiento bancario como anterior a la implantación? Saldrá de la cola de conciliación pendiente y seguirá disponible en el extracto bancario.} other {¿Marcar estos # lanzamientos bancarios como anteriores a la implantación? Saldrán de la cola de conciliación pendiente y seguirán disponibles en el extracto bancario.}}",
+      "releasesSelectedForLegacy": "{count, plural, one {# lanzamiento seleccionado para legado} other {# lanzamientos seleccionados para legado}}",
+      "ordersBlockedMultiSelect": "Bloqueado — múltiples lanzamientos seleccionados para legado",
+      "markLegacySuccess": "{updated, plural, one {# lanzamiento marcado como legado.} other {# lanzamientos marcados como legado.}}",
+      "dataToolsMenu": "Herramientas",
+      "reclassifyFlags": "Reclasificar Banderas",
+      "reclassifyFlagsTooltip": "Corrige la bandera de los lanzamientos bancarios PENDIENTES usando el texto del historial del banco (backfill único)",
+      "reclassifyFlagsConfirmTitle": "Reclasificar banderas",
+      "reclassifyFlagsConfirmMessage": "¿Reclasificar la bandera de los lanzamientos bancarios pendientes a partir del historial del banco? Solo se cambian los lanzamientos cuya bandera difiere de la ya registrada. Los lanzamientos ya conciliados no se ven afectados.",
+      "reclassifyFlagsSuccess": "Lanzamientos pendientes analizados: {analyzed}. Banderas corregidas: {updated}. Sin bandera identificada: {stillUnresolved}.",
+      "reclassifyModality": "Reclasificar Modalidad",
+      "reclassifyModalityTooltip": "Corrige la modalidad (débito/crédito) de lanzamientos de recibo sin modalidad identificada, invisibles en el Extracto Bancario (backfill único)",
+      "reclassifyModalityConfirmTitle": "Reclasificar modalidad",
+      "reclassifyModalityConfirmMessage": "¿Reclasificar la modalidad (débito/crédito) de los lanzamientos de recibo sin modalidad identificada, a partir del histórico del banco? Los lanzamientos sin ninguna señal de débito/crédito en el texto (ej.: TED, SISPAG, correcciones) permanecen sin cambios.",
+      "reclassifyModalitySuccess": "Lanzamientos analizados: {analyzed}. Modalidad corregida: {updated}. Sin modalidad identificada: {stillUnresolved}.",
+      "reclassifyEstablishment": "Reclasificar Establecimiento",
+      "reclassifyAcquirer": "Reclasificar Adquirente",
+      "reclassifyAcquirerTooltip": "Vincula el adquirente de lanzamientos de recibo sin adquirente identificado, a partir del histórico del banco o del documento (backfill único) — ejecutar antes de Reclasificar Establecimiento",
+      "reclassifyAcquirerConfirmTitle": "Reclasificar adquirente",
+      "reclassifyAcquirerConfirmMessage": "¿Vincular el adquirente de los lanzamientos de recibo sin adquirente identificado, a partir del histórico del banco o del documento? Los lanzamientos sin ninguna señal de adquirente reconocible en el texto permanecen sin cambios.",
+      "reclassifyAcquirerSuccess": "Lanzamientos analizados: {analyzed}. Adquirente vinculado: {updated}. Sin adquirente identificado: {stillUnresolved}.",
+      "reclassifyEstablishmentTooltip": "Vincula el establecimiento de lanzamientos de recibo sin establecimiento identificado, a partir del PV en el histórico del banco o en el documento (backfill único)",
+      "reclassifyEstablishmentConfirmTitle": "Reclasificar establecimiento",
+      "reclassifyEstablishmentConfirmMessage": "¿Vincular el establecimiento de los lanzamientos de recibo sin establecimiento identificado, a partir del PV encontrado en el histórico del banco o en el documento? Los lanzamientos sin ningún PV reconocible en el texto (ej.: PIX, TED) permanecen sin cambios.",
+      "reclassifyEstablishmentSuccess": "Lanzamientos analizados: {analyzed}. Establecimiento vinculado: {updated}. Sin establecimiento identificado: {stillUnresolved}.",
+      "preImplantationAnalyze": "Analizar Divergencias Pre-Implantación",
+      "preImplantationAnalyzeTooltip": "Analiza lanzamientos pendientes cuya suma de órdenes de crédito disponibles queda por debajo del valor del lanzamiento (patrón de ventas anteriores a la implantación, sin orden en el sistema) — no graba nada, solo muestra lo que se vincularía",
+      "preImplantationDialogTitle": "Divergencia pre-implantación",
+      "preImplantationDialogMessage": "Lanzamientos abajo cuya suma de órdenes de crédito disponibles (misma empresa/banco/adquirente/bandera, dentro de la ventana de fecha configurada) queda por debajo del valor del lanzamiento. Vincular aplica la justificación estándar de ventas anteriores a la implantación a todos los elegibles.",
+      "preImplantationAnalyzed": "Analizados",
+      "preImplantationEligible": "Elegibles para vincular",
+      "preImplantationSkippedNegative": "Órdenes suman más que el lanzamiento",
+      "preImplantationSkippedNoCandidates": "Sin órdenes candidatas",
+      "preImplantationNoneEligible": "Ningún lanzamiento elegible encontrado.",
+      "preImplantationSelectedCount": "{count, plural, =0 {Ninguno seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "preImplantationColCompany": "Empresa",
+      "preImplantationColAcquirer": "Adquirente",
+      "preImplantationColBank": "Banco",
+      "preImplantationColDate": "Fecha",
+      "preImplantationColValue": "Valor lanzamiento",
+      "preImplantationColMatchedOrders": "Órdenes encontradas",
+      "preImplantationColSum": "Suma de las órdenes",
+      "preImplantationColDifference": "Diferencia",
+      "preImplantationApply": "Vincular Elegibles",
+      "preImplantationApplyConfirmTitle": "Vincular divergencias pre-implantación",
+      "preImplantationApplyConfirmMessage": "¿Vincular automáticamente {eligible, plural, =0 {ningún lanzamiento} one {# lanzamiento elegible} other {# lanzamientos elegibles}}, aplicando la justificación estándar de ventas anteriores a la implantación? Esta acción se recalcula en el momento de la ejecución y no se puede deshacer en lote.",
+      "preImplantationApplySuccess": "Lanzamientos analizados: {analyzed}. Vinculados: {linked}. Órdenes por encima del valor del lanzamiento: {skippedNegativeDifference}. Sin órdenes candidatas: {skippedNoCandidates}.",
+      "noCreditOrderLegacyAnalyze": "Analizar Legado sin Orden de Crédito",
+      "noCreditOrderLegacyAnalyzeTooltip": "Analiza lanzamientos pendientes sin ninguna orden de crédito candidata, dentro de la ventana de legado configurada — no graba nada, solo muestra lo que se marcaría como legado",
+      "noCreditOrderLegacyDialogTitle": "Legado sin orden de crédito",
+      "noCreditOrderLegacyDialogMessage": "Lanzamientos abajo no tienen ninguna orden de crédito candidata (misma empresa/banco/adquirente/bandera, dentro de la ventana de fecha configurada) y están dentro de la ventana de legado (go-live + meses configurados). Marcar aplica el mismo efecto del botón \"Marcar como Legado\" manual a todos los elegibles.",
+      "noCreditOrderLegacyAnalyzed": "Analizados",
+      "noCreditOrderLegacyEligible": "Elegibles para legado",
+      "noCreditOrderLegacySkippedHasCandidates": "Con órdenes candidatas",
+      "noCreditOrderLegacySkippedOutsideWindow": "Fuera de la ventana de legado",
+      "noCreditOrderLegacyNoneEligible": "Ningún lanzamiento elegible encontrado.",
+      "noCreditOrderLegacySelectedCount": "{count, plural, =0 {Ninguno seleccionado} one {# seleccionado} other {# seleccionados}}",
+      "noCreditOrderLegacyColCompany": "Empresa",
+      "noCreditOrderLegacyColAcquirer": "Adquirente",
+      "noCreditOrderLegacyColBank": "Banco",
+      "noCreditOrderLegacyColDate": "Fecha",
+      "noCreditOrderLegacyColValue": "Valor lanzamiento",
+      "noCreditOrderLegacyApply": "Marcar Elegibles",
+      "noCreditOrderLegacyApplyConfirmTitle": "Marcar legado sin orden de crédito",
+      "noCreditOrderLegacyApplyConfirmMessage": "¿Marcar como legado {eligible, plural, =0 {ningún lanzamiento} one {# lanzamiento elegible} other {# lanzamientos elegibles}}? Esta acción se recalcula en el momento de la ejecución y no se puede deshacer en lote.",
+      "noCreditOrderLegacyApplySuccess": "Lanzamientos analizados: {analyzed}. Marcados como legado: {marked}. Con órdenes candidatas: {skippedHasCandidates}. Fuera de la ventana de legado: {skippedOutsideLegacyWindow}.",
+      "salesSummaryPreImplantationAnalyze": "Analizar Backfill Pre-implantación (Resumen x Orden)",
+      "salesSummaryPreImplantationAnalyzeTooltip": "Analiza Resúmenes de Venta anteriores a la implantación cuyas cuotas (órdenes de crédito) solo vencen después del go-live y por eso nunca son reevaluadas por el flujo normal — no graba nada, solo estima el resultado",
+      "salesSummaryPreImplantationDialogTitle": "Backfill pre-implantación — Resumen x Orden de Crédito",
+      "salesSummaryPreImplantationDialogMessage": "Los Resúmenes de Venta anteriores a la implantación nunca son reevaluados por el flujo normal de conciliación Resumen x Orden (aunque la cuota venza mucho después del go-live). Aplicar reevalúa esos resúmenes de una vez, con la misma lógica del flujo normal (suma de órdenes, generación sintética cuando corresponda).",
+      "salesSummaryPreImplantationAnalyzed": "Analizados",
+      "salesSummaryPreImplantationWouldReconcile": "Pasarían a conciliados",
+      "salesSummaryPreImplantationWouldPartial": "Pasarían a parciales",
+      "salesSummaryPreImplantationWouldGenerate": "Generarían orden sintética",
+      "salesSummaryPreImplantationWouldRemainPending": "Permanecerían pendientes",
+      "salesSummaryPreImplantationGrossValue": "Valor bruto analizado",
+      "salesSummaryPreImplantationApply": "Aplicar",
+      "salesSummaryPreImplantationApplyConfirmTitle": "Aplicar backfill pre-implantación",
+      "salesSummaryPreImplantationApplyConfirmMessage": "¿Reevaluar ahora todos los Resúmenes de Venta pre-implantación pendientes? Esta acción se recalcula en el momento de la ejecución y no se puede deshacer en lote.",
+      "salesSummaryPreImplantationApplySuccess": "Analizados: {summariesAnalyzed}. Conciliados: {summariesReconciled}. Parciales: {summariesPartiallyReconciled}. Pendientes: {summariesPending}. Órdenes sintéticas generadas: {generatedCreditOrders}.",
+      "creditOrderPreImplantationAnalyze": "Analizar Huérfanas Pre-implantación (Orden de Crédito)",
+      "creditOrderPreImplantationAnalyzeTooltip": "Analiza órdenes de crédito huérfanas (sin resumen de ventas vinculado) anteriores a la implantación, buscando el resumen correspondiente por adquirente+RV — no graba nada, solo estima lo que se vincularía",
+      "creditOrderPreImplantationDialogTitle": "Backfill pre-implantación — Órdenes de Crédito huérfanas",
+      "creditOrderPreImplantationDialogMessage": "Órdenes de crédito huérfanas (sin resumen de ventas vinculado) anteriores a la implantación, cruzadas por adquirente+RV con los resúmenes existentes. Aplicar vincula automáticamente solo el vínculo exacto (mismo PV); PV divergente queda fuera, necesita revisión manual.",
+      "creditOrderPreImplantationAnalyzed": "Analizadas",
+      "creditOrderPreImplantationExactMatch": "Se vincularían",
+      "creditOrderPreImplantationPvMismatch": "PV divergente (no vinculado)",
+      "creditOrderPreImplantationPvMismatchHint": "El RV coincide, pero el establecimiento (PV) de la orden difiere del resumen de ventas — nunca se vincula automáticamente.",
+      "creditOrderPreImplantationNoMatch": "Sin resumen correspondiente",
+      "creditOrderPreImplantationApply": "Vincular Elegibles",
+      "creditOrderPreImplantationApplyConfirmTitle": "Vincular huérfanas pre-implantación",
+      "creditOrderPreImplantationApplyConfirmMessage": "¿Vincular automáticamente {eligible, plural, =0 {ninguna orden} one {# orden elegible} other {# órdenes elegibles}} (vínculo exacto)? Esta acción se recalcula en el momento de la ejecución y no se puede deshacer en lote.",
+      "creditOrderPreImplantationApplySuccess": "Analizadas: {analyzed}. Vinculadas: {linked}. PV divergente: {pvMismatch}. Sin resumen correspondiente: {noMatch}.",
+      "filters": {
+        "releaseDate": "Fecha del lanzamiento",
+        "rvDate": "Fecha de RV"
+      },
+      "columns": {
+        "date": "Fecha",
+        "bank": "Banco",
+        "company": "Empresa",
+        "description": "Descripción",
+        "value": "Valor",
+        "status": "Estado",
+        "rvNumber": "N° RV",
+        "flag": "Marca",
+        "acquirer": "Adquirente"
+      }
+    },
+    "contractAudit": {
+      "title": "Tasas Aplicadas",
+      "processReconciliation": "Conciliar Tasas",
+      "textTooltip": "Ejecuta manualmente la conciliación de tasas",
+      "processReconciliationError": "No fue posible procesar la conciliación de tasas.",
+      "subtitle": "Compara la tasa contratada, la tasa aplicada y la diferencia cobrada por la adquirente.",
+      "fields": {
+        "fees": "Tasas",
+        "cvNsu": "CV/NSU",
+        "flag": "Bandera",
+        "status": "Estado",
+        "period": "Período",
+        "company": "Empresa",
+        "analysis": "Análisis",
+        "acquirer": "Adquirente",
+        "grossValue": "Valor bruto",
+        "saleDate": "Fecha de venta",
+        "differenceValue": "Diferencia",
+        "liquidValue": "Valor neto",
+        "authorization": "Autorización",
+        "rateContract": "Tasa esperada",
+        "establishment": "Establecimiento",
+        "appliedFeeValue": "Tasa aplicada",
+        "periodSaleDate": "Período de venta"
+      },
+      "columns": {
+        "date": "Fecha",
+        "fees": "Tasas",
+        "value": "Valor",
+        "establishmentShort": "PV",
+        "authorizationShort": "Aut.",
+        "analysis": "Análisis"
+      },
+      "table": {
+        "appliedRate": "Aplicada",
+        "expectedFee": "Esperada",
+        "differenceShort": "Dif.",
+        "contractRate": "Contrato"
+      },
+      "status": {
+        "ok": "OK",
+        "missingContract": "Contrato ausente",
+        "rateDivergence": "Divergencia de tasa",
+        "valueDivergence": "Divergencia de valor",
+        "missingAcquirerSale": "Venta de adquirente ausente"
+      }
+    },
+    "dashboard": {
+      "completed": "Conciliación completada",
+      "result": {
+        "analyzed": "Analizados",
+        "matched": "Conciliados",
+        "updated": "Actualizados",
+        "notMatched": "No conciliados",
+        "valueDivergences": "Divergencias de valor",
+        "acquirerDivergences": "Divergencias de adquirente",
+        "ambiguousMatches": "Coincidencias ambiguas",
+        "flagUpdated": "Bandera actualizada",
+        "businessContextUpdated": "Contexto actualizado",
+        "skippedDivergent": "Omitidos"
+      },
+      "erpVsAcquirer": {
+        "cardTitle": "ERP vs Adquirente",
+        "totalErp": "Total ERP",
+        "totalAcquirer": "Total Adquirente",
+        "matched": "Conciliado"
+      },
+      "swappedManual": {
+        "cardTitle": "Swapped Manual",
+        "pendencies": "Pendencias",
+        "salesCount": "{{ count }} ventas",
+        "divergences": "Divergencias",
+        "occurrencesCount": "{{ count }} ocurrencias"
+      },
+      "fees": {
+        "cardTitle": "Tasas",
+        "charged": "Cobradas",
+        "expected": "Esperado",
+        "ok": "OK",
+        "updatedErp": "ERP actualizados",
+        "divergent": "Divergentes",
+        "missingContract": "Sin contrato",
+        "missingAcquirer": "Sin adquirente"
+      },
+      "bank": {
+        "cardTitle": "Banco / CNAB",
+        "settled": "Liquidado",
+        "completed": "Conciliación bancaria completada",
+        "releasesAnalyzed": "Lanzamientos analizados",
+        "releasesReconciled": "Conciliados",
+        "releasesWithoutMatch": "Sin correspondencia",
+        "totalReleaseValue": "Valor conciliado",
+        "totalCreditOrderValue": "Valor órdenes de crédito"
+      },
+      "cancellation": {
+        "cardTitle": "Reprocesar Cancelaciones ERP",
+        "acqCancelled": "ACQ canceladas",
+        "erpCancelled": "ERP canceladas",
+        "erpInstallments": "Cuotas canceladas",
+        "linkedBeforeCancel": "Vinculadas antes",
+        "skippedAlready": "Ya canceladas",
+        "skippedNoErp": "Sin ERP vinculado"
+      },
+      "salesSummaryTransactions": {
+        "cardTitle": "Resumen de Ventas x TransactionAcq",
+        "partiallyReconciled": "Parcialmente conciliados",
+        "pending": "Pendientes",
+        "allExcluded": "Todos excluidos",
+        "withoutTransactions": "Sin transacciones",
+        "button": "Conciliar Resumen x TransactionAcq"
+      },
+      "acquirerSaleSummary": {
+        "cardTitle": "Venta ADQ x Resumen de Ventas",
+        "partiallyReconciled": "Parcialmente conciliados",
+        "pending": "Pendientes",
+        "blockedByPreviousStep": "Bloqueados (etapa anterior)",
+        "transactionsAnalyzed": "Transacciones analizadas",
+        "transactionsEligible": "Transacciones elegibles",
+        "button": "Conciliar Venta ADQ x Resumen"
+      },
+      "salesSummaryCreditOrder": {
+        "cardTitle": "Resumen de Ventas x Orden de Crédito",
+        "partiallyReconciled": "Parcialmente conciliados",
+        "pending": "Pendientes",
+        "withoutCreditOrders": "Sin orden de crédito",
+        "generated": "Órdenes generadas",
+        "creditOrdersAnalyzed": "Órdenes analizadas",
+        "totalValueReconciled": "Valor conciliado",
+        "totalValuePending": "Valor pendiente",
+        "button": "Conciliar Resumen x Orden de Crédito"
+      },
+      "pipeline": {
+        "cardTitle": "Línea de Conciliación Completa",
+        "description": "Ejecuta toda la pipeline de conciliación financiera en secuencia (ERP, Rede, Banco y conciliaciones).",
+        "completed": "Pipeline completada",
+        "partiallyReconciled": "Parcialmente conciliados",
+        "pending": "Pendientes",
+        "divergent": "Divergentes",
+        "withoutMatch": "Sin correspondencia",
+        "generated": "Generados",
+        "blocked": "Bloqueados",
+        "runButton": "Ejecutar línea completa"
+      },
+      "history": {
+        "title": "Historial de Ejecuciones",
+        "empty": "Aún no hay ejecuciones registradas.",
+        "totalAnalyzed": "Analizados",
+        "totalReconciled": "Conciliados",
+        "totalPending": "Pendientes",
+        "trigger": {
+          "MANUAL": "Manual",
+          "SCHEDULED": "Programado",
+          "SCHEDULER_SEQUENTIAL_JOB": "Programación secuencial",
+          "SCHEDULER_FINANCIAL_PIPELINE": "Programación esteira financiera",
+          "SCHEDULER_ACQUIRER_SALE_SUMMARY": "Programación venta ADQ x resumen",
+          "SCHEDULER_SALES_SUMMARY_CREDIT_ORDER": "Programación resumen x orden",
+          "SCHEDULER_CREDIT_ORDER_BANK_RELEASE": "Programación orden x banco"
+        },
+        "status": {
+          "SUCCESS": "Éxito",
+          "PARTIAL": "Parcial",
+          "FAILED": "Error"
+        },
+        "step": {
+          "ERP_ACQUIRER": "ERP vs Adquirente",
+          "SALES_SUMMARY_TRANSACTION": "Resumen vs TransacciónADQ",
+          "ACQUIRER_SALE_CANCELLATION": "Cancelaciones ADQ",
+          "ACQUIRER_SALE_ADJUSTMENTS": "Ajustes de Tasas ADQ",
+          "ACQUIRER_SALE_SUMMARY": "Venta ADQ vs Resumen",
+          "SALES_SUMMARY_CREDIT_ORDER": "Resumen vs Orden de Crédito",
+          "CREDIT_ORDER_BANK_RELEASE": "Orden de Crédito vs Banco"
+        },
+        "stepStatus": {
+          "NOT_STARTED": "No iniciada",
+          "RUNNING": "En ejecución",
+          "COMPLETED": "Completada",
+          "SKIPPED": "Omitida",
+          "BLOCKED": "Bloqueada",
+          "FAILED": "Error"
+        },
+        "stepMessage": {
+          "ERP_ACQUIRER": "Conciliación ERP vs ADQ completada. Incluye reprocesamiento de entradas manuales con NSU/autorización invertidos. Solo las ventas conciliadas aquí son elegibles para ajustes de tasas.",
+          "SALES_SUMMARY_TRANSACTION": "Resúmenes actualizados según el estado de las transacciones ADQ. Resúmenes sin transacciones marcados como conciliados.",
+          "ACQUIRER_SALE_CANCELLATION": "Las cancelaciones totales informadas por el adquirente fueron propagadas a ADQ y ERP antes de las tasas y resúmenes.",
+          "ACQUIRER_SALE_ADJUSTMENTS": "Las ventas con tasas correctas o contrato ausente normalizado avanzan. Las divergencias de tasa bloquean los pasos siguientes.",
+          "ACQUIRER_SALE_SUMMARY": "Un resumen solo se concilia cuando sus ventas ADQ vinculadas son elegibles de los pasos anteriores.",
+          "SALES_SUMMARY_CREDIT_ORDER": "Débito/anticipación sin orden puede generar una orden sintética para análisis.",
+          "CREDIT_ORDER_BANK_RELEASE": "Una orden de crédito solo es elegible cuando su resumen vinculado ya está conciliado.",
+          "SKIPPED": "Etapa omitida — sin datos para procesar o una etapa anterior fue bloqueada."
+        }
+      }
+    },
+    "reconciliationActions": {
+      "subtitle": "Ejecute cada paso de la pipeline de conciliación financiera individualmente o la pipeline completa de una vez."
+    }
+  },
+  "session": {
+    "expiring": {
+      "title": "La sesión va a expirar",
+      "body": "Tu sesión va a expirar por inactividad en",
+      "hint": "Haz clic en “Renovar” para continuar sin recargar la página."
+    },
+    "expired": {
+      "title": "Sesión expirada",
+      "body": "Tu sesión expiró por inactividad.",
+      "hint": "Para continuar, inicia sesión nuevamente."
+    }
+  },
+  "common": {
+    "filters": {
+      "final": "Valor final",
+      "initial": "Valor inicial"
+    },
+    "no": "No",
+    "to": "hasta",
+    "yes": "Sí",
+    "new": "Nuevo",
+    "all": "Todos",
+    "until": "Hasta",
+    "error": "Error",
+    "action": "Acción",
+    "save": "Guardar",
+    "edit": "Editar",
+    "back": "Volver",
+    "logout": "Salir",
+    "close": "Cerrar",
+    "clear": "Limpiar",
+    "quantity": "Cant.",
+    "search": {
+      "line": "Línea",
+      "title": "Buscar",
+      "process": "Proceso",
+      "transactions": "Transacciones",
+      "salesSummary": "Resumen de Venta",
+      "creditOrder": "Orden de Crédito",
+      "bankStatement": "Extracto Bancario"
+    },
+    "code": "Código",
+    "sales": "Ventas",
+    "status": "Estado",
+    "audit": "Auditoría",
+    "apply": "Aplicar",
+    "actions": "Acciones",
+    "filter": "Filtrar",
+    "remove": "Eliminar",
+    "period": "Periodo",
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "activate": "Activar",
+    "success": "Éxito",
+    "info": "Información",
+    "warning": "Atención",
+    "view": "Visualizar",
+    "shortcuts": "Accesos directos",
+    "company": "Empresa",
+    "grossValue": "Bruto",
+    "notNow": "Ahora no",
+    "from": "A partir de",
+    "update": "Actualizar",
+    "confirm": "Confirmar",
+    "discountValue": "Tarifa",
+    "liquidValue": "Líquido",
+    "acquirer": "Adquirente",
+    "deactivate": "Inactivar",
+    "loading": "Cargando...",
+    "adjustmentValue": "Ajustes",
+    "goToLogin": "Ir al login",
+    "notInformed": "No informado",
+    "tableFilters": "Filtros de tabla",
+    "renewSession": "Renovar sesión",
+    "correlationId": "ID de correlación",
+    "notInformedFemale": "No informada",
+    "calculateTotals": "Calcular totales",
+    "registrationNumber": "N.º inscripción",
+    "advancedFilters": "Filtros avanzados",
+    "viewInstallments": "Visualizar cuotas",
+    "viewAdjustments": "Visualizar ajustes en la transacción",
+    "viewCreditOrders": "Visualizar órdenes de pago",
+    "selected": "{count, plural, =0 {Ningún seleccionado} one {# seleccionado} other {# seleccionados}}",
+    "selectedFemale": "{count, plural, =0 {Ninguna seleccionada} one {# seleccionada} other {# seleccionadas}}",
+    "noRecordsFound": "No se encontraron registros.",
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "confirm": {
+    "logoutTitle": "Cerrar sesión",
+    "logoutMessage": "¿Deseas realmente salir de NimbusFlow?"
+  },
+  "notifications": {
+    "welcome": "¡Hola, {name}!",
+    "itemsCount": "{count, plural, =0 {Ningún item} one {# item} other {# itens}}"
+  },
+  "errors": {
+    "global": {
+      "GENERIC_ERROR": "Ocurrió un error inesperado. Inténtalo nuevamente.",
+      "NETWORK_ERROR": "No fue posible conectarse al servidor.",
+      "ACCESS_DENIED": "No tienes permiso para ejecutar esta acción.",
+      "SESSION_EXPIRED": "Tu sesión expiró. Inicia sesión nuevamente.",
+      "VALIDATION_ERROR": "Algunos campos deben corregirse.",
+      "USER_DOCUMENT_ALREADY_EXISTS": "Ya existe un usuario con este documento.",
+      "USER_USERNAME_ALREADY_EXISTS": "Ya existe un usuario con este nombre de usuario.",
+      "USER_DELETE_SELF_NOT_ALLOWED": "No puedes eliminar tu propio usuario.",
+      "USER_DELETE_PROTECTED_NOT_ALLOWED": "Este usuario está protegido y no puede ser eliminado.",
+      "NOT_FOUND": "Recurso no encontrado.",
+      "INTERNAL_ERROR": "Ocurrió un error interno. Inténtalo nuevamente.",
+      "GROUP_NAME_ALREADY_EXISTS": "Ya existe un grupo con este nombre.",
+      "GROUP_DELETE_SUPPORT_NOT_ALLOWED": "El grupo SUPPORT no puede ser eliminado ni modificado en esta operación.",
+      "GROUP_DELETE_IN_USE": "Este grupo tiene usuarios asociados y no puede ser eliminado.",
+      "PERMISSION_NOT_FOUND": "Uno o más permisos informados no fueron encontrados.",
+      "ESTABLISHMENT_ALREADY_EXISTS": "Ya existe un establecimiento con el mismo PV, empresa y adquirente."
+    },
+    "fields": {
+      "*": {
+        "required": "{label} es obligatorio.",
+        "minLength": "{label} debe tener al menos {requiredLength} caracteres.",
+        "maxLength": "{label} debe tener como máximo {requiredLength} caracteres.",
+        "min": "{label} debe ser como mínimo {min}.",
+        "max": "{label} debe ser como máximo {max}.",
+        "email": "{label} informa un e-mail válido.",
+        "pattern": "{label} tiene un formato inválido.",
+        "invalid": "{label} es inválido.",
+        "passwordMismatch": "Las contraseñas deben ser iguales."
+      }
+    }
+  },
+  "cancellation": {
+    "subtitle": "Analiza cancelaciones de ventas aplicadas por el adquirente.",
+    "totals": {
+      "quantity": "Ajustes: {{count}}",
+      "totalValue": "Importe"
+    },
+    "fields": {
+      "flag": "Marca",
+      "cvNsu": "CV/NSU",
+      "cvNsuShort": "CV/NSU",
+      "company": "Empresa",
+      "acquirer": "Adquirente",
+      "authorization": "Autorización",
+      "authorizationShort": "Auto.",
+      "rvNumber": "RV Ajustado",
+      "rvNumberShort": "RV Aj.",
+      "pvNumber": "PV Ajustado",
+      "pvNumberShort": "PV Aj.",
+      "establishment": "Establecimiento",
+      "establishmentShort": "Estab.",
+      "saleDate": "Fecha venta",
+      "saleDateShort": "Venta",
+      "periodSaleDate": "Período fecha venta",
+      "adjustmentDate": "Solicitud",
+      "adjustmentDateShort": "Solic.",
+      "periodAdjustmentDate": "Período solicitud",
+      "creditDate": "Fecha crédito",
+      "creditDateShort": "Crédito",
+      "periodCreditDate": "Período crédito",
+      "saleValue": "Valor venta",
+      "saleValueShort": "Valor",
+      "valueStart": "Valor mínimo",
+      "valueEnd": "Valor máximo",
+      "adjustmentValue": "Ajuste",
+      "adjustmentValueShort": "Aj.",
+      "adjustmentValueStart": "Valor aj. mínimo",
+      "adjustmentValueEnd": "Valor aj. máximo",
+      "adjustmentReason": "Tipo ajuste",
+      "adjustmentReasonShort": "Ajustes",
+      "status": "Estado",
+      "statusShort": "Estado"
+    }
+  },
+  "chargebackRequest": {
+    "subtitle": "Analiza las solicitudes de contracargo enviadas por el adquirente.",
+    "totals": {
+      "quantity": "Solicitudes: {{count}}",
+      "totalGrossValue": "Bruto"
+    },
+    "fields": {
+      "flag": "Marca",
+      "cvNsu": "CV/NSU",
+      "cvNsuShort": "CV/NSU",
+      "company": "Empresa",
+      "acquirer": "Adquirente",
+      "authorization": "Autorización",
+      "rvNumber": "Resumen ventas",
+      "rvNumberShort": "Resumen",
+      "cardNumber": "Número tarjeta",
+      "establishment": "Establecimiento",
+      "establishmentShort": "Estab.",
+      "modality": "Modalidad",
+      "modalityShort": "Modal.",
+      "saleDate": "Fecha venta",
+      "saleDateShort": "Venta",
+      "periodSaleDate": "Período fecha venta",
+      "deadline": "Fecha límite",
+      "deadlineShort": "Límite",
+      "periodDeadline": "Período solicitud",
+      "transactionValue": "Valor de transacción",
+      "transactionValueShort": "Valor",
+      "requestReason": "Motivo solicitud",
+      "requestReasonShort": "Solicitud",
+      "adjustmentStatus": "Estado solicitud",
+      "adjustmentStatusShort": "Estado"
+    }
+  },
+  "adjustment": {
+    "subtitle": "Analiza ajustes y tarifas aplicadas por el adquirente.",
+    "totals": {
+      "quantity": "Cargos: {{count}}",
+      "totalValue": "Importe"
+    },
+    "fields": {
+      "flag": "Marca",
+      "company": "Empresa",
+      "acquirer": "Adquirente",
+      "rvNumber": "RV Ajuste",
+      "rvNumberShort": "RV Aj.",
+      "establishment": "Establecimiento",
+      "establishmentShort": "Estab.",
+      "adjustmentDate": "Fecha ajuste",
+      "adjustmentDateShort": "F. ajuste",
+      "periodAdjustmentDate": "Período fecha ajuste",
+      "creditDate": "Fecha crédito",
+      "creditDateShort": "F. crédito",
+      "periodCreditDate": "Período fecha crédito",
+      "adjustmentValue": "Ajuste",
+      "adjustmentValueShort": "Aj.",
+      "adjustmentReason": "Motivo ajuste",
+      "adjustmentReasonShort": "Tipo",
+      "status": "Estado",
+      "statusShort": "Estado"
+    }
+  },
+  "processedFileDetail": {
+    "eyebrow": "Detalle del archivo",
+    "fileFallback": "Archivo",
+    "subtitleFallback": "Resumen del procesamiento y errores por línea.",
+    "summary": {
+      "status": "Estado",
+      "processed": "Procesado",
+      "startedAt": "Inicio",
+      "finishedAt": "Fin"
+    },
+    "kpis": {
+      "totalLines": "Líneas",
+      "processedLines": "Procesadas",
+      "warningLines": "Avisos",
+      "errorLines": "Errores",
+      "pendingContract": "Pend. contrato",
+      "pendingContext": "Pend. contexto"
+    },
+    "errors": {
+      "tableHeader": "Errores y advertencias por línea",
+      "lineNumber": "Línea",
+      "type": "Tipo",
+      "code": "Código",
+      "message": "Mensaje",
+      "date": "Fecha",
+      "empty": "No hay errores/advertencias registrados."
+    }
+  },
+  "processedFiles": {
+    "subtitle": "Seguimiento de archivos importados ERP/Rede/CNAB, estado, errores y pendientes.",
+    "fields": {
+      "fileName": "Archivo",
+      "fileNameShort": "Archivo",
+      "origin": "Origen",
+      "status": "Estado",
+      "dateFile": "Fecha archivo",
+      "dateFileShort": "Fecha arch.",
+      "periodDateFile": "Período fecha archivo",
+      "dateImport": "Fecha importación",
+      "dateImportShort": "Importación",
+      "periodDateImport": "Período fecha importación",
+      "lines": "Líneas",
+      "pending": "Pendientes"
+    }
+  },
+  "importedFilesCalendar": {
+    "eyebrow": "Monitoreo de importaciones",
+    "title": "Agenda de archivos importados",
+    "description": "Visualice los días con y sin archivos ERP, Rede y bancarios.",
+    "viewFiles": "Ver archivos",
+    "refresh": "Actualizar",
+    "files": "{count, plural, one {# archivo} other {# archivos}}",
+    "waiting": "Esperando",
+    "noImport": "Sin importación",
+    "groups": {
+      "erp": "ERP",
+      "adq": "ADQ",
+      "bank": "BANK"
+    },
+    "tooltip": {
+      "allReceived": "todos los archivos recibidos",
+      "noneReceived": "ningún archivo recibido",
+      "statusComplete": "Completo",
+      "statusPartial": "Parcial",
+      "statusMissing": "Ausente",
+      "received": "Recibidos",
+      "pending": "Pendientes",
+      "allDone": "Todos recibidos",
+      "filesAbbrev": "arch.",
+      "missingEst": "sin archivo"
+    },
+    "summary": {
+      "total": "Total importado",
+      "totalSub": "archivos en el mes",
+      "withImport": "Días con importación",
+      "withImportSub": "días con al menos un archivo",
+      "withoutImport": "Días sin importación",
+      "withoutImportSub": "días sin archivo registrado"
+    },
+    "weekdays": {
+      "sun": "Dom",
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mié",
+      "thu": "Jue",
+      "fri": "Vie",
+      "sat": "Sáb"
+    },
+    "detail": {
+      "title": "Detalles del día",
+      "futureDate": "Fecha futura",
+      "noImportation": "Sin importación",
+      "futureDateMessage": "Esta fecha aún no ha llegado.",
+      "futureDateSubMessage": "La agenda se actualizará conforme se procesen los archivos.",
+      "noFileMessage": "No se importó ningún archivo en este día.",
+      "noFileSubMessage": "El día permanece resaltado en la agenda para facilitar la identificación de brechas.",
+      "typeOrigin": "Tipo / origen"
+    },
+    "status": {
+      "RECEIVED": "Recibido",
+      "PROCESSING": "Procesando",
+      "PROCESSED": "Procesado",
+      "PROCESSED_WITH_WARNINGS": "Con avisos",
+      "ERROR": "Error",
+      "DUPLICATE": "Duplicado",
+      "INVALID": "Inválido"
+    },
+    "missingByType": {
+      "title": "Pendencias por tipo de archivo",
+      "noDays": "Sin pendencias",
+      "erp": "ERP",
+      "adq": "ADQ / Adquirentes",
+      "bank": "Banco"
+    }
+  },
+  "fileProcessingAnalysis": {
+    "subtitle": "Consulte los archivos importados, estado y pendientes",
+    "empty": "No se encontraron archivos",
+    "row": {
+      "lines": "Líneas",
+      "processed": "Procesadas",
+      "warnings": "Avisos",
+      "errors": "Errores"
+    },
+    "detail": {
+      "totalLines": "Total de líneas",
+      "processedLines": "Líneas procesadas",
+      "ignoredLines": "Líneas ignoradas",
+      "warningLines": "Líneas con aviso",
+      "errorLines": "Líneas con error",
+      "pendingContract": "Pend. contrato",
+      "pendingContext": "Pend. contexto"
+    }
+  },
+  "fileProcessingDashboard": {
+    "subtitle": "Supervise las importaciones ERP, Rede y CNAB, pendientes y conciliación bancaria.",
+    "metrics": {
+      "processed": "Procesados",
+      "warnings": "Con advertencias",
+      "errors": "Con errores",
+      "invalid": "Inválidos",
+      "pending": "Pendientes ERP"
+    },
+    "scheduler": {
+      "erp": "ERP",
+      "acquirer": "Adquirentes",
+      "bank": "Banco / CNAB",
+      "noRun": "Sin ejecución registrada",
+      "running": "Ejecutando",
+      "ok": "OK",
+      "attention": "Atención",
+      "loading": "Cargando estado del scheduler..."
+    },
+    "shortcuts": {
+      "files": {
+        "title": "Archivos procesados",
+        "description": "Historial de importaciones ERP, Rede y CNAB"
+      },
+      "erpPending": {
+        "title": "Ventas ERP pendientes",
+        "description": "Ventas sin contexto de negocio o contrato"
+      },
+      "redeMovements": {
+        "title": "Movimientos Rede",
+        "description": "Informe de movimiento de la adquirente Rede"
+      },
+      "bankReleases": {
+        "title": "Lanzamientos bancarios",
+        "description": "Extracto CNAB del período reconciliado"
+      },
+      "divergences": {
+        "title": "Divergencias",
+        "description": "Archivos con inconsistencias detectadas"
+      }
+    }
+  },
+  "bankStatement": {
+    "subtitle": "Analiza lanzamientos bancarios y estado de pago.",
+    "fields": {
+      "bank": "Banco",
+      "flag": "Marca",
+      "type": "Tipo",
+      "company": "Empresa",
+      "category": "Categoría",
+      "acquirer": "Adquirente",
+      "document": "Documento",
+      "statusShort": "Estado",
+      "releaseDate": "Fecha lanzamiento",
+      "bankHistory": "Historial banco",
+      "releaseDateShort": "Lanz.",
+      "establishment": "Establecimiento",
+      "establishmentShort": "Estab.",
+      "bankingDomicile": "Domicilio",
+      "releaseCategory": "Categoría lanzamiento",
+      "statusPaymentBank": "Estado pago banco",
+      "periodReleaseDate": "Período fecha lanzamiento",
+      "modalityPaymentBank": "Modalidad pago banco",
+      "modalityPaymentBankShort": "Modalidad",
+      "releaseValue": "Valor lanzamiento",
+      "releaseValueShort": "Valor",
+      "hasDivergence": "Con diferencia aceptada",
+      "divergenceTooltip": "Diferencia aceptada: {{value}} — Motivo: {{reason}}"
+    },
+    "deleteManual": {
+      "header": "Confirmar exclusión",
+      "message": "¿Desea eliminar este lanzamiento manual?",
+      "success": "Lanzamiento manual eliminado con éxito.",
+      "error": "No se pudo eliminar el lanzamiento manual."
+    },
+    "undoReconciliation": {
+      "action": "Deshacer conciliación",
+      "header": "Deshacer conciliación",
+      "message": "¿Deshacer la conciliación de este lanzamiento bancario? La(s) orden(es) de crédito y cuotas vinculadas vuelven a pendiente.",
+      "success": "{creditOrdersUnlinked, plural, one {Conciliación deshecha: # orden de crédito desvinculada.} other {Conciliación deshecha: # órdenes de crédito desvinculadas.}}",
+      "error": "No se pudo deshacer la conciliación."
+    }
+  },
+  "anticipation": {
+    "subtitle": "Analiza anticipaciones y sus descuentos financieros.",
+    "fields": {
+      "bank": "Banco",
+      "gross": "Bruto",
+      "flag": "Marca",
+      "company": "Empresa",
+      "release": "Lanzamiento",
+      "acquirer": "Adquirente",
+      "modality": "Modalidad",
+      "discountRate": "Descuento",
+      "grossValue": "Valor bruto",
+      "statusPayment": "Pago",
+      "transactionsStatus": "Venta",
+      "releaseDate": "Fecha lanzamiento",
+      "releaseValue": "Valor lanzamiento",
+      "establishment": "Establecimiento",
+      "originalCredit": "Crédito original",
+      "originalDue": "Lanzamiento original",
+      "bankingDomicile": "Domicilio bancario",
+      "advanceDiscount": "Descuento anticipación",
+      "transactionsStatusEnum": "Estado venta",
+      "discountRateValue": "Valor descuento venta",
+      "statusPaymentBank": "Estado pago banco",
+      "originalDueDate": "Fecha lanzamiento original",
+      "originalCreditValue": "Valor crédito original",
+      "periodReleaseDate": "Período fecha lanzamiento",
+      "statusPaymentBankEnum": "Estado pago banco",
+      "advanceDiscountValue": "Valor descuento anticipación"
+    },
+    "columns": {
+      "installmentNumber": "Cuota",
+      "releaseDate": "Fecha lanzamiento",
+      "numberCvNsu": "N.º de ventas",
+      "numberRvCorresponding": "Resumen ventas",
+      "originalDueDate": "Fecha lanzamiento original"
+    }
+  },
+  "saleSummary": {
+    "subtitle": "Analiza el resumen de ventas.",
+    "fields": {
+      "flag": "Marca",
+      "bank": "Banco",
+      "gross": "Bruto",
+      "orders": "Órdenes",
+      "liquid": "Líquido",
+      "company": "Empresa",
+      "rv": "Resumen ventas",
+      "discount": "Descuento",
+      "pvNumber": "N.º PV",
+      "adjustments": "Ajustes",
+      "acquirer": "Adquirente",
+      "modality": "Modalidad",
+      "grossValue": "Valor bruto",
+      "transactionsStatus": "Venta",
+      "liquidValue": "Valor neto",
+      "discountValue": "Valor descuento",
+      "numberCvNsu": "N.º de ventas",
+      "rvDate": "Fecha resumen ventas",
+      "creditOrderStatus": "Orden crédito",
+      "rvNumber": "Número resumen ventas",
+      "statusPaymentBank": "Pago banco",
+      "periodRvDate": "Período resumen ventas",
+      "establishment": "Establecimiento",
+      "bankingDomicile": "Domicilio bancario",
+      "transactionsStatusEnum": "Estado venta",
+      "creditOrderStatusEnum": "Estado orden crédito",
+      "statusPaymentBankEnum": "Estado pago banco",
+      "rvNumberShort": "Resumen",
+      "nextInstallmentValue": "Valor",
+      "nextInstallmentValueTooltip": "Vista previa del valor de la próxima orden de crédito a generar (valor neto del resumen dividido por el número de cuotas)",
+      "nextInstallmentDate": "Fecha Prevista",
+      "nextInstallmentDateTooltip": "Vista previa de la fecha de vencimiento de la próxima orden de crédito a generar, ya ajustada al día hábil anterior cuando cae en fin de semana o feriado registrado"
+    }
+  },
+  "creditOrders": {
+    "title": "Órdenes de crédito",
+    "subtitle": "Órdenes de crédito.",
+    "fields": {
+      "flag": "Marca",
+      "bank": "Banco",
+      "gross": "Bruto",
+      "orders": "Órdenes",
+      "liquid": "Líquido",
+      "rv": "Resumen ventas",
+      "company": "Empresa",
+      "discount": "Descuento",
+      "pvNumber": "N.º PV",
+      "statusRv": "Estado RV",
+      "release": "Lanzamiento",
+      "modality": "Modalidad",
+      "acquirer": "Adquirente",
+      "installment": "Cuota",
+      "grossValue": "Valor bruto",
+      "installmentNumber": "Cuota",
+      "creditOrder": "Orden crédito",
+      "salesSummary": "Resumen ventas",
+      "discountValue": "Descuento",
+      "releaseDate": "Fecha lanzamiento",
+      "paymentBank": "Pago banco",
+      "rvDate": "Fecha resumen ventas",
+      "releaseValue": "Valor lanzamiento",
+      "establishment": "Establecimiento",
+      "rvNumber": "Número resumen ventas",
+      "creditOrderDate": "Fecha orden crédito",
+      "bankingDomicile": "Domicilio bancario",
+      "periodReleaseDate": "Período lanzamiento",
+      "periodRvDate": "Período resumen ventas",
+      "salesSummaryStatus": "Estado resumen ventas",
+      "statusPaymentBank": "Estado pago banco",
+      "periodCreditOrderDate": "Período orden crédito",
+      "releaseValueShort": "Lanzamiento",
+      "paymentDate": "Fecha de pago",
+      "expectedPaymentDate": "Fecha prevista de pago",
+      "expectedPaymentDateShort": "Previsión"
+    }
+  },
+  "adjustments": {
+    "title": "Ajustes",
+    "fields": {
+      "nsu": "CV/NSU",
+      "reason": "Motivo",
+      "credit": "Crédito",
+      "adjustment": "Ajustes",
+      "installment": "Cuota",
+      "creditDate": "Fecha crédito",
+      "adjustmentValue": "Valor ajuste",
+      "adjustmentReason": "Motivo ajuste",
+      "rvNumberOriginal": "Número resumen original"
+    }
+  },
+  "managementDashboard": {
+    "noData": "No hay datos disponibles para el período seleccionado.",
+    "showAll": "Mostrar todos",
+    "showLess": "Mostrar menos",
+    "groupBy": {
+      "label": "Agrupar por"
+    },
+    "table": {
+      "description": "Descripción",
+      "transactions": "Transacciones",
+      "discount": "Descuento",
+      "liquid": "Líquido",
+      "total": "Total",
+      "pct": "(%)"
+    },
+    "filter": {
+      "company": "Empresa",
+      "companyPlaceholder": "Seleccione empresas",
+      "acquirer": "Adquirente",
+      "acquirerPlaceholder": "Seleccione adquirentes",
+      "flag": "Marca",
+      "flagPlaceholder": "Seleccione marcas",
+      "modality": "Modalidad",
+      "modalityPlaceholder": "Seleccione modalidades",
+      "period": "Período",
+      "date": "Fecha",
+      "search": "Filtrar",
+      "clear": "Limpiar"
+    },
+    "sales": {
+      "title": "Ventas",
+      "colLabel": "Agrupación",
+      "colValue": "Total Ventas",
+      "colToReceive": "Por Cobrar"
+    },
+    "payments": {
+      "title": "Pagos",
+      "colLabel": "Agrupación",
+      "colSales": "Ventas",
+      "colReceived": "Recibido"
+    },
+    "fees": {
+      "title": "Tasas Aplicadas",
+      "colLabel": "Agrupación",
+      "colEffectiveRate": "Tasa Efectiva %",
+      "colAverageRate": "Promedio %"
+    },
+    "debits": {
+      "title": "Débitos",
+      "totalFees": "Total de Tasas",
+      "totalChargeback": "Total Chargeback",
+      "totalCancellation": "Cancelaciones",
+      "qty": "Cant",
+      "average": "Promedio"
+    }
+  },
+  "auditDashboard": {
+    "salesSummary": {
+      "title": "Resumen Consolidado de Ventas",
+      "total": "Total",
+      "collapse": "- Contraer",
+      "expand": "+ Expandir por Adquirente",
+      "consultMore": "Ver más..."
+    },
+    "conciliation": {
+      "title": "Conciliación de Ventas",
+      "lastImports": "Últimas Conciliaciones",
+      "noImport": "Sin importación",
+      "unreconciled": "Comprobantes no conciliados",
+      "colDate": "Fecha",
+      "colErpAcq": "ADQ X ERP",
+      "colErp": "ERP",
+      "colAcq": "ADQ"
+    },
+    "contestable": {
+      "title": "CVs con tasas contestables",
+      "subtitle": "CVs para solicitar reembolso"
+    },
+    "files": {
+      "title": "Archivos",
+      "lastImported": "Últimos Archivos Importados",
+      "today": "HOY",
+      "yesterday": "AYER",
+      "last7days": "ÚLTIMOS 7 DÍAS",
+      "processed": "Archivos Procesados"
+    }
+  },
+  "email": {
+    "settings": {
+      "subtitle": "Configuración del proveedor de envío de correos.",
+      "impl": "Implementación",
+      "implHint": "Define el proveedor de envío. FAKE registra correos en el log (desarrollo), SMTP usa un servidor de correo configurado, BREVO usa la API de Brevo. Cambios de implementación y URL base se aplican tras reiniciar el servidor.",
+      "fromName": "Nombre del remitente",
+      "fromNameHint": "Nombre que aparece en el campo 'De' de los correos enviados.",
+      "fromEmail": "Correo del remitente",
+      "fromEmailHint": "Dirección de correo que aparece en el campo 'De'.",
+      "brevoApiKey": "Clave de API (Brevo)",
+      "brevoApiKeyHint": "Clave de autenticación para la API de Brevo. Necesaria cuando la implementación es BREVO.",
+      "brevoBaseUrl": "URL base (Brevo)",
+      "brevoBaseUrlHint": "URL base de la API de Brevo. Los cambios se aplican tras reiniciar el servidor.",
+      "saved": "Configuración de correo guardada con éxito.",
+      "saveError": "No fue posible guardar la configuración de correo.",
+      "brevoPort": "Puerto",
+      "brevoPortHint": "Puerto del relay SMTP de Brevo. Predeterminado: 587.",
+      "brevoUsername": "Usuario",
+      "brevoUsernameHint": "Usuario para autenticación en el relay SMTP de Brevo, generalmente el correo de la cuenta Brevo.",
+      "brevoTitle": "Configuración de Brevo",
+      "smtpTitle": "Configuración SMTP",
+      "notificationsTitle": "Notificaciones",
+      "chargebackRecipients": "Destinatarios de chargeback",
+      "chargebackRecipientsHint": "Correos que recibirán una notificación cuando se detecten chargebacks durante el procesamiento de archivos. Separe varias direcciones con una coma.",
+      "smtpHost": "Host SMTP",
+      "smtpHostHint": "Dirección del servidor de correo (ej: smtp.gmail.com).",
+      "smtpPort": "Puerto",
+      "smtpPortHint": "Puerto del servidor SMTP. Predeterminado: 587 (STARTTLS) o 465 (SSL).",
+      "smtpUsername": "Usuario",
+      "smtpUsernameHint": "Usuario para autenticación SMTP, generalmente el propio correo electrónico.",
+      "smtpPassword": "Contraseña",
+      "smtpPasswordHint": "Contraseña para autenticación en el servidor SMTP.",
+      "smtpAuth": "Autenticación",
+      "smtpAuthHint": "Habilita la autenticación SMTP con usuario y contraseña.",
+      "smtpStarttls": "STARTTLS",
+      "smtpStarttlsHint": "Habilita la actualización de la conexión a TLS mediante STARTTLS. Recomendado para el puerto 587.",
+      "smtpSsl": "SSL/TLS",
+      "smtpSslHint": "Habilita conexión SSL/TLS directa. Recomendado para el puerto 465."
+    }
+  },
+  "backup": {
+    "settings": {
+      "subtitle": "Genera un backup bajo demanda de los bancos de datos y/o de la carpeta de archivos, para descarga inmediata.",
+      "targetsTitle": "Qué incluir en el backup",
+      "nimbusflowDb": "Base de datos NimbusFlow",
+      "nimbusauthDb": "Base de datos NimbusAuth",
+      "files": "Carpeta de archivos (Volume)",
+      "executeButton": "Ejecutar Backup",
+      "executeHint": "Puede demorar algunos minutos, según el tamaño de los bancos de datos y de la carpeta de archivos. No cierre esta página mientras el backup esté en curso.",
+      "noSelection": "Seleccione al menos un elemento para incluir en el backup.",
+      "executed": "Backup generado con éxito — la descarga debería comenzar automáticamente.",
+      "executeError": "No fue posible generar el backup. Intente nuevamente."
+    }
+  },
+  "scheduler": {
+    "status": {
+      "title": "Estado del Scheduler",
+      "subtitle": "Siga la última ejecución automática/manual del procesamiento ERP, Adquirentes y Banco.",
+      "running": "En ejecución",
+      "lastResult": "Último resultado",
+      "success": "Éxito",
+      "failed": "Fallo",
+      "noRun": "Sin ejecución registrada",
+      "lastStart": "Último inicio",
+      "lastEnd": "Último fin",
+      "trigger": "Trigger",
+      "message": "Mensaje",
+      "files": "Archivos",
+      "processErp": "Procesar ERP ahora",
+      "processAcquirer": "Procesar Adquirentes ahora",
+      "processBank": "Procesar CNAB ahora"
+    },
+    "erp": {
+      "title": "ERP"
+    },
+    "acquirer": {
+      "title": "Adquirentes"
+    },
+    "bank": {
+      "title": "Banco / CNAB"
+    }
+  },
+  "fileProcessing": {
+    "upload": {
+      "subtitle": "Suba manualmente los archivos de ERP, adquirente o banco para procesamiento.",
+      "system": "Sistema",
+      "systems": {
+        "erp": "ERP",
+        "rede": "Adquirente Rede",
+        "itau": "Banco Itaú",
+        "santander": "Banco Santander",
+        "bradesco": "Banco Bradesco",
+        "sicredi": "Banco Sicredi"
+      },
+      "dropLabel": "Haga clic o arrastre los archivos aquí",
+      "dropHint": "Acepta uno o más archivos a la vez.",
+      "submit": "Enviar",
+      "processNow": "Procesar ahora",
+      "success": "archivo(s) enviado(s) con éxito",
+      "errors": "archivo(s) con error"
+    },
+    "browser": {
+      "subtitle": "Consulte y descargue los archivos guardados en el volumen de procesamiento.",
+      "folder": "Carpeta",
+      "empty": "Ningún archivo encontrado en esta carpeta.",
+      "folders": {
+        "input": "Entrada",
+        "processed": "Procesados",
+        "error": "Error",
+        "duplicate": "Duplicados",
+        "invalidFile": "Inválidos",
+        "log": "Log (ERP)"
+      },
+      "columns": {
+        "name": "Nombre",
+        "size": "Tamaño",
+        "lastModified": "Modificado el"
+      }
+    }
+  },
+  "notFound": {
+    "attemptedUrl": "URL accedida",
+    "goHome": "Ir al dashboard",
+    "title": "Página no encontrada",
+    "hint": "Si llegaste aquí por un enlace del sistema, revisa el registro de la ruta o el elemento de menú correspondiente.",
+    "message": "La ruta informada no existe o fue eliminada. Verifica la dirección accedida o vuelve al dashboard."
+  },
+  "suppliers": {
+    "subtitle": "Gestione el registro de proveedores de obras/servicios",
+    "new": {
+      "title": "Nuevo proveedor"
+    },
+    "edit": {
+      "title": "Editar proveedor"
+    },
+    "sections": {
+      "general": "Datos generales",
+      "address": "Dirección",
+      "bank": "Datos bancarios"
+    },
+    "fields": {
+      "companyName": "Razón social",
+      "tradeName": "Nombre comercial",
+      "taxId": "CNPJ/CPF",
+      "phone": "Teléfono",
+      "email": "Correo electrónico",
+      "commercialContact": "Contacto comercial",
+      "status": "Estado",
+      "createdAt": "Creado el",
+      "addressStreet": "Calle",
+      "addressNumber": "Número",
+      "addressComplement": "Complemento",
+      "addressNeighborhood": "Barrio",
+      "addressCity": "Ciudad",
+      "addressState": "Provincia",
+      "addressZipCode": "Código postal",
+      "bankName": "Banco",
+      "bankAgency": "Agencia",
+      "bankAccount": "Cuenta",
+      "bankAccountType": "Tipo de cuenta"
+    },
+    "columns": {
+      "companyName": "Razón social",
+      "tradeName": "Nombre comercial",
+      "taxId": "CNPJ/CPF",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "status": "Estado",
+      "createdAt": "Creado el"
+    },
+    "form": {
+      "invalid": "Revise los campos resaltados antes de guardar.",
+      "created": "Proveedor creado con éxito.",
+      "updated": "Proveedor actualizado con éxito.",
+      "saveError": "No se pudo guardar el proveedor. Intente nuevamente."
+    },
+    "empty": {
+      "title": "Ningún proveedor encontrado"
+    },
+    "action": {
+      "noPermission": "No tiene permiso para gestionar proveedores.",
+      "deactivate": "Desactivar"
+    },
+    "deactivate": {
+      "header": "Desactivar proveedor",
+      "message": "¿Realmente desea desactivar el proveedor {companyName}?",
+      "success": "Proveedor desactivado con éxito."
+    }
+  },
+  "works": {
+    "subtitle": "Gestione el registro de obras/servicios",
+    "new": {
+      "title": "Nueva obra"
+    },
+    "edit": {
+      "title": "Editar obra"
+    },
+    "fields": {
+      "name": "Nombre/descripción",
+      "supplier": "Proveedor",
+      "status": "Estado",
+      "startDate": "Inicio",
+      "expectedEndDate": "Fin previsto",
+      "actualEndDate": "Fin real",
+      "initialAmount": "Monto inicial",
+      "totalAmount": "Monto total",
+      "location": "Ubicación"
+    },
+    "columns": {
+      "name": "Nombre",
+      "supplier": "Proveedor",
+      "status": "Estado",
+      "startDate": "Inicio",
+      "expectedEndDate": "Fin previsto",
+      "totalAmount": "Monto total"
+    },
+    "status": {
+      "PLANNED": "Planificada",
+      "IN_PROGRESS": "En curso",
+      "PAUSED": "Pausada",
+      "COMPLETED": "Concluida",
+      "CANCELLED": "Cancelada"
+    },
+    "form": {
+      "invalid": "Revise los campos resaltados antes de guardar.",
+      "locationRequired": "Marque la ubicación de la obra en el mapa antes de guardar.",
+      "created": "Obra creada con éxito.",
+      "updated": "Obra actualizada con éxito.",
+      "saveError": "No se pudo guardar la obra. Intente nuevamente."
+    },
+    "empty": {
+      "title": "Ninguna obra encontrada"
+    },
+    "action": {
+      "noPermission": "No tiene permiso para gestionar obras."
+    },
+    "mapPicker": {
+      "hint": "Haga clic en el mapa para marcar la ubicación de la obra - solo dentro del área del parque Acquamania.",
+      "outOfBounds": "Punto fuera del área de Acquamania - clic no registrado.",
+      "areaTooltip": "Área de Acquamania"
+    }
+  },
+  "suggestions": {
+    "subtitle": "Sugerencias de mejora registradas por los usuarios",
+    "new": {
+      "title": "Nueva sugerencia"
+    },
+    "fields": {
+      "description": "Descripción",
+      "status": "Estado",
+      "createdAt": "Creado el",
+      "attachment": "Adjunto (opcional)"
+    },
+    "columns": {
+      "description": "Descripción",
+      "status": "Estado",
+      "attachment": "Adjunto",
+      "createdAt": "Creado el"
+    },
+    "status": {
+      "RECEIVED": "Recibida",
+      "IN_ANALYSIS": "En análisis",
+      "IMPLEMENTED": "Implementada",
+      "REJECTED": "Rechazada",
+      "updated": "Estado actualizado con éxito.",
+      "updateError": "No se pudo actualizar el estado de la sugerencia."
+    },
+    "form": {
+      "invalid": "Describa la sugerencia antes de enviar.",
+      "created": "Sugerencia enviada con éxito.",
+      "saveError": "No se pudo enviar la sugerencia. Intente nuevamente."
+    },
+    "empty": {
+      "title": "Ninguna sugerencia encontrada"
+    },
+    "action": {
+      "viewAttachment": "Ver adjunto"
+    }
+  }
+}

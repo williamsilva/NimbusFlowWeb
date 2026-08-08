@@ -1,0 +1,40 @@
+/**
+ * Garante que as cores dos ícones do menu lateral estejam sempre disponíveis no CSS.
+ *
+ * Tailwind v4 escaneia templates HTML para gerar classes, mas pode não detectar
+ * strings em arquivos .ts (como menu.data.ts). As cores abaixo são usadas
+ * exclusivamente no menu.data.ts e precisam ser declaradas explicitamente.
+ *
+ * Padrão de cores do menu:
+ *   - Grupo pai: text-{color}-600 (tom mais escuro)
+ *   - Filhos:    text-{color}-400 (mesma cor, tom mais claro)
+ *
+ * Mapa atual:
+ *   ERP        → teal    (teal-600 / teal-400)       — usados em templates HTML
+ *   ACQ        → cyan    (cyan-600 / cyan-400)        — usados em templates HTML
+ *   Banks      → emerald (emerald-600 / emerald-400)  — APENAS no menu.data.ts
+ *   Adjustment → amber   (amber-600 / amber-400)      — APENAS no menu.data.ts
+ *   Conciliation→ purple  (purple-600 / purple-400)    — usados em templates HTML
+ *   Security   → red     (red-600 / red-400)          — usados em templates HTML
+ *   Register   → orange  (orange-600 / orange-400)    — usados em templates HTML
+ *   Audit      → sky     (sky-600 / sky-400)          — APENAS no menu.data.ts
+ *   Settings   → indigo  (indigo-600 / indigo-400)    — usados em templates HTML
+ *   File Proc. → blue    (blue-600 / blue-400)        — APENAS no menu.data.ts
+ *   Docs Files → violet  (violet-600)                 — usados em templates HTML
+ */
+
+/* Banks — emerald */
+.text-emerald-600 { color: #059669; }
+.text-emerald-400 { color: #34d399; }
+
+/* Adjustment — amber */
+.text-amber-600 { color: #d97706; }
+.text-amber-400 { color: #fbbf24; }
+
+/* Audit — sky */
+.text-sky-600 { color: #0284c7; }
+.text-sky-400 { color: #38bdf8; }
+
+/* File Processing — blue */
+.text-blue-600 { color: #2563eb; }
+.text-blue-400 { color: #60a5fa; }

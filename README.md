@@ -1,27 +1,79 @@
-# NimbusflowFrontend
+# NimbusFlowSecuritySpa
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.21.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.0.
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4201/` (porta 4200 é usada pelo CardSyncWeb neste workspace — ver `angular.json`). The application will automatically reload if you change any of the source files.
+To start a local development server, run:
+
+```bash
+ng serve
+```
+
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
 ## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
-## Build
+```bash
+ng generate component component-name
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+
+```bash
+ng generate --help
+```
+
+## Building
+
+To build the project run:
+
+```bash
+ng build
+```
+
+This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
 ## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+
+```bash
+ng test
+```
 
 ## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+For end-to-end (e2e) testing, run:
 
-## Further help
+```bash
+ng e2e
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+
+## Additional Resources
+
+For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+## Deploy no Cloudflare Pages
+
+Configuração recomendada:
+
+- Build command: `npm run build:pages`
+- Build output directory: `dist/nimbusflow-security/browser`
+- Node version: `22`
+
+Arquivos já preparados para o deploy:
+
+- `public/_redirects` para fallback de SPA
+- `public/_headers` para cache básico
+- `.nvmrc` para alinhar a versão do Node
+
+Antes de publicar em produção, confirme que o backend (NimbusFlowServer) está acessível e que a URL
+real foi preenchida em `src/environments/environment.prod.ts` (hoje é um placeholder
+`https://api.nimbusflow.com.br`, já que o NimbusFlowServer ainda não tem domínio de produção
+documentado).

@@ -1,0 +1,134 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '720px', maxWidth: '95vw', height: '40vh' }"
+  [header]="user()?.id ? ('users.edit.title' | translate) : ('users.new.title' | translate)"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="name"
+            pInputText
+            type="text"
+            formControlName="name"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'name'"
+            [forId]="'name'"
+            [showTechnicalDetails]="true"
+            [control]="form.controls.name"
+            [label]="'users.fields.name' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            type="text"
+            id="userName"
+            formControlName="userName"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'userName'"
+            [forId]="'userName'"
+            [showTechnicalDetails]="false"
+            [control]="form.controls.userName"
+            [label]="'users.fields.userName' | translate"
+          />
+        </p-floatLabel>
+      </div>
+    </div>
+
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-5 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            type="text"
+            id="document"
+            csCpfCnpjMask
+            autocomplete="off"
+            inputmode="numeric"
+            formControlName="document"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'document'"
+            [forId]="'document'"
+            [control]="form.controls.document"
+            [label]="'users.fields.document' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-7 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-multiSelect
+            size="small"
+            class="w-full"
+            appendTo="body"
+            [filter]="true"
+            inputId="groupIds"
+            [showClear]="true"
+            optionValue="value"
+            optionLabel="description"
+            formControlName="groupIds"
+            [options]="groupOptions()"
+          ></p-multiSelect>
+          <app-error-msg
+            [field]="'groupIds'"
+            [forId]="'groupIds'"
+            [control]="form.controls.groupIds"
+            [label]="'users.fields.groups' | translate"
+          />
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    @if (isEditMode()) {
+      <button
+        pButton
+        type="button"
+        icon="pi pi-send"
+        (click)="onResendInvite()"
+        class="p-button-text p-button-sm"
+        [label]="i18n.tUi('users.invite.resend')"
+        [disabled]="!canResendInvite() || sendingInvite() || saving() || loadingUser()"
+      ></button>
+    }
+
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving() || loadingUser()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving() || loadingUser()"
+    ></button>
+  </ng-template>
+</p-dialog>

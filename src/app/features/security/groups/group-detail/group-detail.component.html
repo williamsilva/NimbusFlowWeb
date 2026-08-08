@@ -1,0 +1,257 @@
+<cs-page-header
+  [subtitle]="'groups.detail.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.groups' | translate), url: '/groups' },
+    { label: 'groups.detail.title' | translate },
+  ]"
+  [compact]="false"
+  >
+  <button
+    pButton
+    type="button"
+    icon="pi pi-arrow-left"
+    class="p-button-text p-button-sm"
+    (click)="back()"
+    [label]="'common.back' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-pencil"
+    class="p-button-sm"
+    (click)="openEdit()"
+    [disabled]="!canEdit()"
+    [label]="'common.edit' | translate"
+  ></button>
+</cs-page-header>
+
+<app-groups-create-dialog
+  [group]="group()"
+  (saved)="onSaved()"
+  [visible]="editVisible()"
+  (visibleChange)="editVisible.set($event)"
+></app-groups-create-dialog>
+
+@if (!loading()) {
+  <div class="cs-detail-page">
+    @if (group(); as g) {
+      <div class="grid">
+        <div class="col-12 lg:col-4">
+          <p-card class="h-full cs-card-compact cs-profile-card">
+            <div class="cs-profile-hero">
+              <div class="cs-avatar cs-avatar-lg shadow-3">
+                <div class="cs-avatar-ring"></div>
+                <span class="cs-avatar-text cs-avatar-text-lg">{{ initials() }}</span>
+              </div>
+              <div class="cs-profile-name">{{ g.name }}</div>
+              <div class="cs-profile-username">{{ descriptionText() }}</div>
+              <div class="cs-profile-tags">
+                @if (isSupportGroup()) {
+                  <cs-tag severity="warn" value="SUPPORT"></cs-tag>
+                }
+                <cs-tag
+                  severity="info"
+                  [value]="('groups.detail.permissions.title' | translate) + ': ' + permissionsCount()"
+                ></cs-tag>
+                <cs-tag
+                  severity="success"
+                  [value]="('groups.detail.users.title' | translate) + ': ' + usersCount()"
+                ></cs-tag>
+              </div>
+            </div>
+            <div class="cs-profile-metrics-list">
+              <div class="cs-permission-chip-card is-permissions">
+                <span class="cs-permission-chip-index">1</span>
+                <div class="cs-permission-chip-content">
+                  <span class="cs-permission-chip-text">
+                    {{ 'groups.detail.permissions.title' | translate }}
+                  </span>
+                  <span class="cs-permission-chip-raw">
+                    <cs-badge severity="info" [value]="permissionsCount()"></cs-badge>
+                  </span>
+                </div>
+              </div>
+              <div class="cs-permission-chip-card is-users">
+                <span class="cs-permission-chip-index">2</span>
+                <div class="cs-permission-chip-content">
+                  <span class="cs-permission-chip-text">
+                    {{ 'groups.detail.users.title' | translate }}
+                  </span>
+                  <span class="cs-permission-chip-raw">
+                    <cs-badge severity="success" [value]="usersCount()"></cs-badge>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <p-divider></p-divider>
+            <div class="cs-side-actions">
+              <button
+                pButton
+                type="button"
+                class="w-full p-button-text"
+                icon="pi pi-users"
+                [label]="'breadcrumb.groups' | translate"
+                routerLink="/security/groups"
+              ></button>
+              <button
+                pButton
+                type="button"
+                class="w-full"
+                icon="pi pi-arrow-left"
+                [label]="'common.back' | translate"
+                (click)="back()"
+              ></button>
+            </div>
+          </p-card>
+        </div>
+        <div class="col-12 lg:col-8">
+          <div class="cs-tabs-shell">
+            <button
+              pButton
+              type="button"
+              class="p-button-text cs-tab-btn"
+              [class.cs-tab-active]="activeTab() === 'summary'"
+              (click)="setTab('summary')"
+              >
+              <i class="pi pi-id-card"></i>
+              <span>{{ 'groups.detail.tabs.summary' | translate }}</span>
+            </button>
+            <button
+              pButton
+              type="button"
+              class="p-button-text cs-tab-btn"
+              [class.cs-tab-active]="activeTab() === 'permissions'"
+              (click)="setTab('permissions')"
+              >
+              <i class="pi pi-shield"></i>
+              <span>{{ 'groups.detail.tabs.permissions' | translate }}</span>
+              <cs-badge severity="info" [value]="permissionsCount()"></cs-badge>
+            </button>
+          </div>
+          @if (activeTab() === 'summary') {
+            <p-card class="cs-card-compact cs-data-card">
+              <ng-template pTemplate="title">{{ 'groups.detail.subtitle' | translate }}</ng-template>
+              <div class="cs-summary-sections">
+                <section class="cs-summary-block cs-summary-block-users">
+                  <div class="cs-summary-block-title-center">
+                    <span class="cs-summary-block-title-text">{{
+                      'groups.detail.users.title' | translate
+                    }}</span>
+                    <cs-badge severity="success" [value]="usersCount()"></cs-badge>
+                  </div>
+                  <div class="cs-empty-inline">{{ 'groups.detail.users.manageHint' | translate }}</div>
+                </section>
+                <section class="cs-summary-block cs-summary-block-permissions">
+                  <div class="cs-summary-block-title-center">
+                    <span class="cs-summary-block-title-text">{{
+                      'groups.detail.permissions.title' | translate
+                    }}</span>
+                    <cs-badge severity="info" [value]="permissionsCount()"></cs-badge>
+                  </div>
+                  @if (g.permissions?.length) {
+                    <div
+                      class="cs-summary-mini-grid cs-summary-mini-grid-3"
+                      >
+                      @for (item of g.permissions; track trackById($index, item)) {
+                        <div
+                          class="cs-summary-mini-card cs-summary-mini-card-permission"
+                          >
+                          <div class="cs-summary-mini-icon">
+                            <i class="pi pi-shield"></i>
+                          </div>
+                          <div class="cs-summary-mini-body">
+                            <strong>{{ item.description || ('common.notInformed' | translate) }}</strong>
+                            <small>{{ item.name }}</small>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  } @else {
+                    <div class="cs-empty-inline">{{ 'groups.detail.permissions.empty' | translate }}</div>
+                  }
+                </section>
+              </div>
+            </p-card>
+          }
+          <!-- Card Permissões -->
+          @if (activeTab() === 'permissions') {
+            <p-card class="cs-card-compact cs-data-card">
+              <div class="cs-data-sections">
+                <section class="cs-data-section">
+                  <div class="cs-section-head cs-section-head-top-action">
+                    <div class="cs-section-head-main">
+                      <div>
+                        <div class="cs-section-subtitle">
+                          {{ 'groups.detail.permissions.subtitle' | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-save"
+                      (click)="savePermissions()"
+                      [loading]="savingPermissions()"
+                      [label]="'common.save' | translate"
+                      class="p-button-sm cs-top-save-btn"
+                      [disabled]="!canManagePermissions()"
+                    ></button>
+                  </div>
+                  <p-multiSelect
+                    display="chip"
+                    appendTo="body"
+                    [filter]="true"
+                    optionValue="id"
+                    [showClear]="true"
+                    optionLabel="description"
+                    [options]="permissionOptions()"
+                    [ngModel]="selectedPermissionIds()"
+                    (ngModelChange)="selectedPermissionIds.set($event ?? [])"
+                    [disabled]="!canManagePermissions() || savingPermissions()"
+                    [placeholder]="'groups.detail.permissions.placeholder' | translate"
+                    class="w-full"
+                  ></p-multiSelect>
+                </section>
+                <section class="cs-data-section">
+                  <div class="cs-section-title">{{ 'groups.detail.permissions.title' | translate }}</div>
+                  @if (g.permissions?.length) {
+                    <div class="cs-entity-grid">
+                      @for (item of g.permissions; track trackById($index, item)) {
+                        <div
+                          class="cs-entity-card cs-entity-card-permission"
+                          >
+                          <div class="cs-entity-card-icon">
+                            <i class="pi pi-shield"></i>
+                          </div>
+                          <div class="cs-entity-card-body">
+                            <strong>{{ item.description || ('common.notInformed' | translate) }}</strong>
+                            <small>{{ item.name }}</small>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  } @else {
+                    <div class="cs-empty-inline">{{ 'groups.detail.permissions.empty' | translate }}</div>
+                  }
+                </section>
+              </div>
+            </p-card>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="cs-empty-state">
+        <i class="pi pi-inbox"></i>
+        <div>{{ 'common.noData' | translate }}</div>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="cs-loading-state">
+    <p-progressSpinner strokeWidth="4" ariaLabel="loading"></p-progressSpinner>
+  </div>
+}
+
+

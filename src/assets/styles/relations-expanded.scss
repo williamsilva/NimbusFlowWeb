@@ -1,0 +1,126 @@
+/* =========================================================
+   FLAG EXPANDED RELATIONS — ISOLATE FROM MAIN TABLE
+   ========================================================= */
+
+.cs-admin-table td.flag-expanded-cell {
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: normal !important;
+  padding: 1rem !important;
+}
+
+.cs-admin-table .flag-expanded-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  overflow: visible !important;
+}
+
+.cs-admin-table .flag-expanded-wrap > * {
+  width: var(--flag-rel-card-width, 100%);
+  max-width: var(--flag-rel-card-max-width, 920px);
+}
+
+/* reset nested relation tables */
+.cs-admin-table .flag-expanded-cell .p-datatable-table {
+  table-layout: auto !important;
+}
+
+.cs-admin-table .flag-expanded-cell .p-datatable-thead > tr > th,
+.cs-admin-table .flag-expanded-cell .p-datatable-tbody > tr > td {
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: normal !important;
+}
+
+/* compact but readable relation card */
+.cs-admin-table .flag-expanded-cell .flag-rel-card {
+  width: var(--flag-rel-card-width, 100%);
+  max-width: var(--flag-rel-card-max-width, 920px);
+  margin: 0 auto;
+}
+
+/* header of relation cards */
+.cs-admin-table .flag-expanded-cell .cs-relation-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.cs-admin-table .flag-expanded-cell .cs-relation-card-title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* only the add button */
+.cs-admin-table .flag-expanded-cell .relation-add-btn {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: 8.75rem !important;
+  height: 2rem !important;
+  padding: 0 0.9rem !important;
+  border-radius: 6px !important;
+  white-space: nowrap !important;
+}
+
+.cs-admin-table .flag-expanded-cell .relation-add-btn .p-button-label {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+}
+
+.cs-admin-table .flag-expanded-cell .relation-add-btn .p-button-icon {
+  width: auto !important;
+  height: auto !important;
+  min-width: 1rem !important;
+  font-size: 0.9rem !important;
+  flex-shrink: 0 !important;
+}
+
+/* keep action buttons compact */
+.cs-admin-table .flag-expanded-cell td .p-button.p-button-text.p-button-sm,
+.cs-admin-table .flag-expanded-cell td .p-button.p-button-danger.p-button-sm {
+  width: 2rem !important;
+  min-width: 2rem !important;
+  height: 2rem !important;
+  padding: 0 !important;
+  justify-content: center !important;
+}
+
+.cs-flag-highlight {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #c62828;
+  background: rgba(198, 40, 40, 0.08);
+  border: 1px solid rgba(198, 40, 40, 0.18);
+}
+
+.cs-flag-fixed-field {
+  font-weight: 700;
+  color: #c62828 !important;
+  background: rgba(198, 40, 40, 0.05) !important;
+  border-color: rgba(198, 40, 40, 0.22) !important;
+}
+
+.cs-flag-row-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.cs-flag-row-name-active {
+  color: #d32f2f;
+  font-weight: 700;
+}
+
+.cs-flag-row-name-active span {
+  font-size: 0.8rem;
+}

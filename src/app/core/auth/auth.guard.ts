@@ -1,25 +1,31 @@
 import { inject } from '@angular/core';
-import { CanActivateFn } from '@angular/router';
-import { catchError, map, of } from 'rxjs';
+import { CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 
 import { AuthService } from './auth.service';
 
-export const authGuard: CanActivateFn = () => {
-  const authService = inject(AuthService);
+export const authGuard: CanActivateFn = async (_route, state: RouterStateSnapshot) => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
 
-  return authService.loadMe().pipe(
-    map((me) => {
-      if (me.authenticated) {
-        return true;
-      }
-      authService.startLogin();
-      return false;
-    }),
-    // /bff/me responde 401 (nao 200 com authenticated:false) quando nao ha sessao - sem isso o
-    // guard nunca chamava startLogin() nesse caso, so deixava um erro silencioso no console.
-    catchError(() => {
-      authService.startLogin();
-      return of(false);
-    }),
-  );
+  let ok: boolean;
+  try {
+    ok = await auth.ensureSessionChecked();
+  } catch {
+    // Falha de transporte (não uma rejeição de autenticação real, tipo 502/timeout) - não
+    // redireciona pro /bff/login: a sessão pode continuar válida no backend, e forçar esse
+    // redirect aqui é o que causava o loop (ver comentário em AuthService.fetchMe).
+    return false;
+  }
+
+  if (!ok) {
+    await auth.startLogin(state.url);
+    return false;
+  }
+
+  const returnUrl = auth.consumeReturnUrl();
+  if (returnUrl && returnUrl !== state.url) {
+    return router.parseUrl(returnUrl);
+  }
+
+  return true;
 };

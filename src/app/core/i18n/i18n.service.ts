@@ -1,14 +1,15 @@
-import { DestroyRef, Injectable, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpBackend, HttpClient } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Injectable, DestroyRef, inject, signal } from '@angular/core';
 
 import { filter } from 'rxjs/operators';
+import { PrimeNG } from 'primeng/config';
 import { fromEvent, firstValueFrom } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { PrimeNG } from 'primeng/config';
-import type { Translation } from 'primeng/api';
 
 import { Lang } from './i18n.types';
+import type { UiKey } from './ui-keys';
+import type { GlobalErrorCode, FieldErrorCode, UserFieldName } from './error-codes';
 import {
   LANGS,
   LANG_KEY,
@@ -19,6 +20,7 @@ import {
   LOCALE_COOKIE,
   normalizeLang,
 } from './i18n.config';
+import { PeriodEnum } from '@models/enums/period.enum';
 
 type I18nSyncMessage = {
   type: 'lang-changed';
@@ -27,34 +29,26 @@ type I18nSyncMessage = {
   at: number;
 };
 
-/**
- * Mesmo padrão do CardSyncWeb (core/i18n/i18n.service.ts), simplificado: sem os helpers de
- * tradução de código de erro de backend (tErrorCode/tFieldError) - o backend do NimbusFlow não
- * tem esse catálogo de erros ainda. tUi() usa string simples, não um UiKey tipado (evita manter
- * um registro de ~1800 linhas gerado só pra isso).
- */
 @Injectable({ providedIn: 'root' })
 export class I18nService {
+  private readonly primeng = inject(PrimeNG);
   private readonly destroyRef = inject(DestroyRef);
   private readonly translate = inject(TranslateService);
-  private readonly primeng = inject(PrimeNG);
-  // HttpClient sem interceptors (mesmo motivo do AssetsTranslateLoader: evita recursão, já que o
-  // languageInterceptor depende deste serviço).
   private readonly http = new HttpClient(inject(HttpBackend));
-  private readonly primengTranslationCache = new Map<Lang, Translation>();
 
   private readonly tabId = this.createTabId();
 
   private readonly channel: BroadcastChannel | null =
     typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel(CHANNEL_NAME) : null;
 
+  private readonly primengCache = new Map<Lang, Record<string, unknown>>();
+
   readonly lang = signal<Lang>(this.readLang());
   readonly appliedLang = signal<Lang>(DEFAULT_LANG);
 
   constructor() {
     this.translate.addLangs([...LANGS]);
-    // setDefaultLang() não existe mais no @ngx-translate/core 18 - fallbackLang é configurado via
-    // provideTranslateService({ fallbackLang: DEFAULT_LANG }) em app.config.ts.
+    this.translate.setDefaultLang(DEFAULT_LANG);
 
     this.bindStorageSync();
     this.bindBroadcastChannel();
@@ -78,8 +72,24 @@ export class I18nService {
     return LANG_CONFIG[this.appliedLang()].locale;
   }
 
+  getLocalePtBr(): 'pt-BR' {
+    return 'pt-BR';
+  }
+
+  getCurrencyBrl(): 'BRL' {
+    return 'BRL';
+  }
+
   getCurrency(): 'BRL' | 'USD' | 'EUR' {
     return LANG_CONFIG[this.appliedLang()].currency;
+  }
+
+  getDateLocale(): 'pt-BR' | 'en-US' | 'es-ES' {
+    return LANG_CONFIG[this.appliedLang()].locale;
+  }
+
+  getDateTimeZone(): string {
+    return LANG_CONFIG[this.appliedLang()].timeZone;
   }
 
   async setLang(lang: Lang): Promise<void> {
@@ -91,57 +101,242 @@ export class I18nService {
     await this.applyAll(normalized, true);
   }
 
-  /** tUi('dashboard.title') - instant() lê o dicionário já carregado; usável em template e TS. */
-  tUi(key: string, params?: Record<string, unknown>, fallback?: string): string {
-    return this.instantOrFallback(key, params, fallback);
+  tUi(key: UiKey, params?: Record<string, unknown> | string, fallback?: string): string {
+    const isFallbackOnly = typeof params === 'string';
+    const realParams = isFallbackOnly ? undefined : (params as Record<string, unknown> | undefined);
+    const realFallback = isFallbackOnly ? params : fallback;
+
+    return this.instantOrFallback(key, realParams, realFallback);
   }
 
-  formatCurrency(value: unknown, fallback = ''): string {
-    if (value === null || value === undefined || value === '') {
-      return fallback;
+  tErrorCode(code: GlobalErrorCode, fallback?: string): string {
+    return this.tErrorCodeLoose(code, fallback);
+  }
+
+  tErrorCodeLoose(code?: string | null, fallback?: string): string {
+    if (!code) return this.genericError(fallback);
+
+    return this.instantOrFallback(`errors.global.${code}`, undefined, this.genericError(fallback));
+  }
+
+  tFieldError(
+    field: UserFieldName,
+    fieldCode: FieldErrorCode,
+    fallback?: string,
+    params?: Record<string, unknown>,
+  ): string {
+    return this.tFieldErrorLoose(field, fieldCode, fallback, params);
+  }
+
+  tFieldErrorLoose(
+    field?: string | null,
+    fieldCode?: string | null,
+    fallback?: string,
+    params?: Record<string, unknown>,
+  ): string {
+    if (!fieldCode) return this.genericError(fallback);
+
+    if (field) {
+      const fieldKey = `errors.fields.${field}.${fieldCode}`;
+      const fieldValue = this.translate.instant(fieldKey, params);
+      if (fieldValue && fieldValue !== fieldKey) return fieldValue;
     }
+
+    const wildcardKey = `errors.fields.*.${fieldCode}`;
+    const wildcardValue = this.translate.instant(wildcardKey, params);
+    if (wildcardValue && wildcardValue !== wildcardKey) return wildcardValue;
+
+    const validationKey = `validation.${fieldCode}`;
+    const validationValue = this.translate.instant(validationKey, params);
+    if (validationValue && validationValue !== validationKey) return validationValue;
+
+    return this.genericError(fallback);
+  }
+
+  tPrimeNg(key: string | null | undefined, fallback?: string): string {
+    if (!key) return fallback ?? '';
+
+    const current = this.primengCache.get(this.appliedLang())?.[key];
+    if (typeof current === 'string' && current.trim()) return current;
+
+    const defaultValue = this.primengCache.get(DEFAULT_LANG)?.[key];
+    if (typeof defaultValue === 'string' && defaultValue.trim()) return defaultValue;
+
+    return fallback ?? key;
+  }
+
+  formatBrlCurrency(
+    value: unknown,
+    options?: {
+      fallbackKey?: UiKey;
+      minimumFractionDigits?: number;
+      maximumFractionDigits?: number;
+    },
+  ): string {
+    return this.formatCurrency(value, {
+      ...options,
+      currency: 'BRL',
+    });
+  }
+
+  getDateFormatByPeriod(period: PeriodEnum | null | undefined): string {
+    switch (period) {
+      case PeriodEnum.MONTH:
+        return this.getMonthYearFormat();
+
+      case PeriodEnum.YEAR:
+        return this.getYearFormat();
+
+      case PeriodEnum.DAY:
+      case PeriodEnum.START:
+      case PeriodEnum.END:
+      case PeriodEnum.INTERVAL:
+      default:
+        return this.getDateFormat();
+    }
+  }
+
+  getDateFormat(): string {
+    const locale = this.getDateLocale();
+
+    switch (locale) {
+      case 'en-US':
+        return 'mm/dd/yy';
+
+      case 'es-ES':
+        return 'dd/mm/yy';
+
+      case 'pt-BR':
+      default:
+        return 'dd/mm/yy';
+    }
+  }
+
+  getMonthYearFormat(): string {
+    return 'mm/yy';
+  }
+
+  getYearFormat(): string {
+    return 'yy';
+  }
+
+  formatDateValue(value: string | Date | null | undefined): string | null {
+    if (!value) {
+      return null;
+    }
+
+    const date = value instanceof Date ? value : this.parseDatePreservingDay(value);
+
+    if (!date) {
+      return null;
+    }
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear());
+
+    const locale = this.getDateLocale();
+
+    switch (locale) {
+      case 'en-US':
+        return `${month}/${day}/${year}`;
+
+      case 'es-ES':
+      case 'pt-BR':
+      default:
+        return `${day}/${month}/${year}`;
+    }
+  }
+
+  private parseDatePreservingDay(value: string): Date | null {
+    /**
+     * Mantém o dia original quando vier ISO do backend:
+     * 2026-05-11
+     * 2026-05-11T00:00:00Z
+     * 2026-05-11T03:00:00-03:00
+     */
+    const isoDateMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+    if (isoDateMatch) {
+      const [, year, month, day] = isoDateMatch;
+
+      return new Date(Number(year), Number(month) - 1, Number(day));
+    }
+
+    const parsed = new Date(value);
+
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  private formatCurrency(
+    value: unknown,
+    options?: {
+      currency?: 'BRL' | 'USD' | 'EUR';
+      locale?: 'pt-BR' | 'en-US' | 'es-ES';
+      fallbackKey?: UiKey;
+      minimumFractionDigits?: number;
+      maximumFractionDigits?: number;
+    },
+  ): string {
+    if (value === null || value === undefined || value === '') {
+      return this.tUi(options?.fallbackKey ?? 'common.notInformed');
+    }
+
     const numericValue = Number(value);
+
     if (Number.isNaN(numericValue)) {
       return String(value);
     }
-    return new Intl.NumberFormat(this.getLocale(), {
+
+    return new Intl.NumberFormat(options?.locale ?? this.getLocale(), {
       style: 'currency',
-      currency: this.getCurrency(),
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      currency: options?.currency ?? this.getCurrency(),
+      minimumFractionDigits: options?.minimumFractionDigits ?? 2,
+      maximumFractionDigits: options?.maximumFractionDigits ?? 2,
     }).format(numericValue);
   }
 
   private async applyAll(lang: Lang, syncAcrossTabs: boolean): Promise<void> {
     const normalized = normalizeLang(lang);
 
-    await Promise.all([firstValueFrom(this.translate.use(normalized)), this.applyPrimeNgTranslation(normalized)]);
-    this.applyDocumentSideEffects(normalized);
-    this.lang.set(normalized);
-    this.appliedLang.set(normalized);
+    if (normalized !== this.appliedLang()) {
+      await this.applyRuntimeLanguage(normalized);
+    } else {
+      await firstValueFrom(this.translate.use(normalized));
+      await this.ensurePrimeNgTranslation(normalized);
+      this.applyDocumentSideEffects(normalized);
+      this.lang.set(normalized);
+      this.appliedLang.set(normalized);
+    }
 
     if (syncAcrossTabs) {
       this.publishLangChange(normalized);
     }
   }
 
-  /** Dicionário de textos do PrimeNG (p-table, p-datepicker, etc.) - arquivo próprio, separado das
-   * chaves do app (public/i18n/primeng/{lang}.json), mesmo padrão do CardSyncWeb. */
-  private async applyPrimeNgTranslation(lang: Lang): Promise<void> {
-    const cached = this.primengTranslationCache.get(lang);
+  private async applyRuntimeLanguage(lang: Lang): Promise<void> {
+    this.lang.set(lang);
+
+    await firstValueFrom(this.translate.use(lang));
+    await this.ensurePrimeNgTranslation(lang);
+
+    this.applyDocumentSideEffects(lang);
+    this.appliedLang.set(lang);
+  }
+
+  private async ensurePrimeNgTranslation(lang: Lang): Promise<void> {
+    const cached = this.primengCache.get(lang);
     if (cached) {
-      this.primeng.setTranslation(cached);
+      this.primeng.setTranslation(structuredClone(cached));
       return;
     }
 
-    try {
-      const file = LANG_CONFIG[lang].primengFile;
-      const translation = await firstValueFrom(this.http.get<Translation>(`/i18n/primeng/${file}.json`));
-      this.primengTranslationCache.set(lang, translation);
-      this.primeng.setTranslation(translation);
-    } catch {
-      // Sem tradução do PrimeNG: mantém o dicionário em inglês já embutido no componente.
-    }
+    const dict = await firstValueFrom(
+      this.http.get<Record<string, unknown>>(LANG_CONFIG[lang].primengFile),
+    );
+
+    this.primengCache.set(lang, dict);
+    this.primeng.setTranslation(structuredClone(dict));
   }
 
   private applyDocumentSideEffects(lang: Lang): void {
@@ -150,7 +345,13 @@ export class I18nService {
   }
 
   private publishLangChange(lang: Lang): void {
-    const msg: I18nSyncMessage = { type: 'lang-changed', lang, origin: this.tabId, at: Date.now() };
+    const msg: I18nSyncMessage = {
+      type: 'lang-changed',
+      lang,
+      origin: this.tabId,
+      at: Date.now(),
+    };
+
     localStorage.setItem(EVENT_KEY, JSON.stringify(msg));
     this.broadcast(msg);
   }
@@ -160,6 +361,7 @@ export class I18nService {
       const next = normalizeLang(event.lang);
       this.lang.set(next);
       this.appliedLang.set(next);
+      void this.ensurePrimeNgTranslation(next);
       this.applyDocumentSideEffects(next);
     });
   }
@@ -175,6 +377,7 @@ export class I18nService {
           this.syncIfNeeded(event.newValue);
           return;
         }
+
         if (event.key === EVENT_KEY && event.newValue) {
           try {
             const msg = JSON.parse(event.newValue) as I18nSyncMessage;
@@ -189,6 +392,7 @@ export class I18nService {
 
   private bindBroadcastChannel(): void {
     if (!this.channel) return;
+
     this.channel.onmessage = (event: MessageEvent<I18nSyncMessage>) => {
       const msg = event.data;
       if (!msg || msg.origin === this.tabId || msg.type !== 'lang-changed') return;
@@ -210,12 +414,13 @@ export class I18nService {
     }
   }
 
-  private instantOrFallback(key: string, params?: Record<string, unknown>, fallback?: string): string {
+  private instantOrFallback(
+    key: string,
+    params?: Record<string, unknown>,
+    fallback?: string,
+  ): string {
     const value = this.translate.instant(key, params);
-    if (value && value !== key) {
-      return value;
-    }
-    return fallback ?? key;
+    return value && value !== key ? value : (fallback ?? key);
   }
 
   private readLang(): Lang {
@@ -223,15 +428,25 @@ export class I18nService {
     if (fromStorage?.trim()) {
       return normalizeLang(fromStorage);
     }
+
     const fromCookie = document.cookie
       .split('; ')
       .find((row) => row.startsWith(`${LOCALE_COOKIE}=`))
       ?.split('=')[1];
+
     return normalizeLang(fromCookie);
   }
 
   private setLocaleCookie(lang: Lang): void {
     document.cookie = `${LOCALE_COOKIE}=${lang}; path=/; max-age=31536000; SameSite=Lax`;
+  }
+
+  private genericError(fallback?: string): string {
+    return this.instantOrFallback(
+      'errors.global.GENERIC_ERROR',
+      undefined,
+      fallback ?? 'Ocorreu um erro inesperado.',
+    );
   }
 
   private broadcast(msg: I18nSyncMessage): void {

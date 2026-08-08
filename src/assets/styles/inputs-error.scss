@@ -1,0 +1,33 @@
+/* =====================================================
+   NimbusFlow Security — Input error state (PrimeNG + Angular)
+   ===================================================== */
+
+/* InputText */
+.p-inputtext.ng-invalid.ng-touched {
+  border-color: var(--p-red-500, #ef4444) !important;
+  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.25);
+}
+
+/* Password */
+.p-password.ng-invalid.ng-touched input {
+  border-color: var(--p-red-500, #ef4444) !important;
+  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.25);
+}
+
+/* FloatLabel (PrimeNG) */
+.p-float-label.ng-invalid.ng-touched input {
+  border-color: var(--p-red-500, #ef4444) !important;
+}
+
+/* transição suave */
+input,
+.p-inputtext,
+.p-password input {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* dark mode */
+:root.dark .p-inputtext.ng-invalid.ng-touched,
+:root.dark .p-password.ng-invalid.ng-touched input {
+  box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.35);
+}

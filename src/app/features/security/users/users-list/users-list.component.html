@@ -1,0 +1,595 @@
+<cs-page-header
+  [subtitle]="'users.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.users' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-check-circle"
+    (click)="confirmActivateSelected()"
+    [disabled]="!canActivateSelected()"
+    class="p-button-success p-button-sm"
+    [label]="'users.activate.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-ban"
+    class="p-button-danger p-button-sm"
+    (click)="confirmDeactivateSelected()"
+    [disabled]="!canDeactivateSelected()"
+    [label]="'users.deactivate.selected' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    class="p-button-info p-button-sm"
+    [disabled]="!secPolicy.canCreate()"
+    [label]="'users.new.title' | translate"
+  ></button>
+</cs-page-header>
+
+<app-users-create-dialog
+  [user]="user()"
+  (saved)="onSaved()"
+  [visible]="upsertVisible()"
+  (visibleChange)="onUpsertVisibleChange($event)"
+></app-users-create-dialog>
+
+<cs-filters-panel
+  [collapsed]="true"
+  (clear)="clear()"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="name"
+          pInputText
+          [value]="name()"
+          class="w-full p-inputtext-sm"
+          (input)="name.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="name">{{ 'users.fields.name' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          pInputText
+          id="userName"
+          [value]="userName()"
+          class="w-full p-inputtext-sm"
+          (input)="userName.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="userName">{{ 'users.fields.userName' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          pInputText
+          id="document"
+          csCpfCnpjMask
+          [value]="document()"
+          class="w-full p-inputtext-sm"
+          (input)="document.set(($any($event.target).value ?? '').toString().replace(/\D+/g, ''))"
+        />
+        <label for="document">{{ 'users.fields.document' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          inputId="status"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="status()"
+          [showToggleAll]="false"
+          [options]="statusOptions()"
+          (ngModelChange)="status.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="status">{{ 'users.fields.status' | translate }}</label>
+      </p-floatLabel>
+    </div>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end mt-2">
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showIcon]="true"
+          inputId="lastLoginAt"
+          selectionMode="range"
+          dateFormat="dd/mm/yy"
+          [readonlyInput]="true"
+          [ngModel]="lastLoginAtRange()"
+          (ngModelChange)="lastLoginAtRange.set($event ?? null)"
+        ></p-datepicker>
+        <label for="lastLoginAt">{{ 'users.fields.lastLoginAt' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showIcon]="true"
+          selectionMode="range"
+          dateFormat="dd/mm/yy"
+          inputId="blockedUntil"
+          [readonlyInput]="true"
+          [ngModel]="blockedUntilRange()"
+          (ngModelChange)="blockedUntilRange.set($event ?? null)"
+        ></p-datepicker>
+        <label for="blockedUntil">{{ 'users.fields.blockedUntil' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showIcon]="true"
+          selectionMode="range"
+          dateFormat="dd/mm/yy"
+          [readonlyInput]="true"
+          inputId="passwordExpiresAt"
+          [ngModel]="passwordExpiresAtRange()"
+          (ngModelChange)="passwordExpiresAtRange.set($event ?? null)"
+        ></p-datepicker>
+        <label for="passwordExpiresAt">{{ 'users.fields.passwordExpiresAt' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showIcon]="true"
+          inputId="createdAt"
+          selectionMode="range"
+          dateFormat="dd/mm/yy"
+          [readonlyInput]="true"
+          [ngModel]="createdAtRange()"
+          (ngModelChange)="createdAtRange.set($event ?? null)"
+        ></p-datepicker>
+        <label for="createdAt">{{ 'users.fields.createdAt' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [filter]="true"
+          [showClear]="true"
+          inputId="createdBy"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="createdBy()"
+          [showToggleAll]="false"
+          [options]="usersOptions()"
+          (ngModelChange)="createdBy.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="createdBy">{{ 'users.fields.createdBy' | translate }}</label>
+      </p-floatLabel>
+    </div>
+  </div>
+</cs-filters-panel>
+
+<div class="flex align-items-center justify-content-between mb-2 px-1">
+  <small class="opacity-80">
+    {{ 'users.selection.currentMode' | translate }}:
+    {{ selectionModeLabel() }}
+  </small>
+
+  @if (selectedRows().length) {
+    <small class="opacity-80">
+      {{ 'users.selection.count' | translate: { count: selectedRows().length } }}
+    </small>
+  }
+</div>
+
+<p-table
+  #dt
+  stripedRows
+  dataKey="id"
+  size="small"
+  [rows]="rows"
+  [lazy]="true"
+  showGridlines
+  [value]="users()"
+  [rowHover]="true"
+  [paginator]="true"
+  sortMode="multiple"
+  filterDisplay="menu"
+  stateStorage="local"
+  class="cs-admin-table"
+  [loading]="facade.loading()"
+  [stateKey]="tableStateKey()"
+  [showCurrentPageReport]="true"
+  [totalRecords]="totalRecords()"
+  (onPage)="onPageChange($event)"
+  (onLazyLoad)="onLazyLoad($event)"
+  [paginatorDropdownAppendTo]="'body'"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
+  [currentPageReportTemplate]="'pagination.report' | translate"
+>
+  <ng-template pTemplate="colgroup">
+    <colgroup>
+      <col style="width: 44px" />
+      <col style="width: auto" />
+      <col style="width: auto" />
+      <col style="width: 130px" />
+      <col style="width: 140px" />
+      <col style="width: 170px" />
+      <col style="width: 170px" />
+      <col style="width: 170px" />
+      <col style="width: 170px" />
+      <col style="width: 170px" />
+      <col style="width: 80px" />
+    </colgroup>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="text-center">
+        @if (selectionMode()) {
+          <p-checkbox
+            [binary]="true"
+            [ngModel]="headerChecked()"
+            [indeterminate]="headerIndeterminate()"
+            (onChange)="toggleHeaderSelection(!!$event.checked)"
+          ></p-checkbox>
+        } @else {
+          <i
+            class="pi pi-info-circle opacity-70"
+            [pTooltip]="'users.selection.pickOneFirst' | translate"
+            tooltipPosition="top"
+          ></i>
+        }
+      </th>
+
+      <th pSortableColumn="userName">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'users.columns.userName' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="userName"></p-sortIcon>
+            <p-columnFilter
+              type="text"
+              display="menu"
+              class="ml-auto"
+              field="userName"
+              matchMode="contains"
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              styleClass="cs-colfilter"
+            ></p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="name">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'users.columns.name' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="name"></p-sortIcon>
+            <p-columnFilter
+              type="text"
+              field="name"
+              display="menu"
+              class="ml-auto"
+              matchMode="contains"
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              styleClass="cs-colfilter"
+            ></p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="document">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'users.columns.document' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="document"></p-sortIcon>
+            <p-columnFilter
+              display="menu"
+              field="document"
+              matchMode="contains"
+              [useGrouping]="false"
+              [showOperator]="false"
+              [showAddButton]="false"
+              styleClass="cs-colfilter"
+            ></p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="status">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'users.columns.status' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="status"></p-sortIcon>
+            <p-columnFilter
+              field="status"
+              display="menu"
+              matchMode="in"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect
+                  class="w-full"
+                  appendTo="body"
+                  [ngModel]="value"
+                  [showClear]="true"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="statusOptions()"
+                  (onChange)="filter($event.value)"
+                  [placeholder]="'common.all' | translate"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="lastLoginAt">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'users.columns.lastLoginAt' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="lastLoginAt"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="blockedUntil">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'users.columns.blockedUntil' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="blockedUntil"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="passwordExpiresAt">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'users.columns.passwordExpiresAt' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="passwordExpiresAt"></p-sortIcon>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="createdAt">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'users.columns.createdAt' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="createdAt"></p-sortIcon>
+            <p-columnFilter
+              display="menu"
+              field="createdAt"
+              matchMode="between"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-datepicker
+                  class="w-full"
+                  appendTo="body"
+                  [showIcon]="true"
+                  [ngModel]="value"
+                  selectionMode="range"
+                  dateFormat="dd/mm/yy"
+                  [readonlyInput]="true"
+                  (ngModelChange)="filter($event)"
+                  [placeholder]="'common.period' | translate"
+                ></p-datepicker>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th pSortableColumn="createdBy">
+        <div class="th-flex text-center">
+          <span class="th-label">{{ 'users.columns.createdBy' | translate }}</span>
+          <span class="th-icons">
+            <p-sortIcon field="createdBy"></p-sortIcon>
+            <p-columnFilter
+              display="menu"
+              matchMode="in"
+              field="createdBy"
+              [showOperator]="false"
+              [showAddButton]="false"
+              [showMatchModes]="false"
+              styleClass="cs-colfilter"
+            >
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect
+                  class="w-full"
+                  appendTo="body"
+                  [filter]="true"
+                  [ngModel]="value"
+                  [showClear]="true"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="usersOptions()"
+                  (onChange)="filter($event.value)"
+                  [placeholder]="'common.all' | translate"
+                ></p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </span>
+        </div>
+      </th>
+
+      <th class="text-center">
+        <div class="th-flex text-center justify-content-center">
+          <span class="th-label">{{ 'common.actions' | translate }}</span>
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-row>
+    <tr>
+      <td class="text-center">
+        <p-checkbox
+          [binary]="true"
+          [ngModel]="isRowSelected(row)"
+          [disabled]="isRowCheckboxDisabled(row)"
+          (onChange)="toggleRowSelection(row, !!$event.checked)"
+        ></p-checkbox>
+      </td>
+
+      <td class="cell-strong">{{ row.userName }}</td>
+
+      <td class="cell-muted">
+        {{ row.name }}
+      </td>
+
+      <td class="cell-muted text-center">
+        <span [pTooltip]="row.document" tooltipPosition="top">
+          {{ row.document | csDocument }}
+        </span>
+      </td>
+
+      <td class="cell-muted text-center">
+        <cs-tag [value]="statusLabel(row.status)" [tone]="severity(row.status)" />
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.lastLoginAt ? (row.lastLoginAt | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.blockedUntil ? (row.blockedUntil | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.passwordExpiresAt ? (row.passwordExpiresAt | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}
+      </td>
+
+      <td class="cell-muted text-center">
+        {{ row.createdBy?.name ?? '-' }}
+      </td>
+
+      <td class="text-center">
+        <div class="table-actions">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            (click)="edit(row)"
+            tooltipPosition="top"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canEdit(row)"
+            [pTooltip]="!secPolicy.canEdit(row) ? undefined : ('common.edit' | translate)"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            tooltipPosition="top"
+            icon="pi pi-check-circle"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canActivate(row)"
+            [pTooltip]="
+              secPolicy.canActivate(row)
+                ? ('users.action.activate.label' | translate)
+                : (secPolicy.activateDisabledReason(row) ?? '' | translate)
+            "
+            (click)="confirmActivate(row)"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-ban"
+            tooltipPosition="top"
+            class="p-button-text p-button-sm"
+            [disabled]="!secPolicy.canDeactivate(row)"
+            [pTooltip]="
+              secPolicy.canDeactivate(row)
+                ? ('users.action.deactivate.label' | translate)
+                : (secPolicy.deactivateDisabledReason(row) ?? '' | translate)
+            "
+            (click)="confirmDeactivate(row)"
+          ></button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td [attr.colspan]="11" class="empty-td">
+        <div class="empty empty-center">
+          <div class="empty-title">
+            {{
+              facade.loadedOnce()
+                ? ('users.empty.title' | translate)
+                : ('common.loading' | translate)
+            }}
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

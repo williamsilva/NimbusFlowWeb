@@ -1,0 +1,33 @@
+@use './styles/table.scss';
+@use './styles/datepicker.scss';
+@use './styles/inputs-error.scss';
+@use './styles/confirm-dialog.scss';
+@use './styles/cs-tag-severity.scss';
+@use './styles/cs-badge-severity.scss';
+@use './styles/cs-icon-severity.scss';
+@use './styles/relations-expanded.scss';
+@use './styles/menu-icon-colors.scss';
+
+/* Style select and multSelect*/
+.cs-option-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  line-height: 1.2;
+}
+
+.cs-option-item__label {
+  font-weight: 700;
+}
+
+.cs-option-item__subtext {
+  font-size: 0.65rem;
+  color: var(--text-color-secondary);
+}
+
+.cs-option-item .cs-option-item__subtext .p-tag {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.05rem 0.4rem;
+  line-height: 1.2;
+}

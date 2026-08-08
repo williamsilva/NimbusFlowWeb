@@ -1,0 +1,42 @@
+@if (visible() && resolvedMessage()) {
+  <div
+    class="cs-banner"
+    role="alert"
+    [attr.data-type]="inferredType()"
+    >
+    <div class="left">
+      <div class="iconWrap" [attr.data-type]="inferredType()">
+        <i class="pi icon" [ngClass]="resolvedIcon()"></i>
+      </div>
+      <div class="text">
+        <div class="title">{{ resolvedTitle() }}</div>
+        <div class="msg">{{ resolvedMessage() }}</div>
+        @if (error?.correlationId) {
+          <div class="metaRow">
+            <span class="pill">
+              <strong>{{ 'common.correlationId' | translate }}</strong>
+              {{ error?.correlationId }}
+            </span>
+          </div>
+        }
+        @if (showTechnicalDetails && error?.technicalMessage) {
+          <div class="technical">
+            {{ error?.technicalMessage }}
+          </div>
+        }
+        @if (showDetails && details().length) {
+          <ul class="details">
+            @for (d of details(); track d) {
+              <li>{{ d }}</li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+    @if (dismissible) {
+      <button class="close" type="button" (click)="dismiss()">
+        <i class="pi pi-times"></i>
+      </button>
+    }
+  </div>
+}

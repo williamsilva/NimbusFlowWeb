@@ -1,31 +1,43 @@
 import { Lang } from './i18n.types';
 
-/**
- * Mesmo padrão do CardSyncWeb (core/i18n), simplificado: sem o registro de chaves tipado
- * (ui-keys.ts do CardSync, ~1800 linhas geradas) - aqui as chaves de tradução são strings
- * simples, sem checagem de tipo em tempo de compilação. Suficiente pro estágio atual, sem a
- * infraestrutura extra.
- */
 export const LANGS = ['pt-BR', 'en', 'es'] as const;
 export const DEFAULT_LANG: Lang = 'pt-BR';
 
-export const CHANNEL_NAME = 'nimbusflow-i18n';
-export const LANG_KEY = 'nimbusflow.i18n.lang';
-export const EVENT_KEY = 'nimbusflow.i18n.event';
-export const LOCALE_COOKIE = 'NIMBUSFLOW_LOCALE';
+export const CHANNEL_NAME = 'nimbusflow-security-i18n';
+export const LANG_KEY = 'nimbusflow-security.i18n.lang';
+export const EVENT_KEY = 'nimbusflow-security.i18n.event';
+export const LOCALE_COOKIE = 'NIMBUSFLOW_SECURITY_LOCALE';
 
-interface LangConfig {
+type LangConfig = {
   locale: 'pt-BR' | 'en-US' | 'es-ES';
   currency: 'BRL' | 'USD' | 'EUR';
   documentLang: string;
-  /** Nome do arquivo em public/i18n/primeng/ com o dicionário de textos do PrimeNG. */
   primengFile: string;
-}
+  timeZone: string;
+};
 
 export const LANG_CONFIG: Record<Lang, LangConfig> = {
-  'pt-BR': { locale: 'pt-BR', currency: 'BRL', documentLang: 'pt-BR', primengFile: 'pt-BR' },
-  en: { locale: 'en-US', currency: 'USD', documentLang: 'en', primengFile: 'en' },
-  es: { locale: 'es-ES', currency: 'EUR', documentLang: 'es', primengFile: 'es' },
+  'pt-BR': {
+    locale: 'pt-BR',
+    currency: 'BRL',
+    documentLang: 'pt-BR',
+    primengFile: '/assets/i18n/primeng/pt-BR.json',
+    timeZone: 'America/Sao_Paulo',
+  },
+  en: {
+    locale: 'en-US',
+    currency: 'USD',
+    documentLang: 'en',
+    primengFile: '/assets/i18n/primeng/en.json',
+    timeZone: 'UTC',
+  },
+  es: {
+    locale: 'es-ES',
+    currency: 'EUR',
+    documentLang: 'es',
+    primengFile: '/assets/i18n/primeng/es.json',
+    timeZone: 'America/Sao_Paulo',
+  },
 };
 
 export function normalizeLang(value: string | null | undefined): Lang {

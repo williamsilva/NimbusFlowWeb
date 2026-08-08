@@ -1,31 +1,31 @@
 import { Injectable, computed, inject } from '@angular/core';
 
 import { MeStore } from './me.store';
-import { Permission } from './permissions.constants';
+import { PERMISSIONS, Permission } from './permissions.constants';
 
-/**
- * Mesmo padrão do CardSyncWeb (core/auth/permission.service.ts), sem o bypass hasSupportOr() - o
- * catálogo de permissões do NimbusFlow não tem um authority SUPPORT equivalente.
- */
 @Injectable({ providedIn: 'root' })
 export class PermissionService {
   private readonly meStore = inject(MeStore);
 
   readonly me = computed(() => this.meStore.me());
 
-  readonly permissionSet = computed<Set<string>>(() => {
-    const permissions = this.me()?.permissions ?? [];
+  readonly authoritySet = computed<Set<string>>(() => {
+    const authorities = this.me()?.permissions ?? [];
 
     return new Set(
-      permissions
-        .filter((p): p is string => typeof p === 'string' && p.trim().length > 0)
-        .map((p) => p.trim()),
+      authorities
+        .filter((a): a is string => typeof a === 'string' && a.trim().length > 0)
+        .map((a) => a.trim()),
     );
   });
 
+  authorities(): readonly string[] {
+    return this.me()?.permissions ?? [];
+  }
+
   has(permission: Permission | string | null | undefined): boolean {
     if (!permission) return false;
-    return this.permissionSet().has(permission);
+    return this.authoritySet().has(permission);
   }
 
   hasAny(...permissions: Array<Permission | string | null | undefined>): boolean {
@@ -34,6 +34,56 @@ export class PermissionService {
 
   hasAll(...permissions: Array<Permission | string | null | undefined>): boolean {
     return permissions.every((permission) => this.has(permission));
+  }
+
+  hasSupport(): boolean {
+    return this.has(PERMISSIONS.SUPPORT);
+  }
+
+  hasSupportOr(permission: Permission | string | null | undefined): boolean {
+    return this.hasSupport() || this.has(permission);
+  }
+
+  hasSupportOrAny(...permissions: Array<Permission | string | null | undefined>): boolean {
+    return this.hasSupport() || this.hasAny(...permissions);
+  }
+
+  hasSupportOrAll(...permissions: Array<Permission | string | null | undefined>): boolean {
+    return this.hasSupport() || this.hasAll(...permissions);
+  }
+
+  can(permission: Permission | string | null | undefined): boolean {
+    return this.has(permission);
+  }
+
+  canAny(...permissions: Array<Permission | string | null | undefined>): boolean {
+    return this.hasAny(...permissions);
+  }
+
+  canAll(...permissions: Array<Permission | string | null | undefined>): boolean {
+    return this.hasAll(...permissions);
+  }
+
+  canAccess(
+    permissions: Array<Permission | string | null | undefined>,
+    requireAll = false,
+  ): boolean {
+    if (!permissions.length) {
+      return true;
+    }
+
+    return requireAll ? this.hasSupportOrAll(...permissions) : this.hasSupportOrAny(...permissions);
+  }
+
+  hasMenuAccess(
+    permissions?: Array<Permission | string | null | undefined>,
+    requireAll = false,
+  ): boolean {
+    if (!permissions?.length) {
+      return true;
+    }
+
+    return this.canAccess(permissions, requireAll);
   }
 
   currentUsername(): string | undefined {
@@ -45,6 +95,11 @@ export class PermissionService {
     return typeof id === 'string' && id.trim().length > 0 ? id.trim() : undefined;
   }
 
+  currentDisplayName(): string | undefined {
+    const name = this.me()?.name;
+    return typeof name === 'string' && name.trim().length > 0 ? name.trim() : undefined;
+  }
+
   isCurrentUsername(username: string | null | undefined): boolean {
     const current = this.currentUsername();
     const value = this.normalize(username);
@@ -52,8 +107,20 @@ export class PermissionService {
     return !!current && !!value && current === value;
   }
 
+  isCurrentUserId(id: string | null | undefined): boolean {
+    const current = this.currentUserId();
+    const value = this.normalizeId(id);
+
+    return !!current && !!value && current === value;
+  }
+
   private normalize(value: string | null | undefined): string | undefined {
     const normalized = (value ?? '').trim().toLowerCase();
+    return normalized.length > 0 ? normalized : undefined;
+  }
+
+  private normalizeId(value: string | null | undefined): string | undefined {
+    const normalized = (value ?? '').trim();
     return normalized.length > 0 ? normalized : undefined;
   }
 }

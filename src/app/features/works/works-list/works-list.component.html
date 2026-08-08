@@ -1,0 +1,413 @@
+<cs-page-header
+  [subtitle]="'works.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.works' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    tooltipPosition="top"
+    [disabled]="!canCreate()"
+    class="p-button-info p-button-sm"
+    [label]="'works.new.title' | translate"
+  ></button>
+</cs-page-header>
+
+<app-works-create-dialog
+  [work]="work()"
+  (saved)="onSaved()"
+  [visible]="upsertVisible()"
+  (visibleChange)="onUpsertVisibleChange($event)"
+></app-works-create-dialog>
+
+<cs-filters-panel
+  [collapsed]="true"
+  (clear)="clear()"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeFilterGroups]="activeFilterGroups()"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="name"
+          pInputText
+          [value]="name()"
+          class="w-full p-inputtext-sm"
+          (input)="name.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="name">{{ 'works.fields.name' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          [showClear]="true"
+          inputId="supplierId"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="supplierId()"
+          [showToggleAll]="false"
+          [options]="supplierOptions()"
+          (ngModelChange)="supplierId.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="supplierId">{{ 'works.fields.supplier' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="status"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="status()"
+          [showToggleAll]="false"
+          [options]="statusOptions"
+          (ngModelChange)="status.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="status">{{ 'works.fields.status' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          inputId="startDate"
+          class="w-full"
+          size="small"
+          appendTo="body"
+          [showIcon]="true"
+          [readonlyInput]="true"
+          selectionMode="range"
+          dateFormat="dd/mm/yy"
+          [ngModel]="startDateRange()"
+          (ngModelChange)="startDateRange.set($event ?? null)"
+        ></p-datepicker>
+        <label for="startDate">{{ 'works.fields.startDate' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          inputId="expectedEndDate"
+          class="w-full"
+          size="small"
+          appendTo="body"
+          [showIcon]="true"
+          [readonlyInput]="true"
+          selectionMode="range"
+          dateFormat="dd/mm/yy"
+          [ngModel]="expectedEndDateRange()"
+          (ngModelChange)="expectedEndDateRange.set($event ?? null)"
+        ></p-datepicker>
+        <label for="expectedEndDate">{{ 'works.fields.expectedEndDate' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-6 p-1">
+      <cs-currency-range-filter
+        [inputId]="'totalAmount'"
+        [label]="'works.fields.totalAmount' | translate"
+        [value]="{ start: totalAmountFrom(), end: totalAmountTo() }"
+        (valueChange)="totalAmountFrom.set($event.start); totalAmountTo.set($event.end)"
+      ></cs-currency-range-filter>
+    </div>
+  </div>
+</cs-filters-panel>
+
+<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+  <p-table
+    #dt
+    stripedRows
+    dataKey="id"
+    size="small"
+    [rows]="rows"
+    [lazy]="true"
+    showGridlines
+    [rowHover]="true"
+    [paginator]="true"
+    sortMode="multiple"
+    filterDisplay="menu"
+    stateStorage="local"
+    class="cs-admin-table"
+    [value]="works()"
+    [loading]="facade.loading()"
+    [stateKey]="tableStateKey()"
+    [showCurrentPageReport]="true"
+    [totalRecords]="totalRecords()"
+    (onLazyLoad)="onLazyLoad($event)"
+    [paginatorDropdownAppendTo]="'body'"
+    (onPage)="onPageChange($event)"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [tableStyle]="{ width: '100%', 'min-width': '58rem' }"
+    [currentPageReportTemplate]="'pagination.report' | translate"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: auto" />
+        <col style="width: auto" />
+        <col style="width: 140px" />
+        <col style="width: 110px" />
+        <col style="width: 110px" />
+        <col style="width: 150px" />
+        <col style="width: 80px" />
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="name">
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'works.columns.name' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="name"></p-sortIcon>
+              <p-columnFilter
+                field="name"
+                type="text"
+                display="menu"
+                class="ml-auto"
+                matchMode="contains"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="supplierName">
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'works.columns.supplier' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="supplierName"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="supplierId"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [filter]="true"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="supplierOptions()"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="status">
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'works.columns.status' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="status"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="status"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="statusOptions"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="startDate">
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'works.columns.startDate' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="startDate"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="startDate"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-datepicker
+                    class="w-full"
+                    appendTo="body"
+                    [showIcon]="true"
+                    [ngModel]="value"
+                    selectionMode="range"
+                    dateFormat="dd/mm/yy"
+                    [readonlyInput]="true"
+                    (ngModelChange)="filter($event)"
+                    [placeholder]="'common.period' | translate"
+                  ></p-datepicker>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="expectedEndDate">
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'works.columns.expectedEndDate' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="expectedEndDate"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="expectedEndDate"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-datepicker
+                    class="w-full"
+                    appendTo="body"
+                    [showIcon]="true"
+                    [ngModel]="value"
+                    selectionMode="range"
+                    dateFormat="dd/mm/yy"
+                    [readonlyInput]="true"
+                    (ngModelChange)="filter($event)"
+                    [placeholder]="'common.period' | translate"
+                  ></p-datepicker>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="totalAmount">
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'works.columns.totalAmount' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="totalAmount"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="totalAmount"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [inputId]="'totalAmountCol'"
+                    [label]="'works.fields.totalAmount' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label">{{ 'common.actions' | translate }}</span>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td>{{ row.name }}</td>
+        <td>{{ row.supplierName }}</td>
+        <td class="text-center">
+          <cs-status-badge
+            [tone]="tone(row.status)"
+            [label]="('works.status.' + row.status) | translate"
+          ></cs-status-badge>
+        </td>
+        <td class="text-center">{{ row.startDate | csDate: 'date' }}</td>
+        <td class="text-center">{{ row.expectedEndDate | csDate: 'date' }}</td>
+        <td class="text-right">{{ row.totalAmount | csCurrency }}</td>
+        <td class="text-center">
+          <div class="table-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="edit(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!policy.canEdit()"
+              [pTooltip]="
+                policy.canEdit()
+                  ? ('common.edit' | translate)
+                  : (policy.editDisabledReason() ?? 'works.action.noPermission' | translate)
+              "
+              tooltipPosition="top"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="text-center py-5 opacity-70">
+          {{ 'works.empty.title' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

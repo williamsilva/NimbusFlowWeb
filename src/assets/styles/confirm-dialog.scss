@@ -1,0 +1,88 @@
+
+/* ================================
+   NimbusFlow Security - ConfirmDialog (SaaS)
+   ================================ */
+
+.cs-confirm {
+  .p-dialog {
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--surface-border);
+    box-shadow: 0 14px 45px rgba(0, 0, 0, 0.18);
+  }
+
+  .p-dialog-header {
+    padding: 1rem 1rem 0.75rem 1rem;
+    border-bottom: 0;
+    background: transparent;
+  }
+
+  .p-dialog-title {
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+  }
+
+  .p-dialog-content {
+    padding: 0.25rem 1rem 0.95rem 1rem;
+  }
+
+  .p-confirm-dialog-message {
+    margin: 0.25rem 0 0 0;
+    line-height: 1.45;
+    opacity: 0.88;
+  }
+
+  .p-dialog-footer {
+    padding: 0.95rem 1rem 1rem 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--surface-border) 80%, transparent);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+
+  /* Ícone em círculo (template "icon") */
+  .cs-confirm-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--surface-border);
+    background: color-mix(in srgb, var(--surface-0) 70%, transparent);
+    margin-right: 0.75rem;
+    flex: 0 0 auto;
+
+    i {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+  }
+
+  /* Layout do header: ícone + título alinhados */
+  .p-dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* Botões */
+  .cs-confirm-accept,
+  .cs-confirm-reject {
+    border-radius: 12px !important;
+    padding: 0.55rem 0.9rem !important;
+    font-weight: 650 !important;
+  }
+
+  .cs-confirm-reject {
+    opacity: 0.95;
+  }
+}
+
+/* Variante "logout" (realce suave em vermelho) */
+.cs-confirm--logout {
+  .cs-confirm-icon {
+    background: color-mix(in srgb, var(--red-50) 65%, transparent);
+    border-color: color-mix(in srgb, var(--red-200) 55%, var(--surface-border));
+  }
+}

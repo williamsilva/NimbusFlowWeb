@@ -1,77 +1,161 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, ChangeDetectionStrategy, computed, inject } from '@angular/core';
+
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
-import { TranslatePipe } from '@ngx-translate/core';
+import { ConfirmationService } from 'primeng/api';
+import { TranslateModule } from '@ngx-translate/core';
 
-import { CurrentUser } from '../../core/auth/auth.service';
-
-interface NavItem {
-  labelKey: string;
-  icon: string;
-  link?: string;
-  exact?: boolean;
-  /** Nome cru da permissão (ex.: "USERS_CONSULT", mesmo formato de CurrentUser.permissions - sem
-   *  prefixo "PERM_", esse só existe nas authorities do Spring Security no backend). Item sem
-   *  esse campo é sempre visível (comportamento atual, preservado). */
-  permission?: string;
-  /** Item com children é só um rótulo de grupo (não navegável) - some inteiro se nenhum filho for
-   *  visível (mesma regra do menu do CardSync: filterMenuByPermissions). */
-  children?: NavItem[];
-}
+import { BRAND } from '../../core/brand/brand';
+import { MeStore } from '../../core/auth/me.store';
+import { APP_MENU } from '../../core/menu/menu.data';
+import { AppMenuItem } from '../../core/menu/menu.model';
+import { AuthService } from '../../core/auth/auth.service';
+import { I18nService } from '../../core/i18n/i18n.service';
+import { PermissionService } from '../../core/auth/permission.service';
 
 @Component({
-    selector: 'app-sidebar',
-    imports: [RouterLink, RouterLinkActive, ButtonModule, TooltipModule, TranslatePipe],
-    templateUrl: './sidebar.component.html',
-    styleUrl: './sidebar.component.scss'
+  standalone: true,
+  selector: 'app-sidebar',
+  styleUrl: './sidebar.component.css',
+  templateUrl: './sidebar.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    RouterLink,
+    ButtonModule,
+    TooltipModule,
+    TranslateModule,
+    RouterLinkActive,
+  ],
 })
 export class SidebarComponent {
-  @Input() currentUser: CurrentUser | null = null;
-  @Output() logout = new EventEmitter<void>();
+  readonly brand = BRAND;
+  readonly i18n = inject(I18nService);
 
-  readonly navItems: NavItem[] = [
-    { labelKey: 'menu.dashboard', icon: 'pi pi-home', link: '/', exact: true },
-    { labelKey: 'menu.suppliers', icon: 'pi pi-shop', link: '/suppliers', exact: false },
-    { labelKey: 'menu.works', icon: 'pi pi-hammer', link: '/works', exact: false },
-    { labelKey: 'menu.suggestions', icon: 'pi pi-lightbulb', link: '/suggestions', exact: false },
-    {
-      labelKey: 'menu.security.title',
-      icon: 'pi pi-shield',
-      children: [
-        { labelKey: 'menu.security.users', icon: 'pi pi-users', link: '/security/users', exact: false, permission: 'USERS_CONSULT' },
-        { labelKey: 'menu.security.groups', icon: 'pi pi-id-card', link: '/security/groups', exact: false, permission: 'GROUPS_CONSULT' },
-      ],
-    },
-  ];
+  private readonly router = inject(Router);
+  private readonly meStore = inject(MeStore);
+  private readonly auth = inject(AuthService);
+  private readonly perms = inject(PermissionService);
+  private readonly confirm = inject(ConfirmationService);
 
-  /** Filtra por permissão - só cosmético (ver comentário em supplier-list.component.ts), a
-   *  validação real é 100% backend: sem a permissão, a própria chamada à API volta 403. */
-  get visibleNavItems(): NavItem[] {
-    return this.navItems
-      .map((item) => this.filterItem(item))
-      .filter((item): item is NavItem => item !== null);
-  }
+  readonly me = this.meStore.me;
 
-  private filterItem(item: NavItem): NavItem | null {
-    if (item.children) {
-      const visibleChildren = item.children.filter((child) => this.hasPermission(child.permission));
-      return visibleChildren.length ? { ...item, children: visibleChildren } : null;
+  /**
+   * Estado manual de expandir/recolher grupos.
+   * Se não houver valor aqui, o grupo abre apenas quando algum filho estiver ativo.
+   */
+  private readonly groupState: Record<string, boolean> = {};
+
+  readonly menu = computed(() => this.filterMenuByPermissions(APP_MENU));
+
+  readonly initials = computed(() => {
+    const me = this.me();
+    const base = (me?.name || me?.username || 'CS').trim();
+    const parts = base.split(/[\s._-]+/).filter(Boolean);
+    const a = parts[0]?.[0] ?? 'C';
+    const b = parts.length > 1 ? parts[1][0] : base.length > 1 ? base[1] : 'S';
+    return (a + b).toUpperCase();
+  });
+
+  private filterMenuByPermissions(items: AppMenuItem[]): AppMenuItem[] {
+    const out: AppMenuItem[] = [];
+
+    for (const item of items) {
+      const required = this.resolvePermissions(item);
+      const allowedSelf = this.perms.canAccess(required, item.requireAll ?? false);
+
+      const filteredChildren = item.children?.length
+        ? this.filterMenuByPermissions(item.children)
+        : undefined;
+
+      const isLeaf = !!item.route;
+      const childrenVisible = (filteredChildren?.length ?? 0) > 0;
+
+      const visible = isLeaf ? allowedSelf : allowedSelf && childrenVisible;
+      if (!visible) continue;
+
+      out.push(filteredChildren ? { ...item, children: filteredChildren } : item);
     }
-    return this.hasPermission(item.permission) ? item : null;
+
+    return out;
   }
 
-  private hasPermission(permission?: string): boolean {
-    return !permission || !!this.currentUser?.permissions?.includes(permission);
+  private resolvePermissions(item: AppMenuItem): string[] {
+    if (item.permissions?.length) {
+      return item.permissions;
+    }
+
+    if (Array.isArray(item.permissions)) {
+      return item.permissions;
+    }
+
+    if (item.permissions) {
+      return [item.permissions];
+    }
+
+    return [];
   }
 
-  get initials(): string {
-    const name = this.currentUser?.name || this.currentUser?.username || '?';
-    return name
-      .split(' ')
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part[0]?.toUpperCase())
-      .join('');
+  toggleGroup(item: AppMenuItem): void {
+    const key = this.itemKey(item);
+    this.groupState[key] = !this.isExpanded(item);
+  }
+
+  isExpanded(item: AppMenuItem): boolean {
+    const key = this.itemKey(item);
+
+    if (key in this.groupState) {
+      return this.groupState[key];
+    }
+
+    return this.hasActiveChild(item);
+  }
+
+  hasActiveChild(item: AppMenuItem): boolean {
+    return item.children?.some((child) => this.isActiveOrChildActive(child)) ?? false;
+  }
+
+  isActiveOrChildActive(item: AppMenuItem): boolean {
+    if (this.isActive(item)) return true;
+    return item.children?.some((child) => this.isActiveOrChildActive(child)) ?? false;
+  }
+
+  isActive(item: AppMenuItem): boolean {
+    if (!item.route) return false;
+
+    return this.router.isActive(item.route, {
+      paths: item.exact ? 'exact' : 'subset',
+      queryParams: 'ignored',
+      fragment: 'ignored',
+      matrixParams: 'ignored',
+    });
+  }
+
+  activeIcon(item: AppMenuItem): string {
+    return item.activeIcon ?? 'pi pi-map-marker nav-icon-active-bounce text-blue-500';
+  }
+
+  private itemKey(item: AppMenuItem): string {
+    return item.route ?? item.labelKey;
+  }
+
+  logout(): void {
+    this.confirm.confirm({
+      header: this.i18n.tUi('confirm.logoutTitle'),
+      message: this.i18n.tUi('confirm.logoutMessage'),
+      acceptLabel: this.i18n.tUi('common.logout'),
+      rejectLabel: this.i18n.tUi('common.cancel'),
+      acceptButtonStyleClass: 'p-button-danger cs-confirm-accept',
+      rejectButtonStyleClass: 'p-button-text cs-confirm-reject',
+      accept: async () => {
+        await this.auth.logout();
+      },
+    });
+  }
+
+  trackByLabelKey(_: number, item: AppMenuItem): string {
+    return item.labelKey;
   }
 }

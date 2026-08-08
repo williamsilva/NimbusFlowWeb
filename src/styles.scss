@@ -1,609 +1,276 @@
-// PrimeNG: ícones e utilitários de layout, mesmas libs do CardSyncWeb. O tema em si (Lara,
-// incluindo dark mode via classe .dark na <html>) é registrado via providePrimeNG em
-// app.config.ts, não aqui.
+@use './assets/nimbusflow-security.scss';
+
 @import 'primeicons/primeicons.css';
 @import 'primeflex/primeflex.css';
 
-/* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%; }
-
-:root {
-  color-scheme: light;
-
-  // Paleta "tech glass" inspirada no CardSync: glows azul/roxo/teal, cards translucidos.
-  --nf-glow-a: rgba(59, 130, 246, 0.35);
-  --nf-glow-b: rgba(168, 85, 247, 0.28);
-  --nf-glow-c: rgba(20, 184, 166, 0.22);
-  --nf-card-light: rgba(255, 255, 255, 0.66);
-  --nf-card-dark: rgba(17, 24, 39, 0.55);
-  --nf-border-light: rgba(0, 0, 0, 0.08);
-  --nf-border-dark: rgba(255, 255, 255, 0.12);
-  --nf-text-muted: rgba(0, 0, 0, 0.6);
-}
-
-:root.dark {
-  color-scheme: dark;
-  --nf-text-muted: rgba(255, 255, 255, 0.65);
+/* Ajustes mínimos do app */
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  color: #1a1b1f;
-
-  background:
-    radial-gradient(1100px 650px at 12% -8%, var(--nf-glow-a), transparent 58%),
-    radial-gradient(900px 520px at 90% 2%, var(--nf-glow-b), transparent 55%),
-    radial-gradient(900px 520px at 50% 110%, var(--nf-glow-c), transparent 55%),
-    #eef0f4;
-  background-attachment: fixed;
 }
 
-:root.dark body {
-  color: #e8eaed;
-  background:
-    radial-gradient(1100px 650px at 12% -8%, var(--nf-glow-a), transparent 58%),
-    radial-gradient(900px 520px at 90% 2%, var(--nf-glow-b), transparent 55%),
-    radial-gradient(900px 520px at 50% 110%, var(--nf-glow-c), transparent 55%),
-    #0f1115;
+/* (opcional) suaviza fontes no dark */
+:root {
+  color-scheme: light;
+}
+:root.dark {
+  color-scheme: dark;
 }
 
-// Vidro fosco (glassmorphism) reutilizado por cards/topbar/sidebar/footer.
-.glass {
-  background: var(--nf-card-light);
-  border: 1px solid var(--nf-border-light);
+/* ===== NimbusFlow Security Tech Theme (global) ===== */
+
+:root {
+  --cs-glow-a: rgba(59, 130, 246, 0.35);
+  --cs-glow-b: rgba(168, 85, 247, 0.28);
+  --cs-glow-c: rgba(20, 184, 166, 0.22);
+  --cs-card-light: rgba(255, 255, 255, 0.62);
+  --cs-card-dark: rgba(17, 24, 39, 0.52);
+  --cs-border-light: rgba(0, 0, 0, 0.08);
+  --cs-border-dark: rgba(255, 255, 255, 0.12);
+}
+
+.cs-tech-bg {
+  min-height: 100vh;
+  position: relative;
+  background:
+    radial-gradient(1100px 650px at 12% -8%, var(--cs-glow-a), transparent 58%),
+    radial-gradient(900px 520px at 90% 2%, var(--cs-glow-b), transparent 55%),
+    radial-gradient(900px 520px at 50% 110%, var(--cs-glow-c), transparent 55%),
+    var(--surface-ground);
+}
+
+/* noise overlay (bem sutil) */
+.cs-tech-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+.cs-glass {
+  background: var(--cs-card-light);
+  border: 1px solid var(--cs-border-light);
   backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   box-shadow:
     0 18px 40px rgba(0, 0, 0, 0.08),
     0 0 0 1px rgba(255, 255, 255, 0.22) inset;
 }
 
-:root.dark .glass {
-  background: var(--nf-card-dark);
-  border: 1px solid var(--nf-border-dark);
+:root.dark .cs-glass {
+  background: var(--cs-card-dark);
+  border: 1px solid var(--cs-border-dark);
   box-shadow:
     0 18px 40px rgba(0, 0, 0, 0.35),
     0 0 0 1px rgba(255, 255, 255, 0.08) inset;
 }
 
-// Container padrão de página: centraliza o conteúdo e evita que ele fique colado nas
-// bordas/toolbar. Usado por todas as telas de lista/formulário via <div class="page-container">.
-.page-container {
-  max-width: 1080px;
-  margin: 0 auto;
-  // 12px - mesmo total do CardSyncWeb (shell padding 8px + content-inner padding 12px = 20px do
-  // topo/laterais até o conteúdo). Antes eram 24px aqui (+ os 8px do shell = 32px, bem mais que
-  // os 20px de referência).
-  padding: 12px;
+/* Glow ring para itens ativos */
+.cs-glow-ring {
+  box-shadow:
+    0 10px 28px rgba(59, 130, 246, 0.18),
+    0 0 0 1px rgba(59, 130, 246, 0.22) inset;
 }
 
-// Variante que ocupa a largura toda do painel (sem centralizar/limitar) - telas administrativas
-// densas (Usuários/Grupos) com tabelas largas de muitas colunas, ao contrário das telas de
-// cadastro comuns (Fornecedores/Obras) que continuam com .page-container centralizado.
-.page-container--full {
-  max-width: none;
+:root.dark .cs-glow-ring {
+  box-shadow:
+    0 14px 34px rgba(59, 130, 246, 0.22),
+    0 0 0 1px rgba(59, 130, 246, 0.26) inset;
 }
 
-// Breadcrumb "Dashboard > Usuários" no topo das telas administrativas (padrão CardSyncWeb).
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.82rem;
-  margin-bottom: 2px;
+/* ===== Toast (PrimeNG) — Sakai skin + NimbusFlow Security product ===== */
 
-  a {
-    color: var(--nf-glow-a, #3b82f6);
-    text-decoration: none;
-  }
+.cs-toast {
+  width: 420px;
+}
 
-  a:hover {
-    text-decoration: underline;
-  }
-
-  .breadcrumb__separator {
-    opacity: 0.5;
-  }
-
-  .breadcrumb__current {
-    opacity: 0.75;
+@media (max-width: 768px) {
+  .cs-toast {
+    width: 95vw;
   }
 }
 
-// Botões compactos (Atualizar/Ativar/Inativar/Novo no header, Buscar/Limpar no filtro).
-.btn-sm {
-  height: 30px !important;
-  padding: 0 12px !important;
-  font-size: 0.78rem !important;
-  line-height: 30px !important;
-
-  i.pi {
-    font-size: 14px;
-    margin-right: 4px;
-  }
-}
-
-// Tabela densa (linhas mais baixas, fonte menor) - telas administrativas com muitas colunas
-// (Usuários/Grupos). p-table com [size]="'small'" já ajuda, isso refina mais pro padrão visual
-// do CardSyncWeb - linhas baixas, fonte pequena.
-p-table.compact-table {
-  .p-datatable-thead > tr > th,
-  .p-datatable-tbody > tr > td {
-    padding: 0.4rem 0.6rem;
-    font-size: 0.78rem;
-  }
-
-  .action-btn {
-    width: 30px;
-    height: 30px;
-
-    i.pi {
-      font-size: 15px;
-    }
-  }
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-
-  h2 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 500;
-  }
-}
-
-// Cards de conteúdo (listas, formulários, seções) - espaçamento consistente + visual glass.
-.content-card {
-  @extend .glass;
-  padding: 24px;
-  margin-bottom: 24px;
-  border-radius: 14px;
-
-  h3 {
-    margin: 0 0 16px;
-    font-size: 1.125rem;
-    font-weight: 500;
-  }
-
-  h4 {
-    margin: 24px 0 12px;
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--nf-text-muted);
-  }
-}
-
-.table-container {
-  overflow-x: auto;
-  border-radius: 4px;
-}
-
-// ===== Popup do ícone (i) do painel de filtros (FilterPanelComponent) - o p-popover é portado pra
-// fora do componente (overlay), então precisa ser estilizado aqui, global. =====
-.filter-panel-popover .p-popover-content {
-  padding: 0;
-}
-
-.filter-panel__menu-content {
-  padding: 12px 16px;
-  min-width: 220px;
-  max-width: 320px;
-
-  h4 {
-    margin: 0 0 8px;
-    font-size: 0.85rem;
-    font-weight: 700;
-  }
-
-  p {
-    margin: 0 0 4px;
-    font-size: 0.8rem;
-    line-height: 1.4;
-  }
-
-  p:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.filter-panel__menu-empty {
-  color: var(--nf-text-secondary, #6b7280);
-}
-
-// Envolve varios <mat-card> de secao de um mesmo formulario (ex.: dados gerais / endereco /
-// dados bancarios), todos dentro de uma unica tag <form>.
-.form-sections {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  max-width: 640px;
-}
-
-// Agrupa os campos dentro de uma secao/card.
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: 520px;
-}
-
-.form p-floatlabel {
-  display: flex;
-  width: 100%;
-
-  input,
-  textarea,
-  p-select,
-  p-datepicker {
-    width: 100%;
-  }
-}
-
-.actions {
+/* Base container (message template uses cs-toast-content) */
+.cs-toast-content {
+  position: relative;
   display: flex;
   gap: 12px;
-  align-items: center;
-  margin-top: 8px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--surface-card) 86%, transparent);
+  border: 1px solid color-mix(in srgb, var(--surface-border) 70%, transparent);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+
+  /* animação Sakai-like (entrada suave) */
+  animation: cs-toast-in 220ms ease-out;
 }
 
-// ===== Dialogs (mat-dialog) usados pelos cadastros (fornecedor, sugestao, obra) =====
-.dialog-form {
+@keyframes cs-toast-in {
+  from {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.cs-toast-main {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  // Sem min-width fixo (era min(560px, 80vw), calibrado pro mat-dialog-container do Material,
-  // que sempre tinha espaço de sobra) - o DynamicDialogConfig.width já define a largura do dialog
-  // (p-dialog) em cada tela; forçar min-width aqui de novo overflowava o conteúdo pra fora do
-  // p-dialog-content (área útil menor que 560px depois do padding do PrimeNG).
-  width: 100%;
+  gap: 2px;
+}
 
-  h4 {
-    margin: 20px 0 8px;
+.cs-toast-summary {
+  font-weight: 900;
+  line-height: 1.15rem;
+}
+
+.cs-toast-detail {
+  opacity: 0.9;
+  line-height: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .cs-toast-content {
+    padding: 10px 12px;
+    border-radius: 14px;
+  }
+  .cs-toast-summary {
     font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--nf-text-muted);
-
-    &:first-child {
-      margin-top: 4px;
-    }
+  }
+  .cs-toast-detail {
+    font-size: 0.9rem;
   }
 }
 
-.dialog-form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 4px 16px;
+/* Severity bar (left border) */
+.cs-toast-content.cs-toast-success {
+  border-left: 5px solid var(--green-500);
+}
+.cs-toast-content.cs-toast-info {
+  border-left: 5px solid var(--blue-500);
+}
+.cs-toast-content.cs-toast-warn {
+  border-left: 5px solid var(--orange-500);
+}
+.cs-toast-content.cs-toast-error {
+  border-left: 5px solid var(--red-500);
 }
 
-// O <input>/p-multiselect projetado dentro do p-floatlabel precisa da largura explícita também,
-// floatlabel só herda a do pai por padrão.
-.dialog-form-grid p-floatlabel {
-  display: block;
-  width: 100%;
-
-  input,
-  p-multiselect,
-  p-select,
-  p-datepicker {
-    width: 100%;
-  }
+/* Context background tint (subtle) */
+.cs-toast-content.cs-toast-crud {
+  background: color-mix(in srgb, var(--green-500) 6%, var(--surface-card));
+}
+.cs-toast-content.cs-toast-login {
+  background: color-mix(in srgb, var(--blue-500) 6%, var(--surface-card));
+}
+.cs-toast-content.cs-toast-validation {
+  background: color-mix(in srgb, var(--orange-500) 6%, var(--surface-card));
+}
+.cs-toast-content.cs-toast-system {
+  background: color-mix(in srgb, var(--surface-500) 4%, var(--surface-card));
 }
 
-// Texto de erro de validação de campo (substitui o <mat-error>, que tinha estilo próprio do
-// Material) - mesmo padrão em todos os formulários migrados pra PrimeNG.
-.field-error {
-  display: block;
-  margin-top: 2px;
-  font-size: 0.75rem;
-  color: var(--p-red-500, #ef4444);
-}
-
-// Substitui <mat-dialog-actions align="end"> nos dialogs migrados pra PrimeNG (DynamicDialog não
-// tem uma área de rodapé própria - os botões ficam no fim do template do próprio componente).
-.dialog-actions {
+/* Correlation + copy button */
+.cs-toast-correlation {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  opacity: 0.9;
   display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 20px;
-}
-
-// ===== Barra de busca + atualizar no topo das listas =====
-.list-toolbar {
-  display: flex;
+  gap: 6px;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-
-  .search-field {
-    flex: 1 1 320px;
-    max-width: 420px;
-  }
+  flex-wrap: wrap;
 }
 
-.empty-state {
-  padding: 32px 16px;
-  text-align: center;
-  color: var(--nf-text-muted);
+.cs-toast-correlation .corr-k {
+  font-weight: 900;
+  opacity: 0.7;
 }
 
-// ===== Tabela estilo CardSyncWeb (cs-admin-table) - Usuários/Grupos =====
-// Portado de table.scss do CardSyncWeb (mesmas regras, classe com o mesmo nome) - tabela
-// enterprise compacta: linhas baixas, header com th-flex/th-label/th-icons, listras, bordas,
-// paginador compacto. Sem as regras de p-columnFilter (NimbusFlow filtra client-side via
-// FilterPanelComponent, não tem filtro por coluna no header).
-.cs-admin-table.p-datatable {
-  border: 1px solid var(--surface-border);
-  border-radius: 6px;
-  background: var(--surface-card);
-  overflow: visible;
+.cs-toast-copy {
+  border: 0;
+  background: transparent;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 10px;
 }
 
-.cs-admin-table .p-datatable-table {
-  table-layout: fixed;
-  width: 100%;
+.cs-toast-copy:hover {
+  background: color-mix(in srgb, var(--primary-color) 12%, transparent);
 }
 
-.cs-admin-table th,
-.cs-admin-table td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.cs-admin-table .p-datatable-thead > tr {
-  height: 24px !important;
-}
-
-.cs-admin-table .p-datatable-thead > tr > th {
-  padding: 0.15rem 0.45rem !important;
-  font-size: 0.75rem !important;
-  height: 24px !important;
-  min-height: 24px !important;
-  vertical-align: middle !important;
-  border-right: 1px solid var(--surface-border) !important;
-  transition: background-color 0.15s ease;
-}
-
-.cs-admin-table .p-datatable-thead > tr > th:last-child {
-  border-right: 0 !important;
-}
-
-.cs-admin-table .p-datatable-thead > tr > th:hover {
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.cs-admin-table .th-flex {
-  --cs-th-label-min-width: 6.0ch;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.2rem;
-  height: 16px;
-  width: 100%;
-  min-width: calc(var(--cs-th-label-min-width) + 1.75rem);
-  overflow: visible;
-}
-
-.cs-admin-table .th-label {
-  flex: 1 1 var(--cs-th-label-min-width);
-  min-width: var(--cs-th-label-min-width);
-  display: block;
-  overflow: hidden;
-  font-weight: 500;
-  line-height: 1.1;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  cursor: help;
-}
-
-.cs-admin-table .th-icons {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.05rem;
-  flex: 0 0 auto;
-  min-width: max-content;
-}
-
-.cs-admin-table .p-datatable-thead .th-icons .p-icon,
-.cs-admin-table .p-datatable-thead .th-icons .p-icon-wrapper,
-.cs-admin-table .p-datatable-thead .th-icons .p-sortable-column-icon,
-.cs-admin-table .p-datatable-thead .th-icons .p-button-icon,
-.cs-admin-table .p-datatable-thead .th-icons .pi {
-  width: 10px !important;
-  height: 10px !important;
-  min-width: 10px !important;
-  min-height: 10px !important;
-  font-size: 10px !important;
-  line-height: 10px !important;
-}
-
-.cs-admin-table .p-datatable-thead .th-icons svg,
-.cs-admin-table .p-datatable-thead .p-sortable-column-icon svg,
-.cs-admin-table .p-datatable-thead .p-icon-wrapper svg {
-  width: 10px !important;
-  height: 10px !important;
-  display: block !important;
-}
-
-.cs-admin-table .p-datatable-thead .p-sortable-column-icon {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  opacity: 0.65;
-  margin: 0 !important;
-}
-
-.cs-admin-table .p-datatable-thead > tr > th:hover .p-sortable-column-icon {
-  opacity: 1;
-}
-
-.cs-admin-table .p-datatable-tbody > tr {
-  height: 26px !important;
-}
-
-.cs-admin-table .p-datatable-tbody > tr > td {
-  padding: 0.25rem 0.45rem !important;
-  font-size: 0.82rem !important;
-  line-height: 1.05 !important;
-  border-right: 1px solid var(--surface-border) !important;
-  border-bottom: 1px solid var(--surface-border) !important;
-}
-
-.cs-admin-table .p-datatable-tbody > tr > td:last-child {
-  border-right: 0 !important;
-}
-
-.cs-admin-table .p-datatable-tbody > tr:last-child > td {
-  border-bottom: 0 !important;
-}
-
-.cs-admin-table .p-datatable-tbody > tr:nth-child(even) > td {
-  background: color-mix(in srgb, var(--surface-100) 30%, transparent);
-}
-
-.cs-admin-table .p-datatable-tbody > tr:hover > td {
-  background: color-mix(in srgb, var(--surface-100) 55%, transparent);
-}
-
-.cs-admin-table .p-datatable-thead .p-checkbox,
-.cs-admin-table .p-datatable-tbody .p-checkbox {
-  width: 14px !important;
-  height: 14px !important;
-}
-
-.cs-admin-table .p-datatable-thead .p-checkbox .p-checkbox-box,
-.cs-admin-table .p-datatable-tbody .p-checkbox .p-checkbox-box {
-  width: 14px !important;
-  height: 14px !important;
-  border-radius: 3px !important;
-}
-
-.cs-admin-table .p-datatable-thead .p-checkbox .p-checkbox-icon,
-.cs-admin-table .p-datatable-tbody .p-checkbox .p-checkbox-icon {
-  font-size: 9px !important;
-  width: 9px !important;
-  height: 9px !important;
-}
-
-.cs-admin-table .p-tag {
-  padding: 0.05rem 0.35rem !important;
-  font-size: 0.70rem !important;
-  line-height: 1 !important;
+/* Subtle "Copied!" indicator */
+.cs-toast-copied {
+  font-size: 0.78rem;
+  font-weight: 900;
+  opacity: 0.85;
+  padding: 2px 8px;
   border-radius: 999px;
+  background: color-mix(in srgb, var(--primary-color) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary-color) 22%, transparent);
 }
 
-.cs-admin-table .p-button.p-button-sm {
-  padding: 0 !important;
-  width: 24px !important;
-  height: 24px !important;
-  min-width: 24px !important;
+/* Progress bar (Sakai-like) — uses CSS var --cs-life injected per message */
+.cs-toast-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  opacity: 0.9;
 }
 
-.cs-admin-table .table-actions {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 0.1rem;
+.cs-toast-progress::after {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  transform: scaleX(1);
+  background: color-mix(in srgb, var(--primary-color) 55%, transparent);
+  animation: cs-toast-progress var(--cs-life, 3500ms) linear forwards;
 }
 
-.cs-admin-table .table-actions .p-button.p-button-sm {
-  width: 16px !important;
-  height: 16px !important;
-  min-width: 16px !important;
-  border-radius: 4px !important;
+/* match progress color to severity */
+.cs-toast-content.cs-toast-success .cs-toast-progress::after {
+  background: color-mix(in srgb, var(--green-500) 70%, transparent);
+}
+.cs-toast-content.cs-toast-info .cs-toast-progress::after {
+  background: color-mix(in srgb, var(--blue-500) 70%, transparent);
+}
+.cs-toast-content.cs-toast-warn .cs-toast-progress::after {
+  background: color-mix(in srgb, var(--orange-500) 75%, transparent);
+}
+.cs-toast-content.cs-toast-error .cs-toast-progress::after {
+  background: color-mix(in srgb, var(--red-500) 75%, transparent);
 }
 
-.cs-admin-table .table-actions .p-button .pi,
-.cs-admin-table .table-actions .p-button .p-button-icon,
-.cs-admin-table .table-actions .p-button svg {
-  font-size: 0.58rem !important;
-  width: 10px !important;
-  height: 10px !important;
+@keyframes cs-toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
 }
 
-.cs-admin-table .p-paginator {
-  padding: 0.3rem !important;
-  font-size: 0.78rem !important;
-  border-top: 1px solid var(--surface-border);
-}
-
-.cs-admin-table .p-paginator .p-paginator-page,
-.cs-admin-table .p-paginator .p-paginator-first,
-.cs-admin-table .p-paginator .p-paginator-prev,
-.cs-admin-table .p-paginator .p-paginator-next,
-.cs-admin-table .p-paginator .p-paginator-last {
-  min-width: 1.6rem !important;
-  height: 1.6rem !important;
-  padding: 0 !important;
-  border-radius: 8px;
-  transition: transform 120ms ease;
-}
-
-:root.dark .cs-admin-table .p-datatable-thead > tr > th {
-  background: color-mix(in srgb, var(--surface-800) 60%, transparent) !important;
-}
-
-:root.dark .cs-admin-table .p-datatable-tbody > tr:nth-child(even) > td {
-  background: color-mix(in srgb, var(--surface-900) 25%, transparent);
-}
-
-:root.dark .cs-admin-table .p-datatable-tbody > tr:hover > td {
-  background: color-mix(in srgb, var(--surface-900) 35%, transparent);
-}
-
-// ===== Botões de ação coloridos nas listas de Obras/Fornecedores (ícones circulares coloridos
-// por tipo de ação). Usuários/Grupos passaram a usar botões neutros dentro de .table-actions
-// (.cs-admin-table acima), igual ao CardSyncWeb atual - a versão anterior tinha esses mesmos tons
-// nas duas telas por engano (CardSyncWeb já não usa cor por ação há um tempo). =====
-.action-btn {
-  border-radius: 999px;
-}
-
-.action-btn--edit i.pi {
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.action-btn--view i.pi {
-  color: #0891b2;
-}
-
-.action-btn--activate i.pi {
-  color: #16a34a;
-}
-
-.action-btn--deactivate i.pi,
-.action-btn--delete i.pi {
-  color: #dc2626;
-}
-
-.action-btn--invite i.pi {
-  color: #2563eb;
-}
-
-:root.dark .action-btn--edit i.pi {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-:root.dark .action-btn--view i.pi {
-  color: #22d3ee;
-}
-
-:root.dark .action-btn--activate i.pi {
-  color: #4ade80;
-}
-
-:root.dark .action-btn--deactivate i.pi,
-:root.dark .action-btn--delete i.pi {
-  color: #f87171;
-}
-
-:root.dark .action-btn--invite i.pi {
-  color: #60a5fa;
+/* Optional generic separator (if used elsewhere) */
+.separator {
+  margin: 0 6px;
+  opacity: 0.6;
 }

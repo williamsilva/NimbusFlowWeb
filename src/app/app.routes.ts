@@ -1,28 +1,78 @@
 import { Routes } from '@angular/router';
 
-import { ChangePasswordComponent } from './account/change-password.component';
-import { ProfileComponent } from './account/profile.component';
-import { authGuard } from './core/auth/auth.guard';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { MeasurementFormComponent } from './measurements/measurement-form.component';
-import { GroupDetailComponent } from './security/group-detail.component';
-import { GroupListComponent } from './security/group-list.component';
-import { UserListComponent } from './security/user-list.component';
-import { SuggestionListComponent } from './suggestions/suggestion-list.component';
-import { SupplierListComponent } from './suppliers/supplier-list.component';
-import { WorkFormComponent } from './works/work-form.component';
-import { WorkListComponent } from './works/work-list.component';
+import { authGuard } from '@core/auth/auth.guard';
+import { LayoutComponent } from '@layout/layout.component';
 
-export const routes: Routes = [
-  { path: '', component: DashboardComponent, canActivate: [authGuard] },
-  { path: 'suppliers', component: SupplierListComponent, canActivate: [authGuard] },
-  { path: 'works', component: WorkListComponent, canActivate: [authGuard] },
-  { path: 'works/:id/edit', component: WorkFormComponent, canActivate: [authGuard] },
-  { path: 'installments/:id/measurements/new', component: MeasurementFormComponent, canActivate: [authGuard] },
-  { path: 'suggestions', component: SuggestionListComponent, canActivate: [authGuard] },
-  { path: 'security/users', component: UserListComponent, canActivate: [authGuard] },
-  { path: 'security/groups', component: GroupListComponent, canActivate: [authGuard] },
-  { path: 'security/groups/:id', component: GroupDetailComponent, canActivate: [authGuard] },
-  { path: 'account/profile', component: ProfileComponent, canActivate: [authGuard] },
-  { path: 'account/password', component: ChangePasswordComponent, canActivate: [authGuard] },
+export const appRoutes: Routes = [
+  {
+    path: '',
+    component: LayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'security' },
+
+      {
+        path: 'security',
+        loadChildren: () =>
+          import('./features/security/security.routes').then((m) => m.SECURITY_ROUTES),
+      },
+
+      {
+        path: 'settings',
+        loadChildren: () =>
+          import('./features/settings/settings.routes').then((m) => m.SETTINGS_ROUTES),
+      },
+
+      // Fornecedor / Obra / Sugestão (com.nimbusflow.works no backend) - leitura é aberta a
+      // qualquer usuário autenticado (ver SupplierService/WorkService/SuggestionService no
+      // NimbusFlowServer), por isso não há permissionGuard aqui (diferente de users/groups).
+      {
+        path: 'suppliers',
+        title: 'routes.suppliers.title',
+        loadComponent: () =>
+          import('./features/suppliers/suppliers-list/suppliers-list.component').then(
+            (m) => m.SuppliersListComponent,
+          ),
+      },
+
+      {
+        path: 'works',
+        title: 'routes.works.title',
+        loadComponent: () =>
+          import('./features/works/works-list/works-list.component').then(
+            (m) => m.WorksListComponent,
+          ),
+      },
+
+      {
+        path: 'suggestions',
+        title: 'routes.suggestions.title',
+        loadComponent: () =>
+          import('./features/suggestions/suggestions-list/suggestions-list.component').then(
+            (m) => m.SuggestionsListComponent,
+          ),
+      },
+
+      {
+        path: 'forbidden',
+        title: 'routes.forbidden.title',
+        loadComponent: () =>
+          import('./features/error/forbidden/forbidden.page').then((m) => m.ForbiddenPage),
+      },
+
+      {
+        path: 'not-found',
+        title: 'routes.notFound.title',
+        loadComponent: () =>
+          import('./features/error/not-found/not-found.page').then((m) => m.NotFoundPage),
+      },
+
+      {
+        path: '**',
+        title: 'routes.notFound.title',
+        loadComponent: () =>
+          import('./features/error/not-found/not-found.page').then((m) => m.NotFoundPage),
+      },
+    ],
+  },
 ];

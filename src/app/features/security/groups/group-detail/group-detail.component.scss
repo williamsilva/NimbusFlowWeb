@@ -1,0 +1,902 @@
+:host {
+  display: block;
+
+  --cs-glass-bg:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.22)),
+    color-mix(in srgb, var(--surface-card) 92%, white 8%);
+  --cs-glass-bg-soft:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.16)),
+    color-mix(in srgb, var(--surface-card) 90%, white 10%);
+  --cs-glass-border: 1px solid color-mix(in srgb, var(--surface-border) 78%, transparent);
+  --cs-glass-shadow: 0 8px 18px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.34);
+  --cs-glass-shadow-strong:
+    0 10px 24px rgba(15, 23, 42, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+
+  --cs-dark-bg:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03)),
+    color-mix(in srgb, var(--surface-card) 82%, black 18%);
+  --cs-dark-border: color-mix(in srgb, var(--surface-border) 70%, white 7%);
+  --cs-dark-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+
+  --cs-primary-tint: color-mix(in srgb, var(--primary-color) 10%, transparent);
+  --cs-success-tint: color-mix(in srgb, var(--green-500) 10%, transparent);
+  --cs-info-tint: color-mix(in srgb, var(--blue-500) 10%, transparent);
+  --cs-neutral-tint: color-mix(in srgb, var(--surface-400) 10%, transparent);
+}
+
+.cs-detail-page {
+  padding-top: 0.05rem;
+}
+
+.cs-card-compact :deep(.p-card-body) {
+  padding: 0.8rem;
+}
+
+.cs-card-compact :deep(.p-card-title) {
+  font-size: 0.95rem;
+  margin-bottom: 0.12rem;
+}
+
+.cs-card-compact :deep(.p-card-subtitle) {
+  font-size: 0.77rem;
+  margin-bottom: 0.72rem;
+  color: var(--text-color-secondary);
+}
+
+/* base glass */
+.cs-profile-card :deep(.p-card-body),
+.cs-data-card :deep(.p-card-body),
+.cs-data-section,
+.cs-summary-card,
+.cs-summary-block,
+.cs-permission-chip-card,
+.cs-tabs-shell,
+.cs-summary-mini-card,
+.cs-entity-card {
+  border: var(--cs-glass-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.cs-profile-card :deep(.p-card-body),
+.cs-data-card :deep(.p-card-body) {
+  border-radius: 1rem;
+  background: var(--cs-glass-bg);
+  box-shadow: var(--cs-glass-shadow-strong);
+}
+
+.cs-data-section,
+.cs-summary-block,
+.cs-tabs-shell,
+.cs-summary-mini-card,
+.cs-entity-card {
+  background: var(--cs-glass-bg-soft);
+  box-shadow: var(--cs-glass-shadow);
+}
+
+/* left */
+.cs-profile-card {
+  height: 100%;
+}
+
+.cs-profile-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.cs-avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.cs-avatar-lg {
+  width: 4.35rem;
+  height: 4.35rem;
+  margin-bottom: 0.65rem;
+}
+
+.cs-avatar-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary-color) 32%, transparent),
+    color-mix(in srgb, var(--primary-color) 10%, transparent)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 10px 20px rgba(15, 23, 42, 0.1);
+}
+
+.cs-avatar-text {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.cs-avatar-text-lg {
+  font-size: 1.12rem;
+}
+
+.cs-profile-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1.15;
+}
+
+.cs-profile-username {
+  margin-top: 0.22rem;
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+  line-height: 1.28;
+  max-width: 24rem;
+}
+
+.cs-profile-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-top: 0.65rem;
+}
+
+.cs-profile-tags :deep(.p-tag) {
+  border-radius: 999px;
+  padding: 0.24rem 0.5rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.cs-profile-metrics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.72rem;
+}
+
+.cs-permission-chip-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  border-radius: 0.9rem;
+  padding: 0.62rem 0.72rem;
+  overflow: hidden;
+}
+
+.cs-permission-chip-card::before,
+.cs-summary-mini-card::before,
+.cs-entity-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  opacity: 0.95;
+}
+
+.cs-permission-chip-card.is-permissions {
+  background: linear-gradient(135deg, var(--cs-primary-tint), transparent 68%), var(--cs-glass-bg);
+}
+
+.cs-permission-chip-card.is-users {
+  background: linear-gradient(135deg, var(--cs-success-tint), transparent 68%), var(--cs-glass-bg);
+}
+
+.cs-permission-chip-card.is-permissions::before,
+.cs-entity-card-permission::before {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--primary-color) 92%, white 8%),
+    color-mix(in srgb, var(--primary-color) 50%, white 50%)
+  );
+}
+
+.cs-permission-chip-card.is-users::before,
+.cs-entity-card-user::before {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--green-500) 92%, white 8%),
+    color-mix(in srgb, var(--green-500) 50%, white 50%)
+  );
+}
+
+.cs-summary-mini-card-permission::before {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--blue-500) 92%, white 8%),
+    color-mix(in srgb, var(--blue-500) 50%, white 50%)
+  );
+}
+
+.cs-summary-mini-card-user::before {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--green-500) 92%, white 8%),
+    color-mix(in srgb, var(--green-500) 50%, white 50%)
+  );
+}
+
+.cs-permission-chip-index,
+.cs-summary-card-icon,
+.cs-summary-block-icon,
+.cs-summary-mini-icon,
+.cs-entity-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.26);
+}
+
+.cs-permission-chip-index {
+  width: 1.55rem;
+  height: 1.55rem;
+  min-width: 1.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-color);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.16)),
+    color-mix(in srgb, var(--surface-200) 60%, transparent);
+  border-color: color-mix(in srgb, var(--surface-border) 75%, transparent);
+}
+
+.cs-permission-chip-content {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  gap: 0.75rem;
+}
+
+.cs-permission-chip-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.cs-permission-chip-raw {
+  display: inline-flex;
+  align-items: center;
+}
+
+.cs-permission-chip-raw :deep(.p-badge),
+.cs-section-head :deep(.p-badge) {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.cs-side-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.cs-side-actions :deep(.p-button),
+.cs-top-save-btn {
+  border-radius: 0.82rem !important;
+}
+
+/* tabs */
+.cs-tabs-shell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+  margin-bottom: 0.7rem;
+  padding: 0.26rem;
+  border-radius: 0.9rem;
+  box-shadow:
+    0 6px 16px rgba(15, 23, 42, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34);
+}
+
+.cs-tab-btn {
+  border-radius: 999px !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  border: 1px solid transparent !important;
+  padding-inline: 0.72rem !important;
+  min-height: 2.15rem;
+  font-size: 0.84rem;
+}
+
+.cs-tab-active {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.12)),
+    color-mix(in srgb, var(--primary-color) 12%, transparent) !important;
+  border-color: color-mix(in srgb, var(--primary-color) 30%, var(--surface-border)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+/* sections */
+.cs-data-card {
+  height: 100%;
+}
+
+.cs-data-sections,
+.cs-summary-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0.72rem;
+}
+
+.cs-data-section,
+.cs-summary-block {
+  border-radius: 0.9rem;
+  padding: 0.78rem;
+}
+
+.cs-section-head,
+.cs-summary-block-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.62rem;
+}
+
+.cs-section-head-top-action {
+  align-items: center;
+  margin-bottom: 0.55rem;
+}
+
+.cs-section-head-main {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cs-top-save-btn {
+  margin-left: auto;
+  min-height: 1.95rem !important;
+  padding-inline: 0.72rem !important;
+  font-size: 0.74rem !important;
+}
+
+.cs-section-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1.15;
+}
+
+.cs-section-subtitle {
+  margin-top: 0.14rem;
+  font-size: 0.73rem;
+  color: var(--text-color-secondary);
+  line-height: 1.25;
+}
+
+/* summary top cards */
+.cs-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.72rem;
+}
+
+.cs-summary-card {
+  position: relative;
+  border-radius: 0.95rem;
+  padding: 0.8rem;
+  overflow: hidden;
+}
+
+.cs-summary-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 3px;
+  opacity: 0.95;
+}
+
+.cs-summary-card-primary::before {
+  background: var(--primary-color);
+}
+.cs-summary-card-neutral::before {
+  background: var(--surface-400);
+}
+.cs-summary-card-info::before {
+  background: var(--blue-500);
+}
+.cs-summary-card-success::before {
+  background: var(--green-500);
+}
+
+.cs-summary-card-primary {
+  background: linear-gradient(135deg, var(--cs-primary-tint), transparent 62%), var(--cs-glass-bg);
+}
+
+.cs-summary-card-neutral {
+  background: linear-gradient(135deg, var(--cs-neutral-tint), transparent 62%), var(--cs-glass-bg);
+}
+
+.cs-summary-card-info {
+  background: linear-gradient(135deg, var(--cs-info-tint), transparent 62%), var(--cs-glass-bg);
+}
+
+.cs-summary-card-success {
+  background: linear-gradient(135deg, var(--cs-success-tint), transparent 62%), var(--cs-glass-bg);
+}
+
+.cs-summary-card-head,
+.cs-summary-block-title-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.62rem;
+}
+
+.cs-summary-card-icon {
+  width: 2rem;
+  height: 2rem;
+  min-width: 2rem;
+  border-radius: 0.72rem;
+  border-color: color-mix(in srgb, var(--surface-border) 75%, transparent);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.16)),
+    color-mix(in srgb, var(--surface-200) 62%, transparent);
+  color: var(--text-color);
+}
+
+.cs-summary-card-title-wrap {
+  min-width: 0;
+  flex: 1;
+}
+
+.cs-summary-value {
+  margin-top: 0.14rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-color);
+  line-height: 1.22;
+  word-break: break-word;
+}
+
+/* summary blocks */
+.cs-summary-block-users {
+  background:
+    linear-gradient(135deg, var(--cs-success-tint), transparent 72%), var(--cs-glass-bg-soft);
+}
+
+.cs-summary-block-permissions {
+  background:
+    linear-gradient(135deg, var(--cs-info-tint), transparent 72%), var(--cs-glass-bg-soft);
+}
+
+.cs-summary-block-icon {
+  width: 1.9rem;
+  height: 1.9rem;
+  min-width: 1.9rem;
+  border-radius: 0.7rem;
+}
+
+.cs-summary-block-users .cs-summary-block-icon,
+.cs-summary-mini-card-user .cs-summary-mini-icon {
+  color: var(--green-500);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.14)),
+    color-mix(in srgb, var(--green-500) 10%, transparent);
+  border-color: color-mix(in srgb, var(--green-500) 22%, transparent);
+}
+
+.cs-summary-block-permissions .cs-summary-block-icon,
+.cs-summary-mini-card-permission .cs-summary-mini-icon {
+  color: var(--blue-500);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.14)),
+    color-mix(in srgb, var(--blue-500) 10%, transparent);
+  border-color: color-mix(in srgb, var(--blue-500) 22%, transparent);
+}
+
+/* title center with badge */
+.cs-summary-block-title-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.95rem;
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 0.7rem;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  padding-bottom: 0.38rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--surface-border) 75%, transparent);
+}
+
+.cs-summary-block-title-text {
+  display: inline-block;
+  margin-right: 0;
+}
+
+.cs-summary-block-title-center :deep(.p-badge) {
+  min-width: 1.24rem;
+  height: 1.24rem;
+  font-size: 0.62rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  opacity: 0.92;
+  flex: 0 0 auto;
+}
+
+.cs-summary-block-users .cs-summary-block-title-center :deep(.p-badge) {
+  background: color-mix(in srgb, var(--green-500) 82%, transparent);
+}
+
+.cs-summary-block-permissions .cs-summary-block-title-center :deep(.p-badge) {
+  background: color-mix(in srgb, var(--blue-500) 82%, transparent);
+}
+
+/* summary mini grid */
+.cs-summary-mini-grid,
+.cs-entity-grid {
+  display: grid;
+}
+
+.cs-summary-mini-grid {
+  grid-template-columns: 1fr;
+  gap: 0.42rem;
+  margin-top: 0.62rem;
+}
+
+.cs-summary-mini-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cs-summary-mini-card,
+.cs-entity-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.cs-summary-mini-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0.5rem 0.56rem;
+  border-radius: 0.78rem;
+}
+
+.cs-summary-mini-icon {
+  width: 1.55rem;
+  height: 1.55rem;
+  min-width: 1.55rem;
+  border-radius: 0.56rem;
+}
+
+.cs-summary-mini-icon i {
+  font-size: 0.68rem;
+}
+
+.cs-summary-mini-body,
+.cs-entity-card-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cs-summary-mini-body {
+  gap: 0.12rem;
+}
+
+.cs-summary-mini-body strong {
+  font-size: 0.72rem;
+  line-height: 1.08;
+  font-weight: 700;
+  color: var(--text-color);
+  word-break: break-word;
+}
+
+.cs-summary-mini-body small {
+  font-size: 0.64rem;
+  line-height: 1.1;
+  color: var(--text-color-secondary);
+  word-break: break-word;
+}
+
+/* entity grid */
+.cs-entity-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-top: 0.52rem;
+}
+
+.cs-entity-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.52rem;
+  min-height: 51px;
+  padding: 0.52rem 0.58rem;
+  border-radius: 0.8rem;
+}
+
+.cs-entity-card::before {
+  border-radius: 0.8rem 0 0 0.8rem;
+}
+
+.cs-entity-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.35), transparent 28%);
+  opacity: 0.9;
+}
+
+.cs-entity-card-permission {
+  background: linear-gradient(135deg, var(--cs-primary-tint), transparent 62%), var(--cs-glass-bg);
+  border-color: color-mix(in srgb, var(--primary-color) 28%, var(--surface-border));
+}
+
+.cs-entity-card-user {
+  background: linear-gradient(135deg, var(--cs-success-tint), transparent 62%), var(--cs-glass-bg);
+  border-color: color-mix(in srgb, var(--green-500) 28%, var(--surface-border));
+}
+
+.cs-entity-card-icon {
+  position: relative;
+  z-index: 1;
+  width: 1.62rem;
+  height: 1.62rem;
+  min-width: 1.62rem;
+  border-radius: 0.58rem;
+  margin-top: 0.01rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 3px 8px rgba(15, 23, 42, 0.05);
+}
+
+.cs-entity-card-permission .cs-entity-card-icon {
+  color: var(--primary-color);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.18)),
+    color-mix(in srgb, var(--primary-color) 10%, transparent);
+  border-color: color-mix(in srgb, var(--primary-color) 22%, transparent);
+}
+
+.cs-entity-card-user .cs-entity-card-icon {
+  color: var(--green-500);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.18)),
+    color-mix(in srgb, var(--green-500) 10%, transparent);
+  border-color: color-mix(in srgb, var(--green-500) 22%, transparent);
+}
+
+.cs-entity-card-icon i {
+  font-size: 0.68rem;
+}
+
+.cs-entity-card-body {
+  position: relative;
+  z-index: 1;
+  gap: 0.08rem;
+  padding-top: 0.01rem;
+}
+
+.cs-entity-card-body strong {
+  font-size: 0.7rem;
+  line-height: 1.06;
+  font-weight: 700;
+  color: var(--text-color);
+  word-break: break-word;
+}
+
+.cs-entity-card-body small {
+  font-size: 0.61rem;
+  line-height: 1.08;
+  color: var(--text-color-secondary);
+  word-break: break-word;
+  opacity: 0.95;
+}
+
+/* states */
+.cs-empty-inline {
+  margin-top: 0.45rem;
+  font-size: 0.76rem;
+  color: var(--text-color-secondary);
+}
+
+.cs-loading-state,
+.cs-empty-state {
+  min-height: 14rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  color: var(--text-color-secondary);
+}
+
+.cs-empty-state i {
+  font-size: 1.7rem;
+}
+
+/* responsive */
+@media (max-width: 1199px) {
+  .cs-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-summary-mini-grid-3,
+  .cs-entity-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .cs-tabs-shell {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cs-tab-btn {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .cs-section-head-top-action {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .cs-section-head-main {
+    width: 100%;
+  }
+
+  .cs-top-save-btn {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .cs-summary-mini-grid-3,
+  .cs-entity-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-data-section,
+  .cs-summary-card,
+  .cs-summary-block {
+    padding: 0.72rem;
+  }
+
+  .cs-summary-mini-card {
+    padding: 0.56rem 0.6rem;
+    min-height: 50px;
+  }
+
+  .cs-entity-card {
+    min-height: 48px;
+    padding: 0.5rem 0.56rem;
+  }
+}
+
+/* dark */
+:host-context(.app-dark),
+:host-context(.dark-theme),
+:host-context(.layout-theme-dark),
+:host-context(body.dark) {
+  .cs-profile-card :deep(.p-card-body),
+  .cs-data-card :deep(.p-card-body),
+  .cs-data-section,
+  .cs-summary-card,
+  .cs-summary-block,
+  .cs-permission-chip-card,
+  .cs-tabs-shell,
+  .cs-summary-mini-card,
+  .cs-entity-card {
+    border-color: var(--cs-dark-border);
+    background: var(--cs-dark-bg);
+    box-shadow: var(--cs-dark-shadow);
+  }
+
+  .cs-summary-card-icon,
+  .cs-permission-chip-index {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)),
+      color-mix(in srgb, var(--surface-200) 20%, black);
+    border-color: color-mix(in srgb, var(--surface-border) 75%, white 6%);
+  }
+
+  .cs-tab-active {
+    box-shadow:
+      0 10px 22px rgba(0, 0, 0, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  }
+
+  .cs-summary-card-primary,
+  .cs-permission-chip-card.is-permissions,
+  .cs-entity-card-permission {
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--primary-color) 18%, transparent),
+        transparent 64%
+      ),
+      var(--cs-dark-bg);
+  }
+
+  .cs-summary-card-success,
+  .cs-summary-block-users,
+  .cs-summary-mini-card-user,
+  .cs-permission-chip-card.is-users,
+  .cs-entity-card-user {
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--green-500) 18%, transparent),
+        transparent 64%
+      ),
+      var(--cs-dark-bg);
+  }
+
+  .cs-summary-card-info,
+  .cs-summary-block-permissions,
+  .cs-summary-mini-card-permission {
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--blue-500) 18%, transparent),
+        transparent 64%
+      ),
+      var(--cs-dark-bg);
+  }
+
+  .cs-summary-card-neutral {
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--surface-400) 12%, transparent),
+        transparent 64%
+      ),
+      var(--cs-dark-bg);
+  }
+
+  .cs-entity-card::after {
+    background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.08), transparent 30%);
+  }
+
+  .cs-summary-block-permissions .cs-summary-block-icon,
+  .cs-summary-mini-card-permission .cs-summary-mini-icon {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)),
+      color-mix(in srgb, var(--blue-500) 16%, transparent);
+    border-color: color-mix(in srgb, var(--blue-500) 26%, transparent);
+  }
+
+  .cs-summary-block-users .cs-summary-block-icon,
+  .cs-summary-mini-card-user .cs-summary-mini-icon,
+  .cs-entity-card-user .cs-entity-card-icon {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)),
+      color-mix(in srgb, var(--green-500) 16%, transparent);
+    border-color: color-mix(in srgb, var(--green-500) 26%, transparent);
+  }
+
+  .cs-entity-card-permission .cs-entity-card-icon {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)),
+      color-mix(in srgb, var(--primary-color) 16%, transparent);
+    border-color: color-mix(in srgb, var(--primary-color) 26%, transparent);
+  }
+}

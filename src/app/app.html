@@ -1,0 +1,61 @@
+<p-toast
+  position="top-right"
+  appendTo="body"
+  [breakpoints]="{ '960px': { width: '95vw', left: '2.5vw', right: '2.5vw' } }"
+>
+  <ng-template let-message pTemplate="message">
+    <div
+      class="cs-toast-content"
+      [ngClass]="message.styleClass"
+      [style.--cs-life]="(message.life ?? 3500) + 'ms'"
+    >
+      <div class="cs-toast-main">
+        <div class="cs-toast-summary">{{ message.summary }}</div>
+
+        @if (message.detail) {
+          <div class="cs-toast-detail">{{ message.detail }}</div>
+        }
+
+        @if (message.data?.correlationId) {
+          <div class="cs-toast-correlation">
+            <span class="corr-k">Código:</span>
+            <span class="corr-v">{{ message.data.correlationId }}</span>
+
+            <button
+              type="button"
+              class="cs-toast-copy"
+              (click)="copyCid(message.data.correlationId)"
+            >
+              Copiar
+            </button>
+
+            @if (copiedCid() === message.data.correlationId) {
+              <span class="cs-toast-copied">Copiado!</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="cs-toast-progress" aria-hidden="true"></div>
+    </div>
+  </ng-template>
+</p-toast>
+
+<cs-session-expiry-modal></cs-session-expiry-modal>
+
+<router-outlet></router-outlet>
+
+<p-confirmDialog
+  styleClass="cs-confirm cs-confirm--logout"
+  [closable]="false"
+  [closeOnEscape]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '420px' }"
+  [breakpoints]="{ '960px': '95vw', '640px': '95vw' }"
+>
+  <ng-template pTemplate="icon">
+    <div class="cs-confirm-icon">
+      <i class="pi pi-sign-out"></i>
+    </div>
+  </ng-template>
+</p-confirmDialog>

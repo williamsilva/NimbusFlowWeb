@@ -1,0 +1,142 @@
+/* =========================================================
+   NimbusFlow Security — DatePicker Compact Premium
+   ========================================================= */
+
+/* INPUT (campo fechado) */
+.p-datepicker {
+  font-size: 0.85rem;
+}
+
+.p-datepicker .p-inputtext {
+  height: 2rem !important;
+  padding: 0.25rem 0.6rem !important;
+  font-size: 0.85rem !important;
+}
+
+/* botão do calendário */
+.p-datepicker .p-datepicker-trigger {
+  width: 2rem !important;
+  height: 2rem !important;
+}
+
+.p-datepicker .p-datepicker-trigger .pi {
+  font-size: 0.85rem !important;
+}
+
+/* =========================================================
+   POPUP DO CALENDÁRIO
+   ========================================================= */
+
+.p-datepicker-panel {
+  font-size: 0.85rem;
+  border-radius: 12px;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* header do calendário */
+.p-datepicker-panel .p-datepicker-header {
+  padding: 0.4rem 0.6rem !important;
+  font-size: 0.85rem;
+}
+
+/* botões mês/ano */
+.p-datepicker-panel .p-datepicker-header button {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+/* grid de dias */
+.p-datepicker-panel table {
+  font-size: 0.8rem;
+}
+
+.p-datepicker-panel td {
+  padding: 0.2rem !important;
+}
+
+.p-datepicker-panel td > span {
+  width: 1.8rem;
+  height: 1.8rem;
+  line-height: 1.8rem;
+  border-radius: 8px;
+}
+
+/* hover suave SaaS */
+.p-datepicker-panel td > span:hover {
+  background: var(--surface-100);
+}
+
+/* dia selecionado */
+.p-datepicker-panel td.p-highlight > span {
+  background: var(--primary-color);
+  color: #fff;
+  border-radius: 8px;
+}
+
+/* =========================================================
+   DARK MODE refinado
+   ========================================================= */
+
+:root.dark .p-datepicker-panel {
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+:root.dark .p-datepicker-panel td > span:hover {
+  background: var(--surface-800);
+}
+
+/* =========================================================
+   Fix definitivo — não cortar nome do mês/ano no header
+   (não force tamanho nos botões do título)
+   ========================================================= */
+
+/* header com altura suficiente */
+.p-datepicker-panel .p-datepicker-header {
+  min-height: 46px !important;
+  padding: 0.45rem 0.6rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.4rem;
+}
+
+/* título central e com espaço */
+.p-datepicker-panel .p-datepicker-title {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.35rem;
+  min-width: 0 !important;
+}
+
+/* ✅ somente prev/next (primeiro e último botão do header) */
+.p-datepicker-panel .p-datepicker-header > button {
+  width: 2rem !important;
+  height: 2rem !important;
+  min-width: 2rem !important;
+  min-height: 2rem !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* ✅ mês/ano: tamanho automático (não corta texto) */
+.p-datepicker-panel .p-datepicker-title button {
+  width: auto !important;
+  min-width: 0 !important;
+  height: 2rem !important;
+  padding: 0 0.35rem !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+}
+
+/* texto do mês/ano um pouco menor pra caber em pt-BR */
+.p-datepicker-panel .p-datepicker-title .p-datepicker-month,
+.p-datepicker-panel .p-datepicker-title .p-datepicker-year {
+  font-size: 0.85rem !important;
+  line-height: 1.1 !important;
+}

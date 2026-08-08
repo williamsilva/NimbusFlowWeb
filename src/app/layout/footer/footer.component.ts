@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-footer',
   standalone: true,
+  selector: 'app-footer',
+  imports: [TranslateModule],
+  styleUrl: './footer.component.css',
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {
-  readonly year = new Date().getFullYear();
+  year = new Date().getFullYear();
 }

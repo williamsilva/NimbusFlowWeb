@@ -1,0 +1,271 @@
+<cs-page-header
+  [subtitle]="'suggestions.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.suggestions' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    class="p-button-info p-button-sm"
+    [label]="'suggestions.new.title' | translate"
+  ></button>
+</cs-page-header>
+
+<app-suggestions-create-dialog
+  [visible]="newVisible()"
+  (created)="onCreated()"
+  (visibleChange)="onNewVisibleChange($event)"
+></app-suggestions-create-dialog>
+
+<cs-filters-panel
+  [collapsed]="true"
+  (clear)="clear()"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeFilterGroups]="activeFilterGroups()"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-5 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="description"
+          pInputText
+          [value]="description()"
+          class="w-full p-inputtext-sm"
+          (input)="description.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="description">{{ 'suggestions.fields.description' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="status"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="status()"
+          [showToggleAll]="false"
+          [options]="statusOptions"
+          (ngModelChange)="status.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="status">{{ 'suggestions.fields.status' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          inputId="createdAt"
+          class="w-full"
+          size="small"
+          appendTo="body"
+          [showIcon]="true"
+          [readonlyInput]="true"
+          selectionMode="range"
+          dateFormat="dd/mm/yy"
+          [ngModel]="createdAtRange()"
+          (ngModelChange)="createdAtRange.set($event ?? null)"
+        ></p-datepicker>
+        <label for="createdAt">{{ 'suggestions.fields.createdAt' | translate }}</label>
+      </p-floatLabel>
+    </div>
+  </div>
+</cs-filters-panel>
+
+<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+  <p-table
+    #dt
+    stripedRows
+    dataKey="id"
+    size="small"
+    [rows]="rows"
+    [lazy]="true"
+    showGridlines
+    [rowHover]="true"
+    [paginator]="true"
+    sortMode="multiple"
+    filterDisplay="menu"
+    stateStorage="local"
+    class="cs-admin-table"
+    [value]="suggestions()"
+    [loading]="facade.loading()"
+    [stateKey]="tableStateKey()"
+    [showCurrentPageReport]="true"
+    [totalRecords]="totalRecords()"
+    (onLazyLoad)="onLazyLoad($event)"
+    [paginatorDropdownAppendTo]="'body'"
+    (onPage)="onPageChange($event)"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [tableStyle]="{ width: '100%', 'min-width': '48rem' }"
+    [currentPageReportTemplate]="'pagination.report' | translate"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: auto" />
+        <col style="width: 220px" />
+        <col style="width: 110px" />
+        <col style="width: 150px" />
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="description">
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'suggestions.columns.description' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="description"></p-sortIcon>
+              <p-columnFilter
+                type="text"
+                display="menu"
+                class="ml-auto"
+                matchMode="contains"
+                field="description"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="status">
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'suggestions.columns.status' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="status"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="status"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="statusOptions"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label">{{ 'suggestions.columns.attachment' | translate }}</span>
+          </div>
+        </th>
+
+        <th pSortableColumn="createdAt">
+          <div class="th-flex text-center">
+            <span class="th-label">{{ 'suggestions.columns.createdAt' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="createdAt"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="createdAt"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-datepicker
+                    class="w-full"
+                    appendTo="body"
+                    [showIcon]="true"
+                    [ngModel]="value"
+                    selectionMode="range"
+                    dateFormat="dd/mm/yy"
+                    [readonlyInput]="true"
+                    (ngModelChange)="filter($event)"
+                    [placeholder]="'common.period' | translate"
+                  ></p-datepicker>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td>{{ row.description }}</td>
+        <td class="text-center">
+          <p-select
+            *ngIf="canManageStatus()"
+            size="small"
+            class="w-full"
+            appendTo="body"
+            optionLabel="label"
+            optionValue="value"
+            [options]="statusOptions"
+            [ngModel]="row.status"
+            (ngModelChange)="onStatusChange(row, $event)"
+          ></p-select>
+          <cs-status-badge
+            *ngIf="!canManageStatus()"
+            [tone]="tone(row.status)"
+            [label]="('suggestions.status.' + row.status) | translate"
+          ></cs-status-badge>
+        </td>
+        <td class="text-center">
+          <a
+            *ngIf="row.attachmentUrl"
+            [href]="row.attachmentUrl"
+            target="_blank"
+            rel="noopener"
+            class="cursor-pointer"
+          >
+            {{ 'suggestions.action.viewAttachment' | translate }}
+          </a>
+          <span *ngIf="!row.attachmentUrl">-</span>
+        </td>
+        <td class="text-center">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4" class="text-center py-5 opacity-70">
+          {{ 'suggestions.empty.title' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
