@@ -11,9 +11,9 @@ type ThemeSyncMessage = {
 
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
-  private readonly storageKey = 'nimbusflow-security.theme';
-  private readonly eventKey = 'nimbusflow-security.theme.event';
-  private readonly channelName = 'nimbusflow-security-theme';
+  private readonly storageKey = 'nimbusflow.theme';
+  private readonly eventKey = 'nimbusflow.theme.event';
+  private readonly channelName = 'nimbusflow-theme';
 
   private readonly tabId = this.createTabId();
 

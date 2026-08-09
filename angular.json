@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "nimbusflow-security": {
+    "nimbusflow": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -109,10 +109,10 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "nimbusflow-security:build:production"
+              "buildTarget": "nimbusflow:build:production"
             },
             "development": {
-              "buildTarget": "nimbusflow-security:build:development"
+              "buildTarget": "nimbusflow:build:development"
             }
           },
           "defaultConfiguration": "development"

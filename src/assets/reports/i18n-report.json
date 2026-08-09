@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "generatedAt": "2026-08-08T22:40:42.002Z",
+  "generatedAt": "2026-08-09T00:15:28.301Z",
   "targets": [
     {
       "target": "primeng",
-      "dir": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowSecurityWeb\\src\\assets\\i18n\\primeng",
+      "dir": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowWeb\\src\\assets\\i18n\\primeng",
       "baseLang": "pt-BR",
       "langs": [
         "en",
@@ -12,7 +12,7 @@
       ],
       "files": {
         "pt-BR": {
-          "file": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowSecurityWeb\\src\\assets\\i18n\\primeng\\pt-BR.json",
+          "file": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowWeb\\src\\assets\\i18n\\primeng\\pt-BR.json",
           "ok": true,
           "missingKeys": [],
           "extraKeys": [],
@@ -21,7 +21,7 @@
           "icuErrors": []
         },
         "en": {
-          "file": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowSecurityWeb\\src\\assets\\i18n\\primeng\\en.json",
+          "file": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowWeb\\src\\assets\\i18n\\primeng\\en.json",
           "ok": true,
           "missingKeys": [],
           "extraKeys": [],
@@ -30,7 +30,7 @@
           "icuErrors": []
         },
         "es": {
-          "file": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowSecurityWeb\\src\\assets\\i18n\\primeng\\es.json",
+          "file": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowWeb\\src\\assets\\i18n\\primeng\\es.json",
           "ok": true,
           "missingKeys": [],
           "extraKeys": [],
@@ -51,7 +51,7 @@
     },
     {
       "target": "i18n",
-      "dir": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowSecurityWeb\\src\\assets\\i18n",
+      "dir": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowWeb\\src\\assets\\i18n",
       "baseLang": "pt-BR",
       "langs": [
         "en",
@@ -59,7 +59,7 @@
       ],
       "files": {
         "pt-BR": {
-          "file": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowSecurityWeb\\src\\assets\\i18n\\pt-BR.json",
+          "file": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowWeb\\src\\assets\\i18n\\pt-BR.json",
           "ok": true,
           "missingKeys": [],
           "extraKeys": [],
@@ -68,7 +68,7 @@
           "icuErrors": []
         },
         "en": {
-          "file": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowSecurityWeb\\src\\assets\\i18n\\en.json",
+          "file": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowWeb\\src\\assets\\i18n\\en.json",
           "ok": true,
           "missingKeys": [],
           "extraKeys": [],
@@ -77,7 +77,7 @@
           "icuErrors": []
         },
         "es": {
-          "file": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowSecurityWeb\\src\\assets\\i18n\\es.json",
+          "file": "C:\\WorkSpace\\NimbusSystems\\NimbusFlow\\NimbusFlowWeb\\src\\assets\\i18n\\es.json",
           "ok": true,
           "missingKeys": [],
           "extraKeys": [],

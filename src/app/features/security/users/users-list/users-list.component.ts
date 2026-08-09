@@ -438,15 +438,15 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
   }
 
   protected override tableStateKey(): string {
-    return STATE_KEY.NIMBUSFLOW_SECURITY.SECURITY.USERS.TABLE.STATE.V1;
+    return STATE_KEY.NIMBUSFLOW.SECURITY.USERS.TABLE.STATE.V1;
   }
 
   protected override tableRowsKey(): string {
-    return STATE_KEY.NIMBUSFLOW_SECURITY.SECURITY.USERS.TABLE.ROWS.V1;
+    return STATE_KEY.NIMBUSFLOW.SECURITY.USERS.TABLE.ROWS.V1;
   }
 
   protected override filtersKey(): string {
-    return STATE_KEY.NIMBUSFLOW_SECURITY.SECURITY.USERS.FILTERS.V1;
+    return STATE_KEY.NIMBUSFLOW.SECURITY.USERS.FILTERS.V1;
   }
 
   protected override refresh(): void {

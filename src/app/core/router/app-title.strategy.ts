@@ -19,7 +19,7 @@ export class AppTitleStrategy extends TitleStrategy {
       if (this.lastSnapshot) {
         this.updateTitle(this.lastSnapshot); // <-- chama o override
       } else {
-        const appName = this.translate.instant('app.name') || 'NimbusFlow Security';
+        const appName = this.translate.instant('app.name') || 'NimbusFlow';
         this.title.setTitle(appName);
       }
     });
@@ -29,7 +29,7 @@ export class AppTitleStrategy extends TitleStrategy {
     this.lastSnapshot = snapshot;
 
     const raw = this.buildTitle(snapshot); // key da rota
-    const appName = this.translate.instant('app.name') || 'NimbusFlow Security';
+    const appName = this.translate.instant('app.name') || 'NimbusFlow';
 
     if (!raw) {
       this.title.setTitle(appName);

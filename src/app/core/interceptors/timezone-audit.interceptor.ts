@@ -58,7 +58,7 @@ export const timezoneStrictInterceptor: HttpInterceptorFn = (
         const findings = scan(event.body);
 
         if (findings.length) {
-          console.group('%c[NimbusFlow Security][UTC STRICT MODE]', 'color:#dc2626;font-weight:bold');
+          console.group('%c[NimbusFlow][UTC STRICT MODE]', 'color:#dc2626;font-weight:bold');
           console.error('ISO datetime SEM timezone detectado!');
           findings.slice(0, 20).forEach((f) => console.log(`${f.path} = "${f.value}"`));
           console.groupEnd();

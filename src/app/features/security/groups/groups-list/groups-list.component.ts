@@ -195,15 +195,15 @@ export class GroupsListComponent extends StatefulListPage<
   }
 
   protected override tableStateKey(): string {
-    return STATE_KEY.NIMBUSFLOW_SECURITY.SECURITY.GROUPS.TABLE.STATE.V1;
+    return STATE_KEY.NIMBUSFLOW.SECURITY.GROUPS.TABLE.STATE.V1;
   }
 
   protected override tableRowsKey(): string {
-    return STATE_KEY.NIMBUSFLOW_SECURITY.SECURITY.GROUPS.TABLE.ROWS.V1;
+    return STATE_KEY.NIMBUSFLOW.SECURITY.GROUPS.TABLE.ROWS.V1;
   }
 
   protected override filtersKey(): string {
-    return STATE_KEY.NIMBUSFLOW_SECURITY.SECURITY.GROUPS.FILTERS.V1;
+    return STATE_KEY.NIMBUSFLOW.SECURITY.GROUPS.FILTERS.V1;
   }
 
   protected override refresh(): void {

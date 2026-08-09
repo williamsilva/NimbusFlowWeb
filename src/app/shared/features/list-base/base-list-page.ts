@@ -18,7 +18,7 @@ export abstract class BaseListPage<TState extends object> {
 
   private persisted: PersistedFilters<TState> | null = null;
 
-  /** chave de storage por tela (ex: nimbusflow-security.users.filters.v1) */
+  /** chave de storage por tela (ex: nimbusflow.users.filters.v1) */
   protected abstract filtersKey(): string;
 
   /** chama a carga da lista (facade.loadAll / server search etc.) */

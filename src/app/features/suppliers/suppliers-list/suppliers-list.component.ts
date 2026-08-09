@@ -214,15 +214,15 @@ export class SuppliersListComponent extends StatefulListPage<
   }
 
   protected override tableStateKey(): string {
-    return STATE_KEY.NIMBUSFLOW_SECURITY.WORKS.SUPPLIERS.TABLE.STATE.V1;
+    return STATE_KEY.NIMBUSFLOW.WORKS.SUPPLIERS.TABLE.STATE.V1;
   }
 
   protected override tableRowsKey(): string {
-    return STATE_KEY.NIMBUSFLOW_SECURITY.WORKS.SUPPLIERS.TABLE.ROWS.V1;
+    return STATE_KEY.NIMBUSFLOW.WORKS.SUPPLIERS.TABLE.ROWS.V1;
   }
 
   protected override filtersKey(): string {
-    return STATE_KEY.NIMBUSFLOW_SECURITY.WORKS.SUPPLIERS.FILTERS.V1;
+    return STATE_KEY.NIMBUSFLOW.WORKS.SUPPLIERS.FILTERS.V1;
   }
 
   protected override refresh(): void {

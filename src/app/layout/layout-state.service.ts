@@ -6,7 +6,7 @@ import { Injectable, effect, signal } from '@angular/core';
  */
 @Injectable({ providedIn: 'root' })
 export class LayoutStateService {
-  private static readonly STORAGE_KEY = 'nimbusflow-security.layout.sidebarVisible';
+  private static readonly STORAGE_KEY = 'nimbusflow.layout.sidebarVisible';
 
   /** Controla se o menu lateral está visível. */
   readonly sidebarVisible = signal(true);

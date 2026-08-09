@@ -3,10 +3,10 @@ import { Lang } from './i18n.types';
 export const LANGS = ['pt-BR', 'en', 'es'] as const;
 export const DEFAULT_LANG: Lang = 'pt-BR';
 
-export const CHANNEL_NAME = 'nimbusflow-security-i18n';
-export const LANG_KEY = 'nimbusflow-security.i18n.lang';
-export const EVENT_KEY = 'nimbusflow-security.i18n.event';
-export const LOCALE_COOKIE = 'NIMBUSFLOW_SECURITY_LOCALE';
+export const CHANNEL_NAME = 'nimbusflow-i18n';
+export const LANG_KEY = 'nimbusflow.i18n.lang';
+export const EVENT_KEY = 'nimbusflow.i18n.event';
+export const LOCALE_COOKIE = 'NIMBUSFLOW_LOCALE';
 
 type LangConfig = {
   locale: 'pt-BR' | 'en-US' | 'es-ES';

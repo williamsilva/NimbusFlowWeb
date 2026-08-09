@@ -32,7 +32,7 @@ function isPublicSpaRoute(path: string): boolean {
  * redirect OAuth2 (BFF -> NimbusAuth -> BFF).
  */
 function canTriggerLoginNow(): boolean {
-  const key = 'nfs_login_redirect_lock';
+  const key = 'nf_login_redirect_lock';
   const now = Date.now();
   const last = Number(localStorage.getItem(key) ?? '0');
 

@@ -86,7 +86,7 @@ export class AuthService {
     return !!me?.authenticated;
   }
 
-  static readonly RETURN_URL_KEY = 'nfs_return_url';
+  static readonly RETURN_URL_KEY = 'nf_return_url';
 
   async startLogin(targetUrl?: string): Promise<void> {
     if (this.loginRedirectInFlight) {
@@ -129,7 +129,7 @@ export class AuthService {
       this.session.stop();
       this.meLoadPromise = null;
       this.loginRedirectInFlight = false;
-      sessionStorage.removeItem('nfs_login_redirect_lock');
+      sessionStorage.removeItem('nf_login_redirect_lock');
       sessionStorage.removeItem(AuthService.RETURN_URL_KEY);
     }
 

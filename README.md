@@ -1,4 +1,4 @@
-# NimbusFlowSecuritySpa
+# NimbusFlowWeb
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.0.
 
@@ -64,7 +64,7 @@ For more information on using the Angular CLI, including detailed command refere
 Configuração recomendada:
 
 - Build command: `npm run build:pages`
-- Build output directory: `dist/nimbusflow-security/browser`
+- Build output directory: `dist/nimbusflow/browser`
 - Node version: `22`
 
 Arquivos já preparados para o deploy:

@@ -8,7 +8,7 @@ export function onlyDigits(value: string | null | undefined): string {
  * 00.000.000/0000-00), aceitando o valor já com ou sem máscara. Usado tanto no (input) do
  * formulário (mascara enquanto digita) quanto na listagem (exibição). Mesma lógica do
  * NimbusFlowWeb original (src/app/shared/utils/br-format.ts), portada aqui pra tela de
- * Fornecedores do NimbusFlowSecurityWeb.
+ * Fornecedores do NimbusFlowWeb.
  */
 export function formatTaxId(value: string | null | undefined): string {
   const digits = onlyDigits(value).slice(0, 14);

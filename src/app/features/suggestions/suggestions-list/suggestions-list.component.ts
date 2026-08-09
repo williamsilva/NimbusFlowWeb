@@ -172,15 +172,15 @@ export class SuggestionsListComponent extends StatefulListPage<
   }
 
   protected override tableStateKey(): string {
-    return STATE_KEY.NIMBUSFLOW_SECURITY.WORKS.SUGGESTIONS.TABLE.STATE.V1;
+    return STATE_KEY.NIMBUSFLOW.WORKS.SUGGESTIONS.TABLE.STATE.V1;
   }
 
   protected override tableRowsKey(): string {
-    return STATE_KEY.NIMBUSFLOW_SECURITY.WORKS.SUGGESTIONS.TABLE.ROWS.V1;
+    return STATE_KEY.NIMBUSFLOW.WORKS.SUGGESTIONS.TABLE.ROWS.V1;
   }
 
   protected override filtersKey(): string {
-    return STATE_KEY.NIMBUSFLOW_SECURITY.WORKS.SUGGESTIONS.FILTERS.V1;
+    return STATE_KEY.NIMBUSFLOW.WORKS.SUGGESTIONS.FILTERS.V1;
   }
 
   protected override refresh(): void {

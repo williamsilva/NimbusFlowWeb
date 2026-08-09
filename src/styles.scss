@@ -1,4 +1,4 @@
-@use './assets/nimbusflow-security.scss';
+@use './assets/nimbusflow.scss';
 
 @import 'primeicons/primeicons.css';
 @import 'primeflex/primeflex.css';
@@ -23,7 +23,7 @@ body {
   color-scheme: dark;
 }
 
-/* ===== NimbusFlow Security Tech Theme (global) ===== */
+/* ===== NimbusFlow Tech Theme (global) ===== */
 
 :root {
   --cs-glow-a: rgba(59, 130, 246, 0.35);
@@ -86,7 +86,7 @@ body {
     0 0 0 1px rgba(59, 130, 246, 0.26) inset;
 }
 
-/* ===== Toast (PrimeNG) — Sakai skin + NimbusFlow Security product ===== */
+/* ===== Toast (PrimeNG) — Sakai skin + NimbusFlow product ===== */
 
 .cs-toast {
   width: 420px;

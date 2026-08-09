@@ -6,10 +6,10 @@ type SessionSyncMessage =
 
 @Injectable({ providedIn: 'root' })
 export class SessionService {
-  private static readonly EXPIRES_AT_KEY = 'nimbusflow-security.session.expiresAt';
-  private static readonly EVENT_KEY = 'nimbusflow-security.session.event';
-  private static readonly CHANNEL_NAME = 'nimbusflow-security-session';
-  private static readonly LOGIN_REDIRECT_LOCK_KEY = 'nfs_login_redirect_lock';
+  private static readonly EXPIRES_AT_KEY = 'nimbusflow.session.expiresAt';
+  private static readonly EVENT_KEY = 'nimbusflow.session.event';
+  private static readonly CHANNEL_NAME = 'nimbusflow-session';
+  private static readonly LOGIN_REDIRECT_LOCK_KEY = 'nf_login_redirect_lock';
 
   private readonly tabId = this.createTabId();
 
