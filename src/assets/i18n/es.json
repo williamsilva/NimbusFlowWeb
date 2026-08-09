@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "NimbusFlow"
+    "name": "Flow"
   },
   "routes": {
     "register": {
@@ -189,7 +189,7 @@
   },
   "topbar": {
     "online": "Online",
-    "brandName": "NimbusFlow",
+    "brandName": "Flow",
     "brandSub": "Seguridad y Acceso",
     "sidebarToggleAria": "Mostrar/ocultar menú",
     "sidebarShowTooltip": "Mostrar menú",

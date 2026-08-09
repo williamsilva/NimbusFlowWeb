@@ -1,23 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="180" viewBox="0 0 640 180" role="img" aria-label="NimbusFlow Security">
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="180" viewBox="0 0 640 180" role="img" aria-label="NimbusFlow">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#38bdf8"/>
-      <stop offset="0.55" stop-color="#0ea5e9"/>
-      <stop offset="1" stop-color="#0284c7"/>
+      <stop offset="0" stop-color="#1e293b"/>
+      <stop offset="0.5" stop-color="#1d4ed8"/>
+      <stop offset="1" stop-color="#0ea5e9"/>
     </linearGradient>
   </defs>
 
   <!-- mark -->
   <g transform="translate(20,20)">
     <rect x="0" y="0" width="140" height="140" rx="34" fill="url(#g)"/>
-    <path d="M40 52c8-9 19-15 34-15 12 0 23 4 31 10" fill="none" stroke="#e0f2fe" stroke-opacity="0.85" stroke-width="9" stroke-linecap="round"/>
-    <path d="M100 108c-8 9-19 15-34 15-12 0-23-4-31-10" fill="none" stroke="#e0f2fe" stroke-opacity="0.55" stroke-width="9" stroke-linecap="round"/>
-    <text x="70" y="92" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="56" font-weight="800" fill="#ffffff">CS</text>
+    <path d="M36,21 C47,16 58,13 70,13 C82,13 93,16 104,21 L104,62 C104,91 88,112 70,127 C52,112 36,91 36,62 Z" fill="none" stroke="#e0f2fe" stroke-opacity="0.3" stroke-width="5" stroke-linejoin="round"/>
+    <path transform="translate(51,30) scale(2.2)" d="M10 1a4 4 0 00-4 4v2H5a2 2 0 00-2 2v7a2 2 0 002 2h10a2 2 0 002-2V9a2 2 0 00-2-2h-1V5a4 4 0 00-4-4zm2 6V5a2 2 0 10-4 0v2h4z" fill="#ffffff"/>
+    <text x="70" y="113" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="35" font-weight="800" fill="#ffffff">NF</text>
   </g>
 
   <!-- wordmark -->
   <g transform="translate(190,66)">
-    <text x="0" y="0" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="56" font-weight="800" fill="#0b1220">NimbusFlow Security</text>
-    <text x="2" y="44" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="20" font-weight="600" fill="#475569">Conciliação Simplificada</text>
+    <text x="0" y="0" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="56" font-weight="800" fill="#0b1220">Flow</text>
+    <text x="2" y="44" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial" font-size="20" font-weight="600" fill="#475569">Fluxo de Controle</text>
   </g>
 </svg>

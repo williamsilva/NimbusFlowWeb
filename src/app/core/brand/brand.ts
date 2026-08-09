@@ -1,5 +1,5 @@
 export const BRAND = {
-  appName: 'NimbusFlow',
+  appName: 'Flow',
   logoUrl: 'assets/brand/nimbusflow-logo.svg',
   markUrl: 'assets/brand/nimbusflow-mark.svg',
 };
