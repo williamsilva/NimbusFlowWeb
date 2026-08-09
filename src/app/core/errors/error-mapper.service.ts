@@ -52,6 +52,7 @@ export class ErrorMapperService {
 
     if (e.userMessage) return e.userMessage;
     if (e.code) return this.i18n.tErrorCodeLoose(e.code, e.message);
+    if (e.detail) return this.i18n.tErrorCodeLoose(e.detail, e.message);
     if (e.message) return e.message;
 
     return this.i18n.tErrorCodeLoose('GENERIC_ERROR');
