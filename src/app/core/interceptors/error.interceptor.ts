@@ -5,9 +5,12 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 
 import { ToastService } from '../toast/toast.service';
+import { AuthService } from '../auth/auth.service';
 import { ErrorMapperService } from '../errors/error-mapper.service';
+import { isAutoReloginCandidate } from './auth-redirect.interceptor';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const auth = inject(AuthService);
   const router = inject(Router);
   const toast = inject(ToastService);
   const mapper = inject(ErrorMapperService);
@@ -26,7 +29,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       const apiError = mapper.normalize(err);
 
       if (err.status === 401) {
-        if (!req.url.includes('/bff/me') && !req.url.includes('/bff/login/prepare')) {
+        // Se o auth-redirect.interceptor vai relogar automaticamente por causa deste erro, não
+        // mostra o toast - evita um erro vermelho piscando na tela um instante antes do redirect
+        // silencioso completar (ver isAutoReloginCandidate).
+        const willAutoRelogin = isAutoReloginCandidate(err, req, router, auth);
+
+        if (!willAutoRelogin && !req.url.includes('/bff/me') && !req.url.includes('/bff/login/prepare')) {
           toast.warn(
             mapper.titleForStatus(401),
             mapper.message({ code: 'SESSION_EXPIRED', ...apiError }),

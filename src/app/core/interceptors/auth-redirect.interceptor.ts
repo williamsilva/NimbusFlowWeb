@@ -22,6 +22,38 @@ function isPublicSpaRoute(path: string): boolean {
 }
 
 /**
+ * Mesma decisão usada abaixo pra disparar o re-login automático, exposta pro errorInterceptor
+ * poder suprimir o toast de 401/403 nesses casos (sem isso, o usuário vê um erro vermelho piscar
+ * na tela um instante antes do redirect silencioso completar). Não inclui a checagem de
+ * canTriggerLoginNow() (rate limit entre abas) de propósito - essa função só responde "esse
+ * erro normalmente levaria a um relogin automático", não "o redirect vai disparar agora mesmo
+ * nesta aba".
+ */
+export function isAutoReloginCandidate(
+  err: HttpErrorResponse,
+  req: HttpRequest<unknown>,
+  router: Router,
+  auth: AuthService,
+): boolean {
+  if (!isCardsync(req.url)) return false;
+  if (err.status !== 401 && err.status !== 403) return false;
+
+  const currentPath = router.url || '/';
+  if (isPublicSpaRoute(currentPath)) return false;
+
+  // 403 com sessão válida = sem permissão; não deve relogar
+  if (err.status === 403 && auth.isAuthenticated()) return false;
+
+  const ignored =
+    req.url.includes('/bff/me') ||
+    req.url.includes('/bff/csrf') ||
+    req.url.includes('/bff/logout') ||
+    req.url.includes('/bff/login/prepare');
+
+  return !ignored;
+}
+
+/**
  * localStorage (não sessionStorage) - o lock precisa valer entre abas/janelas diferentes da
  * mesma origem, não só dentro da aba atual. Com múltiplas abas abertas, cada uma tem sua própria
  * sessionStorage isolada: a aba A detectava 401 e redirecionava (migrando o ID da sessão via
@@ -58,31 +90,11 @@ export const authRedirectInterceptor: HttpInterceptorFn = (
         return throwError(() => err);
       }
 
-      if (err.status !== 401 && err.status !== 403) {
+      if (!isAutoReloginCandidate(err, req, router, auth)) {
         return throwError(() => err);
       }
 
       const currentPath = router.url || '/';
-
-      if (isPublicSpaRoute(currentPath)) {
-        return throwError(() => err);
-      }
-
-      // 403 com sessão válida = sem permissão; não deve relogar
-      if (err.status === 403 && auth.isAuthenticated()) {
-        return throwError(() => err);
-      }
-
-      const ignored =
-        req.url.includes('/bff/me') ||
-        req.url.includes('/bff/csrf') ||
-        req.url.includes('/bff/logout') ||
-        req.url.includes('/bff/login/prepare');
-
-      if (ignored) {
-        return throwError(() => err);
-      }
-
       session.stop();
 
       if (!canTriggerLoginNow()) {
