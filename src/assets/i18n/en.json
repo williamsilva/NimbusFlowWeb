@@ -181,7 +181,13 @@
       "title": "Suppliers"
     },
     "works": {
-      "title": "Works"
+      "title": "Works",
+      "addendums": {
+        "title": "Addendums"
+      },
+      "installments": {
+        "title": "Payments"
+      }
     },
     "suggestions": {
       "title": "Suggestions"
@@ -373,6 +379,8 @@
     },
     "suppliers": "Suppliers",
     "works": "Works",
+    "addendums": "Addendums",
+    "installments": "Payments",
     "suggestions": "Suggestions"
   },
   "footer": {
@@ -1891,7 +1899,13 @@
         "placeholder": "Select permissions",
         "saved": "Permissions updated successfully.",
         "saveError": "Could not save group permissions.",
-        "empty": "No permission assigned."
+        "empty": "No permission assigned.",
+        "removeConfirm": {
+          "action": "Remove from group",
+          "header": "Remove permission from group",
+          "message": "Are you sure you want to remove permission {permissionName} from this group?",
+          "success": "Permission removed from the group successfully."
+        }
       },
       "users": {
         "title": "Users",
@@ -1900,7 +1914,13 @@
         "placeholder": "Select users",
         "saved": "Users updated successfully.",
         "saveError": "Could not save group users.",
-        "empty": "No user assigned."
+        "empty": "No user assigned.",
+        "removeConfirm": {
+          "action": "Remove from group",
+          "header": "Remove user from group",
+          "message": "Are you sure you want to remove {userName} from this group?",
+          "success": "User removed from the group successfully."
+        }
       }
     },
     "delete": {
@@ -3704,12 +3724,114 @@
       "title": "No works found"
     },
     "action": {
-      "noPermission": "You do not have permission to manage works."
+      "noPermission": "You do not have permission to manage works.",
+      "viewAddendums": "Addendums",
+      "viewInstallments": "Payments"
     },
     "mapPicker": {
       "hint": "Click on the map to mark the work location - only inside the Acquamania park area.",
       "outOfBounds": "Point outside the Acquamania area - click not registered.",
       "areaTooltip": "Acquamania area"
+    }
+  },
+  "addendums": {
+    "new": {
+      "title": "New addendum"
+    },
+    "fields": {
+      "amount": "Amount",
+      "justification": "Justification"
+    },
+    "columns": {
+      "amount": "Amount",
+      "justification": "Justification",
+      "tier": "Approval tier",
+      "status": "Status",
+      "createdAt": "Requested at",
+      "decisionDate": "Decided at"
+    },
+    "status": {
+      "PENDING": "Pending",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    },
+    "tier": {
+      "TIER1": "Tier 1",
+      "TIER2": "Tier 2"
+    },
+    "form": {
+      "invalid": "Review the highlighted fields before saving.",
+      "tierHint": "automatically calculated by the server based on the amount",
+      "created": "Addendum submitted successfully.",
+      "saveError": "Could not save the addendum. Please try again."
+    },
+    "empty": {
+      "title": "No addendums found"
+    },
+    "action": {
+      "approve": "Approve",
+      "reject": "Reject",
+      "noPermission": "You do not have permission to decide this addendum.",
+      "alreadyDecided": "This addendum was already decided by another user. Refresh the page."
+    },
+    "approveConfirm": {
+      "header": "Approve addendum",
+      "message": "Confirm approval of the {amount} addendum?",
+      "success": "Addendum approved successfully."
+    },
+    "rejectConfirm": {
+      "header": "Reject addendum",
+      "message": "Confirm rejection of the {amount} addendum?",
+      "success": "Addendum rejected successfully."
+    }
+  },
+  "installments": {
+    "new": {
+      "title": "Add installments"
+    },
+    "fields": {
+      "amount": "Amount",
+      "dueDate": "Due date"
+    },
+    "columns": {
+      "number": "#",
+      "amount": "Amount",
+      "dueDate": "Due date",
+      "status": "Status"
+    },
+    "status": {
+      "PLANNED": "Planned",
+      "MEASUREMENT_SUBMITTED": "Measurement submitted",
+      "MEASUREMENT_APPROVED": "Measurement approved",
+      "RELEASED": "Released",
+      "PAID": "Paid"
+    },
+    "form": {
+      "invalid": "Review the highlighted fields before saving.",
+      "created": "Installments scheduled successfully.",
+      "saveError": "Could not save the installments. Please try again."
+    },
+    "empty": {
+      "title": "No installments found"
+    },
+    "action": {
+      "addRow": "Add row",
+      "release": "Release",
+      "markPaid": "Mark as paid",
+      "noPermission": "You do not have permission for this action.",
+      "requiresMeasurementApproved": "Requires an approved measurement to release.",
+      "requiresReleased": "Requires a released installment to mark as paid.",
+      "statusChanged": "This installment's status was changed by another user. Refresh the page."
+    },
+    "releaseConfirm": {
+      "header": "Release installment",
+      "message": "Confirm release of installment #{number}?",
+      "success": "Installment released successfully."
+    },
+    "markPaidConfirm": {
+      "header": "Mark installment as paid",
+      "message": "Confirm installment #{number} was paid?",
+      "success": "Installment marked as paid successfully."
     }
   },
   "suggestions": {

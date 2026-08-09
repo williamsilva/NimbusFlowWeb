@@ -1,0 +1,96 @@
+<cs-page-header
+  [subtitle]="work()?.name ?? ''"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.works' | translate), url: '/works' },
+    { label: ('breadcrumb.installments' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    tooltipPosition="top"
+    [disabled]="!policy.canSchedule()"
+    class="p-button-info p-button-sm"
+    [label]="'installments.new.title' | translate"
+    [pTooltip]="!policy.canSchedule() ? (policy.scheduleDisabledReason() | translate) : ''"
+  ></button>
+</cs-page-header>
+
+<app-installments-create-dialog
+  [workId]="workId()"
+  [visible]="upsertVisible()"
+  (visibleChange)="onUpsertVisibleChange($event)"
+></app-installments-create-dialog>
+
+<div class="card">
+  <p-table [value]="items()" [loading]="loading()" dataKey="id">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center">{{ 'installments.columns.number' | translate }}</th>
+        <th class="text-right">{{ 'installments.columns.amount' | translate }}</th>
+        <th class="text-center">{{ 'installments.columns.dueDate' | translate }}</th>
+        <th class="text-center">{{ 'installments.columns.status' | translate }}</th>
+        <th class="text-center">{{ 'common.actions' | translate }}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td class="text-center">{{ row.number }}</td>
+        <td class="text-right">{{ row.amount | csCurrency }}</td>
+        <td class="text-center">{{ row.dueDate | csDate: 'date' }}</td>
+        <td class="text-center">
+          <cs-status-badge
+            [tone]="tone(row.status)"
+            [label]="('installments.status.' + row.status) | translate"
+          ></cs-status-badge>
+        </td>
+        <td class="text-center">
+          <div class="table-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-send"
+              (click)="confirmRelease(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canRelease(row)"
+              [pTooltip]="
+                canRelease(row)
+                  ? ('installments.action.release' | translate)
+                  : (releaseDisabledReason(row) | translate)
+              "
+              tooltipPosition="top"
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-check-circle"
+              (click)="confirmMarkPaid(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canMarkPaid(row)"
+              [pTooltip]="
+                canMarkPaid(row)
+                  ? ('installments.action.markPaid' | translate)
+                  : (markPaidDisabledReason(row) | translate)
+              "
+              tooltipPosition="top"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="text-center py-5 opacity-70">
+          {{ 'installments.empty.title' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

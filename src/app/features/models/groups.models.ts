@@ -22,6 +22,7 @@ export interface GroupModel {
   permissionsCount?: number;
   usersCount?: number;
   permissions?: PermissionOptionModel[];
+  users?: UserOptionModel[];
 }
 
 export interface GroupCreateInput {
@@ -38,6 +39,10 @@ export interface GroupPermissionsInput {
   permissionIds: string[];
 }
 
+export interface GroupUsersInput {
+  userIds: string[];
+}
+
 export interface GroupApiModel {
   id: string;
   name: string;
@@ -47,6 +52,7 @@ export interface GroupApiModel {
   permissionsCount?: number | null;
   usersCount?: number | null;
   permissions?: PermissionOptionApiModel[] | null;
+  users?: UserOptionApiModel[] | null;
 }
 
 export type GroupsFiltersState = {
@@ -96,8 +102,9 @@ export function mapGroupApiModel(input: GroupApiModel): GroupModel {
     createdAt: input.createdAt ?? null,
     createdBy: input.createdBy ?? null,
     permissionsCount: input.permissionsCount ?? input.permissions?.length ?? 0,
-    usersCount: input.usersCount ?? 0,
+    usersCount: input.usersCount ?? input.users?.length ?? 0,
     permissions: (input.permissions ?? []).map(mapPermissionOptionApiModel),
+    users: (input.users ?? []).map(mapUserOptionApiModel),
   };
 }
 

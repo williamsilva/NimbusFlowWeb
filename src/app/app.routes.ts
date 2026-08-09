@@ -45,6 +45,24 @@ export const appRoutes: Routes = [
       },
 
       {
+        path: 'works/:workId/addendums',
+        title: 'routes.works.addendums.title',
+        loadComponent: () =>
+          import('./features/works/addendums/addendums-list.component').then(
+            (m) => m.AddendumsListComponent,
+          ),
+      },
+
+      {
+        path: 'works/:workId/installments',
+        title: 'routes.works.installments.title',
+        loadComponent: () =>
+          import('./features/works/installments/installments-list.component').then(
+            (m) => m.InstallmentsListComponent,
+          ),
+      },
+
+      {
         path: 'suggestions',
         title: 'routes.suggestions.title',
         loadComponent: () =>

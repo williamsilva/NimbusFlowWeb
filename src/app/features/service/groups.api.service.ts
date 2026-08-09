@@ -12,6 +12,7 @@ import {
   GroupApiModel,
   GroupCreateInput,
   GroupUpdateInput,
+  GroupUsersInput,
   GroupPermissionsInput,
   mapGroupApiModel,
   mapGroupApiModels,
@@ -71,5 +72,9 @@ export class GroupsApiService {
 
   updatePermissions(id: string, input: GroupPermissionsInput) {
     return this.http.put<GroupApiModel>(`${this.baseUrl}/${id}/permissions`, input).pipe(map(mapGroupApiModel));
+  }
+
+  updateUsers(id: string, input: GroupUsersInput) {
+    return this.http.put<GroupApiModel>(`${this.baseUrl}/${id}/users`, input).pipe(map(mapGroupApiModel));
   }
 }

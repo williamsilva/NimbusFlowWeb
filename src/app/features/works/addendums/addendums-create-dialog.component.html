@@ -1,0 +1,83 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '520px', maxWidth: '95vw' }"
+  [header]="'addendums.new.title' | translate"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputNumber
+            size="small"
+            class="w-full"
+            mode="currency"
+            inputId="amount"
+            inputStyleClass="w-full"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [currency]="i18n.getCurrencyBrl()"
+            [locale]="i18n.getLocalePtBr()"
+            formControlName="amount"
+          ></p-inputNumber>
+          <app-error-msg
+            [field]="'amount'"
+            [forId]="'amount'"
+            [control]="form.controls.amount"
+            [label]="'addendums.fields.amount' | translate"
+          />
+        </p-floatLabel>
+        <small class="opacity-70 block mt-1">
+          {{ ('addendums.tier.' + tierHint()) | translate }} —
+          {{ 'addendums.form.tierHint' | translate }}
+        </small>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea
+            rows="4"
+            pTextarea
+            id="justification"
+            class="w-full p-inputtext-sm"
+            formControlName="justification"
+          ></textarea>
+          <app-error-msg
+            [field]="'justification'"
+            [forId]="'justification'"
+            [control]="form.controls.justification"
+            [label]="'addendums.fields.justification' | translate"
+          />
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

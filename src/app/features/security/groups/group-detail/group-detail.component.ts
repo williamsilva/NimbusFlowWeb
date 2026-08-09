@@ -5,18 +5,20 @@ import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 
 import { CardModule } from 'primeng/card';
 import { FormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { CsTagComponent } from '@shared/ui';
 import { I18nService } from '@core/i18n/i18n.service';
 import { GroupsFacade } from '@features/facade/groups.facade';
 import { CsBadgeComponent } from '@shared/ui/badge/cs-badge.component';
-import { GroupModel, PermissionOptionModel } from '@models/groups.models';
+import { UsersApiService } from '@features/service/users.api.service';
+import { GroupModel, PermissionOptionModel, UserOptionModel } from '@models/groups.models';
 import { PermissionsApiService } from '@features/service/permissions.api.service';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { GroupsPermissionPolicy } from '@features/security/policy/groups-permission.policy';
@@ -30,6 +32,7 @@ import { GroupsCreateDialogComponent } from '@features/security/groups/groups-cr
   imports: [
     CardModule,
     FormsModule,
+    TooltipModule,
     ButtonModule,
     DividerModule,
     TranslateModule,
@@ -45,25 +48,33 @@ export class GroupDetailComponent {
   private readonly location = inject(Location);
   private readonly route = inject(ActivatedRoute);
   private readonly toast = inject(MessageService);
+  private readonly confirm = inject(ConfirmationService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly i18n = inject(I18nService);
   readonly groups = inject(GroupsFacade);
   readonly secPolicy = inject(GroupsPermissionPolicy);
+  readonly usersApi = inject(UsersApiService);
   readonly permissionsApi = inject(PermissionsApiService);
 
   readonly loading = signal(true);
   readonly editVisible = signal(false);
   readonly savingPermissions = signal(false);
-  readonly activeTab = signal<'summary' | 'permissions'>('summary');
+  readonly savingUsers = signal(false);
+  readonly activeTab = signal<'summary' | 'permissions' | 'users'>('summary');
 
   readonly group = signal<GroupModel | null>(null);
   readonly selectedPermissionIds = signal<string[]>([]);
+  readonly selectedUserIds = signal<string[]>([]);
   readonly permissionOptions = signal<PermissionOptionModel[]>([]);
+  readonly userOptions = signal<UserOptionModel[]>([]);
 
   readonly canEdit = computed(() => !!this.group() && this.secPolicy.canEdit(this.group()!));
   readonly canManagePermissions = computed(
     () => !!this.group() && this.secPolicy.canManagePermissions(this.group()!),
+  );
+  readonly canManageUsers = computed(
+    () => !!this.group() && this.secPolicy.canManageUsers(this.group()!),
   );
 
   readonly initials = computed(() => this.makeInitials(this.group()?.name));
@@ -97,6 +108,7 @@ export class GroupDetailComponent {
         next: (group) => {
           this.group.set(group);
           this.selectedPermissionIds.set((group.permissions ?? []).map((item) => item.id));
+          this.selectedUserIds.set((group.users ?? []).map((item) => item.id));
           this.loading.set(false);
         },
         error: () => {
@@ -110,6 +122,14 @@ export class GroupDetailComponent {
       .subscribe({
         next: (items) => this.permissionOptions.set(items ?? []),
         error: () => this.permissionOptions.set([]),
+      });
+
+    this.usersApi
+      .getOptions()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (items) => this.userOptions.set(items ?? []),
+        error: () => this.userOptions.set([]),
       });
   }
 
@@ -128,7 +148,7 @@ export class GroupDetailComponent {
     this.load(id);
   }
 
-  setTab(tab: 'summary' | 'permissions'): void {
+  setTab(tab: 'summary' | 'permissions' | 'users'): void {
     this.activeTab.set(tab);
   }
 
@@ -157,6 +177,122 @@ export class GroupDetailComponent {
             severity: 'error',
             summary: this.i18n.tUi('common.error'),
             detail: this.i18n.tUi('groups.detail.permissions.saveError' as never),
+          });
+        },
+      });
+  }
+
+  saveUsers(): void {
+    const group = this.group();
+    if (!group || !this.canManageUsers()) return;
+
+    this.savingUsers.set(true);
+    this.groups
+      .updateUsers(group.id, { userIds: this.selectedUserIds() })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (updated) => {
+          this.group.set(updated);
+          this.selectedUserIds.set((updated.users ?? []).map((item) => item.id));
+          this.savingUsers.set(false);
+          this.toast.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi('groups.detail.users.saved' as never),
+          });
+        },
+        error: () => {
+          this.savingUsers.set(false);
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('groups.detail.users.saveError' as never),
+          });
+        },
+      });
+  }
+
+  confirmRemovePermission(permission: PermissionOptionModel): void {
+    const group = this.group();
+    if (!group || !this.canManagePermissions()) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('groups.detail.permissions.removeConfirm.header' as never),
+      message: this.i18n.tUi('groups.detail.permissions.removeConfirm.message' as never, {
+        permissionName: permission.description || permission.name,
+      }),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => this.removePermission(group.id, permission.id),
+    });
+  }
+
+  private removePermission(groupId: string, permissionId: string): void {
+    this.savingPermissions.set(true);
+    const remainingIds = this.selectedPermissionIds().filter((id) => id !== permissionId);
+
+    this.groups
+      .updatePermissions(groupId, { permissionIds: remainingIds })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (updated) => {
+          this.group.set(updated);
+          this.selectedPermissionIds.set((updated.permissions ?? []).map((item) => item.id));
+          this.savingPermissions.set(false);
+          this.toast.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi('groups.detail.permissions.removeConfirm.success' as never),
+          });
+        },
+        error: () => {
+          this.savingPermissions.set(false);
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('groups.detail.permissions.saveError' as never),
+          });
+        },
+      });
+  }
+
+  confirmRemoveUser(user: UserOptionModel): void {
+    const group = this.group();
+    if (!group || !this.canManageUsers()) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('groups.detail.users.removeConfirm.header' as never),
+      message: this.i18n.tUi('groups.detail.users.removeConfirm.message' as never, {
+        userName: user.name,
+      }),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => this.removeUser(group.id, user.id),
+    });
+  }
+
+  private removeUser(groupId: string, userId: string): void {
+    this.savingUsers.set(true);
+    const remainingIds = this.selectedUserIds().filter((id) => id !== userId);
+
+    this.groups
+      .updateUsers(groupId, { userIds: remainingIds })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (updated) => {
+          this.group.set(updated);
+          this.selectedUserIds.set((updated.users ?? []).map((item) => item.id));
+          this.savingUsers.set(false);
+          this.toast.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi('groups.detail.users.removeConfirm.success' as never),
+          });
+        },
+        error: () => {
+          this.savingUsers.set(false);
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('groups.detail.users.saveError' as never),
           });
         },
       });

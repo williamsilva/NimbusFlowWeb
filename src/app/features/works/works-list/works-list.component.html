@@ -397,6 +397,26 @@
               "
               tooltipPosition="top"
             ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-file"
+              (click)="goToAddendums(row)"
+              class="p-button-text p-button-sm"
+              [pTooltip]="'works.action.viewAddendums' | translate"
+              tooltipPosition="top"
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-wallet"
+              (click)="goToInstallments(row)"
+              class="p-button-text p-button-sm"
+              [pTooltip]="'works.action.viewInstallments' | translate"
+              tooltipPosition="top"
+            ></button>
           </div>
         </td>
       </tr>

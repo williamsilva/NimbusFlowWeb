@@ -181,7 +181,13 @@
       "title": "Proveedores"
     },
     "works": {
-      "title": "Obras"
+      "title": "Obras",
+      "addendums": {
+        "title": "Adicionales"
+      },
+      "installments": {
+        "title": "Pagos"
+      }
     },
     "suggestions": {
       "title": "Sugerencias"
@@ -373,6 +379,8 @@
     },
     "suppliers": "Proveedores",
     "works": "Obras",
+    "addendums": "Adicionales",
+    "installments": "Pagos",
     "suggestions": "Sugerencias"
   },
   "footer": {
@@ -1891,7 +1899,13 @@
         "placeholder": "Selecciona los permisos",
         "saved": "Permisos actualizados correctamente.",
         "saveError": "No fue posible guardar los permisos del grupo.",
-        "empty": "Ningún permiso asociado."
+        "empty": "Ningún permiso asociado.",
+        "removeConfirm": {
+          "action": "Quitar del grupo",
+          "header": "Quitar permiso del grupo",
+          "message": "¿Desea realmente quitar el permiso {permissionName} de este grupo?",
+          "success": "Permiso quitado del grupo con éxito."
+        }
       },
       "users": {
         "title": "Usuarios",
@@ -1900,7 +1914,13 @@
         "placeholder": "Selecciona los usuarios",
         "saved": "Usuarios actualizados correctamente.",
         "saveError": "No fue posible guardar los usuarios del grupo.",
-        "empty": "Ningún usuario asociado."
+        "empty": "Ningún usuario asociado.",
+        "removeConfirm": {
+          "action": "Quitar del grupo",
+          "header": "Quitar usuario del grupo",
+          "message": "¿Desea realmente quitar a {userName} de este grupo?",
+          "success": "Usuario quitado del grupo con éxito."
+        }
       }
     },
     "delete": {
@@ -3704,12 +3724,114 @@
       "title": "Ninguna obra encontrada"
     },
     "action": {
-      "noPermission": "No tiene permiso para gestionar obras."
+      "noPermission": "No tiene permiso para gestionar obras.",
+      "viewAddendums": "Adicionales",
+      "viewInstallments": "Pagos"
     },
     "mapPicker": {
       "hint": "Haga clic en el mapa para marcar la ubicación de la obra - solo dentro del área del parque Acquamania.",
       "outOfBounds": "Punto fuera del área de Acquamania - clic no registrado.",
       "areaTooltip": "Área de Acquamania"
+    }
+  },
+  "addendums": {
+    "new": {
+      "title": "Nuevo adicional"
+    },
+    "fields": {
+      "amount": "Monto",
+      "justification": "Justificación"
+    },
+    "columns": {
+      "amount": "Monto",
+      "justification": "Justificación",
+      "tier": "Nivel de aprobación",
+      "status": "Estado",
+      "createdAt": "Solicitado el",
+      "decisionDate": "Decidido el"
+    },
+    "status": {
+      "PENDING": "Pendiente",
+      "APPROVED": "Aprobado",
+      "REJECTED": "Rechazado"
+    },
+    "tier": {
+      "TIER1": "Nivel 1",
+      "TIER2": "Nivel 2"
+    },
+    "form": {
+      "invalid": "Revise los campos resaltados antes de guardar.",
+      "tierHint": "calculado automáticamente por el servidor según el monto",
+      "created": "Adicional solicitado con éxito.",
+      "saveError": "No se pudo guardar el adicional. Intente nuevamente."
+    },
+    "empty": {
+      "title": "Ningún adicional encontrado"
+    },
+    "action": {
+      "approve": "Aprobar",
+      "reject": "Rechazar",
+      "noPermission": "No tiene permiso para decidir este adicional.",
+      "alreadyDecided": "Este adicional ya fue decidido por otro usuario. Actualice la página."
+    },
+    "approveConfirm": {
+      "header": "Aprobar adicional",
+      "message": "¿Confirma la aprobación del adicional de {amount}?",
+      "success": "Adicional aprobado con éxito."
+    },
+    "rejectConfirm": {
+      "header": "Rechazar adicional",
+      "message": "¿Confirma el rechazo del adicional de {amount}?",
+      "success": "Adicional rechazado con éxito."
+    }
+  },
+  "installments": {
+    "new": {
+      "title": "Agregar cuotas"
+    },
+    "fields": {
+      "amount": "Monto",
+      "dueDate": "Vencimiento"
+    },
+    "columns": {
+      "number": "Nº",
+      "amount": "Monto",
+      "dueDate": "Vencimiento",
+      "status": "Estado"
+    },
+    "status": {
+      "PLANNED": "Planificada",
+      "MEASUREMENT_SUBMITTED": "Medición enviada",
+      "MEASUREMENT_APPROVED": "Medición aprobada",
+      "RELEASED": "Liberada",
+      "PAID": "Pagada"
+    },
+    "form": {
+      "invalid": "Revise los campos resaltados antes de guardar.",
+      "created": "Cuotas registradas con éxito.",
+      "saveError": "No se pudo guardar las cuotas. Intente nuevamente."
+    },
+    "empty": {
+      "title": "Ninguna cuota encontrada"
+    },
+    "action": {
+      "addRow": "Agregar línea",
+      "release": "Liberar",
+      "markPaid": "Marcar como pagada",
+      "noPermission": "No tiene permiso para esta acción.",
+      "requiresMeasurementApproved": "Requiere medición aprobada para liberar.",
+      "requiresReleased": "Requiere cuota liberada para marcar como pagada.",
+      "statusChanged": "El estado de esta cuota fue cambiado por otro usuario. Actualice la página."
+    },
+    "releaseConfirm": {
+      "header": "Liberar cuota",
+      "message": "¿Confirma la liberación de la cuota nº {number}?",
+      "success": "Cuota liberada con éxito."
+    },
+    "markPaidConfirm": {
+      "header": "Marcar cuota como pagada",
+      "message": "¿Confirma que la cuota nº {number} fue pagada?",
+      "success": "Cuota marcada como pagada con éxito."
     }
   },
   "suggestions": {

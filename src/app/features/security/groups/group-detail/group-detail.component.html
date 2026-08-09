@@ -62,7 +62,7 @@
               </div>
             </div>
             <div class="cs-profile-metrics-list">
-              <div class="cs-permission-chip-card is-permissions">
+              <div class="cs-permission-chip-card is-permissions" (click)="setTab('permissions')">
                 <span class="cs-permission-chip-index">1</span>
                 <div class="cs-permission-chip-content">
                   <span class="cs-permission-chip-text">
@@ -73,7 +73,7 @@
                   </span>
                 </div>
               </div>
-              <div class="cs-permission-chip-card is-users">
+              <div class="cs-permission-chip-card is-users" (click)="setTab('users')">
                 <span class="cs-permission-chip-index">2</span>
                 <div class="cs-permission-chip-content">
                   <span class="cs-permission-chip-text">
@@ -129,6 +129,17 @@
               <span>{{ 'groups.detail.tabs.permissions' | translate }}</span>
               <cs-badge severity="info" [value]="permissionsCount()"></cs-badge>
             </button>
+            <button
+              pButton
+              type="button"
+              class="p-button-text cs-tab-btn"
+              [class.cs-tab-active]="activeTab() === 'users'"
+              (click)="setTab('users')"
+              >
+              <i class="pi pi-users"></i>
+              <span>{{ 'groups.detail.tabs.users' | translate }}</span>
+              <cs-badge severity="success" [value]="usersCount()"></cs-badge>
+            </button>
           </div>
           @if (activeTab() === 'summary') {
             <p-card class="cs-card-compact cs-data-card">
@@ -141,7 +152,23 @@
                     }}</span>
                     <cs-badge severity="success" [value]="usersCount()"></cs-badge>
                   </div>
-                  <div class="cs-empty-inline">{{ 'groups.detail.users.manageHint' | translate }}</div>
+                  @if (g.users?.length) {
+                    <div class="cs-summary-mini-grid cs-summary-mini-grid-3">
+                      @for (item of g.users; track trackById($index, item)) {
+                        <div class="cs-summary-mini-card cs-summary-mini-card-user">
+                          <div class="cs-summary-mini-icon">
+                            <i class="pi pi-user"></i>
+                          </div>
+                          <div class="cs-summary-mini-body">
+                            <strong>{{ item.name || ('common.notInformed' | translate) }}</strong>
+                            <small>{{ item.userName }}</small>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  } @else {
+                    <div class="cs-empty-inline">{{ 'groups.detail.users.empty' | translate }}</div>
+                  }
                 </section>
                 <section class="cs-summary-block cs-summary-block-permissions">
                   <div class="cs-summary-block-title-center">
@@ -163,7 +190,6 @@
                           </div>
                           <div class="cs-summary-mini-body">
                             <strong>{{ item.description || ('common.notInformed' | translate) }}</strong>
-                            <small>{{ item.name }}</small>
                           </div>
                         </div>
                       }
@@ -227,13 +253,96 @@
                           </div>
                           <div class="cs-entity-card-body">
                             <strong>{{ item.description || ('common.notInformed' | translate) }}</strong>
-                            <small>{{ item.name }}</small>
                           </div>
+                          <button
+                            pButton
+                            type="button"
+                            icon="pi pi-times"
+                            (click)="confirmRemovePermission(item)"
+                            class="p-button-text p-button-sm p-button-danger"
+                            [disabled]="!canManagePermissions() || savingPermissions()"
+                            [pTooltip]="'groups.detail.permissions.removeConfirm.action' | translate"
+                            tooltipPosition="top"
+                          ></button>
                         </div>
                       }
                     </div>
                   } @else {
                     <div class="cs-empty-inline">{{ 'groups.detail.permissions.empty' | translate }}</div>
+                  }
+                </section>
+              </div>
+            </p-card>
+          }
+          <!-- Card Usuários -->
+          @if (activeTab() === 'users') {
+            <p-card class="cs-card-compact cs-data-card">
+              <div class="cs-data-sections">
+                <section class="cs-data-section">
+                  <div class="cs-section-head cs-section-head-top-action">
+                    <div class="cs-section-head-main">
+                      <div>
+                        <div class="cs-section-subtitle">
+                          {{ 'groups.detail.users.subtitle' | translate }}
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      pButton
+                      type="button"
+                      icon="pi pi-save"
+                      (click)="saveUsers()"
+                      [loading]="savingUsers()"
+                      [label]="'common.save' | translate"
+                      class="p-button-sm cs-top-save-btn"
+                      [disabled]="!canManageUsers()"
+                    ></button>
+                  </div>
+                  <p-multiSelect
+                    display="chip"
+                    appendTo="body"
+                    [filter]="true"
+                    optionValue="id"
+                    [showClear]="true"
+                    optionLabel="name"
+                    [options]="userOptions()"
+                    [ngModel]="selectedUserIds()"
+                    (ngModelChange)="selectedUserIds.set($event ?? [])"
+                    [disabled]="!canManageUsers() || savingUsers()"
+                    [placeholder]="'groups.detail.users.placeholder' | translate"
+                    class="w-full"
+                  ></p-multiSelect>
+                </section>
+                <section class="cs-data-section">
+                  <div class="cs-section-title">{{ 'groups.detail.users.title' | translate }}</div>
+                  @if (g.users?.length) {
+                    <div class="cs-entity-grid">
+                      @for (item of g.users; track trackById($index, item)) {
+                        <div
+                          class="cs-entity-card cs-entity-card-user"
+                          >
+                          <div class="cs-entity-card-icon">
+                            <i class="pi pi-user"></i>
+                          </div>
+                          <div class="cs-entity-card-body">
+                            <strong>{{ item.name || ('common.notInformed' | translate) }}</strong>
+                            <small>{{ item.userName }}</small>
+                          </div>
+                          <button
+                            pButton
+                            type="button"
+                            icon="pi pi-times"
+                            (click)="confirmRemoveUser(item)"
+                            class="p-button-text p-button-sm p-button-danger"
+                            [disabled]="!canManageUsers() || savingUsers()"
+                            [pTooltip]="'groups.detail.users.removeConfirm.action' | translate"
+                            tooltipPosition="top"
+                          ></button>
+                        </div>
+                      }
+                    </div>
+                  } @else {
+                    <div class="cs-empty-inline">{{ 'groups.detail.users.empty' | translate }}</div>
                   }
                 </section>
               </div>

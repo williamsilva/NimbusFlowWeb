@@ -1651,6 +1651,46 @@ export const UI_KEYS = {
       saveError: 'works.form.saveError',
     },
   },
+  addendums: {
+    form: {
+      invalid: 'addendums.form.invalid',
+      created: 'addendums.form.created',
+      saveError: 'addendums.form.saveError',
+    },
+    action: {
+      alreadyDecided: 'addendums.action.alreadyDecided',
+    },
+    approveConfirm: {
+      header: 'addendums.approveConfirm.header',
+      message: 'addendums.approveConfirm.message',
+      success: 'addendums.approveConfirm.success',
+    },
+    rejectConfirm: {
+      header: 'addendums.rejectConfirm.header',
+      message: 'addendums.rejectConfirm.message',
+      success: 'addendums.rejectConfirm.success',
+    },
+  },
+  installments: {
+    form: {
+      invalid: 'installments.form.invalid',
+      created: 'installments.form.created',
+      saveError: 'installments.form.saveError',
+    },
+    action: {
+      statusChanged: 'installments.action.statusChanged',
+    },
+    releaseConfirm: {
+      header: 'installments.releaseConfirm.header',
+      message: 'installments.releaseConfirm.message',
+      success: 'installments.releaseConfirm.success',
+    },
+    markPaidConfirm: {
+      header: 'installments.markPaidConfirm.header',
+      message: 'installments.markPaidConfirm.message',
+      success: 'installments.markPaidConfirm.success',
+    },
+  },
   suggestions: {
     fields: {
       description: 'suggestions.fields.description',

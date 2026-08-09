@@ -1,0 +1,100 @@
+<cs-page-header
+  [subtitle]="work()?.name ?? ''"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.works' | translate), url: '/works' },
+    { label: ('breadcrumb.addendums' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    tooltipPosition="top"
+    [disabled]="!policy.canCreate()"
+    class="p-button-info p-button-sm"
+    [label]="'addendums.new.title' | translate"
+    [pTooltip]="!policy.canCreate() ? ('addendums.action.noPermission' | translate) : ''"
+  ></button>
+</cs-page-header>
+
+<app-addendums-create-dialog
+  [workId]="workId()"
+  [visible]="upsertVisible()"
+  (visibleChange)="onUpsertVisibleChange($event)"
+></app-addendums-create-dialog>
+
+<div class="card">
+  <p-table [value]="items()" [loading]="loading()" dataKey="id">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-right">{{ 'addendums.columns.amount' | translate }}</th>
+        <th>{{ 'addendums.columns.justification' | translate }}</th>
+        <th class="text-center">{{ 'addendums.columns.tier' | translate }}</th>
+        <th class="text-center">{{ 'addendums.columns.status' | translate }}</th>
+        <th class="text-center">{{ 'addendums.columns.createdAt' | translate }}</th>
+        <th class="text-center">{{ 'addendums.columns.decisionDate' | translate }}</th>
+        <th class="text-center">{{ 'common.actions' | translate }}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td class="text-right">{{ row.amount | csCurrency }}</td>
+        <td>{{ row.justification }}</td>
+        <td class="text-center">{{ ('addendums.tier.' + row.requiredTier) | translate }}</td>
+        <td class="text-center">
+          <cs-status-badge
+            [tone]="tone(row.status)"
+            [label]="('addendums.status.' + row.status) | translate"
+          ></cs-status-badge>
+        </td>
+        <td class="text-center">{{ row.createdAt | csDate: 'datetime' }}</td>
+        <td class="text-center">{{ row.decisionDate | csDate: 'datetime' }}</td>
+        <td class="text-center">
+          <div class="table-actions" *ngIf="isPending(row)">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-check"
+              (click)="confirmApprove(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!policy.canDecide(row.requiredTier)"
+              [pTooltip]="
+                policy.canDecide(row.requiredTier)
+                  ? ('addendums.action.approve' | translate)
+                  : (policy.decideDisabledReason(row.requiredTier) ?? 'addendums.action.noPermission' | translate)
+              "
+              tooltipPosition="top"
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-times"
+              (click)="confirmReject(row)"
+              class="p-button-text p-button-sm p-button-danger"
+              [disabled]="!policy.canDecide(row.requiredTier)"
+              [pTooltip]="
+                policy.canDecide(row.requiredTier)
+                  ? ('addendums.action.reject' | translate)
+                  : (policy.decideDisabledReason(row.requiredTier) ?? 'addendums.action.noPermission' | translate)
+              "
+              tooltipPosition="top"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="text-center py-5 opacity-70">
+          {{ 'addendums.empty.title' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

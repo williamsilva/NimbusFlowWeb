@@ -195,6 +195,23 @@ export const PERMISSIONS = {
   SUGESTAO: {
     MANAGE: 'SUGESTAO_MANAGE',
   },
+
+  /**
+   * Aditivo contratual e Parcela/Pagamento de Obra (com.nimbusflow.works.core.
+   * AddendumApprovalService/InstallmentService) - diferente de OBRA/FORNECEDOR/SUGESTAO, aqui há
+   * variantes distintas por ação (a alçada de aprovação de Aditivo depende do valor solicitado,
+   * ver ApprovalTier no backend).
+   */
+  ADITIVO: {
+    CREATE: 'ADITIVO_CREATE',
+    APPROVE_TIER1: 'ADITIVO_APPROVE_TIER1',
+    APPROVE_TIER2: 'ADITIVO_APPROVE_TIER2',
+  },
+
+  PARCELA: {
+    LIBERAR: 'PARCELA_LIBERAR',
+    PAGAR: 'PARCELA_PAGAR',
+  },
 } as const;
 
 type ValueOf<T> = T[keyof T];
@@ -225,4 +242,6 @@ export const ALL_PERMISSIONS: Permission[] = [
   ...Object.values(PERMISSIONS.FORNECEDOR),
   ...Object.values(PERMISSIONS.OBRA),
   ...Object.values(PERMISSIONS.SUGESTAO),
+  ...Object.values(PERMISSIONS.ADITIVO),
+  ...Object.values(PERMISSIONS.PARCELA),
 ];

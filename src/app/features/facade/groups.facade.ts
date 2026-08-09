@@ -9,6 +9,7 @@ import {
   GroupModel,
   GroupCreateInput,
   GroupUpdateInput,
+  GroupUsersInput,
   GroupPermissionsInput,
 } from '@models/groups.models';
 import { SelectOptionGroup } from '@models/select-option.model';
@@ -144,5 +145,10 @@ export class GroupsFacade {
   updatePermissions(id: string, input: GroupPermissionsInput): Observable<GroupModel> {
     this._loading.set(true);
     return this.api.updatePermissions(id, input).pipe(finalize(() => this._loading.set(false)));
+  }
+
+  updateUsers(id: string, input: GroupUsersInput): Observable<GroupModel> {
+    this._loading.set(true);
+    return this.api.updateUsers(id, input).pipe(finalize(() => this._loading.set(false)));
   }
 }

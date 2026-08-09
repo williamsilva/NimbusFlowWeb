@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
@@ -70,6 +71,7 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
 
   protected override readonly i18n = inject(I18nService);
   readonly facade = inject(WorksFacade);
+  private readonly router = inject(Router);
   protected readonly toast = inject(MessageService);
   protected readonly policy = inject(WorksPermissionPolicy);
   readonly suppliersFacade = inject(SuppliersFacade);
@@ -165,6 +167,14 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     if (!this.policy.canEdit()) return;
     this.work.set(row);
     this.upsertVisible.set(true);
+  }
+
+  goToAddendums(row: WorkModel) {
+    this.router.navigate(['/works', row.id, 'addendums']);
+  }
+
+  goToInstallments(row: WorkModel) {
+    this.router.navigate(['/works', row.id, 'installments']);
   }
 
   onSaved(): void {

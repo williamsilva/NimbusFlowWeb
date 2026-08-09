@@ -176,7 +176,13 @@
       "title": "Fornecedores"
     },
     "works": {
-      "title": "Obras"
+      "title": "Obras",
+      "addendums": {
+        "title": "Aditivos"
+      },
+      "installments": {
+        "title": "Pagamentos"
+      }
     },
     "suggestions": {
       "title": "Sugestões"
@@ -368,6 +374,8 @@
     },
     "suppliers": "Fornecedores",
     "works": "Obras",
+    "addendums": "Aditivos",
+    "installments": "Pagamentos",
     "suggestions": "Sugestões"
   },
   "footer": {
@@ -2339,7 +2347,13 @@
         "placeholder": "Selecione as permissões",
         "saved": "Permissões atualizadas com sucesso.",
         "saveError": "Não foi possível salvar as permissões do grupo.",
-        "empty": "Nenhuma permissão associada."
+        "empty": "Nenhuma permissão associada.",
+        "removeConfirm": {
+          "action": "Remover do grupo",
+          "header": "Remover permissão do grupo",
+          "message": "Deseja realmente remover a permissão {permissionName} deste grupo?",
+          "success": "Permissão removida do grupo com sucesso."
+        }
       },
       "users": {
         "title": "Usuários",
@@ -2348,7 +2362,13 @@
         "placeholder": "Selecione os usuários",
         "saved": "Usuários atualizados com sucesso.",
         "saveError": "Não foi possível salvar os usuários do grupo.",
-        "empty": "Nenhum usuário associado."
+        "empty": "Nenhum usuário associado.",
+        "removeConfirm": {
+          "action": "Remover do grupo",
+          "header": "Remover usuário do grupo",
+          "message": "Deseja realmente remover {userName} deste grupo?",
+          "success": "Usuário removido do grupo com sucesso."
+        }
       }
     },
     "delete": {
@@ -3699,12 +3719,114 @@
       "title": "Nenhuma obra encontrada"
     },
     "action": {
-      "noPermission": "Você não tem permissão para gerenciar obras."
+      "noPermission": "Você não tem permissão para gerenciar obras.",
+      "viewAddendums": "Aditivos",
+      "viewInstallments": "Pagamentos"
     },
     "mapPicker": {
       "hint": "Clique no mapa para marcar a localização da obra - apenas dentro da área do parque Acquamania.",
       "outOfBounds": "Ponto fora da área do Acquamania - clique não registrado.",
       "areaTooltip": "Área do Acquamania"
+    }
+  },
+  "addendums": {
+    "new": {
+      "title": "Novo aditivo"
+    },
+    "fields": {
+      "amount": "Valor",
+      "justification": "Justificativa"
+    },
+    "columns": {
+      "amount": "Valor",
+      "justification": "Justificativa",
+      "tier": "Alçada",
+      "status": "Status",
+      "createdAt": "Solicitado em",
+      "decisionDate": "Decisão em"
+    },
+    "status": {
+      "PENDING": "Pendente",
+      "APPROVED": "Aprovado",
+      "REJECTED": "Reprovado"
+    },
+    "tier": {
+      "TIER1": "Alçada 1",
+      "TIER2": "Alçada 2"
+    },
+    "form": {
+      "invalid": "Revise os campos destacados antes de salvar.",
+      "tierHint": "calculada automaticamente pelo servidor conforme o valor",
+      "created": "Aditivo solicitado com sucesso.",
+      "saveError": "Não foi possível salvar o aditivo. Tente novamente."
+    },
+    "empty": {
+      "title": "Nenhum aditivo encontrado"
+    },
+    "action": {
+      "approve": "Aprovar",
+      "reject": "Reprovar",
+      "noPermission": "Você não tem permissão para decidir este aditivo.",
+      "alreadyDecided": "Este aditivo já foi decidido por outro usuário. Atualize a página."
+    },
+    "approveConfirm": {
+      "header": "Aprovar aditivo",
+      "message": "Confirma a aprovação do aditivo de {amount}?",
+      "success": "Aditivo aprovado com sucesso."
+    },
+    "rejectConfirm": {
+      "header": "Reprovar aditivo",
+      "message": "Confirma a reprovação do aditivo de {amount}?",
+      "success": "Aditivo reprovado com sucesso."
+    }
+  },
+  "installments": {
+    "new": {
+      "title": "Adicionar parcelas"
+    },
+    "fields": {
+      "amount": "Valor",
+      "dueDate": "Vencimento"
+    },
+    "columns": {
+      "number": "Nº",
+      "amount": "Valor",
+      "dueDate": "Vencimento",
+      "status": "Status"
+    },
+    "status": {
+      "PLANNED": "Planejada",
+      "MEASUREMENT_SUBMITTED": "Medição enviada",
+      "MEASUREMENT_APPROVED": "Medição aprovada",
+      "RELEASED": "Liberada",
+      "PAID": "Paga"
+    },
+    "form": {
+      "invalid": "Revise os campos destacados antes de salvar.",
+      "created": "Parcelas cadastradas com sucesso.",
+      "saveError": "Não foi possível salvar as parcelas. Tente novamente."
+    },
+    "empty": {
+      "title": "Nenhuma parcela encontrada"
+    },
+    "action": {
+      "addRow": "Adicionar linha",
+      "release": "Liberar",
+      "markPaid": "Marcar como pago",
+      "noPermission": "Você não tem permissão para esta ação.",
+      "requiresMeasurementApproved": "Requer medição aprovada para liberar.",
+      "requiresReleased": "Requer parcela liberada para marcar como paga.",
+      "statusChanged": "O status desta parcela foi alterado por outro usuário. Atualize a página."
+    },
+    "releaseConfirm": {
+      "header": "Liberar parcela",
+      "message": "Confirma a liberação da parcela nº {number}?",
+      "success": "Parcela liberada com sucesso."
+    },
+    "markPaidConfirm": {
+      "header": "Marcar parcela como paga",
+      "message": "Confirma que a parcela nº {number} foi paga?",
+      "success": "Parcela marcada como paga com sucesso."
     }
   },
   "suggestions": {

@@ -30,6 +30,10 @@ export class GroupsPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.GROUPS.MANAGE_PERMISSIONS);
   }
 
+  canManageUsers(_row: GroupPermissionTarget): boolean {
+    return this.perms.hasSupportOr(PERMISSIONS.GROUPS.MANAGE_USERS);
+  }
+
   createDisabledReason(): string | null {
     if (!this.canCreate()) {
       return 'groups.action.create.noPermission';
