@@ -1,9 +1,11 @@
+import { PeriodEnum } from '@models/enums/period.enum';
+
 export interface GroupsAdvancedFilters {
   name?: string;
   description?: string;
 
-  createdAtTo?: string;
-  createdAtFrom?: string;
+  createdAt?: string | string[];
+  periodCreatedAt?: PeriodEnum;
 
   createdBy?: string[] | null;
 

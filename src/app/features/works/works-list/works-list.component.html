@@ -82,6 +82,26 @@
         <p-multiSelect
           size="small"
           class="w-full"
+          [filter]="true"
+          appendTo="body"
+          [showClear]="true"
+          inputId="projectId"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="projectId()"
+          [showToggleAll]="false"
+          [options]="projectOptions()"
+          (ngModelChange)="projectId.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="projectId">{{ 'works.fields.project' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
           appendTo="body"
           [showClear]="true"
           inputId="status"
@@ -96,43 +116,41 @@
       </p-floatLabel>
     </div>
 
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-datepicker
-          inputId="startDate"
-          class="w-full"
-          size="small"
-          appendTo="body"
-          [showIcon]="true"
-          [readonlyInput]="true"
-          selectionMode="range"
-          dateFormat="dd/mm/yy"
-          [ngModel]="startDateRange()"
-          (ngModelChange)="startDateRange.set($event ?? null)"
-        ></p-datepicker>
-        <label for="startDate">{{ 'works.fields.startDate' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-period-date-filter
+      dateInputId="startDate"
+      periodInputId="periodStartDate"
+      [value]="startDate()"
+      [period]="periodStartDate()"
+      class="col-12 md:col-3 p-1"
+      (valueChange)="startDate.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodStartDate())"
+      [dateFormat]="setDateFormat(periodStartDate())"
+      [selectionMode]="setSelectionMode(periodStartDate())"
+      [dateLabel]="'works.fields.startDate' | translate"
+      [periodLabel]="'works.fields.periodStartDate' | translate"
+      (periodChange)="onPeriodColumnChange(periodStartDate, startDate, $event)"
+    ></cs-advanced-period-date-filter>
 
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-datepicker
-          inputId="expectedEndDate"
-          class="w-full"
-          size="small"
-          appendTo="body"
-          [showIcon]="true"
-          [readonlyInput]="true"
-          selectionMode="range"
-          dateFormat="dd/mm/yy"
-          [ngModel]="expectedEndDateRange()"
-          (ngModelChange)="expectedEndDateRange.set($event ?? null)"
-        ></p-datepicker>
-        <label for="expectedEndDate">{{ 'works.fields.expectedEndDate' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-period-date-filter
+      dateInputId="expectedEndDate"
+      periodInputId="periodExpectedEndDate"
+      [value]="expectedEndDate()"
+      [period]="periodExpectedEndDate()"
+      class="col-12 md:col-3 p-1"
+      (valueChange)="expectedEndDate.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodExpectedEndDate())"
+      [dateFormat]="setDateFormat(periodExpectedEndDate())"
+      [selectionMode]="setSelectionMode(periodExpectedEndDate())"
+      [dateLabel]="'works.fields.expectedEndDate' | translate"
+      [periodLabel]="'works.fields.periodExpectedEndDate' | translate"
+      (periodChange)="onPeriodColumnChange(periodExpectedEndDate, expectedEndDate, $event)"
+    ></cs-advanced-period-date-filter>
+  </div>
 
-    <div class="col-12 md:col-6 p-1">
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-6 p-2">
       <cs-currency-range-filter
         [inputId]="'totalAmount'"
         [label]="'works.fields.totalAmount' | translate"
@@ -153,12 +171,12 @@
     [lazy]="true"
     showGridlines
     [rowHover]="true"
+    [value]="works()"
     [paginator]="true"
     sortMode="multiple"
     filterDisplay="menu"
     stateStorage="local"
     class="cs-admin-table"
-    [value]="works()"
     [loading]="facade.loading()"
     [stateKey]="tableStateKey()"
     [showCurrentPageReport]="true"
@@ -167,7 +185,7 @@
     [paginatorDropdownAppendTo]="'body'"
     (onPage)="onPageChange($event)"
     [rowsPerPageOptions]="rowsPerPageOptions"
-    [tableStyle]="{ width: '100%', 'min-width': '58rem' }"
+    [tableStyle]="{ width: '100%', 'min-width': '92rem' }"
     [currentPageReportTemplate]="'pagination.report' | translate"
   >
     <ng-template pTemplate="colgroup">
@@ -175,9 +193,16 @@
         <col style="width: auto" />
         <col style="width: auto" />
         <col style="width: 140px" />
+        <col style="width: 140px" />
         <col style="width: 110px" />
         <col style="width: 110px" />
-        <col style="width: 150px" />
+        <col style="width: 120px" />
+        <col style="width: 90px" />
+        <col style="width: 120px" />
+        <col style="width: 130px" />
+        <col style="width: 90px" />
+        <col style="width: 130px" />
+        <col style="width: 130px" />
         <col style="width: 80px" />
       </colgroup>
     </ng-template>
@@ -186,7 +211,12 @@
       <tr>
         <th pSortableColumn="name">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'works.columns.name' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'works.columns.name' | translate"
+              >{{ 'works.columns.name' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="name"></p-sortIcon>
               <p-columnFilter
@@ -206,7 +236,12 @@
 
         <th pSortableColumn="supplierName">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'works.columns.supplier' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'works.columns.supplier' | translate"
+              >{{ 'works.columns.supplier' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="supplierName"></p-sortIcon>
               <p-columnFilter
@@ -237,9 +272,52 @@
           </div>
         </th>
 
+        <th pSortableColumn="projectName">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'works.columns.project' | translate"
+              >{{ 'works.columns.project' | translate }}</span
+            >
+            <span class="th-icons">
+              <p-sortIcon field="projectName"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="projectId"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [filter]="true"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="projectOptions()"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
         <th pSortableColumn="status">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'works.columns.status' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'works.columns.status' | translate"
+              >{{ 'works.columns.status' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="status"></p-sortIcon>
               <p-columnFilter
@@ -271,7 +349,12 @@
 
         <th pSortableColumn="startDate">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'works.columns.startDate' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'works.columns.startDate' | translate"
+              >{{ 'works.columns.startDate' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="startDate"></p-sortIcon>
               <p-columnFilter
@@ -303,7 +386,12 @@
 
         <th pSortableColumn="expectedEndDate">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'works.columns.expectedEndDate' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'works.columns.expectedEndDate' | translate"
+              >{{ 'works.columns.expectedEndDate' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="expectedEndDate"></p-sortIcon>
               <p-columnFilter
@@ -333,9 +421,89 @@
           </div>
         </th>
 
+        <th pSortableColumn="initialAmount">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'works.columns.initialAmount' | translate"
+              >{{ 'works.columns.initialAmount' | translate }}</span
+            >
+            <span class="th-icons">
+              <p-sortIcon field="initialAmount"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="initialAmount"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [inputId]="'initialAmountCol'"
+                    [label]="'works.columns.initialAmount' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'works.columns.addendumsCount' | translate"
+              >{{ 'works.columns.addendumsCount' | translate }}</span
+            >
+          </div>
+        </th>
+
+        <th pSortableColumn="addendumsAmount">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'works.columns.addendumsAmount' | translate"
+              >{{ 'works.columns.addendumsAmount' | translate }}</span
+            >
+            <span class="th-icons">
+              <p-sortIcon field="addendumsAmount"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="addendumsAmount"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [inputId]="'addendumsAmountCol'"
+                    [label]="'works.columns.addendumsAmount' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
         <th pSortableColumn="totalAmount">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'works.columns.totalAmount' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'works.columns.totalAmount' | translate"
+              >{{ 'works.columns.totalAmount' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="totalAmount"></p-sortIcon>
               <p-columnFilter
@@ -362,7 +530,66 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label">{{ 'common.actions' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'works.columns.installmentsCount' | translate"
+              >{{ 'works.columns.installmentsCount' | translate }}</span
+            >
+          </div>
+        </th>
+
+        <th pSortableColumn="remainingAmount">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'works.columns.remainingAmount' | translate"
+              >{{ 'works.columns.remainingAmount' | translate }}</span
+            >
+            <span class="th-icons">
+              <p-sortIcon field="remainingAmount"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="remainingAmount"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [inputId]="'remainingAmountCol'"
+                    [label]="'works.columns.remainingAmount' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'works.columns.progress' | translate"
+              >{{ 'works.columns.progress' | translate }}</span
+            >
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'common.actions' | translate"
+              >{{ 'common.actions' | translate }}</span
+            >
           </div>
         </th>
       </tr>
@@ -370,17 +597,48 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td>{{ row.name }}</td>
-        <td>{{ row.supplierName }}</td>
+        <td>
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{
+            row.name
+          }}</span>
+        </td>
+        <td>
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.supplierName"
+            >{{ row.supplierName }}</span
+          >
+        </td>
+        <td>
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.projectName">{{
+            row.projectName
+          }}</span>
+        </td>
         <td class="text-center">
           <cs-status-badge
             [tone]="tone(row.status)"
-            [label]="('works.status.' + row.status) | translate"
+            [label]="'works.status.' + row.status | translate"
           ></cs-status-badge>
         </td>
         <td class="text-center">{{ row.startDate | csDate: 'date' }}</td>
         <td class="text-center">{{ row.expectedEndDate | csDate: 'date' }}</td>
+        <td class="text-right">{{ row.initialAmount | csCurrency }}</td>
+        <td class="text-center">{{ row.addendumsCount }}</td>
+        <td class="text-right">{{ row.addendumsAmount | csCurrency }}</td>
         <td class="text-right">{{ row.totalAmount | csCurrency }}</td>
+        <td class="text-center">{{ row.installmentsCount }}</td>
+        <td class="text-right">{{ row.remainingAmount | csCurrency }}</td>
+        <td class="text-center">
+          <div class="flex align-items-center gap-2">
+            <p-progressBar
+              [showValue]="false"
+              [value]="row.progressPercentage"
+              [style]="{ height: '8px', flex: '1' }"
+            ></p-progressBar>
+            <small>{{ row.progressPercentage | number: '1.0-2' }}%</small>
+          </div>
+        </td>
         <td class="text-center">
           <div class="table-actions">
             <button
@@ -417,6 +675,16 @@
               [pTooltip]="'works.action.viewInstallments' | translate"
               tooltipPosition="top"
             ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-camera"
+              (click)="goToMeasurements(row)"
+              class="p-button-text p-button-sm"
+              [pTooltip]="'works.action.viewMeasurements' | translate"
+              tooltipPosition="top"
+            ></button>
           </div>
         </td>
       </tr>
@@ -424,8 +692,10 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="text-center py-5 opacity-70">
-          {{ 'works.empty.title' | translate }}
+        <td colspan="14" class="text-center py-5 opacity-70">
+          {{
+            facade.loadedOnce() ? ('works.empty.title' | translate) : ('common.loading' | translate)
+          }}
         </td>
       </tr>
     </ng-template>

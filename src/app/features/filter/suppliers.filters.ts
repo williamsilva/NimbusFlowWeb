@@ -1,3 +1,5 @@
+import { PeriodEnum } from '@models/enums/period.enum';
+
 export interface SuppliersAdvancedFilters {
   companyName?: string;
   tradeName?: string;
@@ -7,6 +9,6 @@ export interface SuppliersAdvancedFilters {
 
   active?: string[] | null;
 
-  createdAtFrom?: string;
-  createdAtTo?: string;
+  createdAt?: string | string[];
+  periodCreatedAt?: PeriodEnum;
 }

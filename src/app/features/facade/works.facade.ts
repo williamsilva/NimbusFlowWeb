@@ -19,10 +19,30 @@ export class WorksFacade {
   private readonly _data = signal<WorkModel[]>([]);
   private readonly _lastQuery = signal<LastQuery | null>(null);
 
+  private readonly _options = signal<{ label: string; value: string }[]>([]);
+  private readonly _optionsLoadedOnce = signal(false);
+
   readonly loading = this._loading.asReadonly();
   readonly works = this._data.asReadonly();
   readonly totalRecords = this._total.asReadonly();
   readonly loadedOnce = this._loadedOnce.asReadonly();
+  readonly options = this._options.asReadonly();
+
+  /** Pro multiselect de Frente de Serviço no filtro do Dashboard. */
+  loadOptions(force = false): void {
+    if (!force && this._optionsLoadedOnce()) return;
+
+    this.api.findAll().subscribe({
+      next: (items) => {
+        this._options.set(items.map((w) => ({ label: w.name, value: w.id })));
+        this._optionsLoadedOnce.set(true);
+      },
+      error: () => {
+        this._options.set([]);
+        this._optionsLoadedOnce.set(true);
+      },
+    });
+  }
 
   loadPage(q: LastQuery): void {
     if (this._loading()) return;
@@ -61,19 +81,20 @@ export class WorksFacade {
     return this.api.getById(id);
   }
 
+  /**
+   * Sem marcar `_loading` aqui: esse signal é o guard de `loadPage()` (evita corrida entre
+   * paginações concorrentes) - se create/update também o setassem antes de chamar a API, o
+   * `reloadLast()` do `tap` abaixo rodaria enquanto `_loading` ainda está `true` (o `next` do tap
+   * sempre roda antes do `finalize` do próprio create/update, mesmo com uma única emissão) e o
+   * guard de `loadPage()` bloquearia silenciosamente o reload - é exatamente por isso que salvar
+   * uma Frente de Serviço não atualizava a listagem. `reloadLast()`/`loadPage()` já controlam seu
+   * próprio `_loading` sem ajuda externa.
+   */
   create(input: WorkUpsertInput): Observable<WorkModel> {
-    this._loading.set(true);
-    return this.api.create(input).pipe(
-      tap(() => this.reloadLast()),
-      finalize(() => this._loading.set(false)),
-    );
+    return this.api.create(input).pipe(tap(() => this.reloadLast()));
   }
 
   update(id: string, input: WorkUpsertInput): Observable<WorkModel> {
-    this._loading.set(true);
-    return this.api.update(id, input).pipe(
-      tap(() => this.reloadLast()),
-      finalize(() => this._loading.set(false)),
-    );
+    return this.api.update(id, input).pipe(tap(() => this.reloadLast()));
   }
 }

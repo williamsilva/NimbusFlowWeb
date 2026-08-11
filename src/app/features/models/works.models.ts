@@ -1,4 +1,5 @@
 import { WorkStatusEnum } from '@models/enums/work-status.enum';
+import { PeriodEnum } from '@models/enums/period.enum';
 
 /**
  * Espelha com.nimbusflow.works.dto.{request.WorkRequest,response.WorkResponse} do
@@ -13,6 +14,8 @@ export interface WorkModel {
   name: string;
   supplierId: string;
   supplierName: string;
+  projectId: string;
+  projectName: string;
   ownerId: string | null;
   approvedById: string | null;
   approvedAt: string | null;
@@ -20,10 +23,16 @@ export interface WorkModel {
   expectedEndDate: string;
   actualEndDate: string | null;
   initialAmount: number;
+  /** Soma dos aditivos APPROVED - totalAmount menos initialAmount (ver WorkService.recalculateTotalAmount no backend). */
+  addendumsAmount: number;
   totalAmount: number;
+  /** totalAmount menos a soma de todas as Parcelas (ordens de pagamento) já geradas para a obra. */
+  remainingAmount: number;
+  addendumsCount: number;
+  installmentsCount: number;
+  /** Soma das Parcelas com status PAID dividida por totalAmount, em percentual (0 quando ainda não houve pagamento). */
+  progressPercentage: number;
   status: WorkStatusEnum;
-  latitude: number | null;
-  longitude: number | null;
   createdAt: string | null;
   updatedAt: string | null;
 }
@@ -33,21 +42,23 @@ export type WorkApiModel = WorkModel;
 export interface WorkUpsertInput {
   name: string;
   supplierId: string;
+  projectId: string;
   startDate: string;
   expectedEndDate: string;
   actualEndDate: string | null;
   initialAmount: number;
-  latitude: number;
-  longitude: number;
   status: WorkStatusEnum | null;
 }
 
 export type WorksFiltersState = {
   name: string;
   supplierId: string[] | null;
+  projectId: string[] | null;
   status: string[] | null;
-  startDateRange: [string, string] | null;
-  expectedEndDateRange: [string, string] | null;
+  startDate: string | string[] | null;
+  periodStartDate: PeriodEnum | null;
+  expectedEndDate: string | string[] | null;
+  periodExpectedEndDate: PeriodEnum | null;
   totalAmountFrom: number | null;
   totalAmountTo: number | null;
 };

@@ -1,4 +1,5 @@
 import { GroupModel } from '@models/groups.models';
+import { PeriodEnum } from '@models/enums/period.enum';
 import { UserMinimalModel } from '@models/user-minimal.models';
 import { normalizeUserStatus, UserStatus, UserStatusInput } from '@models/enums/user-status.enum';
 
@@ -44,11 +45,15 @@ export type UsersFiltersState = {
   userName: string;
   document: string;
   status: UserStatus[] | null;
-  createdAtRange: [string, string] | null;
+  createdAt: string | string[] | null;
+  periodCreatedAt: PeriodEnum | null;
   createdBy: string[] | null;
-  lastLoginAtRange: [string, string] | null;
-  blockedUntilRange: [string, string] | null;
-  passwordExpiresAtRange: [string, string] | null;
+  lastLoginAt: string | string[] | null;
+  periodLastLoginAt: PeriodEnum | null;
+  blockedUntil: string | string[] | null;
+  periodBlockedUntil: PeriodEnum | null;
+  passwordExpiresAt: string | string[] | null;
+  periodPasswordExpiresAt: PeriodEnum | null;
 };
 
 /**

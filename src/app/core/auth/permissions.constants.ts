@@ -188,6 +188,10 @@ export const PERMISSIONS = {
     MANAGE: 'FORNECEDOR_MANAGE',
   },
 
+  PROJETO: {
+    MANAGE: 'PROJETO_MANAGE',
+  },
+
   OBRA: {
     MANAGE: 'OBRA_MANAGE',
   },
@@ -211,6 +215,15 @@ export const PERMISSIONS = {
   PARCELA: {
     LIBERAR: 'PARCELA_LIBERAR',
     PAGAR: 'PARCELA_PAGAR',
+  },
+
+  /**
+   * Medição de parcela (com.nimbusflow.works.core.MeasurementService) - diferente de ADITIVO,
+   * aprovar/reprovar é uma única permissão sem alçada por valor.
+   */
+  MEDICAO: {
+    CREATE: 'MEDICAO_CREATE',
+    APPROVE: 'MEDICAO_APPROVE',
   },
 } as const;
 
@@ -240,8 +253,10 @@ export const ALL_PERMISSIONS: Permission[] = [
   ...Object.values(PERMISSIONS.SETTINGS),
   ...Object.values(PERMISSIONS.MANAGEMENT),
   ...Object.values(PERMISSIONS.FORNECEDOR),
+  ...Object.values(PERMISSIONS.PROJETO),
   ...Object.values(PERMISSIONS.OBRA),
   ...Object.values(PERMISSIONS.SUGESTAO),
   ...Object.values(PERMISSIONS.ADITIVO),
   ...Object.values(PERMISSIONS.PARCELA),
+  ...Object.values(PERMISSIONS.MEDICAO),
 ];

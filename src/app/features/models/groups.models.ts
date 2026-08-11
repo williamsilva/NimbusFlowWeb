@@ -1,4 +1,5 @@
 import { UserMinimalModel } from '@models/user-minimal.models';
+import { PeriodEnum } from '@models/enums/period.enum';
 
 export interface PermissionOptionModel {
   id: string;
@@ -59,7 +60,8 @@ export type GroupsFiltersState = {
   name: string;
   description: string;
   createdBy: string[] | null;
-  createdAtRange: [string, string] | null;
+  createdAt: string | string[] | null;
+  periodCreatedAt: PeriodEnum | null;
 };
 
 export interface PermissionOptionApiModel {

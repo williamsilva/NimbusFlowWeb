@@ -4,11 +4,16 @@ import { Injectable, inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
+import { HalPagedResponse } from '@core/api/page.model';
+import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { InstallmentsAdvancedFilters } from '@features/filter/installments.filters';
 import {
   InstallmentApiModel,
-  InstallmentScheduleInput,
+  InstallmentWithWorkApiModel,
+  InstallmentWithWorkModel,
   mapInstallmentApiModel,
   mapInstallmentApiModels,
+  mapInstallmentWithWorkApiModels,
 } from '@models/installments.models';
 
 @Injectable({ providedIn: 'root' })
@@ -23,10 +28,18 @@ export class InstallmentsApiService {
       .pipe(map(mapInstallmentApiModels));
   }
 
-  schedule(workId: string, input: InstallmentScheduleInput) {
+  searchPaged(body: ListQueryDto<InstallmentsAdvancedFilters>) {
     return this.http
-      .post<InstallmentApiModel[]>(`${this.worksUrl}/${workId}/installments`, input)
-      .pipe(map(mapInstallmentApiModels));
+      .post<HalPagedResponse<InstallmentWithWorkApiModel>>(`${this.installmentsUrl}/search`, body)
+      .pipe(
+        map((res) => {
+          const content = mapInstallmentWithWorkApiModels(res?._embedded?.content);
+          return {
+            ...res,
+            _embedded: { ...(res?._embedded ?? {}), content },
+          } as HalPagedResponse<InstallmentWithWorkModel>;
+        }),
+      );
   }
 
   release(id: string) {

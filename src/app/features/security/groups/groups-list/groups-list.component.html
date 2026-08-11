@@ -70,23 +70,21 @@
       </p-floatLabel>
     </div>
 
-    <div class="col-12 md:col-2 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-datepicker
-          inputId="createdAt"
-          class="w-full"
-          size="small"
-          appendTo="body"
-          [showIcon]="true"
-          [readonlyInput]="true"
-          selectionMode="range"
-          dateFormat="dd/mm/yy"
-          [ngModel]="createdAtRange()"
-          (ngModelChange)="createdAtRange.set($event ?? null)"
-        ></p-datepicker>
-        <label for="createdAt">{{ 'groups.fields.createdAt' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-period-date-filter
+      dateInputId="createdAt"
+      periodInputId="periodCreatedAt"
+      [value]="createdAt()"
+      [period]="periodCreatedAt()"
+      class="col-12 md:col-2 p-1"
+      (valueChange)="createdAt.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodCreatedAt())"
+      [dateFormat]="setDateFormat(periodCreatedAt())"
+      [selectionMode]="setSelectionMode(periodCreatedAt())"
+      [dateLabel]="'groups.fields.createdAt' | translate"
+      [periodLabel]="'groups.fields.periodCreatedAt' | translate"
+      (periodChange)="onPeriodColumnChange(periodCreatedAt, createdAt, $event)"
+    ></cs-advanced-period-date-filter>
 
     <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
@@ -153,7 +151,7 @@
       <tr>
         <th pSortableColumn="name">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'groups.columns.name' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'groups.columns.name' | translate">{{ 'groups.columns.name' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="name"></p-sortIcon>
               <p-columnFilter
@@ -173,7 +171,7 @@
 
         <th pSortableColumn="description">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'groups.columns.description' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'groups.columns.description' | translate">{{ 'groups.columns.description' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="description"></p-sortIcon>
               <p-columnFilter
@@ -193,7 +191,7 @@
 
         <th pSortableColumn="createdAt">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'groups.columns.createdAt' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'groups.columns.createdAt' | translate">{{ 'groups.columns.createdAt' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="createdAt"></p-sortIcon>
               <p-columnFilter
@@ -225,7 +223,7 @@
 
         <th pSortableColumn="createdBy">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'groups.columns.createdBy' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'groups.columns.createdBy' | translate">{{ 'groups.columns.createdBy' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="createdBy"></p-sortIcon>
               <p-columnFilter
@@ -258,18 +256,18 @@
 
         <th>
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'groups.columns.usersCount' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'groups.columns.usersCount' | translate">{{ 'groups.columns.usersCount' | translate }}</span>
           </div>
         </th>
         <th>
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'groups.columns.permissionsCount' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'groups.columns.permissionsCount' | translate">{{ 'groups.columns.permissionsCount' | translate }}</span>
           </div>
         </th>
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label">{{ 'common.actions' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
           </div>
         </th>
       </tr>
@@ -277,10 +275,10 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td>{{ row.name }}</td>
-        <td>{{ row.description }}</td>
+        <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{ row.name }}</span></td>
+        <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.description">{{ row.description }}</span></td>
         <td class="text-center">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
-        <td class="text-center">{{ row.createdBy?.name ?? '-' }}</td>
+        <td class="text-center"><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.createdBy?.name ?? '-'">{{ row.createdBy?.name ?? '-' }}</span></td>
         <td class="text-center">{{ row.usersCount ?? '-' }}</td>
         <td class="text-center">{{ row.permissionsCount ?? '-' }}</td>
         <td class="text-center">
@@ -334,7 +332,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="7" class="text-center py-5 opacity-70">
-          {{ 'groups.empty.title' | translate }}
+          {{ facade.loadedOnce() ? ('groups.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
     </ng-template>

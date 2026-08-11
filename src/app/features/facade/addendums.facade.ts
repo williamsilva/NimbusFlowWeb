@@ -14,10 +14,12 @@ export class AddendumsFacade {
   private readonly api = inject(AddendumsApiService);
 
   private readonly _loading = signal(false);
+  private readonly _loadedOnce = signal(false);
   private readonly _items = signal<AddendumModel[]>([]);
   private readonly _workId = signal<string | null>(null);
 
   readonly loading = this._loading.asReadonly();
+  readonly loadedOnce = this._loadedOnce.asReadonly();
   readonly items = this._items.asReadonly();
 
   loadByWork(workId: string): void {
@@ -26,7 +28,12 @@ export class AddendumsFacade {
 
     this.api
       .findByWork(workId)
-      .pipe(finalize(() => this._loading.set(false)))
+      .pipe(
+        finalize(() => {
+          this._loading.set(false);
+          this._loadedOnce.set(true);
+        }),
+      )
       .subscribe({
         next: (items) => this._items.set(items),
         error: () => this._items.set([]),

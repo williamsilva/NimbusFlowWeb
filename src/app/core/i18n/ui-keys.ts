@@ -124,7 +124,11 @@ export const UI_KEYS = {
     works: {
       title: 'menu.works.title',
       suppliers: 'menu.works.suppliers',
+      projects: 'menu.works.projects',
       works: 'menu.works.works',
+      addendums: 'menu.works.addendums',
+      installments: 'menu.works.installments',
+      measurements: 'menu.works.measurements',
       suggestions: 'menu.works.suggestions',
     },
   },
@@ -595,12 +599,16 @@ export const UI_KEYS = {
       userName: 'users.fields.userName',
       document: 'users.fields.document',
       createdAt: 'users.fields.createdAt',
+      periodCreatedAt: 'users.fields.periodCreatedAt',
       createdBy: 'users.fields.createdBy',
 
       lastLoginAt: 'users.fields.lastLoginAt',
+      periodLastLoginAt: 'users.fields.periodLastLoginAt',
       blockedUntil: 'users.fields.blockedUntil',
+      periodBlockedUntil: 'users.fields.periodBlockedUntil',
       passwordChangedAt: 'users.fields.passwordChangedAt',
       passwordExpiresAt: 'users.fields.passwordExpiresAt',
+      periodPasswordExpiresAt: 'users.fields.periodPasswordExpiresAt',
     },
     form: {
       loadError: 'users.form.loadError',
@@ -1607,6 +1615,7 @@ export const UI_KEYS = {
       name: 'groups.fields.name',
       description: 'groups.fields.description',
       createdAt: 'groups.fields.createdAt',
+      periodCreatedAt: 'groups.fields.periodCreatedAt',
       createdBy: 'groups.fields.createdBy',
     },
     form: {
@@ -1626,6 +1635,7 @@ export const UI_KEYS = {
       email: 'suppliers.fields.email',
       status: 'suppliers.fields.status',
       createdAt: 'suppliers.fields.createdAt',
+      periodCreatedAt: 'suppliers.fields.periodCreatedAt',
     },
     form: {
       invalid: 'suppliers.form.invalid',
@@ -1638,20 +1648,30 @@ export const UI_KEYS = {
     fields: {
       name: 'works.fields.name',
       supplier: 'works.fields.supplier',
+      project: 'works.fields.project',
       status: 'works.fields.status',
       startDate: 'works.fields.startDate',
+      periodStartDate: 'works.fields.periodStartDate',
       expectedEndDate: 'works.fields.expectedEndDate',
+      periodExpectedEndDate: 'works.fields.periodExpectedEndDate',
       totalAmount: 'works.fields.totalAmount',
     },
     form: {
       invalid: 'works.form.invalid',
-      locationRequired: 'works.form.locationRequired',
       created: 'works.form.created',
       updated: 'works.form.updated',
       saveError: 'works.form.saveError',
     },
   },
   addendums: {
+    fields: {
+      work: 'addendums.fields.work',
+      amount: 'addendums.fields.amount',
+      justification: 'addendums.fields.justification',
+      status: 'addendums.fields.status',
+      tier: 'addendums.fields.tier',
+      createdAt: 'addendums.fields.createdAt',
+    },
     form: {
       invalid: 'addendums.form.invalid',
       created: 'addendums.form.created',
@@ -1672,9 +1692,13 @@ export const UI_KEYS = {
     },
   },
   installments: {
+    fields: {
+      work: 'installments.fields.work',
+      amount: 'installments.fields.amount',
+      status: 'installments.fields.status',
+      dueDate: 'installments.fields.dueDate',
+    },
     form: {
-      invalid: 'installments.form.invalid',
-      created: 'installments.form.created',
       saveError: 'installments.form.saveError',
     },
     action: {
@@ -1691,11 +1715,50 @@ export const UI_KEYS = {
       success: 'installments.markPaidConfirm.success',
     },
   },
+  measurements: {
+    fields: {
+      work: 'measurements.fields.work',
+      description: 'measurements.fields.description',
+      status: 'measurements.fields.status',
+      amountToPay: 'measurements.fields.amountToPay',
+      dueDate: 'measurements.fields.dueDate',
+    },
+    form: {
+      invalid: 'measurements.form.invalid',
+      created: 'measurements.form.created',
+      saveError: 'measurements.form.saveError',
+      exceedsRemaining: 'measurements.form.exceedsRemaining',
+    },
+    action: {
+      requiresSubmittableWork: 'measurements.action.requiresSubmittableWork',
+      alreadyDecided: 'measurements.action.alreadyDecided',
+      exceedsWorkTotal: 'measurements.action.exceedsWorkTotal',
+    },
+    approveConfirm: {
+      header: 'measurements.approveConfirm.header',
+      message: 'measurements.approveConfirm.message',
+      success: 'measurements.approveConfirm.success',
+    },
+    rejectConfirm: {
+      header: 'measurements.rejectConfirm.header',
+      message: 'measurements.rejectConfirm.message',
+      success: 'measurements.rejectConfirm.success',
+    },
+  },
+  projects: {
+    form: {
+      invalid: 'projects.form.invalid',
+      created: 'projects.form.created',
+      updated: 'projects.form.updated',
+      saveError: 'projects.form.saveError',
+    },
+  },
   suggestions: {
     fields: {
       description: 'suggestions.fields.description',
       status: 'suggestions.fields.status',
       createdAt: 'suggestions.fields.createdAt',
+      periodCreatedAt: 'suggestions.fields.periodCreatedAt',
     },
     form: {
       invalid: 'suggestions.form.invalid',

@@ -41,6 +41,42 @@ export const STATE_KEY = {
         },
         FILTERS: { V1: 'nimbusflow.suggestions.filters.v1' },
       },
+      ADDENDUMS: {
+        TABLE: {
+          STATE: { V1: 'nimbusflow.addendums.table.state.v1' },
+        },
+      },
+      INSTALLMENTS: {
+        TABLE: {
+          STATE: { V1: 'nimbusflow.installments.table.state.v1' },
+        },
+      },
+      ALL_ADDENDUMS: {
+        TABLE: {
+          ROWS: { V1: 'all-addendums.table.rows' },
+          STATE: { V1: 'nimbusflow.all-addendums.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.all-addendums.filters.v1' },
+      },
+      ALL_INSTALLMENTS: {
+        TABLE: {
+          ROWS: { V1: 'all-installments.table.rows' },
+          STATE: { V1: 'nimbusflow.all-installments.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.all-installments.filters.v1' },
+      },
+      MEASUREMENTS: {
+        TABLE: {
+          STATE: { V1: 'nimbusflow.measurements.table.state.v1' },
+        },
+      },
+      ALL_MEASUREMENTS: {
+        TABLE: {
+          ROWS: { V1: 'all-measurements.table.rows' },
+          STATE: { V1: 'nimbusflow.all-measurements.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.all-measurements.filters.v1' },
+      },
     },
   },
 };

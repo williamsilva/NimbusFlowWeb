@@ -128,23 +128,21 @@
       </p-floatLabel>
     </div>
 
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-datepicker
-          inputId="createdAt"
-          class="w-full"
-          size="small"
-          appendTo="body"
-          [showIcon]="true"
-          [readonlyInput]="true"
-          selectionMode="range"
-          dateFormat="dd/mm/yy"
-          [ngModel]="createdAtRange()"
-          (ngModelChange)="createdAtRange.set($event ?? null)"
-        ></p-datepicker>
-        <label for="createdAt">{{ 'suppliers.fields.createdAt' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-period-date-filter
+      dateInputId="createdAt"
+      periodInputId="periodCreatedAt"
+      [value]="createdAt()"
+      [period]="periodCreatedAt()"
+      class="col-12 md:col-3 p-1"
+      (valueChange)="createdAt.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodCreatedAt())"
+      [dateFormat]="setDateFormat(periodCreatedAt())"
+      [selectionMode]="setSelectionMode(periodCreatedAt())"
+      [dateLabel]="'suppliers.fields.createdAt' | translate"
+      [periodLabel]="'suppliers.fields.periodCreatedAt' | translate"
+      (periodChange)="onPeriodColumnChange(periodCreatedAt, createdAt, $event)"
+    ></cs-advanced-period-date-filter>
   </div>
 </cs-filters-panel>
 
@@ -192,7 +190,7 @@
       <tr>
         <th pSortableColumn="companyName">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'suppliers.columns.companyName' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'suppliers.columns.companyName' | translate">{{ 'suppliers.columns.companyName' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="companyName"></p-sortIcon>
               <p-columnFilter
@@ -212,7 +210,7 @@
 
         <th pSortableColumn="tradeName">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'suppliers.columns.tradeName' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'suppliers.columns.tradeName' | translate">{{ 'suppliers.columns.tradeName' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="tradeName"></p-sortIcon>
               <p-columnFilter
@@ -232,7 +230,7 @@
 
         <th pSortableColumn="taxId">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'suppliers.columns.taxId' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'suppliers.columns.taxId' | translate">{{ 'suppliers.columns.taxId' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="taxId"></p-sortIcon>
               <p-columnFilter
@@ -252,7 +250,7 @@
 
         <th pSortableColumn="email">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'suppliers.columns.email' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'suppliers.columns.email' | translate">{{ 'suppliers.columns.email' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="email"></p-sortIcon>
               <p-columnFilter
@@ -272,7 +270,7 @@
 
         <th pSortableColumn="phone">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'suppliers.columns.phone' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'suppliers.columns.phone' | translate">{{ 'suppliers.columns.phone' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="phone"></p-sortIcon>
               <p-columnFilter
@@ -292,7 +290,7 @@
 
         <th pSortableColumn="active">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'suppliers.columns.status' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'suppliers.columns.status' | translate">{{ 'suppliers.columns.status' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="active"></p-sortIcon>
               <p-columnFilter
@@ -324,7 +322,7 @@
 
         <th pSortableColumn="createdAt">
           <div class="th-flex text-center">
-            <span class="th-label">{{ 'suppliers.columns.createdAt' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'suppliers.columns.createdAt' | translate">{{ 'suppliers.columns.createdAt' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="createdAt"></p-sortIcon>
               <p-columnFilter
@@ -356,7 +354,7 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label">{{ 'common.actions' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
           </div>
         </th>
       </tr>
@@ -364,10 +362,10 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td>{{ row.companyName }}</td>
-        <td>{{ row.tradeName || '-' }}</td>
+        <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.companyName">{{ row.companyName }}</span></td>
+        <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.tradeName || '-'">{{ row.tradeName || '-' }}</span></td>
         <td>{{ row.taxId | taxId }}</td>
-        <td>{{ row.email || '-' }}</td>
+        <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.email || '-'">{{ row.email || '-' }}</span></td>
         <td>{{ row.phone ? (row.phone | phone) : '-' }}</td>
         <td class="text-center">
           <cs-status-badge
@@ -417,7 +415,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="8" class="text-center py-5 opacity-70">
-          {{ 'suppliers.empty.title' | translate }}
+          {{ facade.loadedOnce() ? ('suppliers.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
     </ng-template>

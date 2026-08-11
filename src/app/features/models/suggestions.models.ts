@@ -1,4 +1,5 @@
 import { SuggestionStatusEnum } from '@models/enums/suggestion-status.enum';
+import { PeriodEnum } from '@models/enums/period.enum';
 
 /**
  * Espelha com.nimbusflow.works.dto.response.SuggestionResponse do NimbusFlowServer (ver
@@ -29,7 +30,8 @@ export interface SuggestionStatusInput {
 export type SuggestionsFiltersState = {
   description: string;
   status: string[] | null;
-  createdAtRange: [string, string] | null;
+  createdAt: string | string[] | null;
+  periodCreatedAt: PeriodEnum | null;
 };
 
 export function mapSuggestionApiModel(input: SuggestionApiModel): SuggestionModel {

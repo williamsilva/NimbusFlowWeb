@@ -1,0 +1,151 @@
+<cs-page-header [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.projects' | translate) },
+  ]" [compact]="false">
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    tooltipPosition="top"
+    [disabled]="!policy.canManage()"
+    class="p-button-info p-button-sm"
+    [label]="'projects.new.title' | translate"
+    [pTooltip]="!policy.canManage() ? (policy.createDisabledReason() ?? '' | translate) : ''"
+  ></button>
+</cs-page-header>
+
+<app-projects-upsert-dialog
+  [visible]="upsertVisible()"
+  [project]="selectedProject()"
+  (visibleChange)="onUpsertVisibleChange($event)"
+></app-projects-upsert-dialog>
+
+<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+  <p-table
+    stripedRows
+    dataKey="id"
+    size="small"
+    showGridlines
+    [rowHover]="true"
+    sortMode="multiple"
+    class="cs-admin-table"
+    [value]="items()"
+    [loading]="loading()"
+    [tableStyle]="{ width: '100%', 'min-width': '72rem' }"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: auto" />
+        <col style="width: 90px" />
+        <col style="width: 130px" />
+        <col style="width: 130px" />
+        <col style="width: 130px" />
+        <col style="width: 110px" />
+        <col style="width: 110px" />
+        <col style="width: 90px" />
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="name">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.name' | translate">{{ 'projects.columns.name' | translate }}</span>
+            <p-sortIcon field="name"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="serviceFrontsCount" class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.serviceFrontsCount' | translate">{{ 'projects.columns.serviceFrontsCount' | translate }}</span>
+            <p-sortIcon field="serviceFrontsCount"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="totalContractedAmount">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.totalContractedAmount' | translate">{{ 'projects.columns.totalContractedAmount' | translate }}</span>
+            <p-sortIcon field="totalContractedAmount"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="totalPaidAmount">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.totalPaidAmount' | translate">{{ 'projects.columns.totalPaidAmount' | translate }}</span>
+            <p-sortIcon field="totalPaidAmount"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="remainingAmount">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.remainingAmount' | translate">{{ 'projects.columns.remainingAmount' | translate }}</span>
+            <p-sortIcon field="remainingAmount"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="progressPercentage" class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.progress' | translate">{{ 'projects.columns.progress' | translate }}</span>
+            <p-sortIcon field="progressPercentage"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="status" class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.status' | translate">{{ 'projects.columns.status' | translate }}</span>
+            <p-sortIcon field="status"></p-sortIcon>
+          </div>
+        </th>
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{ row.name }}</span></td>
+        <td class="text-center">{{ row.serviceFrontsCount }}</td>
+        <td class="text-right">{{ row.totalContractedAmount | csCurrency }}</td>
+        <td class="text-right">{{ row.totalPaidAmount | csCurrency }}</td>
+        <td class="text-right">{{ row.remainingAmount | csCurrency }}</td>
+        <td class="text-center">{{ row.progressPercentage | number: '1.0-2' }}%</td>
+        <td class="text-center">
+          <cs-status-badge [tone]="tone(row.status)" [label]="('projects.status.' + row.status) | translate"></cs-status-badge>
+        </td>
+        <td class="text-center">
+          <div class="table-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="edit(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!policy.canEdit()"
+              [pTooltip]="
+                policy.canEdit()
+                  ? ('common.edit' | translate)
+                  : (policy.editDisabledReason() ?? 'projects.action.noPermission' | translate)
+              "
+              tooltipPosition="top"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" class="text-center py-5 opacity-70">
+          {{ loadedOnce() ? ('projects.empty.title' | translate) : ('common.loading' | translate) }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

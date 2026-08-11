@@ -1,0 +1,82 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '560px', maxWidth: '95vw' }"
+  [header]="(isEditMode() ? 'projects.edit.title' : 'projects.new.title') | translate"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="name" class="w-full p-inputtext-sm" formControlName="name" />
+          <app-error-msg
+            [field]="'name'"
+            [forId]="'name'"
+            [control]="form.controls.name"
+            [label]="'projects.fields.name' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            appendTo="body"
+            inputId="status"
+            styleClass="w-full"
+            optionLabel="label"
+            optionValue="value"
+            formControlName="status"
+            [options]="statusOptions()"
+          ></p-select>
+          <app-error-msg
+            [field]="'status'"
+            [forId]="'status'"
+            [control]="form.controls.status"
+            [label]="'projects.fields.status' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea rows="3" pTextarea id="description" class="w-full p-inputtext-sm" formControlName="description"></textarea>
+          <app-error-msg
+            [field]="'description'"
+            [forId]="'description'"
+            [control]="form.controls.description"
+            [label]="'projects.fields.description' | translate"
+          />
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

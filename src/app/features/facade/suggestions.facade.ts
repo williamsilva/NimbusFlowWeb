@@ -58,12 +58,13 @@ export class SuggestionsFacade {
     this.loadPage(last);
   }
 
+  /**
+   * Sem marcar `_loading` aqui (mesmo motivo de WorksFacade/SuppliersFacade): esse signal é o
+   * guard de `loadPage()`, e setá-lo antes de chamar a API bloquearia silenciosamente o
+   * `reloadLast()` do `tap` abaixo. Mesmo padrão já usado (corretamente) em `updateStatus()`.
+   */
   create(input: SuggestionCreateInput): Observable<SuggestionModel> {
-    this._loading.set(true);
-    return this.api.create(input).pipe(
-      tap(() => this.reloadLast()),
-      finalize(() => this._loading.set(false)),
-    );
+    return this.api.create(input).pipe(tap(() => this.reloadLast()));
   }
 
   updateStatus(id: string, status: SuggestionStatusEnum): Observable<SuggestionModel> {

@@ -180,14 +180,29 @@
     "suppliers": {
       "title": "Proveedores"
     },
+    "projects": {
+      "title": "Proyectos"
+    },
     "works": {
-      "title": "Obras",
+      "title": "Frentes de Servicio",
       "addendums": {
         "title": "Adicionales"
       },
       "installments": {
         "title": "Pagos"
+      },
+      "measurements": {
+        "title": "Mediciones"
       }
+    },
+    "addendums": {
+      "title": "Adicionales"
+    },
+    "installments": {
+      "title": "Pagos"
+    },
+    "measurements": {
+      "title": "Mediciones"
     },
     "suggestions": {
       "title": "Sugerencias"
@@ -196,7 +211,7 @@
   "topbar": {
     "online": "Online",
     "brandName": "Flow",
-    "brandSub": "Seguridad y Acceso",
+    "brandSub": "Gestión Operativa",
     "sidebarToggleAria": "Mostrar/ocultar menú",
     "sidebarShowTooltip": "Mostrar menú",
     "sidebarHideTooltip": "Ocultar menú",
@@ -320,7 +335,11 @@
     "works": {
       "title": "Obras",
       "suppliers": "Proveedores",
-      "works": "Obras",
+      "projects": "Proyectos",
+      "works": "Frentes de Servicio",
+      "addendums": "Adicionales",
+      "installments": "Pagos",
+      "measurements": "Mediciones",
       "suggestions": "Sugerencias"
     }
   },
@@ -378,9 +397,11 @@
       "title": "Órdenes de Pago"
     },
     "suppliers": "Proveedores",
-    "works": "Obras",
+    "projects": "Proyectos",
+    "works": "Frentes de Servicio",
     "addendums": "Adicionales",
     "installments": "Pagos",
+    "measurements": "Mediciones",
     "suggestions": "Sugerencias"
   },
   "footer": {
@@ -426,9 +447,13 @@
       "userName": "Usuario",
       "document": "Documento",
       "createdAt": "Registrado el",
+      "periodCreatedAt": "Período del registro",
       "lastLoginAt": "Último inicio de sesión",
+      "periodLastLoginAt": "Período del último inicio de sesión",
       "blockedUntil": "Bloqueado hasta",
+      "periodBlockedUntil": "Período del bloqueo",
       "passwordExpiresAt": "Contraseña expira",
+      "periodPasswordExpiresAt": "Período de expiración de la contraseña",
       "createdBy": "Registrado por"
     },
     "columns": {
@@ -1801,8 +1826,20 @@
       "EMAIL_SETTINGS_PROCESS": "Editar configuración de correo",
       "RECONCILIATION_SETTINGS_CONSULT": "Consultar configuración de conciliación",
       "RECONCILIATION_SETTINGS_PROCESS": "Editar configuración de conciliación",
+      "BACKUP_PROCESS": "Ejecuta backup manual de la base de datos",
       "MANAGEMENT_DASHBOARD_CONSULT": "Consultar dashboard gerencial",
-      "DASHBOARD_AUDIT_CONSULT": "Consultar dashboard de auditoría (resumen de ventas/no conciliados)"
+      "DASHBOARD_AUDIT_CONSULT": "Consultar dashboard de auditoría (resumen de ventas/no conciliados)",
+      "FORNECEDOR_MANAGE": "Gestiona proveedores (crea, edita, activa/desactiva)",
+      "PROJETO_MANAGE": "Gestiona proyectos (crea, edita, activa/desactiva)",
+      "OBRA_MANAGE": "Gestiona frentes de servicio (crea, edita)",
+      "SUGESTAO_MANAGE": "Gestiona sugerencias (decide estado)",
+      "ADITIVO_CREATE": "Solicita adicional contractual",
+      "ADITIVO_APPROVE_TIER1": "Aprueba o rechaza adicional de nivel 1",
+      "ADITIVO_APPROVE_TIER2": "Aprueba o rechaza adicional de nivel 2",
+      "PARCELA_LIBERAR": "Libera cuota (orden de pago)",
+      "PARCELA_PAGAR": "Marca cuota como pagada",
+      "MEDICAO_CREATE": "Registra medición de frente de servicio",
+      "MEDICAO_APPROVE": "Aprueba o rechaza medición"
     },
     "section": {
       "identification": "Identificación",
@@ -1854,6 +1891,7 @@
       "name": "Nombre",
       "description": "Descripción",
       "createdAt": "Registrado el",
+      "periodCreatedAt": "Período del registro",
       "createdBy": "Registrado por"
     },
     "columns": {
@@ -3639,6 +3677,7 @@
       "commercialContact": "Contacto comercial",
       "status": "Estado",
       "createdAt": "Creado el",
+      "periodCreatedAt": "Período del registro",
       "addressStreet": "Calle",
       "addressNumber": "Número",
       "addressComplement": "Complemento",
@@ -3680,31 +3719,40 @@
     }
   },
   "works": {
-    "subtitle": "Gestione el registro de obras/servicios",
+    "subtitle": "Gestione el registro de frentes de servicio",
     "new": {
-      "title": "Nueva obra"
+      "title": "Nueva frente de servicio"
     },
     "edit": {
-      "title": "Editar obra"
+      "title": "Editar frente de servicio"
     },
     "fields": {
       "name": "Nombre/descripción",
       "supplier": "Proveedor",
+      "project": "Proyecto",
       "status": "Estado",
       "startDate": "Inicio",
+      "periodStartDate": "Período del inicio",
       "expectedEndDate": "Fin previsto",
+      "periodExpectedEndDate": "Período del fin previsto",
       "actualEndDate": "Fin real",
       "initialAmount": "Monto inicial",
-      "totalAmount": "Monto total",
-      "location": "Ubicación"
+      "totalAmount": "Monto total"
     },
     "columns": {
       "name": "Nombre",
       "supplier": "Proveedor",
+      "project": "Proyecto",
       "status": "Estado",
       "startDate": "Inicio",
       "expectedEndDate": "Fin previsto",
-      "totalAmount": "Monto total"
+      "initialAmount": "Monto inicial",
+      "addendumsCount": "Nº adicionales",
+      "addendumsAmount": "Monto adicionales",
+      "totalAmount": "Monto total",
+      "installmentsCount": "Nº pagos",
+      "remainingAmount": "Monto restante",
+      "progress": "Progreso"
     },
     "status": {
       "PLANNED": "Planificada",
@@ -3715,34 +3763,118 @@
     },
     "form": {
       "invalid": "Revise los campos resaltados antes de guardar.",
-      "locationRequired": "Marque la ubicación de la obra en el mapa antes de guardar.",
-      "created": "Obra creada con éxito.",
-      "updated": "Obra actualizada con éxito.",
-      "saveError": "No se pudo guardar la obra. Intente nuevamente."
+      "created": "Frente de servicio creada con éxito.",
+      "updated": "Frente de servicio actualizada con éxito.",
+      "saveError": "No se pudo guardar la frente de servicio. Intente nuevamente."
     },
     "empty": {
-      "title": "Ninguna obra encontrada"
+      "title": "Ninguna frente de servicio encontrada"
     },
     "action": {
-      "noPermission": "No tiene permiso para gestionar obras.",
+      "noPermission": "No tiene permiso para gestionar frentes de servicio.",
       "viewAddendums": "Adicionales",
-      "viewInstallments": "Pagos"
+      "viewInstallments": "Pagos",
+      "viewMeasurements": "Mediciones"
+    }
+  },
+  "dashboard": {
+    "subtitle": "Visión general de proyectos y frentes de servicio",
+    "filters": {
+      "project": "Proyecto",
+      "supplier": "Proveedor",
+      "work": "Frente de servicio",
+      "totalAmount": "Monto contratado"
     },
-    "mapPicker": {
-      "hint": "Haga clic en el mapa para marcar la ubicación de la obra - solo dentro del área del parque Acquamania.",
-      "outOfBounds": "Punto fuera del área de Acquamania - clic no registrado.",
-      "areaTooltip": "Área de Acquamania"
+    "kpi": {
+      "totalPaid": "Total pagado",
+      "totalContracted": "Total contratado",
+      "totalBalance": "Saldo por pagar",
+      "works": "Frentes de servicio",
+      "projects": "Proyectos",
+      "overdueWorks": "Frentes atrasadas",
+      "pending": "Pendientes",
+      "pendingBreakdown": "{addendums} adicional(es) • {measurements} medición(es)"
+    },
+    "charts": {
+      "valueByStatus": {
+        "title": "Valor contratado por estado"
+      },
+      "weeklyDisbursement": {
+        "title": "Desembolso semanal",
+        "series": "Pagado en la semana"
+      },
+      "topWorks": {
+        "title": "Mayores frentes por valor pagado",
+        "others": "{count, plural, one {Demás # frente} other {Demás # frentes}}"
+      }
+    },
+    "projects": {
+      "title": "Proyectos",
+      "empty": "Ningún proyecto registrado todavía.",
+      "contracted": "Contratado",
+      "paid": "Pagado",
+      "remaining": "Saldo",
+      "serviceFronts": "{count, plural, one {# frente de servicio} other {# frentes de servicio}}"
+    }
+  },
+  "projects": {
+    "new": {
+      "title": "Nuevo proyecto"
+    },
+    "edit": {
+      "title": "Editar proyecto"
+    },
+    "fields": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "status": "Estado"
+    },
+    "columns": {
+      "name": "Nombre",
+      "serviceFrontsCount": "Nº frentes",
+      "totalContractedAmount": "Monto contratado",
+      "totalPaidAmount": "Monto pagado",
+      "remainingAmount": "Monto restante",
+      "progress": "Progreso",
+      "status": "Estado"
+    },
+    "status": {
+      "PLANNED": "Planificado",
+      "IN_PROGRESS": "En curso",
+      "PAUSED": "Pausado",
+      "COMPLETED": "Concluido",
+      "CANCELLED": "Cancelado"
+    },
+    "form": {
+      "invalid": "Revise los campos resaltados antes de guardar.",
+      "created": "Proyecto creado con éxito.",
+      "updated": "Proyecto actualizado con éxito.",
+      "saveError": "No se pudo guardar el proyecto. Intente nuevamente."
+    },
+    "empty": {
+      "title": "Ningún proyecto encontrado"
+    },
+    "action": {
+      "noPermission": "No tiene permiso para gestionar proyectos."
     }
   },
   "addendums": {
+    "subtitle": "Adicionales solicitados en todas las frentes de servicio",
     "new": {
       "title": "Nuevo adicional"
     },
     "fields": {
+      "work": "Frente de servicio",
       "amount": "Monto",
-      "justification": "Justificación"
+      "percentage": "Porcentaje de aumento",
+      "justification": "Justificación",
+      "status": "Estado",
+      "tier": "Nivel de aprobación",
+      "createdAt": "Solicitado el",
+      "periodCreatedAt": "Período de la solicitud"
     },
     "columns": {
+      "work": "Frente de servicio",
       "amount": "Monto",
       "justification": "Justificación",
       "tier": "Nivel de aprobación",
@@ -3786,40 +3918,37 @@
     }
   },
   "installments": {
-    "new": {
-      "title": "Agregar cuotas"
-    },
+    "subtitle": "Órdenes de pago generadas por mediciones aprobadas, en todas las frentes de servicio",
     "fields": {
+      "work": "Frente de servicio",
       "amount": "Monto",
-      "dueDate": "Vencimiento"
+      "status": "Estado",
+      "dueDate": "Vencimiento",
+      "periodDueDate": "Período del vencimiento"
     },
     "columns": {
+      "work": "Frente de servicio",
       "number": "Nº",
       "amount": "Monto",
       "dueDate": "Vencimiento",
       "status": "Estado"
     },
     "status": {
-      "PLANNED": "Planificada",
-      "MEASUREMENT_SUBMITTED": "Medición enviada",
-      "MEASUREMENT_APPROVED": "Medición aprobada",
+      "MEASUREMENT_APPROVED": "Esperando liberación",
       "RELEASED": "Liberada",
       "PAID": "Pagada"
     },
     "form": {
-      "invalid": "Revise los campos resaltados antes de guardar.",
-      "created": "Cuotas registradas con éxito.",
-      "saveError": "No se pudo guardar las cuotas. Intente nuevamente."
+      "saveError": "No se pudo completar la acción. Intente nuevamente."
     },
     "empty": {
       "title": "Ninguna cuota encontrada"
     },
     "action": {
-      "addRow": "Agregar línea",
       "release": "Liberar",
       "markPaid": "Marcar como pagada",
       "noPermission": "No tiene permiso para esta acción.",
-      "requiresMeasurementApproved": "Requiere medición aprobada para liberar.",
+      "requiresMeasurementApproved": "Esta cuota ya fue liberada o pagada.",
       "requiresReleased": "Requiere cuota liberada para marcar como pagada.",
       "statusChanged": "El estado de esta cuota fue cambiado por otro usuario. Actualice la página."
     },
@@ -3834,6 +3963,71 @@
       "success": "Cuota marcada como pagada con éxito."
     }
   },
+  "measurements": {
+    "subtitle": "Mediciones registradas en todas las frentes de servicio",
+    "new": {
+      "title": "Nueva medición"
+    },
+    "fields": {
+      "work": "Frente de servicio",
+      "description": "Descripción",
+      "status": "Estado",
+      "percentageCompleted": "Porcentaje ejecutado",
+      "amountToPay": "Monto a pagar",
+      "dueDate": "Vencimiento",
+      "periodDueDate": "Período del vencimiento",
+      "files": "Fotos/videos"
+    },
+    "columns": {
+      "work": "Frente de servicio",
+      "description": "Descripción",
+      "percentageCompleted": "% ejecutado",
+      "amountToPay": "Monto a pagar",
+      "dueDate": "Vencimiento",
+      "status": "Estado",
+      "generatedInstallment": "Orden generada",
+      "media": "Medios"
+    },
+    "status": {
+      "PENDING": "Pendiente",
+      "APPROVED": "Aprobada",
+      "REJECTED": "Reprobada"
+    },
+    "media": {
+      "PHOTO": "Foto",
+      "VIDEO": "Video"
+    },
+    "form": {
+      "invalid": "Revise los campos resaltados antes de guardar.",
+      "created": "Medición enviada con éxito.",
+      "saveError": "No se pudo enviar la medición. Intente nuevamente.",
+      "exceedsRemaining": "El valor a pagar no puede ser mayor que el valor restante de la frente de servicio.",
+      "remainingHint": "Valor restante de la frente de servicio"
+    },
+    "empty": {
+      "title": "Ninguna medición encontrada"
+    },
+    "action": {
+      "approve": "Aprobar",
+      "reject": "Reprobar",
+      "addFile": "Agregar archivo",
+      "installmentGenerated": "Orden de pago generada",
+      "noPermission": "No tiene permiso para decidir esta medición.",
+      "alreadyDecided": "Esta medición ya fue decidida por otro usuario. Actualice la página.",
+      "requiresSubmittableWork": "La frente de servicio debe estar planificada o en curso para registrar una nueva medición.",
+      "exceedsWorkTotal": "El monto solicitado, sumado a las órdenes de pago ya generadas, superaría el valor total de la frente de servicio."
+    },
+    "approveConfirm": {
+      "header": "Aprobar medición",
+      "message": "¿Confirma la aprobación de esta medición? Esto generará una orden de pago.",
+      "success": "Medición aprobada y orden de pago generada con éxito."
+    },
+    "rejectConfirm": {
+      "header": "Reprobar medición",
+      "message": "¿Confirma la reprobación de esta medición?",
+      "success": "Medición reprobada con éxito."
+    }
+  },
   "suggestions": {
     "subtitle": "Sugerencias de mejora registradas por los usuarios",
     "new": {
@@ -3843,6 +4037,7 @@
       "description": "Descripción",
       "status": "Estado",
       "createdAt": "Creado el",
+      "periodCreatedAt": "Período del registro",
       "attachment": "Adjunto (opcional)"
     },
     "columns": {

@@ -3,6 +3,12 @@ import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { AppMenuItem } from './menu.model';
 
 export const APP_MENU: AppMenuItem[] = [
+  {
+    icon: 'pi pi-home text-blue-600',
+    labelKey: 'menu.dashboard',
+    route: '/dashboard',
+    exact: true,
+  },
   /* Fornecedor / Obra / Sugestão - leitura aberta a qualquer usuário autenticado, por isso os
    * itens abaixo não declaram `permissions` (undefined/[] = visível pra todo mundo, ver
    * PermissionService.hasMenuAccess). */
@@ -17,9 +23,33 @@ export const APP_MENU: AppMenuItem[] = [
         exact: false,
       },
       {
+        labelKey: 'menu.works.projects',
+        icon: 'pi pi-briefcase text-green-400',
+        route: '/projects',
+        exact: false,
+      },
+      {
         labelKey: 'menu.works.works',
         icon: 'pi pi-building text-green-400',
         route: '/works',
+        exact: false,
+      },
+      {
+        labelKey: 'menu.works.addendums',
+        icon: 'pi pi-file text-green-400',
+        route: '/addendums',
+        exact: false,
+      },
+      {
+        labelKey: 'menu.works.installments',
+        icon: 'pi pi-wallet text-green-400',
+        route: '/installments',
+        exact: false,
+      },
+      {
+        labelKey: 'menu.works.measurements',
+        icon: 'pi pi-camera text-green-400',
+        route: '/measurements',
         exact: false,
       },
       {

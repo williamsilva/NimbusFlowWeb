@@ -4,12 +4,18 @@ import { Injectable, inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
+import { HalPagedResponse } from '@core/api/page.model';
+import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { AddendumsAdvancedFilters } from '@features/filter/addendums.filters';
 import {
   AddendumApiModel,
   AddendumDecisionInput,
   AddendumRequestInput,
+  AddendumWithWorkApiModel,
+  AddendumWithWorkModel,
   mapAddendumApiModel,
   mapAddendumApiModels,
+  mapAddendumWithWorkApiModels,
 } from '@models/addendums.models';
 
 @Injectable({ providedIn: 'root' })
@@ -22,6 +28,20 @@ export class AddendumsApiService {
     return this.http
       .get<AddendumApiModel[]>(`${this.worksUrl}/${workId}/addendums`)
       .pipe(map(mapAddendumApiModels));
+  }
+
+  searchPaged(body: ListQueryDto<AddendumsAdvancedFilters>) {
+    return this.http
+      .post<HalPagedResponse<AddendumWithWorkApiModel>>(`${this.addendumsUrl}/search`, body)
+      .pipe(
+        map((res) => {
+          const content = mapAddendumWithWorkApiModels(res?._embedded?.content);
+          return {
+            ...res,
+            _embedded: { ...(res?._embedded ?? {}), content },
+          } as HalPagedResponse<AddendumWithWorkModel>;
+        }),
+      );
   }
 
   submit(workId: string, input: AddendumRequestInput) {

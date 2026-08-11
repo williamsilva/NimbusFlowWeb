@@ -316,11 +316,16 @@ export class ProfilePageComponent {
     return 'is-default';
   }
 
+  /**
+   * Sem entrada em profile.permissionDescription (ex.: permissão nova ainda não traduzida) cai
+   * pro mesmo fallback humanizado de groupLabel - antes retornava '' e o chip da permissão ficava
+   * só com o número, sem nome nenhum (bug que já tinha ocorrido no CardSync por esse mesmo motivo).
+   */
   permissionDescription(permission?: string | null): string {
     const value = (permission ?? '').trim().toUpperCase();
     if (!value) return '';
 
-    return this.i18n.tUi(`profile.permissionDescription.${value}` as any, '');
+    return this.i18n.tUi(`profile.permissionDescription.${value}` as any, this.humanizeEnum(value));
   }
 
   groupLabel(group?: string | null): string {

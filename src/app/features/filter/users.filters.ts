@@ -1,4 +1,5 @@
 import { UserStatus } from '@models/enums/user-status.enum';
+import { PeriodEnum } from '@models/enums/period.enum';
 
 export interface UsersAdvancedFilters {
   name?: string;
@@ -6,17 +7,17 @@ export interface UsersAdvancedFilters {
   document?: string;
   status?: UserStatus[] | null;
 
-  lastLoginAtTo?: string;
-  lastLoginAtFrom?: string;
+  lastLoginAt?: string | string[];
+  periodLastLoginAt?: PeriodEnum;
 
-  createdAtTo?: string;
-  createdAtFrom?: string;
+  createdAt?: string | string[];
+  periodCreatedAt?: PeriodEnum;
 
   createdBy?: string[] | null;
 
-  blockedUntilTo?: string;
-  blockedUntilFrom?: string;
+  blockedUntil?: string | string[];
+  periodBlockedUntil?: PeriodEnum;
 
-  passwordExpiresAtTo?: string;
-  passwordExpiresAtFrom?: string;
+  passwordExpiresAt?: string | string[];
+  periodPasswordExpiresAt?: PeriodEnum;
 }

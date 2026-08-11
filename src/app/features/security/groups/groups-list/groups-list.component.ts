@@ -28,6 +28,8 @@ import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { GroupsPermissionPolicy } from '@features/security/policy/groups-permission.policy';
 import { GroupsCreateDialogComponent } from '@features/security/groups/groups-create/groups-create-dialog.component';
+import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
+import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
@@ -56,7 +58,8 @@ import {
     PageHeaderComponent,
     ConfirmDialogModule,
     FiltersPanelComponent,
-    GroupsCreateDialogComponent
+    GroupsCreateDialogComponent,
+    CsAdvancedPeriodDateFilterComponent,
 ],
 })
 export class GroupsListComponent extends StatefulListPage<
@@ -107,11 +110,17 @@ export class GroupsListComponent extends StatefulListPage<
   upsertVisible = signal(false);
   group = signal<GroupModel | null>(null);
   createdBy = signal<string[] | null>(null);
-  createdAtRange = signal<Date[] | null>(null);
+  createdAt = signal<string | string[] | null>(null);
+  periodCreatedAt = signal<PeriodEnum | null>(null);
 
   readonly canCreate = computed(() => this.secPolicy.canCreate());
   readonly totalRecords = computed(() => this.facade.totalRecords());
   readonly groups = computed<GroupModel[]>(() => this.facade.groups());
+
+  readonly periodEnumOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allPeriodEnum().map((value) => ({ label: periodEnumLabel(value, this.i18n), value }));
+  });
 
   protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
     const items: ActiveFilterItem[] = [];
@@ -119,7 +128,6 @@ export class GroupsListComponent extends StatefulListPage<
     const name = this.name().trim();
     const description = this.description().trim();
     const createdBy = this.createdBy();
-    const createdAtRange = this.createdAtRange();
 
     if (name) {
       items.push({ label: this.i18n.tUi('groups.fields.name'), value: name });
@@ -138,11 +146,13 @@ export class GroupsListComponent extends StatefulListPage<
       items.push({ label: this.i18n.tUi('groups.fields.createdBy'), value: labels });
     }
 
-    if (createdAtRange?.[0] && createdAtRange?.[1]) {
-      items.push({
-        label: this.i18n.tUi('groups.fields.createdAt'),
-        value: `${this.formatDate(createdAtRange[0])} – ${this.formatDate(createdAtRange[1])}`,
-      });
+    const createdAtLabel = this.formatActiveFilterPeriodDateValue(
+      this.periodCreatedAt(),
+      this.createdAt(),
+      this.i18n,
+    );
+    if (createdAtLabel) {
+      items.push({ label: this.i18n.tUi('groups.fields.createdAt'), value: createdAtLabel });
     }
 
     return items;
@@ -214,20 +224,17 @@ export class GroupsListComponent extends StatefulListPage<
     this.name.set('');
     this.description.set('');
     this.createdBy.set(null);
-    this.createdAtRange.set(null);
+    this.createdAt.set(null);
+    this.periodCreatedAt.set(null);
   }
 
   protected override toFiltersState(): GroupsFiltersState {
-    const createdAtRange = this.createdAtRange();
-
     return {
       name: this.name(),
       description: this.description(),
       createdBy: this.createdBy()?.length ? this.createdBy() : null,
-      createdAtRange:
-        createdAtRange?.[0] && createdAtRange?.[1]
-          ? [createdAtRange[0].toISOString(), createdAtRange[1].toISOString()]
-          : null,
+      createdAt: this.createdAt(),
+      periodCreatedAt: this.periodCreatedAt(),
     };
   }
 
@@ -235,26 +242,17 @@ export class GroupsListComponent extends StatefulListPage<
     this.name.set(state.name ?? '');
     this.description.set(state.description ?? '');
     this.createdBy.set(state.createdBy ?? null);
-    this.createdAtRange.set(
-      state.createdAtRange?.[0] && state.createdAtRange?.[1]
-        ? [new Date(state.createdAtRange[0]), new Date(state.createdAtRange[1])]
-        : null,
-    );
+    this.createdAt.set(state.createdAt ?? null);
+    this.periodCreatedAt.set(state.periodCreatedAt ?? null);
   }
 
   protected override buildAdvancedFilters(): Partial<GroupsAdvancedFilters> {
-    const createdAtRange = this.createdAtRange();
-    const [createdAtFrom, createdAtTo] =
-      createdAtRange?.[0] && createdAtRange?.[1]
-        ? [createdAtRange[0].toISOString(), createdAtRange[1].toISOString()]
-        : [undefined, undefined];
-
     return {
       name: this.name().trim() || undefined,
       description: this.description().trim() || undefined,
       createdBy: this.createdBy()?.length ? this.createdBy() : undefined,
-      createdAtFrom,
-      createdAtTo,
+      createdAt: this.createdAt() ?? undefined,
+      periodCreatedAt: this.periodCreatedAt() ?? undefined,
     };
   }
 

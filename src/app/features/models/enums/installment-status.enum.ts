@@ -1,25 +1,23 @@
 import { StatusTone } from '@shared/features/status-badge/status-badge.component';
 
-/** Espelha com.nimbusflow.works.model.InstallmentStatus do NimbusFlowServer. */
+/**
+ * Espelha com.nimbusflow.works.model.InstallmentStatus do NimbusFlowServer. A parcela nasce
+ * direto em MEASUREMENT_APPROVED (gerada quando uma Medição da obra é aprovada) - não existe
+ * mais um estado "planejada aguardando medição".
+ */
 export enum InstallmentStatusEnum {
-  PLANNED = 'PLANNED',
-  MEASUREMENT_SUBMITTED = 'MEASUREMENT_SUBMITTED',
   MEASUREMENT_APPROVED = 'MEASUREMENT_APPROVED',
   RELEASED = 'RELEASED',
   PAID = 'PAID',
 }
 
 export const INSTALLMENT_STATUS_VALUES: InstallmentStatusEnum[] = [
-  InstallmentStatusEnum.PLANNED,
-  InstallmentStatusEnum.MEASUREMENT_SUBMITTED,
   InstallmentStatusEnum.MEASUREMENT_APPROVED,
   InstallmentStatusEnum.RELEASED,
   InstallmentStatusEnum.PAID,
 ];
 
 const TONE_MAP: Record<InstallmentStatusEnum, StatusTone> = {
-  [InstallmentStatusEnum.PLANNED]: 'neutral',
-  [InstallmentStatusEnum.MEASUREMENT_SUBMITTED]: 'info',
   [InstallmentStatusEnum.MEASUREMENT_APPROVED]: 'info',
   [InstallmentStatusEnum.RELEASED]: 'warn',
   [InstallmentStatusEnum.PAID]: 'success',

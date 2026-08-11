@@ -1,14 +1,17 @@
+import { PeriodEnum } from '@models/enums/period.enum';
+
 export interface WorksAdvancedFilters {
   name?: string;
 
   supplierId?: string[] | null;
+  projectId?: string[] | null;
   status?: string[] | null;
 
-  startDateFrom?: string;
-  startDateTo?: string;
+  startDate?: string | string[];
+  periodStartDate?: PeriodEnum;
 
-  expectedEndDateFrom?: string;
-  expectedEndDateTo?: string;
+  expectedEndDate?: string | string[];
+  periodExpectedEndDate?: PeriodEnum;
 
   totalAmountFrom?: number;
   totalAmountTo?: number;

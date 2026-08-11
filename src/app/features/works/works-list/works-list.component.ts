@@ -1,37 +1,41 @@
 import { Router } from '@angular/router';
+import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { WorksFacade } from '@features/facade/works.facade';
-import { SuppliersFacade } from '@features/facade/suppliers.facade';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
-import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { WorksAdvancedFilters } from '@features/filter/works.filters';
-import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
-import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
-import { WORK_STATUS_VALUES, workStatusTone } from '@models/enums/work-status.enum';
+import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
+import { ProjectsFacade } from '@features/facade/projects.facade';
 import { WorkModel, WorksFiltersState } from '@models/works.models';
+import { SuppliersFacade } from '@features/facade/suppliers.facade';
+import { WorksAdvancedFilters } from '@features/filter/works.filters';
+import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
+import { WORK_STATUS_VALUES, workStatusTone } from '@models/enums/work-status.enum';
+import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
+import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
+import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { WorksCreateDialogComponent } from '@features/works/works-create/works-create-dialog.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import {
-  CsCurrencyRangeFilterComponent,
   currencyRangeLabel,
+  CsCurrencyRangeFilterComponent,
 } from '@features/list-base/cs-currency-range-filter.component';
 import {
   ActiveFilterItem,
@@ -50,20 +54,23 @@ import {
   imports: [
     CsDatePipe,
     FloatLabel,
+    DecimalPipe,
     FormsModule,
     TableModule,
     ButtonModule,
-    CsCurrencyPipe,
     TooltipModule,
+    CsCurrencyPipe,
     InputTextModule,
     TranslateModule,
     DatePickerModule,
+    ProgressBarModule,
     MultiSelectModule,
     PageHeaderComponent,
-    FiltersPanelComponent,
     StatusBadgeComponent,
+    FiltersPanelComponent,
     WorksCreateDialogComponent,
     CsCurrencyRangeFilterComponent,
+    CsAdvancedPeriodDateFilterComponent,
   ],
 })
 export class WorksListComponent extends StatefulListPage<WorksFiltersState, WorksAdvancedFilters> {
@@ -72,21 +79,32 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
   protected override readonly i18n = inject(I18nService);
   readonly facade = inject(WorksFacade);
   private readonly router = inject(Router);
+  readonly projectsFacade = inject(ProjectsFacade);
   protected readonly toast = inject(MessageService);
-  protected readonly policy = inject(WorksPermissionPolicy);
   readonly suppliersFacade = inject(SuppliersFacade);
+  protected readonly policy = inject(WorksPermissionPolicy);
+
   readonly supplierOptions = this.suppliersFacade.options;
+  readonly projectOptions = this.projectsFacade.options;
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
 
   name = signal('');
   supplierId = signal<string[] | null>(null);
+  projectId = signal<string[] | null>(null);
   status = signal<string[] | null>(null);
-  startDateRange = signal<Date[] | null>(null);
-  expectedEndDateRange = signal<Date[] | null>(null);
+  startDate = signal<string | string[] | null>(null);
+  periodStartDate = signal<PeriodEnum | null>(null);
+  expectedEndDate = signal<string | string[] | null>(null);
+  periodExpectedEndDate = signal<PeriodEnum | null>(null);
   totalAmountFrom = signal<number | null>(null);
   totalAmountTo = signal<number | null>(null);
+
+  readonly periodEnumOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allPeriodEnum().map((value) => ({ label: periodEnumLabel(value, this.i18n), value }));
+  });
 
   upsertVisible = signal(false);
   work = signal<WorkModel | null>(null);
@@ -105,9 +123,8 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
 
     const name = this.name().trim();
     const supplierId = this.supplierId();
+    const projectId = this.projectId();
     const status = this.status();
-    const startDateRange = this.startDateRange();
-    const expectedEndDateRange = this.expectedEndDateRange();
     const totalAmountFrom = this.totalAmountFrom();
     const totalAmountTo = this.totalAmountTo();
 
@@ -121,6 +138,13 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
         .join(', ');
       items.push({ label: this.i18n.tUi('works.fields.supplier'), value: labels });
     }
+    if (projectId?.length) {
+      const labels = this.projectOptions()
+        .filter((opt) => projectId.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+      items.push({ label: this.i18n.tUi('works.fields.project'), value: labels });
+    }
     if (status?.length) {
       const labels = this.statusOptions
         .filter((opt) => status.includes(opt.value))
@@ -128,16 +152,23 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
         .join(', ');
       items.push({ label: this.i18n.tUi('works.fields.status'), value: labels });
     }
-    if (startDateRange?.[0] && startDateRange?.[1]) {
-      items.push({
-        label: this.i18n.tUi('works.fields.startDate'),
-        value: `${this.formatDate(startDateRange[0])} – ${this.formatDate(startDateRange[1])}`,
-      });
+    const startDateLabel = this.formatActiveFilterPeriodDateValue(
+      this.periodStartDate(),
+      this.startDate(),
+      this.i18n,
+    );
+    if (startDateLabel) {
+      items.push({ label: this.i18n.tUi('works.fields.startDate'), value: startDateLabel });
     }
-    if (expectedEndDateRange?.[0] && expectedEndDateRange?.[1]) {
+    const expectedEndDateLabel = this.formatActiveFilterPeriodDateValue(
+      this.periodExpectedEndDate(),
+      this.expectedEndDate(),
+      this.i18n,
+    );
+    if (expectedEndDateLabel) {
       items.push({
         label: this.i18n.tUi('works.fields.expectedEndDate'),
-        value: `${this.formatDate(expectedEndDateRange[0])} – ${this.formatDate(expectedEndDateRange[1])}`,
+        value: expectedEndDateLabel,
       });
     }
     const totalAmountLabel = currencyRangeLabel(this.i18n, totalAmountFrom, totalAmountTo);
@@ -150,6 +181,7 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
 
   ngOnInit() {
     this.suppliersFacade.loadSupplierOptions();
+    this.projectsFacade.loadAll();
     this.initStatefulList();
   }
 
@@ -175,6 +207,10 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
 
   goToInstallments(row: WorkModel) {
     this.router.navigate(['/works', row.id, 'installments']);
+  }
+
+  goToMeasurements(row: WorkModel) {
+    this.router.navigate(['/works', row.id, 'measurements']);
   }
 
   onSaved(): void {
@@ -216,29 +252,26 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
   protected override resetFilters(): void {
     this.name.set('');
     this.supplierId.set(null);
+    this.projectId.set(null);
     this.status.set(null);
-    this.startDateRange.set(null);
-    this.expectedEndDateRange.set(null);
+    this.startDate.set(null);
+    this.periodStartDate.set(null);
+    this.expectedEndDate.set(null);
+    this.periodExpectedEndDate.set(null);
     this.totalAmountFrom.set(null);
     this.totalAmountTo.set(null);
   }
 
   protected override toFiltersState(): WorksFiltersState {
-    const startDateRange = this.startDateRange();
-    const expectedEndDateRange = this.expectedEndDateRange();
-
     return {
       name: this.name(),
       supplierId: this.supplierId()?.length ? this.supplierId() : null,
+      projectId: this.projectId()?.length ? this.projectId() : null,
       status: this.status()?.length ? this.status() : null,
-      startDateRange:
-        startDateRange?.[0] && startDateRange?.[1]
-          ? [startDateRange[0].toISOString(), startDateRange[1].toISOString()]
-          : null,
-      expectedEndDateRange:
-        expectedEndDateRange?.[0] && expectedEndDateRange?.[1]
-          ? [expectedEndDateRange[0].toISOString(), expectedEndDateRange[1].toISOString()]
-          : null,
+      startDate: this.startDate(),
+      periodStartDate: this.periodStartDate(),
+      expectedEndDate: this.expectedEndDate(),
+      periodExpectedEndDate: this.periodExpectedEndDate(),
       totalAmountFrom: this.totalAmountFrom(),
       totalAmountTo: this.totalAmountTo(),
     };
@@ -247,33 +280,26 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
   protected override applyFiltersState(state: WorksFiltersState): void {
     this.name.set(state.name ?? '');
     this.supplierId.set(state.supplierId ?? null);
+    this.projectId.set(state.projectId ?? null);
     this.status.set(state.status ?? null);
-    this.startDateRange.set(
-      state.startDateRange?.[0] && state.startDateRange?.[1]
-        ? [new Date(state.startDateRange[0]), new Date(state.startDateRange[1])]
-        : null,
-    );
-    this.expectedEndDateRange.set(
-      state.expectedEndDateRange?.[0] && state.expectedEndDateRange?.[1]
-        ? [new Date(state.expectedEndDateRange[0]), new Date(state.expectedEndDateRange[1])]
-        : null,
-    );
+    this.startDate.set(state.startDate ?? null);
+    this.periodStartDate.set(state.periodStartDate ?? null);
+    this.expectedEndDate.set(state.expectedEndDate ?? null);
+    this.periodExpectedEndDate.set(state.periodExpectedEndDate ?? null);
     this.totalAmountFrom.set(state.totalAmountFrom ?? null);
     this.totalAmountTo.set(state.totalAmountTo ?? null);
   }
 
   protected override buildAdvancedFilters(): Partial<WorksAdvancedFilters> {
-    const startDateRange = this.startDateRange();
-    const expectedEndDateRange = this.expectedEndDateRange();
-
     return {
       name: this.name().trim() || undefined,
       supplierId: this.supplierId()?.length ? this.supplierId() : undefined,
+      projectId: this.projectId()?.length ? this.projectId() : undefined,
       status: this.status()?.length ? this.status() : undefined,
-      startDateFrom: startDateRange?.[0]?.toISOString(),
-      startDateTo: startDateRange?.[1]?.toISOString(),
-      expectedEndDateFrom: expectedEndDateRange?.[0]?.toISOString(),
-      expectedEndDateTo: expectedEndDateRange?.[1]?.toISOString(),
+      startDate: this.startDate() ?? undefined,
+      periodStartDate: this.periodStartDate() ?? undefined,
+      expectedEndDate: this.expectedEndDate() ?? undefined,
+      periodExpectedEndDate: this.periodExpectedEndDate() ?? undefined,
       totalAmountFrom: this.totalAmountFrom() ?? undefined,
       totalAmountTo: this.totalAmountTo() ?? undefined,
     };
@@ -314,8 +340,12 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
       items.push({ label: this.i18n.tUi('works.fields.expectedEndDate'), value: expectedEndDate });
     }
 
-    const totalAmountRange = filters?.['totalAmount']?.value ?? filters?.['totalAmount']?.[0]?.value;
-    if (Array.isArray(totalAmountRange) && (totalAmountRange[0] != null || totalAmountRange[1] != null)) {
+    const totalAmountRange =
+      filters?.['totalAmount']?.value ?? filters?.['totalAmount']?.[0]?.value;
+    if (
+      Array.isArray(totalAmountRange) &&
+      (totalAmountRange[0] != null || totalAmountRange[1] != null)
+    ) {
       const label = currencyRangeLabel(this.i18n, totalAmountRange[0], totalAmountRange[1]);
       if (label) {
         items.push({ label: this.i18n.tUi('works.fields.totalAmount'), value: label });
@@ -325,7 +355,9 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     return items;
   }
 
-  protected override loadPage(query: ReturnType<typeof buildListQuery<WorksAdvancedFilters>>): void {
+  protected override loadPage(
+    query: ReturnType<typeof buildListQuery<WorksAdvancedFilters>>,
+  ): void {
     this.facade.loadPage(query);
   }
 

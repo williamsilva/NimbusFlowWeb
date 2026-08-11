@@ -180,14 +180,29 @@
     "suppliers": {
       "title": "Suppliers"
     },
+    "projects": {
+      "title": "Projects"
+    },
     "works": {
-      "title": "Works",
+      "title": "Service Fronts",
       "addendums": {
         "title": "Addendums"
       },
       "installments": {
         "title": "Payments"
+      },
+      "measurements": {
+        "title": "Measurements"
       }
+    },
+    "addendums": {
+      "title": "Addendums"
+    },
+    "installments": {
+      "title": "Payments"
+    },
+    "measurements": {
+      "title": "Measurements"
     },
     "suggestions": {
       "title": "Suggestions"
@@ -196,7 +211,7 @@
   "topbar": {
     "online": "Online",
     "brandName": "Flow",
-    "brandSub": "Security and Access",
+    "brandSub": "Operations Management",
     "sidebarToggleAria": "Show/hide menu",
     "sidebarShowTooltip": "Show menu",
     "sidebarHideTooltip": "Hide menu",
@@ -320,7 +335,11 @@
     "works": {
       "title": "Works",
       "suppliers": "Suppliers",
-      "works": "Works",
+      "projects": "Projects",
+      "works": "Service Fronts",
+      "addendums": "Addendums",
+      "installments": "Payments",
+      "measurements": "Measurements",
       "suggestions": "Suggestions"
     }
   },
@@ -378,9 +397,11 @@
       "title": "Payment Orders"
     },
     "suppliers": "Suppliers",
-    "works": "Works",
+    "projects": "Projects",
+    "works": "Service Fronts",
     "addendums": "Addendums",
     "installments": "Payments",
+    "measurements": "Measurements",
     "suggestions": "Suggestions"
   },
   "footer": {
@@ -426,9 +447,13 @@
       "userName": "User",
       "document": "Document",
       "createdAt": "Registered on",
+      "periodCreatedAt": "Registration period",
       "lastLoginAt": "Last login",
+      "periodLastLoginAt": "Last login period",
       "blockedUntil": "Blocked until",
+      "periodBlockedUntil": "Block period",
       "passwordExpiresAt": "Password expires",
+      "periodPasswordExpiresAt": "Password expiration period",
       "createdBy": "Registered by"
     },
     "columns": {
@@ -1801,8 +1826,20 @@
       "EMAIL_SETTINGS_PROCESS": "Edit email settings",
       "RECONCILIATION_SETTINGS_CONSULT": "View reconciliation settings",
       "RECONCILIATION_SETTINGS_PROCESS": "Edit reconciliation settings",
+      "BACKUP_PROCESS": "Trigger manual database backup",
       "MANAGEMENT_DASHBOARD_CONSULT": "View management dashboard",
-      "DASHBOARD_AUDIT_CONSULT": "View audit dashboard (sales summary/unreconciled)"
+      "DASHBOARD_AUDIT_CONSULT": "View audit dashboard (sales summary/unreconciled)",
+      "FORNECEDOR_MANAGE": "Manage suppliers (create, edit, activate/deactivate)",
+      "PROJETO_MANAGE": "Manage projects (create, edit, activate/deactivate)",
+      "OBRA_MANAGE": "Manage service fronts (create, edit)",
+      "SUGESTAO_MANAGE": "Manage suggestions (decide status)",
+      "ADITIVO_CREATE": "Request contract addendum",
+      "ADITIVO_APPROVE_TIER1": "Approve or reject tier 1 addendum",
+      "ADITIVO_APPROVE_TIER2": "Approve or reject tier 2 addendum",
+      "PARCELA_LIBERAR": "Release installment (payment order)",
+      "PARCELA_PAGAR": "Mark installment as paid",
+      "MEDICAO_CREATE": "Submit service front measurement",
+      "MEDICAO_APPROVE": "Approve or reject measurement"
     },
     "section": {
       "identification": "Identification",
@@ -1854,6 +1891,7 @@
       "name": "Name",
       "description": "Description",
       "createdAt": "Registered on",
+      "periodCreatedAt": "Registration period",
       "createdBy": "Registered by"
     },
     "columns": {
@@ -3639,6 +3677,7 @@
       "commercialContact": "Commercial contact",
       "status": "Status",
       "createdAt": "Created at",
+      "periodCreatedAt": "Registration period",
       "addressStreet": "Street",
       "addressNumber": "Number",
       "addressComplement": "Complement",
@@ -3680,31 +3719,40 @@
     }
   },
   "works": {
-    "subtitle": "Manage the works/services registry",
+    "subtitle": "Manage the service fronts registry",
     "new": {
-      "title": "New work"
+      "title": "New service front"
     },
     "edit": {
-      "title": "Edit work"
+      "title": "Edit service front"
     },
     "fields": {
       "name": "Name/description",
       "supplier": "Supplier",
+      "project": "Project",
       "status": "Status",
       "startDate": "Start date",
+      "periodStartDate": "Start date period",
       "expectedEndDate": "Expected end date",
+      "periodExpectedEndDate": "Expected end date period",
       "actualEndDate": "Actual end date",
       "initialAmount": "Initial amount",
-      "totalAmount": "Total amount",
-      "location": "Location"
+      "totalAmount": "Total amount"
     },
     "columns": {
       "name": "Name",
       "supplier": "Supplier",
+      "project": "Project",
       "status": "Status",
       "startDate": "Start date",
       "expectedEndDate": "Expected end date",
-      "totalAmount": "Total amount"
+      "initialAmount": "Initial amount",
+      "addendumsCount": "# addendums",
+      "addendumsAmount": "Addendums amount",
+      "totalAmount": "Total amount",
+      "installmentsCount": "# payments",
+      "remainingAmount": "Remaining amount",
+      "progress": "Progress"
     },
     "status": {
       "PLANNED": "Planned",
@@ -3715,34 +3763,118 @@
     },
     "form": {
       "invalid": "Review the highlighted fields before saving.",
-      "locationRequired": "Mark the work location on the map before saving.",
-      "created": "Work created successfully.",
-      "updated": "Work updated successfully.",
-      "saveError": "Could not save the work. Please try again."
+      "created": "Service front created successfully.",
+      "updated": "Service front updated successfully.",
+      "saveError": "Could not save the service front. Please try again."
     },
     "empty": {
-      "title": "No works found"
+      "title": "No service fronts found"
     },
     "action": {
-      "noPermission": "You do not have permission to manage works.",
+      "noPermission": "You do not have permission to manage service fronts.",
       "viewAddendums": "Addendums",
-      "viewInstallments": "Payments"
+      "viewInstallments": "Payments",
+      "viewMeasurements": "Measurements"
+    }
+  },
+  "dashboard": {
+    "subtitle": "Overview of projects and service fronts",
+    "filters": {
+      "project": "Project",
+      "supplier": "Supplier",
+      "work": "Service front",
+      "totalAmount": "Contracted amount"
     },
-    "mapPicker": {
-      "hint": "Click on the map to mark the work location - only inside the Acquamania park area.",
-      "outOfBounds": "Point outside the Acquamania area - click not registered.",
-      "areaTooltip": "Acquamania area"
+    "kpi": {
+      "totalPaid": "Total paid",
+      "totalContracted": "Total contracted",
+      "totalBalance": "Balance to pay",
+      "works": "Service fronts",
+      "projects": "Projects",
+      "overdueWorks": "Overdue service fronts",
+      "pending": "Pending items",
+      "pendingBreakdown": "{addendums} addendum(s) • {measurements} measurement(s)"
+    },
+    "charts": {
+      "valueByStatus": {
+        "title": "Contracted value by status"
+      },
+      "weeklyDisbursement": {
+        "title": "Weekly disbursement",
+        "series": "Paid that week"
+      },
+      "topWorks": {
+        "title": "Top service fronts by amount paid",
+        "others": "{count, plural, one {Other # front} other {Other # fronts}}"
+      }
+    },
+    "projects": {
+      "title": "Projects",
+      "empty": "No projects registered yet.",
+      "contracted": "Contracted",
+      "paid": "Paid",
+      "remaining": "Balance",
+      "serviceFronts": "{count, plural, one {# service front} other {# service fronts}}"
+    }
+  },
+  "projects": {
+    "new": {
+      "title": "New project"
+    },
+    "edit": {
+      "title": "Edit project"
+    },
+    "fields": {
+      "name": "Name",
+      "description": "Description",
+      "status": "Status"
+    },
+    "columns": {
+      "name": "Name",
+      "serviceFrontsCount": "# service fronts",
+      "totalContractedAmount": "Contracted amount",
+      "totalPaidAmount": "Paid amount",
+      "remainingAmount": "Remaining amount",
+      "progress": "Progress",
+      "status": "Status"
+    },
+    "status": {
+      "PLANNED": "Planned",
+      "IN_PROGRESS": "In progress",
+      "PAUSED": "Paused",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "form": {
+      "invalid": "Review the highlighted fields before saving.",
+      "created": "Project created successfully.",
+      "updated": "Project updated successfully.",
+      "saveError": "Could not save the project. Please try again."
+    },
+    "empty": {
+      "title": "No projects found"
+    },
+    "action": {
+      "noPermission": "You do not have permission to manage projects."
     }
   },
   "addendums": {
+    "subtitle": "Addendums requested across all service fronts",
     "new": {
       "title": "New addendum"
     },
     "fields": {
+      "work": "Service front",
       "amount": "Amount",
-      "justification": "Justification"
+      "percentage": "Increase percentage",
+      "justification": "Justification",
+      "status": "Status",
+      "tier": "Approval tier",
+      "createdAt": "Requested at",
+      "periodCreatedAt": "Request period"
     },
     "columns": {
+      "work": "Service front",
       "amount": "Amount",
       "justification": "Justification",
       "tier": "Approval tier",
@@ -3786,40 +3918,37 @@
     }
   },
   "installments": {
-    "new": {
-      "title": "Add installments"
-    },
+    "subtitle": "Payment orders generated by approved measurements, across all service fronts",
     "fields": {
+      "work": "Service front",
       "amount": "Amount",
-      "dueDate": "Due date"
+      "status": "Status",
+      "dueDate": "Due date",
+      "periodDueDate": "Due date period"
     },
     "columns": {
+      "work": "Service front",
       "number": "#",
       "amount": "Amount",
       "dueDate": "Due date",
       "status": "Status"
     },
     "status": {
-      "PLANNED": "Planned",
-      "MEASUREMENT_SUBMITTED": "Measurement submitted",
-      "MEASUREMENT_APPROVED": "Measurement approved",
+      "MEASUREMENT_APPROVED": "Awaiting release",
       "RELEASED": "Released",
       "PAID": "Paid"
     },
     "form": {
-      "invalid": "Review the highlighted fields before saving.",
-      "created": "Installments scheduled successfully.",
-      "saveError": "Could not save the installments. Please try again."
+      "saveError": "Could not complete the action. Please try again."
     },
     "empty": {
       "title": "No installments found"
     },
     "action": {
-      "addRow": "Add row",
       "release": "Release",
       "markPaid": "Mark as paid",
       "noPermission": "You do not have permission for this action.",
-      "requiresMeasurementApproved": "Requires an approved measurement to release.",
+      "requiresMeasurementApproved": "This installment was already released or paid.",
       "requiresReleased": "Requires a released installment to mark as paid.",
       "statusChanged": "This installment's status was changed by another user. Refresh the page."
     },
@@ -3834,6 +3963,71 @@
       "success": "Installment marked as paid successfully."
     }
   },
+  "measurements": {
+    "subtitle": "Measurements submitted across all service fronts",
+    "new": {
+      "title": "New measurement"
+    },
+    "fields": {
+      "work": "Service front",
+      "description": "Description",
+      "status": "Status",
+      "percentageCompleted": "Percentage completed",
+      "amountToPay": "Amount to pay",
+      "dueDate": "Due date",
+      "periodDueDate": "Due date period",
+      "files": "Photos/videos"
+    },
+    "columns": {
+      "work": "Service front",
+      "description": "Description",
+      "percentageCompleted": "% completed",
+      "amountToPay": "Amount to pay",
+      "dueDate": "Due date",
+      "status": "Status",
+      "generatedInstallment": "Generated order",
+      "media": "Media"
+    },
+    "status": {
+      "PENDING": "Pending",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    },
+    "media": {
+      "PHOTO": "Photo",
+      "VIDEO": "Video"
+    },
+    "form": {
+      "invalid": "Review the highlighted fields before saving.",
+      "created": "Measurement submitted successfully.",
+      "saveError": "Could not submit the measurement. Please try again.",
+      "exceedsRemaining": "The amount to pay cannot be greater than the service front's remaining amount.",
+      "remainingHint": "Service front's remaining amount"
+    },
+    "empty": {
+      "title": "No measurements found"
+    },
+    "action": {
+      "approve": "Approve",
+      "reject": "Reject",
+      "addFile": "Add file",
+      "installmentGenerated": "Payment order generated",
+      "noPermission": "You do not have permission to decide this measurement.",
+      "alreadyDecided": "This measurement was already decided by another user. Refresh the page.",
+      "requiresSubmittableWork": "The service front must be planned or in progress to submit a new measurement.",
+      "exceedsWorkTotal": "The requested amount, added to the payment orders already generated, would exceed the service front's total amount."
+    },
+    "approveConfirm": {
+      "header": "Approve measurement",
+      "message": "Confirm approval of this measurement? This will generate a payment order.",
+      "success": "Measurement approved and payment order generated successfully."
+    },
+    "rejectConfirm": {
+      "header": "Reject measurement",
+      "message": "Confirm rejection of this measurement?",
+      "success": "Measurement rejected successfully."
+    }
+  },
   "suggestions": {
     "subtitle": "Improvement suggestions submitted by users",
     "new": {
@@ -3843,6 +4037,7 @@
       "description": "Description",
       "status": "Status",
       "createdAt": "Created at",
+      "periodCreatedAt": "Registration period",
       "attachment": "Attachment (optional)"
     },
     "columns": {

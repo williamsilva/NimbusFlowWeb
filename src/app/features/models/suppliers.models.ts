@@ -1,3 +1,5 @@
+import { PeriodEnum } from '@models/enums/period.enum';
+
 /**
  * Espelha com.nimbusflow.works.dto.{request.SupplierRequest,response.SupplierResponse} do
  * NimbusFlowServer (ver PROJECT_SPEC.md seção 3.1). taxId/phone são armazenados só com dígitos
@@ -64,7 +66,8 @@ export type SuppliersFiltersState = {
   email: string;
   phone: string;
   active: string[] | null;
-  createdAtRange: [string, string] | null;
+  createdAt: string | string[] | null;
+  periodCreatedAt: PeriodEnum | null;
 };
 
 export function mapSupplierApiModel(input: SupplierApiModel): SupplierModel {

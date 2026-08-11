@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { computed, DestroyRef, ViewChild } from '@angular/core';
+import { computed, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { input, signal, Output, inject, Component, EventEmitter, effect } from '@angular/core';
@@ -18,9 +18,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { I18nService } from '@core/i18n/i18n.service';
 import { WorksFacade } from '@features/facade/works.facade';
 import { SuppliersFacade } from '@features/facade/suppliers.facade';
+import { ProjectsFacade } from '@features/facade/projects.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
-import { MapPickerComponent } from '@features/works/map-picker/map-picker.component';
 import { WORK_STATUS_VALUES, WorkStatusEnum } from '@models/enums/work-status.enum';
 import { WorkModel, WorkUpsertInput } from '@models/works.models';
 
@@ -56,13 +56,10 @@ function fromDateOnlyString(value: string | null | undefined): Date | null {
     FloatLabelModule,
     InputNumberModule,
     ErrorMsgComponent,
-    MapPickerComponent,
     ReactiveFormsModule,
   ],
 })
 export class WorksCreateDialogComponent {
-  @ViewChild(MapPickerComponent) private mapPicker?: MapPickerComponent;
-
   visible = input.required<boolean>();
   work = input<WorkModel | null>(null);
 
@@ -80,6 +77,9 @@ export class WorksCreateDialogComponent {
   readonly policy = inject(WorksPermissionPolicy);
   readonly suppliersFacade = inject(SuppliersFacade);
   readonly supplierOptions = this.suppliersFacade.options;
+  readonly projectsFacade = inject(ProjectsFacade);
+  /** Só projetos Em andamento/Pausado - os únicos que aceitam novas frentes de serviço. */
+  readonly projectOptions = this.projectsFacade.assignableOptions;
 
   readonly loadedWork = signal<WorkModel | null>(null);
   readonly isEditMode = computed(() => !!this.work());
@@ -89,8 +89,6 @@ export class WorksCreateDialogComponent {
   );
 
   readonly saving = signal(false);
-  readonly latitude = signal<number | null>(null);
-  readonly longitude = signal<number | null>(null);
 
   readonly statusOptions = WORK_STATUS_VALUES.map((value) => ({
     value,
@@ -102,6 +100,7 @@ export class WorksCreateDialogComponent {
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(180)]],
     supplierId: ['', [Validators.required]],
+    projectId: ['', [Validators.required]],
     startDate: this.fb.control<Date | null>(null, [Validators.required]),
     expectedEndDate: this.fb.control<Date | null>(null, [Validators.required]),
     actualEndDate: this.fb.control<Date | null>(null),
@@ -111,6 +110,7 @@ export class WorksCreateDialogComponent {
 
   constructor() {
     this.suppliersFacade.loadSupplierOptions();
+    this.projectsFacade.loadAll();
 
     effect(() => {
       if (!this.visible()) {
@@ -131,12 +131,11 @@ export class WorksCreateDialogComponent {
 
       this.lastLoadedId = work.id;
       this.loadedWork.set(work);
-      this.latitude.set(work.latitude ?? null);
-      this.longitude.set(work.longitude ?? null);
 
       this.form.reset({
         name: work.name ?? '',
         supplierId: work.supplierId ?? '',
+        projectId: work.projectId ?? '',
         startDate: fromDateOnlyString(work.startDate),
         expectedEndDate: fromDateOnlyString(work.expectedEndDate),
         actualEndDate: fromDateOnlyString(work.actualEndDate),
@@ -144,17 +143,6 @@ export class WorksCreateDialogComponent {
         status: work.status,
       });
     });
-  }
-
-  onPositionChange(position: { latitude: number; longitude: number }): void {
-    this.latitude.set(position.latitude);
-    this.longitude.set(position.longitude);
-  }
-
-  /** (onShow) do p-dialog dispara depois que a transição de abertura termina de verdade - ponto
-   *  mais confiável pra recalcular o tamanho do mapa do que um delay fixo (ver MapPickerComponent). */
-  onDialogShow(): void {
-    this.mapPicker?.invalidateSize();
   }
 
   onHide(): void {
@@ -171,11 +159,10 @@ export class WorksCreateDialogComponent {
 
   private resetFormForCreate(): void {
     this.loadedWork.set(null);
-    this.latitude.set(null);
-    this.longitude.set(null);
     this.form.reset({
       name: '',
       supplierId: '',
+      projectId: '',
       startDate: null,
       expectedEndDate: null,
       actualEndDate: null,
@@ -188,15 +175,11 @@ export class WorksCreateDialogComponent {
     this.form.markAllAsTouched();
     this.form.updateValueAndValidity();
 
-    const hasPosition = this.latitude() != null && this.longitude() != null;
-
-    if (this.form.invalid || !hasPosition) {
+    if (this.form.invalid) {
       this.toast.add({
         severity: 'warn',
         summary: this.i18n.tUi('common.warning'),
-        detail: !hasPosition
-          ? this.i18n.tUi('works.form.locationRequired')
-          : this.i18n.tUi('works.form.invalid'),
+        detail: this.i18n.tUi('works.form.invalid'),
       });
       return;
     }
@@ -206,12 +189,11 @@ export class WorksCreateDialogComponent {
     const payload: WorkUpsertInput = {
       name: v.name.trim(),
       supplierId: v.supplierId,
+      projectId: v.projectId,
       startDate: toDateOnlyString(v.startDate)!,
       expectedEndDate: toDateOnlyString(v.expectedEndDate)!,
       actualEndDate: toDateOnlyString(v.actualEndDate),
       initialAmount: v.initialAmount!,
-      latitude: this.latitude()!,
-      longitude: this.longitude()!,
       status: v.status,
     };
 

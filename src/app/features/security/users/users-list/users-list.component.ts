@@ -36,6 +36,8 @@ import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
 import { UsersCreateDialogComponent } from '@features/security/users/users-create/users-create-dialog.component';
+import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
+import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
@@ -85,6 +87,7 @@ import {
     FiltersPanelComponent,
     DATA_TABLE_SHELL_IMPORTS,
     UsersCreateDialogComponent,
+    CsAdvancedPeriodDateFilterComponent,
   ],
 })
 export class UsersListComponent extends StatefulListPage<UsersFiltersState, UsersAdvancedFilters> {
@@ -120,10 +123,14 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
   document = signal('');
   status = signal<UserStatus[] | null>(null);
   createdBy = signal<string[] | null>(null);
-  createdAtRange = signal<Date[] | null>(null);
-  lastLoginAtRange = signal<Date[] | null>(null);
-  blockedUntilRange = signal<Date[] | null>(null);
-  passwordExpiresAtRange = signal<Date[] | null>(null);
+  createdAt = signal<string | string[] | null>(null);
+  periodCreatedAt = signal<PeriodEnum | null>(null);
+  lastLoginAt = signal<string | string[] | null>(null);
+  periodLastLoginAt = signal<PeriodEnum | null>(null);
+  blockedUntil = signal<string | string[] | null>(null);
+  periodBlockedUntil = signal<PeriodEnum | null>(null);
+  passwordExpiresAt = signal<string | string[] | null>(null);
+  periodPasswordExpiresAt = signal<PeriodEnum | null>(null);
 
   upsertVisible = signal(false);
   user = signal<UserModel | null>(null);
@@ -135,6 +142,11 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
       label: userStatusLabel(value, this.i18n),
       value,
     }));
+  });
+
+  readonly periodEnumOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allPeriodEnum().map((value) => ({ label: periodEnumLabel(value, this.i18n), value }));
   });
 
   users = computed<UserModel[]>(() => this.facade.users() as UserModel[]);
@@ -202,11 +214,6 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
     const userName = this.userName().trim();
     const document = this.document().trim();
 
-    const create = this.createdAtRange();
-    const last = this.lastLoginAtRange();
-    const blocked = this.blockedUntilRange();
-    const expires = this.passwordExpiresAtRange();
-
     if (name) items.push({ label: this.i18n.tUi('users.fields.name'), value: name });
     if (userName) items.push({ label: this.i18n.tUi('users.fields.userName'), value: userName });
     if (document) items.push({ label: this.i18n.tUi('users.fields.document'), value: document });
@@ -228,31 +235,42 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
       });
     }
 
-    if (create?.[0] && create?.[1]) {
-      items.push({
-        label: this.i18n.tUi('users.fields.createdAt'),
-        value: `${this.formatDate(create[0])} – ${this.formatDate(create[1])}`,
-      });
+    const createdAtLabel = this.formatActiveFilterPeriodDateValue(
+      this.periodCreatedAt(),
+      this.createdAt(),
+      this.i18n,
+    );
+    if (createdAtLabel) {
+      items.push({ label: this.i18n.tUi('users.fields.createdAt'), value: createdAtLabel });
     }
 
-    if (last?.[0] && last?.[1]) {
-      items.push({
-        label: this.i18n.tUi('users.fields.lastLoginAt'),
-        value: `${this.formatDate(last[0])} – ${this.formatDate(last[1])}`,
-      });
+    const lastLoginAtLabel = this.formatActiveFilterPeriodDateValue(
+      this.periodLastLoginAt(),
+      this.lastLoginAt(),
+      this.i18n,
+    );
+    if (lastLoginAtLabel) {
+      items.push({ label: this.i18n.tUi('users.fields.lastLoginAt'), value: lastLoginAtLabel });
     }
 
-    if (blocked?.[0] && blocked?.[1]) {
-      items.push({
-        label: this.i18n.tUi('users.fields.blockedUntil'),
-        value: `${this.formatDate(blocked[0])} – ${this.formatDate(blocked[1])}`,
-      });
+    const blockedUntilLabel = this.formatActiveFilterPeriodDateValue(
+      this.periodBlockedUntil(),
+      this.blockedUntil(),
+      this.i18n,
+    );
+    if (blockedUntilLabel) {
+      items.push({ label: this.i18n.tUi('users.fields.blockedUntil'), value: blockedUntilLabel });
     }
 
-    if (expires?.[0] && expires?.[1]) {
+    const passwordExpiresAtLabel = this.formatActiveFilterPeriodDateValue(
+      this.periodPasswordExpiresAt(),
+      this.passwordExpiresAt(),
+      this.i18n,
+    );
+    if (passwordExpiresAtLabel) {
       items.push({
         label: this.i18n.tUi('users.fields.passwordExpiresAt'),
-        value: `${this.formatDate(expires[0])} – ${this.formatDate(expires[1])}`,
+        value: passwordExpiresAtLabel,
       });
     }
 
@@ -470,32 +488,31 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
     this.document.set('');
     this.status.set(null);
     this.createdBy.set(null);
-    this.createdAtRange.set(null);
-    this.lastLoginAtRange.set(null);
-    this.blockedUntilRange.set(null);
-    this.passwordExpiresAtRange.set(null);
+    this.createdAt.set(null);
+    this.periodCreatedAt.set(null);
+    this.lastLoginAt.set(null);
+    this.periodLastLoginAt.set(null);
+    this.blockedUntil.set(null);
+    this.periodBlockedUntil.set(null);
+    this.passwordExpiresAt.set(null);
+    this.periodPasswordExpiresAt.set(null);
   }
 
   protected override toFiltersState(): UsersFiltersState {
-    const create = this.createdAtRange();
-    const last = this.lastLoginAtRange();
-    const blocked = this.blockedUntilRange();
-    const expires = this.passwordExpiresAtRange();
-
     return {
       name: this.name(),
       userName: this.userName(),
       document: this.document(),
       status: this.status()?.length ? this.status() : null,
       createdBy: this.createdBy()?.length ? this.createdBy() : null,
-      lastLoginAtRange:
-        last?.[0] && last?.[1] ? [last[0].toISOString(), last[1].toISOString()] : null,
-      createdAtRange:
-        create?.[0] && create?.[1] ? [create[0].toISOString(), create[1].toISOString()] : null,
-      blockedUntilRange:
-        blocked?.[0] && blocked?.[1] ? [blocked[0].toISOString(), blocked[1].toISOString()] : null,
-      passwordExpiresAtRange:
-        expires?.[0] && expires?.[1] ? [expires[0].toISOString(), expires[1].toISOString()] : null,
+      lastLoginAt: this.lastLoginAt(),
+      periodLastLoginAt: this.periodLastLoginAt(),
+      createdAt: this.createdAt(),
+      periodCreatedAt: this.periodCreatedAt(),
+      blockedUntil: this.blockedUntil(),
+      periodBlockedUntil: this.periodBlockedUntil(),
+      passwordExpiresAt: this.passwordExpiresAt(),
+      periodPasswordExpiresAt: this.periodPasswordExpiresAt(),
     };
   }
 
@@ -506,71 +523,34 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
     this.userName.set(s.userName ?? '');
     this.document.set(s.document ?? '');
 
-    this.lastLoginAtRange.set(
-      s.lastLoginAtRange?.[0] && s.lastLoginAtRange?.[1]
-        ? [new Date(s.lastLoginAtRange[0]), new Date(s.lastLoginAtRange[1])]
-        : null,
-    );
+    this.lastLoginAt.set(s.lastLoginAt ?? null);
+    this.periodLastLoginAt.set(s.periodLastLoginAt ?? null);
 
-    this.createdAtRange.set(
-      s.createdAtRange?.[0] && s.createdAtRange?.[1]
-        ? [new Date(s.createdAtRange[0]), new Date(s.createdAtRange[1])]
-        : null,
-    );
+    this.createdAt.set(s.createdAt ?? null);
+    this.periodCreatedAt.set(s.periodCreatedAt ?? null);
 
-    this.blockedUntilRange.set(
-      s.blockedUntilRange?.[0] && s.blockedUntilRange?.[1]
-        ? [new Date(s.blockedUntilRange[0]), new Date(s.blockedUntilRange[1])]
-        : null,
-    );
+    this.blockedUntil.set(s.blockedUntil ?? null);
+    this.periodBlockedUntil.set(s.periodBlockedUntil ?? null);
 
-    this.passwordExpiresAtRange.set(
-      s.passwordExpiresAtRange?.[0] && s.passwordExpiresAtRange?.[1]
-        ? [new Date(s.passwordExpiresAtRange[0]), new Date(s.passwordExpiresAtRange[1])]
-        : null,
-    );
+    this.passwordExpiresAt.set(s.passwordExpiresAt ?? null);
+    this.periodPasswordExpiresAt.set(s.periodPasswordExpiresAt ?? null);
   }
 
   protected override buildAdvancedFilters(): Partial<UsersAdvancedFilters> {
-    const create = this.createdAtRange();
-    const last = this.lastLoginAtRange();
-    const blocked = this.blockedUntilRange();
-    const expires = this.passwordExpiresAtRange();
-
-    const [lastFrom, lastTo] =
-      last?.[0] && last?.[1]
-        ? [last[0].toISOString(), last[1].toISOString()]
-        : [undefined, undefined];
-
-    const [createFrom, createTo] =
-      create?.[0] && create?.[1]
-        ? [create[0].toISOString(), create[1].toISOString()]
-        : [undefined, undefined];
-
-    const [blockedFrom, blockedTo] =
-      blocked?.[0] && blocked?.[1]
-        ? [blocked[0].toISOString(), blocked[1].toISOString()]
-        : [undefined, undefined];
-
-    const [expiresFrom, expiresTo] =
-      expires?.[0] && expires?.[1]
-        ? [expires[0].toISOString(), expires[1].toISOString()]
-        : [undefined, undefined];
-
     return {
       name: this.name().trim() || undefined,
       userName: this.userName().trim() || undefined,
       document: onlyDigits(this.document()) || undefined,
       status: this.status()?.length ? this.status() : undefined,
       createdBy: this.createdBy()?.length ? this.createdBy() : undefined,
-      lastLoginAtTo: lastTo,
-      lastLoginAtFrom: lastFrom,
-      createdAtTo: createTo,
-      createdAtFrom: createFrom,
-      blockedUntilTo: blockedTo,
-      blockedUntilFrom: blockedFrom,
-      passwordExpiresAtTo: expiresTo,
-      passwordExpiresAtFrom: expiresFrom,
+      lastLoginAt: this.lastLoginAt() ?? undefined,
+      periodLastLoginAt: this.periodLastLoginAt() ?? undefined,
+      createdAt: this.createdAt() ?? undefined,
+      periodCreatedAt: this.periodCreatedAt() ?? undefined,
+      blockedUntil: this.blockedUntil() ?? undefined,
+      periodBlockedUntil: this.periodBlockedUntil() ?? undefined,
+      passwordExpiresAt: this.passwordExpiresAt() ?? undefined,
+      periodPasswordExpiresAt: this.periodPasswordExpiresAt() ?? undefined,
     };
   }
 

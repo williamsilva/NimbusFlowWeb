@@ -3,24 +3,33 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef } from '@angular/core';
 
+import { FormsModule } from '@angular/forms';
+
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { DatePickerModule } from 'primeng/datepicker';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
+import { STATE_KEY } from '@features/state-key.constants';
 import { WorksFacade } from '@features/facade/works.facade';
 import { InstallmentsFacade } from '@features/facade/installments.facade';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { InstallmentsPermissionPolicy } from '@features/works/installments-permission.policy';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
+import { CsCurrencyRangeFilterComponent } from '@features/list-base/cs-currency-range-filter.component';
 import { InstallmentModel } from '@models/installments.models';
 import { WorkModel } from '@models/works.models';
-import { InstallmentStatusEnum, installmentStatusTone } from '@models/enums/installment-status.enum';
-import { InstallmentsCreateDialogComponent } from '@features/works/installments/installments-create-dialog.component';
+import {
+  INSTALLMENT_STATUS_VALUES,
+  InstallmentStatusEnum,
+  installmentStatusTone,
+} from '@models/enums/installment-status.enum';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
 
 @Component({
@@ -28,15 +37,18 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
   selector: 'app-installments-list',
   templateUrl: './installments-list.component.html',
   imports: [
+    FormsModule,
     TableModule,
     ButtonModule,
     CsDatePipe,
     CsCurrencyPipe,
     TooltipModule,
     TranslateModule,
+    DatePickerModule,
+    MultiSelectModule,
     PageHeaderComponent,
     StatusBadgeComponent,
-    InstallmentsCreateDialogComponent,
+    CsCurrencyRangeFilterComponent,
   ],
 })
 export class InstallmentsListComponent implements OnInit {
@@ -53,10 +65,22 @@ export class InstallmentsListComponent implements OnInit {
 
   readonly workId = signal('');
   readonly work = signal<WorkModel | null>(null);
-  readonly upsertVisible = signal(false);
 
   readonly items = computed<InstallmentModel[]>(() => this.facade.items());
   readonly loading = computed(() => this.facade.loading());
+  readonly loadedOnce = computed(() => this.facade.loadedOnce());
+
+  readonly statusOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return INSTALLMENT_STATUS_VALUES.map((value) => ({
+      value,
+      label: this.i18n.tUi(`installments.status.${value}` as never),
+    }));
+  });
+
+  tableStateKey(): string {
+    return STATE_KEY.NIMBUSFLOW.WORKS.INSTALLMENTS.TABLE.STATE.V1;
+  }
 
   ngOnInit(): void {
     const workId = this.route.snapshot.paramMap.get('workId');
@@ -101,15 +125,6 @@ export class InstallmentsListComponent implements OnInit {
       return 'installments.action.requiresReleased';
     }
     return this.policy.markPaidDisabledReason() ?? 'installments.action.noPermission';
-  }
-
-  goNew(): void {
-    if (!this.policy.canSchedule()) return;
-    this.upsertVisible.set(true);
-  }
-
-  onUpsertVisibleChange(v: boolean): void {
-    this.upsertVisible.set(v);
   }
 
   confirmRelease(row: InstallmentModel): void {

@@ -1,8 +1,10 @@
+import { PeriodEnum } from '@models/enums/period.enum';
+
 export interface SuggestionsAdvancedFilters {
   description?: string;
 
   status?: string[] | null;
 
-  createdAtFrom?: string;
-  createdAtTo?: string;
+  createdAt?: string | string[];
+  periodCreatedAt?: PeriodEnum;
 }

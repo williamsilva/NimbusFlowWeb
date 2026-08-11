@@ -10,17 +10,29 @@ import { TooltipModule } from 'primeng/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
+import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { DatePickerModule } from 'primeng/datepicker';
+import { MultiSelectModule } from 'primeng/multiselect';
+
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
+import { STATE_KEY } from '@features/state-key.constants';
 import { WorksFacade } from '@features/facade/works.facade';
 import { AddendumsFacade } from '@features/facade/addendums.facade';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { AddendumsPermissionPolicy } from '@features/works/addendums-permission.policy';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
+import { CsCurrencyRangeFilterComponent } from '@features/list-base/cs-currency-range-filter.component';
 import { AddendumModel } from '@models/addendums.models';
 import { WorkModel } from '@models/works.models';
-import { AddendumStatusEnum, addendumStatusTone } from '@models/enums/addendum-status.enum';
+import {
+  ADDENDUM_STATUS_VALUES,
+  AddendumStatusEnum,
+  ApprovalTierEnum,
+  addendumStatusTone,
+} from '@models/enums/addendum-status.enum';
 import { AddendumsCreateDialogComponent } from '@features/works/addendums/addendums-create-dialog.component';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
 
@@ -30,15 +42,20 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
   templateUrl: './addendums-list.component.html',
   imports: [
     NgIf,
+    FormsModule,
     TableModule,
     ButtonModule,
     CsDatePipe,
     CsCurrencyPipe,
     TooltipModule,
+    InputTextModule,
     TranslateModule,
+    DatePickerModule,
+    MultiSelectModule,
     PageHeaderComponent,
     StatusBadgeComponent,
     AddendumsCreateDialogComponent,
+    CsCurrencyRangeFilterComponent,
   ],
 })
 export class AddendumsListComponent implements OnInit {
@@ -59,6 +76,27 @@ export class AddendumsListComponent implements OnInit {
 
   readonly items = computed<AddendumModel[]>(() => this.facade.items());
   readonly loading = computed(() => this.facade.loading());
+  readonly loadedOnce = computed(() => this.facade.loadedOnce());
+
+  readonly statusOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return ADDENDUM_STATUS_VALUES.map((value) => ({
+      value,
+      label: this.i18n.tUi(`addendums.status.${value}` as never),
+    }));
+  });
+
+  readonly tierOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return Object.values(ApprovalTierEnum).map((value) => ({
+      value,
+      label: this.i18n.tUi(`addendums.tier.${value}` as never),
+    }));
+  });
+
+  tableStateKey(): string {
+    return STATE_KEY.NIMBUSFLOW.WORKS.ADDENDUMS.TABLE.STATE.V1;
+  }
 
   ngOnInit(): void {
     const workId = this.route.snapshot.paramMap.get('workId');

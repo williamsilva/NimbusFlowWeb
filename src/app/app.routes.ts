@@ -9,7 +9,14 @@ export const appRoutes: Routes = [
     component: LayoutComponent,
     canActivate: [authGuard],
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'security' },
+      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+
+      {
+        path: 'dashboard',
+        title: 'routes.dashboard.title',
+        loadComponent: () =>
+          import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+      },
 
       {
         path: 'security',
@@ -36,11 +43,38 @@ export const appRoutes: Routes = [
       },
 
       {
+        path: 'projects',
+        title: 'routes.projects.title',
+        loadComponent: () =>
+          import('./features/projects/projects-list.component').then(
+            (m) => m.ProjectsListComponent,
+          ),
+      },
+
+      {
         path: 'works',
         title: 'routes.works.title',
         loadComponent: () =>
           import('./features/works/works-list/works-list.component').then(
             (m) => m.WorksListComponent,
+          ),
+      },
+
+      {
+        path: 'addendums',
+        title: 'routes.addendums.title',
+        loadComponent: () =>
+          import('./features/works/addendums/all-addendums-list.component').then(
+            (m) => m.AllAddendumsListComponent,
+          ),
+      },
+
+      {
+        path: 'installments',
+        title: 'routes.installments.title',
+        loadComponent: () =>
+          import('./features/works/installments/all-installments-list.component').then(
+            (m) => m.AllInstallmentsListComponent,
           ),
       },
 
@@ -59,6 +93,24 @@ export const appRoutes: Routes = [
         loadComponent: () =>
           import('./features/works/installments/installments-list.component').then(
             (m) => m.InstallmentsListComponent,
+          ),
+      },
+
+      {
+        path: 'works/:workId/measurements',
+        title: 'routes.works.measurements.title',
+        loadComponent: () =>
+          import('./features/works/measurements/measurements-list.component').then(
+            (m) => m.MeasurementsListComponent,
+          ),
+      },
+
+      {
+        path: 'measurements',
+        title: 'routes.measurements.title',
+        loadComponent: () =>
+          import('./features/works/measurements/all-measurements-list.component').then(
+            (m) => m.AllMeasurementsListComponent,
           ),
       },
 

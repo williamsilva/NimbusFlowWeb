@@ -6,12 +6,12 @@
   [draggable]="false"
   [resizable]="false"
   [visible]="visible()"
-  [style]="{ width: '520px', maxWidth: '95vw' }"
+  [style]="{ width: '560px', maxWidth: '95vw' }"
   [header]="'addendums.new.title' | translate"
 >
   <form [formGroup]="form" class="cs-dialog-form">
     <div class="grid formgrid gap-0">
-      <div class="col-12 p-2">
+      <div class="col-12 md:col-6 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-inputNumber
             size="small"
@@ -32,7 +32,32 @@
             [label]="'addendums.fields.amount' | translate"
           />
         </p-floatLabel>
-        <small class="opacity-70 block mt-1">
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputNumber
+            size="small"
+            class="w-full"
+            mode="decimal"
+            suffix=" %"
+            inputId="percentage"
+            inputStyleClass="w-full"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            formControlName="percentage"
+          ></p-inputNumber>
+          <app-error-msg
+            [field]="'percentage'"
+            [forId]="'percentage'"
+            [control]="form.controls.percentage"
+            [label]="'addendums.fields.percentage' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2 -mt-2">
+        <small class="opacity-70 block">
           {{ ('addendums.tier.' + tierHint()) | translate }} —
           {{ 'addendums.form.tierHint' | translate }}
         </small>

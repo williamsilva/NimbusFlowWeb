@@ -23,27 +23,210 @@
 <app-addendums-create-dialog
   [workId]="workId()"
   [visible]="upsertVisible()"
+  [initialAmount]="work()?.initialAmount ?? 0"
   (visibleChange)="onUpsertVisibleChange($event)"
 ></app-addendums-create-dialog>
 
-<div class="card">
-  <p-table [value]="items()" [loading]="loading()" dataKey="id">
+<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+  <p-table
+    stripedRows
+    dataKey="id"
+    size="small"
+    showGridlines
+    [rows]="10"
+    [rowHover]="true"
+    [paginator]="true"
+    sortMode="multiple"
+    filterDisplay="menu"
+    stateStorage="local"
+    class="cs-admin-table"
+    [value]="items()"
+    [loading]="loading()"
+    [stateKey]="tableStateKey()"
+    [showCurrentPageReport]="true"
+    [paginatorDropdownAppendTo]="'body'"
+    [rowsPerPageOptions]="[10, 20, 50]"
+    [tableStyle]="{ width: '100%', 'min-width': '52rem' }"
+    [currentPageReportTemplate]="'pagination.report' | translate"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: 140px" />
+        <col style="width: auto" />
+        <col style="width: 110px" />
+        <col style="width: 110px" />
+        <col style="width: 150px" />
+        <col style="width: 150px" />
+        <col style="width: 80px" />
+      </colgroup>
+    </ng-template>
+
     <ng-template pTemplate="header">
       <tr>
-        <th class="text-right">{{ 'addendums.columns.amount' | translate }}</th>
-        <th>{{ 'addendums.columns.justification' | translate }}</th>
-        <th class="text-center">{{ 'addendums.columns.tier' | translate }}</th>
-        <th class="text-center">{{ 'addendums.columns.status' | translate }}</th>
-        <th class="text-center">{{ 'addendums.columns.createdAt' | translate }}</th>
-        <th class="text-center">{{ 'addendums.columns.decisionDate' | translate }}</th>
-        <th class="text-center">{{ 'common.actions' | translate }}</th>
+        <th pSortableColumn="amount">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'addendums.columns.amount' | translate">{{ 'addendums.columns.amount' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="amount"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="amount"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [inputId]="'amountCol'"
+                    [label]="'addendums.fields.amount' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="justification">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'addendums.columns.justification' | translate">{{ 'addendums.columns.justification' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="justification"></p-sortIcon>
+              <p-columnFilter
+                type="text"
+                display="menu"
+                class="ml-auto"
+                field="justification"
+                matchMode="contains"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="requiredTier">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'addendums.columns.tier' | translate">{{ 'addendums.columns.tier' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="requiredTier"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="requiredTier"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="tierOptions()"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="status">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'addendums.columns.status' | translate">{{ 'addendums.columns.status' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="status"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="status"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="statusOptions()"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="createdAt">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'addendums.columns.createdAt' | translate">{{ 'addendums.columns.createdAt' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="createdAt"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="createdAt"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-datepicker
+                    class="w-full"
+                    appendTo="body"
+                    [showIcon]="true"
+                    [ngModel]="value"
+                    selectionMode="range"
+                    dateFormat="dd/mm/yy"
+                    [readonlyInput]="true"
+                    (ngModelChange)="filter($event)"
+                    [placeholder]="'common.period' | translate"
+                  ></p-datepicker>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="decisionDate">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'addendums.columns.decisionDate' | translate">{{ 'addendums.columns.decisionDate' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="decisionDate"></p-sortIcon>
+            </span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
+          </div>
+        </th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-row>
       <tr>
         <td class="text-right">{{ row.amount | csCurrency }}</td>
-        <td>{{ row.justification }}</td>
+        <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.justification">{{ row.justification }}</span></td>
         <td class="text-center">{{ ('addendums.tier.' + row.requiredTier) | translate }}</td>
         <td class="text-center">
           <cs-status-badge
@@ -92,7 +275,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="7" class="text-center py-5 opacity-70">
-          {{ 'addendums.empty.title' | translate }}
+          {{ loadedOnce() ? ('addendums.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
     </ng-template>

@@ -31,6 +31,8 @@ import { SuppliersPermissionPolicy } from '@features/suppliers/suppliers-permiss
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { SupplierModel, SuppliersFiltersState } from '@models/suppliers.models';
 import { SuppliersCreateDialogComponent } from '@features/suppliers/suppliers-create/suppliers-create-dialog.component';
+import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
+import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
@@ -64,6 +66,7 @@ import {
     FiltersPanelComponent,
     StatusBadgeComponent,
     SuppliersCreateDialogComponent,
+    CsAdvancedPeriodDateFilterComponent,
   ],
 })
 export class SuppliersListComponent extends StatefulListPage<
@@ -115,7 +118,8 @@ export class SuppliersListComponent extends StatefulListPage<
   email = signal('');
   phone = signal('');
   active = signal<string[] | null>(null);
-  createdAtRange = signal<Date[] | null>(null);
+  createdAt = signal<string | string[] | null>(null);
+  periodCreatedAt = signal<PeriodEnum | null>(null);
 
   upsertVisible = signal(false);
   supplier = signal<SupplierModel | null>(null);
@@ -124,6 +128,11 @@ export class SuppliersListComponent extends StatefulListPage<
     { label: this.i18n.tUi('common.active' as never), value: 'true' },
     { label: this.i18n.tUi('common.inactive' as never), value: 'false' },
   ];
+
+  readonly periodEnumOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allPeriodEnum().map((value) => ({ label: periodEnumLabel(value, this.i18n), value }));
+  });
 
   readonly canCreate = computed(() => this.policy.canCreate());
   readonly totalRecords = computed(() => this.facade.totalRecords());
@@ -138,7 +147,6 @@ export class SuppliersListComponent extends StatefulListPage<
     const email = this.email().trim();
     const phone = this.phone().trim();
     const active = this.active();
-    const createdAtRange = this.createdAtRange();
 
     if (companyName) {
       items.push({ label: this.i18n.tUi('suppliers.fields.companyName'), value: companyName });
@@ -162,11 +170,13 @@ export class SuppliersListComponent extends StatefulListPage<
         .join(', ');
       items.push({ label: this.i18n.tUi('suppliers.fields.status'), value: labels });
     }
-    if (createdAtRange?.[0] && createdAtRange?.[1]) {
-      items.push({
-        label: this.i18n.tUi('suppliers.fields.createdAt'),
-        value: `${this.formatDate(createdAtRange[0])} – ${this.formatDate(createdAtRange[1])}`,
-      });
+    const createdAtLabel = this.formatActiveFilterPeriodDateValue(
+      this.periodCreatedAt(),
+      this.createdAt(),
+      this.i18n,
+    );
+    if (createdAtLabel) {
+      items.push({ label: this.i18n.tUi('suppliers.fields.createdAt'), value: createdAtLabel });
     }
 
     return items;
@@ -236,12 +246,11 @@ export class SuppliersListComponent extends StatefulListPage<
     this.email.set('');
     this.phone.set('');
     this.active.set(null);
-    this.createdAtRange.set(null);
+    this.createdAt.set(null);
+    this.periodCreatedAt.set(null);
   }
 
   protected override toFiltersState(): SuppliersFiltersState {
-    const createdAtRange = this.createdAtRange();
-
     return {
       companyName: this.companyName(),
       tradeName: this.tradeName(),
@@ -249,10 +258,8 @@ export class SuppliersListComponent extends StatefulListPage<
       email: this.email(),
       phone: this.phone(),
       active: this.active()?.length ? this.active() : null,
-      createdAtRange:
-        createdAtRange?.[0] && createdAtRange?.[1]
-          ? [createdAtRange[0].toISOString(), createdAtRange[1].toISOString()]
-          : null,
+      createdAt: this.createdAt(),
+      periodCreatedAt: this.periodCreatedAt(),
     };
   }
 
@@ -263,20 +270,11 @@ export class SuppliersListComponent extends StatefulListPage<
     this.email.set(state.email ?? '');
     this.phone.set(state.phone ?? '');
     this.active.set(state.active ?? null);
-    this.createdAtRange.set(
-      state.createdAtRange?.[0] && state.createdAtRange?.[1]
-        ? [new Date(state.createdAtRange[0]), new Date(state.createdAtRange[1])]
-        : null,
-    );
+    this.createdAt.set(state.createdAt ?? null);
+    this.periodCreatedAt.set(state.periodCreatedAt ?? null);
   }
 
   protected override buildAdvancedFilters(): Partial<SuppliersAdvancedFilters> {
-    const createdAtRange = this.createdAtRange();
-    const [createdAtFrom, createdAtTo] =
-      createdAtRange?.[0] && createdAtRange?.[1]
-        ? [createdAtRange[0].toISOString(), createdAtRange[1].toISOString()]
-        : [undefined, undefined];
-
     return {
       companyName: this.companyName().trim() || undefined,
       tradeName: this.tradeName().trim() || undefined,
@@ -284,8 +282,8 @@ export class SuppliersListComponent extends StatefulListPage<
       email: this.email().trim() || undefined,
       phone: this.phone().trim() || undefined,
       active: this.active()?.length ? this.active() : undefined,
-      createdAtFrom,
-      createdAtTo,
+      createdAt: this.createdAt() ?? undefined,
+      periodCreatedAt: this.periodCreatedAt() ?? undefined,
     };
   }
 

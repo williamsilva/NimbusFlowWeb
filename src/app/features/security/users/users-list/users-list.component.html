@@ -125,77 +125,69 @@
   </div>
 
   <div class="grid formgrid gap-0 align-items-end mt-2">
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-datepicker
-          size="small"
-          class="w-full"
-          appendTo="body"
-          [showIcon]="true"
-          inputId="lastLoginAt"
-          selectionMode="range"
-          dateFormat="dd/mm/yy"
-          [readonlyInput]="true"
-          [ngModel]="lastLoginAtRange()"
-          (ngModelChange)="lastLoginAtRange.set($event ?? null)"
-        ></p-datepicker>
-        <label for="lastLoginAt">{{ 'users.fields.lastLoginAt' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-period-date-filter
+      dateInputId="lastLoginAt"
+      periodInputId="periodLastLoginAt"
+      [value]="lastLoginAt()"
+      [period]="periodLastLoginAt()"
+      class="col-12 md:col-3 p-1"
+      (valueChange)="lastLoginAt.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodLastLoginAt())"
+      [dateFormat]="setDateFormat(periodLastLoginAt())"
+      [selectionMode]="setSelectionMode(periodLastLoginAt())"
+      [dateLabel]="'users.fields.lastLoginAt' | translate"
+      [periodLabel]="'users.fields.periodLastLoginAt' | translate"
+      (periodChange)="onPeriodColumnChange(periodLastLoginAt, lastLoginAt, $event)"
+    ></cs-advanced-period-date-filter>
 
-    <div class="col-12 md:col-2 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-datepicker
-          size="small"
-          class="w-full"
-          appendTo="body"
-          [showIcon]="true"
-          selectionMode="range"
-          dateFormat="dd/mm/yy"
-          inputId="blockedUntil"
-          [readonlyInput]="true"
-          [ngModel]="blockedUntilRange()"
-          (ngModelChange)="blockedUntilRange.set($event ?? null)"
-        ></p-datepicker>
-        <label for="blockedUntil">{{ 'users.fields.blockedUntil' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-period-date-filter
+      dateInputId="blockedUntil"
+      periodInputId="periodBlockedUntil"
+      [value]="blockedUntil()"
+      [period]="periodBlockedUntil()"
+      class="col-12 md:col-2 p-1"
+      (valueChange)="blockedUntil.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodBlockedUntil())"
+      [dateFormat]="setDateFormat(periodBlockedUntil())"
+      [selectionMode]="setSelectionMode(periodBlockedUntil())"
+      [dateLabel]="'users.fields.blockedUntil' | translate"
+      [periodLabel]="'users.fields.periodBlockedUntil' | translate"
+      (periodChange)="onPeriodColumnChange(periodBlockedUntil, blockedUntil, $event)"
+    ></cs-advanced-period-date-filter>
 
-    <div class="col-12 md:col-2 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-datepicker
-          size="small"
-          class="w-full"
-          appendTo="body"
-          [showIcon]="true"
-          selectionMode="range"
-          dateFormat="dd/mm/yy"
-          [readonlyInput]="true"
-          inputId="passwordExpiresAt"
-          [ngModel]="passwordExpiresAtRange()"
-          (ngModelChange)="passwordExpiresAtRange.set($event ?? null)"
-        ></p-datepicker>
-        <label for="passwordExpiresAt">{{ 'users.fields.passwordExpiresAt' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-period-date-filter
+      dateInputId="passwordExpiresAt"
+      periodInputId="periodPasswordExpiresAt"
+      [value]="passwordExpiresAt()"
+      [period]="periodPasswordExpiresAt()"
+      class="col-12 md:col-2 p-1"
+      (valueChange)="passwordExpiresAt.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodPasswordExpiresAt())"
+      [dateFormat]="setDateFormat(periodPasswordExpiresAt())"
+      [selectionMode]="setSelectionMode(periodPasswordExpiresAt())"
+      [dateLabel]="'users.fields.passwordExpiresAt' | translate"
+      [periodLabel]="'users.fields.periodPasswordExpiresAt' | translate"
+      (periodChange)="onPeriodColumnChange(periodPasswordExpiresAt, passwordExpiresAt, $event)"
+    ></cs-advanced-period-date-filter>
 
-    <div class="col-12 md:col-2 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-datepicker
-          size="small"
-          class="w-full"
-          appendTo="body"
-          [showIcon]="true"
-          inputId="createdAt"
-          selectionMode="range"
-          dateFormat="dd/mm/yy"
-          [readonlyInput]="true"
-          [ngModel]="createdAtRange()"
-          (ngModelChange)="createdAtRange.set($event ?? null)"
-        ></p-datepicker>
-        <label for="createdAt">{{ 'users.fields.createdAt' | translate }}</label>
-      </p-floatLabel>
-    </div>
+    <cs-advanced-period-date-filter
+      dateInputId="createdAt"
+      periodInputId="periodCreatedAt"
+      [value]="createdAt()"
+      [period]="periodCreatedAt()"
+      class="col-12 md:col-2 p-1"
+      (valueChange)="createdAt.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodCreatedAt())"
+      [dateFormat]="setDateFormat(periodCreatedAt())"
+      [selectionMode]="setSelectionMode(periodCreatedAt())"
+      [dateLabel]="'users.fields.createdAt' | translate"
+      [periodLabel]="'users.fields.periodCreatedAt' | translate"
+      (periodChange)="onPeriodColumnChange(periodCreatedAt, createdAt, $event)"
+    ></cs-advanced-period-date-filter>
 
     <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
@@ -295,7 +287,7 @@
 
       <th pSortableColumn="userName">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.userName' | translate }}</span>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.userName' | translate">{{ 'users.columns.userName' | translate }}</span>
           <span class="th-icons">
             <p-sortIcon field="userName"></p-sortIcon>
             <p-columnFilter
@@ -315,7 +307,7 @@
 
       <th pSortableColumn="name">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.name' | translate }}</span>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.name' | translate">{{ 'users.columns.name' | translate }}</span>
           <span class="th-icons">
             <p-sortIcon field="name"></p-sortIcon>
             <p-columnFilter
@@ -335,7 +327,7 @@
 
       <th pSortableColumn="document">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.document' | translate }}</span>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.document' | translate">{{ 'users.columns.document' | translate }}</span>
           <span class="th-icons">
             <p-sortIcon field="document"></p-sortIcon>
             <p-columnFilter
@@ -353,7 +345,7 @@
 
       <th pSortableColumn="status">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.status' | translate }}</span>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.status' | translate">{{ 'users.columns.status' | translate }}</span>
           <span class="th-icons">
             <p-sortIcon field="status"></p-sortIcon>
             <p-columnFilter
@@ -385,7 +377,7 @@
 
       <th pSortableColumn="lastLoginAt">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.lastLoginAt' | translate }}</span>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.lastLoginAt' | translate">{{ 'users.columns.lastLoginAt' | translate }}</span>
           <span class="th-icons">
             <p-sortIcon field="lastLoginAt"></p-sortIcon>
           </span>
@@ -394,7 +386,7 @@
 
       <th pSortableColumn="blockedUntil">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.blockedUntil' | translate }}</span>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.blockedUntil' | translate">{{ 'users.columns.blockedUntil' | translate }}</span>
           <span class="th-icons">
             <p-sortIcon field="blockedUntil"></p-sortIcon>
           </span>
@@ -403,7 +395,7 @@
 
       <th pSortableColumn="passwordExpiresAt">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.passwordExpiresAt' | translate }}</span>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.passwordExpiresAt' | translate">{{ 'users.columns.passwordExpiresAt' | translate }}</span>
           <span class="th-icons">
             <p-sortIcon field="passwordExpiresAt"></p-sortIcon>
           </span>
@@ -412,7 +404,7 @@
 
       <th pSortableColumn="createdAt">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.createdAt' | translate }}</span>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.createdAt' | translate">{{ 'users.columns.createdAt' | translate }}</span>
           <span class="th-icons">
             <p-sortIcon field="createdAt"></p-sortIcon>
             <p-columnFilter
@@ -444,7 +436,7 @@
 
       <th pSortableColumn="createdBy">
         <div class="th-flex text-center">
-          <span class="th-label">{{ 'users.columns.createdBy' | translate }}</span>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.createdBy' | translate">{{ 'users.columns.createdBy' | translate }}</span>
           <span class="th-icons">
             <p-sortIcon field="createdBy"></p-sortIcon>
             <p-columnFilter
@@ -477,7 +469,7 @@
 
       <th class="text-center">
         <div class="th-flex text-center justify-content-center">
-          <span class="th-label">{{ 'common.actions' | translate }}</span>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
         </div>
       </th>
     </tr>
@@ -494,10 +486,12 @@
         ></p-checkbox>
       </td>
 
-      <td class="cell-strong">{{ row.userName }}</td>
+      <td class="cell-strong">
+        <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.userName">{{ row.userName }}</span>
+      </td>
 
       <td class="cell-muted">
-        {{ row.name }}
+        <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{ row.name }}</span>
       </td>
 
       <td class="cell-muted text-center">
@@ -527,7 +521,7 @@
       </td>
 
       <td class="cell-muted text-center">
-        {{ row.createdBy?.name ?? '-' }}
+        <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.createdBy?.name ?? '-'">{{ row.createdBy?.name ?? '-' }}</span>
       </td>
 
       <td class="text-center">

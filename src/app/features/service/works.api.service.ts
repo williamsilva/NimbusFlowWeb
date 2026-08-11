@@ -39,6 +39,11 @@ export class WorksApiService {
     return this.http.get<WorkApiModel>(`${this.baseUrl}/${id}`).pipe(map(mapWorkApiModel));
   }
 
+  /** Pro seletor de Frente de Serviço no filtro do Dashboard - reaproveita o findAll sem paginação já exposto pelo backend. */
+  findAll() {
+    return this.http.get<WorkApiModel[]>(`${this.baseUrl}`).pipe(map(mapWorkApiModels));
+  }
+
   create(input: WorkUpsertInput) {
     return this.http.post<WorkApiModel>(`${this.baseUrl}`, input).pipe(map(mapWorkApiModel));
   }

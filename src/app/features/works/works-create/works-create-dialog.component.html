@@ -3,7 +3,6 @@
   appendTo="body"
   [closable]="false"
   (onHide)="onHide()"
-  (onShow)="onDialogShow()"
   [draggable]="false"
   [resizable]="false"
   [visible]="visible()"
@@ -48,6 +47,28 @@
             [forId]="'supplierId'"
             [control]="form.controls.supplierId"
             [label]="'works.fields.supplier' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            inputId="projectId"
+            optionLabel="label"
+            optionValue="value"
+            formControlName="projectId"
+            [options]="projectOptions()"
+          ></p-select>
+          <app-error-msg
+            [field]="'projectId'"
+            [forId]="'projectId'"
+            [control]="form.controls.projectId"
+            [label]="'works.fields.project' | translate"
           />
         </p-floatLabel>
       </div>
@@ -172,15 +193,6 @@
         </p-floatLabel>
       </div>
     </div>
-
-    <h4 class="mb-2 text-sm font-semibold opacity-70">
-      {{ 'works.fields.location' | translate }}
-    </h4>
-    <app-map-picker
-      [latitude]="latitude()"
-      [longitude]="longitude()"
-      (positionChange)="onPositionChange($event)"
-    ></app-map-picker>
   </form>
 
   <ng-template pTemplate="footer">

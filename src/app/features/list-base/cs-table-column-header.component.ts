@@ -2,16 +2,17 @@ import { CommonModule } from '@angular/common';
 import { Component, ContentChild, Input } from '@angular/core';
 
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { CsColumnFilterTemplateDirective } from './cs-column-filter-template.directive';
 
 @Component({
   standalone: true,
   selector: 'th[cs-table-column-header]',
-  imports: [CommonModule, TableModule],
+  imports: [CommonModule, TableModule, TooltipModule],
   template: `
     <div class="th-flex text-center" [class.justify-content-center]="center">
-      <span class="th-label">{{ label }}</span>
+      <span class="th-label" tooltipPosition="top" [pTooltip]="label">{{ label }}</span>
     
       @if (sortField || filterField) {
         <span class="th-icons">

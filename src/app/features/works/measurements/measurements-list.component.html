@@ -1,0 +1,288 @@
+<cs-page-header
+  [subtitle]="work()?.name ?? ''"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.works' | translate), url: '/works' },
+    { label: ('breadcrumb.measurements' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    tooltipPosition="top"
+    [disabled]="!canCreate()"
+    class="p-button-info p-button-sm"
+    [label]="'measurements.new.title' | translate"
+    [pTooltip]="!canCreate() ? (createDisabledReason() | translate) : ''"
+  ></button>
+</cs-page-header>
+
+<app-measurements-create-dialog
+  [workId]="workId()"
+  [visible]="upsertVisible()"
+  [totalAmount]="work()?.totalAmount ?? 0"
+  [remainingAmount]="work()?.remainingAmount ?? 0"
+  (visibleChange)="onUpsertVisibleChange($event)"
+></app-measurements-create-dialog>
+
+<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+  <p-table
+    stripedRows
+    dataKey="id"
+    size="small"
+    showGridlines
+    [rows]="10"
+    [rowHover]="true"
+    [paginator]="true"
+    sortMode="multiple"
+    filterDisplay="menu"
+    stateStorage="local"
+    class="cs-admin-table"
+    [value]="items()"
+    [loading]="loading()"
+    [stateKey]="tableStateKey()"
+    [showCurrentPageReport]="true"
+    [paginatorDropdownAppendTo]="'body'"
+    [rowsPerPageOptions]="[10, 20, 50]"
+    [tableStyle]="{ width: '100%', 'min-width': '72rem' }"
+    [currentPageReportTemplate]="'pagination.report' | translate"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: auto" />
+        <col style="width: 100px" />
+        <col style="width: 140px" />
+        <col style="width: 120px" />
+        <col style="width: 110px" />
+        <col style="width: 110px" />
+        <col style="width: 90px" />
+        <col style="width: 80px" />
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="description">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'measurements.columns.description' | translate">{{ 'measurements.columns.description' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="description"></p-sortIcon>
+              <p-columnFilter
+                type="text"
+                display="menu"
+                class="ml-auto"
+                field="description"
+                matchMode="contains"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="percentageCompleted">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'measurements.columns.percentageCompleted' | translate">{{ 'measurements.columns.percentageCompleted' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="percentageCompleted"></p-sortIcon>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="amountToPay">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'measurements.columns.amountToPay' | translate">{{ 'measurements.columns.amountToPay' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="amountToPay"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="amountToPay"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [inputId]="'amountToPayCol'"
+                    [label]="'measurements.fields.amountToPay' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="dueDate">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'measurements.columns.dueDate' | translate">{{ 'measurements.columns.dueDate' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="dueDate"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="dueDate"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-datepicker
+                    class="w-full"
+                    appendTo="body"
+                    [showIcon]="true"
+                    [ngModel]="value"
+                    selectionMode="range"
+                    dateFormat="dd/mm/yy"
+                    [readonlyInput]="true"
+                    (ngModelChange)="filter($event)"
+                    [placeholder]="'common.period' | translate"
+                  ></p-datepicker>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="status">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'measurements.columns.status' | translate">{{ 'measurements.columns.status' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="status"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="status"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="statusOptions()"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'measurements.columns.generatedInstallment' | translate">{{ 'measurements.columns.generatedInstallment' | translate }}</span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'measurements.columns.media' | translate">{{ 'measurements.columns.media' | translate }}</span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.description">{{ row.description }}</span></td>
+        <td class="text-center">{{ row.percentageCompleted | number: '1.0-2' }}%</td>
+        <td class="text-right">{{ row.amountToPay | csCurrency }}</td>
+        <td class="text-center">{{ row.dueDate | csDate: 'date' }}</td>
+        <td class="text-center">
+          <cs-status-badge
+            [tone]="tone(row.status)"
+            [label]="('measurements.status.' + row.status) | translate"
+          ></cs-status-badge>
+        </td>
+        <td class="text-center">
+          <i
+            *ngIf="row.generatedInstallmentId"
+            class="pi pi-check-circle text-green-600"
+            [pTooltip]="'measurements.action.installmentGenerated' | translate"
+            tooltipPosition="top"
+          ></i>
+          <ng-container *ngIf="!row.generatedInstallmentId">-</ng-container>
+        </td>
+        <td class="text-center">
+          <div class="table-actions" *ngIf="row.media.length; else noMedia">
+            <a
+              *ngFor="let m of row.media"
+              [href]="m.url"
+              target="_blank"
+              rel="noopener"
+              [pTooltip]="('measurements.media.' + m.type) | translate"
+              tooltipPosition="top"
+            >
+              <i class="pi" [class.pi-image]="m.type === 'PHOTO'" [class.pi-video]="m.type === 'VIDEO'"></i>
+            </a>
+          </div>
+          <ng-template #noMedia>-</ng-template>
+        </td>
+        <td class="text-center">
+          <div class="table-actions" *ngIf="isPending(row)">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-check"
+              (click)="confirmApprove(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!policy.canDecide()"
+              [pTooltip]="
+                policy.canDecide()
+                  ? ('measurements.action.approve' | translate)
+                  : (policy.decideDisabledReason() ?? 'measurements.action.noPermission' | translate)
+              "
+              tooltipPosition="top"
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-times"
+              (click)="confirmReject(row)"
+              class="p-button-text p-button-sm p-button-danger"
+              [disabled]="!policy.canDecide()"
+              [pTooltip]="
+                policy.canDecide()
+                  ? ('measurements.action.reject' | translate)
+                  : (policy.decideDisabledReason() ?? 'measurements.action.noPermission' | translate)
+              "
+              tooltipPosition="top"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" class="text-center py-5 opacity-70">
+          {{ loadedOnce() ? ('measurements.empty.title' | translate) : ('common.loading' | translate) }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

@@ -21,6 +21,10 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
  *  (AddendumApprovalService.resolveTier), este valor pode ficar defasado se o limite mudar. */
 const APPROVAL_TIER2_THRESHOLD_HINT = 50000;
 
+function round2(value: number): number {
+  return Math.round(value * 100) / 100;
+}
+
 @Component({
   standalone: true,
   selector: 'app-addendums-create-dialog',
@@ -40,6 +44,8 @@ const APPROVAL_TIER2_THRESHOLD_HINT = 50000;
 export class AddendumsCreateDialogComponent {
   visible = input.required<boolean>();
   workId = input.required<string>();
+  /** Valor inicial da obra - base do percentual de aumento (valor / initialAmount * 100). */
+  initialAmount = input.required<number>();
 
   @Output() saved = new EventEmitter<void>();
   @Output() visibleChange = new EventEmitter<boolean>();
@@ -62,13 +68,28 @@ export class AddendumsCreateDialogComponent {
 
   readonly form = this.fb.nonNullable.group({
     amount: this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)]),
+    percentage: this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)]),
     justification: ['', [Validators.required, Validators.maxLength(1000)]],
   });
 
   constructor() {
     this.form.controls.amount.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((value) => this.amount.set(value ?? null));
+      .subscribe((value) => {
+        this.amount.set(value ?? null);
+        const initial = this.initialAmount();
+        const percentage = value != null && initial > 0 ? round2((value / initial) * 100) : null;
+        this.form.controls.percentage.setValue(percentage, { emitEvent: false });
+      });
+
+    this.form.controls.percentage.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        const initial = this.initialAmount();
+        const amount = value != null ? round2((initial * value) / 100) : null;
+        this.amount.set(amount);
+        this.form.controls.amount.setValue(amount, { emitEvent: false });
+      });
   }
 
   onHide(): void {
@@ -78,7 +99,7 @@ export class AddendumsCreateDialogComponent {
   close(): void {
     this.saving.set(false);
     this.amount.set(null);
-    this.form.reset({ amount: null, justification: '' });
+    this.form.reset({ amount: null, percentage: null, justification: '' });
     this.visibleChange.emit(false);
   }
 

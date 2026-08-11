@@ -6,35 +6,147 @@
     { label: ('breadcrumb.installments' | translate) },
   ]"
   [compact]="false"
->
-  <button
-    pButton
-    type="button"
-    (click)="goNew()"
-    icon="pi pi-plus"
-    tooltipPosition="top"
-    [disabled]="!policy.canSchedule()"
-    class="p-button-info p-button-sm"
-    [label]="'installments.new.title' | translate"
-    [pTooltip]="!policy.canSchedule() ? (policy.scheduleDisabledReason() | translate) : ''"
-  ></button>
-</cs-page-header>
+></cs-page-header>
 
-<app-installments-create-dialog
-  [workId]="workId()"
-  [visible]="upsertVisible()"
-  (visibleChange)="onUpsertVisibleChange($event)"
-></app-installments-create-dialog>
+<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+  <p-table
+    stripedRows
+    dataKey="id"
+    size="small"
+    showGridlines
+    [rows]="10"
+    [rowHover]="true"
+    [paginator]="true"
+    sortMode="multiple"
+    filterDisplay="menu"
+    stateStorage="local"
+    class="cs-admin-table"
+    [value]="items()"
+    [loading]="loading()"
+    [stateKey]="tableStateKey()"
+    [showCurrentPageReport]="true"
+    [paginatorDropdownAppendTo]="'body'"
+    [rowsPerPageOptions]="[10, 20, 50]"
+    [tableStyle]="{ width: '100%', 'min-width': '40rem' }"
+    [currentPageReportTemplate]="'pagination.report' | translate"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: 80px" />
+        <col style="width: 150px" />
+        <col style="width: 150px" />
+        <col style="width: 150px" />
+        <col style="width: 80px" />
+      </colgroup>
+    </ng-template>
 
-<div class="card">
-  <p-table [value]="items()" [loading]="loading()" dataKey="id">
     <ng-template pTemplate="header">
       <tr>
-        <th class="text-center">{{ 'installments.columns.number' | translate }}</th>
-        <th class="text-right">{{ 'installments.columns.amount' | translate }}</th>
-        <th class="text-center">{{ 'installments.columns.dueDate' | translate }}</th>
-        <th class="text-center">{{ 'installments.columns.status' | translate }}</th>
-        <th class="text-center">{{ 'common.actions' | translate }}</th>
+        <th pSortableColumn="number">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'installments.columns.number' | translate">{{ 'installments.columns.number' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="number"></p-sortIcon>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="amount">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'installments.columns.amount' | translate">{{ 'installments.columns.amount' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="amount"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="amount"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [inputId]="'amountCol'"
+                    [label]="'installments.fields.amount' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="dueDate">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'installments.columns.dueDate' | translate">{{ 'installments.columns.dueDate' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="dueDate"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="dueDate"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-datepicker
+                    class="w-full"
+                    appendTo="body"
+                    [showIcon]="true"
+                    [ngModel]="value"
+                    selectionMode="range"
+                    dateFormat="dd/mm/yy"
+                    [readonlyInput]="true"
+                    (ngModelChange)="filter($event)"
+                    [placeholder]="'common.period' | translate"
+                  ></p-datepicker>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th pSortableColumn="status">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'installments.columns.status' | translate">{{ 'installments.columns.status' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="status"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="status"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="statusOptions()"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
+          </div>
+        </th>
       </tr>
     </ng-template>
 
@@ -88,7 +200,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="5" class="text-center py-5 opacity-70">
-          {{ 'installments.empty.title' | translate }}
+          {{ loadedOnce() ? ('installments.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
     </ng-template>

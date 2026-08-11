@@ -12,6 +12,9 @@ const KNOWN_DETAILS: Array<{ match: string; key: UiKey }> = [
   { match: 'Addendum is not pending', key: 'addendums.action.alreadyDecided' },
   { match: 'Installment is not measurement-approved', key: 'installments.action.statusChanged' },
   { match: 'Installment is not released', key: 'installments.action.statusChanged' },
+  { match: 'Work status does not accept new measurements', key: 'measurements.action.requiresSubmittableWork' },
+  { match: 'Measurement is not pending', key: 'measurements.action.alreadyDecided' },
+  { match: 'Payment order exceeds work total amount', key: 'measurements.action.exceedsWorkTotal' },
 ];
 
 function rawDetail(err: unknown): string | null {

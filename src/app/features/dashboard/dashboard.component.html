@@ -1,0 +1,242 @@
+<cs-page-header [subtitle]="'dashboard.subtitle' | translate" [compact]="false"></cs-page-header>
+
+<cs-filters-panel
+  [collapsed]="true"
+  (clear)="clear()"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeFilters]="activeFilters()"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          [showClear]="true"
+          inputId="projectId"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="projectId()"
+          [showToggleAll]="false"
+          [options]="projectOptions()"
+          (ngModelChange)="projectId.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="projectId">{{ 'dashboard.filters.project' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          [showClear]="true"
+          inputId="supplierId"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="supplierId()"
+          [showToggleAll]="false"
+          [options]="supplierOptions()"
+          (ngModelChange)="supplierId.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="supplierId">{{ 'dashboard.filters.supplier' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-6 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          [showClear]="true"
+          inputId="workId"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="workId()"
+          [showToggleAll]="false"
+          [options]="workOptions()"
+          (ngModelChange)="workId.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="workId">{{ 'dashboard.filters.work' | translate }}</label>
+      </p-floatLabel>
+    </div>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-6 p-2">
+      <cs-currency-range-filter
+        [inputId]="'totalAmount'"
+        [label]="'dashboard.filters.totalAmount' | translate"
+        [value]="{ start: totalAmountFrom(), end: totalAmountTo() }"
+        (valueChange)="totalAmountFrom.set($event.start); totalAmountTo.set($event.end)"
+      ></cs-currency-range-filter>
+    </div>
+  </div>
+</cs-filters-panel>
+
+<div class="grid formgrid gap-0">
+  <div class="col-12 md:col-4 p-2">
+    <div class="surface-card border-round p-3 h-full">
+      <div class="text-sm opacity-70 mb-1">{{ 'dashboard.kpi.totalPaid' | translate }}</div>
+      <div class="text-3xl font-bold" style="color: var(--green-500)">
+        {{ facade.summary()?.totalPaid ?? 0 | csCurrency }}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 md:col-4 p-2">
+    <div class="surface-card border-round p-3 h-full">
+      <div class="text-sm opacity-70 mb-1">{{ 'dashboard.kpi.totalContracted' | translate }}</div>
+      <div class="text-3xl font-bold">{{ facade.summary()?.totalContracted ?? 0 | csCurrency }}</div>
+    </div>
+  </div>
+
+  <div class="col-12 md:col-4 p-2">
+    <div class="surface-card border-round p-3 h-full">
+      <div class="text-sm opacity-70 mb-1">{{ 'dashboard.kpi.totalBalance' | translate }}</div>
+      <div class="text-3xl font-bold" style="color: var(--orange-500)">
+        {{ facade.summary()?.totalBalance ?? 0 | csCurrency }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid formgrid gap-0">
+  <div class="col-12 md:col-3 p-2">
+    <div class="surface-card border-round p-3 h-full">
+      <div class="text-sm opacity-70 mb-1">{{ 'dashboard.kpi.works' | translate }}</div>
+      <div class="text-2xl font-bold mb-2">{{ worksTotalCount() }}</div>
+      <div class="flex flex-wrap gap-1">
+        @for (entry of worksByStatusEntries(); track entry.status) {
+          <cs-status-badge [tone]="tone(entry.status)" [label]="entry.count + ' ' + statusLabel(entry.status)" />
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 md:col-3 p-2">
+    <div class="surface-card border-round p-3 h-full">
+      <div class="text-sm opacity-70 mb-1">{{ 'dashboard.kpi.projects' | translate }}</div>
+      <div class="text-2xl font-bold">{{ projects().length }}</div>
+    </div>
+  </div>
+
+  <div class="col-12 md:col-3 p-2">
+    <div class="surface-card border-round p-3 h-full">
+      <div class="text-sm opacity-70 mb-1">{{ 'dashboard.kpi.overdueWorks' | translate }}</div>
+      <div
+        class="text-2xl font-bold"
+        [style.color]="(facade.summary()?.overdueWorksCount ?? 0) > 0 ? 'var(--red-500)' : null"
+      >
+        {{ facade.summary()?.overdueWorksCount ?? 0 }}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 md:col-3 p-2">
+    <div class="surface-card border-round p-3 h-full">
+      <div class="text-sm opacity-70 mb-1">{{ 'dashboard.kpi.pending' | translate }}</div>
+      <div class="text-2xl font-bold">
+        {{ (facade.summary()?.pendingAddendumsCount ?? 0) + (facade.summary()?.pendingMeasurementsCount ?? 0) }}
+      </div>
+      <div class="text-xs opacity-70">
+        {{ 'dashboard.kpi.pendingBreakdown' | translate: {
+          addendums: facade.summary()?.pendingAddendumsCount ?? 0,
+          measurements: facade.summary()?.pendingMeasurementsCount ?? 0
+        } }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid formgrid gap-0">
+  <div class="col-12 md:col-4 p-2">
+    <div class="surface-card border-round p-3 h-full">
+      <div class="font-semibold mb-2">{{ 'dashboard.charts.valueByStatus.title' | translate }}</div>
+      <div class="flex flex-wrap gap-2 mb-3">
+        @for (item of facade.analytics()?.valueByStatus ?? []; track item.status) {
+          <cs-status-badge [tone]="tone(item.status)" [label]="statusLabel(item.status) + ': ' + (item.amount | csCurrency)" />
+        }
+      </div>
+      <div style="height: 90px">
+        <p-chart type="bar" [data]="statusChartData()" [options]="statusChartOptions()"></p-chart>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 md:col-4 p-2">
+    <div class="surface-card border-round p-3 h-full">
+      <div class="font-semibold mb-2">{{ 'dashboard.charts.weeklyDisbursement.title' | translate }}</div>
+      <div style="height: 260px">
+        <p-chart type="bar" [data]="weeklyChartData()" [options]="weeklyChartOptions()"></p-chart>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 md:col-4 p-2">
+    <div class="surface-card border-round p-3 h-full">
+      <div class="font-semibold mb-2">{{ 'dashboard.charts.topWorks.title' | translate }}</div>
+      <div style="height: 260px">
+        <p-chart type="bar" [data]="topWorksChartData()" [options]="topWorksChartOptions()"></p-chart>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid formgrid gap-0">
+  <div class="col-12 p-2">
+    <div class="surface-card border-round p-3">
+      <div class="font-semibold mb-2">{{ 'dashboard.projects.title' | translate }}</div>
+
+      @if (!projects().length) {
+        <div class="text-center py-4 opacity-70">
+          {{ projectsFacade.loadedOnce() ? ('dashboard.projects.empty' | translate) : ('common.loading' | translate) }}
+        </div>
+      }
+
+      <div class="grid formgrid gap-0">
+        @for (project of projects(); track project.id) {
+          <div class="col-12 md:col-6 xl:col-4 p-2">
+            <div class="surface-ground border-round p-3 h-full">
+              <div class="flex align-items-center justify-content-between mb-2">
+                <span class="font-medium">{{ project.name }}</span>
+                <cs-status-badge
+                  [tone]="projectTone(project.status)"
+                  [label]="('projects.status.' + project.status) | translate"
+                ></cs-status-badge>
+              </div>
+
+              <div class="flex justify-content-between text-sm mb-1">
+                <span class="opacity-70">{{ 'dashboard.projects.contracted' | translate }}</span>
+                <span>{{ project.totalContractedAmount | csCurrency }}</span>
+              </div>
+              <div class="flex justify-content-between text-sm mb-1">
+                <span class="opacity-70">{{ 'dashboard.projects.paid' | translate }}</span>
+                <span>{{ project.totalPaidAmount | csCurrency }}</span>
+              </div>
+              <div class="flex justify-content-between text-sm mb-2">
+                <span class="opacity-70">{{ 'dashboard.projects.remaining' | translate }}</span>
+                <span>{{ project.remainingAmount | csCurrency }}</span>
+              </div>
+
+              <p-progressBar [showValue]="false" [value]="project.progressPercentage" [style]="{ height: '8px' }"></p-progressBar>
+              <div class="text-xs opacity-70 mt-1 text-right">
+                {{ project.progressPercentage | number: '1.0-2' }}% •
+                {{ 'dashboard.projects.serviceFronts' | translate: { count: project.serviceFrontsCount } }}
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

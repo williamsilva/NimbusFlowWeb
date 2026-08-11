@@ -102,36 +102,38 @@ export class SuppliersFacade {
     return this.api.getById(id);
   }
 
+  /**
+   * Sem marcar `_loading` aqui: esse signal é o guard de `loadPage()` (evita corrida entre
+   * paginações concorrentes) - se create/update/deactivate também o setassem antes de chamar a
+   * API, o `reloadLast()` do `tap` abaixo rodaria enquanto `_loading` ainda está `true` (o `next`
+   * do tap sempre roda antes do `finalize` do próprio create/update, mesmo com uma única emissão)
+   * e o guard de `loadPage()` bloquearia silenciosamente o reload - mesmo bug corrigido em
+   * WorksFacade. `reloadLast()`/`loadPage()` já controlam seu próprio `_loading` sem ajuda externa.
+   */
   create(input: SupplierUpsertInput): Observable<SupplierModel> {
-    this._loading.set(true);
     return this.api.create(input).pipe(
       tap(() => {
         this.reloadLast();
         this.reloadOptions();
       }),
-      finalize(() => this._loading.set(false)),
     );
   }
 
   update(id: string, input: SupplierUpsertInput): Observable<SupplierModel> {
-    this._loading.set(true);
     return this.api.update(id, input).pipe(
       tap(() => {
         this.reloadLast();
         this.reloadOptions();
       }),
-      finalize(() => this._loading.set(false)),
     );
   }
 
   deactivate(id: string): Observable<void> {
-    this._loading.set(true);
     return this.api.deactivate(id).pipe(
       tap(() => {
         this.reloadLast();
         this.reloadOptions();
       }),
-      finalize(() => this._loading.set(false)),
     );
   }
 }

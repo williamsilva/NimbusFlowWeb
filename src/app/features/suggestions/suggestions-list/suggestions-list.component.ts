@@ -31,6 +31,8 @@ import {
 } from '@models/enums/suggestion-status.enum';
 import { SuggestionModel, SuggestionsFiltersState } from '@models/suggestions.models';
 import { SuggestionsCreateDialogComponent } from '@features/suggestions/suggestions-create/suggestions-create-dialog.component';
+import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
+import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
@@ -62,6 +64,7 @@ import {
     FiltersPanelComponent,
     StatusBadgeComponent,
     SuggestionsCreateDialogComponent,
+    CsAdvancedPeriodDateFilterComponent,
   ],
 })
 export class SuggestionsListComponent extends StatefulListPage<
@@ -80,7 +83,8 @@ export class SuggestionsListComponent extends StatefulListPage<
 
   description = signal('');
   status = signal<string[] | null>(null);
-  createdAtRange = signal<Date[] | null>(null);
+  createdAt = signal<string | string[] | null>(null);
+  periodCreatedAt = signal<PeriodEnum | null>(null);
 
   newVisible = signal(false);
 
@@ -88,6 +92,11 @@ export class SuggestionsListComponent extends StatefulListPage<
     value,
     label: this.i18n.tUi(`suggestions.status.${value}` as never),
   }));
+
+  readonly periodEnumOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allPeriodEnum().map((value) => ({ label: periodEnumLabel(value, this.i18n), value }));
+  });
 
   readonly canCreate = computed(() => this.policy.canCreate());
   readonly canManageStatus = computed(() => this.policy.canManageStatus());
@@ -99,7 +108,6 @@ export class SuggestionsListComponent extends StatefulListPage<
 
     const description = this.description().trim();
     const status = this.status();
-    const createdAtRange = this.createdAtRange();
 
     if (description) {
       items.push({ label: this.i18n.tUi('suggestions.fields.description'), value: description });
@@ -111,11 +119,13 @@ export class SuggestionsListComponent extends StatefulListPage<
         .join(', ');
       items.push({ label: this.i18n.tUi('suggestions.fields.status'), value: labels });
     }
-    if (createdAtRange?.[0] && createdAtRange?.[1]) {
-      items.push({
-        label: this.i18n.tUi('suggestions.fields.createdAt'),
-        value: `${this.formatDate(createdAtRange[0])} – ${this.formatDate(createdAtRange[1])}`,
-      });
+    const createdAtLabel = this.formatActiveFilterPeriodDateValue(
+      this.periodCreatedAt(),
+      this.createdAt(),
+      this.i18n,
+    );
+    if (createdAtLabel) {
+      items.push({ label: this.i18n.tUi('suggestions.fields.createdAt'), value: createdAtLabel });
     }
 
     return items;
@@ -190,44 +200,32 @@ export class SuggestionsListComponent extends StatefulListPage<
   protected override resetFilters(): void {
     this.description.set('');
     this.status.set(null);
-    this.createdAtRange.set(null);
+    this.createdAt.set(null);
+    this.periodCreatedAt.set(null);
   }
 
   protected override toFiltersState(): SuggestionsFiltersState {
-    const createdAtRange = this.createdAtRange();
-
     return {
       description: this.description(),
       status: this.status()?.length ? this.status() : null,
-      createdAtRange:
-        createdAtRange?.[0] && createdAtRange?.[1]
-          ? [createdAtRange[0].toISOString(), createdAtRange[1].toISOString()]
-          : null,
+      createdAt: this.createdAt(),
+      periodCreatedAt: this.periodCreatedAt(),
     };
   }
 
   protected override applyFiltersState(state: SuggestionsFiltersState): void {
     this.description.set(state.description ?? '');
     this.status.set(state.status ?? null);
-    this.createdAtRange.set(
-      state.createdAtRange?.[0] && state.createdAtRange?.[1]
-        ? [new Date(state.createdAtRange[0]), new Date(state.createdAtRange[1])]
-        : null,
-    );
+    this.createdAt.set(state.createdAt ?? null);
+    this.periodCreatedAt.set(state.periodCreatedAt ?? null);
   }
 
   protected override buildAdvancedFilters(): Partial<SuggestionsAdvancedFilters> {
-    const createdAtRange = this.createdAtRange();
-    const [createdAtFrom, createdAtTo] =
-      createdAtRange?.[0] && createdAtRange?.[1]
-        ? [createdAtRange[0].toISOString(), createdAtRange[1].toISOString()]
-        : [undefined, undefined];
-
     return {
       description: this.description().trim() || undefined,
       status: this.status()?.length ? this.status() : undefined,
-      createdAtFrom,
-      createdAtTo,
+      createdAt: this.createdAt() ?? undefined,
+      periodCreatedAt: this.periodCreatedAt() ?? undefined,
     };
   }
 
