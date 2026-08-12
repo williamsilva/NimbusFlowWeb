@@ -230,7 +230,7 @@
         <span class="text-base font-semibold">{{ 'email.settings.brevoTitle' | translate }}</span>
       </div>
       <div class="grid formgrid gap-0">
-        <div class="col-12 md:col-4 p-2">
+        <div class="col-12 md:col-6 p-2">
           <p-floatLabel variant="on" class="w-full">
             <input
               pInputText
@@ -251,7 +251,7 @@
           </p-floatLabel>
         </div>
 
-        <div class="col-12 md:col-4 p-2">
+        <div class="col-12 md:col-6 p-2">
           <p-floatLabel variant="on" class="w-full">
             <input
               pInputText
@@ -271,50 +271,9 @@
             </label>
           </p-floatLabel>
         </div>
-
-        <div class="col-12 md:col-2 p-2">
-          <p-floatLabel variant="on" class="w-full">
-            <p-inputnumber
-              [min]="1"
-              [max]="65535"
-              class="w-full"
-              inputId="brevoPort"
-              [useGrouping]="false"
-              inputStyleClass="w-full p-inputtext-sm"
-              formControlName="brevoPort"
-            ></p-inputnumber>
-            <label for="brevoPort">
-              {{ 'email.settings.brevoPort' | translate }}
-              <i
-                tooltipPosition="top"
-                style="pointer-events: auto"
-                [pTooltip]="'email.settings.brevoPortHint' | translate"
-                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              ></i>
-            </label>
-          </p-floatLabel>
-        </div>
-
-        <div class="col-12 md:col-2 p-2">
-          <p-floatLabel variant="on" class="w-full">
-            <input
-              pInputText
-              type="text"
-              id="brevoUsername"
-              class="w-full p-inputtext-sm"
-              formControlName="brevoUsername"
-            />
-            <label for="brevoUsername">
-              {{ 'email.settings.brevoUsername' | translate }}
-              <i
-                tooltipPosition="top"
-                style="pointer-events: auto"
-                [pTooltip]="'email.settings.brevoUsernameHint' | translate"
-                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              ></i>
-            </label>
-          </p-floatLabel>
-        </div>
+        <!-- brevoPort/brevoUsername removidos da tela - BrevoEmailSenderService (API REST) nunca
+             lê esses dois campos, só api-key + baseUrl (ver EmailConfig/BrevoEmailSenderService).
+             Continuam existindo no form/model por compatibilidade, só não aparecem mais aqui. -->
       </div>
     }
 
