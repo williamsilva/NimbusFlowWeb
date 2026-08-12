@@ -2984,7 +2984,8 @@
         "email": "{label} must be a valid e-mail.",
         "pattern": "{label} has an invalid format.",
         "invalid": "{label} is invalid.",
-        "passwordMismatch": "Passwords must match."
+        "passwordMismatch": "Passwords must match.",
+        "exceedsRemaining": "{label} cannot be greater than the remaining available amount ({remaining})."
       }
     }
   },

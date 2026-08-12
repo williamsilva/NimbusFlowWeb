@@ -1,8 +1,15 @@
 import { NgFor, NgIf } from '@angular/common';
-import { DestroyRef, signal } from '@angular/core';
+import { DestroyRef, effect, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { input, Output, inject, Component, EventEmitter } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 
 import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
@@ -75,18 +82,59 @@ export class MeasurementsCreateDialogComponent {
   readonly saving = signal(false);
   readonly files = signal<File[]>([]);
 
+  /** Valida reativamente contra remainingAmount() - roda a cada updateValueAndValidity, mesmo com {emitEvent: false}. */
+  private readonly amountExceedsRemainingValidator: ValidatorFn = (
+    control: AbstractControl,
+  ): ValidationErrors | null => {
+    const value = control.value;
+    if (value == null) return null;
+
+    const remaining = this.remainingAmount();
+    if (value <= remaining) return null;
+
+    return { exceedsRemaining: { remaining: this.i18n.formatBrlCurrency(remaining) } };
+  };
+
+  /** Mesma regra que amountExceedsRemainingValidator, expressa em percentual (remainingAmount / totalAmount). */
+  private readonly percentageExceedsRemainingValidator: ValidatorFn = (
+    control: AbstractControl,
+  ): ValidationErrors | null => {
+    const value = control.value;
+    if (value == null) return null;
+
+    const total = this.totalAmount();
+    const remaining = this.remainingAmount();
+    const remainingPercentage = total > 0 ? round2((remaining / total) * 100) : 0;
+    if (value <= remainingPercentage) return null;
+
+    return { exceedsRemaining: { remaining: this.formatPercentage(remainingPercentage) } };
+  };
+
   readonly form = this.fb.group({
     description: this.fb.nonNullable.control('', [Validators.required, Validators.maxLength(1000)]),
+    amountToPay: this.fb.control<number | null>(null, [
+      Validators.required,
+      Validators.min(0.01),
+      this.amountExceedsRemainingValidator,
+    ]),
     percentageCompleted: this.fb.control<number | null>(null, [
       Validators.required,
       Validators.min(0),
       Validators.max(100),
+      this.percentageExceedsRemainingValidator,
     ]),
-    amountToPay: this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)]),
     dueDate: this.fb.control<Date | null>(null, [Validators.required]),
   });
 
   constructor() {
+    // remainingAmount/totalAmount são inputs - se mudarem com o diálogo já aberto, revalida os 2 campos.
+    effect(() => {
+      this.totalAmount();
+      this.remainingAmount();
+      this.form.controls.amountToPay.updateValueAndValidity({ emitEvent: false });
+      this.form.controls.percentageCompleted.updateValueAndValidity({ emitEvent: false });
+    });
+
     this.form.controls.percentageCompleted.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((value) => {
@@ -102,6 +150,13 @@ export class MeasurementsCreateDialogComponent {
         const percentage = value != null && total > 0 ? round2((value / total) * 100) : null;
         this.form.controls.percentageCompleted.setValue(percentage, { emitEvent: false });
       });
+  }
+
+  private formatPercentage(value: number): string {
+    return `${new Intl.NumberFormat(this.i18n.getLocale(), {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value)} %`;
   }
 
   onHide(): void {
@@ -139,16 +194,8 @@ export class MeasurementsCreateDialogComponent {
       return;
     }
 
+    // valor > restante já é pego pelo form.invalid acima (amountExceedsRemainingValidator).
     const v = this.form.getRawValue();
-
-    if (v.amountToPay! > this.remainingAmount()) {
-      this.toast.add({
-        severity: 'warn',
-        summary: this.i18n.tUi('common.warning'),
-        detail: this.i18n.tUi('measurements.form.exceedsRemaining'),
-      });
-      return;
-    }
 
     this.saving.set(true);
 

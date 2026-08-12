@@ -2984,7 +2984,8 @@
         "email": "{label} informa un e-mail válido.",
         "pattern": "{label} tiene un formato inválido.",
         "invalid": "{label} es inválido.",
-        "passwordMismatch": "Las contraseñas deben ser iguales."
+        "passwordMismatch": "Las contraseñas deben ser iguales.",
+        "exceedsRemaining": "{label} no puede ser mayor que el restante disponible ({remaining})."
       }
     }
   },

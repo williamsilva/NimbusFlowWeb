@@ -3432,7 +3432,8 @@
         "email": "{label} informe um e-mail válido.",
         "pattern": "{label} está em formato inválido.",
         "invalid": "{label} está inválido.",
-        "passwordMismatch": "As senhas devem ser iguais."
+        "passwordMismatch": "As senhas devem ser iguais.",
+        "exceedsRemaining": "{label} não pode ser maior que o restante disponível ({remaining})."
       }
     }
   },
