@@ -100,6 +100,13 @@ export const APP_MENU: AppMenuItem[] = [
         icon: 'pi pi-database text-slate-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.BACKUP_PROCESS],
       },
+      {
+        exact: false,
+        route: '/settings/approval-limits',
+        labelKey: 'menu.settings.approvalLimits',
+        icon: 'pi pi-percentage text-slate-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.ALCADA_VIEW],
+      },
     ],
   },
 ];

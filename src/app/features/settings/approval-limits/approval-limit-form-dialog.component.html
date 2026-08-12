@@ -1,0 +1,114 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '560px', maxWidth: '95vw' }"
+  [header]="(isEditing() ? 'approvalLimits.edit.title' : 'approvalLimits.new.title') | translate"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputNumber
+            size="small"
+            class="w-full"
+            mode="currency"
+            inputId="minAmount"
+            inputStyleClass="w-full"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [currency]="i18n.getCurrencyBrl()"
+            [locale]="i18n.getLocalePtBr()"
+            formControlName="minAmount"
+          ></p-inputNumber>
+          <app-error-msg
+            [field]="'minAmount'"
+            [forId]="'minAmount'"
+            [control]="form.controls.minAmount"
+            [label]="'approvalLimits.fields.minAmount' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputNumber
+            size="small"
+            class="w-full"
+            mode="currency"
+            inputId="maxAmount"
+            inputStyleClass="w-full"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [disabled]="unbounded()"
+            [currency]="i18n.getCurrencyBrl()"
+            [locale]="i18n.getLocalePtBr()"
+            formControlName="maxAmount"
+          ></p-inputNumber>
+          <app-error-msg
+            [field]="'maxAmount'"
+            [forId]="'maxAmount'"
+            [control]="form.controls.maxAmount"
+            [label]="'approvalLimits.fields.maxAmount' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2 -mt-2 flex align-items-center gap-2">
+        <p-checkbox
+          binary="true"
+          inputId="unbounded"
+          [ngModel]="unbounded()"
+          [ngModelOptions]="{ standalone: true }"
+          (ngModelChange)="onUnboundedChange($event)"
+        ></p-checkbox>
+        <label for="unbounded">{{ 'approvalLimits.fields.unbounded' | translate }}</label>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-multiSelect
+            display="chip"
+            appendTo="body"
+            [filter]="true"
+            optionValue="id"
+            [showClear]="true"
+            optionLabel="name"
+            inputId="userIds"
+            class="w-full"
+            [options]="userOptions()"
+            formControlName="userIds"
+          ></p-multiSelect>
+          <label for="userIds">{{ 'approvalLimits.fields.users' | translate }}</label>
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

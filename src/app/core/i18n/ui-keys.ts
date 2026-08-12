@@ -118,6 +118,7 @@ export const UI_KEYS = {
       scheduler: 'menu.settings.scheduler',
       reconciliation: 'menu.settings.reconciliation',
       backup: 'menu.settings.backup',
+      approvalLimits: 'menu.settings.approvalLimits',
     },
     reconciliation: 'menu.reconciliation',
     /* Fornecedor / Obra / Sugestão (com.nimbusflow.works no backend) */
@@ -1804,6 +1805,21 @@ export const UI_KEYS = {
       noSelection: 'backup.settings.noSelection',
       executed: 'backup.settings.executed',
       executeError: 'backup.settings.executeError',
+    },
+  },
+  approvalLimits: {
+    form: {
+      invalid: 'approvalLimits.form.invalid',
+      invalidRange: 'approvalLimits.form.invalidRange',
+      created: 'approvalLimits.form.created',
+      updated: 'approvalLimits.form.updated',
+      saveError: 'approvalLimits.form.saveError',
+    },
+    deleteConfirm: {
+      header: 'approvalLimits.deleteConfirm.header',
+      message: 'approvalLimits.deleteConfirm.message',
+      success: 'approvalLimits.deleteConfirm.success',
+      error: 'approvalLimits.deleteConfirm.error',
     },
   },
   validation: {
