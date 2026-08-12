@@ -34,6 +34,20 @@ export const SETTINGS_ROUTES: Routes = [
       ),
   },
   {
+    path: 'approval-limits',
+    title: 'routes.settings.approvalLimits.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.ALCADA_VIEW],
+    },
+    loadComponent: () =>
+      import('./approval-limits/approval-limits-list.component').then(
+        (m) => m.ApprovalLimitsListComponent,
+      ),
+  },
+  {
     path: '**',
     title: 'routes.notFound.title',
     loadComponent: () => import('../error/not-found/not-found.page').then((m) => m.NotFoundPage),

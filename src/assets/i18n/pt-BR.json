@@ -122,6 +122,9 @@
       },
       "backup": {
         "title": "Backup"
+      },
+      "approvalLimits": {
+        "title": "Alçada"
       }
     },
     "transactions": {
@@ -310,7 +313,8 @@
       "email": "E-mail",
       "scheduler": "Agendamento",
       "reconciliation": "Conciliação",
-      "backup": "Backup"
+      "backup": "Backup",
+      "approvalLimits": "Alçada"
     },
     "file": {
       "processing": {
@@ -3562,6 +3566,38 @@
       "smtpSslHint": "Habilita conexão SSL/TLS direta. Recomendado para a porta 465.",
       "saved": "Configurações de e-mail salvas com sucesso.",
       "saveError": "Não foi possível salvar as configurações de e-mail."
+    }
+  },
+  "approvalLimits": {
+    "subtitle": "Faixas de valor e usuários autorizados a aprovar aditivos e liberar pagamentos automaticamente.",
+    "new": { "title": "Nova faixa" },
+    "edit": { "title": "Editar faixa" },
+    "columns": {
+      "minAmount": "Valor mínimo",
+      "maxAmount": "Valor máximo",
+      "users": "Usuários"
+    },
+    "fields": {
+      "minAmount": "Valor mínimo",
+      "maxAmount": "Valor máximo",
+      "unbounded": "Sem limite máximo",
+      "users": "Usuários autorizados"
+    },
+    "unbounded": "Sem limite",
+    "empty": { "title": "Nenhuma faixa de alçada cadastrada" },
+    "action": { "noPermission": "Você não tem permissão pra gerenciar a alçada" },
+    "form": {
+      "invalid": "Preencha o valor mínimo e selecione ao menos um usuário",
+      "invalidRange": "O valor máximo deve ser maior que o valor mínimo",
+      "created": "Faixa de alçada criada com sucesso",
+      "updated": "Faixa de alçada atualizada com sucesso",
+      "saveError": "Não foi possível salvar a faixa de alçada"
+    },
+    "deleteConfirm": {
+      "header": "Excluir faixa de alçada",
+      "message": "Tem certeza que deseja excluir esta faixa de alçada?",
+      "success": "Faixa de alçada excluída com sucesso",
+      "error": "Não foi possível excluir a faixa de alçada"
     }
   },
   "backup": {

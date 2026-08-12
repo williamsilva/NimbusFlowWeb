@@ -127,6 +127,9 @@
       },
       "backup": {
         "title": "Backup"
+      },
+      "approvalLimits": {
+        "title": "Alzada de aprobación"
       }
     },
     "transactions": {
@@ -315,7 +318,8 @@
       "email": "E-mail",
       "scheduler": "Programación",
       "reconciliation": "Conciliación",
-      "backup": "Backup"
+      "backup": "Backup",
+      "approvalLimits": "Alzada de aprobación"
     },
     "file": {
       "processing": {
@@ -3567,6 +3571,38 @@
       "smtpStarttlsHint": "Habilita la actualización de la conexión a TLS mediante STARTTLS. Recomendado para el puerto 587.",
       "smtpSsl": "SSL/TLS",
       "smtpSslHint": "Habilita conexión SSL/TLS directa. Recomendado para el puerto 465."
+    }
+  },
+  "approvalLimits": {
+    "subtitle": "Rangos de valor y usuarios autorizados a aprobar adendas y liberar pagos automáticamente.",
+    "new": { "title": "Nuevo rango" },
+    "edit": { "title": "Editar rango" },
+    "columns": {
+      "minAmount": "Valor mínimo",
+      "maxAmount": "Valor máximo",
+      "users": "Usuarios"
+    },
+    "fields": {
+      "minAmount": "Valor mínimo",
+      "maxAmount": "Valor máximo",
+      "unbounded": "Sin límite máximo",
+      "users": "Usuarios autorizados"
+    },
+    "unbounded": "Sin límite",
+    "empty": { "title": "Ningún rango de alzada registrado" },
+    "action": { "noPermission": "No tiene permiso para gestionar la alzada" },
+    "form": {
+      "invalid": "Complete el valor mínimo y seleccione al menos un usuario",
+      "invalidRange": "El valor máximo debe ser mayor que el valor mínimo",
+      "created": "Rango de alzada creado con éxito",
+      "updated": "Rango de alzada actualizado con éxito",
+      "saveError": "No fue posible guardar el rango de alzada"
+    },
+    "deleteConfirm": {
+      "header": "Eliminar rango de alzada",
+      "message": "¿Está seguro de que desea eliminar este rango de alzada?",
+      "success": "Rango de alzada eliminado con éxito",
+      "error": "No fue posible eliminar el rango de alzada"
     }
   },
   "backup": {
