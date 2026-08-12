@@ -24,7 +24,7 @@ import { PageHeaderComponent } from '@shared/features/page-header/page-header.co
 export const EMAIL_IMPL_OPTIONS = [
   { label: 'FAKE', value: 'FAKE' },
   { label: 'SMTP', value: 'SMTP' },
-  { label: 'BREVO', value: 'BREVO' },
+  { label: 'API_KEY', value: 'API_KEY' },
 ];
 
 @Component({
