@@ -34,6 +34,29 @@
           <p-inputNumber
             size="small"
             class="w-full"
+            mode="currency"
+            inputId="amountToPay"
+            inputStyleClass="w-full"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [currency]="i18n.getCurrencyBrl()"
+            [locale]="i18n.getLocalePtBr()"
+            formControlName="amountToPay"
+          ></p-inputNumber>
+          <app-error-msg
+            [field]="'amountToPay'"
+            [forId]="'amountToPay'"
+            [control]="form.controls.amountToPay"
+            [label]="'measurements.fields.amountToPay' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputNumber
+            size="small"
+            class="w-full"
             mode="decimal"
             suffix=" %"
             [min]="0"
@@ -49,29 +72,6 @@
             [forId]="'percentageCompleted'"
             [control]="form.controls.percentageCompleted"
             [label]="'measurements.fields.percentageCompleted' | translate"
-          />
-        </p-floatLabel>
-      </div>
-
-      <div class="col-12 md:col-6 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <p-inputNumber
-            size="small"
-            class="w-full"
-            mode="currency"
-            inputId="amountToPay"
-            inputStyleClass="w-full"
-            [minFractionDigits]="2"
-            [maxFractionDigits]="2"
-            [currency]="i18n.getCurrencyBrl()"
-            [locale]="i18n.getLocalePtBr()"
-            formControlName="amountToPay"
-          ></p-inputNumber>
-          <app-error-msg
-            [field]="'amountToPay'"
-            [forId]="'amountToPay'"
-            [control]="form.controls.amountToPay"
-            [label]="'measurements.fields.amountToPay' | translate"
           />
         </p-floatLabel>
       </div>

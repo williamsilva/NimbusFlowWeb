@@ -150,6 +150,8 @@ function normalizeAngularErrorKey(key: string): string {
       return 'maxLength';
     case 'passwordMismatch':
       return 'passwordMismatch';
+    case 'exceedsRemaining':
+      return 'exceedsRemaining';
     default:
       return 'invalid';
   }
