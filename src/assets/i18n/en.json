@@ -3906,7 +3906,7 @@
       "percentage": "Increase percentage",
       "justification": "Justification",
       "status": "Status",
-      "tier": "Approval tier",
+      "tier": "Approval range",
       "createdAt": "Requested at",
       "periodCreatedAt": "Request period"
     },
@@ -3914,7 +3914,7 @@
       "work": "Service front",
       "amount": "Amount",
       "justification": "Justification",
-      "tier": "Approval tier",
+      "tier": "Approval range",
       "status": "Status",
       "createdAt": "Requested at",
       "decisionDate": "Decided at"
@@ -3924,13 +3924,11 @@
       "APPROVED": "Approved",
       "REJECTED": "Rejected"
     },
-    "tier": {
-      "TIER1": "Tier 1",
-      "TIER2": "Tier 2"
+    "approvalRange": {
+      "none": "No approval range configured"
     },
     "form": {
       "invalid": "Review the highlighted fields before saving.",
-      "tierHint": "automatically calculated by the server based on the amount",
       "created": "Addendum submitted successfully.",
       "saveError": "Could not save the addendum. Please try again."
     },

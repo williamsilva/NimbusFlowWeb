@@ -5,7 +5,6 @@ export interface AddendumsAdvancedFilters {
   justification?: string;
 
   status?: string[] | null;
-  requiredTier?: string[] | null;
 
   amountFrom?: number;
   amountTo?: number;

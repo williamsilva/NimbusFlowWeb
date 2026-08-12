@@ -27,13 +27,9 @@ import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge
 import { CsCurrencyRangeFilterComponent } from '@features/list-base/cs-currency-range-filter.component';
 import { AddendumModel } from '@models/addendums.models';
 import { WorkModel } from '@models/works.models';
-import {
-  ADDENDUM_STATUS_VALUES,
-  AddendumStatusEnum,
-  ApprovalTierEnum,
-  addendumStatusTone,
-} from '@models/enums/addendum-status.enum';
+import { ADDENDUM_STATUS_VALUES, AddendumStatusEnum, addendumStatusTone } from '@models/enums/addendum-status.enum';
 import { AddendumsCreateDialogComponent } from '@features/works/addendums/addendums-create-dialog.component';
+import { formatApprovalRanges } from '@features/works/addendums/addendums-approval-range.util';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
 
 @Component({
@@ -86,14 +82,6 @@ export class AddendumsListComponent implements OnInit {
     }));
   });
 
-  readonly tierOptions = computed(() => {
-    this.i18n.getAppliedLang();
-    return Object.values(ApprovalTierEnum).map((value) => ({
-      value,
-      label: this.i18n.tUi(`addendums.tier.${value}` as never),
-    }));
-  });
-
   tableStateKey(): string {
     return STATE_KEY.NIMBUSFLOW.WORKS.ADDENDUMS.TABLE.STATE.V1;
   }
@@ -125,6 +113,10 @@ export class AddendumsListComponent implements OnInit {
     return row.status === AddendumStatusEnum.PENDING;
   }
 
+  approvalRangeLabel(row: AddendumModel): string {
+    return formatApprovalRanges(this.i18n, row.approvalRanges);
+  }
+
   goNew(): void {
     if (!this.policy.canCreate()) return;
     this.upsertVisible.set(true);
@@ -135,7 +127,7 @@ export class AddendumsListComponent implements OnInit {
   }
 
   confirmApprove(row: AddendumModel): void {
-    if (!this.policy.canDecide(row.requiredTier)) return;
+    if (!row.canDecide) return;
 
     this.confirm.confirm({
       header: this.i18n.tUi('addendums.approveConfirm.header'),
@@ -168,7 +160,7 @@ export class AddendumsListComponent implements OnInit {
   }
 
   confirmReject(row: AddendumModel): void {
-    if (!this.policy.canDecide(row.requiredTier)) return;
+    if (!row.canDecide) return;
 
     this.confirm.confirm({
       header: this.i18n.tUi('addendums.rejectConfirm.header'),

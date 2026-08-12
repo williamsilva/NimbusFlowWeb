@@ -71,25 +71,6 @@
       </p-floatLabel>
     </div>
 
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-multiSelect
-          size="small"
-          class="w-full"
-          appendTo="body"
-          [showClear]="true"
-          inputId="requiredTier"
-          optionLabel="label"
-          optionValue="value"
-          [ngModel]="requiredTier()"
-          [showToggleAll]="false"
-          [options]="tierOptions()"
-          (ngModelChange)="requiredTier.set($event?.length ? $event : null)"
-        ></p-multiSelect>
-        <label for="requiredTier">{{ 'addendums.fields.tier' | translate }}</label>
-      </p-floatLabel>
-    </div>
-
     <cs-advanced-period-date-filter
       dateInputId="createdAt"
       periodInputId="periodCreatedAt"
@@ -228,35 +209,9 @@
           </div>
         </th>
 
-        <th pSortableColumn="requiredTier">
-          <div class="th-flex text-center">
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'addendums.columns.tier' | translate">{{ 'addendums.columns.tier' | translate }}</span>
-            <span class="th-icons">
-              <p-sortIcon field="requiredTier"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                matchMode="in"
-                field="requiredTier"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="false"
-                styleClass="cs-colfilter"
-              >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-multiSelect
-                    class="w-full"
-                    appendTo="body"
-                    [ngModel]="value"
-                    [showClear]="true"
-                    optionLabel="label"
-                    optionValue="value"
-                    [options]="tierOptions()"
-                    (onChange)="filter($event.value)"
-                    [placeholder]="'common.all' | translate"
-                  ></p-multiSelect>
-                </ng-template>
-              </p-columnFilter>
-            </span>
           </div>
         </th>
 
@@ -346,7 +301,7 @@
         <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.workName">{{ row.workName }}</span></td>
         <td class="text-right">{{ row.amount | csCurrency }}</td>
         <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.justification">{{ row.justification }}</span></td>
-        <td class="text-center">{{ ('addendums.tier.' + row.requiredTier) | translate }}</td>
+        <td class="text-center"><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="approvalRangeLabel(row)">{{ approvalRangeLabel(row) }}</span></td>
         <td class="text-center">
           <cs-status-badge
             [tone]="tone(row.status)"
@@ -363,11 +318,9 @@
               icon="pi pi-check"
               (click)="confirmApprove(row)"
               class="p-button-text p-button-sm"
-              [disabled]="!policy.canDecide(row.requiredTier)"
+              [disabled]="!row.canDecide"
               [pTooltip]="
-                policy.canDecide(row.requiredTier)
-                  ? ('addendums.action.approve' | translate)
-                  : (policy.decideDisabledReason(row.requiredTier) ?? 'addendums.action.noPermission' | translate)
+                (row.canDecide ? 'addendums.action.approve' : 'addendums.action.noPermission') | translate
               "
               tooltipPosition="top"
             ></button>
@@ -378,11 +331,9 @@
               icon="pi pi-times"
               (click)="confirmReject(row)"
               class="p-button-text p-button-sm p-button-danger"
-              [disabled]="!policy.canDecide(row.requiredTier)"
+              [disabled]="!row.canDecide"
               [pTooltip]="
-                policy.canDecide(row.requiredTier)
-                  ? ('addendums.action.reject' | translate)
-                  : (policy.decideDisabledReason(row.requiredTier) ?? 'addendums.action.noPermission' | translate)
+                (row.canDecide ? 'addendums.action.reject' : 'addendums.action.noPermission') | translate
               "
               tooltipPosition="top"
             ></button>
