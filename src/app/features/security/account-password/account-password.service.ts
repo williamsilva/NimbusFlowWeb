@@ -51,7 +51,10 @@ export class AccountPasswordService {
   }
 
   changeMyPassword(payload: ChangeMyPasswordRequest): Observable<void> {
-    return this.http.put<void>(`${API.bff}/v1/me/password/change`, payload, {
+    // BffAccountController mapeia PUT /bff/v1/me/password (sem "/change" no final) - o "/change"
+    // só existe no lado NimbusAuth (NimbusAuthClient chama /api/v1/me/password/change lá), não
+    // aqui no BFF do NimbusFlowServer.
+    return this.http.put<void>(`${API.bff}/v1/me/password`, payload, {
       withCredentials: true,
     });
   }
