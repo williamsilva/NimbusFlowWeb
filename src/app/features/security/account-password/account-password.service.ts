@@ -37,13 +37,15 @@ export class AccountPasswordService {
   private readonly http = inject(HttpClient);
 
   loadPolicy(): Observable<PasswordRulesViewModel> {
-    return this.http.get<PasswordRulesViewModel>(`${API.api}/password/policy`, {
+    // /bff/** (sessão), não /api/** (JWT bearer) - essa tela é self-service autenticado por
+    // cookie de sessão; BffAccountController expõe exatamente isso em /bff/v1/password-policy.
+    return this.http.get<PasswordRulesViewModel>(`${API.bff}/v1/password-policy`, {
       withCredentials: true,
     });
   }
 
   checkPolicy(payload: PasswordCheckRequest): Observable<PasswordRulesViewModel> {
-    return this.http.post<PasswordRulesViewModel>(`${API.api}/password/policy/check`, payload, {
+    return this.http.post<PasswordRulesViewModel>(`${API.bff}/v1/password-policy/check`, payload, {
       withCredentials: true,
     });
   }
