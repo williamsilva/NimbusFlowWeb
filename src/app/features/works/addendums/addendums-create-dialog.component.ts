@@ -1,4 +1,4 @@
-import { computed, DestroyRef, signal } from '@angular/core';
+import { DestroyRef, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { input, Output, inject, Component, EventEmitter } from '@angular/core';
@@ -14,12 +14,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { I18nService } from '@core/i18n/i18n.service';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { AddendumsFacade } from '@features/facade/addendums.facade';
-import { ApprovalTierEnum } from '@models/enums/addendum-status.enum';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
-
-/** Só informativo no cliente - a alçada real é sempre calculada e gravada pelo backend
- *  (AddendumApprovalService.resolveTier), este valor pode ficar defasado se o limite mudar. */
-const APPROVAL_TIER2_THRESHOLD_HINT = 50000;
 
 function round2(value: number): number {
   return Math.round(value * 100) / 100;
@@ -59,12 +54,6 @@ export class AddendumsCreateDialogComponent {
 
   readonly saving = signal(false);
   readonly amount = signal<number | null>(null);
-
-  readonly tierHint = computed<ApprovalTierEnum>(() =>
-    (this.amount() ?? 0) > APPROVAL_TIER2_THRESHOLD_HINT
-      ? ApprovalTierEnum.TIER2
-      : ApprovalTierEnum.TIER1,
-  );
 
   readonly form = this.fb.nonNullable.group({
     amount: this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)]),

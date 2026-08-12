@@ -3919,13 +3919,11 @@
       "APPROVED": "Aprovado",
       "REJECTED": "Reprovado"
     },
-    "tier": {
-      "TIER1": "Alçada 1",
-      "TIER2": "Alçada 2"
+    "approvalRange": {
+      "none": "Sem alçada configurada"
     },
     "form": {
       "invalid": "Revise os campos destacados antes de salvar.",
-      "tierHint": "calculada automaticamente pelo servidor conforme o valor",
       "created": "Aditivo solicitado com sucesso.",
       "saveError": "Não foi possível salvar o aditivo. Tente novamente."
     },

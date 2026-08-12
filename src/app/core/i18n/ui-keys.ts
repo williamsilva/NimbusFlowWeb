@@ -1673,6 +1673,9 @@ export const UI_KEYS = {
       tier: 'addendums.fields.tier',
       createdAt: 'addendums.fields.createdAt',
     },
+    approvalRange: {
+      none: 'addendums.approvalRange.none',
+    },
     form: {
       invalid: 'addendums.form.invalid',
       created: 'addendums.form.created',

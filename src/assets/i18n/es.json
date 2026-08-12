@@ -3906,7 +3906,7 @@
       "percentage": "Porcentaje de aumento",
       "justification": "Justificación",
       "status": "Estado",
-      "tier": "Nivel de aprobación",
+      "tier": "Rango de aprobación",
       "createdAt": "Solicitado el",
       "periodCreatedAt": "Período de la solicitud"
     },
@@ -3914,7 +3914,7 @@
       "work": "Frente de servicio",
       "amount": "Monto",
       "justification": "Justificación",
-      "tier": "Nivel de aprobación",
+      "tier": "Rango de aprobación",
       "status": "Estado",
       "createdAt": "Solicitado el",
       "decisionDate": "Decidido el"
@@ -3924,13 +3924,11 @@
       "APPROVED": "Aprobado",
       "REJECTED": "Rechazado"
     },
-    "tier": {
-      "TIER1": "Nivel 1",
-      "TIER2": "Nivel 2"
+    "approvalRange": {
+      "none": "Sin rango de aprobación configurado"
     },
     "form": {
       "invalid": "Revise los campos resaltados antes de guardar.",
-      "tierHint": "calculado automáticamente por el servidor según el monto",
       "created": "Adicional solicitado con éxito.",
       "saveError": "No se pudo guardar el adicional. Intente nuevamente."
     },

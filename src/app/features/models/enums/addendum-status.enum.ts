@@ -24,10 +24,3 @@ export function addendumStatusTone(
 ): StatusTone {
   return status ? TONE_MAP[status as AddendumStatusEnum] ?? 'neutral' : 'neutral';
 }
-
-/** Espelha com.nimbusflow.works.model.ApprovalTier - calculado e gravado pelo backend no momento
- *  da solicitação, conforme o valor pedido (ver AddendumProperties.approvalTier2ThresholdAmount). */
-export enum ApprovalTierEnum {
-  TIER1 = 'TIER1',
-  TIER2 = 'TIER2',
-}

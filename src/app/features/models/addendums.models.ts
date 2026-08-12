@@ -1,5 +1,12 @@
 import { PeriodEnum } from '@models/enums/period.enum';
-import { AddendumStatusEnum, ApprovalTierEnum } from '@models/enums/addendum-status.enum';
+import { AddendumStatusEnum } from '@models/enums/addendum-status.enum';
+
+/** Espelha com.nimbusflow.works.dto.response.ApprovalRangeResponse - faixa de Configurações >
+ *  Alçada que cobre o valor do aditivo, calculada pelo backend no momento da resposta. */
+export interface ApprovalRangeModel {
+  minAmount: number;
+  maxAmount: number | null;
+}
 
 /**
  * Espelha com.nimbusflow.works.dto.{request.AddendumRequest,request.AddendumDecisionRequest,
@@ -12,7 +19,12 @@ export interface AddendumModel {
   amount: number;
   justification: string;
   status: AddendumStatusEnum;
-  requiredTier: ApprovalTierEnum;
+  /** Se o usuário logado pode aprovar/reprovar ESTE aditivo agora - já resolvido pelo backend
+   *  (status PENDING + permissão de aprovar + dentro da faixa de Configurações > Alçada). Usar
+   *  direto em vez de recalcular no cliente (era a causa do bug da coluna "Alçada" desalinhada). */
+  canDecide: boolean;
+  /** Faixas de Configurações > Alçada que cobrem `amount` agora - mostrado na coluna "Alçada". */
+  approvalRanges: ApprovalRangeModel[];
   requestedById: string;
   approvedById: string | null;
   decisionDate: string | null;
@@ -36,7 +48,6 @@ export type AddendumsFiltersState = {
   workName: string;
   justification: string;
   status: string[] | null;
-  requiredTier: string[] | null;
   amountFrom: number | null;
   amountTo: number | null;
   createdAt: string | string[] | null;

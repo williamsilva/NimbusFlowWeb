@@ -2,12 +2,14 @@ import { Injectable, inject } from '@angular/core';
 
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { PermissionService } from '@core/auth/permission.service';
-import { ApprovalTierEnum } from '@models/enums/addendum-status.enum';
 
 /**
- * Alçada de aprovação depende do valor do aditivo (ApprovalTier, calculado pelo backend) - por
- * isso `canDecide`/`decideDisabledReason` recebem o tier em vez de serem um único booleano fixo,
- * diferente de WorksPermissionPolicy.
+ * Quem pode decidir (aprovar/reprovar) um aditivo específico já vem resolvido pelo backend em
+ * AddendumModel.canDecide (permissão de aprovar aditivo + estar na faixa de valor autorizada em
+ * Configurações > Alçada, ver AddendumApprovalService.canDecide) - não recalcular no cliente, só
+ * usar `row.canDecide` direto. Antes esta policy recebia um ApprovalTier (Alçada 1/2, corte fixo
+ * de valor) e decidia sozinha, o que podia divergir da regra real aplicada no approve/reject -
+ * causa do bug da coluna "Alçada" desalinhada.
  */
 @Injectable({ providedIn: 'root' })
 export class AddendumsPermissionPolicy {
@@ -17,19 +19,7 @@ export class AddendumsPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.ADITIVO.CREATE);
   }
 
-  canDecide(tier: ApprovalTierEnum | string): boolean {
-    return this.perms.hasSupportOr(
-      tier === ApprovalTierEnum.TIER2
-        ? PERMISSIONS.ADITIVO.APPROVE_TIER2
-        : PERMISSIONS.ADITIVO.APPROVE_TIER1,
-    );
-  }
-
   createDisabledReason(): string | null {
     return this.canCreate() ? null : 'addendums.action.noPermission';
-  }
-
-  decideDisabledReason(tier: ApprovalTierEnum | string): string | null {
-    return this.canDecide(tier) ? null : 'addendums.action.noPermission';
   }
 }
