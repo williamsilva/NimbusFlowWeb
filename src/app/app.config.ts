@@ -1,5 +1,6 @@
-import { importProvidersFrom, inject } from '@angular/core';
+import { importProvidersFrom, inject, isDevMode } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideServiceWorker } from '@angular/service-worker';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter, TitleStrategy, withInMemoryScrolling } from '@angular/router';
 import {
@@ -91,6 +92,11 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
 
     provideAppInitializer(() => inject(I18nService).init()),
+
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
 
     MessageService,
     ConfirmationService,
