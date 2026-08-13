@@ -3324,6 +3324,10 @@
     }
   },
   "common": {
+    "sitePlanPicker": {
+      "noPlan": "Nenhuma planta cadastrada pra este projeto.",
+      "hint": "Clique na imagem pra marcar a posição."
+    },
     "filters": {
       "final": "Valor Final",
       "initial": "Valor Incial"
@@ -3771,7 +3775,8 @@
       "periodExpectedEndDate": "Período do fim previsto",
       "actualEndDate": "Fim real",
       "initialAmount": "Valor inicial",
-      "totalAmount": "Valor total"
+      "totalAmount": "Valor total",
+      "planPosition": "Posição na planta do projeto"
     },
     "columns": {
       "name": "Nome",
@@ -3867,7 +3872,8 @@
       "totalContractedAmount": "Valor contratado",
       "totalPaidAmount": "Valor pago",
       "remainingAmount": "Valor restante",
-      "progress": "Progresso"
+      "progress": "Progresso",
+      "sitePlan": "Planta do empreendimento"
     },
     "columns": {
       "name": "Nome",
@@ -3889,7 +3895,10 @@
       "invalid": "Revise os campos destacados antes de salvar.",
       "created": "Projeto criado com sucesso.",
       "updated": "Projeto atualizado com sucesso.",
-      "saveError": "Não foi possível salvar o projeto. Tente novamente."
+      "saveError": "Não foi possível salvar o projeto. Tente novamente.",
+      "uploadSitePlan": "Enviar planta",
+      "sitePlanUpdated": "Planta enviada com sucesso.",
+      "sitePlanSaveError": "Não foi possível enviar a planta. Tente novamente."
     },
     "empty": {
       "title": "Nenhum projeto encontrado"
@@ -3943,7 +3952,8 @@
       "approve": "Aprovar",
       "reject": "Reprovar",
       "noPermission": "Você não tem permissão para decidir este aditivo.",
-      "alreadyDecided": "Este aditivo já foi decidido por outro usuário. Atualize a página."
+      "alreadyDecided": "Este aditivo já foi decidido por outro usuário. Atualize a página.",
+      "requiresSubmittableWork": "A frente de serviço precisa estar planejada ou em andamento para solicitar um novo aditivo."
     },
     "approveConfirm": {
       "header": "Aprovar aditivo",
@@ -4015,7 +4025,9 @@
       "amountToPay": "Valor a pagar",
       "dueDate": "Vencimento",
       "periodDueDate": "Período do vencimento",
-      "files": "Fotos/vídeos"
+      "files": "Fotos/vídeos",
+      "planPosition": "Posição na planta do projeto",
+      "deviceLocation": "Localização do dispositivo"
     },
     "columns": {
       "work": "Frente de serviço",
@@ -4041,7 +4053,9 @@
       "created": "Medição enviada com sucesso.",
       "saveError": "Não foi possível enviar a medição. Tente novamente.",
       "exceedsRemaining": "O valor a pagar não pode ser maior que o valor restante da frente de serviço.",
-      "remainingHint": "Valor restante da frente de serviço"
+      "remainingHint": "Valor restante da frente de serviço",
+      "locationUnsupported": "Seu navegador não suporta captura de localização.",
+      "locationError": "Não foi possível capturar a localização. Verifique a permissão do navegador."
     },
     "empty": {
       "title": "Nenhuma medição encontrada"
@@ -4050,6 +4064,7 @@
       "approve": "Aprovar",
       "reject": "Reprovar",
       "addFile": "Adicionar arquivo",
+      "captureLocation": "Capturar localização",
       "installmentGenerated": "Ordem de pagamento gerada",
       "noPermission": "Você não tem permissão para decidir esta medição.",
       "alreadyDecided": "Esta medição já foi decidida por outro usuário. Atualize a página.",

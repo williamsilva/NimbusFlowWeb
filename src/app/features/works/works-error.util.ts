@@ -9,6 +9,7 @@ import { UiKey } from '@core/i18n/ui-keys';
  * AddendumApprovalService/InstallmentService) pra algo que o usuário final entenda.
  */
 const KNOWN_DETAILS: Array<{ match: string; key: UiKey }> = [
+  { match: 'Work status does not accept new addendums', key: 'addendums.action.requiresSubmittableWork' },
   { match: 'Addendum is not pending', key: 'addendums.action.alreadyDecided' },
   { match: 'Installment is not measurement-approved', key: 'installments.action.statusChanged' },
   { match: 'Installment is not released', key: 'installments.action.statusChanged' },

@@ -2876,6 +2876,10 @@
     }
   },
   "common": {
+    "sitePlanPicker": {
+      "noPlan": "No site plan uploaded for this project yet.",
+      "hint": "Click the image to mark the position."
+    },
     "filters": {
       "final": "Final Value",
       "initial": "Initial Value"
@@ -3776,7 +3780,8 @@
       "periodExpectedEndDate": "Expected end date period",
       "actualEndDate": "Actual end date",
       "initialAmount": "Initial amount",
-      "totalAmount": "Total amount"
+      "totalAmount": "Total amount",
+      "planPosition": "Position on the project's site plan"
     },
     "columns": {
       "name": "Name",
@@ -3872,7 +3877,8 @@
       "totalContractedAmount": "Contracted amount",
       "totalPaidAmount": "Paid amount",
       "remainingAmount": "Remaining amount",
-      "progress": "Progress"
+      "progress": "Progress",
+      "sitePlan": "Site plan"
     },
     "columns": {
       "name": "Name",
@@ -3894,7 +3900,10 @@
       "invalid": "Review the highlighted fields before saving.",
       "created": "Project created successfully.",
       "updated": "Project updated successfully.",
-      "saveError": "Could not save the project. Please try again."
+      "saveError": "Could not save the project. Please try again.",
+      "uploadSitePlan": "Upload site plan",
+      "sitePlanUpdated": "Site plan uploaded successfully.",
+      "sitePlanSaveError": "Could not upload the site plan. Please try again."
     },
     "empty": {
       "title": "No projects found"
@@ -3948,7 +3957,8 @@
       "approve": "Approve",
       "reject": "Reject",
       "noPermission": "You do not have permission to decide this addendum.",
-      "alreadyDecided": "This addendum was already decided by another user. Refresh the page."
+      "alreadyDecided": "This addendum was already decided by another user. Refresh the page.",
+      "requiresSubmittableWork": "The service front must be planned or in progress to request a new addendum."
     },
     "approveConfirm": {
       "header": "Approve addendum",

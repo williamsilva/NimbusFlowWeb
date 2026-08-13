@@ -1683,6 +1683,7 @@ export const UI_KEYS = {
     },
     action: {
       alreadyDecided: 'addendums.action.alreadyDecided',
+      requiresSubmittableWork: 'addendums.action.requiresSubmittableWork',
     },
     approveConfirm: {
       header: 'addendums.approveConfirm.header',
@@ -1732,6 +1733,8 @@ export const UI_KEYS = {
       created: 'measurements.form.created',
       saveError: 'measurements.form.saveError',
       exceedsRemaining: 'measurements.form.exceedsRemaining',
+      locationUnsupported: 'measurements.form.locationUnsupported',
+      locationError: 'measurements.form.locationError',
     },
     action: {
       requiresSubmittableWork: 'measurements.action.requiresSubmittableWork',
@@ -1764,6 +1767,9 @@ export const UI_KEYS = {
       created: 'projects.form.created',
       updated: 'projects.form.updated',
       saveError: 'projects.form.saveError',
+      uploadSitePlan: 'projects.form.uploadSitePlan',
+      sitePlanUpdated: 'projects.form.sitePlanUpdated',
+      sitePlanSaveError: 'projects.form.sitePlanSaveError',
     },
   },
   suggestions: {
