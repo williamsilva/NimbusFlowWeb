@@ -3855,6 +3855,7 @@
     }
   },
   "projects": {
+    "subtitle": "Gestiona el registro de proyectos",
     "new": {
       "title": "Nuevo proyecto"
     },
@@ -3864,7 +3865,12 @@
     "fields": {
       "name": "Nombre",
       "description": "Descripción",
-      "status": "Estado"
+      "status": "Estado",
+      "serviceFrontsCount": "Nº frentes",
+      "totalContractedAmount": "Monto contratado",
+      "totalPaidAmount": "Monto pagado",
+      "remainingAmount": "Monto restante",
+      "progress": "Progreso"
     },
     "columns": {
       "name": "Nombre",

@@ -3855,6 +3855,7 @@
     }
   },
   "projects": {
+    "subtitle": "Manage the project register",
     "new": {
       "title": "New project"
     },
@@ -3864,7 +3865,12 @@
     "fields": {
       "name": "Name",
       "description": "Description",
-      "status": "Status"
+      "status": "Status",
+      "serviceFrontsCount": "# service fronts",
+      "totalContractedAmount": "Contracted amount",
+      "totalPaidAmount": "Paid amount",
+      "remainingAmount": "Remaining amount",
+      "progress": "Progress"
     },
     "columns": {
       "name": "Name",

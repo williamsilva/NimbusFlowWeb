@@ -1750,6 +1750,15 @@ export const UI_KEYS = {
     },
   },
   projects: {
+    fields: {
+      name: 'projects.fields.name',
+      status: 'projects.fields.status',
+      serviceFrontsCount: 'projects.fields.serviceFrontsCount',
+      totalContractedAmount: 'projects.fields.totalContractedAmount',
+      totalPaidAmount: 'projects.fields.totalPaidAmount',
+      remainingAmount: 'projects.fields.remainingAmount',
+      progress: 'projects.fields.progress',
+    },
     form: {
       invalid: 'projects.form.invalid',
       created: 'projects.form.created',

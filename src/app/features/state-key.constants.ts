@@ -34,6 +34,13 @@ export const STATE_KEY = {
         },
         FILTERS: { V1: 'nimbusflow.works.filters.v1' },
       },
+      PROJECTS: {
+        TABLE: {
+          ROWS: { V1: 'projects.table.rows' },
+          STATE: { V1: 'nimbusflow.projects.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.projects.filters.v1' },
+      },
       SUGGESTIONS: {
         TABLE: {
           ROWS: { V1: 'suggestions.table.rows' },
