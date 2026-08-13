@@ -656,35 +656,32 @@
               tooltipPosition="top"
             ></button>
 
-            <button
+            <a
               pButton
-              type="button"
               icon="pi pi-file"
-              (click)="goToAddendums(row)"
-              class="p-button-text p-button-sm"
+              [routerLink]="['/works', row.id, 'addendums']"
+              class="p-button-text p-button-sm p-button-warning"
               [pTooltip]="'works.action.viewAddendums' | translate"
               tooltipPosition="top"
-            ></button>
+            ></a>
 
-            <button
+            <a
               pButton
-              type="button"
               icon="pi pi-camera"
-              (click)="goToMeasurements(row)"
-              class="p-button-text p-button-sm"
+              [routerLink]="['/works', row.id, 'measurements']"
+              class="p-button-text p-button-sm p-button-info"
               [pTooltip]="'works.action.viewMeasurements' | translate"
               tooltipPosition="top"
-            ></button>
+            ></a>
 
-            <button
+            <a
               pButton
-              type="button"
               icon="pi pi-wallet"
-              (click)="goToInstallments(row)"
-              class="p-button-text p-button-sm"
+              [routerLink]="['/works', row.id, 'installments']"
+              class="p-button-text p-button-sm p-button-success"
               [pTooltip]="'works.action.viewInstallments' | translate"
               tooltipPosition="top"
-            ></button>
+            ></a>
           </div>
         </td>
       </tr>

@@ -131,12 +131,31 @@ export class AddendumsListComponent implements OnInit {
     return addendumStatusTone(status);
   }
 
+  refresh(): void {
+    this.facade.loadByWork(this.workId());
+  }
+
   isPending(row: AddendumModel): boolean {
     return row.status === AddendumStatusEnum.PENDING;
   }
 
+  isApproved(row: AddendumModel): boolean {
+    return row.status === AddendumStatusEnum.APPROVED;
+  }
+
   approvalRangeLabel(row: AddendumModel): string {
     return formatApprovalRanges(this.i18n, row.approvalRanges);
+  }
+
+  canResendNotification(row: AddendumModel): boolean {
+    return this.isApproved(row) && this.policy.canResendNotification();
+  }
+
+  resendNotificationDisabledReason(row: AddendumModel): string {
+    if (!this.isApproved(row)) {
+      return 'addendums.action.requiresApproved';
+    }
+    return this.policy.resendNotificationDisabledReason() ?? 'addendums.action.noPermission';
   }
 
   goNew(): void {
@@ -200,6 +219,37 @@ export class AddendumsListComponent implements OnInit {
                 severity: 'success',
                 summary: this.i18n.tUi('common.success'),
                 detail: this.i18n.tUi('addendums.rejectConfirm.success'),
+              }),
+            error: (err) =>
+              this.toast.add({
+                severity: 'error',
+                summary: this.i18n.tUi('common.error'),
+                detail:
+                  translateWorksErrorDetail(err, this.i18n) ??
+                  this.i18n.tUi('addendums.form.saveError'),
+              }),
+          });
+      },
+    });
+  }
+
+  confirmResendNotification(row: AddendumModel): void {
+    if (!this.canResendNotification(row)) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('addendums.resendNotificationConfirm.header'),
+      message: this.i18n.tUi('addendums.resendNotificationConfirm.message'),
+      icon: 'pi pi-question-circle',
+      accept: () => {
+        this.facade
+          .resendNotification(row.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () =>
+              this.toast.add({
+                severity: 'success',
+                summary: this.i18n.tUi('common.success'),
+                detail: this.i18n.tUi('addendums.resendNotificationConfirm.success'),
               }),
             error: (err) =>
               this.toast.add({

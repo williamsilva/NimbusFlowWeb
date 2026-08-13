@@ -50,4 +50,8 @@ export class InstallmentsFacade {
   markPaid(id: string): Observable<InstallmentModel> {
     return this.api.markPaid(id).pipe(tap(() => this.reload()));
   }
+
+  resendNotification(id: string): Observable<InstallmentModel> {
+    return this.api.resendNotification(id).pipe(tap(() => this.reload()));
+  }
 }

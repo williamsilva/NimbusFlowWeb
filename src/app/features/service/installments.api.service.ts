@@ -53,4 +53,10 @@ export class InstallmentsApiService {
       .post<InstallmentApiModel>(`${this.installmentsUrl}/${id}/mark-paid`, {})
       .pipe(map(mapInstallmentApiModel));
   }
+
+  resendNotification(id: string) {
+    return this.http
+      .post<InstallmentApiModel>(`${this.installmentsUrl}/${id}/resend-notification`, {})
+      .pipe(map(mapInstallmentApiModel));
+  }
 }

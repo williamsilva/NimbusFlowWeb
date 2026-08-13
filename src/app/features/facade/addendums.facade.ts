@@ -58,4 +58,8 @@ export class AddendumsFacade {
   reject(id: string, input: AddendumDecisionInput): Observable<AddendumModel> {
     return this.api.reject(id, input).pipe(tap(() => this.reload()));
   }
+
+  resendNotification(id: string): Observable<AddendumModel> {
+    return this.api.resendNotification(id).pipe(tap(() => this.reload()));
+  }
 }

@@ -15,11 +15,19 @@ export class InstallmentsPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.PARCELA.PAGAR);
   }
 
+  canResendNotification(): boolean {
+    return this.perms.hasSupportOr(PERMISSIONS.PARCELA.LIBERAR);
+  }
+
   releaseDisabledReason(): string | null {
     return this.canRelease() ? null : 'installments.action.noPermission';
   }
 
   markPaidDisabledReason(): string | null {
     return this.canMarkPaid() ? null : 'installments.action.noPermission';
+  }
+
+  resendNotificationDisabledReason(): string | null {
+    return this.canResendNotification() ? null : 'installments.action.noPermission';
   }
 }
