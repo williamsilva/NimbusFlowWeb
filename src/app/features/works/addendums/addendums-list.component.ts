@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -37,7 +37,6 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
   selector: 'app-addendums-list',
   templateUrl: './addendums-list.component.html',
   imports: [
-    NgIf,
     FormsModule,
     TableModule,
     ButtonModule,

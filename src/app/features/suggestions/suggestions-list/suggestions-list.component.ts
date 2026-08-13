@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
@@ -48,7 +48,6 @@ import {
   selector: 'app-suggestions-list',
   templateUrl: './suggestions-list.component.html',
   imports: [
-    NgIf,
     CsDatePipe,
     FloatLabel,
     FormsModule,

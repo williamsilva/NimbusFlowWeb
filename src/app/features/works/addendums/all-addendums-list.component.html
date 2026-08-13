@@ -5,7 +5,7 @@
     { label: ('breadcrumb.addendums' | translate) },
   ]"
   [compact]="false"
->
+  >
   <button
     pButton
     type="button"
@@ -24,7 +24,7 @@
   [activeCount]="activeFiltersCount()"
   [title]="'common.filter' | translate"
   [activeFilterGroups]="activeFilterGroups()"
->
+  >
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
@@ -34,402 +34,403 @@
           [value]="workName()"
           class="w-full p-inputtext-sm"
           (input)="workName.set(($any($event.target).value ?? '').toString())"
-        />
-        <label for="workName">{{ 'addendums.fields.work' | translate }}</label>
-      </p-floatLabel>
-    </div>
+          />
+          <label for="workName">{{ 'addendums.fields.work' | translate }}</label>
+        </p-floatLabel>
+      </div>
 
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <input
-          id="justification"
-          pInputText
-          [value]="justification()"
-          class="w-full p-inputtext-sm"
-          (input)="justification.set(($any($event.target).value ?? '').toString())"
-        />
-        <label for="justification">{{ 'addendums.fields.justification' | translate }}</label>
-      </p-floatLabel>
-    </div>
+      <div class="col-12 md:col-3 p-1">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="justification"
+            pInputText
+            [value]="justification()"
+            class="w-full p-inputtext-sm"
+            (input)="justification.set(($any($event.target).value ?? '').toString())"
+            />
+            <label for="justification">{{ 'addendums.fields.justification' | translate }}</label>
+          </p-floatLabel>
+        </div>
 
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-multiSelect
-          size="small"
-          class="w-full"
-          appendTo="body"
-          [showClear]="true"
-          inputId="status"
-          optionLabel="label"
-          optionValue="value"
-          [ngModel]="status()"
-          [showToggleAll]="false"
-          [options]="statusOptions()"
-          (ngModelChange)="status.set($event?.length ? $event : null)"
-        ></p-multiSelect>
-        <label for="status">{{ 'addendums.fields.status' | translate }}</label>
-      </p-floatLabel>
-    </div>
+        <div class="col-12 md:col-3 p-1">
+          <p-floatLabel variant="on" class="w-full">
+            <p-multiSelect
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [showClear]="true"
+              inputId="status"
+              optionLabel="label"
+              optionValue="value"
+              [ngModel]="status()"
+              [showToggleAll]="false"
+              [options]="statusOptions()"
+              (ngModelChange)="status.set($event?.length ? $event : null)"
+            ></p-multiSelect>
+            <label for="status">{{ 'addendums.fields.status' | translate }}</label>
+          </p-floatLabel>
+        </div>
 
-    <cs-advanced-period-date-filter
-      dateInputId="createdAt"
-      periodInputId="periodCreatedAt"
-      [value]="createdAt()"
-      [period]="periodCreatedAt()"
-      class="col-12 md:col-3 p-1"
-      (valueChange)="createdAt.set($event)"
-      [periodOptions]="periodEnumOptions()"
-      [view]="setViewFormat(periodCreatedAt())"
-      [dateFormat]="setDateFormat(periodCreatedAt())"
-      [selectionMode]="setSelectionMode(periodCreatedAt())"
-      [dateLabel]="'addendums.fields.createdAt' | translate"
-      [periodLabel]="'addendums.fields.periodCreatedAt' | translate"
-      (periodChange)="onPeriodColumnChange(periodCreatedAt, createdAt, $event)"
-    ></cs-advanced-period-date-filter>
-  </div>
+        <cs-advanced-period-date-filter
+          dateInputId="createdAt"
+          periodInputId="periodCreatedAt"
+          [value]="createdAt()"
+          [period]="periodCreatedAt()"
+          class="col-12 md:col-3 p-1"
+          (valueChange)="createdAt.set($event)"
+          [periodOptions]="periodEnumOptions()"
+          [view]="setViewFormat(periodCreatedAt())"
+          [dateFormat]="setDateFormat(periodCreatedAt())"
+          [selectionMode]="setSelectionMode(periodCreatedAt())"
+          [dateLabel]="'addendums.fields.createdAt' | translate"
+          [periodLabel]="'addendums.fields.periodCreatedAt' | translate"
+          (periodChange)="onPeriodColumnChange(periodCreatedAt, createdAt, $event)"
+        ></cs-advanced-period-date-filter>
+      </div>
 
-  <div class="grid formgrid gap-0 align-items-end">
-    <div class="col-12 md:col-6 p-2">
-      <cs-currency-range-filter
-        [inputId]="'amount'"
-        [label]="'addendums.fields.amount' | translate"
-        [value]="{ start: amountFrom(), end: amountTo() }"
-        (valueChange)="amountFrom.set($event.start); amountTo.set($event.end)"
-      ></cs-currency-range-filter>
-    </div>
-  </div>
-</cs-filters-panel>
+      <div class="grid formgrid gap-0 align-items-end">
+        <div class="col-12 md:col-6 p-2">
+          <cs-currency-range-filter
+            [inputId]="'amount'"
+            [label]="'addendums.fields.amount' | translate"
+            [value]="{ start: amountFrom(), end: amountTo() }"
+            (valueChange)="amountFrom.set($event.start); amountTo.set($event.end)"
+          ></cs-currency-range-filter>
+        </div>
+      </div>
+    </cs-filters-panel>
 
-<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
-  <p-table
-    #dt
-    stripedRows
-    dataKey="id"
-    size="small"
-    [rows]="rows"
-    [lazy]="true"
-    showGridlines
-    [rowHover]="true"
-    [value]="items()"
-    [paginator]="true"
-    sortMode="multiple"
-    filterDisplay="menu"
-    stateStorage="local"
-    class="cs-admin-table"
-    [loading]="loading()"
-    [stateKey]="tableStateKey()"
-    [showCurrentPageReport]="true"
-    [totalRecords]="totalRecords()"
-    (onLazyLoad)="onLazyLoad($event)"
-    [paginatorDropdownAppendTo]="'body'"
-    (onPage)="onPageChange($event)"
-    [rowsPerPageOptions]="rowsPerPageOptions"
-    [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
-    [currentPageReportTemplate]="'pagination.report' | translate"
-  >
-    <ng-template pTemplate="colgroup">
-      <colgroup>
-        <col style="width: auto" />
-        <col style="width: 110px" />
-        <col style="width: auto" />
-        <col style="width: 180px" />
-        <col style="width: 110px" />
-        <col style="width: 150px" />
-        <col style="width: 150px" />
-        <col style="width: 150px" />
-        <col style="width: 80px" />
-      </colgroup>
-    </ng-template>
+    <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+      <p-table
+        #dt
+        stripedRows
+        dataKey="id"
+        size="small"
+        [rows]="rows"
+        [lazy]="true"
+        showGridlines
+        [rowHover]="true"
+        [value]="items()"
+        [paginator]="true"
+        sortMode="multiple"
+        filterDisplay="menu"
+        stateStorage="local"
+        class="cs-admin-table"
+        [loading]="loading()"
+        [stateKey]="tableStateKey()"
+        [showCurrentPageReport]="true"
+        [totalRecords]="totalRecords()"
+        (onLazyLoad)="onLazyLoad($event)"
+        [paginatorDropdownAppendTo]="'body'"
+        (onPage)="onPageChange($event)"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
+        [currentPageReportTemplate]="'pagination.report' | translate"
+        >
+        <ng-template pTemplate="colgroup">
+          <colgroup>
+          <col style="width: auto" />
+          <col style="width: 110px" />
+          <col style="width: auto" />
+          <col style="width: 180px" />
+          <col style="width: 110px" />
+          <col style="width: 150px" />
+          <col style="width: 150px" />
+          <col style="width: 150px" />
+          <col style="width: 80px" />
+        </colgroup>
+      </ng-template>
 
-    <ng-template pTemplate="header">
-      <tr>
-        <th pSortableColumn="workName">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'addendums.columns.work' | translate"
-              >{{ 'addendums.columns.work' | translate }}</span
-            >
-            <span class="th-icons">
-              <p-sortIcon field="workName"></p-sortIcon>
-              <p-columnFilter
-                type="text"
-                display="menu"
-                class="ml-auto"
-                field="workName"
-                matchMode="contains"
-                [useGrouping]="false"
-                [showOperator]="false"
-                [showAddButton]="false"
-                styleClass="cs-colfilter"
-              ></p-columnFilter>
-            </span>
-          </div>
-        </th>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="workName">
+            <div class="th-flex text-center">
+              <span
+                class="th-label"
+                tooltipPosition="top"
+                [pTooltip]="'addendums.columns.work' | translate"
+                >{{ 'addendums.columns.work' | translate }}</span
+                >
+                <span class="th-icons">
+                  <p-sortIcon field="workName"></p-sortIcon>
+                  <p-columnFilter
+                    type="text"
+                    display="menu"
+                    class="ml-auto"
+                    field="workName"
+                    matchMode="contains"
+                    [useGrouping]="false"
+                    [showOperator]="false"
+                    [showAddButton]="false"
+                    styleClass="cs-colfilter"
+                  ></p-columnFilter>
+                </span>
+              </div>
+            </th>
 
-        <th pSortableColumn="amount">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'addendums.columns.amount' | translate"
-              >{{ 'addendums.columns.amount' | translate }}</span
-            >
-            <span class="th-icons">
-              <p-sortIcon field="amount"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                field="amount"
-                matchMode="between"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="false"
-                styleClass="cs-colfilter"
-              >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
-                    [inputId]="'amountCol'"
-                    [label]="'addendums.fields.amount' | translate"
-                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
-                    (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
-                </ng-template>
-              </p-columnFilter>
-            </span>
-          </div>
-        </th>
+            <th pSortableColumn="amount">
+              <div class="th-flex text-center">
+                <span
+                  class="th-label"
+                  tooltipPosition="top"
+                  [pTooltip]="'addendums.columns.amount' | translate"
+                  >{{ 'addendums.columns.amount' | translate }}</span
+                  >
+                  <span class="th-icons">
+                    <p-sortIcon field="amount"></p-sortIcon>
+                    <p-columnFilter
+                      display="menu"
+                      field="amount"
+                      matchMode="between"
+                      [showOperator]="false"
+                      [showAddButton]="false"
+                      [showMatchModes]="false"
+                      styleClass="cs-colfilter"
+                      >
+                      <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                        <cs-currency-range-filter
+                          [inputId]="'amountCol'"
+                          [label]="'addendums.fields.amount' | translate"
+                          [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                          (valueChange)="filter([$event.start, $event.end])"
+                        ></cs-currency-range-filter>
+                      </ng-template>
+                    </p-columnFilter>
+                  </span>
+                </div>
+              </th>
 
-        <th pSortableColumn="justification">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'addendums.columns.justification' | translate"
-              >{{ 'addendums.columns.justification' | translate }}</span
-            >
-            <span class="th-icons">
-              <p-sortIcon field="justification"></p-sortIcon>
-              <p-columnFilter
-                type="text"
-                display="menu"
-                class="ml-auto"
-                field="justification"
-                matchMode="contains"
-                [useGrouping]="false"
-                [showOperator]="false"
-                [showAddButton]="false"
-                styleClass="cs-colfilter"
-              ></p-columnFilter>
-            </span>
-          </div>
-        </th>
+              <th pSortableColumn="justification">
+                <div class="th-flex text-center">
+                  <span
+                    class="th-label"
+                    tooltipPosition="top"
+                    [pTooltip]="'addendums.columns.justification' | translate"
+                    >{{ 'addendums.columns.justification' | translate }}</span
+                    >
+                    <span class="th-icons">
+                      <p-sortIcon field="justification"></p-sortIcon>
+                      <p-columnFilter
+                        type="text"
+                        display="menu"
+                        class="ml-auto"
+                        field="justification"
+                        matchMode="contains"
+                        [useGrouping]="false"
+                        [showOperator]="false"
+                        [showAddButton]="false"
+                        styleClass="cs-colfilter"
+                      ></p-columnFilter>
+                    </span>
+                  </div>
+                </th>
 
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'addendums.columns.tier' | translate"
-              >{{ 'addendums.columns.tier' | translate }}</span
-            >
-          </div>
-        </th>
+                <th class="text-center">
+                  <div class="th-flex text-center justify-content-center">
+                    <span
+                      class="th-label"
+                      tooltipPosition="top"
+                      [pTooltip]="'addendums.columns.tier' | translate"
+                      >{{ 'addendums.columns.tier' | translate }}</span
+                      >
+                    </div>
+                  </th>
 
-        <th pSortableColumn="status">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'addendums.columns.status' | translate"
-              >{{ 'addendums.columns.status' | translate }}</span
-            >
-            <span class="th-icons">
-              <p-sortIcon field="status"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                matchMode="in"
-                field="status"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="false"
-                styleClass="cs-colfilter"
-              >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-multiSelect
-                    class="w-full"
-                    appendTo="body"
-                    [ngModel]="value"
-                    [showClear]="true"
-                    optionLabel="label"
-                    optionValue="value"
-                    [options]="statusOptions()"
-                    (onChange)="filter($event.value)"
-                    [placeholder]="'common.all' | translate"
-                  ></p-multiSelect>
-                </ng-template>
-              </p-columnFilter>
-            </span>
-          </div>
-        </th>
+                  <th pSortableColumn="status">
+                    <div class="th-flex text-center">
+                      <span
+                        class="th-label"
+                        tooltipPosition="top"
+                        [pTooltip]="'addendums.columns.status' | translate"
+                        >{{ 'addendums.columns.status' | translate }}</span
+                        >
+                        <span class="th-icons">
+                          <p-sortIcon field="status"></p-sortIcon>
+                          <p-columnFilter
+                            display="menu"
+                            matchMode="in"
+                            field="status"
+                            [showOperator]="false"
+                            [showAddButton]="false"
+                            [showMatchModes]="false"
+                            styleClass="cs-colfilter"
+                            >
+                            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                              <p-multiSelect
+                                class="w-full"
+                                appendTo="body"
+                                [ngModel]="value"
+                                [showClear]="true"
+                                optionLabel="label"
+                                optionValue="value"
+                                [options]="statusOptions()"
+                                (onChange)="filter($event.value)"
+                                [placeholder]="'common.all' | translate"
+                              ></p-multiSelect>
+                            </ng-template>
+                          </p-columnFilter>
+                        </span>
+                      </div>
+                    </th>
 
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'addendums.columns.approvedBy' | translate"
-              >{{ 'addendums.columns.approvedBy' | translate }}</span
-            >
-          </div>
-        </th>
+                    <th class="text-center">
+                      <div class="th-flex text-center justify-content-center">
+                        <span
+                          class="th-label"
+                          tooltipPosition="top"
+                          [pTooltip]="'addendums.columns.approvedBy' | translate"
+                          >{{ 'addendums.columns.approvedBy' | translate }}</span
+                          >
+                        </div>
+                      </th>
 
-        <th pSortableColumn="createdAt">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'addendums.columns.createdAt' | translate"
-              >{{ 'addendums.columns.createdAt' | translate }}</span
-            >
-            <span class="th-icons">
-              <p-sortIcon field="createdAt"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                field="createdAt"
-                matchMode="between"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="false"
-                styleClass="cs-colfilter"
-              >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-datepicker
-                    class="w-full"
-                    appendTo="body"
-                    [showIcon]="true"
-                    [ngModel]="value"
-                    selectionMode="range"
-                    dateFormat="dd/mm/yy"
-                    [readonlyInput]="true"
-                    (ngModelChange)="filter($event)"
-                    [placeholder]="'common.period' | translate"
-                  ></p-datepicker>
-                </ng-template>
-              </p-columnFilter>
-            </span>
-          </div>
-        </th>
+                      <th pSortableColumn="createdAt">
+                        <div class="th-flex text-center">
+                          <span
+                            class="th-label"
+                            tooltipPosition="top"
+                            [pTooltip]="'addendums.columns.createdAt' | translate"
+                            >{{ 'addendums.columns.createdAt' | translate }}</span
+                            >
+                            <span class="th-icons">
+                              <p-sortIcon field="createdAt"></p-sortIcon>
+                              <p-columnFilter
+                                display="menu"
+                                field="createdAt"
+                                matchMode="between"
+                                [showOperator]="false"
+                                [showAddButton]="false"
+                                [showMatchModes]="false"
+                                styleClass="cs-colfilter"
+                                >
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                  <p-datepicker
+                                    class="w-full"
+                                    appendTo="body"
+                                    [showIcon]="true"
+                                    [ngModel]="value"
+                                    selectionMode="range"
+                                    dateFormat="dd/mm/yy"
+                                    [readonlyInput]="true"
+                                    (ngModelChange)="filter($event)"
+                                    [placeholder]="'common.period' | translate"
+                                  ></p-datepicker>
+                                </ng-template>
+                              </p-columnFilter>
+                            </span>
+                          </div>
+                        </th>
 
-        <th pSortableColumn="decisionDate">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'addendums.columns.decisionDate' | translate"
-              >{{ 'addendums.columns.decisionDate' | translate }}</span
-            >
-            <span class="th-icons">
-              <p-sortIcon field="decisionDate"></p-sortIcon>
-            </span>
-          </div>
-        </th>
+                        <th pSortableColumn="decisionDate">
+                          <div class="th-flex text-center">
+                            <span
+                              class="th-label"
+                              tooltipPosition="top"
+                              [pTooltip]="'addendums.columns.decisionDate' | translate"
+                              >{{ 'addendums.columns.decisionDate' | translate }}</span
+                              >
+                              <span class="th-icons">
+                                <p-sortIcon field="decisionDate"></p-sortIcon>
+                              </span>
+                            </div>
+                          </th>
 
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'common.actions' | translate"
-              >{{ 'common.actions' | translate }}</span
-            >
-          </div>
-        </th>
-      </tr>
-    </ng-template>
+                          <th class="text-center">
+                            <div class="th-flex text-center justify-content-center">
+                              <span
+                                class="th-label"
+                                tooltipPosition="top"
+                                [pTooltip]="'common.actions' | translate"
+                                >{{ 'common.actions' | translate }}</span
+                                >
+                              </div>
+                            </th>
+                          </tr>
+                        </ng-template>
 
-    <ng-template pTemplate="body" let-row>
-      <tr>
-        <td>
-          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.workName">{{
-            row.workName
-          }}</span>
-        </td>
-        <td class="text-right">{{ row.amount | csCurrency }}</td>
-        <td>
-          <span
-            class="cs-table-cell-ellipsis"
-            tooltipPosition="top"
-            [pTooltip]="row.justification"
-            >{{ row.justification }}</span
-          >
-        </td>
-        <td class="text-center">
-          <span
-            class="cs-table-cell-ellipsis"
-            tooltipPosition="top"
-            [pTooltip]="approvalRangeLabel(row)"
-            >{{ approvalRangeLabel(row) }}</span
-          >
-        </td>
-        <td class="text-center">
-          <cs-status-badge
-            [tone]="tone(row.status)"
-            [label]="'addendums.status.' + row.status | translate"
-          ></cs-status-badge>
-        </td>
-        <td class="text-center">
-          <span
-            class="cs-table-cell-ellipsis"
-            tooltipPosition="top"
-            [pTooltip]="row.approvedBy?.name ?? '-'"
-            >{{ row.approvedBy?.name ?? '-' }}</span
-          >
-        </td>
-        <td class="text-center">{{ row.createdAt | csDate: 'datetime' }}</td>
-        <td class="text-center">{{ row.decisionDate | csDate: 'datetime' }}</td>
-        <td class="text-center">
-          <div class="table-actions" *ngIf="isPending(row)">
-            <button
-              pButton
-              type="button"
-              icon="pi pi-check"
-              (click)="confirmApprove(row)"
-              class="p-button-text p-button-sm"
-              [disabled]="!row.canDecide"
+                        <ng-template pTemplate="body" let-row>
+                          <tr>
+                            <td>
+                              <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.workName">{{
+                                row.workName
+                              }}</span>
+                            </td>
+                            <td class="text-right">{{ row.amount | csCurrency }}</td>
+                            <td>
+                              <span
+                                class="cs-table-cell-ellipsis"
+                                tooltipPosition="top"
+                                [pTooltip]="row.justification"
+                                >{{ row.justification }}</span
+                                >
+                              </td>
+                              <td class="text-center">
+                                <span
+                                  class="cs-table-cell-ellipsis"
+                                  tooltipPosition="top"
+                                  [pTooltip]="approvalRangeLabel(row)"
+                                  >{{ approvalRangeLabel(row) }}</span
+                                  >
+                                </td>
+                                <td class="text-center">
+                                  <cs-status-badge
+                                    [tone]="tone(row.status)"
+                                    [label]="'addendums.status.' + row.status | translate"
+                                  ></cs-status-badge>
+                                </td>
+                                <td class="text-center">
+                                  <span
+                                    class="cs-table-cell-ellipsis"
+                                    tooltipPosition="top"
+                                    [pTooltip]="row.approvedBy?.name ?? '-'"
+                                    >{{ row.approvedBy?.name ?? '-' }}</span
+                                    >
+                                  </td>
+                                  <td class="text-center">{{ row.createdAt | csDate: 'datetime' }}</td>
+                                  <td class="text-center">{{ row.decisionDate | csDate: 'datetime' }}</td>
+                                  <td class="text-center">
+                                    @if (isPending(row)) {
+                                      <div class="table-actions">
+                                        <button
+                                          pButton
+                                          type="button"
+                                          icon="pi pi-check"
+                                          (click)="confirmApprove(row)"
+                                          class="p-button-text p-button-sm"
+                                          [disabled]="!row.canDecide"
               [pTooltip]="
                 (row.canDecide ? 'addendums.action.approve' : 'addendums.action.noPermission')
                   | translate
               "
-              tooltipPosition="top"
-            ></button>
-
-            <button
-              pButton
-              type="button"
-              icon="pi pi-times"
-              (click)="confirmReject(row)"
-              class="p-button-text p-button-sm p-button-danger"
-              [disabled]="!row.canDecide"
+                                          tooltipPosition="top"
+                                        ></button>
+                                        <button
+                                          pButton
+                                          type="button"
+                                          icon="pi pi-times"
+                                          (click)="confirmReject(row)"
+                                          class="p-button-text p-button-sm p-button-danger"
+                                          [disabled]="!row.canDecide"
               [pTooltip]="
                 (row.canDecide ? 'addendums.action.reject' : 'addendums.action.noPermission')
                   | translate
               "
-              tooltipPosition="top"
-            ></button>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
+                                          tooltipPosition="top"
+                                        ></button>
+                                      </div>
+                                    }
+                                  </td>
+                                </tr>
+                              </ng-template>
 
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="9" class="text-center py-5 opacity-70">
-          {{
-            loadedOnce() ? ('addendums.empty.title' | translate) : ('common.loading' | translate)
-          }}
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
+                              <ng-template pTemplate="emptymessage">
+                                <tr>
+                                  <td colspan="9" class="text-center py-5 opacity-70">
+                                    {{
+                                    loadedOnce() ? ('addendums.empty.title' | translate) : ('common.loading' | translate)
+                                    }}
+                                  </td>
+                                </tr>
+                              </ng-template>
+                            </p-table>
+                          </div>

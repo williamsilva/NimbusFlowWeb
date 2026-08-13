@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -50,7 +50,6 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
   selector: 'app-all-addendums-list',
   templateUrl: './all-addendums-list.component.html',
   imports: [
-    NgIf,
     FloatLabel,
     FormsModule,
     TableModule,

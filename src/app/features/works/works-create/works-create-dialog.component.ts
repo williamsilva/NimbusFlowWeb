@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { computed, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -44,7 +44,6 @@ function fromDateOnlyString(value: string | null | undefined): Date | null {
   selector: 'app-works-create-dialog',
   templateUrl: './works-create-dialog.component.html',
   imports: [
-    NgIf,
     ToastModule,
     FormsModule,
     SelectModule,
