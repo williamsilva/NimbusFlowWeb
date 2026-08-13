@@ -8,7 +8,7 @@
   [visible]="visible()"
   [style]="{ width: '560px', maxWidth: '95vw' }"
   [header]="'measurements.new.title' | translate"
->
+  >
   <form [formGroup]="form" class="cs-dialog-form">
     <div class="grid formgrid gap-0">
       <div class="col-12 p-2">
@@ -25,143 +25,146 @@
             [forId]="'description'"
             [control]="form.controls.description"
             [label]="'measurements.fields.description' | translate"
-          />
-        </p-floatLabel>
-      </div>
+            />
+          </p-floatLabel>
+        </div>
 
-      <div class="col-12 md:col-6 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <p-inputNumber
-            size="small"
-            class="w-full"
-            mode="currency"
-            inputId="amountToPay"
-            inputStyleClass="w-full"
-            [minFractionDigits]="2"
-            [maxFractionDigits]="2"
-            [currency]="i18n.getCurrencyBrl()"
-            [locale]="i18n.getLocalePtBr()"
-            formControlName="amountToPay"
-          ></p-inputNumber>
-          <app-error-msg
-            [field]="'amountToPay'"
-            [forId]="'amountToPay'"
-            [control]="form.controls.amountToPay"
-            [label]="'measurements.fields.amountToPay' | translate"
-          />
-        </p-floatLabel>
-      </div>
+        <div class="col-12 md:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputNumber
+              size="small"
+              class="w-full"
+              mode="currency"
+              inputId="amountToPay"
+              inputStyleClass="w-full"
+              [minFractionDigits]="2"
+              [maxFractionDigits]="2"
+              [currency]="i18n.getCurrencyBrl()"
+              [locale]="i18n.getLocalePtBr()"
+              formControlName="amountToPay"
+            ></p-inputNumber>
+            <app-error-msg
+              [field]="'amountToPay'"
+              [forId]="'amountToPay'"
+              [control]="form.controls.amountToPay"
+              [label]="'measurements.fields.amountToPay' | translate"
+              />
+            </p-floatLabel>
+          </div>
 
-      <div class="col-12 md:col-6 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <p-inputNumber
-            size="small"
-            class="w-full"
-            mode="decimal"
-            suffix=" %"
-            [min]="0"
-            [max]="100"
-            inputId="percentageCompleted"
-            inputStyleClass="w-full"
-            [minFractionDigits]="2"
-            [maxFractionDigits]="2"
-            formControlName="percentageCompleted"
-          ></p-inputNumber>
-          <app-error-msg
-            [field]="'percentageCompleted'"
-            [forId]="'percentageCompleted'"
-            [control]="form.controls.percentageCompleted"
-            [label]="'measurements.fields.percentageCompleted' | translate"
-          />
-        </p-floatLabel>
-      </div>
+          <div class="col-12 md:col-6 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <p-inputNumber
+                size="small"
+                class="w-full"
+                mode="decimal"
+                suffix=" %"
+                [min]="0"
+                [max]="100"
+                inputId="percentageCompleted"
+                inputStyleClass="w-full"
+                [minFractionDigits]="2"
+                [maxFractionDigits]="2"
+                formControlName="percentageCompleted"
+              ></p-inputNumber>
+              <app-error-msg
+                [field]="'percentageCompleted'"
+                [forId]="'percentageCompleted'"
+                [control]="form.controls.percentageCompleted"
+                [label]="'measurements.fields.percentageCompleted' | translate"
+                />
+              </p-floatLabel>
+            </div>
 
-      <div class="col-12 p-2 -mt-2">
-        <small class="opacity-70 block">
-          {{ 'measurements.form.remainingHint' | translate }}: {{ remainingAmount() | csCurrency }}
-        </small>
-      </div>
+            <div class="col-12 p-2 -mt-2">
+              <small class="opacity-70 block">
+                {{ 'measurements.form.remainingHint' | translate }}: {{ remainingAmount() | csCurrency }}
+              </small>
+            </div>
 
-      <div class="col-12 md:col-6 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <p-datepicker
-            class="w-full"
-            inputId="dueDate"
-            appendTo="body"
-            [showIcon]="true"
-            dateFormat="dd/mm/yy"
-            [readonlyInput]="true"
-            formControlName="dueDate"
-          ></p-datepicker>
-          <app-error-msg
-            [field]="'dueDate'"
-            [forId]="'dueDate'"
-            [control]="form.controls.dueDate"
-            [label]="'measurements.fields.dueDate' | translate"
-          />
-        </p-floatLabel>
-      </div>
+            <div class="col-12 md:col-6 p-2">
+              <p-floatLabel variant="on" class="w-full">
+                <p-datepicker
+                  class="w-full"
+                  inputId="dueDate"
+                  appendTo="body"
+                  [showIcon]="true"
+                  dateFormat="dd/mm/yy"
+                  [readonlyInput]="true"
+                  formControlName="dueDate"
+                ></p-datepicker>
+                <app-error-msg
+                  [field]="'dueDate'"
+                  [forId]="'dueDate'"
+                  [control]="form.controls.dueDate"
+                  [label]="'measurements.fields.dueDate' | translate"
+                  />
+                </p-floatLabel>
+              </div>
 
-      <div class="col-12 p-2">
-        <small class="font-semibold block mb-2">{{ 'measurements.fields.files' | translate }}</small>
+              <div class="col-12 p-2">
+                <small class="font-semibold block mb-2">{{ 'measurements.fields.files' | translate }}</small>
 
-        <input
-          #fileInput
-          type="file"
-          multiple
-          [accept]="acceptedMediaTypes"
-          (change)="onFilesSelected($event)"
-          class="hidden"
-        />
+                <input
+                  #fileInput
+                  type="file"
+                  multiple
+                  [accept]="acceptedMediaTypes"
+                  (change)="onFilesSelected($event)"
+                  class="hidden"
+                  />
 
-        <button
-          pButton
-          type="button"
-          icon="pi pi-upload"
-          (click)="fileInput.click()"
-          class="p-button-outlined p-button-sm"
-          [label]="'measurements.action.addFile' | translate"
-        ></button>
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-upload"
+                    (click)="fileInput.click()"
+                    class="p-button-outlined p-button-sm"
+                    [label]="'measurements.action.addFile' | translate"
+                  ></button>
 
-        <ul class="list-none p-0 m-0 mt-2" *ngIf="files().length">
-          <li
-            *ngFor="let file of files(); let i = index"
-            class="flex align-items-center justify-content-between gap-2 py-1"
-          >
-            <span class="text-sm overflow-hidden text-overflow-ellipsis">{{ file.name }}</span>
-            <button
-              pButton
-              type="button"
-              icon="pi pi-times"
-              (click)="removeFile(i)"
-              class="p-button-text p-button-sm p-button-danger"
-            ></button>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </form>
+                  @if (files().length) {
+                    <ul class="list-none p-0 m-0 mt-2">
+                      @for (file of files(); track file; let i = $index) {
+                        <li
+                          class="flex align-items-center justify-content-between gap-2 py-1"
+                          >
+                          <span class="text-sm overflow-hidden text-overflow-ellipsis">{{ file.name }}</span>
+                          <button
+                            pButton
+                            type="button"
+                            icon="pi pi-times"
+                            (click)="removeFile(i)"
+                            class="p-button-text p-button-sm p-button-danger"
+                          ></button>
+                        </li>
+                      }
+                    </ul>
+                  }
+                </div>
+              </div>
+            </form>
 
-  <ng-template pTemplate="footer">
-    <button
-      pButton
-      type="button"
-      (click)="close()"
-      icon="pi pi-times"
-      class="p-button-text p-button-sm"
-      [label]="'common.cancel' | translate"
-      [disabled]="saving()"
-    ></button>
+            <ng-template pTemplate="footer">
+              <button
+                pButton
+                type="button"
+                (click)="close()"
+                icon="pi pi-times"
+                class="p-button-text p-button-sm"
+                [label]="'common.cancel' | translate"
+                [disabled]="saving()"
+              ></button>
 
-    <button
-      pButton
-      type="button"
-      (click)="save()"
-      icon="pi pi-save"
-      class="p-button-sm"
-      [loading]="saving()"
-      [label]="'common.save' | translate"
-      [disabled]="saving()"
-    ></button>
-  </ng-template>
-</p-dialog>
+              <button
+                pButton
+                type="button"
+                (click)="save()"
+                icon="pi pi-save"
+                class="p-button-sm"
+                [loading]="saving()"
+                [label]="'common.save' | translate"
+                [disabled]="saving()"
+              ></button>
+            </ng-template>
+          </p-dialog>

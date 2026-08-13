@@ -1,4 +1,4 @@
-import { DecimalPipe, NgFor, NgIf } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -54,8 +54,6 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
   selector: 'app-all-measurements-list',
   templateUrl: './all-measurements-list.component.html',
   imports: [
-    NgIf,
-    NgFor,
     FloatLabel,
     DecimalPipe,
     FormsModule,

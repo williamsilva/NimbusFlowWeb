@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+
 import { DestroyRef, effect, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { input, Output, inject, Component, EventEmitter } from '@angular/core';
@@ -46,8 +46,6 @@ function round2(value: number): number {
   selector: 'app-measurements-create-dialog',
   templateUrl: './measurements-create-dialog.component.html',
   imports: [
-    NgIf,
-    NgFor,
     DialogModule,
     ButtonModule,
     TranslateModule,

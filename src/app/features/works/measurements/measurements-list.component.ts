@@ -1,4 +1,4 @@
-import { DecimalPipe, NgFor, NgIf } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
@@ -41,8 +41,6 @@ const SUBMITTABLE_WORK_STATUSES = new Set<WorkStatusEnum>([WorkStatusEnum.PLANNE
   selector: 'app-measurements-list',
   templateUrl: './measurements-list.component.html',
   imports: [
-    NgIf,
-    NgFor,
     DecimalPipe,
     FormsModule,
     TableModule,

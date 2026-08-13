@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { NgIf } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
@@ -48,7 +48,6 @@ import {
   selector: 'app-suppliers-list',
   templateUrl: './suppliers-list.component.html',
   imports: [
-    NgIf,
     TaxIdPipe,
     PhonePipe,
     CsDatePipe,
