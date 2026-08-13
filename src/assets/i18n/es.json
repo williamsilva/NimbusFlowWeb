@@ -3916,6 +3916,7 @@
       "justification": "Justificación",
       "tier": "Rango de aprobación",
       "status": "Estado",
+      "approvedBy": "Aprobado por",
       "createdAt": "Solicitado el",
       "decisionDate": "Decidido el"
     },

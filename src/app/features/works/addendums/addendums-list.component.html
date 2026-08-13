@@ -57,6 +57,7 @@
         <col style="width: 110px" />
         <col style="width: 150px" />
         <col style="width: 150px" />
+        <col style="width: 150px" />
         <col style="width: 80px" />
       </colgroup>
     </ng-template>
@@ -148,6 +149,12 @@
           </div>
         </th>
 
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'addendums.columns.approvedBy' | translate">{{ 'addendums.columns.approvedBy' | translate }}</span>
+          </div>
+        </th>
+
         <th pSortableColumn="createdAt">
           <div class="th-flex text-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'addendums.columns.createdAt' | translate">{{ 'addendums.columns.createdAt' | translate }}</span>
@@ -208,6 +215,7 @@
             [label]="('addendums.status.' + row.status) | translate"
           ></cs-status-badge>
         </td>
+        <td class="text-center"><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.approvedBy?.name ?? '-'">{{ row.approvedBy?.name ?? '-' }}</span></td>
         <td class="text-center">{{ row.createdAt | csDate: 'datetime' }}</td>
         <td class="text-center">{{ row.decisionDate | csDate: 'datetime' }}</td>
         <td class="text-center">
@@ -244,7 +252,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="text-center py-5 opacity-70">
+        <td colspan="8" class="text-center py-5 opacity-70">
           {{ loadedOnce() ? ('addendums.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
