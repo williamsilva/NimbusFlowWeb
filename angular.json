@@ -92,6 +92,9 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "pwaLocal": {
+              "optimization": true
             }
           },
           "defaultConfiguration": "production"
