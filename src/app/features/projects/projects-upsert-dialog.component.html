@@ -54,6 +54,31 @@
           />
         </p-floatLabel>
       </div>
+
+      @if (isEditMode()) {
+        <div class="col-12 p-2">
+          <div class="flex align-items-center justify-content-between mb-2">
+            <span class="text-base font-semibold">{{ 'projects.fields.sitePlan' | translate }}</span>
+            <input
+              #sitePlanInput
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              class="hidden"
+              (change)="onSitePlanSelected($event)"
+            />
+            <button
+              pButton
+              type="button"
+              icon="pi pi-upload"
+              class="p-button-text p-button-sm"
+              (click)="sitePlanInput.click()"
+              [loading]="uploadingSitePlan()"
+              [label]="'projects.form.uploadSitePlan' | translate"
+            ></button>
+          </div>
+          <cs-site-plan-picker [imageUrl]="currentSiteplanUrl()" [readonly]="true" />
+        </div>
+      }
     </div>
   </form>
 

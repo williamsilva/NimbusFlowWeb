@@ -52,4 +52,13 @@ export class ProjectsApiService {
   update(id: string, input: ProjectUpsertInput) {
     return this.http.put<ProjectApiModel>(`${this.projectsUrl}/${id}`, input).pipe(map(mapProjectApiModel));
   }
+
+  /** multipart/form-data, uma única parte de arquivo - espelha ProjectController.uploadSitePlan. */
+  uploadSitePlan(id: string, file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http
+      .post<ProjectApiModel>(`${this.projectsUrl}/${id}/site-plan`, formData)
+      .pipe(map(mapProjectApiModel));
+  }
 }

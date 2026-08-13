@@ -196,6 +196,16 @@
                           </p-floatLabel>
                         </div>
                       }
+
+                      <div class="col-12 p-2">
+                        <span class="text-base font-semibold block mb-2">{{ 'works.fields.planPosition' | translate }}</span>
+                        <cs-site-plan-picker
+                          [imageUrl]="selectedProjectSiteplanUrl()"
+                          [x]="form.controls.planPositionX.value"
+                          [y]="form.controls.planPositionY.value"
+                          (positionChange)="onPlanPositionChange($event)"
+                        />
+                      </div>
                     </div>
                   </form>
 

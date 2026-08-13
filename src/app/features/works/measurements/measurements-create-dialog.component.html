@@ -142,6 +142,35 @@
                     </ul>
                   }
                 </div>
+
+                <div class="col-12 p-2">
+                  <small class="font-semibold block mb-2">{{ 'measurements.fields.planPosition' | translate }}</small>
+                  <cs-site-plan-picker
+                    [imageUrl]="siteplanUrl()"
+                    [x]="planPositionX()"
+                    [y]="planPositionY()"
+                    (positionChange)="onPlanPositionChange($event)"
+                  />
+                </div>
+
+                <div class="col-12 p-2">
+                  <small class="font-semibold block mb-2">{{ 'measurements.fields.deviceLocation' | translate }}</small>
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-map-marker"
+                    class="p-button-outlined p-button-sm"
+                    [loading]="capturingLocation()"
+                    (click)="captureDeviceLocation()"
+                    [label]="'measurements.action.captureLocation' | translate"
+                  ></button>
+                  @if (deviceLatitude() != null && deviceLongitude() != null) {
+                    <small class="block mt-2 opacity-70">{{ deviceLatitude() }}, {{ deviceLongitude() }}</small>
+                  }
+                  @if (locationError()) {
+                    <small class="block mt-2 text-red-500">{{ locationError() }}</small>
+                  }
+                </div>
               </div>
             </form>
 

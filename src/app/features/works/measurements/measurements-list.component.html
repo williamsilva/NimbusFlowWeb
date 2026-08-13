@@ -25,6 +25,7 @@
   [visible]="upsertVisible()"
   [totalAmount]="work()?.totalAmount ?? 0"
   [remainingAmount]="work()?.remainingAmount ?? 0"
+  [siteplanUrl]="siteplanUrl()"
   (visibleChange)="onUpsertVisibleChange($event)"
 ></app-measurements-create-dialog>
 

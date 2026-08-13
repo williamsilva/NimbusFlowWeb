@@ -23,6 +23,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { I18nService } from '@core/i18n/i18n.service';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
+import { SitePlanPickerComponent } from '@shared/features/site-plan-picker/site-plan-picker.component';
 import { MeasurementsFacade } from '@features/facade/measurements.facade';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
 
@@ -55,6 +56,7 @@ function round2(value: number): number {
     InputNumberModule,
     ErrorMsgComponent,
     CsCurrencyPipe,
+    SitePlanPickerComponent,
     ReactiveFormsModule,
   ],
 })
@@ -65,6 +67,9 @@ export class MeasurementsCreateDialogComponent {
   totalAmount = input.required<number>();
   /** totalAmount menos as parcelas já geradas - teto do valor a pagar desta medição (mesma checagem feita no backend ao submeter). */
   remainingAmount = input.required<number>();
+  /** Planta do Projeto da obra (nulo se o Projeto não tiver planta cadastrada) - resolvido pelo
+   *  componente pai (mesmo Project já carregado em ProjectsFacade pro dropdown de Work). */
+  siteplanUrl = input<string | null>(null);
 
   @Output() saved = new EventEmitter<void>();
   @Output() visibleChange = new EventEmitter<boolean>();
@@ -79,6 +84,14 @@ export class MeasurementsCreateDialogComponent {
 
   readonly saving = signal(false);
   readonly files = signal<File[]>([]);
+  readonly planPositionX = signal<number | null>(null);
+  readonly planPositionY = signal<number | null>(null);
+  /** Geolocalização real do dispositivo (navigator.geolocation) - opcional, capturada sob
+   *  demanda (não solicita permissão sozinho ao abrir o diálogo). */
+  readonly deviceLatitude = signal<number | null>(null);
+  readonly deviceLongitude = signal<number | null>(null);
+  readonly capturingLocation = signal(false);
+  readonly locationError = signal<string | null>(null);
 
   /** Valida reativamente contra remainingAmount() - roda a cada updateValueAndValidity, mesmo com {emitEvent: false}. */
   private readonly amountExceedsRemainingValidator: ValidatorFn = (
@@ -172,9 +185,44 @@ export class MeasurementsCreateDialogComponent {
     this.files.set(this.files().filter((_, i) => i !== index));
   }
 
+  onPlanPositionChange(position: { x: number; y: number }): void {
+    this.planPositionX.set(position.x);
+    this.planPositionY.set(position.y);
+  }
+
+  /** Best-effort - nunca bloqueia o envio se o navegador negar/não suportar (mesmo espírito do
+   *  antigo distanceFromWorkMeters, que era só informativo). */
+  captureDeviceLocation(): void {
+    if (!('geolocation' in navigator)) {
+      this.locationError.set(this.i18n.tUi('measurements.form.locationUnsupported'));
+      return;
+    }
+
+    this.capturingLocation.set(true);
+    this.locationError.set(null);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.deviceLatitude.set(position.coords.latitude);
+        this.deviceLongitude.set(position.coords.longitude);
+        this.capturingLocation.set(false);
+      },
+      () => {
+        this.capturingLocation.set(false);
+        this.locationError.set(this.i18n.tUi('measurements.form.locationError'));
+      },
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
+  }
+
   close(): void {
     this.saving.set(false);
     this.files.set([]);
+    this.planPositionX.set(null);
+    this.planPositionY.set(null);
+    this.deviceLatitude.set(null);
+    this.deviceLongitude.set(null);
+    this.locationError.set(null);
     this.form.reset({ description: '', percentageCompleted: null, amountToPay: null, dueDate: null });
     this.visibleChange.emit(false);
   }
@@ -205,6 +253,10 @@ export class MeasurementsCreateDialogComponent {
         dueDate: toDateOnlyString(v.dueDate)!,
         supersedesId: null,
         files: this.files(),
+        planPositionX: this.planPositionX(),
+        planPositionY: this.planPositionY(),
+        deviceLatitude: this.deviceLatitude(),
+        deviceLongitude: this.deviceLongitude(),
       })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({

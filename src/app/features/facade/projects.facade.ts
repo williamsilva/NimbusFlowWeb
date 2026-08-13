@@ -130,4 +130,13 @@ export class ProjectsFacade {
       }),
     );
   }
+
+  uploadSitePlan(id: string, file: File): Observable<ProjectModel> {
+    return this.api.uploadSitePlan(id, file).pipe(
+      tap(() => {
+        this.reloadLast();
+        this.loadAll(true);
+      }),
+    );
+  }
 }

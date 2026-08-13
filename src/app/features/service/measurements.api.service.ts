@@ -53,6 +53,10 @@ export class MeasurementsApiService {
       amountToPay: input.amountToPay,
       dueDate: input.dueDate,
       supersedesId: input.supersedesId,
+      planPositionX: input.planPositionX,
+      planPositionY: input.planPositionY,
+      deviceLatitude: input.deviceLatitude,
+      deviceLongitude: input.deviceLongitude,
     };
     formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
     input.files.forEach((file) => formData.append('files', file));
