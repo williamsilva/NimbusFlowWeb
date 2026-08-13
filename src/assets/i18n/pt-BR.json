@@ -2315,7 +2315,14 @@
       "permissions": "Permissões"
     },
     "button": {
-      "changePassword": "Alterar senha"
+      "changePassword": "Alterar senha",
+      "enablePush": "Ativar notificações neste dispositivo",
+      "disablePush": "Desativar notificações neste dispositivo"
+    },
+    "push": {
+      "unsupported": "Notificações push não são suportadas neste navegador.",
+      "enabled": "Notificações ativadas neste dispositivo.",
+      "error": "Não foi possível ativar as notificações. Tente novamente."
     },
     "fallback": {
       "noName": "Usuário sem nome",

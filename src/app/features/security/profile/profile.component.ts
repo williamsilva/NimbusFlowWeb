@@ -17,6 +17,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { UsersFacade } from '@features/facade/users.facade';
 import { CsBadgeComponent } from '@shared/ui/badge/cs-badge.component';
+import { PushNotificationService } from '@core/push/push-notification.service';
 import {
   UserStatus,
   userStatusLabel,
@@ -59,6 +60,7 @@ export class ProfilePageComponent {
   private readonly auth = inject(AuthService);
   private readonly usersFacade = inject(UsersFacade);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly pushNotification = inject(PushNotificationService);
 
   readonly loading = signal(true);
   readonly loadError = signal<string | null>(null);
@@ -70,6 +72,14 @@ export class ProfilePageComponent {
   readonly groups = computed(() => this.profile()?.groups ?? []);
   readonly authorities = computed(() => this.profile()?.authorities ?? []);
 
+  // Opt-in de push notification neste dispositivo/navegador (ver PushNotificationService) -
+  // pushSupported some o botão em navegador/contexto sem suporte (ex.: Safari antigo, dev sem
+  // service worker registrado); pushSubscribed reflete se JÁ existe uma assinatura ativa.
+  readonly pushSupported = signal(false);
+  readonly pushSubscribed = signal(false);
+  readonly pushBusy = signal(false);
+  readonly pushError = signal<string | null>(null);
+
   openGroupsModal(): void {
     this.groupsModalVisible.set(true);
   }
@@ -78,8 +88,36 @@ export class ProfilePageComponent {
     this.permissionsModalVisible.set(true);
   }
 
+  async togglePush(): Promise<void> {
+    this.pushBusy.set(true);
+    this.pushError.set(null);
+    try {
+      if (this.pushSubscribed()) {
+        await this.pushNotification.unsubscribe();
+        this.pushSubscribed.set(false);
+      } else {
+        await this.pushNotification.subscribe();
+        this.pushSubscribed.set(true);
+      }
+    } catch {
+      this.pushError.set(this.i18n.tUi('profile.push.error' as any, 'Não foi possível ativar as notificações. Tente novamente.'));
+    } finally {
+      this.pushBusy.set(false);
+    }
+  }
+
   constructor() {
     void this.load();
+    void this.loadPushState();
+  }
+
+  private async loadPushState(): Promise<void> {
+    this.pushSupported.set(this.pushNotification.isSupported);
+    if (!this.pushNotification.isSupported) {
+      return;
+    }
+    const subscription = await this.pushNotification.currentSubscription();
+    this.pushSubscribed.set(!!subscription);
   }
 
   private async load(): Promise<void> {

@@ -1867,7 +1867,14 @@
       "permissions": "Permisos"
     },
     "button": {
-      "changePassword": "Cambiar contraseña"
+      "changePassword": "Cambiar contraseña",
+      "enablePush": "Activar notificaciones en este dispositivo",
+      "disablePush": "Desactivar notificaciones en este dispositivo"
+    },
+    "push": {
+      "unsupported": "Las notificaciones push no son compatibles con este navegador.",
+      "enabled": "Notificaciones activadas en este dispositivo.",
+      "error": "No fue posible activar las notificaciones. Intente nuevamente."
     },
     "fallback": {
       "noName": "Usuario sin nombre",

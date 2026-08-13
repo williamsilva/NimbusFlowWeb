@@ -109,6 +109,32 @@
             [label]="'profile.button.changePassword' | translate"
             routerLink="/security/account/password"
           ></button>
+
+          @if (pushSupported()) {
+            <button
+              pButton
+              type="button"
+              class="w-full mt-2"
+              [loading]="pushBusy()"
+              (click)="togglePush()"
+              [icon]="pushSubscribed() ? 'pi pi-bell-slash' : 'pi pi-bell'"
+              [class.p-button-outlined]="pushSubscribed()"
+              [label]="
+                (pushSubscribed() ? 'profile.button.disablePush' : 'profile.button.enablePush')
+                  | translate
+              "
+            ></button>
+
+            @if (pushSubscribed() && !pushError()) {
+              <p class="m-0 mt-2 text-xs opacity-70">
+                {{ 'profile.push.enabled' | translate }}
+              </p>
+            }
+
+            @if (pushError()) {
+              <small class="block mt-2 text-red-500">{{ pushError() }}</small>
+            }
+          }
         </p-card>
       </div>
 
