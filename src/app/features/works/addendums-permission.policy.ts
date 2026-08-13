@@ -19,7 +19,18 @@ export class AddendumsPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.ADITIVO.CREATE);
   }
 
+  /** Espelha AddendumApprovalService.resendNotification: qualquer permissão de aprovar aditivo
+   *  (TIER1 ou TIER2) já basta - reenviar não é decidir de novo, então não exige alçada, ao
+   *  contrário de row.canDecide (que o backend já resolve levando a alçada em conta). */
+  canResendNotification(): boolean {
+    return this.perms.hasSupportOrAny(PERMISSIONS.ADITIVO.APPROVE_TIER1, PERMISSIONS.ADITIVO.APPROVE_TIER2);
+  }
+
   createDisabledReason(): string | null {
     return this.canCreate() ? null : 'addendums.action.noPermission';
+  }
+
+  resendNotificationDisabledReason(): string | null {
+    return this.canResendNotification() ? null : 'addendums.action.noPermission';
   }
 }

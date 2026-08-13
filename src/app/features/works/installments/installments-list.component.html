@@ -6,7 +6,16 @@
     { label: ('breadcrumb.installments' | translate) },
   ]"
   [compact]="false"
-></cs-page-header>
+  >
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+</cs-page-header>
 
 <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
   <p-table
@@ -189,6 +198,21 @@
                 canMarkPaid(row)
                   ? ('installments.action.markPaid' | translate)
                   : (markPaidDisabledReason(row) | translate)
+              "
+              tooltipPosition="top"
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-envelope"
+              (click)="confirmResendNotification(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canResendNotification(row)"
+              [pTooltip]="
+                canResendNotification(row)
+                  ? ('installments.action.resendNotification' | translate)
+                  : (resendNotificationDisabledReason(row) | translate)
               "
               tooltipPosition="top"
             ></button>

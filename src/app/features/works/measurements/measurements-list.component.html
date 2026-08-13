@@ -10,6 +10,14 @@
   <button
     pButton
     type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+  <button
+    pButton
+    type="button"
     (click)="goNew()"
     icon="pi pi-plus"
     tooltipPosition="top"

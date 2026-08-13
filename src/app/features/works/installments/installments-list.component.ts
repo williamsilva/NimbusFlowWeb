@@ -105,6 +105,10 @@ export class InstallmentsListComponent implements OnInit {
     return installmentStatusTone(status);
   }
 
+  refresh(): void {
+    this.facade.loadByWork(this.workId());
+  }
+
   canRelease(row: InstallmentModel): boolean {
     return row.status === InstallmentStatusEnum.MEASUREMENT_APPROVED && this.policy.canRelease();
   }
@@ -125,6 +129,20 @@ export class InstallmentsListComponent implements OnInit {
       return 'installments.action.requiresReleased';
     }
     return this.policy.markPaidDisabledReason() ?? 'installments.action.noPermission';
+  }
+
+  canResendNotification(row: InstallmentModel): boolean {
+    return (
+      (row.status === InstallmentStatusEnum.RELEASED || row.status === InstallmentStatusEnum.PAID) &&
+      this.policy.canResendNotification()
+    );
+  }
+
+  resendNotificationDisabledReason(row: InstallmentModel): string {
+    if (row.status !== InstallmentStatusEnum.RELEASED && row.status !== InstallmentStatusEnum.PAID) {
+      return 'installments.action.requiresReleasedOrPaid';
+    }
+    return this.policy.resendNotificationDisabledReason() ?? 'installments.action.noPermission';
   }
 
   confirmRelease(row: InstallmentModel): void {
@@ -179,6 +197,39 @@ export class InstallmentsListComponent implements OnInit {
                 severity: 'success',
                 summary: this.i18n.tUi('common.success'),
                 detail: this.i18n.tUi('installments.markPaidConfirm.success'),
+              }),
+            error: (err) =>
+              this.toast.add({
+                severity: 'error',
+                summary: this.i18n.tUi('common.error'),
+                detail:
+                  translateWorksErrorDetail(err, this.i18n) ??
+                  this.i18n.tUi('installments.form.saveError'),
+              }),
+          });
+      },
+    });
+  }
+
+  confirmResendNotification(row: InstallmentModel): void {
+    if (!this.canResendNotification(row)) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('installments.resendNotificationConfirm.header'),
+      message: this.i18n.tUi('installments.resendNotificationConfirm.message', {
+        number: row.number,
+      }),
+      icon: 'pi pi-question-circle',
+      accept: () => {
+        this.facade
+          .resendNotification(row.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () =>
+              this.toast.add({
+                severity: 'success',
+                summary: this.i18n.tUi('common.success'),
+                detail: this.i18n.tUi('installments.resendNotificationConfirm.success'),
               }),
             error: (err) =>
               this.toast.add({

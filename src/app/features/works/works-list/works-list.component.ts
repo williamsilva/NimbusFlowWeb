@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
@@ -52,6 +52,7 @@ import {
   selector: 'app-works-list',
   templateUrl: './works-list.component.html',
   imports: [
+    RouterLink,
     CsDatePipe,
     FloatLabel,
     DecimalPipe,
@@ -78,7 +79,6 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
 
   protected override readonly i18n = inject(I18nService);
   readonly facade = inject(WorksFacade);
-  private readonly router = inject(Router);
   readonly projectsFacade = inject(ProjectsFacade);
   protected readonly toast = inject(MessageService);
   readonly suppliersFacade = inject(SuppliersFacade);
@@ -199,18 +199,6 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     if (!this.policy.canEdit()) return;
     this.work.set(row);
     this.upsertVisible.set(true);
-  }
-
-  goToAddendums(row: WorkModel) {
-    this.router.navigate(['/works', row.id, 'addendums']);
-  }
-
-  goToInstallments(row: WorkModel) {
-    this.router.navigate(['/works', row.id, 'installments']);
-  }
-
-  goToMeasurements(row: WorkModel) {
-    this.router.navigate(['/works', row.id, 'measurements']);
   }
 
   onSaved(): void {

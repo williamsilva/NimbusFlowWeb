@@ -1684,6 +1684,7 @@ export const UI_KEYS = {
     action: {
       alreadyDecided: 'addendums.action.alreadyDecided',
       requiresSubmittableWork: 'addendums.action.requiresSubmittableWork',
+      requiresApproved: 'addendums.action.requiresApproved',
     },
     approveConfirm: {
       header: 'addendums.approveConfirm.header',
@@ -1694,6 +1695,11 @@ export const UI_KEYS = {
       header: 'addendums.rejectConfirm.header',
       message: 'addendums.rejectConfirm.message',
       success: 'addendums.rejectConfirm.success',
+    },
+    resendNotificationConfirm: {
+      header: 'addendums.resendNotificationConfirm.header',
+      message: 'addendums.resendNotificationConfirm.message',
+      success: 'addendums.resendNotificationConfirm.success',
     },
   },
   installments: {
@@ -1708,6 +1714,7 @@ export const UI_KEYS = {
     },
     action: {
       statusChanged: 'installments.action.statusChanged',
+      requiresReleasedOrPaid: 'installments.action.requiresReleasedOrPaid',
     },
     releaseConfirm: {
       header: 'installments.releaseConfirm.header',
@@ -1718,6 +1725,11 @@ export const UI_KEYS = {
       header: 'installments.markPaidConfirm.header',
       message: 'installments.markPaidConfirm.message',
       success: 'installments.markPaidConfirm.success',
+    },
+    resendNotificationConfirm: {
+      header: 'installments.resendNotificationConfirm.header',
+      message: 'installments.resendNotificationConfirm.message',
+      success: 'installments.resendNotificationConfirm.success',
     },
   },
   measurements: {

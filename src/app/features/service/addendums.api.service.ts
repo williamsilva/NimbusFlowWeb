@@ -61,4 +61,10 @@ export class AddendumsApiService {
       .post<AddendumApiModel>(`${this.addendumsUrl}/${id}/reject`, input)
       .pipe(map(mapAddendumApiModel));
   }
+
+  resendNotification(id: string) {
+    return this.http
+      .post<AddendumApiModel>(`${this.addendumsUrl}/${id}/resend-notification`, {})
+      .pipe(map(mapAddendumApiModel));
+  }
 }

@@ -3951,9 +3951,11 @@
     "action": {
       "approve": "Aprovar",
       "reject": "Reprovar",
+      "resendNotification": "Reenviar notificação por e-mail",
       "noPermission": "Você não tem permissão para decidir este aditivo.",
       "alreadyDecided": "Este aditivo já foi decidido por outro usuário. Atualize a página.",
-      "requiresSubmittableWork": "A frente de serviço precisa estar planejada ou em andamento para solicitar um novo aditivo."
+      "requiresSubmittableWork": "A frente de serviço precisa estar planejada ou em andamento para solicitar um novo aditivo.",
+      "requiresApproved": "Este aditivo ainda não foi aprovado."
     },
     "approveConfirm": {
       "header": "Aprovar aditivo",
@@ -3964,6 +3966,11 @@
       "header": "Reprovar aditivo",
       "message": "Confirma a reprovação do aditivo de {amount}?",
       "success": "Aditivo reprovado com sucesso."
+    },
+    "resendNotificationConfirm": {
+      "header": "Reenviar notificação",
+      "message": "Confirma o reenvio do e-mail de aditivo aprovado para os destinatários configurados?",
+      "success": "Notificação reenviada com sucesso."
     }
   },
   "installments": {
@@ -3996,9 +4003,11 @@
     "action": {
       "release": "Liberar",
       "markPaid": "Marcar como pago",
+      "resendNotification": "Reenviar notificação por e-mail",
       "noPermission": "Você não tem permissão para esta ação.",
       "requiresMeasurementApproved": "Esta parcela já foi liberada ou paga.",
       "requiresReleased": "Requer parcela liberada para marcar como paga.",
+      "requiresReleasedOrPaid": "Esta parcela ainda não foi liberada.",
       "statusChanged": "O status desta parcela foi alterado por outro usuário. Atualize a página."
     },
     "releaseConfirm": {
@@ -4010,6 +4019,11 @@
       "header": "Marcar parcela como paga",
       "message": "Confirma que a parcela nº {number} foi paga?",
       "success": "Parcela marcada como paga com sucesso."
+    },
+    "resendNotificationConfirm": {
+      "header": "Reenviar notificação",
+      "message": "Confirma o reenvio do e-mail de ordem de pagamento da parcela nº {number} para os destinatários configurados?",
+      "success": "Notificação reenviada com sucesso."
     }
   },
   "measurements": {

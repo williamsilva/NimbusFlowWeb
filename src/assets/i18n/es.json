@@ -3956,9 +3956,11 @@
     "action": {
       "approve": "Aprobar",
       "reject": "Rechazar",
+      "resendNotification": "Reenviar notificación por correo",
       "noPermission": "No tiene permiso para decidir este adicional.",
       "alreadyDecided": "Este adicional ya fue decidido por otro usuario. Actualice la página.",
-      "requiresSubmittableWork": "La frente de servicio debe estar planificada o en curso para solicitar un nuevo adicional."
+      "requiresSubmittableWork": "La frente de servicio debe estar planificada o en curso para solicitar un nuevo adicional.",
+      "requiresApproved": "Este adicional todavía no fue aprobado."
     },
     "approveConfirm": {
       "header": "Aprobar adicional",
@@ -3969,6 +3971,11 @@
       "header": "Rechazar adicional",
       "message": "¿Confirma el rechazo del adicional de {amount}?",
       "success": "Adicional rechazado con éxito."
+    },
+    "resendNotificationConfirm": {
+      "header": "Reenviar notificación",
+      "message": "¿Confirma el reenvío del correo de adicional aprobado a los destinatarios configurados?",
+      "success": "Notificación reenviada con éxito."
     }
   },
   "installments": {
@@ -4001,9 +4008,11 @@
     "action": {
       "release": "Liberar",
       "markPaid": "Marcar como pagada",
+      "resendNotification": "Reenviar notificación por correo",
       "noPermission": "No tiene permiso para esta acción.",
       "requiresMeasurementApproved": "Esta cuota ya fue liberada o pagada.",
       "requiresReleased": "Requiere cuota liberada para marcar como pagada.",
+      "requiresReleasedOrPaid": "Esta cuota todavía no fue liberada.",
       "statusChanged": "El estado de esta cuota fue cambiado por otro usuario. Actualice la página."
     },
     "releaseConfirm": {
@@ -4015,6 +4024,11 @@
       "header": "Marcar cuota como pagada",
       "message": "¿Confirma que la cuota nº {number} fue pagada?",
       "success": "Cuota marcada como pagada con éxito."
+    },
+    "resendNotificationConfirm": {
+      "header": "Reenviar notificación",
+      "message": "¿Confirma el reenvío del correo de orden de pago de la cuota nº {number} a los destinatarios configurados?",
+      "success": "Notificación reenviada con éxito."
     }
   },
   "measurements": {

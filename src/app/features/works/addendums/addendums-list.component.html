@@ -10,6 +10,14 @@
   <button
     pButton
     type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+  <button
+    pButton
+    type="button"
     (click)="goNew()"
     icon="pi pi-plus"
     tooltipPosition="top"
@@ -305,6 +313,23 @@
                 [pTooltip]="
                   (row.canDecide ? 'addendums.action.reject' : 'addendums.action.noPermission')
                     | translate
+                "
+                tooltipPosition="top"
+              ></button>
+            </div>
+          } @else if (isApproved(row)) {
+            <div class="table-actions">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-envelope"
+                (click)="confirmResendNotification(row)"
+                class="p-button-text p-button-sm"
+                [disabled]="!canResendNotification(row)"
+                [pTooltip]="
+                  canResendNotification(row)
+                    ? ('addendums.action.resendNotification' | translate)
+                    : (resendNotificationDisabledReason(row) | translate)
                 "
                 tooltipPosition="top"
               ></button>

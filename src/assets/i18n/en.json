@@ -3956,9 +3956,11 @@
     "action": {
       "approve": "Approve",
       "reject": "Reject",
+      "resendNotification": "Resend e-mail notification",
       "noPermission": "You do not have permission to decide this addendum.",
       "alreadyDecided": "This addendum was already decided by another user. Refresh the page.",
-      "requiresSubmittableWork": "The service front must be planned or in progress to request a new addendum."
+      "requiresSubmittableWork": "The service front must be planned or in progress to request a new addendum.",
+      "requiresApproved": "This addendum has not been approved yet."
     },
     "approveConfirm": {
       "header": "Approve addendum",
@@ -3969,6 +3971,11 @@
       "header": "Reject addendum",
       "message": "Confirm rejection of the {amount} addendum?",
       "success": "Addendum rejected successfully."
+    },
+    "resendNotificationConfirm": {
+      "header": "Resend notification",
+      "message": "Confirm resending the approved addendum e-mail to the configured recipients?",
+      "success": "Notification resent successfully."
     }
   },
   "installments": {
@@ -4001,9 +4008,11 @@
     "action": {
       "release": "Release",
       "markPaid": "Mark as paid",
+      "resendNotification": "Resend e-mail notification",
       "noPermission": "You do not have permission for this action.",
       "requiresMeasurementApproved": "This installment was already released or paid.",
       "requiresReleased": "Requires a released installment to mark as paid.",
+      "requiresReleasedOrPaid": "This installment has not been released yet.",
       "statusChanged": "This installment's status was changed by another user. Refresh the page."
     },
     "releaseConfirm": {
@@ -4015,6 +4024,11 @@
       "header": "Mark installment as paid",
       "message": "Confirm installment #{number} was paid?",
       "success": "Installment marked as paid successfully."
+    },
+    "resendNotificationConfirm": {
+      "header": "Resend notification",
+      "message": "Confirm resending the payment order e-mail for installment #{number} to the configured recipients?",
+      "success": "Notification resent successfully."
     }
   },
   "measurements": {

@@ -135,6 +135,10 @@ export class MeasurementsListComponent implements OnInit {
     return measurementStatusTone(status);
   }
 
+  refresh(): void {
+    this.facade.loadByWork(this.workId());
+  }
+
   isPending(row: MeasurementModel): boolean {
     return row.status === MeasurementStatusEnum.PENDING;
   }
