@@ -3911,6 +3911,7 @@
       "justification": "Justificativa",
       "tier": "Alçada",
       "status": "Status",
+      "approvedBy": "Aprovado por",
       "createdAt": "Solicitado em",
       "decisionDate": "Decisão em"
     },

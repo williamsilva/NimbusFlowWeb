@@ -1,4 +1,5 @@
 import { PeriodEnum } from '@models/enums/period.enum';
+import { UserMinimalModel } from '@models/user-minimal.models';
 import { AddendumStatusEnum } from '@models/enums/addendum-status.enum';
 
 /** Espelha com.nimbusflow.works.dto.response.ApprovalRangeResponse - faixa de Configurações >
@@ -27,6 +28,9 @@ export interface AddendumModel {
   approvalRanges: ApprovalRangeModel[];
   requestedById: string;
   approvedById: string | null;
+  /** Nome/username de approvedById, resolvido pelo backend (UserDirectoryService) - null
+   *  enquanto pendente ou se o NimbusAuth não puder ser consultado. */
+  approvedBy: UserMinimalModel | null;
   decisionDate: string | null;
   decisionNote: string | null;
   supersedesId: string | null;
