@@ -277,7 +277,8 @@
       </div>
     }
 
-    <!-- Destinatários de chargeback -->
+    <!-- Listas de destinatários de notificação - uma por evento de negócio (pagamento liberado /
+         aditivo aprovado), pra quem acompanha um não ser necessariamente notificado do outro. -->
     <p-divider></p-divider>
     <div class="flex align-items-center gap-2 mb-2">
       <span class="text-base font-semibold">{{
@@ -292,15 +293,36 @@
             pTextarea
             class="w-full"
             style="resize: vertical"
-            id="chargebackRecipients"
-            formControlName="chargebackRecipients"
+            id="paymentRecipients"
+            formControlName="paymentRecipients"
           ></textarea>
-          <label for="chargebackRecipients">
-            {{ 'email.settings.chargebackRecipients' | translate }}
+          <label for="paymentRecipients">
+            {{ 'email.settings.paymentRecipients' | translate }}
             <i
               tooltipPosition="top"
               style="pointer-events: auto"
-              [pTooltip]="'email.settings.chargebackRecipientsHint' | translate"
+              [pTooltip]="'email.settings.paymentRecipientsHint' | translate"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea
+            rows="3"
+            pTextarea
+            class="w-full"
+            style="resize: vertical"
+            id="addendumRecipients"
+            formControlName="addendumRecipients"
+          ></textarea>
+          <label for="addendumRecipients">
+            {{ 'email.settings.addendumRecipients' | translate }}
+            <i
+              tooltipPosition="top"
+              style="pointer-events: auto"
+              [pTooltip]="'email.settings.addendumRecipientsHint' | translate"
               class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
             ></i>
           </label>
