@@ -2876,6 +2876,10 @@
     }
   },
   "common": {
+    "sitePlanPicker": {
+      "noPlan": "Todavía no hay una planta cargada para este proyecto.",
+      "hint": "Haga clic en la imagen para marcar la posición."
+    },
     "filters": {
       "final": "Valor final",
       "initial": "Valor inicial"
@@ -3776,7 +3780,8 @@
       "periodExpectedEndDate": "Período del fin previsto",
       "actualEndDate": "Fin real",
       "initialAmount": "Monto inicial",
-      "totalAmount": "Monto total"
+      "totalAmount": "Monto total",
+      "planPosition": "Posición en la planta del proyecto"
     },
     "columns": {
       "name": "Nombre",
@@ -3872,7 +3877,8 @@
       "totalContractedAmount": "Monto contratado",
       "totalPaidAmount": "Monto pagado",
       "remainingAmount": "Monto restante",
-      "progress": "Progreso"
+      "progress": "Progreso",
+      "sitePlan": "Planta del emprendimiento"
     },
     "columns": {
       "name": "Nombre",
@@ -3894,7 +3900,10 @@
       "invalid": "Revise los campos resaltados antes de guardar.",
       "created": "Proyecto creado con éxito.",
       "updated": "Proyecto actualizado con éxito.",
-      "saveError": "No se pudo guardar el proyecto. Intente nuevamente."
+      "saveError": "No se pudo guardar el proyecto. Intente nuevamente.",
+      "uploadSitePlan": "Enviar planta",
+      "sitePlanUpdated": "Planta enviada con éxito.",
+      "sitePlanSaveError": "No se pudo enviar la planta. Intente nuevamente."
     },
     "empty": {
       "title": "Ningún proyecto encontrado"
@@ -3948,7 +3957,8 @@
       "approve": "Aprobar",
       "reject": "Rechazar",
       "noPermission": "No tiene permiso para decidir este adicional.",
-      "alreadyDecided": "Este adicional ya fue decidido por otro usuario. Actualice la página."
+      "alreadyDecided": "Este adicional ya fue decidido por otro usuario. Actualice la página.",
+      "requiresSubmittableWork": "La frente de servicio debe estar planificada o en curso para solicitar un nuevo adicional."
     },
     "approveConfirm": {
       "header": "Aprobar adicional",

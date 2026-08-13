@@ -13,10 +13,10 @@
     (click)="goNew()"
     icon="pi pi-plus"
     tooltipPosition="top"
-    [disabled]="!policy.canCreate()"
+    [disabled]="!canCreate()"
     class="p-button-info p-button-sm"
     [label]="'addendums.new.title' | translate"
-    [pTooltip]="!policy.canCreate() ? ('addendums.action.noPermission' | translate) : ''"
+    [pTooltip]="!canCreate() ? (createDisabledReason() | translate) : ''"
   ></button>
 </cs-page-header>
 
@@ -44,16 +44,16 @@
     class="cs-admin-table"
     [stateKey]="tableStateKey()"
     [showCurrentPageReport]="true"
-    [paginatorDropdownAppendTo]="'body'"
     [rowsPerPageOptions]="[10, 20, 50]"
+    [paginatorDropdownAppendTo]="'body'"
     [tableStyle]="{ width: '100%', 'min-width': '52rem' }"
     [currentPageReportTemplate]="'pagination.report' | translate"
   >
     <ng-template pTemplate="colgroup">
       <colgroup>
-        <col style="width: 140px" />
         <col style="width: auto" />
-        <col style="width: 160px" />
+        <col style="width: 140px" />
+        <col style="width: 200px" />
         <col style="width: 110px" />
         <col style="width: 150px" />
         <col style="width: 150px" />
@@ -64,6 +64,31 @@
 
     <ng-template pTemplate="header">
       <tr>
+        <th pSortableColumn="justification">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'addendums.columns.justification' | translate"
+              >{{ 'addendums.columns.justification' | translate }}</span
+            >
+            <span class="th-icons">
+              <p-sortIcon field="justification"></p-sortIcon>
+              <p-columnFilter
+                type="text"
+                display="menu"
+                class="ml-auto"
+                matchMode="contains"
+                field="justification"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
+        </th>
+
         <th pSortableColumn="amount">
           <div class="th-flex text-center">
             <span
@@ -92,31 +117,6 @@
                   ></cs-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
-            </span>
-          </div>
-        </th>
-
-        <th pSortableColumn="justification">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'addendums.columns.justification' | translate"
-              >{{ 'addendums.columns.justification' | translate }}</span
-            >
-            <span class="th-icons">
-              <p-sortIcon field="justification"></p-sortIcon>
-              <p-columnFilter
-                type="text"
-                display="menu"
-                class="ml-auto"
-                matchMode="contains"
-                field="justification"
-                [useGrouping]="false"
-                [showOperator]="false"
-                [showAddButton]="false"
-                styleClass="cs-colfilter"
-              ></p-columnFilter>
             </span>
           </div>
         </th>
@@ -246,7 +246,6 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td class="text-right">{{ row.amount | csCurrency }}</td>
         <td>
           <span
             tooltipPosition="top"
@@ -255,6 +254,7 @@
             >{{ row.justification }}</span
           >
         </td>
+        <td class="text-right">{{ row.amount | csCurrency }}</td>
         <td class="text-center">
           <span
             class="cs-table-cell-ellipsis"

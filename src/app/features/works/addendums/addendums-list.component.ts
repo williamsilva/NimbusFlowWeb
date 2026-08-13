@@ -27,10 +27,19 @@ import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge
 import { CsCurrencyRangeFilterComponent } from '@features/list-base/cs-currency-range-filter.component';
 import { AddendumModel } from '@models/addendums.models';
 import { WorkModel } from '@models/works.models';
+import { WorkStatusEnum } from '@models/enums/work-status.enum';
 import { ADDENDUM_STATUS_VALUES, AddendumStatusEnum, addendumStatusTone } from '@models/enums/addendum-status.enum';
 import { AddendumsCreateDialogComponent } from '@features/works/addendums/addendums-create-dialog.component';
 import { formatApprovalRanges } from '@features/works/addendums/addendums-approval-range.util';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
+
+/** Espelha AddendumApprovalService.SUBMITTABLE_WORK_STATUSES - mesma checagem preventiva já
+ *  usada em MeasurementsListComponent, faltando aqui (o backend já bloqueava, só não avisava
+ *  antes de tentar). */
+const SUBMITTABLE_WORK_STATUSES = new Set<WorkStatusEnum>([
+  WorkStatusEnum.PLANNED,
+  WorkStatusEnum.IN_PROGRESS,
+]);
 
 @Component({
   standalone: true,
@@ -81,6 +90,20 @@ export class AddendumsListComponent implements OnInit {
     }));
   });
 
+  readonly canCreate = computed(() => {
+    const work = this.work();
+    return this.policy.canCreate() && !!work && SUBMITTABLE_WORK_STATUSES.has(work.status);
+  });
+
+  readonly createDisabledReason = computed<string | null>(() => {
+    if (!this.policy.canCreate()) return this.policy.createDisabledReason();
+    const work = this.work();
+    if (!work || !SUBMITTABLE_WORK_STATUSES.has(work.status)) {
+      return 'addendums.action.requiresSubmittableWork';
+    }
+    return null;
+  });
+
   tableStateKey(): string {
     return STATE_KEY.NIMBUSFLOW.WORKS.ADDENDUMS.TABLE.STATE.V1;
   }
@@ -117,7 +140,7 @@ export class AddendumsListComponent implements OnInit {
   }
 
   goNew(): void {
-    if (!this.policy.canCreate()) return;
+    if (!this.canCreate()) return;
     this.upsertVisible.set(true);
   }
 
