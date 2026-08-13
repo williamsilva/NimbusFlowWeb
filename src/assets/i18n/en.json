@@ -1867,7 +1867,14 @@
       "permissions": "Permissions"
     },
     "button": {
-      "changePassword": "Change password"
+      "changePassword": "Change password",
+      "enablePush": "Enable notifications on this device",
+      "disablePush": "Disable notifications on this device"
+    },
+    "push": {
+      "unsupported": "Push notifications are not supported in this browser.",
+      "enabled": "Notifications enabled on this device.",
+      "error": "Could not enable notifications. Please try again."
     },
     "fallback": {
       "noName": "User without name",
