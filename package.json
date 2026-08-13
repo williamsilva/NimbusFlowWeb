@@ -12,7 +12,9 @@
     "dev": "npm run validate:i18n && concurrently -k \"ng serve\" \"npm run validate:i18n:watch\"",
     "build:checked": "npm run validate:i18n && npm run build",
     "build:pages": "npm run validate:i18n && ng build --configuration production",
-    "pages:preview": "npx wrangler pages dev dist/nimbusflow/browser"
+    "pages:preview": "npx wrangler pages dev dist/nimbusflow/browser",
+    "build:pwa-local": "ng build --configuration pwaLocal",
+    "pwa-local:preview": "npm run build:pwa-local && npx serve -s dist/nimbusflow/browser -l 4201"
   },
   "prettier": {
     "printWidth": 100,
