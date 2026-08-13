@@ -17,6 +17,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { WorksFacade } from '@features/facade/works.facade';
+import { ProjectsFacade } from '@features/facade/projects.facade';
 import { STATE_KEY } from '@features/state-key.constants';
 import { MeasurementsFacade } from '@features/facade/measurements.facade';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
@@ -66,12 +67,19 @@ export class MeasurementsListComponent implements OnInit {
   readonly facade = inject(MeasurementsFacade);
   readonly policy = inject(MeasurementsPermissionPolicy);
   private readonly worksFacade = inject(WorksFacade);
+  private readonly projectsFacade = inject(ProjectsFacade);
   private readonly toast = inject(MessageService);
   private readonly confirm = inject(ConfirmationService);
 
   readonly workId = signal('');
   readonly work = signal<WorkModel | null>(null);
   readonly upsertVisible = signal(false);
+
+  /** Planta do Projeto da obra - mesmo Projeto já carregado em ProjectsFacade pro dropdown de
+   *  Work, sem chamada extra (ver cs-site-plan-picker no diálogo de nova medição). */
+  readonly siteplanUrl = computed(
+    () => this.projectsFacade.items().find((p) => p.id === this.work()?.projectId)?.siteplanUrl ?? null,
+  );
 
   readonly items = computed<MeasurementModel[]>(() => this.facade.items());
   readonly loading = computed(() => this.facade.loading());
@@ -111,6 +119,7 @@ export class MeasurementsListComponent implements OnInit {
     }
 
     this.workId.set(workId);
+    this.projectsFacade.loadAll();
     this.worksFacade
       .getById(workId)
       .pipe(takeUntilDestroyed(this.destroyRef))

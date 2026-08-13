@@ -4030,7 +4030,9 @@
       "amountToPay": "Amount to pay",
       "dueDate": "Due date",
       "periodDueDate": "Due date period",
-      "files": "Photos/videos"
+      "files": "Photos/videos",
+      "planPosition": "Position on the project's site plan",
+      "deviceLocation": "Device location"
     },
     "columns": {
       "work": "Service front",
@@ -4056,7 +4058,9 @@
       "created": "Measurement submitted successfully.",
       "saveError": "Could not submit the measurement. Please try again.",
       "exceedsRemaining": "The amount to pay cannot be greater than the service front's remaining amount.",
-      "remainingHint": "Service front's remaining amount"
+      "remainingHint": "Service front's remaining amount",
+      "locationUnsupported": "Your browser does not support location capture.",
+      "locationError": "Could not capture location. Check the browser permission."
     },
     "empty": {
       "title": "No measurements found"
@@ -4065,6 +4069,7 @@
       "approve": "Approve",
       "reject": "Reject",
       "addFile": "Add file",
+      "captureLocation": "Capture location",
       "installmentGenerated": "Payment order generated",
       "noPermission": "You do not have permission to decide this measurement.",
       "alreadyDecided": "This measurement was already decided by another user. Refresh the page.",

@@ -4030,7 +4030,9 @@
       "amountToPay": "Monto a pagar",
       "dueDate": "Vencimiento",
       "periodDueDate": "Período del vencimiento",
-      "files": "Fotos/videos"
+      "files": "Fotos/videos",
+      "planPosition": "Posición en la planta del proyecto",
+      "deviceLocation": "Ubicación del dispositivo"
     },
     "columns": {
       "work": "Frente de servicio",
@@ -4056,7 +4058,9 @@
       "created": "Medición enviada con éxito.",
       "saveError": "No se pudo enviar la medición. Intente nuevamente.",
       "exceedsRemaining": "El valor a pagar no puede ser mayor que el valor restante de la frente de servicio.",
-      "remainingHint": "Valor restante de la frente de servicio"
+      "remainingHint": "Valor restante de la frente de servicio",
+      "locationUnsupported": "Su navegador no soporta la captura de ubicación.",
+      "locationError": "No se pudo capturar la ubicación. Verifique el permiso del navegador."
     },
     "empty": {
       "title": "Ninguna medición encontrada"
@@ -4065,6 +4069,7 @@
       "approve": "Aprobar",
       "reject": "Reprobar",
       "addFile": "Agregar archivo",
+      "captureLocation": "Capturar ubicación",
       "installmentGenerated": "Orden de pago generada",
       "noPermission": "No tiene permiso para decidir esta medición.",
       "alreadyDecided": "Esta medición ya fue decidida por otro usuario. Actualice la página.",

@@ -1,6 +1,6 @@
 
 import { computed, DestroyRef } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { input, signal, Output, inject, Component, EventEmitter, effect } from '@angular/core';
 
@@ -20,6 +20,7 @@ import { WorksFacade } from '@features/facade/works.facade';
 import { SuppliersFacade } from '@features/facade/suppliers.facade';
 import { ProjectsFacade } from '@features/facade/projects.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
+import { SitePlanPickerComponent } from '@shared/features/site-plan-picker/site-plan-picker.component';
 import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
 import { WORK_STATUS_VALUES, WorkStatusEnum } from '@models/enums/work-status.enum';
 import { WorkModel, WorkUpsertInput } from '@models/works.models';
@@ -55,6 +56,7 @@ function fromDateOnlyString(value: string | null | undefined): Date | null {
     FloatLabelModule,
     InputNumberModule,
     ErrorMsgComponent,
+    SitePlanPickerComponent,
     ReactiveFormsModule,
   ],
 })
@@ -105,7 +107,18 @@ export class WorksCreateDialogComponent {
     actualEndDate: this.fb.control<Date | null>(null),
     initialAmount: this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)]),
     status: this.fb.control<WorkStatusEnum | null>(null),
+    planPositionX: this.fb.control<number | null>(null),
+    planPositionY: this.fb.control<number | null>(null),
   });
+
+  /** Planta do Projeto selecionado no form - reativo ao trocar de projeto no seletor (mesmo
+   *  projeto já carregado em projectsFacade.items() pro dropdown, sem chamada extra). */
+  private readonly selectedProjectId = toSignal(this.form.controls.projectId.valueChanges, {
+    initialValue: this.form.controls.projectId.value,
+  });
+  readonly selectedProjectSiteplanUrl = computed(
+    () => this.projectsFacade.items().find((p) => p.id === this.selectedProjectId())?.siteplanUrl ?? null,
+  );
 
   constructor() {
     this.suppliersFacade.loadSupplierOptions();
@@ -140,6 +153,8 @@ export class WorksCreateDialogComponent {
         actualEndDate: fromDateOnlyString(work.actualEndDate),
         initialAmount: work.initialAmount,
         status: work.status,
+        planPositionX: work.planPositionX,
+        planPositionY: work.planPositionY,
       });
     });
   }
@@ -167,7 +182,13 @@ export class WorksCreateDialogComponent {
       actualEndDate: null,
       initialAmount: null,
       status: null,
+      planPositionX: null,
+      planPositionY: null,
     });
+  }
+
+  onPlanPositionChange(position: { x: number; y: number }): void {
+    this.form.patchValue({ planPositionX: position.x, planPositionY: position.y });
   }
 
   save(): void {
@@ -194,6 +215,8 @@ export class WorksCreateDialogComponent {
       actualEndDate: toDateOnlyString(v.actualEndDate),
       initialAmount: v.initialAmount!,
       status: v.status,
+      planPositionX: v.planPositionX,
+      planPositionY: v.planPositionY,
     };
 
     this.saving.set(true);

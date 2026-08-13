@@ -32,6 +32,12 @@ export interface MeasurementModel {
   /** Preenchido só quando status = APPROVED - id da Parcela (ordem de pagamento) gerada. */
   generatedInstallmentId: string | null;
   media: MeasurementMediaModel[];
+  /** Ponto relativo (0-100%) na planta do Projeto da obra - ver WorkModel.planPositionX/Y. */
+  planPositionX: number | null;
+  planPositionY: number | null;
+  /** Geolocalização real do dispositivo capturada no envio (navigator.geolocation) - opcional. */
+  deviceLatitude: number | null;
+  deviceLongitude: number | null;
   createdAt: string | null;
   updatedAt: string | null;
 }
@@ -63,6 +69,10 @@ export interface MeasurementSubmitInput {
   dueDate: string;
   supersedesId: string | null;
   files: File[];
+  planPositionX: number | null;
+  planPositionY: number | null;
+  deviceLatitude: number | null;
+  deviceLongitude: number | null;
 }
 
 export interface MeasurementDecisionInput {

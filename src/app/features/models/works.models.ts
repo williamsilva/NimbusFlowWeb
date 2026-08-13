@@ -33,6 +33,10 @@ export interface WorkModel {
   /** Soma das Parcelas com status PAID dividida por totalAmount, em percentual (0 quando ainda não houve pagamento). */
   progressPercentage: number;
   status: WorkStatusEnum;
+  /** Ponto relativo (0-100%) na planta do Projeto (ProjectModel.siteplanUrl) - nulo se ninguém
+   *  marcou ainda ou se o Projeto não tem planta cadastrada. */
+  planPositionX: number | null;
+  planPositionY: number | null;
   createdAt: string | null;
   updatedAt: string | null;
 }
@@ -48,6 +52,8 @@ export interface WorkUpsertInput {
   actualEndDate: string | null;
   initialAmount: number;
   status: WorkStatusEnum | null;
+  planPositionX: number | null;
+  planPositionY: number | null;
 }
 
 export type WorksFiltersState = {

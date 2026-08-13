@@ -19,6 +19,10 @@ export interface ProjectModel {
   progressPercentage: number;
   startDate: string | null;
   expectedEndDate: string | null;
+  /** URL assinada e temporária da planta/imagem do empreendimento - nulo até alguém enviar uma
+   *  (ver ProjectsApiService.uploadSitePlan). Frente de Serviço/Medição marcam um ponto (x/y)
+   *  relativo a esta imagem, ver WorkModel.planPositionX/Y. */
+  siteplanUrl: string | null;
   createdAt: string | null;
   updatedAt: string | null;
 }

@@ -1,0 +1,26 @@
+@if (imageUrl()) {
+  <div class="site-plan-picker">
+    <div
+      #container
+      class="site-plan-picker__container"
+      [class.site-plan-picker__container--clickable]="!readonly()"
+      (click)="onImageClick($event)"
+    >
+      <img [src]="imageUrl()" class="site-plan-picker__image" alt="" />
+      @if (hasPin()) {
+        <div
+          class="site-plan-picker__pin pi pi-map-marker"
+          [style.left.%]="x()"
+          [style.top.%]="y()"
+        ></div>
+      }
+    </div>
+    @if (!readonly()) {
+      <small class="text-color-secondary">{{ 'common.sitePlanPicker.hint' | translate }}</small>
+    }
+  </div>
+} @else {
+  <div class="site-plan-picker__empty text-color-secondary text-sm">
+    {{ 'common.sitePlanPicker.noPlan' | translate }}
+  </div>
+}
