@@ -1,7 +1,11 @@
-<cs-page-header [breadcrumb]="[
+<cs-page-header
+  [subtitle]="'projects.subtitle' | translate"
+  [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
     { label: ('breadcrumb.projects' | translate) },
-  ]" [compact]="false">
+  ]"
+  [compact]="false"
+>
   <button
     pButton
     type="button"
@@ -30,28 +34,97 @@
   (visibleChange)="onUpsertVisibleChange($event)"
 ></app-projects-upsert-dialog>
 
+<cs-filters-panel
+  [collapsed]="true"
+  (clear)="clear()"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeFilterGroups]="activeFilterGroups()"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="name"
+          pInputText
+          [value]="name()"
+          class="w-full p-inputtext-sm"
+          (input)="name.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="name">{{ 'projects.fields.name' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-4 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="status"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="status()"
+          [showToggleAll]="false"
+          [options]="statusOptions()"
+          (ngModelChange)="status.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="status">{{ 'projects.fields.status' | translate }}</label>
+      </p-floatLabel>
+    </div>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-6 p-2">
+      <cs-currency-range-filter
+        [inputId]="'totalContractedAmount'"
+        [label]="'projects.fields.totalContractedAmount' | translate"
+        [value]="{ start: totalContractedAmountFrom(), end: totalContractedAmountTo() }"
+        (valueChange)="totalContractedAmountFrom.set($event.start); totalContractedAmountTo.set($event.end)"
+      ></cs-currency-range-filter>
+    </div>
+  </div>
+</cs-filters-panel>
+
 <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
   <p-table
+    #dt
     stripedRows
     dataKey="id"
     size="small"
+    [rows]="rows"
+    [lazy]="true"
     showGridlines
     [rowHover]="true"
-    sortMode="multiple"
-    class="cs-admin-table"
     [value]="items()"
+    [paginator]="true"
+    sortMode="multiple"
+    filterDisplay="menu"
+    stateStorage="local"
+    class="cs-admin-table"
     [loading]="loading()"
+    [stateKey]="tableStateKey()"
+    [showCurrentPageReport]="true"
+    [totalRecords]="totalRecords()"
+    (onLazyLoad)="onLazyLoad($event)"
+    [paginatorDropdownAppendTo]="'body'"
+    (onPage)="onPageChange($event)"
+    [rowsPerPageOptions]="rowsPerPageOptions"
     [tableStyle]="{ width: '100%', 'min-width': '72rem' }"
+    [currentPageReportTemplate]="'pagination.report' | translate"
   >
     <ng-template pTemplate="colgroup">
       <colgroup>
         <col style="width: auto" />
-        <col style="width: 90px" />
+        <col style="width: 130px" />
+        <col style="width: 150px" />
+        <col style="width: 150px" />
+        <col style="width: 150px" />
         <col style="width: 130px" />
         <col style="width: 130px" />
-        <col style="width: 130px" />
-        <col style="width: 110px" />
-        <col style="width: 110px" />
         <col style="width: 90px" />
       </colgroup>
     </ng-template>
@@ -61,45 +134,194 @@
         <th pSortableColumn="name">
           <div class="th-flex text-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.name' | translate">{{ 'projects.columns.name' | translate }}</span>
-            <p-sortIcon field="name"></p-sortIcon>
+            <span class="th-icons">
+              <p-sortIcon field="name"></p-sortIcon>
+              <p-columnFilter
+                type="text"
+                display="menu"
+                class="ml-auto"
+                field="name"
+                matchMode="contains"
+                [useGrouping]="false"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
           </div>
         </th>
+
         <th pSortableColumn="serviceFrontsCount" class="text-center">
           <div class="th-flex text-center justify-content-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.serviceFrontsCount' | translate">{{ 'projects.columns.serviceFrontsCount' | translate }}</span>
-            <p-sortIcon field="serviceFrontsCount"></p-sortIcon>
+            <span class="th-icons">
+              <p-sortIcon field="serviceFrontsCount"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="serviceFrontsCount"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [mask]="'decimal'"
+                    [minFractionDigits]="0"
+                    [maxFractionDigits]="0"
+                    [inputId]="'serviceFrontsCountCol'"
+                    [label]="'projects.columns.serviceFrontsCount' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
           </div>
         </th>
+
         <th pSortableColumn="totalContractedAmount">
           <div class="th-flex text-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.totalContractedAmount' | translate">{{ 'projects.columns.totalContractedAmount' | translate }}</span>
-            <p-sortIcon field="totalContractedAmount"></p-sortIcon>
+            <span class="th-icons">
+              <p-sortIcon field="totalContractedAmount"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="totalContractedAmount"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [inputId]="'totalContractedAmountCol'"
+                    [label]="'projects.columns.totalContractedAmount' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
           </div>
         </th>
+
         <th pSortableColumn="totalPaidAmount">
           <div class="th-flex text-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.totalPaidAmount' | translate">{{ 'projects.columns.totalPaidAmount' | translate }}</span>
-            <p-sortIcon field="totalPaidAmount"></p-sortIcon>
+            <span class="th-icons">
+              <p-sortIcon field="totalPaidAmount"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="totalPaidAmount"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [inputId]="'totalPaidAmountCol'"
+                    [label]="'projects.columns.totalPaidAmount' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
           </div>
         </th>
+
         <th pSortableColumn="remainingAmount">
           <div class="th-flex text-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.remainingAmount' | translate">{{ 'projects.columns.remainingAmount' | translate }}</span>
-            <p-sortIcon field="remainingAmount"></p-sortIcon>
+            <span class="th-icons">
+              <p-sortIcon field="remainingAmount"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="remainingAmount"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [inputId]="'remainingAmountCol'"
+                    [label]="'projects.columns.remainingAmount' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
           </div>
         </th>
+
         <th pSortableColumn="progressPercentage" class="text-center">
           <div class="th-flex text-center justify-content-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.progress' | translate">{{ 'projects.columns.progress' | translate }}</span>
-            <p-sortIcon field="progressPercentage"></p-sortIcon>
+            <span class="th-icons">
+              <p-sortIcon field="progressPercentage"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="progressPercentage"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [mask]="'percent'"
+                    [inputId]="'progressPercentageCol'"
+                    [label]="'projects.columns.progress' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
           </div>
         </th>
+
         <th pSortableColumn="status" class="text-center">
           <div class="th-flex text-center justify-content-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.status' | translate">{{ 'projects.columns.status' | translate }}</span>
-            <p-sortIcon field="status"></p-sortIcon>
+            <span class="th-icons">
+              <p-sortIcon field="status"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="status"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="statusOptions()"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
           </div>
         </th>
+
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>

@@ -3850,6 +3850,7 @@
     }
   },
   "projects": {
+    "subtitle": "Gerencie o cadastro de projetos",
     "new": {
       "title": "Novo projeto"
     },
@@ -3859,7 +3860,12 @@
     "fields": {
       "name": "Nome",
       "description": "Descrição",
-      "status": "Status"
+      "status": "Status",
+      "serviceFrontsCount": "Nº frentes",
+      "totalContractedAmount": "Valor contratado",
+      "totalPaidAmount": "Valor pago",
+      "remainingAmount": "Valor restante",
+      "progress": "Progresso"
     },
     "columns": {
       "name": "Nome",
