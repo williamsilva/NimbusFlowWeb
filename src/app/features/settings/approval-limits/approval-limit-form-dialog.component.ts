@@ -74,6 +74,18 @@ export class ApprovalLimitFormDialogComponent {
       });
     });
 
+    // maxAmount desabilita via FormControl (não [disabled] no template) - ligar os dois causa o
+    // warning do Angular "disabled attribute with a reactive form directive". form.reset() acima
+    // sempre reabilita os controles, por isso este effect roda depois (mesma ordem de leitura de
+    // signals) e aplica o estado certo de volta.
+    effect(() => {
+      if (this.unbounded()) {
+        this.form.controls.maxAmount.disable();
+      } else {
+        this.form.controls.maxAmount.enable();
+      }
+    });
+
     this.form.controls.userIds.setValidators([]);
   }
 
