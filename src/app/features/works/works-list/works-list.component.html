@@ -602,12 +602,12 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td>
+        <td class="mobile-card-title">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{
             row.name
           }}</span>
         </td>
-        <td>
+        <td [attr.data-label]="'works.columns.supplier' | translate">
           <span
             tooltipPosition="top"
             [pTooltip]="row.supplierName"
@@ -615,26 +615,26 @@
             >{{ row.supplierName }}</span
           >
         </td>
-        <td>
+        <td [attr.data-label]="'works.columns.project' | translate">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.projectName">{{
             row.projectName
           }}</span>
         </td>
-        <td class="text-center">
+        <td class="text-center" [attr.data-label]="'works.columns.status' | translate">
           <cs-status-badge
             [tone]="tone(row.status)"
             [label]="'works.status.' + row.status | translate"
           ></cs-status-badge>
         </td>
-        <td class="text-center">{{ row.startDate | csDate: 'date' }}</td>
-        <td class="text-center">{{ row.expectedEndDate | csDate: 'date' }}</td>
-        <td class="text-right">{{ row.initialAmount | csCurrency }}</td>
-        <td class="text-center">{{ row.addendumsCount }}</td>
-        <td class="text-right">{{ row.addendumsAmount | csCurrency }}</td>
-        <td class="text-right">{{ row.totalAmount | csCurrency }}</td>
-        <td class="text-center">{{ row.installmentsCount }}</td>
-        <td class="text-right">{{ row.remainingAmount | csCurrency }}</td>
-        <td class="text-center">
+        <td class="text-center" [attr.data-label]="'works.columns.startDate' | translate">{{ row.startDate | csDate: 'date' }}</td>
+        <td class="text-center" [attr.data-label]="'works.columns.expectedEndDate' | translate">{{ row.expectedEndDate | csDate: 'date' }}</td>
+        <td class="text-right" [attr.data-label]="'works.columns.initialAmount' | translate">{{ row.initialAmount | csCurrency }}</td>
+        <td class="text-center" [attr.data-label]="'works.columns.addendumsCount' | translate">{{ row.addendumsCount }}</td>
+        <td class="text-right" [attr.data-label]="'works.columns.addendumsAmount' | translate">{{ row.addendumsAmount | csCurrency }}</td>
+        <td class="text-right" [attr.data-label]="'works.columns.totalAmount' | translate">{{ row.totalAmount | csCurrency }}</td>
+        <td class="text-center" [attr.data-label]="'works.columns.installmentsCount' | translate">{{ row.installmentsCount }}</td>
+        <td class="text-right" [attr.data-label]="'works.columns.remainingAmount' | translate">{{ row.remainingAmount | csCurrency }}</td>
+        <td class="text-center" [attr.data-label]="'works.columns.progress' | translate">
           <div class="flex align-items-center gap-2">
             <p-progressBar
               [showValue]="false"
@@ -644,7 +644,7 @@
             <small>{{ row.progressPercentage | number: '1.0-2' }}%</small>
           </div>
         </td>
-        <td class="text-center">
+        <td class="text-center mobile-card-actions">
           <div class="table-actions">
             <button
               pButton
