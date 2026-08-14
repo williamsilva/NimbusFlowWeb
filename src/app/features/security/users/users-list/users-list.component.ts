@@ -62,6 +62,7 @@ import {
   standalone: true,
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
+  styleUrl: './users-list.component.scss',
   imports: [
     FloatLabel,
     CsDatePipe,

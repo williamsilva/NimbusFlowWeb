@@ -374,23 +374,23 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td>
+        <td class="mobile-card-title">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{
             row.name
           }}</span>
         </td>
-        <td class="text-center">{{ row.serviceFrontsCount }}</td>
-        <td class="text-right">{{ row.totalContractedAmount | csCurrency }}</td>
-        <td class="text-right">{{ row.totalPaidAmount | csCurrency }}</td>
-        <td class="text-right">{{ row.remainingAmount | csCurrency }}</td>
-        <td class="text-center">{{ row.progressPercentage | number: '1.0-2' }}%</td>
-        <td class="text-center">
+        <td class="text-center" [attr.data-label]="'projects.columns.serviceFrontsCount' | translate">{{ row.serviceFrontsCount }}</td>
+        <td class="text-right" [attr.data-label]="'projects.columns.totalContractedAmount' | translate">{{ row.totalContractedAmount | csCurrency }}</td>
+        <td class="text-right" [attr.data-label]="'projects.columns.totalPaidAmount' | translate">{{ row.totalPaidAmount | csCurrency }}</td>
+        <td class="text-right" [attr.data-label]="'projects.columns.remainingAmount' | translate">{{ row.remainingAmount | csCurrency }}</td>
+        <td class="text-center" [attr.data-label]="'projects.columns.progress' | translate">{{ row.progressPercentage | number: '1.0-2' }}%</td>
+        <td class="text-center" [attr.data-label]="'projects.columns.status' | translate">
           <cs-status-badge
             [tone]="tone(row.status)"
             [label]="'projects.status.' + row.status | translate"
           ></cs-status-badge>
         </td>
-        <td class="text-center">
+        <td class="text-center mobile-card-actions">
           <div class="table-actions">
             <button
               pButton

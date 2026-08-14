@@ -269,8 +269,8 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td class="text-center">{{ numberLabel(row) }}</td>
-        <td>
+        <td class="text-center mobile-card-title">{{ numberLabel(row) }}</td>
+        <td [attr.data-label]="'addendums.columns.justification' | translate">
           <span
             tooltipPosition="top"
             class="cs-table-cell-ellipsis"
@@ -278,8 +278,8 @@
             >{{ row.justification }}</span
           >
         </td>
-        <td class="text-right">{{ row.amount | csCurrency }}</td>
-        <td class="text-center">
+        <td class="text-right" [attr.data-label]="'addendums.columns.amount' | translate">{{ row.amount | csCurrency }}</td>
+        <td class="text-center" [attr.data-label]="'addendums.columns.tier' | translate">
           <span
             class="cs-table-cell-ellipsis"
             tooltipPosition="top"
@@ -287,13 +287,13 @@
             >{{ approvalRangeLabel(row) }}</span
           >
         </td>
-        <td class="text-center">
+        <td class="text-center" [attr.data-label]="'addendums.columns.status' | translate">
           <cs-status-badge
             [tone]="tone(row.status)"
             [label]="'addendums.status.' + row.status | translate"
           ></cs-status-badge>
         </td>
-        <td class="text-center">
+        <td class="text-center" [attr.data-label]="'addendums.columns.approvedBy' | translate">
           <span
             class="cs-table-cell-ellipsis"
             tooltipPosition="top"
@@ -301,9 +301,9 @@
             >{{ row.approvedBy?.name ?? '-' }}</span
           >
         </td>
-        <td class="text-center">{{ row.createdAt | csDate: 'datetime' }}</td>
-        <td class="text-center">{{ row.decisionDate | csDate: 'datetime' }}</td>
-        <td class="text-center">
+        <td class="text-center" [attr.data-label]="'addendums.columns.createdAt' | translate">{{ row.createdAt | csDate: 'datetime' }}</td>
+        <td class="text-center" [attr.data-label]="'addendums.columns.decisionDate' | translate">{{ row.decisionDate | csDate: 'datetime' }}</td>
+        <td class="text-center mobile-card-actions">
           <div class="table-actions">
             <button
               pButton

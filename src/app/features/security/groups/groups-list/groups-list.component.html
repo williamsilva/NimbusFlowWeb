@@ -310,18 +310,18 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td>
+        <td class="mobile-card-title">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{
             row.name
           }}</span>
         </td>
-        <td>
+        <td [attr.data-label]="'groups.columns.description' | translate">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.description">{{
             row.description
           }}</span>
         </td>
-        <td class="text-center">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
-        <td class="text-center">
+        <td class="text-center" [attr.data-label]="'groups.columns.createdAt' | translate">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
+        <td class="text-center" [attr.data-label]="'groups.columns.createdBy' | translate">
           <span
             class="cs-table-cell-ellipsis"
             tooltipPosition="top"
@@ -329,9 +329,9 @@
             >{{ row.createdBy?.name ?? '-' }}</span
           >
         </td>
-        <td class="text-center">{{ row.usersCount ?? '-' }}</td>
-        <td class="text-center">{{ row.permissionsCount ?? '-' }}</td>
-        <td class="text-center">
+        <td class="text-center" [attr.data-label]="'groups.columns.usersCount' | translate">{{ row.usersCount ?? '-' }}</td>
+        <td class="text-center" [attr.data-label]="'groups.columns.permissionsCount' | translate">{{ row.permissionsCount ?? '-' }}</td>
+        <td class="text-center mobile-card-actions">
           <div class="table-actions">
             <button
               pButton

@@ -46,6 +46,7 @@ const SUBMITTABLE_WORK_STATUSES = new Set<WorkStatusEnum>([
   standalone: true,
   selector: 'app-addendums-list',
   templateUrl: './addendums-list.component.html',
+  styleUrl: './addendums-list.component.scss',
   imports: [
     FormsModule,
     TableModule,

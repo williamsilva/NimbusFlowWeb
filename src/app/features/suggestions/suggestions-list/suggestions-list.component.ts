@@ -47,6 +47,7 @@ import {
   standalone: true,
   selector: 'app-suggestions-list',
   templateUrl: './suggestions-list.component.html',
+  styleUrl: './suggestions-list.component.scss',
   imports: [
     CsDatePipe,
     FloatLabel,

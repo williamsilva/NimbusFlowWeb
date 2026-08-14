@@ -1,0 +1,5 @@
+@use '../../../assets/styles/mobile-card-table' as mct;
+
+// Mobile: tabela vira lista de cards - ver mobile-card-table.scss pro que isso faz e por quê.
+// mobile-card-title/mobile-card-actions marcados manualmente no <td> certo, no HTML desta tela.
+@include mct.mobile-card-table;

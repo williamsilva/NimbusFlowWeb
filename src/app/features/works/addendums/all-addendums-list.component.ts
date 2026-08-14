@@ -54,6 +54,7 @@ import {
   standalone: true,
   selector: 'app-all-addendums-list',
   templateUrl: './all-addendums-list.component.html',
+  styleUrl: './all-addendums-list.component.scss',
   imports: [
     FloatLabel,
     CsDatePipe,

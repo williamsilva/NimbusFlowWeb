@@ -47,6 +47,7 @@ import {
   standalone: true,
   selector: 'app-suppliers-list',
   templateUrl: './suppliers-list.component.html',
+  styleUrl: './suppliers-list.component.scss',
   imports: [
     TaxIdPipe,
     PhonePipe,

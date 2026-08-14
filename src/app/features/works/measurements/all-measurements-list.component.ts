@@ -54,6 +54,7 @@ import { formatSequentialNumber } from '@shared/utils/br-format';
   standalone: true,
   selector: 'app-all-measurements-list',
   templateUrl: './all-measurements-list.component.html',
+  styleUrl: './all-measurements-list.component.scss',
   imports: [
     FloatLabel,
     DecimalPipe,
