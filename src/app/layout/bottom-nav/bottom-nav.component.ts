@@ -26,7 +26,10 @@ export class BottomNavComponent {
 
   readonly sidebarVisible = this.layout.sidebarVisible;
 
+  /** Alterna (não só abre) - senão tocar em "Mais" de novo pra fechar não faz nada, e o único
+   *  jeito de fechar vira tocar no fundo escurecido (ver layout.component.html), o que não é
+   *  óbvio pra quem espera o próprio botão fechar de volta. */
   openMore(): void {
-    this.layout.showSidebar();
+    this.layout.toggleSidebar();
   }
 }
