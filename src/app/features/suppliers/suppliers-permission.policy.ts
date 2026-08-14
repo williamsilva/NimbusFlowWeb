@@ -29,6 +29,10 @@ export class SuppliersPermissionPolicy {
     return this.canManage();
   }
 
+  canActivate(): boolean {
+    return this.canManage();
+  }
+
   createDisabledReason(): string | null {
     return this.canCreate() ? null : 'suppliers.action.noPermission';
   }
@@ -39,5 +43,9 @@ export class SuppliersPermissionPolicy {
 
   deactivateDisabledReason(): string | null {
     return this.canDeactivate() ? null : 'suppliers.action.noPermission';
+  }
+
+  activateDisabledReason(): string | null {
+    return this.canActivate() ? null : 'suppliers.action.noPermission';
   }
 }

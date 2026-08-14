@@ -109,6 +109,21 @@ export class SuppliersListComponent extends StatefulListPage<
           ),
       });
     }
+
+    confirmActivate(row: SupplierModel): void {
+      this.confirmAction({
+        header: this.i18n.tUi('suppliers.activate.header' as never),
+        message: this.i18n.tUi('suppliers.activate.message' as never, {
+          companyName: row.companyName,
+        }),
+        icon: 'pi pi-question-circle',
+        accept: () =>
+          this.executeAction(
+            this.host.facade.activate(row.id),
+            this.i18n.tUi('suppliers.activate.success' as never),
+          ),
+      });
+    }
   })(this);
 
   companyName = signal('');
@@ -197,9 +212,36 @@ export class SuppliersListComponent extends StatefulListPage<
     this.upsertVisible.set(true);
   }
 
+  canDeactivate(row: SupplierModel): boolean {
+    return row.active && this.policy.canDeactivate();
+  }
+
+  deactivateDisabledReason(row: SupplierModel): string {
+    if (!row.active) {
+      return 'suppliers.action.alreadyInactive';
+    }
+    return this.policy.deactivateDisabledReason() ?? 'suppliers.action.noPermission';
+  }
+
+  canActivate(row: SupplierModel): boolean {
+    return !row.active && this.policy.canActivate();
+  }
+
+  activateDisabledReason(row: SupplierModel): string {
+    if (row.active) {
+      return 'suppliers.action.alreadyActive';
+    }
+    return this.policy.activateDisabledReason() ?? 'suppliers.action.noPermission';
+  }
+
   confirmDeactivate(row: SupplierModel) {
-    if (!this.policy.canDeactivate()) return;
+    if (!this.canDeactivate(row)) return;
     this.bulk.confirmDeactivate(row);
+  }
+
+  confirmActivate(row: SupplierModel) {
+    if (!this.canActivate(row)) return;
+    this.bulk.confirmActivate(row);
   }
 
   onSaved(): void {

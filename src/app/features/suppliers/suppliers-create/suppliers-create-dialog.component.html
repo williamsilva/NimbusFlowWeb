@@ -144,7 +144,37 @@
       {{ 'suppliers.sections.address' | translate }}
     </h4>
     <div class="grid formgrid gap-0">
-      <div class="col-12 md:col-6 p-2">
+      <div class="col-6 md:col-3 p-2">
+        <div class="flex align-items-end gap-1">
+          <p-floatLabel variant="on" class="w-full">
+            <input
+              id="addressZipCode"
+              pInputText
+              type="text"
+              maxlength="9"
+              formControlName="addressZipCode"
+              class="w-full p-inputtext-sm"
+              (input)="onZipCodeInput($any($event.target).value)"
+              (keydown.enter)="searchZipCode()"
+            />
+            <label for="addressZipCode">{{
+              'suppliers.fields.addressZipCode' | translate
+            }}</label>
+          </p-floatLabel>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-search"
+            tooltipPosition="top"
+            [loading]="cepLoading()"
+            (click)="searchZipCode()"
+            class="p-button-sm flex-shrink-0"
+            [pTooltip]="'suppliers.cep.searchTooltip' | translate"
+          ></button>
+        </div>
+      </div>
+
+      <div class="col-12 md:col-5 p-2">
         <p-floatLabel variant="on" class="w-full">
           <input
             id="addressStreet"
@@ -170,7 +200,7 @@
         </p-floatLabel>
       </div>
 
-      <div class="col-6 md:col-4 p-2">
+      <div class="col-6 md:col-2 p-2">
         <p-floatLabel variant="on" class="w-full">
           <input
             id="addressComplement"
@@ -200,7 +230,7 @@
         </p-floatLabel>
       </div>
 
-      <div class="col-12 md:col-4 p-2">
+      <div class="col-12 md:col-6 p-2">
         <p-floatLabel variant="on" class="w-full">
           <input
             id="addressCity"
@@ -225,19 +255,6 @@
             style="text-transform: uppercase"
           />
           <label for="addressState">{{ 'suppliers.fields.addressState' | translate }}</label>
-        </p-floatLabel>
-      </div>
-
-      <div class="col-6 md:col-2 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <input
-            id="addressZipCode"
-            pInputText
-            type="text"
-            formControlName="addressZipCode"
-            class="w-full p-inputtext-sm"
-          />
-          <label for="addressZipCode">{{ 'suppliers.fields.addressZipCode' | translate }}</label>
         </p-floatLabel>
       </div>
     </div>
