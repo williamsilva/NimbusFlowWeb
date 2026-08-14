@@ -1709,6 +1709,9 @@ export const UI_KEYS = {
       status: 'installments.fields.status',
       dueDate: 'installments.fields.dueDate',
     },
+    approvalRange: {
+      none: 'installments.approvalRange.none',
+    },
     form: {
       saveError: 'installments.form.saveError',
     },
@@ -1841,6 +1844,7 @@ export const UI_KEYS = {
     form: {
       invalid: 'approvalLimits.form.invalid',
       invalidRange: 'approvalLimits.form.invalidRange',
+      overlapsRange: 'approvalLimits.form.overlapsRange',
       created: 'approvalLimits.form.created',
       updated: 'approvalLimits.form.updated',
       saveError: 'approvalLimits.form.saveError',

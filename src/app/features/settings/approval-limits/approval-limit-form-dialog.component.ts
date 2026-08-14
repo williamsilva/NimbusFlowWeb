@@ -39,6 +39,10 @@ export class ApprovalLimitFormDialogComponent {
   visible = input.required<boolean>();
   editing = input.required<ApprovalLimitModel | null>();
   userOptions = input.required<UserOptionModel[]>();
+  /** Faixas já cadastradas (lista da tela pai) - usado só pra checar sobreposição no client antes
+   *  de chamar o facade (mesma regra validada de novo no backend, ver
+   *  ApprovalLimitService.validate - nunca confiar só no client). */
+  existingRanges = input<ApprovalLimitModel[]>([]);
 
   @Output() visibleChange = new EventEmitter<boolean>();
 
@@ -129,9 +133,19 @@ export class ApprovalLimitFormDialogComponent {
       return;
     }
 
+    const newMax = this.unbounded() ? null : v.maxAmount;
+    if (this.overlapsExistingRange(v.minAmount!, newMax)) {
+      this.toast.add({
+        severity: 'warn',
+        summary: this.i18n.tUi('common.warning'),
+        detail: this.i18n.tUi('approvalLimits.form.overlapsRange'),
+      });
+      return;
+    }
+
     const input = {
       minAmount: v.minAmount!,
-      maxAmount: this.unbounded() ? null : v.maxAmount,
+      maxAmount: newMax,
       userIds: v.userIds,
     };
 
@@ -158,5 +172,20 @@ export class ApprovalLimitFormDialogComponent {
         });
       },
     });
+  }
+
+  /** Mesma regra validada de novo no backend (ApprovalLimitService.overlaps) - aqui só pra dar
+   *  feedback imediato sem round-trip. max nulo = sem limite superior; a própria faixa sendo
+   *  editada nunca é comparada contra si mesma. */
+  private overlapsExistingRange(minAmount: number, maxAmount: number | null): boolean {
+    const editingId = this.editing()?.id;
+
+    return this.existingRanges()
+      .filter((range) => range.id !== editingId)
+      .some((range) => {
+        const startsBeforeOtherEnds = range.maxAmount == null || minAmount <= range.maxAmount;
+        const endsAfterOtherStarts = maxAmount == null || maxAmount >= range.minAmount;
+        return startsBeforeOtherEnds && endsAfterOtherStarts;
+      });
   }
 }

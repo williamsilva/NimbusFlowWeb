@@ -19,20 +19,30 @@
 </cs-page-header>
 
 <app-approval-limit-form-dialog
-  [visible]="formVisible()"
   [editing]="editing()"
+  [visible]="formVisible()"
+  [existingRanges]="items()"
   [userOptions]="userOptions()"
   (visibleChange)="onFormVisibleChange($event)"
 ></app-approval-limit-form-dialog>
 
 <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
-  <p-table stripedRows dataKey="id" size="small" showGridlines [value]="items()" [rowHover]="true" [loading]="loading()" class="cs-admin-table">
+  <p-table
+    stripedRows
+    dataKey="id"
+    size="small"
+    showGridlines
+    [value]="items()"
+    [rowHover]="true"
+    [loading]="loading()"
+    class="cs-admin-table"
+  >
     <ng-template pTemplate="colgroup">
       <colgroup>
         <col style="width: 160px" />
         <col style="width: 160px" />
         <col style="width: auto" />
-        <col style="width: 100px" />
+        <col style="width: 70px" />
       </colgroup>
     </ng-template>
 
@@ -49,10 +59,18 @@
       <tr>
         <td class="text-right">{{ row.minAmount | csCurrency }}</td>
         <td class="text-right">
-          {{ row.maxAmount != null ? (row.maxAmount | csCurrency) : ('approvalLimits.unbounded' | translate) }}
+          {{
+            row.maxAmount != null
+              ? (row.maxAmount | csCurrency)
+              : ('approvalLimits.unbounded' | translate)
+          }}
         </td>
         <td>
-          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="userNames(row.userIds)">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="userNames(row.userIds)"
+          >
             {{ userNames(row.userIds) }}
           </span>
         </td>
@@ -63,21 +81,29 @@
               type="button"
               icon="pi pi-pencil"
               (click)="goEdit(row)"
+              tooltipPosition="top"
               [disabled]="!canChange()"
               class="p-button-text p-button-sm"
-              [pTooltip]="canChange() ? ('common.edit' | translate) : ('approvalLimits.action.noPermission' | translate)"
-              tooltipPosition="top"
+              [pTooltip]="
+                canChange()
+                  ? ('common.edit' | translate)
+                  : ('approvalLimits.action.noPermission' | translate)
+              "
             ></button>
 
             <button
               pButton
               type="button"
               icon="pi pi-trash"
-              (click)="confirmDelete(row)"
-              [disabled]="!canChange()"
-              class="p-button-text p-button-sm p-button-danger"
-              [pTooltip]="canChange() ? ('common.delete' | translate) : ('approvalLimits.action.noPermission' | translate)"
               tooltipPosition="top"
+              [disabled]="!canChange()"
+              (click)="confirmDelete(row)"
+              class="p-button-text p-button-sm p-button-danger"
+              [pTooltip]="
+                canChange()
+                  ? ('common.delete' | translate)
+                  : ('approvalLimits.action.noPermission' | translate)
+              "
             ></button>
           </div>
         </td>
@@ -87,7 +113,11 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="4" class="text-center py-5 opacity-70">
-          {{ loadedOnce() ? ('approvalLimits.empty.title' | translate) : ('common.loading' | translate) }}
+          {{
+            loadedOnce()
+              ? ('approvalLimits.empty.title' | translate)
+              : ('common.loading' | translate)
+          }}
         </td>
       </tr>
     </ng-template>
