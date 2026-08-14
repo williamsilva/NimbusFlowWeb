@@ -12,15 +12,27 @@ export class LayoutStateService {
   readonly sidebarVisible = signal(true);
 
   constructor() {
-    // Persistência simples no navegador (localStorage)
     if (!this.isBrowser()) return;
 
-    const saved = window.localStorage.getItem(LayoutStateService.STORAGE_KEY);
-    if (saved === 'true' || saved === 'false') {
-      this.sidebarVisible.set(saved === 'true');
+    // No mobile (ver breakpoint em layout.component.css/bottom-nav.component.css) esta mesma
+    // flag vira o overlay de tela cheia aberto pelo botão "Mais" - precisa SEMPRE nascer
+    // fechada ali (nunca lembrar entre sessões, diferente do desktop), senão o app abre com o
+    // menu travado cobrindo a tela inteira (o botão de esconder - hambúrguer - some no mobile,
+    // então nada nunca zerava essa flag de volta). Ignora o valor salvo nesse caso de propósito.
+    const isMobileViewport = window.innerWidth <= 768;
+    if (isMobileViewport) {
+      this.sidebarVisible.set(false);
+    } else {
+      // Persistência simples no navegador (localStorage) - só faz sentido no desktop, onde o
+      // usuário de fato escolhe esconder/mostrar via o botão do topbar.
+      const saved = window.localStorage.getItem(LayoutStateService.STORAGE_KEY);
+      if (saved === 'true' || saved === 'false') {
+        this.sidebarVisible.set(saved === 'true');
+      }
     }
 
-    // Sempre que mudar, salva.
+    // Sempre que mudar, salva (no mobile isso grava "true" enquanto o overlay estiver aberto,
+    // mas não importa - o próximo boot força false de novo, acima, antes de ler isso).
     effect(() => {
       window.localStorage.setItem(
         LayoutStateService.STORAGE_KEY,
