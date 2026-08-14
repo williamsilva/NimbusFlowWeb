@@ -27,7 +27,7 @@ import { WorksAdvancedFilters } from '@features/filter/works.filters';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
-import { WORK_STATUS_VALUES, workStatusTone } from '@models/enums/work-status.enum';
+import { WORK_STATUS_VALUES, WorkStatusEnum, workStatusTone } from '@models/enums/work-status.enum';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
@@ -93,7 +93,7 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
   name = signal('');
   supplierId = signal<string[] | null>(null);
   projectId = signal<string[] | null>(null);
-  status = signal<string[] | null>(null);
+  status = signal<string[] | null>(this.defaultStatus());
   startDate = signal<string | string[] | null>(null);
   periodStartDate = signal<PeriodEnum | null>(null);
   expectedEndDate = signal<string | string[] | null>(null);
@@ -237,6 +237,24 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     this.reloadWithCurrentState();
   }
 
+  /** Mesmo padrão do CardSync (CreditOrderListComponent - "Ordens de Pagamento"): status "Em
+   *  andamento" pré-selecionado, mas só quando o painel de filtros está vazio de verdade (nem
+   *  restaurado do localStorage, nem definido pelo usuário) - ver applyDefaultFiltersIfEmpty. */
+  private defaultStatus(): string[] {
+    return [WorkStatusEnum.IN_PROGRESS];
+  }
+
+  /** Só entra quando NENHUM filtro avançado está setado (painel inteiro vazio) - primeira visita
+   *  à tela (nada persistido ainda), filtros persistidos totalmente vazios, ou logo após
+   *  "Limpar". Checa o painel inteiro, não campo a campo: se o usuário já definiu qualquer outro
+   *  filtro (ex.: Nome), isso já conta como painel "não vazio" e não deve reaplicar o default -
+   *  senão a escolha dele nunca "gruda". */
+  private applyDefaultFiltersIfEmpty(): void {
+    if (this.advancedActiveFilters().length > 0) return;
+
+    this.status.set(this.defaultStatus());
+  }
+
   protected override resetFilters(): void {
     this.name.set('');
     this.supplierId.set(null);
@@ -248,6 +266,7 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     this.periodExpectedEndDate.set(null);
     this.totalAmountFrom.set(null);
     this.totalAmountTo.set(null);
+    this.applyDefaultFiltersIfEmpty();
   }
 
   protected override toFiltersState(): WorksFiltersState {
@@ -276,6 +295,8 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     this.periodExpectedEndDate.set(state.periodExpectedEndDate ?? null);
     this.totalAmountFrom.set(state.totalAmountFrom ?? null);
     this.totalAmountTo.set(state.totalAmountTo ?? null);
+
+    this.applyDefaultFiltersIfEmpty();
   }
 
   protected override buildAdvancedFilters(): Partial<WorksAdvancedFilters> {
