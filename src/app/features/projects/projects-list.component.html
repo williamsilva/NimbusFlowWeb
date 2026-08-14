@@ -39,9 +39,9 @@
   (clear)="clear()"
   (search)="search()"
   [actionsAlign]="'start'"
-  [activeFilterGroups]="activeFilterGroups()"
   [activeCount]="activeFiltersCount()"
   [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
 >
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-4 p-1">
@@ -83,7 +83,9 @@
         [inputId]="'totalContractedAmount'"
         [label]="'projects.fields.totalContractedAmount' | translate"
         [value]="{ start: totalContractedAmountFrom(), end: totalContractedAmountTo() }"
-        (valueChange)="totalContractedAmountFrom.set($event.start); totalContractedAmountTo.set($event.end)"
+        (valueChange)="
+          totalContractedAmountFrom.set($event.start); totalContractedAmountTo.set($event.end)
+        "
       ></cs-currency-range-filter>
     </div>
   </div>
@@ -133,7 +135,12 @@
       <tr>
         <th pSortableColumn="name">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.name' | translate">{{ 'projects.columns.name' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'projects.columns.name' | translate"
+              >{{ 'projects.columns.name' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="name"></p-sortIcon>
               <p-columnFilter
@@ -153,7 +160,12 @@
 
         <th pSortableColumn="serviceFrontsCount" class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.serviceFrontsCount' | translate">{{ 'projects.columns.serviceFrontsCount' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'projects.columns.serviceFrontsCount' | translate"
+              >{{ 'projects.columns.serviceFrontsCount' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="serviceFrontsCount"></p-sortIcon>
               <p-columnFilter
@@ -183,7 +195,12 @@
 
         <th pSortableColumn="totalContractedAmount">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.totalContractedAmount' | translate">{{ 'projects.columns.totalContractedAmount' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'projects.columns.totalContractedAmount' | translate"
+              >{{ 'projects.columns.totalContractedAmount' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="totalContractedAmount"></p-sortIcon>
               <p-columnFilter
@@ -210,7 +227,12 @@
 
         <th pSortableColumn="totalPaidAmount">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.totalPaidAmount' | translate">{{ 'projects.columns.totalPaidAmount' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'projects.columns.totalPaidAmount' | translate"
+              >{{ 'projects.columns.totalPaidAmount' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="totalPaidAmount"></p-sortIcon>
               <p-columnFilter
@@ -237,7 +259,12 @@
 
         <th pSortableColumn="remainingAmount">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.remainingAmount' | translate">{{ 'projects.columns.remainingAmount' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'projects.columns.remainingAmount' | translate"
+              >{{ 'projects.columns.remainingAmount' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="remainingAmount"></p-sortIcon>
               <p-columnFilter
@@ -264,7 +291,12 @@
 
         <th pSortableColumn="progressPercentage" class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.progress' | translate">{{ 'projects.columns.progress' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'projects.columns.progress' | translate"
+              >{{ 'projects.columns.progress' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="progressPercentage"></p-sortIcon>
               <p-columnFilter
@@ -292,7 +324,12 @@
 
         <th pSortableColumn="status" class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'projects.columns.status' | translate">{{ 'projects.columns.status' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'projects.columns.status' | translate"
+              >{{ 'projects.columns.status' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="status"></p-sortIcon>
               <p-columnFilter
@@ -324,7 +361,12 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'common.actions' | translate"
+              >{{ 'common.actions' | translate }}</span
+            >
           </div>
         </th>
       </tr>
@@ -332,14 +374,21 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{ row.name }}</span></td>
+        <td>
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{
+            row.name
+          }}</span>
+        </td>
         <td class="text-center">{{ row.serviceFrontsCount }}</td>
         <td class="text-right">{{ row.totalContractedAmount | csCurrency }}</td>
         <td class="text-right">{{ row.totalPaidAmount | csCurrency }}</td>
         <td class="text-right">{{ row.remainingAmount | csCurrency }}</td>
         <td class="text-center">{{ row.progressPercentage | number: '1.0-2' }}%</td>
         <td class="text-center">
-          <cs-status-badge [tone]="tone(row.status)" [label]="('projects.status.' + row.status) | translate"></cs-status-badge>
+          <cs-status-badge
+            [tone]="tone(row.status)"
+            [label]="'projects.status.' + row.status | translate"
+          ></cs-status-badge>
         </td>
         <td class="text-center">
           <div class="table-actions">
@@ -348,14 +397,59 @@
               type="button"
               icon="pi pi-pencil"
               (click)="edit(row)"
-              class="p-button-text p-button-sm"
+              tooltipPosition="top"
               [disabled]="!policy.canEdit()"
+              class="p-button-text p-button-sm"
               [pTooltip]="
                 policy.canEdit()
                   ? ('common.edit' | translate)
                   : (policy.editDisabledReason() ?? 'projects.action.noPermission' | translate)
               "
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-play"
               tooltipPosition="top"
+              (click)="confirmMarkInProgress(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canMarkInProgress(row)"
+              [pTooltip]="
+                canMarkInProgress(row)
+                  ? ('projects.action.markInProgress' | translate)
+                  : (markInProgressDisabledReason(row) | translate)
+              "
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pause"
+              tooltipPosition="top"
+              (click)="confirmMarkPaused(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canMarkPaused(row)"
+              [pTooltip]="
+                canMarkPaused(row)
+                  ? ('projects.action.markPaused' | translate)
+                  : (markPausedDisabledReason(row) | translate)
+              "
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-check-circle"
+              tooltipPosition="top"
+              (click)="confirmMarkCompleted(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canMarkCompleted(row)"
+              [pTooltip]="
+                canMarkCompleted(row)
+                  ? ('projects.action.markCompleted' | translate)
+                  : (markCompletedDisabledReason(row) | translate)
+              "
             ></button>
           </div>
         </td>
