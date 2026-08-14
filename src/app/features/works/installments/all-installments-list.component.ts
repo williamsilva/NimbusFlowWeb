@@ -24,6 +24,7 @@ import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { InstallmentsPermissionPolicy } from '@features/works/installments-permission.policy';
+import { formatApprovalRanges } from '@features/works/installments/installments-approval-range.util';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { InstallmentWithWorkModel, InstallmentsFiltersState } from '@models/installments.models';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
@@ -158,15 +159,22 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     this.clearTableAndReload(this.dt);
   }
 
+  /** row.canRelease já cobre status MEASUREMENT_APPROVED + permissão/alçada (ver
+   *  InstallmentService.canReleasePending) - mesmo padrão de AddendumModel.canDecide, não
+   *  recalcular no cliente. */
   canRelease(row: InstallmentWithWorkModel): boolean {
-    return row.status === InstallmentStatusEnum.MEASUREMENT_APPROVED && this.policy.canRelease();
+    return row.canRelease;
   }
 
   releaseDisabledReason(row: InstallmentWithWorkModel): string {
     if (row.status !== InstallmentStatusEnum.MEASUREMENT_APPROVED) {
       return 'installments.action.requiresMeasurementApproved';
     }
-    return this.policy.releaseDisabledReason() ?? 'installments.action.noPermission';
+    return 'installments.action.noPermission';
+  }
+
+  approvalRangeLabel(row: InstallmentWithWorkModel): string {
+    return formatApprovalRanges(this.i18n, row.approvalRanges);
   }
 
   canMarkPaid(row: InstallmentWithWorkModel): boolean {
