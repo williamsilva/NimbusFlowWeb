@@ -35,7 +35,11 @@
       }
     </div>
 
-    <div class="flex align-items-start md:align-items-start gap-2 -mt-3">
+    <!-- -mt-3 só no desktop (md:flex-row, título/subtítulo e botões lado a lado - a margem
+         negativa alinha verticalmente contra o bloco de título/subtítulo). No mobile
+         (md:flex-column acima - os botões empilham ABAIXO do título/subtítulo) essa mesma
+         margem negativa "puxava" os botões pra cima, sobrepondo o subtítulo (bug reportado). -->
+    <div class="flex align-items-start gap-2 md:-mt-3">
       <ng-content></ng-content>
     </div>
   </div>
