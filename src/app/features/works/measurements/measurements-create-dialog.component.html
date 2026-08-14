@@ -114,6 +114,19 @@
                   class="hidden"
                   />
 
+                  <!-- capture="environment" só faz sentido pra imagem - abre a câmera traseira
+                       direto (sem passar pelo seletor de galeria/arquivos), diferente do input
+                       acima (sem capture), que deixa o navegador/SO escolher de onde vem o
+                       arquivo. Os dois gravam no mesmo files() via onFilesSelected. -->
+                  <input
+                    #cameraInput
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    (change)="onFilesSelected($event)"
+                    class="hidden"
+                    />
+
                   <button
                     pButton
                     type="button"
@@ -121,6 +134,15 @@
                     (click)="fileInput.click()"
                     class="p-button-outlined p-button-sm"
                     [label]="'measurements.action.addFile' | translate"
+                  ></button>
+
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-camera"
+                    (click)="cameraInput.click()"
+                    class="p-button-outlined p-button-sm ml-2"
+                    [label]="'measurements.action.takePhoto' | translate"
                   ></button>
 
                   @if (files().length) {

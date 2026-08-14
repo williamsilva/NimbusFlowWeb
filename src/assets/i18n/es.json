@@ -3607,6 +3607,7 @@
     "form": {
       "invalid": "Complete el valor mínimo y seleccione al menos un usuario",
       "invalidRange": "El valor máximo debe ser mayor que el valor mínimo",
+      "overlapsRange": "Este rango se superpone con un rango ya registrado. El valor mínimo debe ser mayor que el valor máximo del rango anterior.",
       "created": "Rango de alzada creado con éxito",
       "updated": "Rango de alzada actualizado con éxito",
       "saveError": "No fue posible guardar el rango de alzada"
@@ -4032,7 +4033,11 @@
       "number": "Nº",
       "amount": "Monto",
       "dueDate": "Vencimiento",
-      "status": "Estado"
+      "status": "Estado",
+      "tier": "Rango de aprobación"
+    },
+    "approvalRange": {
+      "none": "Sin rango de aprobación configurado"
     },
     "status": {
       "MEASUREMENT_APPROVED": "Esperando liberación",
@@ -4123,6 +4128,7 @@
       "approve": "Aprobar",
       "reject": "Reprobar",
       "addFile": "Agregar archivo",
+      "takePhoto": "Tomar foto",
       "captureLocation": "Capturar ubicación",
       "installmentGenerated": "Orden de pago generada",
       "noPermission": "No tiene permiso para decidir esta medición.",

@@ -3607,6 +3607,7 @@
     "form": {
       "invalid": "Fill in the minimum amount and select at least one user",
       "invalidRange": "The maximum amount must be greater than the minimum amount",
+      "overlapsRange": "This range overlaps an existing range. The minimum amount must be greater than the previous range's maximum amount.",
       "created": "Approval limit created successfully",
       "updated": "Approval limit updated successfully",
       "saveError": "Could not save the approval limit"
@@ -4032,7 +4033,11 @@
       "number": "#",
       "amount": "Amount",
       "dueDate": "Due date",
-      "status": "Status"
+      "status": "Status",
+      "tier": "Approval range"
+    },
+    "approvalRange": {
+      "none": "No approval range configured"
     },
     "status": {
       "MEASUREMENT_APPROVED": "Awaiting release",
@@ -4123,6 +4128,7 @@
       "approve": "Approve",
       "reject": "Reject",
       "addFile": "Add file",
+      "takePhoto": "Take photo",
       "captureLocation": "Capture location",
       "installmentGenerated": "Payment order generated",
       "noPermission": "You do not have permission to decide this measurement.",
