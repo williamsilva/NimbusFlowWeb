@@ -3602,6 +3602,7 @@
     "form": {
       "invalid": "Preencha o valor mínimo e selecione ao menos um usuário",
       "invalidRange": "O valor máximo deve ser maior que o valor mínimo",
+      "overlapsRange": "Esta faixa se sobrepõe a uma faixa já cadastrada. O valor mínimo deve ser maior que o valor máximo da faixa anterior.",
       "created": "Faixa de alçada criada com sucesso",
       "updated": "Faixa de alçada atualizada com sucesso",
       "saveError": "Não foi possível salvar a faixa de alçada"
@@ -4027,7 +4028,11 @@
       "number": "Nº",
       "amount": "Valor",
       "dueDate": "Vencimento",
-      "status": "Status"
+      "status": "Status",
+      "tier": "Alçada"
+    },
+    "approvalRange": {
+      "none": "Sem alçada configurada"
     },
     "status": {
       "MEASUREMENT_APPROVED": "Aguardando liberação",
@@ -4118,6 +4123,7 @@
       "approve": "Aprovar",
       "reject": "Reprovar",
       "addFile": "Adicionar arquivo",
+      "takePhoto": "Tirar foto",
       "captureLocation": "Capturar localização",
       "installmentGenerated": "Ordem de pagamento gerada",
       "noPermission": "Você não tem permissão para decidir esta medição.",
