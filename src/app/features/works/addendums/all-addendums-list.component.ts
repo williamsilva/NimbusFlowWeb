@@ -23,6 +23,7 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
 import { AddendumsAdvancedFilters } from '@features/filter/addendums.filters';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { AddendumsGlobalFacade } from '@features/facade/addendums-global.facade';
+import { formatSequentialNumber } from '@shared/utils/br-format';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { AddendumsPermissionPolicy } from '@features/works/addendums-permission.policy';
 import { AddendumWithWorkModel, AddendumsFiltersState } from '@models/addendums.models';
@@ -191,6 +192,11 @@ export class AllAddendumsListComponent extends StatefulListPage<
 
   approvalRangeLabel(row: AddendumWithWorkModel): string {
     return formatApprovalRanges(this.i18n, row.approvalRanges);
+  }
+
+  /** Sequencial por obra com prefixo "ADT-" (ex.: ADT-0001) - mesmo padrão de InstallmentsListComponent. */
+  numberLabel(row: AddendumWithWorkModel): string {
+    return formatSequentialNumber('ADT', row.number);
   }
 
   clear() {

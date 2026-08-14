@@ -59,6 +59,7 @@
   >
     <ng-template pTemplate="colgroup">
       <colgroup>
+        <col style="width: 100px" />
         <col style="width: auto" />
         <col style="width: 140px" />
         <col style="width: 250px" />
@@ -72,6 +73,20 @@
 
     <ng-template pTemplate="header">
       <tr>
+        <th pSortableColumn="number">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'addendums.columns.number' | translate"
+              >{{ 'addendums.columns.number' | translate }}</span
+            >
+            <span class="th-icons">
+              <p-sortIcon field="number"></p-sortIcon>
+            </span>
+          </div>
+        </th>
+
         <th pSortableColumn="justification">
           <div class="th-flex text-center">
             <span
@@ -254,6 +269,7 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
+        <td class="text-center">{{ numberLabel(row) }}</td>
         <td>
           <span
             tooltipPosition="top"
@@ -334,7 +350,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="8" class="text-center py-5 opacity-70">
+        <td colspan="9" class="text-center py-5 opacity-70">
           {{
             loadedOnce() ? ('addendums.empty.title' | translate) : ('common.loading' | translate)
           }}

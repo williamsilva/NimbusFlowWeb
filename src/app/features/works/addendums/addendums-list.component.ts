@@ -32,6 +32,7 @@ import { ADDENDUM_STATUS_VALUES, AddendumStatusEnum, addendumStatusTone } from '
 import { AddendumsCreateDialogComponent } from '@features/works/addendums/addendums-create-dialog.component';
 import { formatApprovalRanges } from '@features/works/addendums/addendums-approval-range.util';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
+import { formatSequentialNumber } from '@shared/utils/br-format';
 
 /** Espelha AddendumApprovalService.SUBMITTABLE_WORK_STATUSES - mesma checagem preventiva já
  *  usada em MeasurementsListComponent, faltando aqui (o backend já bloqueava, só não avisava
@@ -155,6 +156,11 @@ export class AddendumsListComponent implements OnInit {
 
   approvalRangeLabel(row: AddendumModel): string {
     return formatApprovalRanges(this.i18n, row.approvalRanges);
+  }
+
+  /** Sequencial por obra com prefixo "ADT-" (ex.: ADT-0001) - mesmo padrão de InstallmentsListComponent. */
+  numberLabel(row: AddendumModel): string {
+    return formatSequentialNumber('ADT', row.number);
   }
 
   canResendNotification(row: AddendumModel): boolean {

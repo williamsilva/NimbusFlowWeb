@@ -17,6 +17,9 @@ export interface ApprovalRangeModel {
 export interface AddendumModel {
   id: string;
   workId: string;
+  /** Sequencial por obra (1, 2, 3...) - exibido com prefixo "ADT-" via formatSequentialNumber
+   *  (ex.: ADT-0001). Ver Addendum.number no backend. */
+  number: number;
   amount: number;
   justification: string;
   status: AddendumStatusEnum;

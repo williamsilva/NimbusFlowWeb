@@ -25,6 +25,7 @@ import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { InstallmentsPermissionPolicy } from '@features/works/installments-permission.policy';
 import { formatApprovalRanges } from '@features/works/installments/installments-approval-range.util';
+import { formatSequentialNumber } from '@shared/utils/br-format';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { InstallmentWithWorkModel, InstallmentsFiltersState } from '@models/installments.models';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
@@ -177,6 +178,12 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     return formatApprovalRanges(this.i18n, row.approvalRanges);
   }
 
+  /** Sequencial por obra com prefixo "PAG-" (ex.: PAG-0001) - mesmo padrão de
+   *  Addendums/MeasurementsListComponent ("ADT-"/"MED-"). */
+  numberLabel(row: InstallmentWithWorkModel): string {
+    return formatSequentialNumber('PAG', row.number);
+  }
+
   canMarkPaid(row: InstallmentWithWorkModel): boolean {
     return row.status === InstallmentStatusEnum.RELEASED && this.policy.canMarkPaid();
   }
@@ -208,7 +215,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     this.confirm.confirm({
       header: this.i18n.tUi('installments.releaseConfirm.header'),
       message: this.i18n.tUi('installments.releaseConfirm.message', {
-        number: row.number,
+        number: this.numberLabel(row),
       }),
       icon: 'pi pi-question-circle',
       accept: () => {
@@ -241,7 +248,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     this.confirm.confirm({
       header: this.i18n.tUi('installments.markPaidConfirm.header'),
       message: this.i18n.tUi('installments.markPaidConfirm.message', {
-        number: row.number,
+        number: this.numberLabel(row),
       }),
       icon: 'pi pi-question-circle',
       accept: () => {
@@ -274,7 +281,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     this.confirm.confirm({
       header: this.i18n.tUi('installments.resendNotificationConfirm.header'),
       message: this.i18n.tUi('installments.resendNotificationConfirm.message', {
-        number: row.number,
+        number: this.numberLabel(row),
       }),
       icon: 'pi pi-question-circle',
       accept: () => {

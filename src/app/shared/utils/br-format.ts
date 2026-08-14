@@ -57,3 +57,13 @@ export function formatZipCode(value: string | null | undefined): string {
   }
   return digits.replace(/(\d{5})(\d{1,3})$/, '$1-$2');
 }
+
+/**
+ * Formata um número sequencial por obra com prefixo de domínio, ex.: formatSequentialNumber('ADT', 1)
+ * -> "ADT-0001" (Aditivo), 'MED' (Medição), 'PAG' (Pagamento/Parcela) - mesmo valor inteiro
+ * armazenado no backend (Addendum.number/Measurement.number/Installment.number), só a exibição
+ * ganha o prefixo e o zero-padding de 4 dígitos.
+ */
+export function formatSequentialNumber(prefix: string, value: number): string {
+  return `${prefix}-${String(value).padStart(4, '0')}`;
+}

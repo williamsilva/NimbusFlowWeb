@@ -304,7 +304,7 @@
             row.workName
           }}</span>
         </td>
-        <td class="text-center">{{ row.number }}</td>
+        <td class="text-center">{{ numberLabel(row) }}</td>
         <td class="text-right">{{ row.amount | csCurrency }}</td>
         <td class="text-center">{{ row.dueDate | csDate: 'date' }}</td>
         <td class="text-center">

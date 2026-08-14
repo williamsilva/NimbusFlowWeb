@@ -18,6 +18,9 @@ export interface MeasurementMediaModel {
 export interface MeasurementModel {
   id: string;
   workId: string;
+  /** Sequencial por obra (1, 2, 3...) - exibido com prefixo "MED-" via formatSequentialNumber
+   *  (ex.: MED-0001). Ver Measurement.number no backend. */
+  number: number;
   description: string;
   status: MeasurementStatusEnum;
   percentageCompleted: number;

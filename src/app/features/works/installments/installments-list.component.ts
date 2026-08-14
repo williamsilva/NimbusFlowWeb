@@ -25,6 +25,7 @@ import { PageHeaderComponent } from '@shared/features/page-header/page-header.co
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { InstallmentsPermissionPolicy } from '@features/works/installments-permission.policy';
 import { formatApprovalRanges } from '@features/works/installments/installments-approval-range.util';
+import { formatSequentialNumber } from '@shared/utils/br-format';
 import { CsCurrencyRangeFilterComponent } from '@features/list-base/cs-currency-range-filter.component';
 import {
   InstallmentStatusEnum,
@@ -134,6 +135,12 @@ export class InstallmentsListComponent implements OnInit {
     return formatApprovalRanges(this.i18n, row.approvalRanges);
   }
 
+  /** Sequencial por obra com prefixo "PAG-" (ex.: PAG-0001) - mesmo padrão de
+   *  Addendums/MeasurementsListComponent ("ADT-"/"MED-"). */
+  numberLabel(row: InstallmentModel): string {
+    return formatSequentialNumber('PAG', row.number);
+  }
+
   canMarkPaid(row: InstallmentModel): boolean {
     return row.status === InstallmentStatusEnum.RELEASED && this.policy.canMarkPaid();
   }
@@ -169,7 +176,7 @@ export class InstallmentsListComponent implements OnInit {
     this.confirm.confirm({
       header: this.i18n.tUi('installments.releaseConfirm.header'),
       message: this.i18n.tUi('installments.releaseConfirm.message', {
-        number: row.number,
+        number: this.numberLabel(row),
       }),
       icon: 'pi pi-question-circle',
       accept: () => {
@@ -202,7 +209,7 @@ export class InstallmentsListComponent implements OnInit {
     this.confirm.confirm({
       header: this.i18n.tUi('installments.markPaidConfirm.header'),
       message: this.i18n.tUi('installments.markPaidConfirm.message', {
-        number: row.number,
+        number: this.numberLabel(row),
       }),
       icon: 'pi pi-question-circle',
       accept: () => {
@@ -235,7 +242,7 @@ export class InstallmentsListComponent implements OnInit {
     this.confirm.confirm({
       header: this.i18n.tUi('installments.resendNotificationConfirm.header'),
       message: this.i18n.tUi('installments.resendNotificationConfirm.message', {
-        number: row.number,
+        number: this.numberLabel(row),
       }),
       icon: 'pi pi-question-circle',
       accept: () => {
