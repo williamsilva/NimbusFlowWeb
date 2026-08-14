@@ -7,6 +7,7 @@ import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { ProjectsAdvancedFilters } from '@features/filter/projects.filters';
+import { ProjectStatusEnum } from '@models/enums/project-status.enum';
 import {
   ProjectApiModel,
   ProjectUpsertInput,
@@ -51,6 +52,14 @@ export class ProjectsApiService {
 
   update(id: string, input: ProjectUpsertInput) {
     return this.http.put<ProjectApiModel>(`${this.projectsUrl}/${id}`, input).pipe(map(mapProjectApiModel));
+  }
+
+  /** Atalho de mudança de status a partir da listagem - não exige reenviar name/description como
+   *  update() (edição completa) exige. */
+  changeStatus(id: string, status: ProjectStatusEnum) {
+    return this.http
+      .post<ProjectApiModel>(`${this.projectsUrl}/${id}/status/${status}`, {})
+      .pipe(map(mapProjectApiModel));
   }
 
   /** multipart/form-data, uma única parte de arquivo - espelha ProjectController.uploadSitePlan. */

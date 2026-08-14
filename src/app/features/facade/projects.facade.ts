@@ -139,4 +139,13 @@ export class ProjectsFacade {
       }),
     );
   }
+
+  changeStatus(id: string, status: ProjectStatusEnum): Observable<ProjectModel> {
+    return this.api.changeStatus(id, status).pipe(
+      tap(() => {
+        this.reloadLast();
+        this.loadAll(true);
+      }),
+    );
+  }
 }

@@ -1,6 +1,7 @@
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { DestroyRef, Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -10,6 +11,7 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { STATE_KEY } from '@features/state-key.constants';
@@ -28,7 +30,11 @@ import {
   CsCurrencyRangeFilterComponent,
 } from '@features/list-base/cs-currency-range-filter.component';
 import { ProjectModel, ProjectsFiltersState } from '@models/projects.models';
-import { PROJECT_STATUS_VALUES, projectStatusTone } from '@models/enums/project-status.enum';
+import {
+  PROJECT_STATUS_VALUES,
+  ProjectStatusEnum,
+  projectStatusTone,
+} from '@models/enums/project-status.enum';
 import { ProjectsUpsertDialogComponent } from '@features/projects/projects-upsert-dialog.component';
 import {
   ActiveFilterItem,
@@ -63,6 +69,10 @@ export class ProjectsListComponent extends StatefulListPage<
   ProjectsAdvancedFilters
 > {
   @ViewChild('dt') private dt?: Table;
+
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly toast = inject(MessageService);
+  private readonly confirm = inject(ConfirmationService);
 
   protected override readonly i18n = inject(I18nService);
   readonly facade = inject(ProjectsFacade);
@@ -154,6 +164,98 @@ export class ProjectsListComponent extends StatefulListPage<
   onUpsertVisibleChange(v: boolean): void {
     this.upsertVisible.set(v);
     if (!v) this.selectedProject.set(null);
+  }
+
+  canMarkInProgress(row: ProjectModel): boolean {
+    return row.status !== ProjectStatusEnum.IN_PROGRESS && this.policy.canManage();
+  }
+
+  markInProgressDisabledReason(row: ProjectModel): string {
+    if (row.status === ProjectStatusEnum.IN_PROGRESS) {
+      return 'projects.action.alreadyInProgress';
+    }
+    return this.policy.editDisabledReason() ?? 'projects.action.noPermission';
+  }
+
+  canMarkPaused(row: ProjectModel): boolean {
+    return row.status !== ProjectStatusEnum.PAUSED && this.policy.canManage();
+  }
+
+  markPausedDisabledReason(row: ProjectModel): string {
+    if (row.status === ProjectStatusEnum.PAUSED) {
+      return 'projects.action.alreadyPaused';
+    }
+    return this.policy.editDisabledReason() ?? 'projects.action.noPermission';
+  }
+
+  canMarkCompleted(row: ProjectModel): boolean {
+    return row.status !== ProjectStatusEnum.COMPLETED && this.policy.canManage();
+  }
+
+  markCompletedDisabledReason(row: ProjectModel): string {
+    if (row.status === ProjectStatusEnum.COMPLETED) {
+      return 'projects.action.alreadyCompleted';
+    }
+    return this.policy.editDisabledReason() ?? 'projects.action.noPermission';
+  }
+
+  confirmMarkInProgress(row: ProjectModel): void {
+    if (!this.canMarkInProgress(row)) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('projects.markInProgressConfirm.header' as never),
+      message: this.i18n.tUi('projects.markInProgressConfirm.message' as never, {
+        name: row.name,
+      }),
+      icon: 'pi pi-question-circle',
+      accept: () => this.changeStatus(row, ProjectStatusEnum.IN_PROGRESS, 'projects.markInProgressConfirm.success'),
+    });
+  }
+
+  confirmMarkPaused(row: ProjectModel): void {
+    if (!this.canMarkPaused(row)) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('projects.markPausedConfirm.header' as never),
+      message: this.i18n.tUi('projects.markPausedConfirm.message' as never, {
+        name: row.name,
+      }),
+      icon: 'pi pi-question-circle',
+      accept: () => this.changeStatus(row, ProjectStatusEnum.PAUSED, 'projects.markPausedConfirm.success'),
+    });
+  }
+
+  confirmMarkCompleted(row: ProjectModel): void {
+    if (!this.canMarkCompleted(row)) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('projects.markCompletedConfirm.header' as never),
+      message: this.i18n.tUi('projects.markCompletedConfirm.message' as never, {
+        name: row.name,
+      }),
+      icon: 'pi pi-question-circle',
+      accept: () => this.changeStatus(row, ProjectStatusEnum.COMPLETED, 'projects.markCompletedConfirm.success'),
+    });
+  }
+
+  private changeStatus(row: ProjectModel, status: ProjectStatusEnum, successKey: string): void {
+    this.facade
+      .changeStatus(row.id, status)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () =>
+          this.toast.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi(successKey as never),
+          }),
+        error: () =>
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('projects.form.saveError'),
+          }),
+      });
   }
 
   clear() {
