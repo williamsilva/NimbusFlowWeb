@@ -121,6 +121,7 @@
         <col style="width: 150px" />
         <col style="width: 150px" />
         <col style="width: 150px" />
+        <col style="width: 250px" />
         <col style="width: 70px" />
       </colgroup>
     </ng-template>
@@ -277,6 +278,17 @@
             <span
               class="th-label"
               tooltipPosition="top"
+              [pTooltip]="'installments.columns.tier' | translate"
+              >{{ 'installments.columns.tier' | translate }}</span
+            >
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
               [pTooltip]="'common.actions' | translate"
               >{{ 'common.actions' | translate }}</span
             >
@@ -300,6 +312,14 @@
             [tone]="tone(row.status)"
             [label]="'installments.status.' + row.status | translate"
           ></cs-status-badge>
+        </td>
+        <td class="text-center">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="approvalRangeLabel(row)"
+            >{{ approvalRangeLabel(row) }}</span
+          >
         </td>
         <td class="text-center">
           <div class="table-actions">
@@ -354,7 +374,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="6" class="text-center py-5 opacity-70">
+        <td colspan="7" class="text-center py-5 opacity-70">
           {{
             loadedOnce() ? ('installments.empty.title' | translate) : ('common.loading' | translate)
           }}

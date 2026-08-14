@@ -1,4 +1,5 @@
 import { PeriodEnum } from '@models/enums/period.enum';
+import { ApprovalRangeModel } from '@models/addendums.models';
 import { InstallmentStatusEnum } from '@models/enums/installment-status.enum';
 
 /**
@@ -14,6 +15,13 @@ export interface InstallmentModel {
   amount: number;
   dueDate: string;
   status: InstallmentStatusEnum;
+  /** true se o usuário logado pode liberar ESTA parcela agora (status MEASUREMENT_APPROVED +
+   *  permissão de liberar + dentro da faixa de valor de Configurações > Alçada) - mesmo padrão de
+   *  AddendumModel.canDecide, ver InstallmentService.canRelease/canReleasePending. */
+  canRelease: boolean;
+  /** Faixas de Configurações > Alçada que cobrem {@code amount} agora - mesmo papel de
+   *  AddendumModel.approvalRanges, exibido na coluna "Alçada" da tela Pagamentos. */
+  approvalRanges: ApprovalRangeModel[];
   releasedById: string | null;
   releasedAt: string | null;
   paidAt: string | null;

@@ -24,6 +24,7 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { InstallmentsPermissionPolicy } from '@features/works/installments-permission.policy';
+import { formatApprovalRanges } from '@features/works/installments/installments-approval-range.util';
 import { CsCurrencyRangeFilterComponent } from '@features/list-base/cs-currency-range-filter.component';
 import {
   InstallmentStatusEnum,
@@ -115,15 +116,22 @@ export class InstallmentsListComponent implements OnInit {
     this.facade.loadByWork(this.workId());
   }
 
+  /** row.canRelease já cobre status MEASUREMENT_APPROVED + permissão/alçada (ver
+   *  InstallmentService.canReleasePending) - mesmo padrão de AddendumModel.canDecide, não
+   *  recalcular no cliente. */
   canRelease(row: InstallmentModel): boolean {
-    return row.status === InstallmentStatusEnum.MEASUREMENT_APPROVED && this.policy.canRelease();
+    return row.canRelease;
   }
 
   releaseDisabledReason(row: InstallmentModel): string {
     if (row.status !== InstallmentStatusEnum.MEASUREMENT_APPROVED) {
       return 'installments.action.requiresMeasurementApproved';
     }
-    return this.policy.releaseDisabledReason() ?? 'installments.action.noPermission';
+    return 'installments.action.noPermission';
+  }
+
+  approvalRangeLabel(row: InstallmentModel): string {
+    return formatApprovalRanges(this.i18n, row.approvalRanges);
   }
 
   canMarkPaid(row: InstallmentModel): boolean {
