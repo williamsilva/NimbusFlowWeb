@@ -3970,6 +3970,7 @@
       "periodCreatedAt": "Período de la solicitud"
     },
     "columns": {
+      "number": "Nº",
       "work": "Frente de servicio",
       "amount": "Monto",
       "justification": "Justificación",
@@ -4095,6 +4096,7 @@
       "deviceLocation": "Ubicación del dispositivo"
     },
     "columns": {
+      "number": "Nº",
       "work": "Frente de servicio",
       "description": "Descripción",
       "percentageCompleted": "% ejecutado",

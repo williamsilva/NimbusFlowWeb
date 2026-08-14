@@ -34,6 +34,7 @@ import {
 } from '@models/enums/measurement-status.enum';
 import { MeasurementsCreateDialogComponent } from '@features/works/measurements/measurements-create-dialog.component';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
+import { formatSequentialNumber } from '@shared/utils/br-format';
 
 const SUBMITTABLE_WORK_STATUSES = new Set<WorkStatusEnum>([WorkStatusEnum.PLANNED, WorkStatusEnum.IN_PROGRESS]);
 
@@ -152,6 +153,11 @@ export class MeasurementsListComponent implements OnInit {
       return 'measurements.action.alreadyDecided';
     }
     return this.policy.decideDisabledReason() ?? 'measurements.action.noPermission';
+  }
+
+  /** Sequencial por obra com prefixo "MED-" (ex.: MED-0001) - mesmo padrão de InstallmentsListComponent. */
+  numberLabel(row: MeasurementModel): string {
+    return formatSequentialNumber('MED', row.number);
   }
 
   goNew(): void {

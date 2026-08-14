@@ -48,6 +48,7 @@ import {
   measurementStatusTone,
 } from '@models/enums/measurement-status.enum';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
+import { formatSequentialNumber } from '@shared/utils/br-format';
 
 @Component({
   standalone: true,
@@ -174,6 +175,11 @@ export class AllMeasurementsListComponent extends StatefulListPage<
       return 'measurements.action.alreadyDecided';
     }
     return this.policy.decideDisabledReason() ?? 'measurements.action.noPermission';
+  }
+
+  /** Sequencial por obra com prefixo "MED-" (ex.: MED-0001) - mesmo padrão de InstallmentsListComponent. */
+  numberLabel(row: MeasurementWithContextModel): string {
+    return formatSequentialNumber('MED', row.number);
   }
 
   clear() {

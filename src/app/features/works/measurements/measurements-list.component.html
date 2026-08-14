@@ -61,6 +61,7 @@
   >
     <ng-template pTemplate="colgroup">
       <colgroup>
+        <col style="width: 100px" />
         <col style="width: auto" />
         <col style="width: 100px" />
         <col style="width: 140px" />
@@ -74,6 +75,20 @@
 
     <ng-template pTemplate="header">
       <tr>
+        <th pSortableColumn="number">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'measurements.columns.number' | translate"
+              >{{ 'measurements.columns.number' | translate }}</span
+            >
+            <span class="th-icons">
+              <p-sortIcon field="number"></p-sortIcon>
+            </span>
+          </div>
+        </th>
+
         <th pSortableColumn="description">
           <div class="th-flex text-center">
             <span
@@ -256,6 +271,7 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
+        <td class="text-center">{{ numberLabel(row) }}</td>
         <td>
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.description">{{
             row.description
@@ -342,7 +358,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="8" class="text-center py-5 opacity-70">
+        <td colspan="9" class="text-center py-5 opacity-70">
           {{
             loadedOnce() ? ('measurements.empty.title' | translate) : ('common.loading' | translate)
           }}

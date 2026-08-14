@@ -3970,6 +3970,7 @@
       "periodCreatedAt": "Request period"
     },
     "columns": {
+      "number": "#",
       "work": "Service front",
       "amount": "Amount",
       "justification": "Justification",
@@ -4095,6 +4096,7 @@
       "deviceLocation": "Device location"
     },
     "columns": {
+      "number": "#",
       "work": "Service front",
       "description": "Description",
       "percentageCompleted": "% completed",
