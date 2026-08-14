@@ -3718,6 +3718,10 @@
       "address": "Dirección",
       "bank": "Datos bancarios"
     },
+    "cep": {
+      "searchTooltip": "Buscar dirección por código postal",
+      "notFound": "Código postal no encontrado."
+    },
     "fields": {
       "companyName": "Razón social",
       "tradeName": "Nombre comercial",
@@ -3760,7 +3764,15 @@
     },
     "action": {
       "noPermission": "No tiene permiso para gestionar proveedores.",
-      "deactivate": "Desactivar"
+      "deactivate": "Desactivar",
+      "alreadyInactive": "Este proveedor ya está inactivo.",
+      "activate": "Activar",
+      "alreadyActive": "Este proveedor ya está activo."
+    },
+    "activate": {
+      "header": "Activar proveedor",
+      "message": "¿Desea realmente activar el proveedor {companyName}?",
+      "success": "Proveedor activado con éxito."
     },
     "deactivate": {
       "header": "Desactivar proveedor",
@@ -3916,7 +3928,28 @@
       "title": "Ningún proyecto encontrado"
     },
     "action": {
-      "noPermission": "No tiene permiso para gestionar proyectos."
+      "noPermission": "No tiene permiso para gestionar proyectos.",
+      "markInProgress": "Marcar como en curso",
+      "markPaused": "Pausar",
+      "markCompleted": "Marcar como concluido",
+      "alreadyInProgress": "Este proyecto ya está en curso.",
+      "alreadyPaused": "Este proyecto ya está pausado.",
+      "alreadyCompleted": "Este proyecto ya está concluido."
+    },
+    "markInProgressConfirm": {
+      "header": "Marcar como en curso",
+      "message": "¿Confirma el cambio de estado del proyecto {name} a \"En curso\"?",
+      "success": "Proyecto marcado como en curso."
+    },
+    "markPausedConfirm": {
+      "header": "Pausar proyecto",
+      "message": "¿Confirma el cambio de estado del proyecto {name} a \"Pausado\"?",
+      "success": "Proyecto pausado con éxito."
+    },
+    "markCompletedConfirm": {
+      "header": "Marcar como concluido",
+      "message": "¿Confirma el cambio de estado del proyecto {name} a \"Concluido\"?",
+      "success": "Proyecto marcado como concluido."
     }
   },
   "addendums": {
