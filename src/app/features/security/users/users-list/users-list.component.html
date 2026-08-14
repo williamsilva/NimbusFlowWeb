@@ -262,7 +262,7 @@
       <col style="width: 170px" />
       <col style="width: 170px" />
       <col style="width: 170px" />
-      <col style="width: 80px" />
+      <col style="width: 70px" />
     </colgroup>
   </ng-template>
 
@@ -287,7 +287,12 @@
 
       <th pSortableColumn="userName">
         <div class="th-flex text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.userName' | translate">{{ 'users.columns.userName' | translate }}</span>
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'users.columns.userName' | translate"
+            >{{ 'users.columns.userName' | translate }}</span
+          >
           <span class="th-icons">
             <p-sortIcon field="userName"></p-sortIcon>
             <p-columnFilter
@@ -307,7 +312,12 @@
 
       <th pSortableColumn="name">
         <div class="th-flex text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.name' | translate">{{ 'users.columns.name' | translate }}</span>
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'users.columns.name' | translate"
+            >{{ 'users.columns.name' | translate }}</span
+          >
           <span class="th-icons">
             <p-sortIcon field="name"></p-sortIcon>
             <p-columnFilter
@@ -327,7 +337,12 @@
 
       <th pSortableColumn="document">
         <div class="th-flex text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.document' | translate">{{ 'users.columns.document' | translate }}</span>
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'users.columns.document' | translate"
+            >{{ 'users.columns.document' | translate }}</span
+          >
           <span class="th-icons">
             <p-sortIcon field="document"></p-sortIcon>
             <p-columnFilter
@@ -345,7 +360,12 @@
 
       <th pSortableColumn="status">
         <div class="th-flex text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.status' | translate">{{ 'users.columns.status' | translate }}</span>
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'users.columns.status' | translate"
+            >{{ 'users.columns.status' | translate }}</span
+          >
           <span class="th-icons">
             <p-sortIcon field="status"></p-sortIcon>
             <p-columnFilter
@@ -377,7 +397,12 @@
 
       <th pSortableColumn="lastLoginAt">
         <div class="th-flex text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.lastLoginAt' | translate">{{ 'users.columns.lastLoginAt' | translate }}</span>
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'users.columns.lastLoginAt' | translate"
+            >{{ 'users.columns.lastLoginAt' | translate }}</span
+          >
           <span class="th-icons">
             <p-sortIcon field="lastLoginAt"></p-sortIcon>
           </span>
@@ -386,7 +411,12 @@
 
       <th pSortableColumn="blockedUntil">
         <div class="th-flex text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.blockedUntil' | translate">{{ 'users.columns.blockedUntil' | translate }}</span>
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'users.columns.blockedUntil' | translate"
+            >{{ 'users.columns.blockedUntil' | translate }}</span
+          >
           <span class="th-icons">
             <p-sortIcon field="blockedUntil"></p-sortIcon>
           </span>
@@ -395,7 +425,12 @@
 
       <th pSortableColumn="passwordExpiresAt">
         <div class="th-flex text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.passwordExpiresAt' | translate">{{ 'users.columns.passwordExpiresAt' | translate }}</span>
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'users.columns.passwordExpiresAt' | translate"
+            >{{ 'users.columns.passwordExpiresAt' | translate }}</span
+          >
           <span class="th-icons">
             <p-sortIcon field="passwordExpiresAt"></p-sortIcon>
           </span>
@@ -404,7 +439,12 @@
 
       <th pSortableColumn="createdAt">
         <div class="th-flex text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.createdAt' | translate">{{ 'users.columns.createdAt' | translate }}</span>
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'users.columns.createdAt' | translate"
+            >{{ 'users.columns.createdAt' | translate }}</span
+          >
           <span class="th-icons">
             <p-sortIcon field="createdAt"></p-sortIcon>
             <p-columnFilter
@@ -436,7 +476,12 @@
 
       <th pSortableColumn="createdBy">
         <div class="th-flex text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'users.columns.createdBy' | translate">{{ 'users.columns.createdBy' | translate }}</span>
+          <span
+            class="th-label"
+            tooltipPosition="top"
+            [pTooltip]="'users.columns.createdBy' | translate"
+            >{{ 'users.columns.createdBy' | translate }}</span
+          >
           <span class="th-icons">
             <p-sortIcon field="createdBy"></p-sortIcon>
             <p-columnFilter
@@ -469,7 +514,9 @@
 
       <th class="text-center">
         <div class="th-flex text-center justify-content-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{
+            'common.actions' | translate
+          }}</span>
         </div>
       </th>
     </tr>
@@ -487,11 +534,15 @@
       </td>
 
       <td class="cell-strong">
-        <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.userName">{{ row.userName }}</span>
+        <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.userName">{{
+          row.userName
+        }}</span>
       </td>
 
       <td class="cell-muted">
-        <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{ row.name }}</span>
+        <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{
+          row.name
+        }}</span>
       </td>
 
       <td class="cell-muted text-center">
@@ -521,7 +572,12 @@
       </td>
 
       <td class="cell-muted text-center">
-        <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.createdBy?.name ?? '-'">{{ row.createdBy?.name ?? '-' }}</span>
+        <span
+          class="cs-table-cell-ellipsis"
+          tooltipPosition="top"
+          [pTooltip]="row.createdBy?.name ?? '-'"
+          >{{ row.createdBy?.name ?? '-' }}</span
+        >
       </td>
 
       <td class="text-center">

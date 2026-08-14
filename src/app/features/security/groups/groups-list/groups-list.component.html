@@ -39,9 +39,9 @@
   (clear)="clear()"
   (search)="search()"
   [actionsAlign]="'start'"
-  [activeFilterGroups]="activeFilterGroups()"
   [activeCount]="activeFiltersCount()"
   [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
 >
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-3 p-1">
@@ -143,7 +143,7 @@
         <col style="width: 170px" />
         <col style="width: 90px" />
         <col style="width: 90px" />
-        <col style="width: 90px" />
+        <col style="width: 70px" />
       </colgroup>
     </ng-template>
 
@@ -151,7 +151,12 @@
       <tr>
         <th pSortableColumn="name">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'groups.columns.name' | translate">{{ 'groups.columns.name' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'groups.columns.name' | translate"
+              >{{ 'groups.columns.name' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="name"></p-sortIcon>
               <p-columnFilter
@@ -171,7 +176,12 @@
 
         <th pSortableColumn="description">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'groups.columns.description' | translate">{{ 'groups.columns.description' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'groups.columns.description' | translate"
+              >{{ 'groups.columns.description' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="description"></p-sortIcon>
               <p-columnFilter
@@ -191,7 +201,12 @@
 
         <th pSortableColumn="createdAt">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'groups.columns.createdAt' | translate">{{ 'groups.columns.createdAt' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'groups.columns.createdAt' | translate"
+              >{{ 'groups.columns.createdAt' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="createdAt"></p-sortIcon>
               <p-columnFilter
@@ -223,7 +238,12 @@
 
         <th pSortableColumn="createdBy">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'groups.columns.createdBy' | translate">{{ 'groups.columns.createdBy' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'groups.columns.createdBy' | translate"
+              >{{ 'groups.columns.createdBy' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="createdBy"></p-sortIcon>
               <p-columnFilter
@@ -256,18 +276,33 @@
 
         <th>
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'groups.columns.usersCount' | translate">{{ 'groups.columns.usersCount' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'groups.columns.usersCount' | translate"
+              >{{ 'groups.columns.usersCount' | translate }}</span
+            >
           </div>
         </th>
         <th>
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'groups.columns.permissionsCount' | translate">{{ 'groups.columns.permissionsCount' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'groups.columns.permissionsCount' | translate"
+              >{{ 'groups.columns.permissionsCount' | translate }}</span
+            >
           </div>
         </th>
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'common.actions' | translate"
+              >{{ 'common.actions' | translate }}</span
+            >
           </div>
         </th>
       </tr>
@@ -275,10 +310,25 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{ row.name }}</span></td>
-        <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.description">{{ row.description }}</span></td>
+        <td>
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{
+            row.name
+          }}</span>
+        </td>
+        <td>
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.description">{{
+            row.description
+          }}</span>
+        </td>
         <td class="text-center">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
-        <td class="text-center"><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.createdBy?.name ?? '-'">{{ row.createdBy?.name ?? '-' }}</span></td>
+        <td class="text-center">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.createdBy?.name ?? '-'"
+            >{{ row.createdBy?.name ?? '-' }}</span
+          >
+        </td>
         <td class="text-center">{{ row.usersCount ?? '-' }}</td>
         <td class="text-center">{{ row.permissionsCount ?? '-' }}</td>
         <td class="text-center">
@@ -332,7 +382,11 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="7" class="text-center py-5 opacity-70">
-          {{ facade.loadedOnce() ? ('groups.empty.title' | translate) : ('common.loading' | translate) }}
+          {{
+            facade.loadedOnce()
+              ? ('groups.empty.title' | translate)
+              : ('common.loading' | translate)
+          }}
         </td>
       </tr>
     </ng-template>

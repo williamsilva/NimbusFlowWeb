@@ -604,9 +604,9 @@
         </td>
         <td>
           <span
-            class="cs-table-cell-ellipsis"
             tooltipPosition="top"
             [pTooltip]="row.supplierName"
+            class="cs-table-cell-ellipsis"
             >{{ row.supplierName }}</span
           >
         </td>
@@ -646,41 +646,41 @@
               type="button"
               icon="pi pi-pencil"
               (click)="edit(row)"
-              class="p-button-text p-button-sm"
+              tooltipPosition="top"
               [disabled]="!policy.canEdit()"
+              class="p-button-text p-button-sm"
               [pTooltip]="
                 policy.canEdit()
                   ? ('common.edit' | translate)
                   : (policy.editDisabledReason() ?? 'works.action.noPermission' | translate)
               "
-              tooltipPosition="top"
             ></button>
 
             <a
               pButton
               icon="pi pi-file"
+              tooltipPosition="top"
               [routerLink]="['/works', row.id, 'addendums']"
               class="p-button-text p-button-sm p-button-danger"
               [pTooltip]="'works.action.viewAddendums' | translate"
-              tooltipPosition="top"
             ></a>
 
             <a
               pButton
               icon="pi pi-camera"
-              [routerLink]="['/works', row.id, 'measurements']"
-              class="p-button-text p-button-sm p-button-warning"
-              [pTooltip]="'works.action.viewMeasurements' | translate"
               tooltipPosition="top"
+              class="p-button-text p-button-sm p-button-warn"
+              [routerLink]="['/works', row.id, 'measurements']"
+              [pTooltip]="'works.action.viewMeasurements' | translate"
             ></a>
 
             <a
               pButton
               icon="pi pi-wallet"
-              [routerLink]="['/works', row.id, 'installments']"
-              class="p-button-text p-button-sm p-button-success"
-              [pTooltip]="'works.action.viewInstallments' | translate"
               tooltipPosition="top"
+              class="p-button-text p-button-sm p-button-info"
+              [routerLink]="['/works', row.id, 'installments']"
+              [pTooltip]="'works.action.viewInstallments' | translate"
             ></a>
           </div>
         </td>
