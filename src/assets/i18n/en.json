@@ -3718,6 +3718,10 @@
       "address": "Address",
       "bank": "Bank details"
     },
+    "cep": {
+      "searchTooltip": "Look up address by ZIP code",
+      "notFound": "ZIP code not found."
+    },
     "fields": {
       "companyName": "Company name",
       "tradeName": "Trade name",
@@ -3760,7 +3764,15 @@
     },
     "action": {
       "noPermission": "You do not have permission to manage suppliers.",
-      "deactivate": "Deactivate"
+      "deactivate": "Deactivate",
+      "alreadyInactive": "This supplier is already inactive.",
+      "activate": "Activate",
+      "alreadyActive": "This supplier is already active."
+    },
+    "activate": {
+      "header": "Activate supplier",
+      "message": "Do you really want to activate supplier {companyName}?",
+      "success": "Supplier activated successfully."
     },
     "deactivate": {
       "header": "Deactivate supplier",
@@ -3916,7 +3928,28 @@
       "title": "No projects found"
     },
     "action": {
-      "noPermission": "You do not have permission to manage projects."
+      "noPermission": "You do not have permission to manage projects.",
+      "markInProgress": "Mark as in progress",
+      "markPaused": "Pause",
+      "markCompleted": "Mark as completed",
+      "alreadyInProgress": "This project is already in progress.",
+      "alreadyPaused": "This project is already paused.",
+      "alreadyCompleted": "This project is already completed."
+    },
+    "markInProgressConfirm": {
+      "header": "Mark as in progress",
+      "message": "Confirm changing project {name}'s status to \"In progress\"?",
+      "success": "Project marked as in progress."
+    },
+    "markPausedConfirm": {
+      "header": "Pause project",
+      "message": "Confirm changing project {name}'s status to \"Paused\"?",
+      "success": "Project paused successfully."
+    },
+    "markCompletedConfirm": {
+      "header": "Mark as completed",
+      "message": "Confirm changing project {name}'s status to \"Completed\"?",
+      "success": "Project marked as completed."
     }
   },
   "addendums": {

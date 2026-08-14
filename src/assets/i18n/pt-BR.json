@@ -3713,6 +3713,10 @@
       "address": "Endereço",
       "bank": "Dados bancários"
     },
+    "cep": {
+      "searchTooltip": "Buscar endereço pelo CEP",
+      "notFound": "CEP não encontrado."
+    },
     "fields": {
       "companyName": "Razão social",
       "tradeName": "Nome fantasia",
@@ -3755,12 +3759,20 @@
     },
     "action": {
       "noPermission": "Você não tem permissão para gerenciar fornecedores.",
-      "deactivate": "Desativar"
+      "deactivate": "Desativar",
+      "alreadyInactive": "Este fornecedor já está inativo.",
+      "activate": "Ativar",
+      "alreadyActive": "Este fornecedor já está ativo."
     },
     "deactivate": {
       "header": "Desativar fornecedor",
       "message": "Deseja realmente desativar o fornecedor {companyName}?",
       "success": "Fornecedor desativado com sucesso."
+    },
+    "activate": {
+      "header": "Ativar fornecedor",
+      "message": "Deseja realmente ativar o fornecedor {companyName}?",
+      "success": "Fornecedor ativado com sucesso."
     }
   },
   "works": {
@@ -3911,7 +3923,28 @@
       "title": "Nenhum projeto encontrado"
     },
     "action": {
-      "noPermission": "Você não tem permissão para gerenciar projetos."
+      "noPermission": "Você não tem permissão para gerenciar projetos.",
+      "markInProgress": "Marcar como em andamento",
+      "markPaused": "Pausar",
+      "markCompleted": "Marcar como concluído",
+      "alreadyInProgress": "Este projeto já está em andamento.",
+      "alreadyPaused": "Este projeto já está pausado.",
+      "alreadyCompleted": "Este projeto já está concluído."
+    },
+    "markInProgressConfirm": {
+      "header": "Marcar como em andamento",
+      "message": "Confirma a mudança do status do projeto {name} para \"Em andamento\"?",
+      "success": "Projeto marcado como em andamento."
+    },
+    "markPausedConfirm": {
+      "header": "Pausar projeto",
+      "message": "Confirma a mudança do status do projeto {name} para \"Pausado\"?",
+      "success": "Projeto pausado com sucesso."
+    },
+    "markCompletedConfirm": {
+      "header": "Marcar como concluído",
+      "message": "Confirma a mudança do status do projeto {name} para \"Concluído\"?",
+      "success": "Projeto marcado como concluído."
     }
   },
   "addendums": {
