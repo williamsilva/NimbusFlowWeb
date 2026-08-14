@@ -136,4 +136,13 @@ export class SuppliersFacade {
       }),
     );
   }
+
+  activate(id: string): Observable<void> {
+    return this.api.activate(id).pipe(
+      tap(() => {
+        this.reloadLast();
+        this.reloadOptions();
+      }),
+    );
+  }
 }

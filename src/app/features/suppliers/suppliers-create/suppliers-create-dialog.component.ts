@@ -13,6 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -21,9 +22,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { I18nService } from '@core/i18n/i18n.service';
 import { SuppliersFacade } from '@features/facade/suppliers.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
-import { onlyDigits, formatTaxId, formatPhone } from '@shared/utils/br-format';
+import { CepLookupService } from '@shared/services/cep-lookup.service';
 import { SuppliersPermissionPolicy } from '@features/suppliers/suppliers-permission.policy';
 import { SupplierModel, SupplierUpsertInput } from '@models/suppliers.models';
+import { onlyDigits, formatTaxId, formatPhone, formatZipCode } from '@shared/utils/br-format';
 
 /** Exige, após remover não-dígitos, exatamente 11 (CPF) ou 14 (CNPJ) dígitos - mesma regra do
  *  backend (SupplierRequest.taxId, regex `\d{11}|\d{14}`). */
@@ -46,6 +48,7 @@ function taxIdValidator(): ValidatorFn {
     ToastModule,
     DialogModule,
     ButtonModule,
+    TooltipModule,
     CheckboxModule,
     InputTextModule,
     TranslateModule,
@@ -66,10 +69,13 @@ export class SuppliersCreateDialogComponent {
   private readonly fb = inject(FormBuilder);
   private readonly toast = inject(MessageService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly cepLookup = inject(CepLookupService);
 
   readonly i18n = inject(I18nService);
   readonly suppliers = inject(SuppliersFacade);
   readonly policy = inject(SuppliersPermissionPolicy);
+
+  readonly cepLoading = signal(false);
 
   readonly loadedSupplier = signal<SupplierModel | null>(null);
   readonly isEditMode = computed(() => !!this.supplier());
@@ -137,7 +143,7 @@ export class SuppliersCreateDialogComponent {
         addressNeighborhood: supplier.addressNeighborhood ?? '',
         addressCity: supplier.addressCity ?? '',
         addressState: supplier.addressState ?? '',
-        addressZipCode: supplier.addressZipCode ?? '',
+        addressZipCode: supplier.addressZipCode ? formatZipCode(supplier.addressZipCode) : '',
         bankName: supplier.bankName ?? '',
         bankAgency: supplier.bankAgency ?? '',
         bankAccount: supplier.bankAccount ?? '',
@@ -153,6 +159,52 @@ export class SuppliersCreateDialogComponent {
 
   onPhoneInput(value: string): void {
     this.form.controls.phone.setValue(formatPhone(value));
+  }
+
+  /** Formata enquanto digita e, ao completar os 8 dígitos, já dispara a busca automaticamente -
+   *  sem precisar clicar no botão de buscar (que fica só como alternativa pra CEP colado/editado
+   *  sem disparar o (input), ou pra tentar de novo). */
+  onZipCodeInput(value: string): void {
+    const formatted = formatZipCode(value);
+    this.form.controls.addressZipCode.setValue(formatted);
+
+    if (onlyDigits(formatted).length === 8) {
+      this.searchZipCode();
+    }
+  }
+
+  searchZipCode(): void {
+    const zipCode = this.form.controls.addressZipCode.value;
+    if (onlyDigits(zipCode).length !== 8 || this.cepLoading()) {
+      return;
+    }
+
+    this.cepLoading.set(true);
+    this.cepLookup
+      .lookup(zipCode)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (address) => {
+          this.cepLoading.set(false);
+
+          if (!address) {
+            this.toast.add({
+              severity: 'warn',
+              summary: this.i18n.tUi('common.warning'),
+              detail: this.i18n.tUi('suppliers.cep.notFound' as never),
+            });
+            return;
+          }
+
+          this.form.patchValue({
+            addressStreet: address.street ?? '',
+            addressNeighborhood: address.neighborhood ?? '',
+            addressCity: address.city ?? '',
+            addressState: address.state ?? '',
+          });
+        },
+        error: () => this.cepLoading.set(false),
+      });
   }
 
   onHide(): void {
@@ -220,7 +272,7 @@ export class SuppliersCreateDialogComponent {
       addressNeighborhood: v.addressNeighborhood.trim() || null,
       addressCity: v.addressCity.trim() || null,
       addressState: v.addressState.trim() || null,
-      addressZipCode: v.addressZipCode.trim() || null,
+      addressZipCode: v.addressZipCode ? onlyDigits(v.addressZipCode) : null,
       bankName: v.bankName.trim() || null,
       bankAgency: v.bankAgency.trim() || null,
       bankAccount: v.bankAccount.trim() || null,

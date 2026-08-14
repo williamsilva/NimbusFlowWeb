@@ -48,3 +48,12 @@ export function isValidTaxIdLength(value: string | null | undefined): boolean {
   const len = onlyDigits(value).length;
   return len === 11 || len === 14;
 }
+
+/** Formata progressivamente como CEP (8 dígitos, 00000-000). */
+export function formatZipCode(value: string | null | undefined): string {
+  const digits = onlyDigits(value).slice(0, 8);
+  if (!digits) {
+    return '';
+  }
+  return digits.replace(/(\d{5})(\d{1,3})$/, '$1-$2');
+}

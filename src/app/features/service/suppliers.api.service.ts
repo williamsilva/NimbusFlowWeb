@@ -64,4 +64,9 @@ export class SuppliersApiService {
   deactivate(id: string) {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  /** Reverte o soft-delete (backend só marca active=true). */
+  activate(id: string) {
+    return this.http.post<void>(`${this.baseUrl}/${id}/activate`, {});
+  }
 }
