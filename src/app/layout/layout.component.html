@@ -2,6 +2,9 @@
 
 <div class="shell" [class.sidebar-collapsed]="!sidebarVisible()">
   @if (sidebarVisible()) {
+    <!-- No mobile (ver CSS) isto vira um overlay de tela cheia, não uma coluna do grid - o
+         fundo escurecido abaixo só existe/aparece nesse breakpoint (display:none no desktop). -->
+    <div class="sidebar-backdrop" (click)="closeSidebarOverlay()"></div>
     <app-sidebar class="sidebar-host"></app-sidebar>
   }
 
@@ -13,3 +16,5 @@
 </div>
 
 <app-footer class="footer-fixed" [class.sidebar-collapsed]="!sidebarVisible()"></app-footer>
+
+<app-bottom-nav></app-bottom-nav>

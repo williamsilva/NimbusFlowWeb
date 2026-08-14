@@ -1,0 +1,41 @@
+<nav class="bottom-nav cs-glass">
+  <a
+    class="bottom-nav-item"
+    routerLink="/dashboard"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    >
+    <i class="pi pi-home"></i>
+    <span>{{ 'menu.dashboard' | translate }}</span>
+  </a>
+
+  <a
+    class="bottom-nav-item"
+    routerLink="/works"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: false }"
+    >
+    <i class="pi pi-building"></i>
+    <span>{{ 'menu.works.works' | translate }}</span>
+  </a>
+
+  <a
+    class="bottom-nav-item"
+    routerLink="/measurements"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: false }"
+    >
+    <i class="pi pi-camera"></i>
+    <span>{{ 'menu.works.measurements' | translate }}</span>
+  </a>
+
+  <button
+    type="button"
+    class="bottom-nav-item"
+    [class.active]="sidebarVisible()"
+    (click)="openMore()"
+    >
+    <i class="pi pi-bars"></i>
+    <span>{{ 'menu.more' | translate }}</span>
+  </button>
+</nav>

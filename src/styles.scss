@@ -9,10 +9,26 @@ body {
   margin: 0;
   height: 100%;
   overflow-x: hidden;
+  /* combina com o fundo do app (evita flash branco atrás da status bar translúcida no iOS -
+     ver apple-mobile-web-app-status-bar-style=black-translucent no index.html). */
+  background-color: var(--surface-ground);
 }
 
 body {
   margin: 0;
+  /* "cara de app", não de site: sem puxar-pra-atualizar/bounce de borracha ao chegar no fim da
+     rolagem (o maior "cheiro de navegador" que existe), sem o flash cinza ao tocar em
+     botões/links (herdado do estilo padrão de toque do navegador mobile). */
+  overscroll-behavior-y: contain;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Remove o delay de ~300ms + double-tap-to-zoom em áreas clicáveis - mantém o pinch-zoom geral
+ * intacto (acessibilidade), só tira o zoom por toque duplo em botões/links/nav. */
+button,
+a,
+[role='button'] {
+  touch-action: manipulation;
 }
 
 /* (opcional) suaviza fontes no dark */

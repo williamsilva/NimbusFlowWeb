@@ -2,7 +2,15 @@
   display: block;
   height: 100dvh;
   box-sizing: border-box;
-  padding-top: 8px; /* pequeno espaço superior no topbar */
+  /* pequeno espaço superior no topbar + área do notch/status bar (iOS, viewport-fit=cover no
+     index.html) - sem o env() aqui o topbar fica por baixo do notch em telas com entalhe. */
+  padding-top: calc(8px + env(safe-area-inset-top));
+}
+
+/* Fundo escurecido atrás do sidebar quando ele vira overlay no mobile (ver .sidebar-host
+   abaixo) - inerte/invisível no desktop, onde a sidebar é só uma coluna do grid. */
+.sidebar-backdrop {
+  display: none;
 }
 
 /* Topbar wrapper (altura fixa real) */
@@ -102,5 +110,46 @@
   .footer-fixed {
     left: 8px;
     right: 8px;
+  }
+}
+
+/* ===== Mobile: sidebar vira overlay de tela cheia + barra inferior no lugar do rodapé =====
+   Mesmo breakpoint de bottom-nav.component.css/topbar.component.css - os três precisam
+   coordenar (sidebar overlay, rodapé sumindo, barra inferior aparecendo) no mesmo ponto. */
+@media (max-width: 768px) {
+  .shell {
+    /* a sidebar não é mais coluna do grid nesta largura - vira overlay (position: fixed) */
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 190;
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  .sidebar-host {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    height: 100dvh;
+    padding: calc(8px + env(safe-area-inset-top)) calc(8px + env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom))
+      calc(8px + env(safe-area-inset-left));
+    box-sizing: border-box;
+  }
+
+  /* Substituída pela app-bottom-nav - as duas juntas não cabem/não fazem sentido numa tela de
+     celular. */
+  .footer-fixed {
+    display: none;
+  }
+
+  /* Espaço reservado pra app-bottom-nav (não mais pro rodapé) - altura aproximada da barra
+     (~46px de conteúdo + 12px de padding vertical) + a folga que ela mesma já reserva pro
+     home indicator/gesture bar via safe-area-inset-bottom. */
+  .content {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
   }
 }

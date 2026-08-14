@@ -1,0 +1,76 @@
+/* Escondida no desktop por padrão - só aparece abaixo do breakpoint (mesmo usado em
+   topbar.component.css pros ajustes responsivos do topbar). */
+:host {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  :host {
+    display: block;
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    z-index: 120;
+  }
+}
+
+.bottom-nav {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  gap: 4px;
+
+  border-radius: 16px;
+  padding: 6px;
+  /* home indicator (iPhone)/gesture bar (Android) - sem isso os itens ficam colados na borda
+     de baixo da tela, "cara de site" que ignora a área reservada do sistema. */
+  padding-bottom: calc(6px + env(safe-area-inset-bottom));
+  padding-left: calc(6px + env(safe-area-inset-left));
+  padding-right: calc(6px + env(safe-area-inset-right));
+}
+
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+
+  padding: 6px 4px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  text-decoration: none;
+  font: inherit;
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.bottom-nav-item i {
+  font-size: 1.15rem;
+  opacity: 0.92;
+}
+
+.bottom-nav-item span {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1px;
+}
+
+/* mesma cor de destaque usada em SidebarComponent (.nav-item.active) - consistência com o
+   resto do chrome do app, não introduz um acento novo. */
+.bottom-nav-item.active {
+  color: rgb(59, 130, 246);
+  background: rgba(59, 130, 246, 0.14);
+}
+
+:root.dark .bottom-nav-item.active {
+  background: rgba(59, 130, 246, 0.22);
+}
