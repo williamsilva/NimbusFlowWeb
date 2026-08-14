@@ -221,6 +221,7 @@
   },
   "menu": {
     "me": "Minha conta",
+    "more": "Mais",
     "dashboard": "Dashboard",
     "managementDashboard": "Dashboard Gerencial",
     "dashboardManagement": "Gerenciamento",

@@ -311,6 +311,12 @@
   .session-timer {
     display: none;
   }
+
+  /* substituído pelo botão "Mais" da app-bottom-nav neste breakpoint - dois jeitos de abrir o
+     mesmo menu na tela seria redundante, e o topbar já está apertado no mobile. */
+  .cs-sidebar-toggle {
+    display: none;
+  }
 }
 
 @media (max-width: 640px) {
