@@ -1,8 +1,7 @@
-
-import { FormsModule } from '@angular/forms';
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -11,27 +10,30 @@ import { TooltipModule } from 'primeng/tooltip';
 import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { TranslateModule } from '@ngx-translate/core';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
-import { AddendumsGlobalFacade } from '@features/facade/addendums-global.facade';
-import { AddendumsAdvancedFilters } from '@features/filter/addendums.filters';
+import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { translateWorksErrorDetail } from '@features/works/works-error.util';
+import { AddendumsAdvancedFilters } from '@features/filter/addendums.filters';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { AddendumsGlobalFacade } from '@features/facade/addendums-global.facade';
+import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
+import { AddendumsPermissionPolicy } from '@features/works/addendums-permission.policy';
+import { AddendumWithWorkModel, AddendumsFiltersState } from '@models/addendums.models';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
+import { formatApprovalRanges } from '@features/works/addendums/addendums-approval-range.util';
+import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import {
   currencyRangeLabel,
   CsCurrencyRangeFilterComponent,
 } from '@features/list-base/cs-currency-range-filter.component';
-import { AddendumWithWorkModel, AddendumsFiltersState } from '@models/addendums.models';
-import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
@@ -41,9 +43,11 @@ import {
   readArrayFilterValues,
   readDateRangeFilterValue,
 } from '@features/list-base/table-filter-readers';
-import { ADDENDUM_STATUS_VALUES, AddendumStatusEnum, addendumStatusTone } from '@models/enums/addendum-status.enum';
-import { formatApprovalRanges } from '@features/works/addendums/addendums-approval-range.util';
-import { translateWorksErrorDetail } from '@features/works/works-error.util';
+import {
+  AddendumStatusEnum,
+  addendumStatusTone,
+  ADDENDUM_STATUS_VALUES,
+} from '@models/enums/addendum-status.enum';
 
 @Component({
   standalone: true,
@@ -51,10 +55,10 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
   templateUrl: './all-addendums-list.component.html',
   imports: [
     FloatLabel,
+    CsDatePipe,
     FormsModule,
     TableModule,
     ButtonModule,
-    CsDatePipe,
     CsCurrencyPipe,
     TooltipModule,
     InputTextModule,
@@ -77,6 +81,7 @@ export class AllAddendumsListComponent extends StatefulListPage<
 
   protected override readonly i18n = inject(I18nService);
   readonly facade = inject(AddendumsGlobalFacade);
+  readonly policy = inject(AddendumsPermissionPolicy);
   private readonly toast = inject(MessageService);
   private readonly confirm = inject(ConfirmationService);
 
@@ -159,6 +164,31 @@ export class AllAddendumsListComponent extends StatefulListPage<
     return row.status === AddendumStatusEnum.PENDING;
   }
 
+  /** row.canDecide já cobre status PENDING + permissão/alçada (ver
+   *  AddendumApprovalService.canDecidePending) - só falta diferenciar o motivo pro tooltip
+   *  quando desabilitado. */
+  decideDisabledReason(row: AddendumWithWorkModel): string {
+    if (!this.isPending(row)) {
+      return 'addendums.action.alreadyDecided';
+    }
+    return 'addendums.action.noPermission';
+  }
+
+  isApproved(row: AddendumWithWorkModel): boolean {
+    return row.status === AddendumStatusEnum.APPROVED;
+  }
+
+  canResendNotification(row: AddendumWithWorkModel): boolean {
+    return this.isApproved(row) && this.policy.canResendNotification();
+  }
+
+  resendNotificationDisabledReason(row: AddendumWithWorkModel): string {
+    if (!this.isApproved(row)) {
+      return 'addendums.action.requiresApproved';
+    }
+    return this.policy.resendNotificationDisabledReason() ?? 'addendums.action.noPermission';
+  }
+
   approvalRangeLabel(row: AddendumWithWorkModel): string {
     return formatApprovalRanges(this.i18n, row.approvalRanges);
   }
@@ -219,6 +249,37 @@ export class AllAddendumsListComponent extends StatefulListPage<
                 severity: 'success',
                 summary: this.i18n.tUi('common.success'),
                 detail: this.i18n.tUi('addendums.rejectConfirm.success'),
+              }),
+            error: (err) =>
+              this.toast.add({
+                severity: 'error',
+                summary: this.i18n.tUi('common.error'),
+                detail:
+                  translateWorksErrorDetail(err, this.i18n) ??
+                  this.i18n.tUi('addendums.form.saveError'),
+              }),
+          });
+      },
+    });
+  }
+
+  confirmResendNotification(row: AddendumWithWorkModel): void {
+    if (!this.canResendNotification(row)) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('addendums.resendNotificationConfirm.header'),
+      message: this.i18n.tUi('addendums.resendNotificationConfirm.message'),
+      icon: 'pi pi-question-circle',
+      accept: () => {
+        this.facade
+          .resendNotification(row.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () =>
+              this.toast.add({
+                severity: 'success',
+                summary: this.i18n.tUi('common.success'),
+                detail: this.i18n.tUi('addendums.resendNotificationConfirm.success'),
               }),
             error: (err) =>
               this.toast.add({

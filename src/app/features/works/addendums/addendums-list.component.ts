@@ -143,6 +143,16 @@ export class AddendumsListComponent implements OnInit {
     return row.status === AddendumStatusEnum.APPROVED;
   }
 
+  /** row.canDecide já cobre status PENDING + permissão/alçada (ver
+   *  AddendumApprovalService.canDecidePending) - só falta diferenciar o motivo pro tooltip
+   *  quando desabilitado. */
+  decideDisabledReason(row: AddendumModel): string {
+    if (!this.isPending(row)) {
+      return 'addendums.action.alreadyDecided';
+    }
+    return 'addendums.action.noPermission';
+  }
+
   approvalRangeLabel(row: AddendumModel): string {
     return formatApprovalRanges(this.i18n, row.approvalRanges);
   }

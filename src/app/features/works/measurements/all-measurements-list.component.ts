@@ -165,12 +165,23 @@ export class AllMeasurementsListComponent extends StatefulListPage<
     return row.status === MeasurementStatusEnum.PENDING;
   }
 
+  canDecide(row: MeasurementWithContextModel): boolean {
+    return this.isPending(row) && this.policy.canDecide();
+  }
+
+  decideDisabledReason(row: MeasurementWithContextModel): string {
+    if (!this.isPending(row)) {
+      return 'measurements.action.alreadyDecided';
+    }
+    return this.policy.decideDisabledReason() ?? 'measurements.action.noPermission';
+  }
+
   clear() {
     this.clearTableAndReload(this.dt);
   }
 
   confirmApprove(row: MeasurementWithContextModel): void {
-    if (!this.policy.canDecide()) return;
+    if (!this.canDecide(row)) return;
 
     this.confirm.confirm({
       header: this.i18n.tUi('measurements.approveConfirm.header'),
@@ -201,7 +212,7 @@ export class AllMeasurementsListComponent extends StatefulListPage<
   }
 
   confirmReject(row: MeasurementWithContextModel): void {
-    if (!this.policy.canDecide()) return;
+    if (!this.canDecide(row)) return;
 
     this.confirm.confirm({
       header: this.i18n.tUi('measurements.rejectConfirm.header'),
