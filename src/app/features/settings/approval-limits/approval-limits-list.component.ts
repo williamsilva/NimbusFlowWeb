@@ -23,6 +23,7 @@ import { ApprovalLimitFormDialogComponent } from '@features/settings/approval-li
   standalone: true,
   selector: 'app-approval-limits-list',
   templateUrl: './approval-limits-list.component.html',
+  styleUrl: './approval-limits-list.component.scss',
   imports: [
     TableModule,
     ButtonModule,

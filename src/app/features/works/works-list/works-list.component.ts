@@ -51,7 +51,7 @@ import {
   standalone: true,
   selector: 'app-works-list',
   templateUrl: './works-list.component.html',
-  styleUrl: './works-list.component.css',
+  styleUrl: './works-list.component.scss',
   imports: [
     RouterLink,
     CsDatePipe,

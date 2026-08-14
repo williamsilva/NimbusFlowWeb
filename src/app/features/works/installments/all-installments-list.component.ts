@@ -54,6 +54,7 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
   standalone: true,
   selector: 'app-all-installments-list',
   templateUrl: './all-installments-list.component.html',
+  styleUrl: './all-installments-list.component.scss',
   imports: [
     FloatLabel,
     FormsModule,

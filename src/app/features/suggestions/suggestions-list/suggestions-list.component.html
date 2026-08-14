@@ -223,8 +223,8 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.description">{{ row.description }}</span></td>
-        <td class="text-center">
+        <td class="mobile-card-title"><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.description">{{ row.description }}</span></td>
+        <td class="text-center" [attr.data-label]="'suggestions.columns.status' | translate">
           @if (canManageStatus()) {
             <p-select
               size="small"
@@ -244,7 +244,7 @@
             ></cs-status-badge>
           }
         </td>
-        <td class="text-center">
+        <td class="text-center" [attr.data-label]="'suggestions.columns.attachment' | translate">
           @if (row.attachmentUrl) {
             <a
               [href]="row.attachmentUrl"
@@ -259,7 +259,7 @@
             <span>-</span>
           }
         </td>
-        <td class="text-center">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
+        <td class="text-center" [attr.data-label]="'suggestions.columns.createdAt' | translate">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
       </tr>
     </ng-template>
 

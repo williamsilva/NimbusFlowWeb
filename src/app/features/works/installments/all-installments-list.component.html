@@ -299,21 +299,21 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td>
+        <td class="mobile-card-title">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.workName">{{
             row.workName
           }}</span>
         </td>
-        <td class="text-center">{{ numberLabel(row) }}</td>
-        <td class="text-right">{{ row.amount | csCurrency }}</td>
-        <td class="text-center">{{ row.dueDate | csDate: 'date' }}</td>
-        <td class="text-center">
+        <td class="text-center" [attr.data-label]="'installments.columns.number' | translate">{{ numberLabel(row) }}</td>
+        <td class="text-right" [attr.data-label]="'installments.columns.amount' | translate">{{ row.amount | csCurrency }}</td>
+        <td class="text-center" [attr.data-label]="'installments.columns.dueDate' | translate">{{ row.dueDate | csDate: 'date' }}</td>
+        <td class="text-center" [attr.data-label]="'installments.columns.status' | translate">
           <cs-status-badge
             [tone]="tone(row.status)"
             [label]="'installments.status.' + row.status | translate"
           ></cs-status-badge>
         </td>
-        <td class="text-center">
+        <td class="text-center" [attr.data-label]="'installments.columns.tier' | translate">
           <span
             tooltipPosition="top"
             class="cs-table-cell-ellipsis"
@@ -321,7 +321,7 @@
             >{{ approvalRangeLabel(row) }}</span
           >
         </td>
-        <td class="text-center">
+        <td class="text-center mobile-card-actions">
           <div class="table-actions">
             <button
               pButton

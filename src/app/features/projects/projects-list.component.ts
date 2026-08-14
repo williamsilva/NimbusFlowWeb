@@ -46,6 +46,7 @@ import { readSingleFilterValue, readArrayFilterValues } from '@features/list-bas
   standalone: true,
   selector: 'app-projects-list',
   templateUrl: './projects-list.component.html',
+  styleUrl: './projects-list.component.scss',
   imports: [
     DecimalPipe,
     FloatLabel,

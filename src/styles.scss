@@ -23,6 +23,33 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Botões de ação do cs-page-header (Atualizar/Novo.../etc, projetados via <ng-content> - cada
+ * tela declara os próprios botões, cs-page-header não controla o conteúdo diretamente, por
+ * isso é global e não um estilo do próprio componente) viram só ícone no mobile - cara de app
+ * (barra de ações compacta), não de site. "Visually hidden" (não display:none) pra manter o
+ * texto acessível pra leitor de tela - só o rótulo VISUAL some, o nome acessível do botão
+ * continua o mesmo. */
+@media (max-width: 768px) {
+  cs-page-header .p-button-label {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  cs-page-header .p-button {
+    width: 2.25rem;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    justify-content: center;
+  }
+}
+
 /* Remove o delay de ~300ms + double-tap-to-zoom em áreas clicáveis - mantém o pinch-zoom geral
  * intacto (acessibilidade), só tira o zoom por toque duplo em botões/links/nav. */
 button,

@@ -42,6 +42,7 @@ const SUBMITTABLE_WORK_STATUSES = new Set<WorkStatusEnum>([WorkStatusEnum.PLANNE
   standalone: true,
   selector: 'app-measurements-list',
   templateUrl: './measurements-list.component.html',
+  styleUrl: './measurements-list.component.scss',
   imports: [
     DecimalPipe,
     FormsModule,

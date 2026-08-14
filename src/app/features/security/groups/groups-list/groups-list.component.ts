@@ -44,6 +44,7 @@ import {
   standalone: true,
   selector: 'app-groups-list',
   templateUrl: './groups-list.component.html',
+  styleUrl: './groups-list.component.scss',
   imports: [
     FloatLabel,
     CsDatePipe,

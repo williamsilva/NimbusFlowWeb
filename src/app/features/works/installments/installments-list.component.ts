@@ -37,6 +37,7 @@ import {
   standalone: true,
   selector: 'app-installments-list',
   templateUrl: './installments-list.component.html',
+  styleUrl: './installments-list.component.scss',
   imports: [
     FormsModule,
     CsDatePipe,

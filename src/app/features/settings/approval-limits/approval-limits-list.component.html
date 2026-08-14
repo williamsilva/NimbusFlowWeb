@@ -57,15 +57,15 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td class="text-right">{{ row.minAmount | csCurrency }}</td>
-        <td class="text-right">
+        <td class="text-right mobile-card-title">{{ row.minAmount | csCurrency }}</td>
+        <td class="text-right" [attr.data-label]="'approvalLimits.columns.maxAmount' | translate">
           {{
             row.maxAmount != null
               ? (row.maxAmount | csCurrency)
               : ('approvalLimits.unbounded' | translate)
           }}
         </td>
-        <td>
+        <td [attr.data-label]="'approvalLimits.columns.users' | translate">
           <span
             tooltipPosition="top"
             class="cs-table-cell-ellipsis"
@@ -74,7 +74,7 @@
             {{ userNames(row.userIds) }}
           </span>
         </td>
-        <td class="text-center">
+        <td class="text-center mobile-card-actions">
           <div class="table-actions">
             <button
               pButton

@@ -402,12 +402,12 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td>
+        <td class="mobile-card-title">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.companyName">{{
             row.companyName
           }}</span>
         </td>
-        <td>
+        <td [attr.data-label]="'suppliers.columns.tradeName' | translate">
           <span
             class="cs-table-cell-ellipsis"
             tooltipPosition="top"
@@ -415,8 +415,8 @@
             >{{ row.tradeName || '-' }}</span
           >
         </td>
-        <td>{{ row.taxId | taxId }}</td>
-        <td>
+        <td [attr.data-label]="'suppliers.columns.taxId' | translate">{{ row.taxId | taxId }}</td>
+        <td [attr.data-label]="'suppliers.columns.email' | translate">
           <span
             class="cs-table-cell-ellipsis"
             tooltipPosition="top"
@@ -424,15 +424,15 @@
             >{{ row.email || '-' }}</span
           >
         </td>
-        <td>{{ row.phone ? (row.phone | phone) : '-' }}</td>
-        <td class="text-center">
+        <td [attr.data-label]="'suppliers.columns.phone' | translate">{{ row.phone ? (row.phone | phone) : '-' }}</td>
+        <td class="text-center" [attr.data-label]="'suppliers.columns.status' | translate">
           <cs-status-badge
             [tone]="row.active ? 'success' : 'neutral'"
             [label]="(row.active ? 'common.active' : 'common.inactive') | translate"
           ></cs-status-badge>
         </td>
-        <td class="text-center">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
-        <td class="text-center">
+        <td class="text-center" [attr.data-label]="'suppliers.columns.createdAt' | translate">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
+        <td class="text-center mobile-card-actions">
           <div class="table-actions">
             <button
               pButton
