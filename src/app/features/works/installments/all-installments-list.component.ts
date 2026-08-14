@@ -180,6 +180,20 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     return this.policy.markPaidDisabledReason() ?? 'installments.action.noPermission';
   }
 
+  canResendNotification(row: InstallmentWithWorkModel): boolean {
+    return (
+      (row.status === InstallmentStatusEnum.RELEASED || row.status === InstallmentStatusEnum.PAID) &&
+      this.policy.canResendNotification()
+    );
+  }
+
+  resendNotificationDisabledReason(row: InstallmentWithWorkModel): string {
+    if (row.status !== InstallmentStatusEnum.RELEASED && row.status !== InstallmentStatusEnum.PAID) {
+      return 'installments.action.requiresReleasedOrPaid';
+    }
+    return this.policy.resendNotificationDisabledReason() ?? 'installments.action.noPermission';
+  }
+
   confirmRelease(row: InstallmentWithWorkModel): void {
     if (!this.canRelease(row)) return;
 
@@ -232,6 +246,39 @@ export class AllInstallmentsListComponent extends StatefulListPage<
                 severity: 'success',
                 summary: this.i18n.tUi('common.success'),
                 detail: this.i18n.tUi('installments.markPaidConfirm.success'),
+              }),
+            error: (err) =>
+              this.toast.add({
+                severity: 'error',
+                summary: this.i18n.tUi('common.error'),
+                detail:
+                  translateWorksErrorDetail(err, this.i18n) ??
+                  this.i18n.tUi('installments.form.saveError'),
+              }),
+          });
+      },
+    });
+  }
+
+  confirmResendNotification(row: InstallmentWithWorkModel): void {
+    if (!this.canResendNotification(row)) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('installments.resendNotificationConfirm.header'),
+      message: this.i18n.tUi('installments.resendNotificationConfirm.message', {
+        number: row.number,
+      }),
+      icon: 'pi pi-question-circle',
+      accept: () => {
+        this.facade
+          .resendNotification(row.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () =>
+              this.toast.add({
+                severity: 'success',
+                summary: this.i18n.tUi('common.success'),
+                detail: this.i18n.tUi('installments.resendNotificationConfirm.success'),
               }),
             error: (err) =>
               this.toast.add({

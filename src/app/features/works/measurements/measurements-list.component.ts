@@ -143,6 +143,17 @@ export class MeasurementsListComponent implements OnInit {
     return row.status === MeasurementStatusEnum.PENDING;
   }
 
+  canDecide(row: MeasurementModel): boolean {
+    return this.isPending(row) && this.policy.canDecide();
+  }
+
+  decideDisabledReason(row: MeasurementModel): string {
+    if (!this.isPending(row)) {
+      return 'measurements.action.alreadyDecided';
+    }
+    return this.policy.decideDisabledReason() ?? 'measurements.action.noPermission';
+  }
+
   goNew(): void {
     if (!this.canCreate()) return;
     this.upsertVisible.set(true);
@@ -153,7 +164,7 @@ export class MeasurementsListComponent implements OnInit {
   }
 
   confirmApprove(row: MeasurementModel): void {
-    if (!this.policy.canDecide()) return;
+    if (!this.canDecide(row)) return;
 
     this.confirm.confirm({
       header: this.i18n.tUi('measurements.approveConfirm.header'),
@@ -184,7 +195,7 @@ export class MeasurementsListComponent implements OnInit {
   }
 
   confirmReject(row: MeasurementModel): void {
-    if (!this.policy.canDecide()) return;
+    if (!this.canDecide(row)) return;
 
     this.confirm.confirm({
       header: this.i18n.tUi('measurements.rejectConfirm.header'),

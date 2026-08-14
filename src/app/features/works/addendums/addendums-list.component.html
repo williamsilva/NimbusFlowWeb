@@ -61,12 +61,12 @@
       <colgroup>
         <col style="width: auto" />
         <col style="width: 140px" />
-        <col style="width: 200px" />
+        <col style="width: 250px" />
         <col style="width: 110px" />
         <col style="width: 150px" />
         <col style="width: 150px" />
         <col style="width: 150px" />
-        <col style="width: 80px" />
+        <col style="width: 70px" />
       </colgroup>
     </ng-template>
 
@@ -288,53 +288,46 @@
         <td class="text-center">{{ row.createdAt | csDate: 'datetime' }}</td>
         <td class="text-center">{{ row.decisionDate | csDate: 'datetime' }}</td>
         <td class="text-center">
-          @if (isPending(row)) {
-            <div class="table-actions">
-              <button
-                pButton
-                type="button"
-                icon="pi pi-check"
-                (click)="confirmApprove(row)"
-                class="p-button-text p-button-sm"
-                [disabled]="!row.canDecide"
-                [pTooltip]="
-                  (row.canDecide ? 'addendums.action.approve' : 'addendums.action.noPermission')
-                    | translate
-                "
-                tooltipPosition="top"
-              ></button>
-              <button
-                pButton
-                type="button"
-                icon="pi pi-times"
-                (click)="confirmReject(row)"
-                class="p-button-text p-button-sm p-button-danger"
-                [disabled]="!row.canDecide"
-                [pTooltip]="
-                  (row.canDecide ? 'addendums.action.reject' : 'addendums.action.noPermission')
-                    | translate
-                "
-                tooltipPosition="top"
-              ></button>
-            </div>
-          } @else if (isApproved(row)) {
-            <div class="table-actions">
-              <button
-                pButton
-                type="button"
-                icon="pi pi-envelope"
-                (click)="confirmResendNotification(row)"
-                class="p-button-text p-button-sm"
-                [disabled]="!canResendNotification(row)"
-                [pTooltip]="
-                  canResendNotification(row)
-                    ? ('addendums.action.resendNotification' | translate)
-                    : (resendNotificationDisabledReason(row) | translate)
-                "
-                tooltipPosition="top"
-              ></button>
-            </div>
-          }
+          <div class="table-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-check"
+              (click)="confirmApprove(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!row.canDecide"
+              [pTooltip]="
+                (row.canDecide ? 'addendums.action.approve' : decideDisabledReason(row)) | translate
+              "
+              tooltipPosition="top"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-times"
+              (click)="confirmReject(row)"
+              class="p-button-text p-button-sm p-button-danger"
+              [disabled]="!row.canDecide"
+              [pTooltip]="
+                (row.canDecide ? 'addendums.action.reject' : decideDisabledReason(row)) | translate
+              "
+              tooltipPosition="top"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-envelope"
+              (click)="confirmResendNotification(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canResendNotification(row)"
+              [pTooltip]="
+                canResendNotification(row)
+                  ? ('addendums.action.resendNotification' | translate)
+                  : (resendNotificationDisabledReason(row) | translate)
+              "
+              tooltipPosition="top"
+            ></button>
+          </div>
         </td>
       </tr>
     </ng-template>

@@ -1,36 +1,35 @@
-import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { DatePickerModule } from 'primeng/datepicker';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { TranslateModule } from '@ngx-translate/core';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
+import { WorkModel } from '@models/works.models';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { WorksFacade } from '@features/facade/works.facade';
+import { InstallmentModel, InstallmentWithWorkModel } from '@models/installments.models';
+import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { InstallmentsFacade } from '@features/facade/installments.facade';
+import { translateWorksErrorDetail } from '@features/works/works-error.util';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { InstallmentsPermissionPolicy } from '@features/works/installments-permission.policy';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
+import { InstallmentsPermissionPolicy } from '@features/works/installments-permission.policy';
 import { CsCurrencyRangeFilterComponent } from '@features/list-base/cs-currency-range-filter.component';
-import { InstallmentModel } from '@models/installments.models';
-import { WorkModel } from '@models/works.models';
 import {
-  INSTALLMENT_STATUS_VALUES,
   InstallmentStatusEnum,
   installmentStatusTone,
+  INSTALLMENT_STATUS_VALUES,
 } from '@models/enums/installment-status.enum';
-import { translateWorksErrorDetail } from '@features/works/works-error.util';
 
 @Component({
   standalone: true,
@@ -38,9 +37,9 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
   templateUrl: './installments-list.component.html',
   imports: [
     FormsModule,
+    CsDatePipe,
     TableModule,
     ButtonModule,
-    CsDatePipe,
     CsCurrencyPipe,
     TooltipModule,
     TranslateModule,
@@ -66,7 +65,14 @@ export class InstallmentsListComponent implements OnInit {
   readonly workId = signal('');
   readonly work = signal<WorkModel | null>(null);
 
-  readonly items = computed<InstallmentModel[]>(() => this.facade.items());
+  /** InstallmentModel puro não tem workName (endpoint por obra não manda - já implícito na URL/
+   *  work() carregado à parte) - a coluna "Frente de serviço" da tabela (mesmo layout da listagem
+   *  global) precisa do campo no próprio row pra sort/filter do PrimeNG funcionarem, então
+   *  completa aqui com o nome já carregado em work(), igual pra todas as linhas desta página. */
+  readonly items = computed<InstallmentWithWorkModel[]>(() => {
+    const workName = this.work()?.name ?? '';
+    return this.facade.items().map((item) => ({ ...item, workName }));
+  });
   readonly loading = computed(() => this.facade.loading());
   readonly loadedOnce = computed(() => this.facade.loadedOnce());
 
@@ -133,13 +139,17 @@ export class InstallmentsListComponent implements OnInit {
 
   canResendNotification(row: InstallmentModel): boolean {
     return (
-      (row.status === InstallmentStatusEnum.RELEASED || row.status === InstallmentStatusEnum.PAID) &&
+      (row.status === InstallmentStatusEnum.RELEASED ||
+        row.status === InstallmentStatusEnum.PAID) &&
       this.policy.canResendNotification()
     );
   }
 
   resendNotificationDisabledReason(row: InstallmentModel): string {
-    if (row.status !== InstallmentStatusEnum.RELEASED && row.status !== InstallmentStatusEnum.PAID) {
+    if (
+      row.status !== InstallmentStatusEnum.RELEASED &&
+      row.status !== InstallmentStatusEnum.PAID
+    ) {
       return 'installments.action.requiresReleasedOrPaid';
     }
     return this.policy.resendNotificationDisabledReason() ?? 'installments.action.noPermission';

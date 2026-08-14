@@ -21,9 +21,9 @@
   (clear)="clear()"
   (search)="search()"
   [actionsAlign]="'start'"
-  [activeFilterGroups]="activeFilterGroups()"
   [activeCount]="activeFiltersCount()"
   [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
 >
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-3 p-1">
@@ -121,7 +121,7 @@
         <col style="width: 150px" />
         <col style="width: 150px" />
         <col style="width: 150px" />
-        <col style="width: 80px" />
+        <col style="width: 70px" />
       </colgroup>
     </ng-template>
 
@@ -129,7 +129,12 @@
       <tr>
         <th pSortableColumn="workName">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'installments.columns.work' | translate">{{ 'installments.columns.work' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'installments.columns.work' | translate"
+              >{{ 'installments.columns.work' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="workName"></p-sortIcon>
               <p-columnFilter
@@ -149,7 +154,12 @@
 
         <th pSortableColumn="number">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'installments.columns.number' | translate">{{ 'installments.columns.number' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'installments.columns.number' | translate"
+              >{{ 'installments.columns.number' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="number"></p-sortIcon>
             </span>
@@ -158,7 +168,12 @@
 
         <th pSortableColumn="amount">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'installments.columns.amount' | translate">{{ 'installments.columns.amount' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'installments.columns.amount' | translate"
+              >{{ 'installments.columns.amount' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="amount"></p-sortIcon>
               <p-columnFilter
@@ -185,7 +200,12 @@
 
         <th pSortableColumn="dueDate">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'installments.columns.dueDate' | translate">{{ 'installments.columns.dueDate' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'installments.columns.dueDate' | translate"
+              >{{ 'installments.columns.dueDate' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="dueDate"></p-sortIcon>
               <p-columnFilter
@@ -217,7 +237,12 @@
 
         <th pSortableColumn="status">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'installments.columns.status' | translate">{{ 'installments.columns.status' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'installments.columns.status' | translate"
+              >{{ 'installments.columns.status' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="status"></p-sortIcon>
               <p-columnFilter
@@ -249,7 +274,12 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'common.actions' | translate"
+              >{{ 'common.actions' | translate }}</span
+            >
           </div>
         </th>
       </tr>
@@ -257,14 +287,18 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.workName">{{ row.workName }}</span></td>
+        <td>
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.workName">{{
+            row.workName
+          }}</span>
+        </td>
         <td class="text-center">{{ row.number }}</td>
         <td class="text-right">{{ row.amount | csCurrency }}</td>
         <td class="text-center">{{ row.dueDate | csDate: 'date' }}</td>
         <td class="text-center">
           <cs-status-badge
             [tone]="tone(row.status)"
-            [label]="('installments.status.' + row.status) | translate"
+            [label]="'installments.status.' + row.status | translate"
           ></cs-status-badge>
         </td>
         <td class="text-center">
@@ -298,6 +332,21 @@
               "
               tooltipPosition="top"
             ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-envelope"
+              (click)="confirmResendNotification(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canResendNotification(row)"
+              [pTooltip]="
+                canResendNotification(row)
+                  ? ('installments.action.resendNotification' | translate)
+                  : (resendNotificationDisabledReason(row) | translate)
+              "
+              tooltipPosition="top"
+            ></button>
           </div>
         </td>
       </tr>
@@ -306,7 +355,9 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="6" class="text-center py-5 opacity-70">
-          {{ loadedOnce() ? ('installments.empty.title' | translate) : ('common.loading' | translate) }}
+          {{
+            loadedOnce() ? ('installments.empty.title' | translate) : ('common.loading' | translate)
+          }}
         </td>
       </tr>
     </ng-template>
