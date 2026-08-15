@@ -4388,6 +4388,7 @@
     },
     "action": {
       "mine": "My tasks",
+      "advance": "Advance status",
       "advanceTo": {
         "IN_PROGRESS": "Start task",
         "DONE": "Complete task"

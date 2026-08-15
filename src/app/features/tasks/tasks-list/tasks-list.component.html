@@ -99,26 +99,26 @@
         <td class="text-center" [attr.data-label]="'tasks.columns.dueDate' | translate">{{ row.dueDate ? (row.dueDate | csDate: 'short') : '-' }}</td>
         <td class="text-center mobile-card-actions" [attr.data-label]="'common.actions' | translate">
           <div class="table-actions">
-            @if (canEdit(row)) {
-              <button
-                pButton
-                type="button"
-                icon="pi pi-pencil"
-                (click)="goEdit(row)"
-                class="p-button-text p-button-sm"
-                [pTooltip]="'common.edit' | translate"
-              ></button>
-            }
-            @if (canAdvance(row)) {
-              <button
-                pButton
-                type="button"
-                icon="pi pi-arrow-right"
-                (click)="advance(row)"
-                class="p-button-text p-button-sm"
-                [pTooltip]="advanceLabel(row)"
-              ></button>
-            }
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="goEdit(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canEdit(row)"
+              [pTooltip]="'common.edit' | translate"
+              tooltipPosition="top"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-arrow-right"
+              (click)="advance(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canAdvance(row)"
+              [pTooltip]="advanceLabel(row) || ('tasks.action.advance' | translate)"
+              tooltipPosition="top"
+            ></button>
           </div>
         </td>
       </tr>

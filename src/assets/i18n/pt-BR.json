@@ -4383,6 +4383,7 @@
     },
     "action": {
       "mine": "Minhas tarefas",
+      "advance": "Avançar status",
       "advanceTo": {
         "IN_PROGRESS": "Iniciar tarefa",
         "DONE": "Concluir tarefa"

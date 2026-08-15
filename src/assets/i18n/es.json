@@ -4388,6 +4388,7 @@
     },
     "action": {
       "mine": "Mis tareas",
+      "advance": "Avanzar estado",
       "advanceTo": {
         "IN_PROGRESS": "Iniciar tarea",
         "DONE": "Concluir tarea"
