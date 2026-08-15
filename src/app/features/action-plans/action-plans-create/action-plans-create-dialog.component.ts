@@ -17,7 +17,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { UsersFacade } from '@features/facade/users.facade';
-import { WorksFacade } from '@features/facade/works.facade';
 import { TicketModel } from '@models/tickets.models';
 import { ActionPlansFacade } from '@features/facade/action-plans.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
@@ -78,8 +77,6 @@ export class ActionPlansCreateDialogComponent {
   readonly actionPlans = inject(ActionPlansFacade);
   readonly usersFacade = inject(UsersFacade);
   readonly responsibleOptions = this.usersFacade.options;
-  readonly worksFacade = inject(WorksFacade);
-  readonly workOptions = this.worksFacade.options;
 
   readonly isEditMode = computed(() => !!this.actionPlan());
   readonly saving = signal(false);
@@ -95,12 +92,10 @@ export class ActionPlansCreateDialogComponent {
     howMuch: this.fb.control<number | null>(null),
     targetDate: this.fb.control<Date | null>(null),
     responsibleId: ['', [Validators.required]],
-    workId: this.fb.control<string | null>(null),
   });
 
   constructor() {
     this.usersFacade.loadUsersOptions();
-    this.worksFacade.loadOptions();
 
     effect(() => {
       if (!this.visible()) {
@@ -131,7 +126,6 @@ export class ActionPlansCreateDialogComponent {
         howMuch: plan.howMuch,
         targetDate: fromDateOnlyString(plan.targetDate),
         responsibleId: plan.responsibleId,
-        workId: plan.workId,
       });
     });
   }
@@ -157,7 +151,6 @@ export class ActionPlansCreateDialogComponent {
       howMuch: null,
       targetDate: null,
       responsibleId: '',
-      workId: ticket?.workId ?? null,
     });
   }
 
@@ -186,7 +179,6 @@ export class ActionPlansCreateDialogComponent {
       howMuch: v.howMuch,
       targetDate: toDateOnlyString(v.targetDate),
       responsibleId: v.responsibleId,
-      workId: v.workId,
       ticketId: id ? null : (this.fromTicket()?.id ?? null),
     };
 

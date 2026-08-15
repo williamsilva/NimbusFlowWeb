@@ -120,24 +120,6 @@
           />
         </p-floatLabel>
       </div>
-
-      <div class="col-12 md:col-4 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <p-select
-            size="small"
-            class="w-full"
-            [filter]="true"
-            appendTo="body"
-            inputId="workId"
-            optionLabel="label"
-            optionValue="value"
-            [showClear]="true"
-            [options]="workOptions()"
-            formControlName="workId"
-          ></p-select>
-          <label for="workId">{{ 'actionPlans.fields.work' | translate }}</label>
-        </p-floatLabel>
-      </div>
     </div>
   </form>
 

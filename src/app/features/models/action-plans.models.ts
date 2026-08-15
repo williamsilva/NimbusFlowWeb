@@ -20,6 +20,8 @@ export interface ActionPlanModel {
   status: ActionPlanStatusEnum;
   workId: string | null;
   workName: string | null;
+  projectId: string | null;
+  projectName: string | null;
   ticketId: string | null;
   createdById: string;
   createdByName: string | null;
@@ -30,6 +32,8 @@ export interface ActionPlanModel {
 
 export type ActionPlanApiModel = ActionPlanModel;
 
+/** Sem workId/projectId de propósito - nunca definidos na criação/edição, só depois via
+ *  linkWork/linkProject (ver ActionPlanWorkLinkInput/ActionPlanProjectLinkInput). */
 export interface ActionPlanUpsertInput {
   title: string;
   what: string;
@@ -39,9 +43,16 @@ export interface ActionPlanUpsertInput {
   howMuch: number | null;
   targetDate: string | null;
   responsibleId: string;
-  workId: string | null;
   /** Só considerado na criação (imutável depois) - ver ActionPlanRequest.ticketId no backend. */
   ticketId: string | null;
+}
+
+export interface ActionPlanProjectLinkInput {
+  projectId: string;
+}
+
+export interface ActionPlanWorkLinkInput {
+  workId: string;
 }
 
 export type ActionPlansFiltersState = {

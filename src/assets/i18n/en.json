@@ -4304,6 +4304,7 @@
     },
     "columns": {
       "title": "Title",
+      "project": "Project",
       "work": "Service Front",
       "status": "Status",
       "responsible": "Responsible",
@@ -4329,7 +4330,13 @@
       "complete": "Complete plan",
       "cancel": "Cancel plan",
       "viewTasks": "View tasks",
-      "hasOpenTasks": "There are tasks not yet completed or cancelled in this plan."
+      "hasOpenTasks": "There are tasks not yet completed or cancelled in this plan.",
+      "createProject": "Register new Project",
+      "createWork": "Create new Service Front",
+      "projectLinked": "Project linked successfully.",
+      "projectLinkError": "Could not link the Project.",
+      "workLinked": "Service Front linked successfully.",
+      "workLinkError": "Could not link the Service Front."
     },
     "startConfirm": {
       "success": "Action plan started successfully."

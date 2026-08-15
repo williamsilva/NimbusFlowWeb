@@ -5,7 +5,12 @@ import { Observable, finalize, tap } from 'rxjs';
 import { ActionPlansApiService } from '@features/service/action-plans.api.service';
 import { ActionPlansAdvancedFilters } from '@features/filter/action-plans.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
-import { ActionPlanModel, ActionPlanUpsertInput } from '@models/action-plans.models';
+import {
+  ActionPlanModel,
+  ActionPlanUpsertInput,
+  ActionPlanProjectLinkInput,
+  ActionPlanWorkLinkInput,
+} from '@models/action-plans.models';
 
 type LastQuery = ListQueryDto<ActionPlansAdvancedFilters>;
 
@@ -84,5 +89,13 @@ export class ActionPlansFacade {
 
   cancel(id: string): Observable<ActionPlanModel> {
     return this.api.cancel(id).pipe(tap(() => this.reloadLast()));
+  }
+
+  linkProject(id: string, input: ActionPlanProjectLinkInput): Observable<ActionPlanModel> {
+    return this.api.linkProject(id, input).pipe(tap(() => this.reloadLast()));
+  }
+
+  linkWork(id: string, input: ActionPlanWorkLinkInput): Observable<ActionPlanModel> {
+    return this.api.linkWork(id, input).pipe(tap(() => this.reloadLast()));
   }
 }

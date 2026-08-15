@@ -40,8 +40,15 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
 export class ProjectsUpsertDialogComponent {
   visible = input.required<boolean>();
   project = input<ProjectModel | null>(null);
+  /** Pré-preenche o nome no modo criação (ex.: "Cadastrar novo Projeto" a partir de um Plano de
+   *  Ação - ActionPlansListComponent passa o título do plano). Ignorado em modo edição. */
+  initialName = input<string | null>(null);
 
   @Output() saved = new EventEmitter<void>();
+  /** Emite o ProjectModel recém-criado - só no create (updated não existe separado, `saved`
+   *  cobre os dois casos hoje; `created` foi adicionado só pro consumidor novo,
+   *  ActionPlansListComponent, que precisa do id pra vincular na sequência). */
+  @Output() created = new EventEmitter<ProjectModel>();
   @Output() visibleChange = new EventEmitter<boolean>();
 
   private readonly fb = inject(FormBuilder);
@@ -85,6 +92,10 @@ export class ProjectsUpsertDialogComponent {
         this.lastLoadedId = null;
         this.currentSiteplanUrl.set(null);
         this.resetFormForCreate();
+        const initialName = this.initialName();
+        if (initialName) {
+          this.form.patchValue({ name: initialName });
+        }
         return;
       }
 
@@ -165,13 +176,16 @@ export class ProjectsUpsertDialogComponent {
     const request = id ? this.facade.update(id, payload) : this.facade.create(payload);
 
     request.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
+      next: (project) => {
         this.saving.set(false);
         this.toast.add({
           severity: 'success',
           summary: this.i18n.tUi('common.success'),
           detail: this.i18n.tUi(id ? 'projects.form.updated' : 'projects.form.created'),
         });
+        if (!id) {
+          this.created.emit(project);
+        }
         this.saved.emit();
         this.close();
       },

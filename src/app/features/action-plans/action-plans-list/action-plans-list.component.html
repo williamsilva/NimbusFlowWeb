@@ -35,6 +35,20 @@
   (visibleChange)="onNewVisibleChange($event)"
 ></app-action-plans-create-dialog>
 
+<app-projects-upsert-dialog
+  [visible]="createProjectVisible()"
+  [initialName]="linkTargetPlanTitle()"
+  (created)="onProjectCreated($event)"
+  (visibleChange)="onCreateProjectVisibleChange($event)"
+></app-projects-upsert-dialog>
+
+<app-works-create-dialog
+  [visible]="createWorkVisible()"
+  [initialName]="linkTargetPlanTitle()"
+  (created)="onWorkCreated($event)"
+  (visibleChange)="onCreateWorkVisibleChange($event)"
+></app-works-create-dialog>
+
 <p-confirmDialog></p-confirmDialog>
 
 <cs-filters-panel
@@ -146,11 +160,12 @@
       <ng-template pTemplate="colgroup">
         <colgroup>
         <col style="width: auto" />
+        <col style="width: 170px" />
         <col style="width: 200px" />
         <col style="width: 130px" />
         <col style="width: 170px" />
         <col style="width: 130px" />
-        <col style="width: 160px" />
+        <col style="width: 200px" />
       </colgroup>
     </ng-template>
 
@@ -173,6 +188,12 @@
                 styleClass="cs-colfilter"
               ></p-columnFilter>
             </span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.project' | translate">{{ 'actionPlans.columns.project' | translate }}</span>
           </div>
         </th>
 
@@ -237,6 +258,7 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td class="mobile-card-title"><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.title">{{ row.title }}</span></td>
+        <td class="text-center" [attr.data-label]="'actionPlans.columns.project' | translate">{{ row.projectName ?? '-' }}</td>
         <td class="text-center" [attr.data-label]="'actionPlans.columns.work' | translate">{{ row.workName ?? '-' }}</td>
         <td class="text-center" [attr.data-label]="'actionPlans.columns.status' | translate">
           <cs-status-badge
@@ -297,6 +319,26 @@
               [pTooltip]="'actionPlans.action.cancel' | translate"
               tooltipPosition="top"
             ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-briefcase"
+              (click)="goCreateProject(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canCreateProject(row)"
+              [pTooltip]="'actionPlans.action.createProject' | translate"
+              tooltipPosition="top"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-building"
+              (click)="goCreateWork(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canCreateWork(row)"
+              [pTooltip]="'actionPlans.action.createWork' | translate"
+              tooltipPosition="top"
+            ></button>
           </div>
         </td>
       </tr>
@@ -304,7 +346,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="6" class="text-center py-5 opacity-70">
+        <td colspan="7" class="text-center py-5 opacity-70">
           {{ facade.loadedOnce() ? ('actionPlans.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>

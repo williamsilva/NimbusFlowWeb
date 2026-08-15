@@ -4304,6 +4304,7 @@
     },
     "columns": {
       "title": "Título",
+      "project": "Proyecto",
       "work": "Frente de Servicio",
       "status": "Estado",
       "responsible": "Responsable",
@@ -4329,7 +4330,13 @@
       "complete": "Concluir plan",
       "cancel": "Cancelar plan",
       "viewTasks": "Ver tareas",
-      "hasOpenTasks": "Hay tareas aún no concluidas o canceladas en este plan."
+      "hasOpenTasks": "Hay tareas aún no concluidas o canceladas en este plan.",
+      "createProject": "Registrar nuevo Proyecto",
+      "createWork": "Crear nueva Frente de Servicio",
+      "projectLinked": "Proyecto vinculado con éxito.",
+      "projectLinkError": "No se pudo vincular el Proyecto.",
+      "workLinked": "Frente de Servicio vinculada con éxito.",
+      "workLinkError": "No se pudo vincular la Frente de Servicio."
     },
     "startConfirm": {
       "success": "Plan de acción iniciado con éxito."

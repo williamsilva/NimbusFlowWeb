@@ -11,6 +11,8 @@ import {
   ActionPlanModel,
   ActionPlanApiModel,
   ActionPlanUpsertInput,
+  ActionPlanProjectLinkInput,
+  ActionPlanWorkLinkInput,
   mapActionPlanApiModel,
   mapActionPlanApiModels,
 } from '@models/action-plans.models';
@@ -70,6 +72,24 @@ export class ActionPlansApiService {
   cancel(id: string) {
     return this.http
       .put<ActionPlanApiModel>(`${this.baseUrl}/${id}/cancel`, {})
+      .pipe(map(mapActionPlanApiModel));
+  }
+
+  /** "Cadastrar novo Projeto" a partir de um plano já criado - sempre um Projeto recém-criado
+   *  (ActionPlansListComponent#onProjectCreated chama logo depois de
+   *  ProjectsUpsertDialogComponent salvar). */
+  linkProject(id: string, input: ActionPlanProjectLinkInput) {
+    return this.http
+      .put<ActionPlanApiModel>(`${this.baseUrl}/${id}/link-project`, input)
+      .pipe(map(mapActionPlanApiModel));
+  }
+
+  /** "Criar nova Frente de Serviço" a partir de um plano já criado - sempre uma Frente
+   *  recém-criada (ActionPlansListComponent#onWorkCreated chama logo depois de
+   *  WorksCreateDialogComponent salvar). */
+  linkWork(id: string, input: ActionPlanWorkLinkInput) {
+    return this.http
+      .put<ActionPlanApiModel>(`${this.baseUrl}/${id}/link-work`, input)
       .pipe(map(mapActionPlanApiModel));
   }
 }

@@ -21,7 +21,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
+import { WorkModel } from '@models/works.models';
 import { WorksFacade } from '@features/facade/works.facade';
+import { ProjectModel } from '@models/projects.models';
 import { ActionPlansFacade } from '@features/facade/action-plans.facade';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
@@ -36,6 +38,8 @@ import {
 } from '@models/enums/action-plan-status.enum';
 import { ActionPlanModel, ActionPlansFiltersState } from '@models/action-plans.models';
 import { ActionPlansCreateDialogComponent } from '@features/action-plans/action-plans-create/action-plans-create-dialog.component';
+import { WorksCreateDialogComponent } from '@features/works/works-create/works-create-dialog.component';
+import { ProjectsUpsertDialogComponent } from '@features/projects/projects-upsert-dialog.component';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import {
@@ -70,6 +74,8 @@ import {
     FiltersPanelComponent,
     StatusBadgeComponent,
     ActionPlansCreateDialogComponent,
+    WorksCreateDialogComponent,
+    ProjectsUpsertDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
   ],
 })
@@ -100,6 +106,12 @@ export class ActionPlansListComponent extends StatefulListPage<
   newVisible = signal(false);
   editingPlan = signal<ActionPlanModel | null>(null);
 
+  /** Plano em uso nos fluxos "cadastrar novo Projeto"/"criar nova Frente de Serviço" - sempre
+   *  cria um registro novo (nunca reaproveita existente, mesmo padrão já adotado em Chamados). */
+  linkTargetPlanId = signal<string | null>(null);
+  createProjectVisible = signal(false);
+  createWorkVisible = signal(false);
+
   readonly statusOptions = ACTION_PLAN_STATUS_VALUES.map((value) => ({
     value,
     label: this.i18n.tUi(`actionPlans.status.${value}` as never),
@@ -114,6 +126,15 @@ export class ActionPlansListComponent extends StatefulListPage<
   readonly canManage = computed(() => this.policy.canManage());
   readonly totalRecords = computed(() => this.facade.totalRecords());
   readonly actionPlans = computed<ActionPlanModel[]>(() => this.facade.actionPlans());
+
+  /** Pré-preenche o nome da Frente/Projeto ao criar um novo a partir do plano (ver
+   *  WorksCreateDialogComponent#initialName/ProjectsUpsertDialogComponent#initialName) - deriva
+   *  do id compartilhado em vez de um signal próprio. */
+  readonly linkTargetPlanTitle = computed(() => {
+    const id = this.linkTargetPlanId();
+    if (!id) return null;
+    return this.actionPlans().find((p) => p.id === id)?.title ?? null;
+  });
 
   protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
     const items: ActiveFilterItem[] = [];
@@ -206,6 +227,98 @@ export class ActionPlansListComponent extends StatefulListPage<
       this.canManage() &&
       (row.status === ActionPlanStatusEnum.DRAFT || row.status === ActionPlanStatusEnum.IN_PROGRESS)
     );
+  }
+
+  /** projectId==null pra impedir cadastrar de novo pela UI (mesma restrição já adotada em
+   *  Chamados) - status editável, mesma elegibilidade de canEdit/canCancel. */
+  canCreateProject(row: ActionPlanModel): boolean {
+    return (
+      this.canManage() &&
+      row.projectId == null &&
+      (row.status === ActionPlanStatusEnum.DRAFT || row.status === ActionPlanStatusEnum.IN_PROGRESS)
+    );
+  }
+
+  canCreateWork(row: ActionPlanModel): boolean {
+    return (
+      this.canManage() &&
+      row.workId == null &&
+      (row.status === ActionPlanStatusEnum.DRAFT || row.status === ActionPlanStatusEnum.IN_PROGRESS)
+    );
+  }
+
+  goCreateProject(row: ActionPlanModel): void {
+    this.linkTargetPlanId.set(row.id);
+    this.createProjectVisible.set(true);
+  }
+
+  goCreateWork(row: ActionPlanModel): void {
+    this.linkTargetPlanId.set(row.id);
+    this.createWorkVisible.set(true);
+  }
+
+  onCreateProjectVisibleChange(v: boolean): void {
+    this.createProjectVisible.set(v);
+    if (!v) this.linkTargetPlanId.set(null);
+  }
+
+  onCreateWorkVisibleChange(v: boolean): void {
+    this.createWorkVisible.set(v);
+    if (!v) this.linkTargetPlanId.set(null);
+  }
+
+  /** O Projeto acabou de ser criado (ProjectsUpsertDialogComponent) - vincula ele ao plano que
+   *  disparou o fluxo. linkTargetPlanId ainda está setado aqui: (created) emite antes de
+   *  (visibleChange), que só zera o id (ver onCreateProjectVisibleChange). */
+  onProjectCreated(project: ProjectModel): void {
+    const planId = this.linkTargetPlanId();
+    if (!planId) return;
+
+    this.facade
+      .linkProject(planId, { projectId: project.id })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toast.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi('actionPlans.action.projectLinked' as never),
+          });
+          this.refresh();
+        },
+        error: () =>
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('actionPlans.action.projectLinkError' as never),
+          }),
+      });
+  }
+
+  /** Mesmo racional de onProjectCreated, pra Frente de Serviço (WorksCreateDialogComponent). */
+  onWorkCreated(work: WorkModel): void {
+    const planId = this.linkTargetPlanId();
+    if (!planId) return;
+
+    this.facade
+      .linkWork(planId, { workId: work.id })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toast.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi('actionPlans.action.workLinked' as never),
+          });
+          this.refresh();
+        },
+        error: () =>
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('actionPlans.action.workLinkError' as never),
+          }),
+      });
   }
 
   confirmStart(row: ActionPlanModel): void {
