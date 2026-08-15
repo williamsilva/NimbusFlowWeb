@@ -4257,7 +4257,7 @@
       "periodCreatedAt": "Período del registro",
       "attachment": "Adjunto (opcional)",
       "resolutionNote": "Nota de resolución",
-      "closePhotos": "Evidencias fotográficas (opcional)",
+      "closePhotos": "Evidencias fotográficas",
       "targetType": "Dirigir a",
       "targetUser": "Usuario",
       "targetDepartment": "Departamento"
@@ -4299,7 +4299,7 @@
       "invalid": "Complete los campos obligatorios (título, descripción, tipo, prioridad y destinatario) antes de enviar.",
       "created": "Llamado registrado con éxito.",
       "saveError": "No se pudo registrar el llamado. Intente nuevamente.",
-      "closeInvalid": "Describa la resolución antes de cerrar el llamado."
+      "closeInvalid": "Describa la resolución y agregue al menos una evidencia fotográfica antes de cerrar el llamado."
     },
     "empty": {
       "title": "Ningún llamado encontrado"

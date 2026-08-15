@@ -4257,7 +4257,7 @@
       "periodCreatedAt": "Report period",
       "attachment": "Attachment (optional)",
       "resolutionNote": "Resolution note",
-      "closePhotos": "Photo evidence (optional)",
+      "closePhotos": "Photo evidence",
       "targetType": "Direct to",
       "targetUser": "User",
       "targetDepartment": "Department"
@@ -4299,7 +4299,7 @@
       "invalid": "Fill in the required fields (title, description, type, priority and target) before submitting.",
       "created": "Ticket reported successfully.",
       "saveError": "Could not report the ticket. Please try again.",
-      "closeInvalid": "Describe the resolution before closing the ticket."
+      "closeInvalid": "Describe the resolution and add at least one photo evidence before closing the ticket."
     },
     "empty": {
       "title": "No tickets found"

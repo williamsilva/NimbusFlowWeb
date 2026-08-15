@@ -23,8 +23,9 @@ const ACCEPTED_PHOTO_TYPES = 'image/jpeg,image/png,image/webp';
 /** Pequeno dialog dedicado só porque TicketCloseRequest.resolutionNote é obrigatório no backend
  *  (@NotBlank) - diferente de Addendum.decisionNote (opcional, resolvido via ConfirmationService
  *  simples sem input de texto em AllAddendumsListComponent). Evidência fotográfica (galeria ou
- *  câmera) é opcional - mesmo padrão dual-input de MeasurementsCreateDialogComponent, só que
- *  photo-only (sem vídeo). */
+ *  câmera) é obrigatória (ao menos 1 foto) - mesmo padrão dual-input de
+ *  MeasurementsCreateDialogComponent, só que photo-only (sem vídeo); TicketService#close rejeita
+ *  de novo no backend se nenhuma foto chegar, então este check aqui é só feedback imediato. */
 @Component({
   standalone: true,
   selector: 'app-tickets-close-dialog',
@@ -105,7 +106,7 @@ export class TicketsCloseDialogComponent {
     this.form.markAllAsTouched();
     this.form.updateValueAndValidity();
 
-    if (this.form.invalid) {
+    if (this.form.invalid || this.files().length === 0) {
       this.toast.add({
         severity: 'warn',
         summary: this.i18n.tUi('common.warning'),
