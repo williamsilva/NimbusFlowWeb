@@ -45,14 +45,6 @@
   (visibleChange)="onConvertVisibleChange($event)"
 ></app-action-plans-create-dialog>
 
-<app-tickets-link-work-dialog
-  [visible]="linkWorkVisible()"
-  [ticketId]="workFrontTicketId()"
-  (linked)="onWorkLinked()"
-  (createNewRequested)="onCreateNewWorkRequested()"
-  (visibleChange)="onLinkWorkVisibleChange($event)"
-></app-tickets-link-work-dialog>
-
 <app-works-create-dialog
   [visible]="createWorkVisible()"
   [initialName]="workFrontTicketTitle()"

@@ -4269,9 +4269,6 @@
       "cancel": "Cancel ticket",
       "convert": "Convert into action plan",
       "openWorkFront": "Open Service Front",
-      "openWorkFrontOr": "or",
-      "createNewWork": "Create new Service Front",
-      "link": "Link",
       "workLinked": "Service Front linked successfully.",
       "workLinkError": "Could not link the Service Front."
     },

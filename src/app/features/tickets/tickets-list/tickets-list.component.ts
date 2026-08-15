@@ -35,7 +35,6 @@ import { TicketModel, TicketsFiltersState } from '@models/tickets.models';
 import { WorkModel } from '@models/works.models';
 import { TicketsCreateDialogComponent } from '@features/tickets/tickets-create/tickets-create-dialog.component';
 import { TicketsCloseDialogComponent } from '@features/tickets/tickets-close/tickets-close-dialog.component';
-import { TicketsLinkWorkDialogComponent } from '@features/tickets/tickets-link-work/tickets-link-work-dialog.component';
 import { WorksCreateDialogComponent } from '@features/works/works-create/works-create-dialog.component';
 import { ActionPlansCreateDialogComponent } from '@features/action-plans/action-plans-create/action-plans-create-dialog.component';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
@@ -73,7 +72,6 @@ import {
     StatusBadgeComponent,
     TicketsCreateDialogComponent,
     TicketsCloseDialogComponent,
-    TicketsLinkWorkDialogComponent,
     WorksCreateDialogComponent,
     ActionPlansCreateDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
@@ -110,10 +108,9 @@ export class TicketsListComponent extends StatefulListPage<
   convertVisible = signal(false);
   convertingTicket = signal<TicketModel | null>(null);
 
-  /** Compartilhado entre os dois dialogs do fluxo "abrir Frente de Serviço" (vincular existente
-   *  ou criar nova) - ver onWorkCreated pro porquê de um único id em vez de um por dialog. */
+  /** Chamado em uso no fluxo "abrir Frente de Serviço" (sempre cria uma nova, nunca reaproveita
+   *  uma existente) - ver onWorkCreated pra onde é consumido depois que a Frente é criada. */
   workFrontTicketId = signal<string | null>(null);
-  linkWorkVisible = signal(false);
   createWorkVisible = signal(false);
 
   readonly statusOptions = TICKET_STATUS_VALUES.map((value) => ({
@@ -138,9 +135,8 @@ export class TicketsListComponent extends StatefulListPage<
 
   readonly workOptions = this.worksFacade.options;
   /** Pré-preenche o nome da Frente ao criar uma nova a partir do chamado (ver
-   *  onCreateNewWorkRequested/WorksCreateDialogComponent#initialName) - deriva do id
-   *  compartilhado em vez de um signal próprio, já que workFrontTicketId já identifica o chamado
-   *  em uso nesse fluxo. */
+   *  WorksCreateDialogComponent#initialName) - deriva do id compartilhado em vez de um signal
+   *  próprio, já que workFrontTicketId já identifica o chamado em uso nesse fluxo. */
   readonly workFrontTicketTitle = computed(() => {
     const id = this.workFrontTicketId();
     if (!id) return null;
@@ -285,23 +281,10 @@ export class TicketsListComponent extends StatefulListPage<
     this.refresh();
   }
 
+  /** Sempre cria uma Frente nova - usuário não quer reaproveitar uma existente (decisão de
+   *  produto, substitui o fluxo anterior que também oferecia vincular a uma Frente já criada). */
   goOpenWorkFront(row: TicketModel): void {
     this.workFrontTicketId.set(row.id);
-    this.linkWorkVisible.set(true);
-  }
-
-  onLinkWorkVisibleChange(v: boolean): void {
-    this.linkWorkVisible.set(v);
-    if (!v && !this.createWorkVisible()) {
-      this.workFrontTicketId.set(null);
-    }
-  }
-
-  onWorkLinked(): void {
-    this.refresh();
-  }
-
-  onCreateNewWorkRequested(): void {
     this.createWorkVisible.set(true);
   }
 

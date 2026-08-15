@@ -4264,9 +4264,6 @@
       "cancel": "Cancelar chamado",
       "convert": "Converter em plano de ação",
       "openWorkFront": "Abrir Frente de Serviço",
-      "openWorkFrontOr": "ou",
-      "createNewWork": "Criar nova Frente de Serviço",
-      "link": "Vincular",
       "workLinked": "Frente de Serviço vinculada com sucesso.",
       "workLinkError": "Não foi possível vincular a Frente de Serviço."
     },
