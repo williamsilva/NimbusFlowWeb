@@ -209,6 +209,9 @@
     },
     "suggestions": {
       "title": "Suggestions"
+    },
+    "tickets": {
+      "title": "Tickets"
     }
   },
   "topbar": {
@@ -345,7 +348,8 @@
       "addendums": "Addendums",
       "installments": "Payments",
       "measurements": "Measurements",
-      "suggestions": "Suggestions"
+      "suggestions": "Suggestions",
+      "tickets": "Tickets"
     }
   },
   "sidebar": {
@@ -407,7 +411,8 @@
     "addendums": "Addendums",
     "installments": "Payments",
     "measurements": "Measurements",
-    "suggestions": "Suggestions"
+    "suggestions": "Suggestions",
+    "tickets": "Tickets"
   },
   "footer": {
     "copyright": "NimbusFlow Tech",
@@ -4186,6 +4191,56 @@
     },
     "action": {
       "viewAttachment": "View attachment"
+    }
+  },
+  "tickets": {
+    "subtitle": "Tickets manually reported by users - first link of the Ticket → Action Plan → Task chain",
+    "new": {
+      "title": "New ticket"
+    },
+    "fields": {
+      "title": "Title",
+      "description": "Description",
+      "status": "Status",
+      "work": "Service Front",
+      "createdAt": "Reported at",
+      "periodCreatedAt": "Report period",
+      "attachment": "Attachment (optional)",
+      "resolutionNote": "Resolution note"
+    },
+    "columns": {
+      "title": "Title",
+      "work": "Service Front",
+      "status": "Status",
+      "reportedBy": "Reported by",
+      "createdAt": "Reported at"
+    },
+    "status": {
+      "OPEN": "Open",
+      "CONVERTED_TO_ACTION_PLAN": "Converted to plan",
+      "CLOSED": "Closed",
+      "CANCELLED": "Cancelled",
+      "closed": "Ticket closed successfully.",
+      "closeError": "Could not close the ticket.",
+      "cancelled": "Ticket cancelled successfully.",
+      "cancelError": "Could not cancel the ticket."
+    },
+    "form": {
+      "invalid": "Fill in the title and description before submitting.",
+      "created": "Ticket reported successfully.",
+      "saveError": "Could not report the ticket. Please try again.",
+      "closeInvalid": "Describe the resolution before closing the ticket."
+    },
+    "empty": {
+      "title": "No tickets found"
+    },
+    "action": {
+      "close": "Close ticket",
+      "cancel": "Cancel ticket"
+    },
+    "cancelConfirm": {
+      "header": "Cancel ticket",
+      "message": "Confirm cancellation of this ticket?"
     }
   }
 }

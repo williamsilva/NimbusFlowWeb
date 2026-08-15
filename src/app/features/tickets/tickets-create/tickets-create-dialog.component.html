@@ -1,0 +1,98 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '560px', maxWidth: '95vw' }"
+  [header]="'tickets.new.title' | translate"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            id="title"
+            style="width: 100%"
+            formControlName="title"
+          />
+          <label for="title">{{ 'tickets.fields.title' | translate }}</label>
+        </p-floatLabel>
+        <app-error-msg
+          [field]="'title'"
+          [forId]="'title'"
+          [control]="form.controls.title"
+          [label]="'tickets.fields.title' | translate"
+        />
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea
+            pTextarea
+            rows="4"
+            id="description"
+            style="width: 100%"
+            formControlName="description"
+          ></textarea>
+          <app-error-msg
+            [field]="'description'"
+            [forId]="'description'"
+            [control]="form.controls.description"
+            [label]="'tickets.fields.description' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            inputId="workId"
+            optionLabel="label"
+            optionValue="value"
+            [showClear]="true"
+            [options]="workOptions()"
+            formControlName="workId"
+          ></p-select>
+          <label for="workId">{{ 'tickets.fields.work' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <label class="block mb-2 text-sm opacity-80">
+          {{ 'tickets.fields.attachment' | translate }}
+        </label>
+        <input type="file" (change)="onFileSelected($event)" />
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

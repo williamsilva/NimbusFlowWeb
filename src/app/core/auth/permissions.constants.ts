@@ -203,6 +203,25 @@ export const PERMISSIONS = {
   },
 
   /**
+   * Chamado (com.nimbusflow.tickets), Plano de Ação (com.nimbusflow.actionplans) e Tarefa
+   * (com.nimbusflow.tasks) - cadeia 5W2H Chamado -> Plano de Ação -> Tarefa. TAREFA tem duas
+   * variantes (diferente de CHAMADO/PLANO_ACAO): MANAGE cobre qualquer tarefa, EXECUTE é mais
+   * enxuta e só deixa o próprio assignee mover a PRÓPRIA tarefa pra frente.
+   */
+  CHAMADO: {
+    MANAGE: 'CHAMADO_MANAGE',
+  },
+
+  PLANO_ACAO: {
+    MANAGE: 'PLANO_ACAO_MANAGE',
+  },
+
+  TAREFA: {
+    MANAGE: 'TAREFA_MANAGE',
+    EXECUTE: 'TAREFA_EXECUTE',
+  },
+
+  /**
    * Aditivo contratual e Parcela/Pagamento de Obra (com.nimbusflow.works.core.
    * AddendumApprovalService/InstallmentService) - diferente de OBRA/FORNECEDOR/SUGESTAO, aqui há
    * variantes distintas por ação (a alçada de aprovação de Aditivo depende do valor solicitado,
@@ -261,4 +280,7 @@ export const ALL_PERMISSIONS: Permission[] = [
   ...Object.values(PERMISSIONS.ADITIVO),
   ...Object.values(PERMISSIONS.PARCELA),
   ...Object.values(PERMISSIONS.MEDICAO),
+  ...Object.values(PERMISSIONS.CHAMADO),
+  ...Object.values(PERMISSIONS.PLANO_ACAO),
+  ...Object.values(PERMISSIONS.TAREFA),
 ];

@@ -204,6 +204,9 @@
     },
     "suggestions": {
       "title": "Sugestões"
+    },
+    "tickets": {
+      "title": "Chamados"
     }
   },
   "topbar": {
@@ -340,7 +343,8 @@
       "addendums": "Aditivos",
       "installments": "Pagamentos",
       "measurements": "Medições",
-      "suggestions": "Sugestões"
+      "suggestions": "Sugestões",
+      "tickets": "Chamados"
     }
   },
   "sidebar": {
@@ -402,7 +406,8 @@
     "addendums": "Aditivos",
     "installments": "Pagamentos",
     "measurements": "Medições",
-    "suggestions": "Sugestões"
+    "suggestions": "Sugestões",
+    "tickets": "Chamados"
   },
   "footer": {
     "copyright": "NimbusFlow Tech",
@@ -4181,6 +4186,56 @@
     },
     "action": {
       "viewAttachment": "Ver anexo"
+    }
+  },
+  "tickets": {
+    "subtitle": "Chamados registrados manualmente pelos usuários - primeiro elo da cadeia Chamado → Plano de Ação → Tarefa",
+    "new": {
+      "title": "Novo chamado"
+    },
+    "fields": {
+      "title": "Título",
+      "description": "Descrição",
+      "status": "Status",
+      "work": "Frente de Serviço",
+      "createdAt": "Registrado em",
+      "periodCreatedAt": "Período do registro",
+      "attachment": "Anexo (opcional)",
+      "resolutionNote": "Nota de resolução"
+    },
+    "columns": {
+      "title": "Título",
+      "work": "Frente de Serviço",
+      "status": "Status",
+      "reportedBy": "Relatado por",
+      "createdAt": "Registrado em"
+    },
+    "status": {
+      "OPEN": "Aberto",
+      "CONVERTED_TO_ACTION_PLAN": "Convertido em plano",
+      "CLOSED": "Fechado",
+      "CANCELLED": "Cancelado",
+      "closed": "Chamado fechado com sucesso.",
+      "closeError": "Não foi possível fechar o chamado.",
+      "cancelled": "Chamado cancelado com sucesso.",
+      "cancelError": "Não foi possível cancelar o chamado."
+    },
+    "form": {
+      "invalid": "Preencha o título e a descrição antes de enviar.",
+      "created": "Chamado registrado com sucesso.",
+      "saveError": "Não foi possível registrar o chamado. Tente novamente.",
+      "closeInvalid": "Descreva a resolução antes de fechar o chamado."
+    },
+    "empty": {
+      "title": "Nenhum chamado encontrado"
+    },
+    "action": {
+      "close": "Fechar chamado",
+      "cancel": "Cancelar chamado"
+    },
+    "cancelConfirm": {
+      "header": "Cancelar chamado",
+      "message": "Confirma o cancelamento deste chamado?"
     }
   }
 }

@@ -84,6 +84,34 @@ export const STATE_KEY = {
         },
         FILTERS: { V1: 'nimbusflow.all-measurements.filters.v1' },
       },
+
+      /* Cadeia 5W2H: Chamado -> Plano de Ação -> Tarefa (com.nimbusflow.tickets/actionplans/tasks) */
+      TICKETS: {
+        TABLE: {
+          ROWS: { V1: 'tickets.table.rows' },
+          STATE: { V1: 'nimbusflow.tickets.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.tickets.filters.v1' },
+      },
+      ACTION_PLANS: {
+        TABLE: {
+          ROWS: { V1: 'action-plans.table.rows' },
+          STATE: { V1: 'nimbusflow.action-plans.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.action-plans.filters.v1' },
+      },
+      TASKS: {
+        TABLE: {
+          STATE: { V1: 'nimbusflow.tasks.table.state.v1' },
+        },
+      },
+      ALL_TASKS: {
+        TABLE: {
+          ROWS: { V1: 'all-tasks.table.rows' },
+          STATE: { V1: 'nimbusflow.all-tasks.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.all-tasks.filters.v1' },
+      },
     },
   },
 };

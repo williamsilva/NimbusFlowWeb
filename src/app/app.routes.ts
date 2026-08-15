@@ -123,6 +123,18 @@ export const appRoutes: Routes = [
           ),
       },
 
+      // Cadeia 5W2H Chamado -> Plano de Ação -> Tarefa (com.nimbusflow.tickets/actionplans/tasks
+      // no backend) - leitura aberta a qualquer usuário autenticado, mesmo espírito de
+      // suppliers/works/suggestions acima.
+      {
+        path: 'tickets',
+        title: 'routes.tickets.title',
+        loadComponent: () =>
+          import('./features/tickets/tickets-list/tickets-list.component').then(
+            (m) => m.TicketsListComponent,
+          ),
+      },
+
       {
         path: 'forbidden',
         title: 'routes.forbidden.title',

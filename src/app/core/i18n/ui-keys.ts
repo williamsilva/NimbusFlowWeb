@@ -131,6 +131,7 @@ export const UI_KEYS = {
       installments: 'menu.works.installments',
       measurements: 'menu.works.measurements',
       suggestions: 'menu.works.suggestions',
+      tickets: 'menu.works.tickets',
     },
   },
   sidebar: {
@@ -1798,6 +1799,25 @@ export const UI_KEYS = {
       invalid: 'suggestions.form.invalid',
       created: 'suggestions.form.created',
       saveError: 'suggestions.form.saveError',
+    },
+  },
+  tickets: {
+    fields: {
+      title: 'tickets.fields.title',
+      status: 'tickets.fields.status',
+      work: 'tickets.fields.work',
+      createdAt: 'tickets.fields.createdAt',
+      periodCreatedAt: 'tickets.fields.periodCreatedAt',
+    },
+    form: {
+      invalid: 'tickets.form.invalid',
+      created: 'tickets.form.created',
+      saveError: 'tickets.form.saveError',
+      closeInvalid: 'tickets.form.closeInvalid',
+    },
+    cancelConfirm: {
+      header: 'tickets.cancelConfirm.header',
+      message: 'tickets.cancelConfirm.message',
     },
   },
   audit: {
