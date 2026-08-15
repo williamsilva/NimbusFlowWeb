@@ -1,7 +1,7 @@
 import { DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { input, signal, Output, inject, Component, EventEmitter, effect } from '@angular/core';
+import { input, signal, Output, inject, computed, Component, EventEmitter, effect } from '@angular/core';
 
 import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
@@ -14,6 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { I18nService } from '@core/i18n/i18n.service';
 import { WorksFacade } from '@features/facade/works.facade';
 import { TicketsFacade } from '@features/facade/tickets.facade';
+import { WorkStatusEnum } from '@models/enums/work-status.enum';
 
 /**
  * "Abrir Frente de Serviço" a partir de um chamado já criado - o usuário escolhe entre vincular a
@@ -47,10 +48,23 @@ export class TicketsLinkWorkDialogComponent {
   private readonly toast = inject(MessageService);
   private readonly destroyRef = inject(DestroyRef);
 
+  /** Só Frentes ainda em execução aceitam um novo vínculo de chamado - o backend (TicketService#
+   *  linkWork) valida de novo o mesmo recorte, este filtro aqui é só pra não oferecer no seletor
+   *  uma Frente já concluída/cancelada. */
+  private static readonly ELIGIBLE_STATUSES = new Set<WorkStatusEnum>([
+    WorkStatusEnum.PLANNED,
+    WorkStatusEnum.IN_PROGRESS,
+    WorkStatusEnum.PAUSED,
+  ]);
+
   readonly i18n = inject(I18nService);
   readonly tickets = inject(TicketsFacade);
   readonly worksFacade = inject(WorksFacade);
-  readonly workOptions = this.worksFacade.options;
+  readonly workOptions = computed(() =>
+    this.worksFacade
+      .options()
+      .filter((w) => TicketsLinkWorkDialogComponent.ELIGIBLE_STATUSES.has(w.status)),
+  );
 
   readonly saving = signal(false);
   readonly selectedWorkId = signal<string | null>(null);

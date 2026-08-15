@@ -4,6 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { WorksApiService } from '@features/service/works.api.service';
 import { WorksAdvancedFilters } from '@features/filter/works.filters';
+import { WorkStatusEnum } from '@models/enums/work-status.enum';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { WorkModel, WorkUpsertInput } from '@models/works.models';
 
@@ -19,7 +20,7 @@ export class WorksFacade {
   private readonly _data = signal<WorkModel[]>([]);
   private readonly _lastQuery = signal<LastQuery | null>(null);
 
-  private readonly _options = signal<{ label: string; value: string }[]>([]);
+  private readonly _options = signal<{ label: string; value: string; status: WorkStatusEnum }[]>([]);
   private readonly _optionsLoadedOnce = signal(false);
 
   readonly loading = this._loading.asReadonly();
@@ -34,7 +35,7 @@ export class WorksFacade {
 
     this.api.findAll().subscribe({
       next: (items) => {
-        this._options.set(items.map((w) => ({ label: w.name, value: w.id })));
+        this._options.set(items.map((w) => ({ label: w.name, value: w.id, status: w.status })));
         this._optionsLoadedOnce.set(true);
       },
       error: () => {

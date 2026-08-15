@@ -6,27 +6,22 @@
   [draggable]="false"
   [resizable]="false"
   [visible]="visible()"
-  [style]="{ width: '560px', maxWidth: '95vw' }"
   [header]="'tickets.new.title' | translate"
+  [style]="{ width: '560px', maxWidth: '95vw' }"
 >
   <form [formGroup]="form" class="cs-dialog-form">
     <div class="grid formgrid gap-0">
       <div class="col-12 p-2">
         <p-floatLabel variant="on" class="w-full">
-          <input
-            pInputText
-            id="title"
-            style="width: 100%"
-            formControlName="title"
+          <input pInputText id="title" style="width: 100%" formControlName="title" />
+
+          <app-error-msg
+            [field]="'title'"
+            [forId]="'title'"
+            [control]="form.controls.title"
+            [label]="'tickets.fields.title' | translate"
           />
-          <label for="title">{{ 'tickets.fields.title' | translate }}</label>
         </p-floatLabel>
-        <app-error-msg
-          [field]="'title'"
-          [forId]="'title'"
-          [control]="form.controls.title"
-          [label]="'tickets.fields.title' | translate"
-        />
       </div>
 
       <div class="col-12 p-2">
