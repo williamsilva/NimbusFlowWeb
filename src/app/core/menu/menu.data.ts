@@ -9,6 +9,28 @@ export const APP_MENU: AppMenuItem[] = [
     route: '/dashboard',
     exact: true,
   },
+  /* Cadeia 5W2H Chamado -> Plano de Ação -> Tarefa (com.nimbusflow.tickets/actionplans/tasks) -
+   * itens soltos (sem submenu), acima do grupo Fornecedor/Obra/Sugestão a pedido do usuário.
+   * Leitura aberta a qualquer usuário autenticado, mesmo espírito do grupo abaixo (sem
+   * `permissions` declarado). */
+  {
+    labelKey: 'menu.works.tickets',
+    icon: 'pi pi-megaphone text-green-600',
+    route: '/tickets',
+    exact: false,
+  },
+  {
+    labelKey: 'menu.works.actionPlans',
+    icon: 'pi pi-map text-green-600',
+    route: '/action-plans',
+    exact: false,
+  },
+  {
+    labelKey: 'menu.works.tasks',
+    icon: 'pi pi-check-square text-green-600',
+    route: '/tasks',
+    exact: false,
+  },
   /* Fornecedor / Obra / Sugestão - leitura aberta a qualquer usuário autenticado, por isso os
    * itens abaixo não declaram `permissions` (undefined/[] = visível pra todo mundo, ver
    * PermissionService.hasMenuAccess). */
@@ -56,24 +78,6 @@ export const APP_MENU: AppMenuItem[] = [
         labelKey: 'menu.works.suggestions',
         icon: 'pi pi-lightbulb text-green-400',
         route: '/suggestions',
-        exact: false,
-      },
-      {
-        labelKey: 'menu.works.tickets',
-        icon: 'pi pi-megaphone text-green-400',
-        route: '/tickets',
-        exact: false,
-      },
-      {
-        labelKey: 'menu.works.actionPlans',
-        icon: 'pi pi-map text-green-400',
-        route: '/action-plans',
-        exact: false,
-      },
-      {
-        labelKey: 'menu.works.tasks',
-        icon: 'pi pi-check-square text-green-400',
-        route: '/tasks',
         exact: false,
       },
     ],
