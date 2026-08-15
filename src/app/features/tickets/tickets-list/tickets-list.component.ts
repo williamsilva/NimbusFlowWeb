@@ -237,10 +237,13 @@ export class TicketsListComponent extends StatefulListPage<
   }
 
   /** Mesma elegibilidade de canClose - um chamado já convertido em plano ainda pode precisar de
-   *  uma Frente de Serviço pra executar (ver TicketService.WORK_LINKABLE_STATUSES no backend). */
+   *  uma Frente de Serviço pra executar (ver TicketService.WORK_LINKABLE_STATUSES no backend).
+   *  workId==null pra impedir vincular de novo (trocar) pela UI - o backend ainda aceita
+   *  sobrescrever via API direta, restrição é só de tela mesmo. */
   canOpenWorkFront(row: TicketModel): boolean {
     return (
       this.canManage() &&
+      row.workId == null &&
       (row.status === TicketStatusEnum.OPEN || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
     );
   }
