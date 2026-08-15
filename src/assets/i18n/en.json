@@ -4365,6 +4365,7 @@
       "description": "Description",
       "assignee": "Assignee",
       "dueDate": "Due date",
+      "dependsOnTask": "Depends on completion of (optional)",
       "status": "Status",
       "createdAt": "Created at",
       "periodCreatedAt": "Creation period"
@@ -4373,6 +4374,7 @@
       "title": "Title",
       "actionPlan": "Action Plan",
       "assignee": "Assigned to",
+      "dependsOnTask": "Depends on",
       "status": "Status",
       "dueDate": "Due date"
     },
@@ -4399,7 +4401,8 @@
       "advanceTo": {
         "IN_PROGRESS": "Start task",
         "DONE": "Complete task"
-      }
+      },
+      "blockedByDependency": "Blocked until \"{title}\" is completed"
     }
   }
 }

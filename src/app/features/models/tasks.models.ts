@@ -11,6 +11,12 @@ export interface TaskModel {
   assigneeName: string | null;
   status: TaskStatusEnum;
   dueDate: string | null;
+  /** Vínculo opcional com outra Tarefa do MESMO Plano de Ação - nulo = sem dependência.
+   *  dependsOnTaskStatus já vem resolvido pelo backend (evita uma segunda chamada só pra saber
+   *  se a dependência já foi concluída, ver TasksListComponent#canAdvance). */
+  dependsOnTaskId: string | null;
+  dependsOnTaskTitle: string | null;
+  dependsOnTaskStatus: TaskStatusEnum | null;
   completedAt: string | null;
   completedById: string | null;
   createdById: string;
@@ -33,6 +39,7 @@ export interface TaskUpsertInput {
   description: string | null;
   assigneeId: string;
   dueDate: string | null;
+  dependsOnTaskId: string | null;
 }
 
 export interface TaskStatusInput {

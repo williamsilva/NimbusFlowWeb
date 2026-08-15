@@ -4360,6 +4360,7 @@
       "description": "Descrição",
       "assignee": "Responsável pela execução",
       "dueDate": "Prazo",
+      "dependsOnTask": "Depende da conclusão de (opcional)",
       "status": "Status",
       "createdAt": "Criada em",
       "periodCreatedAt": "Período de criação"
@@ -4368,6 +4369,7 @@
       "title": "Título",
       "actionPlan": "Plano de Ação",
       "assignee": "Atribuída a",
+      "dependsOnTask": "Depende de",
       "status": "Status",
       "dueDate": "Prazo"
     },
@@ -4394,7 +4396,8 @@
       "advanceTo": {
         "IN_PROGRESS": "Iniciar tarefa",
         "DONE": "Concluir tarefa"
-      }
+      },
+      "blockedByDependency": "Bloqueada até \"{title}\" ser concluída"
     }
   }
 }

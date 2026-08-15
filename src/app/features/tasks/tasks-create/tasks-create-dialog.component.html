@@ -66,6 +66,24 @@
           <label for="dueDate">{{ 'tasks.fields.dueDate' | translate }}</label>
         </p-floatLabel>
       </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            [showClear]="true"
+            inputId="dependsOnTaskId"
+            optionLabel="label"
+            optionValue="value"
+            formControlName="dependsOnTaskId"
+            [options]="dependencyOptions()"
+          ></p-select>
+          <label for="dependsOnTaskId">{{ 'tasks.fields.dependsOnTask' | translate }}</label>
+        </p-floatLabel>
+      </div>
     </div>
   </form>
 

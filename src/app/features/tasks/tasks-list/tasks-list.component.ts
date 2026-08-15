@@ -109,11 +109,24 @@ export class TasksListComponent implements OnInit {
     return this.canManage() && row.status !== TaskStatusEnum.DONE && row.status !== TaskStatusEnum.CANCELLED;
   }
 
+  /** Quem só executa (não gerencia) fica travado enquanto a dependência não estiver DONE - quem
+   *  gerencia ignora essa trava, mesmo espírito de já poder mudar pra qualquer status sem
+   *  respeitar a ordem de transição (ver TaskService#updateStatus no backend). */
+  isDependencySatisfied(row: TaskModel): boolean {
+    return !row.dependsOnTaskId || row.dependsOnTaskStatus === TaskStatusEnum.DONE;
+  }
+
   canAdvance(row: TaskModel): boolean {
-    return this.policy.canExecuteOwn(row) && nextForwardTaskStatus(row.status) !== null;
+    if (!this.policy.canExecuteOwn(row) || nextForwardTaskStatus(row.status) === null) {
+      return false;
+    }
+    return this.policy.canManage() || this.isDependencySatisfied(row);
   }
 
   advanceLabel(row: TaskModel): string {
+    if (!this.isDependencySatisfied(row)) {
+      return this.i18n.tUi('tasks.action.blockedByDependency' as never, { title: row.dependsOnTaskTitle });
+    }
     const next = nextForwardTaskStatus(row.status);
     return next ? this.i18n.tUi(`tasks.action.advanceTo.${next}` as never) : '';
   }

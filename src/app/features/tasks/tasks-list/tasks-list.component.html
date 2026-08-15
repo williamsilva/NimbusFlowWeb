@@ -58,6 +58,7 @@
       <colgroup>
         <col style="width: auto" />
         <col style="width: 180px" />
+        <col style="width: 180px" />
         <col style="width: 130px" />
         <col style="width: 130px" />
         <col style="width: 130px" />
@@ -71,6 +72,9 @@
         </th>
         <th class="text-center">
           <span class="th-label" tooltipPosition="top" [pTooltip]="'tasks.columns.assignee' | translate">{{ 'tasks.columns.assignee' | translate }}</span>
+        </th>
+        <th class="text-center">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'tasks.columns.dependsOnTask' | translate">{{ 'tasks.columns.dependsOnTask' | translate }}</span>
         </th>
         <th class="text-center">
           <span class="th-label" tooltipPosition="top" [pTooltip]="'tasks.columns.status' | translate">{{ 'tasks.columns.status' | translate }}</span>
@@ -90,6 +94,9 @@
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.title">{{ row.title }}</span>
         </td>
         <td class="text-center" [attr.data-label]="'tasks.columns.assignee' | translate">{{ row.assigneeName ?? '-' }}</td>
+        <td class="text-center" [attr.data-label]="'tasks.columns.dependsOnTask' | translate">
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.dependsOnTaskTitle">{{ row.dependsOnTaskTitle ?? '-' }}</span>
+        </td>
         <td class="text-center" [attr.data-label]="'tasks.columns.status' | translate">
           <cs-status-badge
             [tone]="tone(row.status)"
@@ -126,7 +133,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="5" class="text-center py-5 opacity-70">
+        <td colspan="6" class="text-center py-5 opacity-70">
           {{ loadedOnce() ? ('tasks.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>

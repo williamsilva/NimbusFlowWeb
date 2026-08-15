@@ -28,7 +28,12 @@ import { PageHeaderComponent } from '@shared/features/page-header/page-header.co
 import { TasksAdvancedFilters } from '@features/filter/tasks.filters';
 import { TasksPermissionPolicy } from '@features/tasks/tasks-permission.policy';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
-import { TASK_STATUS_VALUES, taskStatusTone, nextForwardTaskStatus } from '@models/enums/task-status.enum';
+import {
+  TASK_STATUS_VALUES,
+  TaskStatusEnum,
+  taskStatusTone,
+  nextForwardTaskStatus,
+} from '@models/enums/task-status.enum';
 import { TaskWithActionPlanModel, TasksFiltersState } from '@models/tasks.models';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
@@ -157,11 +162,23 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     this.search();
   }
 
+  /** Mesma regra de TasksListComponent#isDependencySatisfied - quem só executa fica travado
+   *  enquanto a dependência não estiver DONE, quem gerencia ignora essa trava. */
+  isDependencySatisfied(row: TaskWithActionPlanModel): boolean {
+    return !row.dependsOnTaskId || row.dependsOnTaskStatus === TaskStatusEnum.DONE;
+  }
+
   canAdvance(row: TaskWithActionPlanModel): boolean {
-    return this.policy.canExecuteOwn(row) && nextForwardTaskStatus(row.status) !== null;
+    if (!this.policy.canExecuteOwn(row) || nextForwardTaskStatus(row.status) === null) {
+      return false;
+    }
+    return this.policy.canManage() || this.isDependencySatisfied(row);
   }
 
   advanceLabel(row: TaskWithActionPlanModel): string {
+    if (!this.isDependencySatisfied(row)) {
+      return this.i18n.tUi('tasks.action.blockedByDependency' as never, { title: row.dependsOnTaskTitle });
+    }
     const next = nextForwardTaskStatus(row.status);
     return next ? this.i18n.tUi(`tasks.action.advanceTo.${next}` as never) : '';
   }

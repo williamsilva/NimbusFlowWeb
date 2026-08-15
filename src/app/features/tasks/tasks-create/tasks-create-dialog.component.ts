@@ -75,6 +75,17 @@ export class TasksCreateDialogComponent {
   readonly isEditMode = computed(() => !!this.task());
   readonly saving = signal(false);
 
+  /** Outras tarefas do MESMO plano (já carregadas por TasksListComponent antes de abrir este
+   *  diálogo, ver TasksFacade.items) pra escolher como dependência - exclui a própria tarefa em
+   *  modo edição (não pode depender de si mesma). */
+  readonly dependencyOptions = computed(() => {
+    const currentId = this.task()?.id;
+    return this.tasks
+      .items()
+      .filter((t) => t.id !== currentId)
+      .map((t) => ({ label: t.title, value: t.id }));
+  });
+
   private lastLoadedId: string | null = null;
   /** Evita resetar o form de novo em modo criação a cada re-execução do effect() (ver
    *  constructor) - true assim que o form já foi inicializado pra este "open" do diálogo. */
@@ -85,6 +96,7 @@ export class TasksCreateDialogComponent {
     description: this.fb.control<string | null>(null, [Validators.maxLength(1000)]),
     assigneeId: ['', [Validators.required]],
     dueDate: this.fb.control<Date | null>(null),
+    dependsOnTaskId: this.fb.control<string | null>(null),
   });
 
   constructor() {
@@ -123,6 +135,7 @@ export class TasksCreateDialogComponent {
         description: task.description,
         assigneeId: task.assigneeId,
         dueDate: fromDateOnlyString(task.dueDate),
+        dependsOnTaskId: task.dependsOnTaskId,
       });
     });
   }
@@ -140,7 +153,7 @@ export class TasksCreateDialogComponent {
   }
 
   private resetFormForCreate(): void {
-    this.form.reset({ title: '', description: null, assigneeId: '', dueDate: null });
+    this.form.reset({ title: '', description: null, assigneeId: '', dueDate: null, dependsOnTaskId: null });
   }
 
   save(): void {
@@ -164,6 +177,7 @@ export class TasksCreateDialogComponent {
       description: v.description?.trim() || null,
       assigneeId: v.assigneeId,
       dueDate: toDateOnlyString(v.dueDate),
+      dependsOnTaskId: v.dependsOnTaskId,
     };
 
     this.saving.set(true);
