@@ -206,6 +206,7 @@
         <col style="width: 180px" />
         <col style="width: 130px" />
         <col style="width: 150px" />
+        <col style="width: 170px" />
         <col style="width: 150px" />
         <col style="width: 80px" />
       </colgroup>
@@ -324,6 +325,17 @@
             <span
               class="th-label"
               tooltipPosition="top"
+              [pTooltip]="'tickets.columns.target' | translate"
+              >{{ 'tickets.columns.target' | translate }}</span
+            >
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
               [pTooltip]="'tickets.columns.createdAt' | translate"
               >{{ 'tickets.columns.createdAt' | translate }}</span
             >
@@ -392,6 +404,14 @@
         <td class="text-center" [attr.data-label]="'tickets.columns.reportedBy' | translate">
           {{ row.reportedByName ?? '-' }}
         </td>
+        <td class="text-center" [attr.data-label]="'tickets.columns.target' | translate">
+          <i
+            class="pi"
+            [class.pi-user]="row.targetType === 'USER'"
+            [class.pi-sitemap]="row.targetType === 'DEPARTMENT'"
+          ></i>
+          {{ (row.targetType === 'USER' ? row.targetUserName : row.targetDepartmentName) ?? '-' }}
+        </td>
         <td class="text-center" [attr.data-label]="'tickets.columns.createdAt' | translate">
           {{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}
         </td>
@@ -447,7 +467,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="8" class="text-center py-5 opacity-70">
+        <td colspan="9" class="text-center py-5 opacity-70">
           {{
             facade.loadedOnce()
               ? ('tickets.empty.title' | translate)

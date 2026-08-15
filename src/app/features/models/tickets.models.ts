@@ -1,6 +1,7 @@
 import { TicketStatusEnum } from '@models/enums/ticket-status.enum';
 import { TicketTypeEnum } from '@models/enums/ticket-type.enum';
 import { TicketPriorityEnum } from '@models/enums/ticket-priority.enum';
+import { TicketTargetTypeEnum } from '@models/enums/ticket-target-type.enum';
 import { PeriodEnum } from '@models/enums/period.enum';
 
 /** Uma evidência fotográfica anexada ao fechar o chamado - `url` é pré-assinada (expira), mesmo
@@ -26,6 +27,14 @@ export interface TicketModel {
   status: TicketStatusEnum;
   workId: string | null;
   workName: string | null;
+  targetType: TicketTargetTypeEnum;
+  targetUserId: string | null;
+  /** Resolvido pelo backend (não em lote, mas cacheado por usuário - ver TicketService no
+   *  NimbusFlowServer) - nunca resolvido de novo aqui. */
+  targetUserName: string | null;
+  targetDepartmentId: string | null;
+  /** Resolvido pelo backend em lote - nunca resolvido de novo aqui. */
+  targetDepartmentName: string | null;
   reportedById: string;
   reportedByName: string | null;
   attachmentUrl: string | null;
@@ -39,12 +48,18 @@ export interface TicketModel {
 
 export type TicketApiModel = TicketModel;
 
-/** Sem workId de propósito - nunca definido na criação/edição, só via linkWork depois de criado. */
+/** Sem workId de propósito - nunca definido na criação/edição, só via linkWork depois de criado.
+ *  targetUserId/targetDepartmentId são mutuamente exclusivos, de acordo com targetType (validado
+ *  no backend, ver TicketService#resolveTarget) - o diálogo sempre envia null pro que não se
+ *  aplica. */
 export interface TicketUpsertInput {
   title: string;
   description: string;
   type: TicketTypeEnum;
   priority: TicketPriorityEnum;
+  targetType: TicketTargetTypeEnum;
+  targetUserId: string | null;
+  targetDepartmentId: string | null;
 }
 
 export interface TicketCreateInput extends TicketUpsertInput {

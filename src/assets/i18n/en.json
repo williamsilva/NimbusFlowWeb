@@ -130,6 +130,9 @@
       },
       "approvalLimits": {
         "title": "Approval limits"
+      },
+      "departments": {
+        "title": "Departments"
       }
     },
     "transactions": {
@@ -332,7 +335,8 @@
       "scheduler": "Scheduler",
       "reconciliation": "Reconciliation",
       "backup": "Backup",
-      "approvalLimits": "Approval limits"
+      "approvalLimits": "Approval limits",
+      "departments": "Departments"
     },
     "file": {
       "processing": {
@@ -3638,6 +3642,33 @@
       "error": "Could not delete the approval limit"
     }
   },
+  "departments": {
+    "subtitle": "Departments that can be the target of a ticket, in addition to a specific user.",
+    "new": { "title": "New department" },
+    "edit": { "title": "Edit department" },
+    "columns": {
+      "name": "Name",
+      "users": "Users"
+    },
+    "fields": {
+      "name": "Name",
+      "users": "Users"
+    },
+    "empty": { "title": "No departments registered" },
+    "action": { "noPermission": "You don't have permission to manage departments" },
+    "form": {
+      "invalid": "Fill in the name and select at least one user",
+      "created": "Department created successfully",
+      "updated": "Department updated successfully",
+      "saveError": "Could not save the department"
+    },
+    "deleteConfirm": {
+      "header": "Delete department",
+      "message": "Are you sure you want to delete this department?",
+      "success": "Department deleted successfully",
+      "error": "Could not delete the department"
+    }
+  },
   "backup": {
     "settings": {
       "subtitle": "Generates an on-demand backup of the databases and/or the files folder, for immediate download.",
@@ -4226,7 +4257,10 @@
       "periodCreatedAt": "Report period",
       "attachment": "Attachment (optional)",
       "resolutionNote": "Resolution note",
-      "closePhotos": "Photo evidence (optional)"
+      "closePhotos": "Photo evidence (optional)",
+      "targetType": "Direct to",
+      "targetUser": "User",
+      "targetDepartment": "Department"
     },
     "columns": {
       "title": "Title",
@@ -4235,11 +4269,16 @@
       "work": "Service Front",
       "status": "Status",
       "reportedBy": "Reported by",
+      "target": "Directed to",
       "createdAt": "Reported at"
     },
     "type": {
       "TICKET": "Ticket",
       "ALERT": "Possible issue alert"
+    },
+    "targetType": {
+      "USER": "User",
+      "DEPARTMENT": "Department"
     },
     "priority": {
       "HIGH": "High",
@@ -4257,7 +4296,7 @@
       "cancelError": "Could not cancel the ticket."
     },
     "form": {
-      "invalid": "Fill in the required fields (title, description, type and priority) before submitting.",
+      "invalid": "Fill in the required fields (title, description, type, priority and target) before submitting.",
       "created": "Ticket reported successfully.",
       "saveError": "Could not report the ticket. Please try again.",
       "closeInvalid": "Describe the resolution before closing the ticket."

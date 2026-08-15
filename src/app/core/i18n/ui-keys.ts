@@ -119,6 +119,7 @@ export const UI_KEYS = {
       reconciliation: 'menu.settings.reconciliation',
       backup: 'menu.settings.backup',
       approvalLimits: 'menu.settings.approvalLimits',
+      departments: 'menu.settings.departments',
     },
     reconciliation: 'menu.reconciliation',
     /* Fornecedor / Obra / Sugestão (com.nimbusflow.works no backend) */
@@ -1916,6 +1917,20 @@ export const UI_KEYS = {
       message: 'approvalLimits.deleteConfirm.message',
       success: 'approvalLimits.deleteConfirm.success',
       error: 'approvalLimits.deleteConfirm.error',
+    },
+  },
+  departments: {
+    form: {
+      invalid: 'departments.form.invalid',
+      created: 'departments.form.created',
+      updated: 'departments.form.updated',
+      saveError: 'departments.form.saveError',
+    },
+    deleteConfirm: {
+      header: 'departments.deleteConfirm.header',
+      message: 'departments.deleteConfirm.message',
+      success: 'departments.deleteConfirm.success',
+      error: 'departments.deleteConfirm.error',
     },
   },
   validation: {

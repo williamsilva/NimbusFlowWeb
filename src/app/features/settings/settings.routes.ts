@@ -48,6 +48,20 @@ export const SETTINGS_ROUTES: Routes = [
       ),
   },
   {
+    path: 'departments',
+    title: 'routes.settings.departments.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.DEPARTAMENTO_VIEW],
+    },
+    loadComponent: () =>
+      import('./departments/departments-list.component').then(
+        (m) => m.DepartmentsListComponent,
+      ),
+  },
+  {
     path: '**',
     title: 'routes.notFound.title',
     loadComponent: () => import('../error/not-found/not-found.page').then((m) => m.NotFoundPage),

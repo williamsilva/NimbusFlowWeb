@@ -125,6 +125,9 @@
       },
       "approvalLimits": {
         "title": "Alçada"
+      },
+      "departments": {
+        "title": "Departamentos"
       }
     },
     "transactions": {
@@ -327,7 +330,8 @@
       "scheduler": "Agendamento",
       "reconciliation": "Conciliação",
       "backup": "Backup",
-      "approvalLimits": "Alçada"
+      "approvalLimits": "Alçada",
+      "departments": "Departamentos"
     },
     "file": {
       "processing": {
@@ -3633,6 +3637,33 @@
       "error": "Não foi possível excluir a faixa de alçada"
     }
   },
+  "departments": {
+    "subtitle": "Departamentos que podem ser o destinatário de um chamado, além de um usuário específico.",
+    "new": { "title": "Novo departamento" },
+    "edit": { "title": "Editar departamento" },
+    "columns": {
+      "name": "Nome",
+      "users": "Usuários"
+    },
+    "fields": {
+      "name": "Nome",
+      "users": "Usuários"
+    },
+    "empty": { "title": "Nenhum departamento cadastrado" },
+    "action": { "noPermission": "Você não tem permissão pra gerenciar departamentos" },
+    "form": {
+      "invalid": "Preencha o nome e selecione ao menos um usuário",
+      "created": "Departamento criado com sucesso",
+      "updated": "Departamento atualizado com sucesso",
+      "saveError": "Não foi possível salvar o departamento"
+    },
+    "deleteConfirm": {
+      "header": "Excluir departamento",
+      "message": "Tem certeza que deseja excluir este departamento?",
+      "success": "Departamento excluído com sucesso",
+      "error": "Não foi possível excluir o departamento"
+    }
+  },
   "backup": {
     "settings": {
       "subtitle": "Gera um backup sob demanda dos bancos e/ou da pasta de arquivos, para download imediato.",
@@ -4221,7 +4252,10 @@
       "periodCreatedAt": "Período do registro",
       "attachment": "Anexo (opcional)",
       "resolutionNote": "Nota de resolução",
-      "closePhotos": "Evidências fotográficas (opcional)"
+      "closePhotos": "Evidências fotográficas (opcional)",
+      "targetType": "Direcionar para",
+      "targetUser": "Usuário",
+      "targetDepartment": "Departamento"
     },
     "columns": {
       "title": "Título",
@@ -4230,11 +4264,16 @@
       "work": "Frente de Serviço",
       "status": "Status",
       "reportedBy": "Relatado por",
+      "target": "Direcionado para",
       "createdAt": "Registrado em"
     },
     "type": {
       "TICKET": "Chamado",
       "ALERT": "Alerta de possível problema"
+    },
+    "targetType": {
+      "USER": "Usuário",
+      "DEPARTMENT": "Departamento"
     },
     "priority": {
       "HIGH": "Alta",
@@ -4252,7 +4291,7 @@
       "cancelError": "Não foi possível cancelar o chamado."
     },
     "form": {
-      "invalid": "Preencha os campos obrigatórios (título, descrição, tipo e prioridade) antes de enviar.",
+      "invalid": "Preencha os campos obrigatórios (título, descrição, tipo, prioridade e direcionamento) antes de enviar.",
       "created": "Chamado registrado com sucesso.",
       "saveError": "Não foi possível registrar o chamado. Tente novamente.",
       "closeInvalid": "Descreva a resolução antes de fechar o chamado."

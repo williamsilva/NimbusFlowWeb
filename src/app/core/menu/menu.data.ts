@@ -129,6 +129,13 @@ export const APP_MENU: AppMenuItem[] = [
         icon: 'pi pi-percentage text-slate-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.ALCADA_VIEW],
       },
+      {
+        exact: false,
+        route: '/settings/departments',
+        labelKey: 'menu.settings.departments',
+        icon: 'pi pi-sitemap text-slate-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.DEPARTAMENTO_VIEW],
+      },
     ],
   },
 ];

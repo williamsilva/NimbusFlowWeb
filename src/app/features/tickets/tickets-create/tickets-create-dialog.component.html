@@ -86,6 +86,64 @@
 
       <div class="col-12 p-2">
         <label class="block mb-2 text-sm opacity-80">
+          {{ 'tickets.fields.targetType' | translate }}
+        </label>
+        <p-selectButton
+          [options]="targetTypeOptions"
+          optionLabel="label"
+          optionValue="value"
+          formControlName="targetType"
+        ></p-selectButton>
+      </div>
+
+      @if (form.controls.targetType.value === TicketTargetTypeEnum.USER) {
+        <div class="col-12 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              [filter]="true"
+              appendTo="body"
+              inputId="targetUserId"
+              optionLabel="label"
+              optionValue="value"
+              [options]="userOptions()"
+              formControlName="targetUserId"
+            ></p-select>
+            <app-error-msg
+              [field]="'targetUserId'"
+              [forId]="'targetUserId'"
+              [control]="form.controls.targetUserId"
+              [label]="'tickets.fields.targetUser' | translate"
+            />
+          </p-floatLabel>
+        </div>
+      } @else {
+        <div class="col-12 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              [filter]="true"
+              appendTo="body"
+              inputId="targetDepartmentId"
+              optionLabel="label"
+              optionValue="value"
+              [options]="departmentOptions()"
+              formControlName="targetDepartmentId"
+            ></p-select>
+            <app-error-msg
+              [field]="'targetDepartmentId'"
+              [forId]="'targetDepartmentId'"
+              [control]="form.controls.targetDepartmentId"
+              [label]="'tickets.fields.targetDepartment' | translate"
+            />
+          </p-floatLabel>
+        </div>
+      }
+
+      <div class="col-12 p-2">
+        <label class="block mb-2 text-sm opacity-80">
           {{ 'tickets.fields.attachment' | translate }}
         </label>
         <input type="file" (change)="onFileSelected($event)" />

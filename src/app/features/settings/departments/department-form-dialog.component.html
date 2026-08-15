@@ -1,0 +1,74 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '560px', maxWidth: '95vw' }"
+  [header]="(isEditing() ? 'departments.edit.title' : 'departments.new.title') | translate"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            pInputText
+            id="name"
+            class="w-full"
+            formControlName="name"
+          />
+          <label for="name">{{ 'departments.fields.name' | translate }}</label>
+          <app-error-msg
+            [field]="'name'"
+            [forId]="'name'"
+            [control]="form.controls.name"
+            [label]="'departments.fields.name' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-multiSelect
+            display="chip"
+            appendTo="body"
+            [filter]="true"
+            optionValue="id"
+            [showClear]="true"
+            optionLabel="name"
+            inputId="userIds"
+            class="w-full"
+            [options]="userOptions()"
+            formControlName="userIds"
+          ></p-multiSelect>
+          <label for="userIds">{{ 'departments.fields.users' | translate }}</label>
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

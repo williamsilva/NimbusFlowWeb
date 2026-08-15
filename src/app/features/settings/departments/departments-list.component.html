@@ -1,0 +1,115 @@
+<cs-page-header
+  [subtitle]="'departments.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('menu.settings.title' | translate), url: '/settings' },
+    { label: ('routes.settings.departments.title' | translate) },
+  ]"
+>
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    tooltipPosition="top"
+    [disabled]="!canChange()"
+    class="p-button-info p-button-sm"
+    [label]="'departments.new.title' | translate"
+    [pTooltip]="!canChange() ? ('departments.action.noPermission' | translate) : ''"
+  ></button>
+</cs-page-header>
+
+<app-department-form-dialog
+  [editing]="editing()"
+  [visible]="formVisible()"
+  [userOptions]="userOptions()"
+  (visibleChange)="onFormVisibleChange($event)"
+></app-department-form-dialog>
+
+<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+  <p-table
+    stripedRows
+    dataKey="id"
+    size="small"
+    showGridlines
+    [value]="items()"
+    [rowHover]="true"
+    [loading]="loading()"
+    class="cs-admin-table"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: 220px" />
+        <col style="width: auto" />
+        <col style="width: 70px" />
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th>{{ 'departments.columns.name' | translate }}</th>
+        <th>{{ 'departments.columns.users' | translate }}</th>
+        <th class="text-center">{{ 'common.actions' | translate }}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td class="mobile-card-title">{{ row.name }}</td>
+        <td [attr.data-label]="'departments.columns.users' | translate">
+          <span
+            tooltipPosition="top"
+            class="cs-table-cell-ellipsis"
+            [pTooltip]="userNames(row.userIds)"
+          >
+            {{ userNames(row.userIds) }}
+          </span>
+        </td>
+        <td class="text-center mobile-card-actions">
+          <div class="table-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="goEdit(row)"
+              tooltipPosition="top"
+              [disabled]="!canChange()"
+              class="p-button-text p-button-sm"
+              [pTooltip]="
+                canChange()
+                  ? ('common.edit' | translate)
+                  : ('departments.action.noPermission' | translate)
+              "
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              tooltipPosition="top"
+              [disabled]="!canChange()"
+              (click)="confirmDelete(row)"
+              class="p-button-text p-button-sm p-button-danger"
+              [pTooltip]="
+                canChange()
+                  ? ('common.delete' | translate)
+                  : ('departments.action.noPermission' | translate)
+              "
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="3" class="text-center py-5 opacity-70">
+          {{
+            loadedOnce()
+              ? ('departments.empty.title' | translate)
+              : ('common.loading' | translate)
+          }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

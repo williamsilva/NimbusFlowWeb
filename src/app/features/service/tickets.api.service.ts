@@ -45,9 +45,10 @@ export class TicketsApiService {
   }
 
   /**
-   * multipart/form-data com 2 parts: "data" (JSON de {title, description, type, priority}) e
-   * "attachment" (arquivo, opcional) - o backend (TicketController) exige a part "data" mesmo sem
-   * anexo. Sem workId de propósito - nunca definido na criação.
+   * multipart/form-data com 2 parts: "data" (JSON de {title, description, type, priority,
+   * targetType, targetUserId, targetDepartmentId}) e "attachment" (arquivo, opcional) - o backend
+   * (TicketController) exige a part "data" mesmo sem anexo. Sem workId de propósito - nunca
+   * definido na criação.
    */
   create(input: TicketCreateInput) {
     const formData = new FormData();
@@ -60,6 +61,9 @@ export class TicketsApiService {
             description: input.description,
             type: input.type,
             priority: input.priority,
+            targetType: input.targetType,
+            targetUserId: input.targetUserId,
+            targetDepartmentId: input.targetDepartmentId,
           }),
         ],
         { type: 'application/json' },
