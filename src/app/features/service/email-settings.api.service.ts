@@ -6,6 +6,9 @@ import { environment } from 'environments/environment';
 
 export interface EmailSettingsModel {
   impl: string;
+  /** false em produção (perfil Spring "prod") - calculado só no backend, ver
+   *  EmailSettingsService#allowFakeImpl no NimbusFlowServer. */
+  allowFakeImpl: boolean;
   fromName: string;
   fromEmail: string;
   brevoApiKey: string | null;
