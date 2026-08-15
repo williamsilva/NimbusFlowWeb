@@ -113,5 +113,16 @@ export const STATE_KEY = {
         FILTERS: { V1: 'nimbusflow.all-tasks.filters.v1' },
       },
     },
+
+    /* Configurações > Auditoria de E-mail (com.nimbusflow.common.notification.mail no backend) */
+    SETTINGS: {
+      EMAIL_LOG: {
+        TABLE: {
+          ROWS: { V1: 'email-log.table.rows' },
+          STATE: { V1: 'nimbusflow.email-log.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.email-log.filters.v1' },
+      },
+    },
   },
 };

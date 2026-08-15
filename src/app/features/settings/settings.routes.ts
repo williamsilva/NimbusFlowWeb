@@ -48,7 +48,6 @@ export const SETTINGS_ROUTES: Routes = [
       ),
   },
   {
-<<<<<<< HEAD
     path: 'departments',
     title: 'routes.settings.departments.title',
     canActivate: [permissionGuard],
@@ -63,8 +62,20 @@ export const SETTINGS_ROUTES: Routes = [
       ),
   },
   {
-=======
->>>>>>> feature/migracao-angular21-primeng
+    path: 'email-log',
+    title: 'routes.settings.emailLog.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.EMAIL_LOG_VIEW],
+    },
+    loadComponent: () =>
+      import('./email-log/email-log-list.component').then(
+        (m) => m.EmailLogListComponent,
+      ),
+  },
+  {
     path: '**',
     title: 'routes.notFound.title',
     loadComponent: () => import('../error/not-found/not-found.page').then((m) => m.NotFoundPage),

@@ -130,12 +130,12 @@
       },
       "approvalLimits": {
         "title": "Alzada de aprobación"
-<<<<<<< HEAD
       },
       "departments": {
         "title": "Departamentos"
-=======
->>>>>>> feature/migracao-angular21-primeng
+      },
+      "emailLog": {
+        "title": "Auditoría de E-mail"
       }
     },
     "transactions": {
@@ -338,12 +338,9 @@
       "scheduler": "Programación",
       "reconciliation": "Conciliación",
       "backup": "Backup",
-<<<<<<< HEAD
       "approvalLimits": "Alzada de aprobación",
-      "departments": "Departamentos"
-=======
-      "approvalLimits": "Alzada de aprobación"
->>>>>>> feature/migracao-angular21-primeng
+      "departments": "Departamentos",
+      "emailLog": "Auditoría de E-mail"
     },
     "file": {
       "processing": {
@@ -3649,7 +3646,6 @@
       "error": "No fue posible eliminar el rango de alzada"
     }
   },
-<<<<<<< HEAD
   "departments": {
     "subtitle": "Departamentos que pueden ser el destinatario de un ticket, además de un usuario específico.",
     "new": { "title": "Nuevo departamento" },
@@ -3677,8 +3673,43 @@
       "error": "No fue posible eliminar el departamento"
     }
   },
-=======
->>>>>>> feature/migracao-angular21-primeng
+  "emailLog": {
+    "subtitle": "Registro de todos los correos enviados por el sistema - destinatarios, asunto, estado y cuerpo.",
+    "columns": {
+      "recipients": "Destinatarios",
+      "subject": "Asunto",
+      "eventType": "Evento",
+      "status": "Estado",
+      "sentAt": "Enviado el",
+      "errorMessage": "Error"
+    },
+    "fields": {
+      "recipients": "Destinatarios",
+      "subject": "Asunto",
+      "eventType": "Evento",
+      "status": "Estado",
+      "sentAt": "Enviado el",
+      "periodSentAt": "Período del envío"
+    },
+    "status": {
+      "SENT": "Enviado",
+      "FAILED": "Falla en el envío"
+    },
+    "eventType": {
+      "addendum_approved": "Adenda aprobada",
+      "payment_released": "Cuota liberada",
+      "ticket_target": "Ticket"
+    },
+    "empty": { "title": "Ningún correo registrado" },
+    "detail": {
+      "title": "Detalles del correo",
+      "recipients": "Destinatarios",
+      "subject": "Asunto",
+      "template": "Plantilla",
+      "body": "Cuerpo",
+      "noBody": "Cuerpo no disponible para correos enviados antes de esta versión."
+    }
+  },
   "backup": {
     "settings": {
       "subtitle": "Genera un backup bajo demanda de los bancos de datos y/o de la carpeta de archivos, para descarga inmediata.",
