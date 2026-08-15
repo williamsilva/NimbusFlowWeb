@@ -15,19 +15,19 @@ export const APP_MENU: AppMenuItem[] = [
    * `permissions` declarado). */
   {
     labelKey: 'menu.works.tickets',
-    icon: 'pi pi-megaphone text-green-600',
+    icon: 'pi pi-megaphone text-orange-600',
     route: '/tickets',
     exact: false,
   },
   {
     labelKey: 'menu.works.actionPlans',
-    icon: 'pi pi-map text-green-600',
+    icon: 'pi pi-map text-purple-600',
     route: '/action-plans',
     exact: false,
   },
   {
     labelKey: 'menu.works.tasks',
-    icon: 'pi pi-check-square text-green-600',
+    icon: 'pi pi-check-square text-teal-600',
     route: '/tasks',
     exact: false,
   },
