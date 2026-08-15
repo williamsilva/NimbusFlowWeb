@@ -406,46 +406,48 @@
           class="text-center mobile-card-actions"
           [attr.data-label]="'common.actions' | translate"
         >
-          <button
-            pButton
-            type="button"
-            icon="pi pi-building"
-            (click)="goOpenWorkFront(row)"
-            class="p-button-text p-button-sm"
-            [disabled]="!canOpenWorkFront(row)"
-            [pTooltip]="'tickets.action.openWorkFront' | translate"
-            tooltipPosition="top"
-          ></button>
-          <button
-            pButton
-            type="button"
-            icon="pi pi-arrow-right-arrow-left"
-            (click)="goConvert(row)"
-            class="p-button-text p-button-sm"
-            [disabled]="!canConvert(row)"
-            [pTooltip]="'tickets.action.convert' | translate"
-            tooltipPosition="top"
-          ></button>
-          <button
-            pButton
-            type="button"
-            icon="pi pi-check"
-            (click)="goClose(row)"
-            class="p-button-text p-button-sm"
-            [disabled]="!canClose(row)"
-            [pTooltip]="'tickets.action.close' | translate"
-            tooltipPosition="top"
-          ></button>
-          <button
-            pButton
-            type="button"
-            icon="pi pi-times"
-            class="p-button-text p-button-sm p-button-danger"
-            (click)="confirmCancel(row)"
-            [disabled]="!canCancel(row)"
-            [pTooltip]="'tickets.action.cancel' | translate"
-            tooltipPosition="top"
-          ></button>
+          <div class="table-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-building"
+              (click)="goOpenWorkFront(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canOpenWorkFront(row)"
+              [pTooltip]="'tickets.action.openWorkFront' | translate"
+              tooltipPosition="top"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-arrow-right-arrow-left"
+              (click)="goConvert(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canConvert(row)"
+              [pTooltip]="'tickets.action.convert' | translate"
+              tooltipPosition="top"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-check"
+              (click)="goClose(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canClose(row)"
+              [pTooltip]="'tickets.action.close' | translate"
+              tooltipPosition="top"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-times"
+              class="p-button-text p-button-sm p-button-danger"
+              (click)="confirmCancel(row)"
+              [disabled]="!canCancel(row)"
+              [pTooltip]="'tickets.action.cancel' | translate"
+              tooltipPosition="top"
+            ></button>
+          </div>
         </td>
       </tr>
     </ng-template>

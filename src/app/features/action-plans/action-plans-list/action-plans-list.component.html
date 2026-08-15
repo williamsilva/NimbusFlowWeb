@@ -247,54 +247,57 @@
         <td class="text-center" [attr.data-label]="'actionPlans.columns.responsible' | translate">{{ row.responsibleName ?? '-' }}</td>
         <td class="text-center" [attr.data-label]="'actionPlans.columns.targetDate' | translate">{{ row.targetDate ? (row.targetDate | csDate: 'short') : '-' }}</td>
         <td class="text-center mobile-card-actions" [attr.data-label]="'common.actions' | translate">
-          <button
-            pButton
-            type="button"
-            icon="pi pi-list-check"
-            (click)="goTasks(row)"
-            class="p-button-text p-button-sm"
-            [pTooltip]="'actionPlans.action.viewTasks' | translate"
-          ></button>
-          <button
-            pButton
-            type="button"
-            icon="pi pi-pencil"
-            (click)="goEdit(row)"
-            class="p-button-text p-button-sm"
-            [disabled]="!canEdit(row)"
-            [pTooltip]="'common.edit' | translate"
-            tooltipPosition="top"
-          ></button>
-          <button
-            pButton
-            type="button"
-            icon="pi pi-play"
-            (click)="confirmStart(row)"
-            class="p-button-text p-button-sm"
-            [disabled]="!canStart(row)"
-            [pTooltip]="'actionPlans.action.start' | translate"
-            tooltipPosition="top"
-          ></button>
-          <button
-            pButton
-            type="button"
-            icon="pi pi-check"
-            (click)="confirmComplete(row)"
-            class="p-button-text p-button-sm"
-            [disabled]="!canComplete(row)"
-            [pTooltip]="'actionPlans.action.complete' | translate"
-            tooltipPosition="top"
-          ></button>
-          <button
-            pButton
-            type="button"
-            icon="pi pi-times"
-            class="p-button-text p-button-sm p-button-danger"
-            (click)="confirmCancel(row)"
-            [disabled]="!canCancel(row)"
-            [pTooltip]="'actionPlans.action.cancel' | translate"
-            tooltipPosition="top"
-          ></button>
+          <div class="table-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-list-check"
+              (click)="goTasks(row)"
+              class="p-button-text p-button-sm"
+              [pTooltip]="'actionPlans.action.viewTasks' | translate"
+              tooltipPosition="top"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="goEdit(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canEdit(row)"
+              [pTooltip]="'common.edit' | translate"
+              tooltipPosition="top"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-play"
+              (click)="confirmStart(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canStart(row)"
+              [pTooltip]="'actionPlans.action.start' | translate"
+              tooltipPosition="top"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-check"
+              (click)="confirmComplete(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canComplete(row)"
+              [pTooltip]="'actionPlans.action.complete' | translate"
+              tooltipPosition="top"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-times"
+              class="p-button-text p-button-sm p-button-danger"
+              (click)="confirmCancel(row)"
+              [disabled]="!canCancel(row)"
+              [pTooltip]="'actionPlans.action.cancel' | translate"
+              tooltipPosition="top"
+            ></button>
+          </div>
         </td>
       </tr>
     </ng-template>

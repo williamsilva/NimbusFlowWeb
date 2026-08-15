@@ -238,16 +238,18 @@
         </td>
         <td class="text-center" [attr.data-label]="'tasks.columns.dueDate' | translate">{{ row.dueDate ? (row.dueDate | csDate: 'short') : '-' }}</td>
         <td class="text-center mobile-card-actions" [attr.data-label]="'common.actions' | translate">
-          <button
-            pButton
-            type="button"
-            icon="pi pi-arrow-right"
-            (click)="advance(row)"
-            class="p-button-text p-button-sm"
-            [disabled]="!canAdvance(row)"
-            [pTooltip]="advanceLabel(row) || ('tasks.action.advance' | translate)"
-            tooltipPosition="top"
-          ></button>
+          <div class="table-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-arrow-right"
+              (click)="advance(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canAdvance(row)"
+              [pTooltip]="advanceLabel(row) || ('tasks.action.advance' | translate)"
+              tooltipPosition="top"
+            ></button>
+          </div>
         </td>
       </tr>
     </ng-template>
