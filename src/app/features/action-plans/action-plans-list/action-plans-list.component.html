@@ -5,7 +5,7 @@
     { label: ('breadcrumb.actionPlans' | translate) },
   ]"
   [compact]="false"
-  >
+>
   <button
     pButton
     type="button"
@@ -56,10 +56,10 @@
   (clear)="clear()"
   (search)="search()"
   [actionsAlign]="'start'"
-  [activeFilterGroups]="activeFilterGroups()"
   [activeCount]="activeFiltersCount()"
   [title]="'common.filter' | translate"
-  >
+  [activeFilterGroups]="activeFilterGroups()"
+>
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-4 p-1">
       <p-floatLabel variant="on" class="w-full">
@@ -69,96 +69,96 @@
           [value]="title()"
           class="w-full p-inputtext-sm"
           (input)="title.set(($any($event.target).value ?? '').toString())"
-          />
-          <label for="title">{{ 'actionPlans.fields.title' | translate }}</label>
-        </p-floatLabel>
-      </div>
-
-      <div class="col-12 md:col-3 p-1">
-        <p-floatLabel variant="on" class="w-full">
-          <p-multiSelect
-            size="small"
-            class="w-full"
-            appendTo="body"
-            [showClear]="true"
-            inputId="status"
-            optionLabel="label"
-            optionValue="value"
-            [ngModel]="status()"
-            [showToggleAll]="false"
-            [options]="statusOptions"
-            (ngModelChange)="status.set($event?.length ? $event : null)"
-          ></p-multiSelect>
-          <label for="status">{{ 'actionPlans.fields.status' | translate }}</label>
-        </p-floatLabel>
-      </div>
-
-      <div class="col-12 md:col-3 p-1">
-        <p-floatLabel variant="on" class="w-full">
-          <p-multiSelect
-            size="small"
-            class="w-full"
-            appendTo="body"
-            [showClear]="true"
-            inputId="workIds"
-            optionLabel="label"
-            optionValue="value"
-            [ngModel]="workIds()"
-            [showToggleAll]="false"
-            [options]="workOptions()"
-            (ngModelChange)="workIds.set($event?.length ? $event : null)"
-          ></p-multiSelect>
-          <label for="workIds">{{ 'actionPlans.fields.work' | translate }}</label>
-        </p-floatLabel>
-      </div>
-
-      <cs-advanced-period-date-filter
-        dateInputId="createdAt"
-        periodInputId="periodCreatedAt"
-        [value]="createdAt()"
-        [period]="periodCreatedAt()"
-        class="col-12 md:col-2 p-1"
-        (valueChange)="createdAt.set($event)"
-        [periodOptions]="periodEnumOptions()"
-        [view]="setViewFormat(periodCreatedAt())"
-        [dateFormat]="setDateFormat(periodCreatedAt())"
-        [selectionMode]="setSelectionMode(periodCreatedAt())"
-        [dateLabel]="'actionPlans.fields.createdAt' | translate"
-        [periodLabel]="'actionPlans.fields.periodCreatedAt' | translate"
-        (periodChange)="onPeriodColumnChange(periodCreatedAt, createdAt, $event)"
-      ></cs-advanced-period-date-filter>
+        />
+        <label for="title">{{ 'actionPlans.fields.title' | translate }}</label>
+      </p-floatLabel>
     </div>
-  </cs-filters-panel>
 
-  <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
-    <p-table
-      #dt
-      stripedRows
-      dataKey="id"
-      size="small"
-      [rows]="rows"
-      [lazy]="true"
-      showGridlines
-      [rowHover]="true"
-      [paginator]="true"
-      sortMode="multiple"
-      filterDisplay="menu"
-      stateStorage="local"
-      class="cs-admin-table"
-      [value]="actionPlans()"
-      [loading]="facade.loading()"
-      [stateKey]="tableStateKey()"
-      [showCurrentPageReport]="true"
-      [totalRecords]="totalRecords()"
-      (onLazyLoad)="onLazyLoad($event)"
-      [paginatorDropdownAppendTo]="'body'"
-      (onPage)="onPageChange($event)"
-      [rowsPerPageOptions]="rowsPerPageOptions"
-      [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
-      [currentPageReportTemplate]="'pagination.report' | translate"
-      >
-      <ng-template pTemplate="colgroup">
-        <colgroup>
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="status"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="status()"
+          [showToggleAll]="false"
+          [options]="statusOptions"
+          (ngModelChange)="status.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="status">{{ 'actionPlans.fields.status' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="workIds"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="workIds()"
+          [showToggleAll]="false"
+          [options]="workOptions()"
+          (ngModelChange)="workIds.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="workIds">{{ 'actionPlans.fields.work' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <cs-advanced-period-date-filter
+      dateInputId="createdAt"
+      periodInputId="periodCreatedAt"
+      [value]="createdAt()"
+      [period]="periodCreatedAt()"
+      class="col-12 md:col-2 p-1"
+      (valueChange)="createdAt.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodCreatedAt())"
+      [dateFormat]="setDateFormat(periodCreatedAt())"
+      [selectionMode]="setSelectionMode(periodCreatedAt())"
+      [dateLabel]="'actionPlans.fields.createdAt' | translate"
+      [periodLabel]="'actionPlans.fields.periodCreatedAt' | translate"
+      (periodChange)="onPeriodColumnChange(periodCreatedAt, createdAt, $event)"
+    ></cs-advanced-period-date-filter>
+  </div>
+</cs-filters-panel>
+
+<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+  <p-table
+    #dt
+    stripedRows
+    dataKey="id"
+    size="small"
+    [rows]="rows"
+    [lazy]="true"
+    showGridlines
+    [rowHover]="true"
+    [paginator]="true"
+    sortMode="multiple"
+    filterDisplay="menu"
+    stateStorage="local"
+    class="cs-admin-table"
+    [value]="actionPlans()"
+    [loading]="facade.loading()"
+    [stateKey]="tableStateKey()"
+    [showCurrentPageReport]="true"
+    [totalRecords]="totalRecords()"
+    (onLazyLoad)="onLazyLoad($event)"
+    [paginatorDropdownAppendTo]="'body'"
+    (onPage)="onPageChange($event)"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
+    [currentPageReportTemplate]="'pagination.report' | translate"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
         <col style="width: auto" />
         <col style="width: 170px" />
         <col style="width: 200px" />
@@ -166,7 +166,7 @@
         <col style="width: 140px" />
         <col style="width: 170px" />
         <col style="width: 130px" />
-        <col style="width: 200px" />
+        <col style="width: 130px" />
       </colgroup>
     </ng-template>
 
@@ -174,7 +174,12 @@
       <tr>
         <th pSortableColumn="title">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.title' | translate">{{ 'actionPlans.columns.title' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'actionPlans.columns.title' | translate"
+              >{{ 'actionPlans.columns.title' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="title"></p-sortIcon>
               <p-columnFilter
@@ -194,19 +199,34 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.project' | translate">{{ 'actionPlans.columns.project' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'actionPlans.columns.project' | translate"
+              >{{ 'actionPlans.columns.project' | translate }}</span
+            >
           </div>
         </th>
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.work' | translate">{{ 'actionPlans.columns.work' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'actionPlans.columns.work' | translate"
+              >{{ 'actionPlans.columns.work' | translate }}</span
+            >
           </div>
         </th>
 
         <th pSortableColumn="status">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.status' | translate">{{ 'actionPlans.columns.status' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'actionPlans.columns.status' | translate"
+              >{{ 'actionPlans.columns.status' | translate }}</span
+            >
             <span class="th-icons">
               <p-sortIcon field="status"></p-sortIcon>
               <p-columnFilter
@@ -217,7 +237,7 @@
                 [showAddButton]="false"
                 [showMatchModes]="false"
                 styleClass="cs-colfilter"
-                >
+              >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                   <p-multiSelect
                     class="w-full"
@@ -238,19 +258,34 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.tasks' | translate">{{ 'actionPlans.columns.tasks' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'actionPlans.columns.tasks' | translate"
+              >{{ 'actionPlans.columns.tasks' | translate }}</span
+            >
           </div>
         </th>
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.responsible' | translate">{{ 'actionPlans.columns.responsible' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'actionPlans.columns.responsible' | translate"
+              >{{ 'actionPlans.columns.responsible' | translate }}</span
+            >
           </div>
         </th>
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.targetDate' | translate">{{ 'actionPlans.columns.targetDate' | translate }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'actionPlans.columns.targetDate' | translate"
+              >{{ 'actionPlans.columns.targetDate' | translate }}</span
+            >
           </div>
         </th>
 
@@ -264,25 +299,42 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td class="mobile-card-title"><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.title">{{ row.title }}</span></td>
-        <td class="text-center" [attr.data-label]="'actionPlans.columns.project' | translate">{{ row.projectName ?? '-' }}</td>
-        <td class="text-center" [attr.data-label]="'actionPlans.columns.work' | translate">{{ row.workName ?? '-' }}</td>
+        <td class="mobile-card-title">
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.title">{{
+            row.title
+          }}</span>
+        </td>
+        <td class="text-center" [attr.data-label]="'actionPlans.columns.project' | translate">
+          {{ row.projectName ?? '-' }}
+        </td>
+        <td class="text-center" [attr.data-label]="'actionPlans.columns.work' | translate">
+          {{ row.workName ?? '-' }}
+        </td>
         <td class="text-center" [attr.data-label]="'actionPlans.columns.status' | translate">
           <cs-status-badge
             [tone]="tone(row.status)"
-            [label]="('actionPlans.status.' + row.status) | translate"
+            [label]="'actionPlans.status.' + row.status | translate"
           ></cs-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'actionPlans.columns.tasks' | translate">
           {{ 'actionPlans.tasksCount' | translate: { count: row.tasksCount } }}
           @if (row.pendingTasksCount > 0) {
             <br />
-            <small class="opacity-70">{{ 'actionPlans.pendingTasksCount' | translate: { count: row.pendingTasksCount } }}</small>
+            <small class="opacity-70">{{
+              'actionPlans.pendingTasksCount' | translate: { count: row.pendingTasksCount }
+            }}</small>
           }
         </td>
-        <td class="text-center" [attr.data-label]="'actionPlans.columns.responsible' | translate">{{ row.responsibleName ?? '-' }}</td>
-        <td class="text-center" [attr.data-label]="'actionPlans.columns.targetDate' | translate">{{ row.targetDate ? (row.targetDate | csDate: 'short') : '-' }}</td>
-        <td class="text-center mobile-card-actions" [attr.data-label]="'common.actions' | translate">
+        <td class="text-center" [attr.data-label]="'actionPlans.columns.responsible' | translate">
+          {{ row.responsibleName ?? '-' }}
+        </td>
+        <td class="text-center" [attr.data-label]="'actionPlans.columns.targetDate' | translate">
+          {{ row.targetDate ? (row.targetDate | csDate: 'short') : '-' }}
+        </td>
+        <td
+          class="text-center mobile-card-actions"
+          [attr.data-label]="'common.actions' | translate"
+        >
           <div class="table-actions">
             <button
               pButton
@@ -320,7 +372,7 @@
               (click)="confirmComplete(row)"
               class="p-button-text p-button-sm"
               [disabled]="!canComplete(row)"
-              [pTooltip]="'actionPlans.action.complete' | translate"
+              [pTooltip]="completeTooltip(row)"
               tooltipPosition="top"
             ></button>
             <button
@@ -361,7 +413,11 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="8" class="text-center py-5 opacity-70">
-          {{ facade.loadedOnce() ? ('actionPlans.empty.title' | translate) : ('common.loading' | translate) }}
+          {{
+            facade.loadedOnce()
+              ? ('actionPlans.empty.title' | translate)
+              : ('common.loading' | translate)
+          }}
         </td>
       </tr>
     </ng-template>

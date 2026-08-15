@@ -219,7 +219,24 @@ export class ActionPlansListComponent extends StatefulListPage<
   }
 
   canComplete(row: ActionPlanModel): boolean {
-    return this.canManage() && row.status === ActionPlanStatusEnum.IN_PROGRESS;
+    return (
+      this.canManage() &&
+      row.status === ActionPlanStatusEnum.IN_PROGRESS &&
+      row.pendingTasksCount === 0
+    );
+  }
+
+  /** Mesmo racional de tasks-list#advanceLabel: quando o motivo de estar desabilitado não é óbvio
+   *  (status errado / sem permissão), explica no tooltip por que ainda há tarefas pendentes. */
+  completeTooltip(row: ActionPlanModel): string {
+    if (
+      this.canManage() &&
+      row.status === ActionPlanStatusEnum.IN_PROGRESS &&
+      row.pendingTasksCount > 0
+    ) {
+      return this.i18n.tUi('actionPlans.action.hasOpenTasks' as never);
+    }
+    return this.i18n.tUi('actionPlans.action.complete' as never);
   }
 
   canCancel(row: ActionPlanModel): boolean {
