@@ -212,6 +212,9 @@
     },
     "tickets": {
       "title": "Llamados"
+    },
+    "actionPlans": {
+      "title": "Planes de Acción"
     }
   },
   "topbar": {
@@ -349,7 +352,8 @@
       "installments": "Pagos",
       "measurements": "Mediciones",
       "suggestions": "Sugerencias",
-      "tickets": "Llamados"
+      "tickets": "Llamados",
+      "actionPlans": "Planes de Acción"
     }
   },
   "sidebar": {
@@ -412,7 +416,8 @@
     "installments": "Pagos",
     "measurements": "Mediciones",
     "suggestions": "Sugerencias",
-    "tickets": "Llamados"
+    "tickets": "Llamados",
+    "actionPlans": "Planes de Acción"
   },
   "footer": {
     "copyright": "NimbusFlow Tech",
@@ -4236,11 +4241,76 @@
     },
     "action": {
       "close": "Cerrar llamado",
-      "cancel": "Cancelar llamado"
+      "cancel": "Cancelar llamado",
+      "convert": "Convertir en plan de acción"
     },
     "cancelConfirm": {
       "header": "Cancelar llamado",
       "message": "¿Confirma la cancelación de este llamado?"
+    }
+  },
+  "actionPlans": {
+    "subtitle": "Planes de acción (metodología 5W2H) - segundo eslabón de la cadena Llamado → Plan de Acción → Tarea",
+    "new": {
+      "title": "Nuevo plan de acción"
+    },
+    "edit": {
+      "title": "Editar plan de acción"
+    },
+    "fields": {
+      "title": "Título",
+      "what": "Qué",
+      "why": "Por qué",
+      "where": "Dónde",
+      "how": "Cómo",
+      "howMuch": "Cuánto cuesta",
+      "targetDate": "Plazo objetivo",
+      "responsible": "Responsable",
+      "status": "Estado",
+      "work": "Frente de Servicio",
+      "createdAt": "Creado el",
+      "periodCreatedAt": "Período de creación"
+    },
+    "columns": {
+      "title": "Título",
+      "work": "Frente de Servicio",
+      "status": "Estado",
+      "responsible": "Responsable",
+      "targetDate": "Plazo objetivo"
+    },
+    "status": {
+      "DRAFT": "Borrador",
+      "IN_PROGRESS": "En curso",
+      "COMPLETED": "Concluido",
+      "CANCELLED": "Cancelado"
+    },
+    "form": {
+      "invalid": "Complete los campos obligatorios del 5W2H antes de enviar.",
+      "created": "Plan de acción creado con éxito.",
+      "updated": "Plan de acción actualizado con éxito.",
+      "saveError": "No se pudo guardar el plan de acción. Intente nuevamente."
+    },
+    "empty": {
+      "title": "Ningún plan de acción encontrado"
+    },
+    "action": {
+      "start": "Iniciar plan",
+      "complete": "Concluir plan",
+      "cancel": "Cancelar plan",
+      "hasOpenTasks": "Hay tareas aún no concluidas o canceladas en este plan."
+    },
+    "startConfirm": {
+      "success": "Plan de acción iniciado con éxito."
+    },
+    "completeConfirm": {
+      "header": "Concluir plan de acción",
+      "message": "¿Confirma la conclusión de este plan de acción?",
+      "success": "Plan de acción concluido con éxito."
+    },
+    "cancelConfirm": {
+      "header": "Cancelar plan de acción",
+      "message": "¿Confirma la cancelación de este plan de acción?",
+      "success": "Plan de acción cancelado con éxito."
     }
   }
 }

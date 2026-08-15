@@ -132,6 +132,7 @@ export const UI_KEYS = {
       measurements: 'menu.works.measurements',
       suggestions: 'menu.works.suggestions',
       tickets: 'menu.works.tickets',
+      actionPlans: 'menu.works.actionPlans',
     },
   },
   sidebar: {
@@ -1818,6 +1819,29 @@ export const UI_KEYS = {
     cancelConfirm: {
       header: 'tickets.cancelConfirm.header',
       message: 'tickets.cancelConfirm.message',
+    },
+  },
+  actionPlans: {
+    fields: {
+      title: 'actionPlans.fields.title',
+      status: 'actionPlans.fields.status',
+      work: 'actionPlans.fields.work',
+      createdAt: 'actionPlans.fields.createdAt',
+      periodCreatedAt: 'actionPlans.fields.periodCreatedAt',
+    },
+    form: {
+      invalid: 'actionPlans.form.invalid',
+      created: 'actionPlans.form.created',
+      updated: 'actionPlans.form.updated',
+      saveError: 'actionPlans.form.saveError',
+    },
+    completeConfirm: {
+      header: 'actionPlans.completeConfirm.header',
+      message: 'actionPlans.completeConfirm.message',
+    },
+    cancelConfirm: {
+      header: 'actionPlans.cancelConfirm.header',
+      message: 'actionPlans.cancelConfirm.message',
     },
   },
   audit: {

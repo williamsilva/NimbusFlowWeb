@@ -212,6 +212,9 @@
     },
     "tickets": {
       "title": "Tickets"
+    },
+    "actionPlans": {
+      "title": "Action Plans"
     }
   },
   "topbar": {
@@ -349,7 +352,8 @@
       "installments": "Payments",
       "measurements": "Measurements",
       "suggestions": "Suggestions",
-      "tickets": "Tickets"
+      "tickets": "Tickets",
+      "actionPlans": "Action Plans"
     }
   },
   "sidebar": {
@@ -412,7 +416,8 @@
     "installments": "Payments",
     "measurements": "Measurements",
     "suggestions": "Suggestions",
-    "tickets": "Tickets"
+    "tickets": "Tickets",
+    "actionPlans": "Action Plans"
   },
   "footer": {
     "copyright": "NimbusFlow Tech",
@@ -4236,11 +4241,76 @@
     },
     "action": {
       "close": "Close ticket",
-      "cancel": "Cancel ticket"
+      "cancel": "Cancel ticket",
+      "convert": "Convert into action plan"
     },
     "cancelConfirm": {
       "header": "Cancel ticket",
       "message": "Confirm cancellation of this ticket?"
+    }
+  },
+  "actionPlans": {
+    "subtitle": "Action plans (5W2H methodology) - second link of the Ticket → Action Plan → Task chain",
+    "new": {
+      "title": "New action plan"
+    },
+    "edit": {
+      "title": "Edit action plan"
+    },
+    "fields": {
+      "title": "Title",
+      "what": "What",
+      "why": "Why",
+      "where": "Where",
+      "how": "How",
+      "howMuch": "How much",
+      "targetDate": "Target date",
+      "responsible": "Responsible",
+      "status": "Status",
+      "work": "Service Front",
+      "createdAt": "Created at",
+      "periodCreatedAt": "Creation period"
+    },
+    "columns": {
+      "title": "Title",
+      "work": "Service Front",
+      "status": "Status",
+      "responsible": "Responsible",
+      "targetDate": "Target date"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "IN_PROGRESS": "In progress",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "form": {
+      "invalid": "Fill in the required 5W2H fields before submitting.",
+      "created": "Action plan created successfully.",
+      "updated": "Action plan updated successfully.",
+      "saveError": "Could not save the action plan. Please try again."
+    },
+    "empty": {
+      "title": "No action plans found"
+    },
+    "action": {
+      "start": "Start plan",
+      "complete": "Complete plan",
+      "cancel": "Cancel plan",
+      "hasOpenTasks": "There are tasks not yet completed or cancelled in this plan."
+    },
+    "startConfirm": {
+      "success": "Action plan started successfully."
+    },
+    "completeConfirm": {
+      "header": "Complete action plan",
+      "message": "Confirm completion of this action plan?",
+      "success": "Action plan completed successfully."
+    },
+    "cancelConfirm": {
+      "header": "Cancel action plan",
+      "message": "Confirm cancellation of this action plan?",
+      "success": "Action plan cancelled successfully."
     }
   }
 }

@@ -21,17 +21,19 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { WorksFacade } from '@features/facade/works.facade';
-import { TicketsFacade } from '@features/facade/tickets.facade';
+import { ActionPlansFacade } from '@features/facade/action-plans.facade';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { TicketsAdvancedFilters } from '@features/filter/tickets.filters';
-import { TicketsPermissionPolicy } from '@features/tickets/tickets-permission.policy';
+import { ActionPlansAdvancedFilters } from '@features/filter/action-plans.filters';
+import { ActionPlansPermissionPolicy } from '@features/action-plans/action-plans-permission.policy';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
-import { TICKET_STATUS_VALUES, TicketStatusEnum, ticketStatusTone } from '@models/enums/ticket-status.enum';
-import { TicketModel, TicketsFiltersState } from '@models/tickets.models';
-import { TicketsCreateDialogComponent } from '@features/tickets/tickets-create/tickets-create-dialog.component';
-import { TicketsCloseDialogComponent } from '@features/tickets/tickets-close/tickets-close-dialog.component';
+import {
+  ACTION_PLAN_STATUS_VALUES,
+  ActionPlanStatusEnum,
+  actionPlanStatusTone,
+} from '@models/enums/action-plan-status.enum';
+import { ActionPlanModel, ActionPlansFiltersState } from '@models/action-plans.models';
 import { ActionPlansCreateDialogComponent } from '@features/action-plans/action-plans-create/action-plans-create-dialog.component';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
@@ -47,9 +49,9 @@ import {
 
 @Component({
   standalone: true,
-  selector: 'app-tickets-list',
-  templateUrl: './tickets-list.component.html',
-  styleUrl: './tickets-list.component.scss',
+  selector: 'app-action-plans-list',
+  templateUrl: './action-plans-list.component.html',
+  styleUrl: './action-plans-list.component.scss',
   imports: [
     CsDatePipe,
     FloatLabel,
@@ -66,24 +68,22 @@ import {
     PageHeaderComponent,
     FiltersPanelComponent,
     StatusBadgeComponent,
-    TicketsCreateDialogComponent,
-    TicketsCloseDialogComponent,
     ActionPlansCreateDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
   ],
 })
-export class TicketsListComponent extends StatefulListPage<
-  TicketsFiltersState,
-  TicketsAdvancedFilters
+export class ActionPlansListComponent extends StatefulListPage<
+  ActionPlansFiltersState,
+  ActionPlansAdvancedFilters
 > {
   @ViewChild('dt') private dt?: Table;
 
   protected override readonly i18n = inject(I18nService);
-  readonly facade = inject(TicketsFacade);
+  readonly facade = inject(ActionPlansFacade);
   readonly worksFacade = inject(WorksFacade);
   protected readonly toast = inject(MessageService);
   protected readonly confirm = inject(ConfirmationService);
-  protected readonly policy = inject(TicketsPermissionPolicy);
+  protected readonly policy = inject(ActionPlansPermissionPolicy);
   private readonly destroyRef = inject(DestroyRef);
 
   override rows =
@@ -96,14 +96,11 @@ export class TicketsListComponent extends StatefulListPage<
   periodCreatedAt = signal<PeriodEnum | null>(null);
 
   newVisible = signal(false);
-  closeTicketId = signal<string | null>(null);
-  closeVisible = signal(false);
-  convertVisible = signal(false);
-  convertingTicket = signal<TicketModel | null>(null);
+  editingPlan = signal<ActionPlanModel | null>(null);
 
-  readonly statusOptions = TICKET_STATUS_VALUES.map((value) => ({
+  readonly statusOptions = ACTION_PLAN_STATUS_VALUES.map((value) => ({
     value,
-    label: this.i18n.tUi(`tickets.status.${value}` as never),
+    label: this.i18n.tUi(`actionPlans.status.${value}` as never),
   }));
 
   readonly periodEnumOptions = computed(() => {
@@ -112,10 +109,9 @@ export class TicketsListComponent extends StatefulListPage<
   });
 
   readonly workOptions = this.worksFacade.options;
-  readonly canCreate = computed(() => this.policy.canCreate());
   readonly canManage = computed(() => this.policy.canManage());
   readonly totalRecords = computed(() => this.facade.totalRecords());
-  readonly tickets = computed<TicketModel[]>(() => this.facade.tickets());
+  readonly actionPlans = computed<ActionPlanModel[]>(() => this.facade.actionPlans());
 
   protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
     const items: ActiveFilterItem[] = [];
@@ -125,21 +121,24 @@ export class TicketsListComponent extends StatefulListPage<
     const workIds = this.workIds();
 
     if (title) {
-      items.push({ label: this.i18n.tUi('tickets.fields.title'), value: title });
+      items.push({ label: this.i18n.tUi('actionPlans.fields.title'), value: title });
     }
     if (status?.length) {
       const labels = this.statusOptions
         .filter((opt) => status.includes(opt.value))
         .map((opt) => opt.label)
         .join(', ');
-      items.push({ label: this.i18n.tUi('tickets.fields.status'), value: labels });
+      items.push({ label: this.i18n.tUi('actionPlans.fields.status'), value: labels });
     }
     if (workIds?.length) {
       const labels = this.workOptions()
         .filter((opt) => workIds.includes(opt.value))
         .map((opt) => opt.label)
         .join(', ');
-      items.push({ label: this.i18n.tUi('tickets.fields.work'), value: labels || workIds.join(', ') });
+      items.push({
+        label: this.i18n.tUi('actionPlans.fields.work'),
+        value: labels || workIds.join(', '),
+      });
     }
     const createdAtLabel = this.formatActiveFilterPeriodDateValue(
       this.periodCreatedAt(),
@@ -147,7 +146,7 @@ export class TicketsListComponent extends StatefulListPage<
       this.i18n,
     );
     if (createdAtLabel) {
-      items.push({ label: this.i18n.tUi('tickets.fields.createdAt'), value: createdAtLabel });
+      items.push({ label: this.i18n.tUi('actionPlans.fields.createdAt'), value: createdAtLabel });
     }
 
     return items;
@@ -158,93 +157,106 @@ export class TicketsListComponent extends StatefulListPage<
     this.initStatefulList();
   }
 
-  tone(status: string): ReturnType<typeof ticketStatusTone> {
-    return ticketStatusTone(status);
+  tone(status: string): ReturnType<typeof actionPlanStatusTone> {
+    return actionPlanStatusTone(status);
   }
 
-  goNew() {
+  goNew(): void {
+    this.editingPlan.set(null);
     this.newVisible.set(true);
   }
 
-  onCreated(): void {
+  goEdit(row: ActionPlanModel): void {
+    this.editingPlan.set(row);
+    this.newVisible.set(true);
+  }
+
+  onSaved(): void {
     this.refresh();
   }
 
-  onNewVisibleChange(v: boolean) {
+  onNewVisibleChange(v: boolean): void {
     this.newVisible.set(v);
+    if (!v) this.editingPlan.set(null);
   }
 
-  canClose(row: TicketModel): boolean {
+  canEdit(row: ActionPlanModel): boolean {
     return (
       this.canManage() &&
-      (row.status === TicketStatusEnum.OPEN || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
+      (row.status === ActionPlanStatusEnum.DRAFT || row.status === ActionPlanStatusEnum.IN_PROGRESS)
     );
   }
 
-  canCancel(row: TicketModel): boolean {
-    return this.canManage() && row.status === TicketStatusEnum.OPEN;
+  canStart(row: ActionPlanModel): boolean {
+    return this.canManage() && row.status === ActionPlanStatusEnum.DRAFT;
   }
 
-  /** Não existe endpoint separado de "converter" - criar um Plano de Ação com ticketId JÁ é a
-   *  conversão (ver ActionPlanService.create no backend). */
-  canConvert(row: TicketModel): boolean {
-    return this.canManage() && row.status === TicketStatusEnum.OPEN;
+  canComplete(row: ActionPlanModel): boolean {
+    return this.canManage() && row.status === ActionPlanStatusEnum.IN_PROGRESS;
   }
 
-  goClose(row: TicketModel): void {
-    this.closeTicketId.set(row.id);
-    this.closeVisible.set(true);
+  canCancel(row: ActionPlanModel): boolean {
+    return (
+      this.canManage() &&
+      (row.status === ActionPlanStatusEnum.DRAFT || row.status === ActionPlanStatusEnum.IN_PROGRESS)
+    );
   }
 
-  onCloseVisibleChange(v: boolean): void {
-    this.closeVisible.set(v);
-    if (!v) this.closeTicketId.set(null);
+  confirmStart(row: ActionPlanModel): void {
+    if (!this.canStart(row)) return;
+    this.runAction(this.facade.start(row.id), 'actionPlans.startConfirm.success', 'actionPlans.form.saveError');
   }
 
-  onClosed(): void {
-    this.refresh();
+  confirmComplete(row: ActionPlanModel): void {
+    if (!this.canComplete(row)) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('actionPlans.completeConfirm.header'),
+      message: this.i18n.tUi('actionPlans.completeConfirm.message'),
+      icon: 'pi pi-question-circle',
+      accept: () =>
+        this.runAction(
+          this.facade.complete(row.id),
+          'actionPlans.completeConfirm.success',
+          'actionPlans.action.hasOpenTasks',
+        ),
+    });
   }
 
-  goConvert(row: TicketModel): void {
-    this.convertingTicket.set(row);
-    this.convertVisible.set(true);
-  }
-
-  onConvertVisibleChange(v: boolean): void {
-    this.convertVisible.set(v);
-    if (!v) this.convertingTicket.set(null);
-  }
-
-  onConverted(): void {
-    this.refresh();
-  }
-
-  confirmCancel(row: TicketModel): void {
+  confirmCancel(row: ActionPlanModel): void {
     if (!this.canCancel(row)) return;
 
     this.confirm.confirm({
-      header: this.i18n.tUi('tickets.cancelConfirm.header'),
-      message: this.i18n.tUi('tickets.cancelConfirm.message'),
+      header: this.i18n.tUi('actionPlans.cancelConfirm.header'),
+      message: this.i18n.tUi('actionPlans.cancelConfirm.message'),
       icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.facade
-          .cancel(row.id)
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe({
-            next: () =>
-              this.toast.add({
-                severity: 'success',
-                summary: this.i18n.tUi('common.success'),
-                detail: this.i18n.tUi('tickets.status.cancelled' as never),
-              }),
-            error: () =>
-              this.toast.add({
-                severity: 'error',
-                summary: this.i18n.tUi('common.error'),
-                detail: this.i18n.tUi('tickets.status.cancelError' as never),
-              }),
-          });
-      },
+      accept: () =>
+        this.runAction(
+          this.facade.cancel(row.id),
+          'actionPlans.cancelConfirm.success',
+          'actionPlans.form.saveError',
+        ),
+    });
+  }
+
+  private runAction(
+    request: ReturnType<ActionPlansFacade['start']>,
+    successKey: string,
+    errorKey: string,
+  ): void {
+    request.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () =>
+        this.toast.add({
+          severity: 'success',
+          summary: this.i18n.tUi('common.success'),
+          detail: this.i18n.tUi(successKey as never),
+        }),
+      error: () =>
+        this.toast.add({
+          severity: 'error',
+          summary: this.i18n.tUi('common.error'),
+          detail: this.i18n.tUi(errorKey as never),
+        }),
     });
   }
 
@@ -258,15 +270,15 @@ export class TicketsListComponent extends StatefulListPage<
   }
 
   protected override tableStateKey(): string {
-    return STATE_KEY.NIMBUSFLOW.WORKS.TICKETS.TABLE.STATE.V1;
+    return STATE_KEY.NIMBUSFLOW.WORKS.ACTION_PLANS.TABLE.STATE.V1;
   }
 
   protected override tableRowsKey(): string {
-    return STATE_KEY.NIMBUSFLOW.WORKS.TICKETS.TABLE.ROWS.V1;
+    return STATE_KEY.NIMBUSFLOW.WORKS.ACTION_PLANS.TABLE.ROWS.V1;
   }
 
   protected override filtersKey(): string {
-    return STATE_KEY.NIMBUSFLOW.WORKS.TICKETS.FILTERS.V1;
+    return STATE_KEY.NIMBUSFLOW.WORKS.ACTION_PLANS.FILTERS.V1;
   }
 
   protected override refresh(): void {
@@ -281,7 +293,7 @@ export class TicketsListComponent extends StatefulListPage<
     this.periodCreatedAt.set(null);
   }
 
-  protected override toFiltersState(): TicketsFiltersState {
+  protected override toFiltersState(): ActionPlansFiltersState {
     return {
       title: this.title(),
       status: this.status()?.length ? this.status() : null,
@@ -291,7 +303,7 @@ export class TicketsListComponent extends StatefulListPage<
     };
   }
 
-  protected override applyFiltersState(state: TicketsFiltersState): void {
+  protected override applyFiltersState(state: ActionPlansFiltersState): void {
     this.title.set(state.title ?? '');
     this.status.set(state.status ?? null);
     this.workIds.set(state.workIds ?? null);
@@ -299,7 +311,7 @@ export class TicketsListComponent extends StatefulListPage<
     this.periodCreatedAt.set(state.periodCreatedAt ?? null);
   }
 
-  protected override buildAdvancedFilters(): Partial<TicketsAdvancedFilters> {
+  protected override buildAdvancedFilters(): Partial<ActionPlansAdvancedFilters> {
     return {
       title: this.title().trim() || undefined,
       status: this.status()?.length ? this.status() : undefined,
@@ -316,7 +328,7 @@ export class TicketsListComponent extends StatefulListPage<
 
     const title = readSingleFilterValue(filters, 'title');
     if (title) {
-      items.push({ label: this.i18n.tUi('tickets.fields.title'), value: title });
+      items.push({ label: this.i18n.tUi('actionPlans.fields.title'), value: title });
     }
 
     const statusValues = readArrayFilterValues(filters, 'status');
@@ -325,21 +337,21 @@ export class TicketsListComponent extends StatefulListPage<
         .filter((option) => statusValues.includes(option.value))
         .map((option) => option.label);
       items.push({
-        label: this.i18n.tUi('tickets.fields.status'),
+        label: this.i18n.tUi('actionPlans.fields.status'),
         value: (labels.length ? labels : statusValues).join(', '),
       });
     }
 
     const createdAt = readDateRangeFilterValue(filters, 'createdAt', this.formatDate.bind(this));
     if (createdAt) {
-      items.push({ label: this.i18n.tUi('tickets.fields.createdAt'), value: createdAt });
+      items.push({ label: this.i18n.tUi('actionPlans.fields.createdAt'), value: createdAt });
     }
 
     return items;
   }
 
   protected override loadPage(
-    query: ReturnType<typeof buildListQuery<TicketsAdvancedFilters>>,
+    query: ReturnType<typeof buildListQuery<ActionPlansAdvancedFilters>>,
   ): void {
     this.facade.loadPage(query);
   }

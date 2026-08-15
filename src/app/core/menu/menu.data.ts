@@ -64,6 +64,12 @@ export const APP_MENU: AppMenuItem[] = [
         route: '/tickets',
         exact: false,
       },
+      {
+        labelKey: 'menu.works.actionPlans',
+        icon: 'pi pi-map text-green-400',
+        route: '/action-plans',
+        exact: false,
+      },
     ],
   },
   /* Security */

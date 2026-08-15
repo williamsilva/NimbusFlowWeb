@@ -1,8 +1,8 @@
 <cs-page-header
-  [subtitle]="'tickets.subtitle' | translate"
+  [subtitle]="'actionPlans.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
-    { label: ('breadcrumb.tickets' | translate) },
+    { label: ('breadcrumb.actionPlans' | translate) },
   ]"
   [compact]="false"
   >
@@ -15,34 +15,24 @@
     [label]="'common.update' | translate"
   ></button>
 
-  <button
-    pButton
-    type="button"
-    (click)="goNew()"
-    icon="pi pi-plus"
-    class="p-button-info p-button-sm"
-    [label]="'tickets.new.title' | translate"
-  ></button>
+  @if (canManage()) {
+    <button
+      pButton
+      type="button"
+      (click)="goNew()"
+      icon="pi pi-plus"
+      class="p-button-info p-button-sm"
+      [label]="'actionPlans.new.title' | translate"
+    ></button>
+  }
 </cs-page-header>
 
-<app-tickets-create-dialog
-  [visible]="newVisible()"
-  (created)="onCreated()"
-  (visibleChange)="onNewVisibleChange($event)"
-></app-tickets-create-dialog>
-
-<app-tickets-close-dialog
-  [visible]="closeVisible()"
-  [ticketId]="closeTicketId()"
-  (closed)="onClosed()"
-  (visibleChange)="onCloseVisibleChange($event)"
-></app-tickets-close-dialog>
-
 <app-action-plans-create-dialog
-  [visible]="convertVisible()"
-  [fromTicket]="convertingTicket()"
-  (created)="onConverted()"
-  (visibleChange)="onConvertVisibleChange($event)"
+  [visible]="newVisible()"
+  [actionPlan]="editingPlan()"
+  (created)="onSaved()"
+  (updated)="onSaved()"
+  (visibleChange)="onNewVisibleChange($event)"
 ></app-action-plans-create-dialog>
 
 <p-confirmDialog></p-confirmDialog>
@@ -66,7 +56,7 @@
           class="w-full p-inputtext-sm"
           (input)="title.set(($any($event.target).value ?? '').toString())"
           />
-          <label for="title">{{ 'tickets.fields.title' | translate }}</label>
+          <label for="title">{{ 'actionPlans.fields.title' | translate }}</label>
         </p-floatLabel>
       </div>
 
@@ -85,7 +75,7 @@
             [options]="statusOptions"
             (ngModelChange)="status.set($event?.length ? $event : null)"
           ></p-multiSelect>
-          <label for="status">{{ 'tickets.fields.status' | translate }}</label>
+          <label for="status">{{ 'actionPlans.fields.status' | translate }}</label>
         </p-floatLabel>
       </div>
 
@@ -104,7 +94,7 @@
             [options]="workOptions()"
             (ngModelChange)="workIds.set($event?.length ? $event : null)"
           ></p-multiSelect>
-          <label for="workIds">{{ 'tickets.fields.work' | translate }}</label>
+          <label for="workIds">{{ 'actionPlans.fields.work' | translate }}</label>
         </p-floatLabel>
       </div>
 
@@ -119,8 +109,8 @@
         [view]="setViewFormat(periodCreatedAt())"
         [dateFormat]="setDateFormat(periodCreatedAt())"
         [selectionMode]="setSelectionMode(periodCreatedAt())"
-        [dateLabel]="'tickets.fields.createdAt' | translate"
-        [periodLabel]="'tickets.fields.periodCreatedAt' | translate"
+        [dateLabel]="'actionPlans.fields.createdAt' | translate"
+        [periodLabel]="'actionPlans.fields.periodCreatedAt' | translate"
         (periodChange)="onPeriodColumnChange(periodCreatedAt, createdAt, $event)"
       ></cs-advanced-period-date-filter>
     </div>
@@ -141,7 +131,7 @@
       filterDisplay="menu"
       stateStorage="local"
       class="cs-admin-table"
-      [value]="tickets()"
+      [value]="actionPlans()"
       [loading]="facade.loading()"
       [stateKey]="tableStateKey()"
       [showCurrentPageReport]="true"
@@ -150,7 +140,7 @@
       [paginatorDropdownAppendTo]="'body'"
       (onPage)="onPageChange($event)"
       [rowsPerPageOptions]="rowsPerPageOptions"
-      [tableStyle]="{ width: '100%', 'min-width': '58rem' }"
+      [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
       [currentPageReportTemplate]="'pagination.report' | translate"
       >
       <ng-template pTemplate="colgroup">
@@ -158,9 +148,9 @@
         <col style="width: auto" />
         <col style="width: 200px" />
         <col style="width: 130px" />
-        <col style="width: 180px" />
-        <col style="width: 150px" />
+        <col style="width: 170px" />
         <col style="width: 130px" />
+        <col style="width: 160px" />
       </colgroup>
     </ng-template>
 
@@ -168,7 +158,7 @@
       <tr>
         <th pSortableColumn="title">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'tickets.columns.title' | translate">{{ 'tickets.columns.title' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.title' | translate">{{ 'actionPlans.columns.title' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="title"></p-sortIcon>
               <p-columnFilter
@@ -188,13 +178,13 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'tickets.columns.work' | translate">{{ 'tickets.columns.work' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.work' | translate">{{ 'actionPlans.columns.work' | translate }}</span>
           </div>
         </th>
 
         <th pSortableColumn="status">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'tickets.columns.status' | translate">{{ 'tickets.columns.status' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.status' | translate">{{ 'actionPlans.columns.status' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="status"></p-sortIcon>
               <p-columnFilter
@@ -226,39 +216,13 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'tickets.columns.reportedBy' | translate">{{ 'tickets.columns.reportedBy' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.responsible' | translate">{{ 'actionPlans.columns.responsible' | translate }}</span>
           </div>
         </th>
 
-        <th pSortableColumn="createdAt">
-          <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'tickets.columns.createdAt' | translate">{{ 'tickets.columns.createdAt' | translate }}</span>
-            <span class="th-icons">
-              <p-sortIcon field="createdAt"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                field="createdAt"
-                matchMode="between"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="false"
-                styleClass="cs-colfilter"
-                >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-datepicker
-                    class="w-full"
-                    appendTo="body"
-                    [showIcon]="true"
-                    [ngModel]="value"
-                    selectionMode="range"
-                    dateFormat="dd/mm/yy"
-                    [readonlyInput]="true"
-                    (ngModelChange)="filter($event)"
-                    [placeholder]="'common.period' | translate"
-                  ></p-datepicker>
-                </ng-template>
-              </p-columnFilter>
-            </span>
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.targetDate' | translate">{{ 'actionPlans.columns.targetDate' | translate }}</span>
           </div>
         </th>
 
@@ -273,34 +237,44 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td class="mobile-card-title"><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.title">{{ row.title }}</span></td>
-        <td class="text-center" [attr.data-label]="'tickets.columns.work' | translate">{{ row.workName ?? '-' }}</td>
-        <td class="text-center" [attr.data-label]="'tickets.columns.status' | translate">
+        <td class="text-center" [attr.data-label]="'actionPlans.columns.work' | translate">{{ row.workName ?? '-' }}</td>
+        <td class="text-center" [attr.data-label]="'actionPlans.columns.status' | translate">
           <cs-status-badge
             [tone]="tone(row.status)"
-            [label]="('tickets.status.' + row.status) | translate"
+            [label]="('actionPlans.status.' + row.status) | translate"
           ></cs-status-badge>
         </td>
-        <td class="text-center" [attr.data-label]="'tickets.columns.reportedBy' | translate">{{ row.reportedByName ?? '-' }}</td>
-        <td class="text-center" [attr.data-label]="'tickets.columns.createdAt' | translate">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
+        <td class="text-center" [attr.data-label]="'actionPlans.columns.responsible' | translate">{{ row.responsibleName ?? '-' }}</td>
+        <td class="text-center" [attr.data-label]="'actionPlans.columns.targetDate' | translate">{{ row.targetDate ? (row.targetDate | csDate: 'short') : '-' }}</td>
         <td class="text-center mobile-card-actions" [attr.data-label]="'common.actions' | translate">
-          @if (canConvert(row)) {
+          @if (canEdit(row)) {
             <button
               pButton
               type="button"
-              icon="pi pi-arrow-right-arrow-left"
-              (click)="goConvert(row)"
+              icon="pi pi-pencil"
+              (click)="goEdit(row)"
               class="p-button-text p-button-sm"
-              [pTooltip]="'tickets.action.convert' | translate"
+              [pTooltip]="'common.edit' | translate"
             ></button>
           }
-          @if (canClose(row)) {
+          @if (canStart(row)) {
+            <button
+              pButton
+              type="button"
+              icon="pi pi-play"
+              (click)="confirmStart(row)"
+              class="p-button-text p-button-sm"
+              [pTooltip]="'actionPlans.action.start' | translate"
+            ></button>
+          }
+          @if (canComplete(row)) {
             <button
               pButton
               type="button"
               icon="pi pi-check"
-              (click)="goClose(row)"
+              (click)="confirmComplete(row)"
               class="p-button-text p-button-sm"
-              [pTooltip]="'tickets.action.close' | translate"
+              [pTooltip]="'actionPlans.action.complete' | translate"
             ></button>
           }
           @if (canCancel(row)) {
@@ -310,11 +284,8 @@
               icon="pi pi-times"
               class="p-button-text p-button-sm p-button-danger"
               (click)="confirmCancel(row)"
-              [pTooltip]="'tickets.action.cancel' | translate"
+              [pTooltip]="'actionPlans.action.cancel' | translate"
             ></button>
-          }
-          @if (!canConvert(row) && !canClose(row) && !canCancel(row)) {
-            <span>-</span>
           }
         </td>
       </tr>
@@ -323,7 +294,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="6" class="text-center py-5 opacity-70">
-          {{ facade.loadedOnce() ? ('tickets.empty.title' | translate) : ('common.loading' | translate) }}
+          {{ facade.loadedOnce() ? ('actionPlans.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
     </ng-template>
