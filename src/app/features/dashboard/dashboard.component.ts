@@ -45,6 +45,11 @@ const BRL_COMPACT_FORMAT = new Intl.NumberFormat('pt-BR', {
   notation: 'compact',
 });
 
+/** Mesmo corte "top N + Demais" de topWorks acima - aqui feito no componente porque
+ *  DashboardService.getEmployeeTaskRanking() devolve a lista completa, sem cortar (ver seu
+ *  javadoc no backend). */
+const TOP_EMPLOYEES_LIMIT = 7;
+
 @Component({
   standalone: true,
   selector: 'app-dashboard',
@@ -312,6 +317,54 @@ export class DashboardComponent implements OnInit {
       scales: {
         x: {
           ticks: { color: text, callback: (value: number) => BRL_COMPACT_FORMAT.format(value) },
+          grid: { color: grid },
+        },
+        y: { ticks: { color: text }, grid: { display: false } },
+      },
+    };
+  });
+
+  /** Ranking de funcionários por tarefas concluídas - mesmo espírito de topWorksChartData/
+   *  Options, só que sem formatação monetária (eixo/tooltip mostram contagem simples). */
+  readonly employeeTaskRankingChartData = computed(() => {
+    this.i18n.getAppliedLang();
+    const ranking = this.facade.employeeTaskRanking();
+    const top = ranking.slice(0, TOP_EMPLOYEES_LIMIT);
+    const others = ranking.slice(TOP_EMPLOYEES_LIMIT);
+    const color = this.primaryColor();
+
+    const labels = top.map((item) => item.employeeName);
+    const data = top.map((item) => item.completedTasksCount);
+
+    if (others.length > 0) {
+      labels.push(
+        this.i18n.tUi('dashboard.charts.employeeTaskRanking.others' as never, {
+          count: others.length,
+        }),
+      );
+      data.push(others.reduce((sum, item) => sum + item.completedTasksCount, 0));
+    }
+
+    return {
+      labels,
+      datasets: [{ data, backgroundColor: color, borderRadius: 4, maxBarThickness: 28 }],
+    };
+  });
+
+  readonly employeeTaskRankingChartOptions = computed(() => {
+    const text = this.textColor();
+    const grid = this.gridColor();
+
+    return {
+      indexAxis: 'y' as const,
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+      },
+      scales: {
+        x: {
+          ticks: { color: text, precision: 0 },
           grid: { color: grid },
         },
         y: { ticks: { color: text }, grid: { display: false } },

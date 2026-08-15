@@ -8,8 +8,10 @@ import {
   DashboardAnalyticsModel,
   DashboardFilterInput,
   DashboardSummaryModel,
+  EmployeeTaskRankingModel,
   mapDashboardAnalyticsApiModel,
   mapDashboardSummaryApiModel,
+  mapEmployeeTaskRankingApiModels,
 } from '@models/dashboard.models';
 
 @Injectable({ providedIn: 'root' })
@@ -27,6 +29,14 @@ export class DashboardApiService {
     return this.http
       .get<DashboardAnalyticsModel>(`${this.baseUrl}/analytics`, { params: this.buildParams(filter) })
       .pipe(map(mapDashboardAnalyticsApiModel));
+  }
+
+  /** Ranking de funcionários por tarefas concluídas - sem filtro (não tem correspondência com
+   *  DashboardFilterRequest hoje, já que Task não tem workId/projectId próprio). */
+  employeeTaskRanking() {
+    return this.http
+      .get<EmployeeTaskRankingModel[]>(`${this.baseUrl}/employee-task-ranking`)
+      .pipe(map(mapEmployeeTaskRankingApiModels));
   }
 
   private buildParams(filter?: DashboardFilterInput): HttpParams {

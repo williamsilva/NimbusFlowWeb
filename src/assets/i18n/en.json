@@ -3889,6 +3889,10 @@
       "topWorks": {
         "title": "Top service fronts by amount paid",
         "others": "{count, plural, one {Other # front} other {Other # fronts}}"
+      },
+      "employeeTaskRanking": {
+        "title": "Employee ranking by completed tasks",
+        "others": "{count, plural, one {Other # employee} other {Other # employees}}"
       }
     },
     "projects": {

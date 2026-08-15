@@ -3884,6 +3884,10 @@
       "topWorks": {
         "title": "Maiores frentes por valor pago",
         "others": "{count, plural, one {Demais # frente} other {Demais # frentes}}"
+      },
+      "employeeTaskRanking": {
+        "title": "Ranking de funcionários por tarefas concluídas",
+        "others": "{count, plural, one {Demais # funcionário} other {Demais # funcionários}}"
       }
     },
     "projects": {

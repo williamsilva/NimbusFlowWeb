@@ -42,6 +42,17 @@ export interface DashboardAnalyticsModel {
   othersCount: number;
 }
 
+/** Espelha com.nimbusflow.works.dto.response.EmployeeTaskRankingResponse - ranking de
+ *  funcionários por tarefas concluídas (com.nimbusflow.tasks). employeeName já vem resolvido
+ *  pelo backend via UserDirectoryService (nunca resolvido aqui). Backend devolve a lista
+ *  completa, sem cortar top-N - o corte "top N + Demais" é feito no componente, igual ao
+ *  topWorks/othersAmount acima. */
+export interface EmployeeTaskRankingModel {
+  employeeId: string;
+  employeeName: string;
+  completedTasksCount: number;
+}
+
 /** Filtro opcional da página inicial - espelha com.nimbusflow.works.dto.request.DashboardFilterRequest. */
 export interface DashboardFilterInput {
   projectIds?: string[] | null;
@@ -64,4 +75,10 @@ export function mapDashboardAnalyticsApiModel(
     weeklyDisbursement: input.weeklyDisbursement ?? [],
     topWorks: input.topWorks ?? [],
   };
+}
+
+export function mapEmployeeTaskRankingApiModels(
+  items: EmployeeTaskRankingModel[] | null | undefined,
+): EmployeeTaskRankingModel[] {
+  return items ?? [];
 }

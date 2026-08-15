@@ -195,6 +195,17 @@
 <div class="grid formgrid gap-0">
   <div class="col-12 p-2">
     <div class="surface-card border-round p-3">
+      <div class="font-semibold mb-2">{{ 'dashboard.charts.employeeTaskRanking.title' | translate }}</div>
+      <div style="height: 260px">
+        <p-chart type="bar" [data]="employeeTaskRankingChartData()" [options]="employeeTaskRankingChartOptions()"></p-chart>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid formgrid gap-0">
+  <div class="col-12 p-2">
+    <div class="surface-card border-round p-3">
       <div class="font-semibold mb-2">{{ 'dashboard.projects.title' | translate }}</div>
 
       @if (!projects().length) {
