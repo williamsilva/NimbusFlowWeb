@@ -129,6 +129,7 @@ export const APP_MENU: AppMenuItem[] = [
         icon: 'pi pi-percentage text-slate-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.ALCADA_VIEW],
       },
+<<<<<<< HEAD
       {
         exact: false,
         route: '/settings/departments',
@@ -136,6 +137,8 @@ export const APP_MENU: AppMenuItem[] = [
         icon: 'pi pi-sitemap text-slate-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.DEPARTAMENTO_VIEW],
       },
+=======
+>>>>>>> feature/migracao-angular21-primeng
     ],
   },
 ];

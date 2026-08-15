@@ -8,7 +8,7 @@
   [visible]="visible()"
   [style]="{ width: '760px', maxWidth: '95vw' }"
   [header]="isEditMode() ? ('works.edit.title' | translate) : ('works.new.title' | translate)"
-  >
+>
   <form [formGroup]="form" class="cs-dialog-form">
     <div class="grid formgrid gap-0">
       <div class="col-12 md:col-8 p-2">
@@ -19,216 +19,218 @@
             type="text"
             formControlName="name"
             class="w-full p-inputtext-sm"
-            />
-            <app-error-msg
-              [field]="'name'"
-              [forId]="'name'"
-              [control]="form.controls.name"
-              [label]="'works.fields.name' | translate"
-              />
-            </p-floatLabel>
-          </div>
+          />
+          <app-error-msg
+            [field]="'name'"
+            [forId]="'name'"
+            [control]="form.controls.name"
+            [label]="'works.fields.name' | translate"
+          />
+        </p-floatLabel>
+      </div>
 
-          <div class="col-12 md:col-4 p-2">
-            <p-floatLabel variant="on" class="w-full">
-              <p-select
-                size="small"
-                class="w-full"
-                [filter]="true"
-                appendTo="body"
-                inputId="supplierId"
-                optionLabel="label"
-                optionValue="value"
-                formControlName="supplierId"
-                [options]="supplierOptions()"
-              ></p-select>
-              <app-error-msg
-                [field]="'supplierId'"
-                [forId]="'supplierId'"
-                [control]="form.controls.supplierId"
-                [label]="'works.fields.supplier' | translate"
-                />
-              </p-floatLabel>
-            </div>
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            optionLabel="label"
+            optionValue="value"
+            inputId="supplierId"
+            formControlName="supplierId"
+            [options]="supplierOptions()"
+          ></p-select>
+          <app-error-msg
+            [field]="'supplierId'"
+            [forId]="'supplierId'"
+            [control]="form.controls.supplierId"
+            [label]="'works.fields.supplier' | translate"
+          />
+        </p-floatLabel>
+      </div>
 
-            <div class="col-12 md:col-4 p-2">
-              <p-floatLabel variant="on" class="w-full">
-                <p-select
-                  size="small"
-                  class="w-full"
-                  [filter]="true"
-                  appendTo="body"
-                  inputId="projectId"
-                  optionLabel="label"
-                  optionValue="value"
-                  formControlName="projectId"
-                  [options]="projectOptions()"
-                ></p-select>
-                <app-error-msg
-                  [field]="'projectId'"
-                  [forId]="'projectId'"
-                  [control]="form.controls.projectId"
-                  [label]="'works.fields.project' | translate"
-                  />
-                </p-floatLabel>
-              </div>
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            inputId="projectId"
+            optionLabel="label"
+            optionValue="value"
+            formControlName="projectId"
+            [options]="projectOptions()"
+          ></p-select>
+          <app-error-msg
+            [field]="'projectId'"
+            [forId]="'projectId'"
+            [control]="form.controls.projectId"
+            [label]="'works.fields.project' | translate"
+          />
+        </p-floatLabel>
+      </div>
 
-              <div class="col-12 md:col-4 p-2">
-                <p-floatLabel variant="on" class="w-full">
-                  <p-datepicker
-                    inputId="startDate"
-                    class="w-full"
-                    appendTo="body"
-                    [showIcon]="true"
-                    dateFormat="dd/mm/yy"
-                    [readonlyInput]="true"
-                    formControlName="startDate"
-                  ></p-datepicker>
-                  <app-error-msg
-                    [field]="'startDate'"
-                    [forId]="'startDate'"
-                    [control]="form.controls.startDate"
-                    [label]="'works.fields.startDate' | translate"
-                    />
-                  </p-floatLabel>
-                </div>
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            inputId="startDate"
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            dateFormat="dd/mm/yy"
+            [readonlyInput]="true"
+            formControlName="startDate"
+          ></p-datepicker>
+          <app-error-msg
+            [field]="'startDate'"
+            [forId]="'startDate'"
+            [control]="form.controls.startDate"
+            [label]="'works.fields.startDate' | translate"
+          />
+        </p-floatLabel>
+      </div>
 
-                <div class="col-12 md:col-4 p-2">
-                  <p-floatLabel variant="on" class="w-full">
-                    <p-datepicker
-                      inputId="expectedEndDate"
-                      class="w-full"
-                      appendTo="body"
-                      [showIcon]="true"
-                      dateFormat="dd/mm/yy"
-                      [readonlyInput]="true"
-                      formControlName="expectedEndDate"
-                    ></p-datepicker>
-                    <app-error-msg
-                      [field]="'expectedEndDate'"
-                      [forId]="'expectedEndDate'"
-                      [control]="form.controls.expectedEndDate"
-                      [label]="'works.fields.expectedEndDate' | translate"
-                      />
-                    </p-floatLabel>
-                  </div>
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            inputId="expectedEndDate"
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            dateFormat="dd/mm/yy"
+            [readonlyInput]="true"
+            formControlName="expectedEndDate"
+          ></p-datepicker>
+          <app-error-msg
+            [field]="'expectedEndDate'"
+            [forId]="'expectedEndDate'"
+            [control]="form.controls.expectedEndDate"
+            [label]="'works.fields.expectedEndDate' | translate"
+          />
+        </p-floatLabel>
+      </div>
 
-                  <div class="col-12 md:col-4 p-2">
-                    <p-floatLabel variant="on" class="w-full">
-                      <p-datepicker
-                        inputId="actualEndDate"
-                        class="w-full"
-                        appendTo="body"
-                        [showIcon]="true"
-                        dateFormat="dd/mm/yy"
-                        [readonlyInput]="true"
-                        formControlName="actualEndDate"
-                      ></p-datepicker>
-                      <app-error-msg
-                        [required]="false"
-                        [field]="'actualEndDate'"
-                        [forId]="'actualEndDate'"
-                        [control]="form.controls.actualEndDate"
-                        [label]="'works.fields.actualEndDate' | translate"
-                        />
-                      </p-floatLabel>
-                    </div>
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            inputId="actualEndDate"
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            dateFormat="dd/mm/yy"
+            [readonlyInput]="true"
+            formControlName="actualEndDate"
+          ></p-datepicker>
+          <app-error-msg
+            [required]="false"
+            [field]="'actualEndDate'"
+            [forId]="'actualEndDate'"
+            [control]="form.controls.actualEndDate"
+            [label]="'works.fields.actualEndDate' | translate"
+          />
+        </p-floatLabel>
+      </div>
 
-                    <div class="col-12 md:col-4 p-2">
-                      <p-floatLabel variant="on" class="w-full">
-                        <p-inputNumber
-                          size="small"
-                          class="w-full"
-                          mode="currency"
-                          inputId="initialAmount"
-                          inputStyleClass="w-full"
-                          [minFractionDigits]="2"
-                          [maxFractionDigits]="2"
-                          [currency]="i18n.getCurrencyBrl()"
-                          [locale]="i18n.getLocalePtBr()"
-                          formControlName="initialAmount"
-                        ></p-inputNumber>
-                        <app-error-msg
-                          [field]="'initialAmount'"
-                          [forId]="'initialAmount'"
-                          [control]="form.controls.initialAmount"
-                          [label]="'works.fields.initialAmount' | translate"
-                          />
-                        </p-floatLabel>
-                      </div>
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputNumber
+            size="small"
+            class="w-full"
+            mode="currency"
+            inputId="initialAmount"
+            inputStyleClass="w-full"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [currency]="i18n.getCurrencyBrl()"
+            [locale]="i18n.getLocalePtBr()"
+            formControlName="initialAmount"
+          ></p-inputNumber>
+          <app-error-msg
+            [field]="'initialAmount'"
+            [forId]="'initialAmount'"
+            [control]="form.controls.initialAmount"
+            [label]="'works.fields.initialAmount' | translate"
+          />
+        </p-floatLabel>
+      </div>
 
-                      @if (isEditMode()) {
-                        <div class="col-12 md:col-4 p-2">
-                          <p-floatLabel variant="on" class="w-full">
-                            <p-inputNumber
-                              size="small"
-                              class="w-full"
-                              mode="currency"
-                              [disabled]="true"
-                              inputId="totalAmount"
-                              inputStyleClass="w-full"
-                              [minFractionDigits]="2"
-                              [maxFractionDigits]="2"
-                              [currency]="i18n.getCurrencyBrl()"
-                              [locale]="i18n.getLocalePtBr()"
-                              [ngModel]="loadedWork()?.totalAmount ?? 0"
-                              [ngModelOptions]="{ standalone: true }"
-                            ></p-inputNumber>
-                            <label for="totalAmount">{{ 'works.fields.totalAmount' | translate }}</label>
-                          </p-floatLabel>
-                        </div>
-                      }
+      @if (isEditMode()) {
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputNumber
+              size="small"
+              class="w-full"
+              mode="currency"
+              [disabled]="true"
+              inputId="totalAmount"
+              inputStyleClass="w-full"
+              [minFractionDigits]="2"
+              [maxFractionDigits]="2"
+              [currency]="i18n.getCurrencyBrl()"
+              [locale]="i18n.getLocalePtBr()"
+              [ngModel]="loadedWork()?.totalAmount ?? 0"
+              [ngModelOptions]="{ standalone: true }"
+            ></p-inputNumber>
+            <label for="totalAmount">{{ 'works.fields.totalAmount' | translate }}</label>
+          </p-floatLabel>
+        </div>
+      }
 
-                      @if (isEditMode()) {
-                        <div class="col-12 md:col-4 p-2">
-                          <p-floatLabel variant="on" class="w-full">
-                            <p-select
-                              size="small"
-                              class="w-full"
-                              appendTo="body"
-                              inputId="status"
-                              optionLabel="label"
-                              optionValue="value"
-                              formControlName="status"
-                              [options]="statusOptions"
-                            ></p-select>
-                            <label for="status">{{ 'works.fields.status' | translate }}</label>
-                          </p-floatLabel>
-                        </div>
-                      }
+      @if (isEditMode()) {
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              inputId="status"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="status"
+              [options]="statusOptions"
+            ></p-select>
+            <label for="status">{{ 'works.fields.status' | translate }}</label>
+          </p-floatLabel>
+        </div>
+      }
 
-                      <div class="col-12 p-2">
-                        <span class="text-base font-semibold block mb-2">{{ 'works.fields.planPosition' | translate }}</span>
-                        <cs-site-plan-picker
-                          [imageUrl]="selectedProjectSiteplanUrl()"
-                          [x]="form.controls.planPositionX.value"
-                          [y]="form.controls.planPositionY.value"
-                          (positionChange)="onPlanPositionChange($event)"
-                        />
-                      </div>
-                    </div>
-                  </form>
+      <div class="col-12 p-2">
+        <span class="text-base font-semibold block mb-2">{{
+          'works.fields.planPosition' | translate
+        }}</span>
+        <cs-site-plan-picker
+          [imageUrl]="selectedProjectSiteplanUrl()"
+          [x]="form.controls.planPositionX.value"
+          [y]="form.controls.planPositionY.value"
+          (positionChange)="onPlanPositionChange($event)"
+        />
+      </div>
+    </div>
+  </form>
 
-                  <ng-template pTemplate="footer">
-                    <button
-                      pButton
-                      type="button"
-                      (click)="close()"
-                      icon="pi pi-times"
-                      class="p-button-text p-button-sm"
-                      [label]="'common.cancel' | translate"
-                      [disabled]="saving()"
-                    ></button>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
 
-                    <button
-                      pButton
-                      type="button"
-                      (click)="save()"
-                      icon="pi pi-save"
-                      class="p-button-sm"
-                      [loading]="saving()"
-                      [label]="'common.save' | translate"
-                      [disabled]="saving() || !canSubmit()"
-                    ></button>
-                  </ng-template>
-                </p-dialog>
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving() || !canSubmit()"
+    ></button>
+  </ng-template>
+</p-dialog>

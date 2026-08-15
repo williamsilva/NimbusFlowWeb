@@ -1,6 +1,10 @@
 {
   "ok": true,
+<<<<<<< HEAD
   "generatedAt": "2026-08-15T14:12:10.633Z",
+=======
+  "generatedAt": "2026-08-14T22:13:23.801Z",
+>>>>>>> feature/migracao-angular21-primeng
   "targets": [
     {
       "target": "primeng",

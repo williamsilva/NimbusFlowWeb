@@ -130,9 +130,12 @@
       },
       "approvalLimits": {
         "title": "Approval limits"
+<<<<<<< HEAD
       },
       "departments": {
         "title": "Departments"
+=======
+>>>>>>> feature/migracao-angular21-primeng
       }
     },
     "transactions": {
@@ -335,8 +338,12 @@
       "scheduler": "Scheduler",
       "reconciliation": "Reconciliation",
       "backup": "Backup",
+<<<<<<< HEAD
       "approvalLimits": "Approval limits",
       "departments": "Departments"
+=======
+      "approvalLimits": "Approval limits"
+>>>>>>> feature/migracao-angular21-primeng
     },
     "file": {
       "processing": {
@@ -3642,6 +3649,7 @@
       "error": "Could not delete the approval limit"
     }
   },
+<<<<<<< HEAD
   "departments": {
     "subtitle": "Departments that can be the target of a ticket, in addition to a specific user.",
     "new": { "title": "New department" },
@@ -3669,6 +3677,8 @@
       "error": "Could not delete the department"
     }
   },
+=======
+>>>>>>> feature/migracao-angular21-primeng
   "backup": {
     "settings": {
       "subtitle": "Generates an on-demand backup of the databases and/or the files folder, for immediate download.",

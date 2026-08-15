@@ -130,9 +130,12 @@
       },
       "approvalLimits": {
         "title": "Alzada de aprobación"
+<<<<<<< HEAD
       },
       "departments": {
         "title": "Departamentos"
+=======
+>>>>>>> feature/migracao-angular21-primeng
       }
     },
     "transactions": {
@@ -335,8 +338,12 @@
       "scheduler": "Programación",
       "reconciliation": "Conciliación",
       "backup": "Backup",
+<<<<<<< HEAD
       "approvalLimits": "Alzada de aprobación",
       "departments": "Departamentos"
+=======
+      "approvalLimits": "Alzada de aprobación"
+>>>>>>> feature/migracao-angular21-primeng
     },
     "file": {
       "processing": {
@@ -3642,6 +3649,7 @@
       "error": "No fue posible eliminar el rango de alzada"
     }
   },
+<<<<<<< HEAD
   "departments": {
     "subtitle": "Departamentos que pueden ser el destinatario de un ticket, además de un usuario específico.",
     "new": { "title": "Nuevo departamento" },
@@ -3669,6 +3677,8 @@
       "error": "No fue posible eliminar el departamento"
     }
   },
+=======
+>>>>>>> feature/migracao-angular21-primeng
   "backup": {
     "settings": {
       "subtitle": "Genera un backup bajo demanda de los bancos de datos y/o de la carpeta de archivos, para descarga inmediata.",

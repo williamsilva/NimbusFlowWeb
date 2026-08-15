@@ -48,6 +48,7 @@ export const SETTINGS_ROUTES: Routes = [
       ),
   },
   {
+<<<<<<< HEAD
     path: 'departments',
     title: 'routes.settings.departments.title',
     canActivate: [permissionGuard],
@@ -62,6 +63,8 @@ export const SETTINGS_ROUTES: Routes = [
       ),
   },
   {
+=======
+>>>>>>> feature/migracao-angular21-primeng
     path: '**',
     title: 'routes.notFound.title',
     loadComponent: () => import('../error/not-found/not-found.page').then((m) => m.NotFoundPage),

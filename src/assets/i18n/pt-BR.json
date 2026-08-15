@@ -125,9 +125,12 @@
       },
       "approvalLimits": {
         "title": "Alçada"
+<<<<<<< HEAD
       },
       "departments": {
         "title": "Departamentos"
+=======
+>>>>>>> feature/migracao-angular21-primeng
       }
     },
     "transactions": {
@@ -330,8 +333,12 @@
       "scheduler": "Agendamento",
       "reconciliation": "Conciliação",
       "backup": "Backup",
+<<<<<<< HEAD
       "approvalLimits": "Alçada",
       "departments": "Departamentos"
+=======
+      "approvalLimits": "Alçada"
+>>>>>>> feature/migracao-angular21-primeng
     },
     "file": {
       "processing": {
@@ -3637,6 +3644,7 @@
       "error": "Não foi possível excluir a faixa de alçada"
     }
   },
+<<<<<<< HEAD
   "departments": {
     "subtitle": "Departamentos que podem ser o destinatário de um chamado, além de um usuário específico.",
     "new": { "title": "Novo departamento" },
@@ -3664,6 +3672,8 @@
       "error": "Não foi possível excluir o departamento"
     }
   },
+=======
+>>>>>>> feature/migracao-angular21-primeng
   "backup": {
     "settings": {
       "subtitle": "Gera um backup sob demanda dos bancos e/ou da pasta de arquivos, para download imediato.",
