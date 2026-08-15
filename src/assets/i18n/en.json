@@ -4225,7 +4225,8 @@
       "createdAt": "Reported at",
       "periodCreatedAt": "Report period",
       "attachment": "Attachment (optional)",
-      "resolutionNote": "Resolution note"
+      "resolutionNote": "Resolution note",
+      "closePhotos": "Photo evidence (optional)"
     },
     "columns": {
       "title": "Title",
@@ -4270,7 +4271,9 @@
       "convert": "Convert into action plan",
       "openWorkFront": "Open Service Front",
       "workLinked": "Service Front linked successfully.",
-      "workLinkError": "Could not link the Service Front."
+      "workLinkError": "Could not link the Service Front.",
+      "addFile": "Add file",
+      "takePhoto": "Take photo"
     },
     "cancelConfirm": {
       "header": "Cancel ticket",

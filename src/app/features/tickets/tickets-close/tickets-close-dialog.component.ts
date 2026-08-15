@@ -15,9 +15,15 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { TicketsFacade } from '@features/facade/tickets.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 
+/** Só imagem (evidência fotográfica) - diferente de ACCEPTED_MEDIA_TYPES de Measurement, que
+ *  também aceita vídeo. */
+const ACCEPTED_PHOTO_TYPES = 'image/jpeg,image/png,image/webp';
+
 /** Pequeno dialog dedicado só porque TicketCloseRequest.resolutionNote é obrigatório no backend
  *  (@NotBlank) - diferente de Addendum.decisionNote (opcional, resolvido via ConfirmationService
- *  simples sem input de texto em AllAddendumsListComponent). */
+ *  simples sem input de texto em AllAddendumsListComponent). Evidência fotográfica (galeria ou
+ *  câmera) é opcional - mesmo padrão dual-input de MeasurementsCreateDialogComponent, só que
+ *  photo-only (sem vídeo). */
 @Component({
   standalone: true,
   selector: 'app-tickets-close-dialog',
@@ -46,8 +52,10 @@ export class TicketsCloseDialogComponent {
 
   readonly i18n = inject(I18nService);
   readonly tickets = inject(TicketsFacade);
+  readonly acceptedPhotoTypes = ACCEPTED_PHOTO_TYPES;
 
   readonly saving = signal(false);
+  readonly files = signal<File[]>([]);
 
   readonly form = this.fb.nonNullable.group({
     resolutionNote: ['', [Validators.required, Validators.maxLength(1000)]],
@@ -66,6 +74,17 @@ export class TicketsCloseDialogComponent {
     this.close();
   }
 
+  onFilesSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const selected = input.files ? Array.from(input.files) : [];
+    this.files.set([...this.files(), ...selected]);
+    input.value = '';
+  }
+
+  removeFile(index: number): void {
+    this.files.set(this.files().filter((_, i) => i !== index));
+  }
+
   close(): void {
     this.saving.set(false);
     this.reset();
@@ -73,6 +92,7 @@ export class TicketsCloseDialogComponent {
   }
 
   private reset(): void {
+    this.files.set([]);
     this.form.reset({ resolutionNote: '' });
   }
 
@@ -97,7 +117,7 @@ export class TicketsCloseDialogComponent {
     this.saving.set(true);
 
     this.tickets
-      .close(id, { resolutionNote: v.resolutionNote.trim() })
+      .close(id, { resolutionNote: v.resolutionNote.trim(), photos: this.files() })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {

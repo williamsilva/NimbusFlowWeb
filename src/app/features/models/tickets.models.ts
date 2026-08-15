@@ -3,6 +3,13 @@ import { TicketTypeEnum } from '@models/enums/ticket-type.enum';
 import { TicketPriorityEnum } from '@models/enums/ticket-priority.enum';
 import { PeriodEnum } from '@models/enums/period.enum';
 
+/** Uma evidência fotográfica anexada ao fechar o chamado - `url` é pré-assinada (expira), mesmo
+ *  cuidado de `attachmentUrl` abaixo. */
+export interface TicketClosePhotoModel {
+  id: string;
+  url: string;
+}
+
 /**
  * Espelha com.nimbusflow.tickets.dto.response.TicketResponse do NimbusFlowServer. `workId` é o
  * vínculo opcional com uma Frente de Serviço (Work) - nunca definido na criação, só depois via
@@ -24,6 +31,7 @@ export interface TicketModel {
   attachmentUrl: string | null;
   actionPlanId: string | null;
   resolutionNote: string | null;
+  closePhotos: TicketClosePhotoModel[];
   closedAt: string | null;
   createdAt: string | null;
   updatedAt: string | null;
@@ -45,6 +53,7 @@ export interface TicketCreateInput extends TicketUpsertInput {
 
 export interface TicketCloseInput {
   resolutionNote: string;
+  photos: File[];
 }
 
 export interface TicketWorkLinkInput {

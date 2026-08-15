@@ -78,9 +78,18 @@ export class TicketsApiService {
       .pipe(map(mapTicketApiModel));
   }
 
+  /** multipart/form-data com 2 parts: "data" (JSON de {resolutionNote}) e "photos" (0..n arquivos,
+   *  galeria ou câmera - o backend não distingue a origem) - mesmo formato de MeasurementsApiService.submit. */
   close(id: string, input: TicketCloseInput) {
+    const formData = new FormData();
+    formData.append(
+      'data',
+      new Blob([JSON.stringify({ resolutionNote: input.resolutionNote })], { type: 'application/json' }),
+    );
+    input.photos.forEach((photo) => formData.append('photos', photo));
+
     return this.http
-      .put<TicketApiModel>(`${this.baseUrl}/${id}/close`, input)
+      .put<TicketApiModel>(`${this.baseUrl}/${id}/close`, formData)
       .pipe(map(mapTicketApiModel));
   }
 
@@ -90,8 +99,8 @@ export class TicketsApiService {
       .pipe(map(mapTicketApiModel));
   }
 
-  /** "Abrir Frente de Serviço" a partir de um chamado já criado - existente ou recém-criada
-   *  (o frontend decide antes de chamar isto, ver TicketsLinkWorkDialogComponent). */
+  /** "Abrir Frente de Serviço" a partir de um chamado já criado - sempre uma Frente recém-criada
+   *  (TicketsListComponent#onWorkCreated chama logo depois de WorksCreateDialogComponent salvar). */
   linkWork(id: string, input: TicketWorkLinkInput) {
     return this.http
       .put<TicketApiModel>(`${this.baseUrl}/${id}/link-work`, input)

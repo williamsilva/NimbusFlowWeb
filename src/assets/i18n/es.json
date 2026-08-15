@@ -4225,7 +4225,8 @@
       "createdAt": "Registrado el",
       "periodCreatedAt": "Período del registro",
       "attachment": "Adjunto (opcional)",
-      "resolutionNote": "Nota de resolución"
+      "resolutionNote": "Nota de resolución",
+      "closePhotos": "Evidencias fotográficas (opcional)"
     },
     "columns": {
       "title": "Título",
@@ -4270,7 +4271,9 @@
       "convert": "Convertir en plan de acción",
       "openWorkFront": "Abrir Frente de Servicio",
       "workLinked": "Frente de Servicio vinculada con éxito.",
-      "workLinkError": "No se pudo vincular la Frente de Servicio."
+      "workLinkError": "No se pudo vincular la Frente de Servicio.",
+      "addFile": "Agregar archivo",
+      "takePhoto": "Tomar foto"
     },
     "cancelConfirm": {
       "header": "Cancelar llamado",

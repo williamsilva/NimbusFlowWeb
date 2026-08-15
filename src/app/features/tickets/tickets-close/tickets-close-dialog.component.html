@@ -28,6 +28,66 @@
           />
         </p-floatLabel>
       </div>
+
+      <div class="col-12 p-2">
+        <small class="font-semibold block mb-2">{{ 'tickets.fields.closePhotos' | translate }}</small>
+
+        <input
+          #fileInput
+          type="file"
+          multiple
+          [accept]="acceptedPhotoTypes"
+          (change)="onFilesSelected($event)"
+          class="hidden"
+        />
+
+        <!-- capture="environment" abre a câmera traseira direto (sem passar pelo seletor de
+             galeria/arquivos) - mesmo dual-input de MeasurementsCreateDialogComponent, só que
+             photo-only. Os dois gravam no mesmo files() via onFilesSelected. -->
+        <input
+          #cameraInput
+          type="file"
+          accept="image/*"
+          capture="environment"
+          (change)="onFilesSelected($event)"
+          class="hidden"
+        />
+
+        <button
+          pButton
+          type="button"
+          icon="pi pi-upload"
+          (click)="fileInput.click()"
+          class="p-button-outlined p-button-sm"
+          [label]="'tickets.action.addFile' | translate"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          icon="pi pi-camera"
+          (click)="cameraInput.click()"
+          class="p-button-outlined p-button-sm ml-2"
+          [label]="'tickets.action.takePhoto' | translate"
+        ></button>
+
+        @if (files().length) {
+          <ul class="list-none p-0 m-0 mt-2">
+            @for (file of files(); track file; let i = $index) {
+              <li class="flex align-items-center justify-content-between gap-2 py-1">
+                <span class="text-sm overflow-hidden text-overflow-ellipsis">{{ file.name }}</span>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-times"
+                  (click)="removeFile(i)"
+                  class="p-button-text p-button-sm p-button-danger"
+                ></button>
+              </li>
+            }
+          </ul>
+        }
+      </div>
     </div>
   </form>
 
