@@ -10,6 +10,7 @@ import {
   TicketCreateInput,
   TicketUpsertInput,
   TicketCloseInput,
+  TicketWorkLinkInput,
 } from '@models/tickets.models';
 
 type LastQuery = ListQueryDto<TicketsAdvancedFilters>;
@@ -81,5 +82,9 @@ export class TicketsFacade {
 
   cancel(id: string): Observable<TicketModel> {
     return this.api.cancel(id).pipe(tap(() => this.reloadLast()));
+  }
+
+  linkWork(id: string, input: TicketWorkLinkInput): Observable<TicketModel> {
+    return this.api.linkWork(id, input).pipe(tap(() => this.reloadLast()));
   }
 }

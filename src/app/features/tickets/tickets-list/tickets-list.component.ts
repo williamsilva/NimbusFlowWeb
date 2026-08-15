@@ -29,9 +29,14 @@ import { TicketsAdvancedFilters } from '@features/filter/tickets.filters';
 import { TicketsPermissionPolicy } from '@features/tickets/tickets-permission.policy';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { TICKET_STATUS_VALUES, TicketStatusEnum, ticketStatusTone } from '@models/enums/ticket-status.enum';
+import { TICKET_TYPE_VALUES } from '@models/enums/ticket-type.enum';
+import { TICKET_PRIORITY_VALUES, ticketPriorityTone } from '@models/enums/ticket-priority.enum';
 import { TicketModel, TicketsFiltersState } from '@models/tickets.models';
+import { WorkModel } from '@models/works.models';
 import { TicketsCreateDialogComponent } from '@features/tickets/tickets-create/tickets-create-dialog.component';
 import { TicketsCloseDialogComponent } from '@features/tickets/tickets-close/tickets-close-dialog.component';
+import { TicketsLinkWorkDialogComponent } from '@features/tickets/tickets-link-work/tickets-link-work-dialog.component';
+import { WorksCreateDialogComponent } from '@features/works/works-create/works-create-dialog.component';
 import { ActionPlansCreateDialogComponent } from '@features/action-plans/action-plans-create/action-plans-create-dialog.component';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
@@ -68,6 +73,8 @@ import {
     StatusBadgeComponent,
     TicketsCreateDialogComponent,
     TicketsCloseDialogComponent,
+    TicketsLinkWorkDialogComponent,
+    WorksCreateDialogComponent,
     ActionPlansCreateDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
   ],
@@ -91,6 +98,8 @@ export class TicketsListComponent extends StatefulListPage<
 
   title = signal('');
   status = signal<string[] | null>(null);
+  types = signal<string[] | null>(null);
+  priorities = signal<string[] | null>(null);
   workIds = signal<string[] | null>(null);
   createdAt = signal<string | string[] | null>(null);
   periodCreatedAt = signal<PeriodEnum | null>(null);
@@ -101,9 +110,25 @@ export class TicketsListComponent extends StatefulListPage<
   convertVisible = signal(false);
   convertingTicket = signal<TicketModel | null>(null);
 
+  /** Compartilhado entre os dois dialogs do fluxo "abrir Frente de Serviço" (vincular existente
+   *  ou criar nova) - ver onWorkCreated pro porquê de um único id em vez de um por dialog. */
+  workFrontTicketId = signal<string | null>(null);
+  linkWorkVisible = signal(false);
+  createWorkVisible = signal(false);
+
   readonly statusOptions = TICKET_STATUS_VALUES.map((value) => ({
     value,
     label: this.i18n.tUi(`tickets.status.${value}` as never),
+  }));
+
+  readonly typeOptions = TICKET_TYPE_VALUES.map((value) => ({
+    value,
+    label: this.i18n.tUi(`tickets.type.${value}` as never),
+  }));
+
+  readonly priorityOptions = TICKET_PRIORITY_VALUES.map((value) => ({
+    value,
+    label: this.i18n.tUi(`tickets.priority.${value}` as never),
   }));
 
   readonly periodEnumOptions = computed(() => {
@@ -122,6 +147,8 @@ export class TicketsListComponent extends StatefulListPage<
 
     const title = this.title().trim();
     const status = this.status();
+    const types = this.types();
+    const priorities = this.priorities();
     const workIds = this.workIds();
 
     if (title) {
@@ -133,6 +160,20 @@ export class TicketsListComponent extends StatefulListPage<
         .map((opt) => opt.label)
         .join(', ');
       items.push({ label: this.i18n.tUi('tickets.fields.status'), value: labels });
+    }
+    if (types?.length) {
+      const labels = this.typeOptions
+        .filter((opt) => types.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+      items.push({ label: this.i18n.tUi('tickets.fields.type'), value: labels });
+    }
+    if (priorities?.length) {
+      const labels = this.priorityOptions
+        .filter((opt) => priorities.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+      items.push({ label: this.i18n.tUi('tickets.fields.priority'), value: labels });
     }
     if (workIds?.length) {
       const labels = this.workOptions()
@@ -160,6 +201,10 @@ export class TicketsListComponent extends StatefulListPage<
 
   tone(status: string): ReturnType<typeof ticketStatusTone> {
     return ticketStatusTone(status);
+  }
+
+  priorityTone(priority: string): ReturnType<typeof ticketPriorityTone> {
+    return ticketPriorityTone(priority);
   }
 
   goNew() {
@@ -191,6 +236,15 @@ export class TicketsListComponent extends StatefulListPage<
     return this.canManage() && row.status === TicketStatusEnum.OPEN;
   }
 
+  /** Mesma elegibilidade de canClose - um chamado já convertido em plano ainda pode precisar de
+   *  uma Frente de Serviço pra executar (ver TicketService.WORK_LINKABLE_STATUSES no backend). */
+  canOpenWorkFront(row: TicketModel): boolean {
+    return (
+      this.canManage() &&
+      (row.status === TicketStatusEnum.OPEN || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
+    );
+  }
+
   goClose(row: TicketModel): void {
     this.closeTicketId.set(row.id);
     this.closeVisible.set(true);
@@ -217,6 +271,59 @@ export class TicketsListComponent extends StatefulListPage<
 
   onConverted(): void {
     this.refresh();
+  }
+
+  goOpenWorkFront(row: TicketModel): void {
+    this.workFrontTicketId.set(row.id);
+    this.linkWorkVisible.set(true);
+  }
+
+  onLinkWorkVisibleChange(v: boolean): void {
+    this.linkWorkVisible.set(v);
+    if (!v && !this.createWorkVisible()) {
+      this.workFrontTicketId.set(null);
+    }
+  }
+
+  onWorkLinked(): void {
+    this.refresh();
+  }
+
+  onCreateNewWorkRequested(): void {
+    this.createWorkVisible.set(true);
+  }
+
+  onCreateWorkVisibleChange(v: boolean): void {
+    this.createWorkVisible.set(v);
+    if (!v) this.workFrontTicketId.set(null);
+  }
+
+  /** A Frente acabou de ser criada (WorksCreateDialogComponent) - vincula ela ao chamado que
+   *  disparou o fluxo. workFrontTicketId ainda está setado aqui: (created) emite antes de
+   *  (visibleChange) no dialog de Frente, que só zera o id (ver onCreateWorkVisibleChange). */
+  onWorkCreated(work: WorkModel): void {
+    const ticketId = this.workFrontTicketId();
+    if (!ticketId) return;
+
+    this.facade
+      .linkWork(ticketId, { workId: work.id })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.toast.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi('tickets.action.workLinked' as never),
+          });
+          this.refresh();
+        },
+        error: () =>
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('tickets.action.workLinkError' as never),
+          }),
+      });
   }
 
   confirmCancel(row: TicketModel): void {
@@ -276,6 +383,8 @@ export class TicketsListComponent extends StatefulListPage<
   protected override resetFilters(): void {
     this.title.set('');
     this.status.set(null);
+    this.types.set(null);
+    this.priorities.set(null);
     this.workIds.set(null);
     this.createdAt.set(null);
     this.periodCreatedAt.set(null);
@@ -285,6 +394,8 @@ export class TicketsListComponent extends StatefulListPage<
     return {
       title: this.title(),
       status: this.status()?.length ? this.status() : null,
+      types: this.types()?.length ? this.types() : null,
+      priorities: this.priorities()?.length ? this.priorities() : null,
       workIds: this.workIds()?.length ? this.workIds() : null,
       createdAt: this.createdAt(),
       periodCreatedAt: this.periodCreatedAt(),
@@ -294,6 +405,8 @@ export class TicketsListComponent extends StatefulListPage<
   protected override applyFiltersState(state: TicketsFiltersState): void {
     this.title.set(state.title ?? '');
     this.status.set(state.status ?? null);
+    this.types.set(state.types ?? null);
+    this.priorities.set(state.priorities ?? null);
     this.workIds.set(state.workIds ?? null);
     this.createdAt.set(state.createdAt ?? null);
     this.periodCreatedAt.set(state.periodCreatedAt ?? null);
@@ -303,6 +416,8 @@ export class TicketsListComponent extends StatefulListPage<
     return {
       title: this.title().trim() || undefined,
       status: this.status()?.length ? this.status() : undefined,
+      types: this.types()?.length ? this.types() : undefined,
+      priorities: this.priorities()?.length ? this.priorities() : undefined,
       workIds: this.workIds()?.length ? this.workIds() : undefined,
       createdAt: this.createdAt() ?? undefined,
       periodCreatedAt: this.periodCreatedAt() ?? undefined,

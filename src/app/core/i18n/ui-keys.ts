@@ -1806,6 +1806,8 @@ export const UI_KEYS = {
   tickets: {
     fields: {
       title: 'tickets.fields.title',
+      type: 'tickets.fields.type',
+      priority: 'tickets.fields.priority',
       status: 'tickets.fields.status',
       work: 'tickets.fields.work',
       createdAt: 'tickets.fields.createdAt',

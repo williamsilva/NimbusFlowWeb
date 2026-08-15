@@ -4218,6 +4218,8 @@
     "fields": {
       "title": "Título",
       "description": "Descripción",
+      "type": "Tipo",
+      "priority": "Prioridad",
       "status": "Estado",
       "work": "Frente de Servicio",
       "createdAt": "Registrado el",
@@ -4227,10 +4229,21 @@
     },
     "columns": {
       "title": "Título",
+      "type": "Tipo",
+      "priority": "Prioridad",
       "work": "Frente de Servicio",
       "status": "Estado",
       "reportedBy": "Relatado por",
       "createdAt": "Registrado el"
+    },
+    "type": {
+      "TICKET": "Llamado",
+      "ALERT": "Alerta de posible problema"
+    },
+    "priority": {
+      "HIGH": "Alta",
+      "MEDIUM": "Media",
+      "LOW": "Baja"
     },
     "status": {
       "OPEN": "Abierto",
@@ -4243,7 +4256,7 @@
       "cancelError": "No se pudo cancelar el llamado."
     },
     "form": {
-      "invalid": "Complete el título y la descripción antes de enviar.",
+      "invalid": "Complete los campos obligatorios (título, descripción, tipo y prioridad) antes de enviar.",
       "created": "Llamado registrado con éxito.",
       "saveError": "No se pudo registrar el llamado. Intente nuevamente.",
       "closeInvalid": "Describa la resolución antes de cerrar el llamado."
@@ -4254,7 +4267,13 @@
     "action": {
       "close": "Cerrar llamado",
       "cancel": "Cancelar llamado",
-      "convert": "Convertir en plan de acción"
+      "convert": "Convertir en plan de acción",
+      "openWorkFront": "Abrir Frente de Servicio",
+      "openWorkFrontOr": "o",
+      "createNewWork": "Crear nueva Frente de Servicio",
+      "link": "Vincular",
+      "workLinked": "Frente de Servicio vinculada con éxito.",
+      "workLinkError": "No se pudo vincular la Frente de Servicio."
     },
     "cancelConfirm": {
       "header": "Cancelar llamado",

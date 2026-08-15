@@ -64,9 +64,12 @@ export class WorksCreateDialogComponent {
   visible = input.required<boolean>();
   work = input<WorkModel | null>(null);
 
-  @Output() saved = new EventEmitter<void>();
-  @Output() updated = new EventEmitter<void>();
-  @Output() created = new EventEmitter<void>();
+  /** Emitem o WorkModel salvo (não só void) - consumidores que só querem recarregar a lista
+   *  seguem ignorando o $event de sempre; o novo consumidor (TicketsListComponent, "abrir Frente
+   *  de Serviço" a partir de um Chamado) precisa do id recém-criado pra vincular na sequência. */
+  @Output() saved = new EventEmitter<WorkModel>();
+  @Output() updated = new EventEmitter<WorkModel>();
+  @Output() created = new EventEmitter<WorkModel>();
   @Output() visibleChange = new EventEmitter<boolean>();
 
   private readonly fb = inject(FormBuilder);
@@ -225,7 +228,7 @@ export class WorksCreateDialogComponent {
     const req$ = id ? this.works.update(id, payload) : this.works.create(payload);
 
     req$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
+      next: (work) => {
         this.saving.set(false);
 
         const isEdit = !!id;
@@ -237,12 +240,12 @@ export class WorksCreateDialogComponent {
         });
 
         if (isEdit) {
-          this.updated.emit();
+          this.updated.emit(work);
         } else {
-          this.created.emit();
+          this.created.emit(work);
         }
 
-        this.saved.emit();
+        this.saved.emit(work);
         this.close();
       },
       error: () => {

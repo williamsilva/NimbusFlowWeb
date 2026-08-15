@@ -1,0 +1,70 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '480px', maxWidth: '95vw' }"
+  [header]="'tickets.action.openWorkFront' | translate"
+>
+  <div class="grid formgrid gap-0">
+    <div class="col-12 p-2">
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          inputId="workId"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="selectedWorkId()"
+          [options]="workOptions()"
+          (ngModelChange)="selectedWorkId.set($event)"
+        ></p-select>
+        <label for="workId">{{ 'tickets.fields.work' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 p-2 text-center">
+      <span class="opacity-70 text-sm">{{ 'tickets.action.openWorkFrontOr' | translate }}</span>
+    </div>
+
+    <div class="col-12 p-2 text-center">
+      <button
+        pButton
+        type="button"
+        (click)="goCreateNew()"
+        icon="pi pi-plus"
+        class="p-button-text p-button-sm"
+        [label]="'tickets.action.createNewWork' | translate"
+        [disabled]="saving()"
+      ></button>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="link()"
+      icon="pi pi-link"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'tickets.action.link' | translate"
+      [disabled]="saving() || !selectedWorkId()"
+    ></button>
+  </ng-template>
+</p-dialog>

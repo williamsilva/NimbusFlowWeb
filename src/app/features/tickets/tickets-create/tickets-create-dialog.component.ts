@@ -14,9 +14,10 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
-import { WorksFacade } from '@features/facade/works.facade';
 import { TicketsFacade } from '@features/facade/tickets.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
+import { TICKET_TYPE_VALUES, TicketTypeEnum } from '@models/enums/ticket-type.enum';
+import { TICKET_PRIORITY_VALUES, TicketPriorityEnum } from '@models/enums/ticket-priority.enum';
 
 @Component({
   standalone: true,
@@ -48,21 +49,28 @@ export class TicketsCreateDialogComponent {
 
   readonly i18n = inject(I18nService);
   readonly tickets = inject(TicketsFacade);
-  readonly worksFacade = inject(WorksFacade);
-  readonly workOptions = this.worksFacade.options;
 
   readonly saving = signal(false);
   readonly selectedFile = signal<File | null>(null);
 
+  readonly typeOptions = TICKET_TYPE_VALUES.map((value) => ({
+    value,
+    label: this.i18n.tUi(`tickets.type.${value}` as never),
+  }));
+
+  readonly priorityOptions = TICKET_PRIORITY_VALUES.map((value) => ({
+    value,
+    label: this.i18n.tUi(`tickets.priority.${value}` as never),
+  }));
+
   readonly form = this.fb.nonNullable.group({
     title: ['', [Validators.required, Validators.maxLength(200)]],
     description: ['', [Validators.required, Validators.maxLength(2000)]],
-    workId: this.fb.control<string | null>(null),
+    type: this.fb.control<TicketTypeEnum | null>(null, [Validators.required]),
+    priority: this.fb.control<TicketPriorityEnum | null>(null, [Validators.required]),
   });
 
   constructor() {
-    this.worksFacade.loadOptions();
-
     effect(() => {
       if (this.visible()) {
         return;
@@ -87,7 +95,7 @@ export class TicketsCreateDialogComponent {
   }
 
   private reset(): void {
-    this.form.reset({ title: '', description: '', workId: null });
+    this.form.reset({ title: '', description: '', type: null, priority: null });
     this.selectedFile.set(null);
   }
 
@@ -112,7 +120,8 @@ export class TicketsCreateDialogComponent {
       .create({
         title: v.title.trim(),
         description: v.description.trim(),
-        workId: v.workId,
+        type: v.type!,
+        priority: v.priority!,
         attachment: this.selectedFile(),
       })
       .pipe(takeUntilDestroyed(this.destroyRef))

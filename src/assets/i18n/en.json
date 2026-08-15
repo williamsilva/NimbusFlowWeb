@@ -4218,6 +4218,8 @@
     "fields": {
       "title": "Title",
       "description": "Description",
+      "type": "Type",
+      "priority": "Priority",
       "status": "Status",
       "work": "Service Front",
       "createdAt": "Reported at",
@@ -4227,10 +4229,21 @@
     },
     "columns": {
       "title": "Title",
+      "type": "Type",
+      "priority": "Priority",
       "work": "Service Front",
       "status": "Status",
       "reportedBy": "Reported by",
       "createdAt": "Reported at"
+    },
+    "type": {
+      "TICKET": "Ticket",
+      "ALERT": "Possible issue alert"
+    },
+    "priority": {
+      "HIGH": "High",
+      "MEDIUM": "Medium",
+      "LOW": "Low"
     },
     "status": {
       "OPEN": "Open",
@@ -4243,7 +4256,7 @@
       "cancelError": "Could not cancel the ticket."
     },
     "form": {
-      "invalid": "Fill in the title and description before submitting.",
+      "invalid": "Fill in the required fields (title, description, type and priority) before submitting.",
       "created": "Ticket reported successfully.",
       "saveError": "Could not report the ticket. Please try again.",
       "closeInvalid": "Describe the resolution before closing the ticket."
@@ -4254,7 +4267,13 @@
     "action": {
       "close": "Close ticket",
       "cancel": "Cancel ticket",
-      "convert": "Convert into action plan"
+      "convert": "Convert into action plan",
+      "openWorkFront": "Open Service Front",
+      "openWorkFrontOr": "or",
+      "createNewWork": "Create new Service Front",
+      "link": "Link",
+      "workLinked": "Service Front linked successfully.",
+      "workLinkError": "Could not link the Service Front."
     },
     "cancelConfirm": {
       "header": "Cancel ticket",

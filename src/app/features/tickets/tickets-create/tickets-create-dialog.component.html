@@ -47,20 +47,45 @@
         </p-floatLabel>
       </div>
 
-      <div class="col-12 p-2">
+      <div class="col-12 md:col-6 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-select
             size="small"
             class="w-full"
             appendTo="body"
-            inputId="workId"
+            inputId="type"
             optionLabel="label"
             optionValue="value"
-            [showClear]="true"
-            [options]="workOptions()"
-            formControlName="workId"
+            [options]="typeOptions"
+            formControlName="type"
           ></p-select>
-          <label for="workId">{{ 'tickets.fields.work' | translate }}</label>
+          <app-error-msg
+            [field]="'type'"
+            [forId]="'type'"
+            [control]="form.controls.type"
+            [label]="'tickets.fields.type' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            inputId="priority"
+            optionLabel="label"
+            optionValue="value"
+            [options]="priorityOptions"
+            formControlName="priority"
+          ></p-select>
+          <app-error-msg
+            [field]="'priority'"
+            [forId]="'priority'"
+            [control]="form.controls.priority"
+            [label]="'tickets.fields.priority' | translate"
+          />
         </p-floatLabel>
       </div>
 

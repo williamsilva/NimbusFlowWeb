@@ -13,6 +13,7 @@ import {
   TicketCreateInput,
   TicketUpsertInput,
   TicketCloseInput,
+  TicketWorkLinkInput,
   mapTicketApiModel,
   mapTicketApiModels,
 } from '@models/tickets.models';
@@ -44,15 +45,23 @@ export class TicketsApiService {
   }
 
   /**
-   * multipart/form-data com 2 parts: "data" (JSON de {title, description, workId}) e "attachment"
-   * (arquivo, opcional) - o backend (TicketController) exige a part "data" mesmo sem anexo.
+   * multipart/form-data com 2 parts: "data" (JSON de {title, description, type, priority}) e
+   * "attachment" (arquivo, opcional) - o backend (TicketController) exige a part "data" mesmo sem
+   * anexo. Sem workId de propósito - nunca definido na criação.
    */
   create(input: TicketCreateInput) {
     const formData = new FormData();
     formData.append(
       'data',
       new Blob(
-        [JSON.stringify({ title: input.title, description: input.description, workId: input.workId })],
+        [
+          JSON.stringify({
+            title: input.title,
+            description: input.description,
+            type: input.type,
+            priority: input.priority,
+          }),
+        ],
         { type: 'application/json' },
       ),
     );
@@ -78,6 +87,14 @@ export class TicketsApiService {
   cancel(id: string) {
     return this.http
       .put<TicketApiModel>(`${this.baseUrl}/${id}/cancel`, {})
+      .pipe(map(mapTicketApiModel));
+  }
+
+  /** "Abrir Frente de Serviço" a partir de um chamado já criado - existente ou recém-criada
+   *  (o frontend decide antes de chamar isto, ver TicketsLinkWorkDialogComponent). */
+  linkWork(id: string, input: TicketWorkLinkInput) {
+    return this.http
+      .put<TicketApiModel>(`${this.baseUrl}/${id}/link-work`, input)
       .pipe(map(mapTicketApiModel));
   }
 }

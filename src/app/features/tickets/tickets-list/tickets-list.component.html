@@ -45,6 +45,20 @@
   (visibleChange)="onConvertVisibleChange($event)"
 ></app-action-plans-create-dialog>
 
+<app-tickets-link-work-dialog
+  [visible]="linkWorkVisible()"
+  [ticketId]="workFrontTicketId()"
+  (linked)="onWorkLinked()"
+  (createNewRequested)="onCreateNewWorkRequested()"
+  (visibleChange)="onLinkWorkVisibleChange($event)"
+></app-tickets-link-work-dialog>
+
+<app-works-create-dialog
+  [visible]="createWorkVisible()"
+  (created)="onWorkCreated($event)"
+  (visibleChange)="onCreateWorkVisibleChange($event)"
+></app-works-create-dialog>
+
 <p-confirmDialog></p-confirmDialog>
 
 <cs-filters-panel
@@ -57,7 +71,7 @@
   [title]="'common.filter' | translate"
   >
   <div class="grid formgrid gap-0 align-items-end">
-    <div class="col-12 md:col-4 p-1">
+    <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
         <input
           id="title"
@@ -70,7 +84,7 @@
         </p-floatLabel>
       </div>
 
-      <div class="col-12 md:col-3 p-1">
+      <div class="col-12 md:col-2 p-1">
         <p-floatLabel variant="on" class="w-full">
           <p-multiSelect
             size="small"
@@ -86,6 +100,44 @@
             (ngModelChange)="status.set($event?.length ? $event : null)"
           ></p-multiSelect>
           <label for="status">{{ 'tickets.fields.status' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-2 p-1">
+        <p-floatLabel variant="on" class="w-full">
+          <p-multiSelect
+            size="small"
+            class="w-full"
+            appendTo="body"
+            [showClear]="true"
+            inputId="types"
+            optionLabel="label"
+            optionValue="value"
+            [ngModel]="types()"
+            [showToggleAll]="false"
+            [options]="typeOptions"
+            (ngModelChange)="types.set($event?.length ? $event : null)"
+          ></p-multiSelect>
+          <label for="types">{{ 'tickets.fields.type' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-2 p-1">
+        <p-floatLabel variant="on" class="w-full">
+          <p-multiSelect
+            size="small"
+            class="w-full"
+            appendTo="body"
+            [showClear]="true"
+            inputId="priorities"
+            optionLabel="label"
+            optionValue="value"
+            [ngModel]="priorities()"
+            [showToggleAll]="false"
+            [options]="priorityOptions"
+            (ngModelChange)="priorities.set($event?.length ? $event : null)"
+          ></p-multiSelect>
+          <label for="priorities">{{ 'tickets.fields.priority' | translate }}</label>
         </p-floatLabel>
       </div>
 
@@ -150,17 +202,19 @@
       [paginatorDropdownAppendTo]="'body'"
       (onPage)="onPageChange($event)"
       [rowsPerPageOptions]="rowsPerPageOptions"
-      [tableStyle]="{ width: '100%', 'min-width': '58rem' }"
+      [tableStyle]="{ width: '100%', 'min-width': '82rem' }"
       [currentPageReportTemplate]="'pagination.report' | translate"
       >
       <ng-template pTemplate="colgroup">
         <colgroup>
         <col style="width: auto" />
-        <col style="width: 200px" />
-        <col style="width: 130px" />
+        <col style="width: 110px" />
+        <col style="width: 110px" />
         <col style="width: 180px" />
-        <col style="width: 150px" />
         <col style="width: 130px" />
+        <col style="width: 150px" />
+        <col style="width: 150px" />
+        <col style="width: 150px" />
       </colgroup>
     </ng-template>
 
@@ -183,6 +237,18 @@
                 styleClass="cs-colfilter"
               ></p-columnFilter>
             </span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'tickets.columns.type' | translate">{{ 'tickets.columns.type' | translate }}</span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'tickets.columns.priority' | translate">{{ 'tickets.columns.priority' | translate }}</span>
           </div>
         </th>
 
@@ -230,8 +296,8 @@
           </div>
         </th>
 
-        <th pSortableColumn="createdAt">
-          <div class="th-flex text-center">
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'tickets.columns.createdAt' | translate">{{ 'tickets.columns.createdAt' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="createdAt"></p-sortIcon>
@@ -273,6 +339,13 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td class="mobile-card-title"><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.title">{{ row.title }}</span></td>
+        <td class="text-center" [attr.data-label]="'tickets.columns.type' | translate">{{ ('tickets.type.' + row.type) | translate }}</td>
+        <td class="text-center" [attr.data-label]="'tickets.columns.priority' | translate">
+          <cs-status-badge
+            [tone]="priorityTone(row.priority)"
+            [label]="('tickets.priority.' + row.priority) | translate"
+          ></cs-status-badge>
+        </td>
         <td class="text-center" [attr.data-label]="'tickets.columns.work' | translate">{{ row.workName ?? '-' }}</td>
         <td class="text-center" [attr.data-label]="'tickets.columns.status' | translate">
           <cs-status-badge
@@ -283,6 +356,16 @@
         <td class="text-center" [attr.data-label]="'tickets.columns.reportedBy' | translate">{{ row.reportedByName ?? '-' }}</td>
         <td class="text-center" [attr.data-label]="'tickets.columns.createdAt' | translate">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
         <td class="text-center mobile-card-actions" [attr.data-label]="'common.actions' | translate">
+          @if (canOpenWorkFront(row)) {
+            <button
+              pButton
+              type="button"
+              icon="pi pi-building"
+              (click)="goOpenWorkFront(row)"
+              class="p-button-text p-button-sm"
+              [pTooltip]="'tickets.action.openWorkFront' | translate"
+            ></button>
+          }
           @if (canConvert(row)) {
             <button
               pButton
@@ -313,7 +396,7 @@
               [pTooltip]="'tickets.action.cancel' | translate"
             ></button>
           }
-          @if (!canConvert(row) && !canClose(row) && !canCancel(row)) {
+          @if (!canOpenWorkFront(row) && !canConvert(row) && !canClose(row) && !canCancel(row)) {
             <span>-</span>
           }
         </td>
@@ -322,7 +405,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="6" class="text-center py-5 opacity-70">
+        <td colspan="8" class="text-center py-5 opacity-70">
           {{ facade.loadedOnce() ? ('tickets.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
