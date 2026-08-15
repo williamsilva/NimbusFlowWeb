@@ -347,6 +347,7 @@ export class ActionPlansListComponent extends StatefulListPage<
     if (!this.canComplete(row)) return;
 
     this.confirm.confirm({
+      key: 'actionPlans',
       header: this.i18n.tUi('actionPlans.completeConfirm.header'),
       message: this.i18n.tUi('actionPlans.completeConfirm.message'),
       icon: 'pi pi-question-circle',
@@ -363,6 +364,7 @@ export class ActionPlansListComponent extends StatefulListPage<
     if (!this.canCancel(row)) return;
 
     this.confirm.confirm({
+      key: 'actionPlans',
       header: this.i18n.tUi('actionPlans.cancelConfirm.header'),
       message: this.i18n.tUi('actionPlans.cancelConfirm.message'),
       icon: 'pi pi-exclamation-triangle',

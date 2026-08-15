@@ -325,6 +325,7 @@ export class TicketsListComponent extends StatefulListPage<
     if (!this.canCancel(row)) return;
 
     this.confirm.confirm({
+      key: 'tickets',
       header: this.i18n.tUi('tickets.cancelConfirm.header'),
       message: this.i18n.tUi('tickets.cancelConfirm.message'),
       icon: 'pi pi-exclamation-triangle',
