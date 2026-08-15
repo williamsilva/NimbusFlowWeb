@@ -4307,9 +4307,12 @@
       "project": "Proyecto",
       "work": "Frente de Servicio",
       "status": "Estado",
+      "tasks": "Tareas",
       "responsible": "Responsable",
       "targetDate": "Plazo objetivo"
     },
+    "tasksCount": "{count, plural, =0 {Ninguna tarea} one {# tarea} other {# tareas}}",
+    "pendingTasksCount": "{count, plural, =0 {} one {# pendiente} other {# pendientes}}",
     "status": {
       "DRAFT": "Borrador",
       "IN_PROGRESS": "En curso",

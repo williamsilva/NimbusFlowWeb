@@ -163,6 +163,7 @@
         <col style="width: 170px" />
         <col style="width: 200px" />
         <col style="width: 130px" />
+        <col style="width: 140px" />
         <col style="width: 170px" />
         <col style="width: 130px" />
         <col style="width: 200px" />
@@ -237,6 +238,12 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.tasks' | translate">{{ 'actionPlans.columns.tasks' | translate }}</span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.responsible' | translate">{{ 'actionPlans.columns.responsible' | translate }}</span>
           </div>
         </th>
@@ -265,6 +272,13 @@
             [tone]="tone(row.status)"
             [label]="('actionPlans.status.' + row.status) | translate"
           ></cs-status-badge>
+        </td>
+        <td class="text-center" [attr.data-label]="'actionPlans.columns.tasks' | translate">
+          {{ 'actionPlans.tasksCount' | translate: { count: row.tasksCount } }}
+          @if (row.pendingTasksCount > 0) {
+            <br />
+            <small class="opacity-70">{{ 'actionPlans.pendingTasksCount' | translate: { count: row.pendingTasksCount } }}</small>
+          }
         </td>
         <td class="text-center" [attr.data-label]="'actionPlans.columns.responsible' | translate">{{ row.responsibleName ?? '-' }}</td>
         <td class="text-center" [attr.data-label]="'actionPlans.columns.targetDate' | translate">{{ row.targetDate ? (row.targetDate | csDate: 'short') : '-' }}</td>
@@ -346,7 +360,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="text-center py-5 opacity-70">
+        <td colspan="8" class="text-center py-5 opacity-70">
           {{ facade.loadedOnce() ? ('actionPlans.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>

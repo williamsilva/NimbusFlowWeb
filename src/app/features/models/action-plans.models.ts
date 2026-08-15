@@ -18,6 +18,10 @@ export interface ActionPlanModel {
   responsibleId: string;
   responsibleName: string | null;
   status: ActionPlanStatusEnum;
+  /** Contagem de Tarefas do plano - pendingTasksCount é o subconjunto ainda TODO/IN_PROGRESS
+   *  (mesmo recorte usado pra bloquear a conclusão do plano no backend). */
+  tasksCount: number;
+  pendingTasksCount: number;
   workId: string | null;
   workName: string | null;
   projectId: string | null;
