@@ -63,6 +63,9 @@ function fromDateOnlyString(value: string | null | undefined): Date | null {
 export class WorksCreateDialogComponent {
   visible = input.required<boolean>();
   work = input<WorkModel | null>(null);
+  /** Pré-preenche o nome no modo criação (ex.: "Criar nova Frente de Serviço" a partir de um
+   *  Chamado - TicketsListComponent passa o título do chamado). Ignorado em modo edição. */
+  initialName = input<string | null>(null);
 
   /** Emitem o WorkModel salvo (não só void) - consumidores que só querem recarregar a lista
    *  seguem ignorando o $event de sempre; o novo consumidor (TicketsListComponent, "abrir Frente
@@ -137,6 +140,10 @@ export class WorksCreateDialogComponent {
       if (!work) {
         this.lastLoadedId = null;
         this.resetFormForCreate();
+        const initialName = this.initialName();
+        if (initialName) {
+          this.form.patchValue({ name: initialName });
+        }
         return;
       }
 

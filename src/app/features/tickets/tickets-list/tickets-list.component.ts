@@ -137,6 +137,15 @@ export class TicketsListComponent extends StatefulListPage<
   });
 
   readonly workOptions = this.worksFacade.options;
+  /** Pré-preenche o nome da Frente ao criar uma nova a partir do chamado (ver
+   *  onCreateNewWorkRequested/WorksCreateDialogComponent#initialName) - deriva do id
+   *  compartilhado em vez de um signal próprio, já que workFrontTicketId já identifica o chamado
+   *  em uso nesse fluxo. */
+  readonly workFrontTicketTitle = computed(() => {
+    const id = this.workFrontTicketId();
+    if (!id) return null;
+    return this.tickets().find((t) => t.id === id)?.title ?? null;
+  });
   readonly canCreate = computed(() => this.policy.canCreate());
   readonly canManage = computed(() => this.policy.canManage());
   readonly totalRecords = computed(() => this.facade.totalRecords());

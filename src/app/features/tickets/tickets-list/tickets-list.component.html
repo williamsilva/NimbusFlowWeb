@@ -55,6 +55,7 @@
 
 <app-works-create-dialog
   [visible]="createWorkVisible()"
+  [initialName]="workFrontTicketTitle()"
   (created)="onWorkCreated($event)"
   (visibleChange)="onCreateWorkVisibleChange($event)"
 ></app-works-create-dialog>
