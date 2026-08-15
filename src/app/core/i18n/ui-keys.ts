@@ -119,10 +119,8 @@ export const UI_KEYS = {
       reconciliation: 'menu.settings.reconciliation',
       backup: 'menu.settings.backup',
       approvalLimits: 'menu.settings.approvalLimits',
-<<<<<<< HEAD
       departments: 'menu.settings.departments',
-=======
->>>>>>> feature/migracao-angular21-primeng
+      emailLog: 'menu.settings.emailLog',
     },
     reconciliation: 'menu.reconciliation',
     /* Fornecedor / Obra / Sugestão (com.nimbusflow.works no backend) */
@@ -1922,7 +1920,6 @@ export const UI_KEYS = {
       error: 'approvalLimits.deleteConfirm.error',
     },
   },
-<<<<<<< HEAD
   departments: {
     form: {
       invalid: 'departments.form.invalid',
@@ -1937,8 +1934,18 @@ export const UI_KEYS = {
       error: 'departments.deleteConfirm.error',
     },
   },
-=======
->>>>>>> feature/migracao-angular21-primeng
+  emailLog: {
+    fields: {
+      recipients: 'emailLog.fields.recipients',
+      subject: 'emailLog.fields.subject',
+      status: 'emailLog.fields.status',
+      eventType: 'emailLog.fields.eventType',
+      sentAt: 'emailLog.fields.sentAt',
+    },
+    empty: {
+      title: 'emailLog.empty.title',
+    },
+  },
   validation: {
     required: 'validation.required',
     minLength: 'validation.minLength',

@@ -130,12 +130,12 @@
       },
       "approvalLimits": {
         "title": "Approval limits"
-<<<<<<< HEAD
       },
       "departments": {
         "title": "Departments"
-=======
->>>>>>> feature/migracao-angular21-primeng
+      },
+      "emailLog": {
+        "title": "Email Audit"
       }
     },
     "transactions": {
@@ -338,12 +338,9 @@
       "scheduler": "Scheduler",
       "reconciliation": "Reconciliation",
       "backup": "Backup",
-<<<<<<< HEAD
       "approvalLimits": "Approval limits",
-      "departments": "Departments"
-=======
-      "approvalLimits": "Approval limits"
->>>>>>> feature/migracao-angular21-primeng
+      "departments": "Departments",
+      "emailLog": "Email Audit"
     },
     "file": {
       "processing": {
@@ -3649,7 +3646,6 @@
       "error": "Could not delete the approval limit"
     }
   },
-<<<<<<< HEAD
   "departments": {
     "subtitle": "Departments that can be the target of a ticket, in addition to a specific user.",
     "new": { "title": "New department" },
@@ -3677,8 +3673,43 @@
       "error": "Could not delete the department"
     }
   },
-=======
->>>>>>> feature/migracao-angular21-primeng
+  "emailLog": {
+    "subtitle": "Record of every email sent by the system - recipients, subject, status and body.",
+    "columns": {
+      "recipients": "Recipients",
+      "subject": "Subject",
+      "eventType": "Event",
+      "status": "Status",
+      "sentAt": "Sent at",
+      "errorMessage": "Error"
+    },
+    "fields": {
+      "recipients": "Recipients",
+      "subject": "Subject",
+      "eventType": "Event",
+      "status": "Status",
+      "sentAt": "Sent at",
+      "periodSentAt": "Sent period"
+    },
+    "status": {
+      "SENT": "Sent",
+      "FAILED": "Send failed"
+    },
+    "eventType": {
+      "addendum_approved": "Addendum approved",
+      "payment_released": "Installment released",
+      "ticket_target": "Ticket"
+    },
+    "empty": { "title": "No emails registered" },
+    "detail": {
+      "title": "Email details",
+      "recipients": "Recipients",
+      "subject": "Subject",
+      "template": "Template",
+      "body": "Body",
+      "noBody": "Body not available for emails sent before this version."
+    }
+  },
   "backup": {
     "settings": {
       "subtitle": "Generates an on-demand backup of the databases and/or the files folder, for immediate download.",
