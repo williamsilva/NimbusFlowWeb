@@ -7,7 +7,9 @@
   [resizable]="false"
   [visible]="visible()"
   [style]="{ width: '760px', maxWidth: '95vw' }"
-  [header]="isEditMode() ? ('actionPlans.edit.title' | translate) : ('actionPlans.new.title' | translate)"
+  [header]="
+    isEditMode() ? ('actionPlans.edit.title' | translate) : ('actionPlans.new.title' | translate)
+  "
 >
   <form [formGroup]="form" class="cs-dialog-form">
     <div class="grid formgrid gap-0">
@@ -25,7 +27,13 @@
 
       <div class="col-12 md:col-6 p-2">
         <p-floatLabel variant="on" class="w-full">
-          <textarea pTextarea rows="3" id="what" style="width: 100%" formControlName="what"></textarea>
+          <textarea
+            pTextarea
+            rows="3"
+            id="what"
+            style="width: 100%"
+            formControlName="what"
+          ></textarea>
           <app-error-msg
             [field]="'what'"
             [forId]="'what'"
@@ -37,7 +45,13 @@
 
       <div class="col-12 md:col-6 p-2">
         <p-floatLabel variant="on" class="w-full">
-          <textarea pTextarea rows="3" id="why" style="width: 100%" formControlName="why"></textarea>
+          <textarea
+            pTextarea
+            rows="3"
+            id="why"
+            style="width: 100%"
+            formControlName="why"
+          ></textarea>
           <app-error-msg
             [field]="'why'"
             [forId]="'why'"
@@ -49,7 +63,13 @@
 
       <div class="col-12 p-2">
         <p-floatLabel variant="on" class="w-full">
-          <textarea pTextarea rows="3" id="how" style="width: 100%" formControlName="how"></textarea>
+          <textarea
+            pTextarea
+            rows="3"
+            id="how"
+            style="width: 100%"
+            formControlName="how"
+          ></textarea>
           <app-error-msg
             [field]="'how'"
             [forId]="'how'"
@@ -105,9 +125,10 @@
             size="small"
             class="w-full"
             [filter]="true"
-            inputId="responsibleId"
+            appendTo="body"
             optionLabel="label"
             optionValue="value"
+            inputId="responsibleId"
             formControlName="responsibleId"
             [options]="responsibleOptions()"
           ></p-select>
@@ -128,9 +149,9 @@
       type="button"
       (click)="close()"
       icon="pi pi-times"
+      [disabled]="saving()"
       class="p-button-text p-button-sm"
       [label]="'common.cancel' | translate"
-      [disabled]="saving()"
     ></button>
 
     <button
@@ -140,8 +161,8 @@
       icon="pi pi-save"
       class="p-button-sm"
       [loading]="saving()"
-      [label]="'common.save' | translate"
       [disabled]="saving()"
+      [label]="'common.save' | translate"
     ></button>
   </ng-template>
 </p-dialog>

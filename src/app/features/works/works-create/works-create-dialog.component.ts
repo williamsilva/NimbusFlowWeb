@@ -103,6 +103,9 @@ export class WorksCreateDialogComponent {
   }));
 
   private lastLoadedId: string | null = null;
+  /** Evita resetar o form de novo em modo criação a cada re-execução do effect() (ver
+   *  constructor) - true assim que o form já foi inicializado pra este "open" do diálogo. */
+  private createFormInitialized = false;
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(180)]],
@@ -132,12 +135,20 @@ export class WorksCreateDialogComponent {
 
     effect(() => {
       if (!this.visible()) {
+        this.createFormInitialized = false;
         return;
       }
 
       const work = this.work();
 
       if (!work) {
+        // Sem isto, qualquer re-execução espúria do effect() (ex.: change detection disparada
+        // pelo fechamento do painel de um p-select após selecionar uma opção) chamaria
+        // resetFormForCreate() de novo e apagaria o que o usuário já tinha preenchido.
+        if (this.createFormInitialized) {
+          return;
+        }
+        this.createFormInitialized = true;
         this.lastLoadedId = null;
         this.resetFormForCreate();
         const initialName = this.initialName();
@@ -147,6 +158,7 @@ export class WorksCreateDialogComponent {
         return;
       }
 
+      this.createFormInitialized = false;
       if (this.lastLoadedId === work.id) {
         return;
       }
@@ -177,6 +189,7 @@ export class WorksCreateDialogComponent {
     this.loadedWork.set(null);
     this.saving.set(false);
     this.lastLoadedId = null;
+    this.createFormInitialized = false;
     this.resetFormForCreate();
     this.visibleChange.emit(false);
   }

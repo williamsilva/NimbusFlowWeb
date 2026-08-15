@@ -76,6 +76,9 @@ export class ProjectsUpsertDialogComponent {
   });
 
   private lastLoadedId: string | null = null;
+  /** Evita resetar o form de novo em modo criação a cada re-execução do effect() (ver
+   *  constructor) - true assim que o form já foi inicializado pra este "open" do diálogo. */
+  private createFormInitialized = false;
 
   readonly form = this.fb.group({
     name: this.fb.nonNullable.control('', [Validators.required, Validators.maxLength(200)]),
@@ -85,10 +88,18 @@ export class ProjectsUpsertDialogComponent {
 
   constructor() {
     effect(() => {
-      if (!this.visible()) return;
+      if (!this.visible()) {
+        this.createFormInitialized = false;
+        return;
+      }
       const project = this.project();
 
       if (!project) {
+        // Sem isto, qualquer re-execução espúria do effect() (ex.: change detection disparada
+        // pelo fechamento do painel de um p-select após selecionar uma opção) chamaria
+        // resetFormForCreate() de novo e apagaria o que o usuário já tinha preenchido.
+        if (this.createFormInitialized) return;
+        this.createFormInitialized = true;
         this.lastLoadedId = null;
         this.currentSiteplanUrl.set(null);
         this.resetFormForCreate();
@@ -99,6 +110,7 @@ export class ProjectsUpsertDialogComponent {
         return;
       }
 
+      this.createFormInitialized = false;
       if (this.lastLoadedId === project.id) return;
       this.lastLoadedId = project.id;
       this.currentSiteplanUrl.set(project.siteplanUrl);
@@ -118,6 +130,7 @@ export class ProjectsUpsertDialogComponent {
   close(): void {
     this.saving.set(false);
     this.lastLoadedId = null;
+    this.createFormInitialized = false;
     this.resetFormForCreate();
     this.visibleChange.emit(false);
   }
