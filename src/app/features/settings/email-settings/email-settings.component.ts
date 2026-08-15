@@ -57,7 +57,14 @@ export class EmailSettingsComponent {
 
   protected readonly saving = signal(false);
   protected readonly loading = signal(false);
-  protected readonly implOptions = EMAIL_IMPL_OPTIONS;
+
+  // FAKE só aparece fora de produção (ver EmailSettingsModel.allowFakeImpl, calculado no backend
+  // a partir do perfil Spring ativo) - default true até a primeira carga responder, pra não
+  // esconder a opção só por um instante em ambientes onde ela é válida.
+  private readonly allowFakeImpl = signal(true);
+  protected readonly implOptions = computed(() =>
+    this.allowFakeImpl() ? EMAIL_IMPL_OPTIONS : EMAIL_IMPL_OPTIONS.filter((o) => o.value !== 'FAKE'),
+  );
 
   // O backend nunca devolve o segredo real (só uma versão mascarada, ex. "••••••1234") —
   // guarda o valor mascarado carregado pra saber, no save(), se o usuário realmente digitou
@@ -100,6 +107,7 @@ export class EmailSettingsComponent {
     this.loading.set(true);
     this.service.getSettings().subscribe({
       next: (s) => {
+        this.allowFakeImpl.set(s.allowFakeImpl);
         this.loadedBrevoApiKeyMask = s.brevoApiKey ?? '';
         this.loadedSmtpPasswordMask = s.smtpPassword ?? '';
         this.form.patchValue({
