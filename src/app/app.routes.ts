@@ -145,6 +145,24 @@ export const appRoutes: Routes = [
       },
 
       {
+        path: 'action-plans/:actionPlanId/tasks',
+        title: 'routes.actionPlans.tasks.title',
+        loadComponent: () =>
+          import('./features/tasks/tasks-list/tasks-list.component').then(
+            (m) => m.TasksListComponent,
+          ),
+      },
+
+      {
+        path: 'tasks',
+        title: 'routes.tasks.title',
+        loadComponent: () =>
+          import('./features/tasks/all-tasks-list/all-tasks-list.component').then(
+            (m) => m.AllTasksListComponent,
+          ),
+      },
+
+      {
         path: 'forbidden',
         title: 'routes.forbidden.title',
         loadComponent: () =>

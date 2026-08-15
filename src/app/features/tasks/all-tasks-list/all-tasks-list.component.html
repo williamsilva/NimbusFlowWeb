@@ -1,8 +1,8 @@
 <cs-page-header
-  [subtitle]="'actionPlans.subtitle' | translate"
+  [subtitle]="'tasks.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
-    { label: ('breadcrumb.actionPlans' | translate) },
+    { label: ('breadcrumb.tasks' | translate) },
   ]"
   [compact]="false"
   >
@@ -15,27 +15,15 @@
     [label]="'common.update' | translate"
   ></button>
 
-  @if (canManage()) {
-    <button
-      pButton
-      type="button"
-      (click)="goNew()"
-      icon="pi pi-plus"
-      class="p-button-info p-button-sm"
-      [label]="'actionPlans.new.title' | translate"
-    ></button>
-  }
+  <button
+    pButton
+    type="button"
+    (click)="goMine()"
+    icon="pi pi-user"
+    class="p-button-secondary p-button-sm"
+    [label]="'tasks.action.mine' | translate"
+  ></button>
 </cs-page-header>
-
-<app-action-plans-create-dialog
-  [visible]="newVisible()"
-  [actionPlan]="editingPlan()"
-  (created)="onSaved()"
-  (updated)="onSaved()"
-  (visibleChange)="onNewVisibleChange($event)"
-></app-action-plans-create-dialog>
-
-<p-confirmDialog></p-confirmDialog>
 
 <cs-filters-panel
   [collapsed]="true"
@@ -56,7 +44,7 @@
           class="w-full p-inputtext-sm"
           (input)="title.set(($any($event.target).value ?? '').toString())"
           />
-          <label for="title">{{ 'actionPlans.fields.title' | translate }}</label>
+          <label for="title">{{ 'tasks.fields.title' | translate }}</label>
         </p-floatLabel>
       </div>
 
@@ -75,7 +63,7 @@
             [options]="statusOptions"
             (ngModelChange)="status.set($event?.length ? $event : null)"
           ></p-multiSelect>
-          <label for="status">{{ 'actionPlans.fields.status' | translate }}</label>
+          <label for="status">{{ 'tasks.fields.status' | translate }}</label>
         </p-floatLabel>
       </div>
 
@@ -84,17 +72,18 @@
           <p-multiSelect
             size="small"
             class="w-full"
+            [filter]="true"
             appendTo="body"
             [showClear]="true"
-            inputId="workIds"
+            inputId="assigneeIds"
             optionLabel="label"
             optionValue="value"
-            [ngModel]="workIds()"
+            [ngModel]="assigneeIds()"
             [showToggleAll]="false"
-            [options]="workOptions()"
-            (ngModelChange)="workIds.set($event?.length ? $event : null)"
+            [options]="assigneeOptions()"
+            (ngModelChange)="assigneeIds.set($event?.length ? $event : null)"
           ></p-multiSelect>
-          <label for="workIds">{{ 'actionPlans.fields.work' | translate }}</label>
+          <label for="assigneeIds">{{ 'tasks.fields.assignee' | translate }}</label>
         </p-floatLabel>
       </div>
 
@@ -109,8 +98,8 @@
         [view]="setViewFormat(periodCreatedAt())"
         [dateFormat]="setDateFormat(periodCreatedAt())"
         [selectionMode]="setSelectionMode(periodCreatedAt())"
-        [dateLabel]="'actionPlans.fields.createdAt' | translate"
-        [periodLabel]="'actionPlans.fields.periodCreatedAt' | translate"
+        [dateLabel]="'tasks.fields.createdAt' | translate"
+        [periodLabel]="'tasks.fields.periodCreatedAt' | translate"
         (periodChange)="onPeriodColumnChange(periodCreatedAt, createdAt, $event)"
       ></cs-advanced-period-date-filter>
     </div>
@@ -131,7 +120,7 @@
       filterDisplay="menu"
       stateStorage="local"
       class="cs-admin-table"
-      [value]="actionPlans()"
+      [value]="tasks()"
       [loading]="facade.loading()"
       [stateKey]="tableStateKey()"
       [showCurrentPageReport]="true"
@@ -147,10 +136,10 @@
         <colgroup>
         <col style="width: auto" />
         <col style="width: 200px" />
-        <col style="width: 130px" />
-        <col style="width: 170px" />
-        <col style="width: 130px" />
         <col style="width: 160px" />
+        <col style="width: 130px" />
+        <col style="width: 120px" />
+        <col style="width: 100px" />
       </colgroup>
     </ng-template>
 
@@ -158,7 +147,7 @@
       <tr>
         <th pSortableColumn="title">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.title' | translate">{{ 'actionPlans.columns.title' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'tasks.columns.title' | translate">{{ 'tasks.columns.title' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="title"></p-sortIcon>
               <p-columnFilter
@@ -178,13 +167,19 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.work' | translate">{{ 'actionPlans.columns.work' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'tasks.columns.actionPlan' | translate">{{ 'tasks.columns.actionPlan' | translate }}</span>
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'tasks.columns.assignee' | translate">{{ 'tasks.columns.assignee' | translate }}</span>
           </div>
         </th>
 
         <th pSortableColumn="status">
           <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.status' | translate">{{ 'actionPlans.columns.status' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'tasks.columns.status' | translate">{{ 'tasks.columns.status' | translate }}</span>
             <span class="th-icons">
               <p-sortIcon field="status"></p-sortIcon>
               <p-columnFilter
@@ -216,13 +211,7 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.responsible' | translate">{{ 'actionPlans.columns.responsible' | translate }}</span>
-          </div>
-        </th>
-
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'actionPlans.columns.targetDate' | translate">{{ 'actionPlans.columns.targetDate' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'tasks.columns.dueDate' | translate">{{ 'tasks.columns.dueDate' | translate }}</span>
           </div>
         </th>
 
@@ -237,63 +226,30 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td class="mobile-card-title"><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.title">{{ row.title }}</span></td>
-        <td class="text-center" [attr.data-label]="'actionPlans.columns.work' | translate">{{ row.workName ?? '-' }}</td>
-        <td class="text-center" [attr.data-label]="'actionPlans.columns.status' | translate">
+        <td class="text-center" [attr.data-label]="'tasks.columns.actionPlan' | translate">
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.actionPlanTitle">{{ row.actionPlanTitle }}</span>
+        </td>
+        <td class="text-center" [attr.data-label]="'tasks.columns.assignee' | translate">{{ row.assigneeName ?? '-' }}</td>
+        <td class="text-center" [attr.data-label]="'tasks.columns.status' | translate">
           <cs-status-badge
             [tone]="tone(row.status)"
-            [label]="('actionPlans.status.' + row.status) | translate"
+            [label]="('tasks.status.' + row.status) | translate"
           ></cs-status-badge>
         </td>
-        <td class="text-center" [attr.data-label]="'actionPlans.columns.responsible' | translate">{{ row.responsibleName ?? '-' }}</td>
-        <td class="text-center" [attr.data-label]="'actionPlans.columns.targetDate' | translate">{{ row.targetDate ? (row.targetDate | csDate: 'short') : '-' }}</td>
+        <td class="text-center" [attr.data-label]="'tasks.columns.dueDate' | translate">{{ row.dueDate ? (row.dueDate | csDate: 'short') : '-' }}</td>
         <td class="text-center mobile-card-actions" [attr.data-label]="'common.actions' | translate">
-          <button
-            pButton
-            type="button"
-            icon="pi pi-list-check"
-            (click)="goTasks(row)"
-            class="p-button-text p-button-sm"
-            [pTooltip]="'actionPlans.action.viewTasks' | translate"
-          ></button>
-          @if (canEdit(row)) {
+          @if (canAdvance(row)) {
             <button
               pButton
               type="button"
-              icon="pi pi-pencil"
-              (click)="goEdit(row)"
+              icon="pi pi-arrow-right"
+              (click)="advance(row)"
               class="p-button-text p-button-sm"
-              [pTooltip]="'common.edit' | translate"
+              [pTooltip]="advanceLabel(row)"
             ></button>
           }
-          @if (canStart(row)) {
-            <button
-              pButton
-              type="button"
-              icon="pi pi-play"
-              (click)="confirmStart(row)"
-              class="p-button-text p-button-sm"
-              [pTooltip]="'actionPlans.action.start' | translate"
-            ></button>
-          }
-          @if (canComplete(row)) {
-            <button
-              pButton
-              type="button"
-              icon="pi pi-check"
-              (click)="confirmComplete(row)"
-              class="p-button-text p-button-sm"
-              [pTooltip]="'actionPlans.action.complete' | translate"
-            ></button>
-          }
-          @if (canCancel(row)) {
-            <button
-              pButton
-              type="button"
-              icon="pi pi-times"
-              class="p-button-text p-button-sm p-button-danger"
-              (click)="confirmCancel(row)"
-              [pTooltip]="'actionPlans.action.cancel' | translate"
-            ></button>
+          @if (!canAdvance(row)) {
+            <span>-</span>
           }
         </td>
       </tr>
@@ -302,7 +258,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="6" class="text-center py-5 opacity-70">
-          {{ facade.loadedOnce() ? ('actionPlans.empty.title' | translate) : ('common.loading' | translate) }}
+          {{ facade.loadedOnce() ? ('tasks.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
     </ng-template>

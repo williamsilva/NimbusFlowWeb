@@ -1,4 +1,5 @@
 
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -84,6 +85,7 @@ export class ActionPlansListComponent extends StatefulListPage<
   protected readonly toast = inject(MessageService);
   protected readonly confirm = inject(ConfirmationService);
   protected readonly policy = inject(ActionPlansPermissionPolicy);
+  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
   override rows =
@@ -169,6 +171,10 @@ export class ActionPlansListComponent extends StatefulListPage<
   goEdit(row: ActionPlanModel): void {
     this.editingPlan.set(row);
     this.newVisible.set(true);
+  }
+
+  goTasks(row: ActionPlanModel): void {
+    this.router.navigate(['/action-plans', row.id, 'tasks']);
   }
 
   onSaved(): void {

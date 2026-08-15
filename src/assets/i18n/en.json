@@ -214,7 +214,13 @@
       "title": "Tickets"
     },
     "actionPlans": {
-      "title": "Action Plans"
+      "title": "Action Plans",
+      "tasks": {
+        "title": "Tasks"
+      }
+    },
+    "tasks": {
+      "title": "Tasks"
     }
   },
   "topbar": {
@@ -353,7 +359,8 @@
       "measurements": "Measurements",
       "suggestions": "Suggestions",
       "tickets": "Tickets",
-      "actionPlans": "Action Plans"
+      "actionPlans": "Action Plans",
+      "tasks": "Tasks"
     }
   },
   "sidebar": {
@@ -417,7 +424,8 @@
     "measurements": "Measurements",
     "suggestions": "Suggestions",
     "tickets": "Tickets",
-    "actionPlans": "Action Plans"
+    "actionPlans": "Action Plans",
+    "tasks": "Tasks"
   },
   "footer": {
     "copyright": "NimbusFlow Tech",
@@ -4297,6 +4305,7 @@
       "start": "Start plan",
       "complete": "Complete plan",
       "cancel": "Cancel plan",
+      "viewTasks": "View tasks",
       "hasOpenTasks": "There are tasks not yet completed or cancelled in this plan."
     },
     "startConfirm": {
@@ -4311,6 +4320,55 @@
       "header": "Cancel action plan",
       "message": "Confirm cancellation of this action plan?",
       "success": "Action plan cancelled successfully."
+    }
+  },
+  "tasks": {
+    "subtitle": "Tasks across all action plans - third link of the Ticket → Action Plan → Task chain",
+    "new": {
+      "title": "New task"
+    },
+    "edit": {
+      "title": "Edit task"
+    },
+    "fields": {
+      "title": "Title",
+      "description": "Description",
+      "assignee": "Assignee",
+      "dueDate": "Due date",
+      "status": "Status",
+      "createdAt": "Created at",
+      "periodCreatedAt": "Creation period"
+    },
+    "columns": {
+      "title": "Title",
+      "actionPlan": "Action Plan",
+      "assignee": "Assigned to",
+      "status": "Status",
+      "dueDate": "Due date"
+    },
+    "status": {
+      "TODO": "To do",
+      "IN_PROGRESS": "In progress",
+      "DONE": "Done",
+      "CANCELLED": "Cancelled",
+      "updated": "Task status updated successfully.",
+      "updateError": "Could not update the task status."
+    },
+    "form": {
+      "invalid": "Fill in the title and assignee before submitting.",
+      "created": "Task created successfully.",
+      "updated": "Task updated successfully.",
+      "saveError": "Could not save the task. Please try again."
+    },
+    "empty": {
+      "title": "No tasks found"
+    },
+    "action": {
+      "mine": "My tasks",
+      "advanceTo": {
+        "IN_PROGRESS": "Start task",
+        "DONE": "Complete task"
+      }
     }
   }
 }

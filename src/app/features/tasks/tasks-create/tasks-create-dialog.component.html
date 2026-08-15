@@ -1,0 +1,94 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '560px', maxWidth: '95vw' }"
+  [header]="isEditMode() ? ('tasks.edit.title' | translate) : ('tasks.new.title' | translate)"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="title" style="width: 100%" formControlName="title" />
+          <app-error-msg
+            [field]="'title'"
+            [forId]="'title'"
+            [control]="form.controls.title"
+            [label]="'tasks.fields.title' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea pTextarea rows="3" id="description" style="width: 100%" formControlName="description"></textarea>
+          <label for="description">{{ 'tasks.fields.description' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            inputId="assigneeId"
+            optionLabel="label"
+            optionValue="value"
+            formControlName="assigneeId"
+            [options]="assigneeOptions()"
+          ></p-select>
+          <app-error-msg
+            [field]="'assigneeId'"
+            [forId]="'assigneeId'"
+            [control]="form.controls.assigneeId"
+            [label]="'tasks.fields.assignee' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            inputId="dueDate"
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            dateFormat="dd/mm/yy"
+            [readonlyInput]="true"
+            formControlName="dueDate"
+          ></p-datepicker>
+          <label for="dueDate">{{ 'tasks.fields.dueDate' | translate }}</label>
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

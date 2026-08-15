@@ -209,7 +209,13 @@
       "title": "Chamados"
     },
     "actionPlans": {
-      "title": "Planos de Ação"
+      "title": "Planos de Ação",
+      "tasks": {
+        "title": "Tarefas"
+      }
+    },
+    "tasks": {
+      "title": "Tarefas"
     }
   },
   "topbar": {
@@ -348,7 +354,8 @@
       "measurements": "Medições",
       "suggestions": "Sugestões",
       "tickets": "Chamados",
-      "actionPlans": "Planos de Ação"
+      "actionPlans": "Planos de Ação",
+      "tasks": "Tarefas"
     }
   },
   "sidebar": {
@@ -412,7 +419,8 @@
     "measurements": "Medições",
     "suggestions": "Sugestões",
     "tickets": "Chamados",
-    "actionPlans": "Planos de Ação"
+    "actionPlans": "Planos de Ação",
+    "tasks": "Tarefas"
   },
   "footer": {
     "copyright": "NimbusFlow Tech",
@@ -4292,6 +4300,7 @@
       "start": "Iniciar plano",
       "complete": "Concluir plano",
       "cancel": "Cancelar plano",
+      "viewTasks": "Ver tarefas",
       "hasOpenTasks": "Existem tarefas ainda não concluídas ou canceladas neste plano."
     },
     "startConfirm": {
@@ -4306,6 +4315,55 @@
       "header": "Cancelar plano de ação",
       "message": "Confirma o cancelamento deste plano de ação?",
       "success": "Plano de ação cancelado com sucesso."
+    }
+  },
+  "tasks": {
+    "subtitle": "Tarefas de todos os planos de ação - terceiro elo da cadeia Chamado → Plano de Ação → Tarefa",
+    "new": {
+      "title": "Nova tarefa"
+    },
+    "edit": {
+      "title": "Editar tarefa"
+    },
+    "fields": {
+      "title": "Título",
+      "description": "Descrição",
+      "assignee": "Responsável pela execução",
+      "dueDate": "Prazo",
+      "status": "Status",
+      "createdAt": "Criada em",
+      "periodCreatedAt": "Período de criação"
+    },
+    "columns": {
+      "title": "Título",
+      "actionPlan": "Plano de Ação",
+      "assignee": "Atribuída a",
+      "status": "Status",
+      "dueDate": "Prazo"
+    },
+    "status": {
+      "TODO": "A fazer",
+      "IN_PROGRESS": "Em andamento",
+      "DONE": "Concluída",
+      "CANCELLED": "Cancelada",
+      "updated": "Status da tarefa atualizado com sucesso.",
+      "updateError": "Não foi possível atualizar o status da tarefa."
+    },
+    "form": {
+      "invalid": "Preencha o título e o responsável antes de enviar.",
+      "created": "Tarefa criada com sucesso.",
+      "updated": "Tarefa atualizada com sucesso.",
+      "saveError": "Não foi possível salvar a tarefa. Tente novamente."
+    },
+    "empty": {
+      "title": "Nenhuma tarefa encontrada"
+    },
+    "action": {
+      "mine": "Minhas tarefas",
+      "advanceTo": {
+        "IN_PROGRESS": "Iniciar tarefa",
+        "DONE": "Concluir tarefa"
+      }
     }
   }
 }

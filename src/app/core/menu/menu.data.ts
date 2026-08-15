@@ -70,6 +70,12 @@ export const APP_MENU: AppMenuItem[] = [
         route: '/action-plans',
         exact: false,
       },
+      {
+        labelKey: 'menu.works.tasks',
+        icon: 'pi pi-check-square text-green-400',
+        route: '/tasks',
+        exact: false,
+      },
     ],
   },
   /* Security */

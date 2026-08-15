@@ -133,6 +133,7 @@ export const UI_KEYS = {
       suggestions: 'menu.works.suggestions',
       tickets: 'menu.works.tickets',
       actionPlans: 'menu.works.actionPlans',
+      tasks: 'menu.works.tasks',
     },
   },
   sidebar: {
@@ -1842,6 +1843,21 @@ export const UI_KEYS = {
     cancelConfirm: {
       header: 'actionPlans.cancelConfirm.header',
       message: 'actionPlans.cancelConfirm.message',
+    },
+  },
+  tasks: {
+    fields: {
+      title: 'tasks.fields.title',
+      status: 'tasks.fields.status',
+      assignee: 'tasks.fields.assignee',
+      createdAt: 'tasks.fields.createdAt',
+      periodCreatedAt: 'tasks.fields.periodCreatedAt',
+    },
+    form: {
+      invalid: 'tasks.form.invalid',
+      created: 'tasks.form.created',
+      updated: 'tasks.form.updated',
+      saveError: 'tasks.form.saveError',
     },
   },
   audit: {
