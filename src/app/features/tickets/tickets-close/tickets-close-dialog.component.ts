@@ -13,6 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { TicketsFacade } from '@features/facade/tickets.facade';
+import { PwaEnvironmentService } from '@core/pwa/pwa-environment.service';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 
 /** Só imagem (evidência fotográfica) - diferente de ACCEPTED_MEDIA_TYPES de Measurement, que
@@ -52,6 +53,7 @@ export class TicketsCloseDialogComponent {
 
   readonly i18n = inject(I18nService);
   readonly tickets = inject(TicketsFacade);
+  readonly pwa = inject(PwaEnvironmentService);
   readonly acceptedPhotoTypes = ACCEPTED_PHOTO_TYPES;
 
   readonly saving = signal(false);

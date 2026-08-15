@@ -41,18 +41,6 @@
           class="hidden"
         />
 
-        <!-- capture="environment" abre a câmera traseira direto (sem passar pelo seletor de
-             galeria/arquivos) - mesmo dual-input de MeasurementsCreateDialogComponent, só que
-             photo-only. Os dois gravam no mesmo files() via onFilesSelected. -->
-        <input
-          #cameraInput
-          type="file"
-          accept="image/*"
-          capture="environment"
-          (change)="onFilesSelected($event)"
-          class="hidden"
-        />
-
         <button
           pButton
           type="button"
@@ -62,14 +50,27 @@
           [label]="'tickets.action.addFile' | translate"
         ></button>
 
-        <button
-          pButton
-          type="button"
-          icon="pi pi-camera"
-          (click)="cameraInput.click()"
-          class="p-button-outlined p-button-sm ml-2"
-          [label]="'tickets.action.takePhoto' | translate"
-        ></button>
+        <!-- Câmera só faz sentido com o app instalado (PWA) num celular - no computador (mesmo
+             instalado) só oferece upload de arquivo (ver PwaEnvironmentService#canUseCamera). -->
+        @if (pwa.canUseCamera()) {
+          <input
+            #cameraInput
+            type="file"
+            accept="image/*"
+            capture="environment"
+            (change)="onFilesSelected($event)"
+            class="hidden"
+          />
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-camera"
+            (click)="cameraInput.click()"
+            class="p-button-outlined p-button-sm ml-2"
+            [label]="'tickets.action.takePhoto' | translate"
+          ></button>
+        }
 
         @if (files().length) {
           <ul class="list-none p-0 m-0 mt-2">
