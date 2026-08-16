@@ -31,6 +31,13 @@
   (visibleChange)="onNewVisibleChange($event)"
 ></app-tickets-create-dialog>
 
+<app-tickets-edit-dialog
+  [ticket]="editingTicket()"
+  [visible]="editVisible()"
+  (updated)="onUpdated()"
+  (visibleChange)="onEditVisibleChange($event)"
+></app-tickets-edit-dialog>
+
 <app-tickets-close-dialog
   [visible]="closeVisible()"
   [ticketId]="closeTicketId()"
@@ -208,6 +215,7 @@
         <col style="width: 150px" />
         <col style="width: 170px" />
         <col style="width: 150px" />
+        <col style="width: 110px" />
         <col style="width: 80px" />
       </colgroup>
     </ng-template>
@@ -370,6 +378,17 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'tickets.columns.duration' | translate"
+              >{{ 'tickets.columns.duration' | translate }}</span
+            >
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
             <span class="th-label">{{ 'common.actions' | translate }}</span>
           </div>
         </th>
@@ -415,11 +434,24 @@
         <td class="text-center" [attr.data-label]="'tickets.columns.createdAt' | translate">
           {{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}
         </td>
+        <td class="text-center" [attr.data-label]="'tickets.columns.duration' | translate">
+          {{ ticketDuration(row) }}
+        </td>
         <td
           class="text-center mobile-card-actions"
           [attr.data-label]="'common.actions' | translate"
         >
           <div class="table-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="goEdit(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canEdit(row)"
+              [pTooltip]="'common.edit' | translate"
+              tooltipPosition="top"
+            ></button>
             <button
               pButton
               type="button"
@@ -467,7 +499,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="9" class="text-center py-5 opacity-70">
+        <td colspan="10" class="text-center py-5 opacity-70">
           {{
             facade.loadedOnce()
               ? ('tickets.empty.title' | translate)

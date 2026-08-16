@@ -4287,6 +4287,9 @@
     "new": {
       "title": "New ticket"
     },
+    "edit": {
+      "title": "Edit ticket"
+    },
     "fields": {
       "title": "Title",
       "description": "Description",
@@ -4311,7 +4314,8 @@
       "status": "Status",
       "reportedBy": "Reported by",
       "target": "Directed to",
-      "createdAt": "Reported at"
+      "createdAt": "Reported at",
+      "duration": "Duration"
     },
     "type": {
       "TICKET": "Ticket",
@@ -4339,6 +4343,7 @@
     "form": {
       "invalid": "Fill in the required fields (title, description, type, priority and target) before submitting.",
       "created": "Ticket reported successfully.",
+      "updated": "Ticket updated successfully.",
       "saveError": "Could not report the ticket. Please try again.",
       "closeInvalid": "Describe the resolution and add at least one photo evidence before closing the ticket."
     },

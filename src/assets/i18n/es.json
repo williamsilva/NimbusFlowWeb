@@ -4287,6 +4287,9 @@
     "new": {
       "title": "Nuevo llamado"
     },
+    "edit": {
+      "title": "Editar llamado"
+    },
     "fields": {
       "title": "Título",
       "description": "Descripción",
@@ -4311,7 +4314,8 @@
       "status": "Estado",
       "reportedBy": "Relatado por",
       "target": "Dirigido a",
-      "createdAt": "Registrado el"
+      "createdAt": "Registrado el",
+      "duration": "Duración"
     },
     "type": {
       "TICKET": "Llamado",
@@ -4339,6 +4343,7 @@
     "form": {
       "invalid": "Complete los campos obligatorios (título, descripción, tipo, prioridad y destinatario) antes de enviar.",
       "created": "Llamado registrado con éxito.",
+      "updated": "Llamado actualizado con éxito.",
       "saveError": "No se pudo registrar el llamado. Intente nuevamente.",
       "closeInvalid": "Describa la resolución y agregue al menos una evidencia fotográfica antes de cerrar el llamado."
     },
