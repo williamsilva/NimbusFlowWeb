@@ -382,11 +382,14 @@ export class TicketsListComponent extends StatefulListPage<
 
   /** Da abertura (createdAt) até o fechamento (closedAt) - closedAt também é preenchido ao
    *  cancelar (ver TicketService#cancel no backend), então aparece pra CLOSED e CANCELLED, não só
-   *  CLOSED. "-" enquanto o chamado ainda está aberto (closedAt nulo). */
+   *  CLOSED. Enquanto ainda aberto (closedAt nulo), mostra o tempo decorrido até agora em vez de
+   *  "-" - recalculado a cada change detection (sem timer próprio, mesmo espírito de formatDate
+   *  abaixo), então só atualiza de fato num refresh/nova carga da lista, não a cada segundo. */
   protected ticketDuration(row: TicketModel): string {
-    if (!row.createdAt || !row.closedAt) return '-';
+    if (!row.createdAt) return '-';
 
-    const diffMs = new Date(row.closedAt).getTime() - new Date(row.createdAt).getTime();
+    const end = row.closedAt ? new Date(row.closedAt).getTime() : Date.now();
+    const diffMs = end - new Date(row.createdAt).getTime();
     if (!Number.isFinite(diffMs) || diffMs < 0) return '-';
 
     const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
