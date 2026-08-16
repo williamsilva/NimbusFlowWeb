@@ -34,6 +34,7 @@ import { TICKET_PRIORITY_VALUES, ticketPriorityTone } from '@models/enums/ticket
 import { TicketModel, TicketsFiltersState } from '@models/tickets.models';
 import { WorkModel } from '@models/works.models';
 import { TicketsCreateDialogComponent } from '@features/tickets/tickets-create/tickets-create-dialog.component';
+import { TicketsEditDialogComponent } from '@features/tickets/tickets-edit/tickets-edit-dialog.component';
 import { TicketsCloseDialogComponent } from '@features/tickets/tickets-close/tickets-close-dialog.component';
 import { WorksCreateDialogComponent } from '@features/works/works-create/works-create-dialog.component';
 import { ActionPlansCreateDialogComponent } from '@features/action-plans/action-plans-create/action-plans-create-dialog.component';
@@ -71,6 +72,7 @@ import {
     FiltersPanelComponent,
     StatusBadgeComponent,
     TicketsCreateDialogComponent,
+    TicketsEditDialogComponent,
     TicketsCloseDialogComponent,
     WorksCreateDialogComponent,
     ActionPlansCreateDialogComponent,
@@ -103,6 +105,8 @@ export class TicketsListComponent extends StatefulListPage<
   periodCreatedAt = signal<PeriodEnum | null>(null);
 
   newVisible = signal(false);
+  editVisible = signal(false);
+  editingTicket = signal<TicketModel | null>(null);
   closeTicketId = signal<string | null>(null);
   closeVisible = signal(false);
   convertVisible = signal(false);
@@ -222,6 +226,27 @@ export class TicketsListComponent extends StatefulListPage<
 
   onNewVisibleChange(v: boolean) {
     this.newVisible.set(v);
+  }
+
+  /** Mesma elegibilidade de EDITABLE_STATUSES no backend (TicketService#update) - só chamado
+   *  ainda OPEN aceita edição. */
+  canEdit(row: TicketModel): boolean {
+    return this.canManage() && row.status === TicketStatusEnum.OPEN;
+  }
+
+  goEdit(row: TicketModel): void {
+    if (!this.canEdit(row)) return;
+    this.editingTicket.set(row);
+    this.editVisible.set(true);
+  }
+
+  onEditVisibleChange(v: boolean): void {
+    this.editVisible.set(v);
+    if (!v) this.editingTicket.set(null);
+  }
+
+  onUpdated(): void {
+    this.refresh();
   }
 
   canClose(row: TicketModel): boolean {
@@ -353,6 +378,21 @@ export class TicketsListComponent extends StatefulListPage<
 
   clear() {
     this.clearTableAndReload(this.dt);
+  }
+
+  /** Da abertura (createdAt) até o fechamento (closedAt) - closedAt também é preenchido ao
+   *  cancelar (ver TicketService#cancel no backend), então aparece pra CLOSED e CANCELLED, não só
+   *  CLOSED. "-" enquanto o chamado ainda está aberto (closedAt nulo). */
+  protected ticketDuration(row: TicketModel): string {
+    if (!row.createdAt || !row.closedAt) return '-';
+
+    const diffMs = new Date(row.closedAt).getTime() - new Date(row.createdAt).getTime();
+    if (!Number.isFinite(diffMs) || diffMs < 0) return '-';
+
+    const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const days = Math.floor(totalHours / 24);
+    const hours = totalHours % 24;
+    return `${days}d ${hours}h`;
   }
 
   protected formatDate(value: Date | string): string {

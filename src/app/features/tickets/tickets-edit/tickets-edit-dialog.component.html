@@ -1,0 +1,169 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [header]="'tickets.edit.title' | translate"
+  [style]="{ width: '560px', maxWidth: '95vw' }"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="editTitle" style="width: 100%" formControlName="title" />
+
+          <app-error-msg
+            [field]="'title'"
+            [forId]="'editTitle'"
+            [control]="form.controls.title"
+            [label]="'tickets.fields.title' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea
+            pTextarea
+            rows="4"
+            id="editDescription"
+            style="width: 100%"
+            formControlName="description"
+          ></textarea>
+          <app-error-msg
+            [field]="'description'"
+            [forId]="'editDescription'"
+            [control]="form.controls.description"
+            [label]="'tickets.fields.description' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            inputId="editType"
+            optionLabel="label"
+            optionValue="value"
+            [options]="typeOptions"
+            formControlName="type"
+          ></p-select>
+          <app-error-msg
+            [field]="'type'"
+            [forId]="'editType'"
+            [control]="form.controls.type"
+            [label]="'tickets.fields.type' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            inputId="editPriority"
+            optionLabel="label"
+            optionValue="value"
+            [options]="priorityOptions"
+            formControlName="priority"
+          ></p-select>
+          <app-error-msg
+            [field]="'priority'"
+            [forId]="'editPriority'"
+            [control]="form.controls.priority"
+            [label]="'tickets.fields.priority' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <label class="block mb-2 text-sm opacity-80">
+          {{ 'tickets.fields.targetType' | translate }}
+        </label>
+        <p-selectButton
+          [options]="targetTypeOptions"
+          optionLabel="label"
+          optionValue="value"
+          formControlName="targetType"
+        ></p-selectButton>
+      </div>
+
+      @if (form.controls.targetType.value === TicketTargetTypeEnum.USER) {
+        <div class="col-12 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              [filter]="true"
+              appendTo="body"
+              inputId="editTargetUserId"
+              optionLabel="label"
+              optionValue="value"
+              [options]="userOptions()"
+              formControlName="targetUserId"
+            ></p-select>
+            <app-error-msg
+              [field]="'targetUserId'"
+              [forId]="'editTargetUserId'"
+              [control]="form.controls.targetUserId"
+              [label]="'tickets.fields.targetUser' | translate"
+            />
+          </p-floatLabel>
+        </div>
+      } @else {
+        <div class="col-12 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              [filter]="true"
+              appendTo="body"
+              inputId="editTargetDepartmentId"
+              optionLabel="label"
+              optionValue="value"
+              [options]="departmentOptions()"
+              formControlName="targetDepartmentId"
+            ></p-select>
+            <app-error-msg
+              [field]="'targetDepartmentId'"
+              [forId]="'editTargetDepartmentId'"
+              [control]="form.controls.targetDepartmentId"
+              [label]="'tickets.fields.targetDepartment' | translate"
+            />
+          </p-floatLabel>
+        </div>
+      }
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>
