@@ -4363,6 +4363,9 @@
     "cancelConfirm": {
       "header": "Cancelar llamado",
       "message": "¿Confirma la cancelación de este llamado?"
+    },
+    "mobile": {
+      "createdBy": "Creado por {name} el {date}"
     }
   },
   "actionPlans": {

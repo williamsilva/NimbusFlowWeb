@@ -216,7 +216,7 @@
         <col style="width: 170px" />
         <col style="width: 150px" />
         <col style="width: 110px" />
-        <col style="width: 80px" />
+        <col style="width: 90px" />
       </colgroup>
     </ng-template>
 
@@ -401,6 +401,9 @@
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.title">{{
             row.title
           }}</span>
+          @if (row.type === 'ALERT') {
+            <i class="pi pi-exclamation-triangle mobile-card-alert-icon"></i>
+          }
         </td>
         <td class="text-center" [attr.data-label]="'tickets.columns.type' | translate">
           {{ 'tickets.type.' + row.type | translate }}
@@ -421,7 +424,15 @@
           ></cs-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'tickets.columns.reportedBy' | translate">
-          {{ row.reportedByName ?? '-' }}
+          <span class="desktop-only">{{ row.reportedByName ?? '-' }}</span>
+          <span class="mobile-only">{{
+            'tickets.mobile.createdBy'
+              | translate
+                : {
+                    name: row.reportedByName ?? '-',
+                    date: row.createdAt ? formatDate(row.createdAt) : '-',
+                  }
+          }}</span>
         </td>
         <td class="text-center" [attr.data-label]="'tickets.columns.target' | translate">
           <i

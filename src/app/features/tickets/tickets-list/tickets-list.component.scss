@@ -3,3 +3,159 @@
 // Mobile: tabela vira lista de cards - ver mobile-card-table.scss pro que isso faz e por quê.
 // mobile-card-title/mobile-card-actions marcados manualmente no <td> certo, no HTML desta tela.
 @include mct.mobile-card-table;
+
+// Alterna o texto "Relatado por" (desktop, só o nome) x "Criado por X em Y" (mobile, frase
+// composta com a data - ver span.mobile-only no <td> de reportedBy). Os próprios <span> são
+// deste componente (não renderizados pelo p-table), então dispensam ::ng-deep.
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: inline;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+}
+
+// Layout mais próximo da referência pedida pelo usuário (badges lado a lado, bloco de
+// rodapé com separador, selo pro tipo Alerta) - só nesta tela. Não entra no mixin genérico
+// (mobile-card-table.scss), que é reaproveitado por mais 12 telas com o padrão simples
+// rótulo/valor - mudar o mixin quebraria todas elas.
+@media (max-width: 768px) {
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr {
+    display: grid !important;
+    grid-template-columns: auto 1fr;
+    row-gap: 4px;
+    column-gap: 10px;
+    position: relative;
+  }
+
+  // Título ocupa a linha toda - sem a borda que o mixin genérico aplica (na referência não tem
+  // separador logo abaixo do título, só antes do bloco de duração/criado por).
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td.mobile-card-title {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    border-bottom: none !important;
+    margin-bottom: 0;
+    padding-bottom: 2px !important;
+  }
+
+  // Tipo (badge) + Frente de Serviço, lado a lado
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(2) {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    padding: 2px 8px !important;
+    border-radius: 999px;
+    background: var(--surface-100);
+    font-size: 0.68rem !important;
+    font-weight: 600;
+  }
+
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(4) {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: start;
+    opacity: 0.75;
+  }
+
+  // Prioridade + Status, lado a lado (cs-status-badge já é um badge colorido - só precisa
+  // ficar lado a lado em vez de empilhado)
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(3) {
+    grid-column: 1;
+    grid-row: 3;
+    justify-self: start;
+  }
+
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(5) {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: start;
+  }
+
+  // Badges/meta não precisam do rótulo (data-label) que o mixin genérico mostra - o próprio
+  // texto/badge já é autoexplicativo, igual na referência.
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(2)::before,
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(3)::before,
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(4)::before,
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(5)::before {
+    display: none;
+  }
+
+  // Direcionado para - linha própria, em forma de frase (rótulo não fica em negrito)
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(7) {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    justify-content: flex-start;
+    gap: 4px;
+    opacity: 0.75;
+  }
+
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(7)::before {
+    font-weight: 500;
+    opacity: 1;
+    content: attr(data-label) ':';
+  }
+
+  // Registrado em - já embutido na frase "Criado por X em Y" (td de reportedBy, nth-child(6))
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(8) {
+    display: none;
+  }
+
+  // Duração - separador antes, em forma de frase (mesmo espírito do rodapé da referência)
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(9) {
+    grid-column: 1 / -1;
+    grid-row: 5;
+    justify-content: flex-start;
+    gap: 4px;
+    margin-top: 4px;
+    padding-top: 8px !important;
+    border-top: 1px solid var(--surface-border);
+    opacity: 0.75;
+  }
+
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(9)::before {
+    font-weight: 500;
+    opacity: 1;
+    content: attr(data-label) ':';
+  }
+
+  // Relatado por - vira a frase "Criado por X em Y" (ver .mobile-only no HTML) - sem o rótulo
+  // do mixin genérico, que ficaria redundante.
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(6) {
+    grid-column: 1 / -1;
+    grid-row: 6;
+    justify-content: flex-start;
+    opacity: 0.75;
+  }
+
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(6)::before {
+    display: none;
+  }
+
+  // Ações, por último
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td.mobile-card-actions {
+    grid-column: 1 / -1;
+    grid-row: 7;
+  }
+
+  // Selo de alerta (só pra chamados do tipo Alerta - ver row.type na <td> do título)
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td.mobile-card-title .mobile-card-alert-icon {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(245, 158, 11, 0.85);
+    color: #fff;
+    font-size: 0.8rem;
+  }
+}

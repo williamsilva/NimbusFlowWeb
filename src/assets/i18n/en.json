@@ -4363,6 +4363,9 @@
     "cancelConfirm": {
       "header": "Cancel ticket",
       "message": "Confirm cancellation of this ticket?"
+    },
+    "mobile": {
+      "createdBy": "Created by {name} on {date}"
     }
   },
   "actionPlans": {
