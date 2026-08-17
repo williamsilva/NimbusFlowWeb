@@ -29,13 +29,16 @@ export class WorksFacade {
   readonly loadedOnce = this._loadedOnce.asReadonly();
   readonly options = this._options.asReadonly();
 
-  /** Pro multiselect de Frente de Serviço no filtro do Dashboard. */
+  /** Pro multiselect de Frente de Serviço em Chamados/Planos de Ação/Dashboard/Medições/Parcelas/
+   *  Aditivos e no diálogo de criação de Obra - consome `/works/options` (sem gate de permissão no
+   *  backend), não `findAll()` (que agora exige OBRA_CONSULT, só usado pela própria tela de
+   *  Obras). */
   loadOptions(force = false): void {
     if (!force && this._optionsLoadedOnce()) return;
 
-    this.api.findAll().subscribe({
+    this.api.options().subscribe({
       next: (items) => {
-        this._options.set(items.map((w) => ({ label: w.name, value: w.id, status: w.status })));
+        this._options.set(items);
         this._optionsLoadedOnce.set(true);
       },
       error: () => {

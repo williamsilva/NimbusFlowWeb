@@ -10,30 +10,35 @@ export const APP_MENU: AppMenuItem[] = [
     exact: true,
   },
   /* Cadeia 5W2H Chamado -> Plano de Ação -> Tarefa (com.nimbusflow.tickets/actionplans/tasks) -
-   * itens soltos (sem submenu), acima do grupo Fornecedor/Obra/Sugestão a pedido do usuário.
-   * Leitura aberta a qualquer usuário autenticado, mesmo espírito do grupo abaixo (sem
-   * `permissions` declarado). */
+   * itens soltos (sem submenu), acima do grupo Fornecedor/Obra/Sugestão a pedido do usuário. Cada
+   * um exige sua própria permissão de visualização, mesma lista de `permissions` da rota
+   * correspondente (ver app.routes.ts). Tarefas aceita VIEW ou EXECUTE - quem só executa as
+   * próprias tarefas continua vendo o item de menu. */
   {
     labelKey: 'menu.works.tickets',
     icon: 'pi pi-megaphone text-orange-600',
     route: '/tickets',
     exact: false,
+    permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CHAMADO.VIEW],
   },
   {
     labelKey: 'menu.works.actionPlans',
     icon: 'pi pi-map text-purple-600',
     route: '/action-plans',
     exact: false,
+    permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PLANO_ACAO.VIEW],
   },
   {
     labelKey: 'menu.works.tasks',
     icon: 'pi pi-check-square text-teal-600',
     route: '/tasks',
     exact: false,
+    permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.TAREFA.VIEW, PERMISSIONS.TAREFA.EXECUTE],
   },
-  /* Fornecedor / Obra / Sugestão - leitura aberta a qualquer usuário autenticado, por isso os
-   * itens abaixo não declaram `permissions` (undefined/[] = visível pra todo mundo, ver
-   * PermissionService.hasMenuAccess). */
+  /* Fornecedor / Sugestão - leitura aberta a qualquer usuário autenticado, por isso esses itens
+   * não declaram `permissions` (undefined/[] = visível pra todo mundo, ver
+   * PermissionService.hasMenuAccess). Obra é exceção dentro deste mesmo grupo - exige
+   * OBRA_CONSULT, ver seu próprio item abaixo. */
   {
     icon: 'pi pi-building text-green-600',
     labelKey: 'menu.works.title',
@@ -55,6 +60,7 @@ export const APP_MENU: AppMenuItem[] = [
         icon: 'pi pi-building text-green-400',
         route: '/works',
         exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.OBRA.VIEW],
       },
       {
         labelKey: 'menu.works.addendums',

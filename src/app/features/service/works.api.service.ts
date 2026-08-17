@@ -7,6 +7,7 @@ import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { WorksAdvancedFilters } from '@features/filter/works.filters';
+import { WorkStatusEnum } from '@models/enums/work-status.enum';
 import {
   WorkModel,
   WorkApiModel,
@@ -14,6 +15,12 @@ import {
   mapWorkApiModel,
   mapWorkApiModels,
 } from '@models/works.models';
+
+interface WorkOptionApiModel {
+  id: string;
+  name: string;
+  status: WorkStatusEnum;
+}
 
 @Injectable({ providedIn: 'root' })
 export class WorksApiService {
@@ -39,9 +46,19 @@ export class WorksApiService {
     return this.http.get<WorkApiModel>(`${this.baseUrl}/${id}`).pipe(map(mapWorkApiModel));
   }
 
-  /** Pro seletor de Frente de Serviço no filtro do Dashboard - reaproveita o findAll sem paginação já exposto pelo backend. */
+  /** Listagem completa sem paginação - usada só pela própria tela de Obras (exige OBRA_CONSULT no
+   *  backend). Pro seletor de Frente de Serviço em outras telas, ver `options()` abaixo. */
   findAll() {
     return this.http.get<WorkApiModel[]>(`${this.baseUrl}`).pipe(map(mapWorkApiModels));
+  }
+
+  /** Pro seletor de Frente de Serviço em Chamados/Planos de Ação/Dashboard/Medições/Parcelas/
+   *  Aditivos e no diálogo de criação de Obra - sem gate de permissão no backend (ver
+   *  WorkService#options), diferente de `findAll()`/`searchPaged()`/`getById()` acima. */
+  options() {
+    return this.http.get<WorkOptionApiModel[]>(`${this.baseUrl}/options`).pipe(
+      map((items) => (items ?? []).map((w) => ({ label: w.name, value: w.id, status: w.status }))),
+    );
   }
 
   create(input: WorkUpsertInput) {

@@ -197,8 +197,11 @@ export const PERMISSIONS = {
     MANAGE: 'PROJETO_MANAGE',
   },
 
+  /** VIEW controla acesso à tela (menu + rota) - ver `menu.data.ts`/`app.routes.ts`. Sem ela,
+   *  MANAGE por si só não abre a tela, mesmo padrão de CHAMADO/PLANO_ACAO/TAREFA abaixo. */
   OBRA: {
     MANAGE: 'OBRA_MANAGE',
+    VIEW: 'OBRA_CONSULT',
   },
 
   SUGESTAO: {
@@ -208,20 +211,26 @@ export const PERMISSIONS = {
   /**
    * Chamado (com.nimbusflow.tickets), Plano de Ação (com.nimbusflow.actionplans) e Tarefa
    * (com.nimbusflow.tasks) - cadeia 5W2H Chamado -> Plano de Ação -> Tarefa. TAREFA tem duas
-   * variantes (diferente de CHAMADO/PLANO_ACAO): MANAGE cobre qualquer tarefa, EXECUTE é mais
-   * enxuta e só deixa o próprio assignee mover a PRÓPRIA tarefa pra frente.
+   * variantes de escrita (diferente de CHAMADO/PLANO_ACAO): MANAGE cobre qualquer tarefa, EXECUTE
+   * é mais enxuta e só deixa o próprio assignee mover a PRÓPRIA tarefa pra frente - EXECUTE também
+   * libera "Minhas tarefas" (findMine) mesmo sem VIEW, já que é escopado ao próprio usuário (ver
+   * TaskService#findMine no backend). VIEW controla acesso à tela (menu + rota) nos 3 - sem ela,
+   * MANAGE/EXECUTE por si só não abrem a tela.
    */
   CHAMADO: {
     MANAGE: 'CHAMADO_MANAGE',
+    VIEW: 'CHAMADO_CONSULT',
   },
 
   PLANO_ACAO: {
     MANAGE: 'PLANO_ACAO_MANAGE',
+    VIEW: 'PLANO_ACAO_CONSULT',
   },
 
   TAREFA: {
     MANAGE: 'TAREFA_MANAGE',
     EXECUTE: 'TAREFA_EXECUTE',
+    VIEW: 'TAREFA_CONSULT',
   },
 
   /**

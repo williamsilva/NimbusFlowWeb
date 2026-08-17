@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 
 import { authGuard } from '@core/auth/auth.guard';
+import { permissionGuard } from '@core/auth/permission.guard';
+import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { LayoutComponent } from '@layout/layout.component';
 
 export const appRoutes: Routes = [
@@ -30,9 +32,10 @@ export const appRoutes: Routes = [
           import('./features/settings/settings.routes').then((m) => m.SETTINGS_ROUTES),
       },
 
-      // Fornecedor / Obra / Sugestão (com.nimbusflow.works no backend) - leitura é aberta a
-      // qualquer usuário autenticado (ver SupplierService/WorkService/SuggestionService no
-      // NimbusFlowServer), por isso não há permissionGuard aqui (diferente de users/groups).
+      // Fornecedor / Sugestão (com.nimbusflow.works no backend) - leitura é aberta a qualquer
+      // usuário autenticado (ver SupplierService/SuggestionService no NimbusFlowServer), por isso
+      // não há permissionGuard aqui (diferente de users/groups). Obra (`/works` logo abaixo) é
+      // exceção dentro deste mesmo grupo - exige OBRA_CONSULT, ver seu próprio bloco.
       {
         path: 'suppliers',
         title: 'routes.suppliers.title',
@@ -54,6 +57,12 @@ export const appRoutes: Routes = [
       {
         path: 'works',
         title: 'routes.works.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.OBRA.VIEW],
+        },
         loadComponent: () =>
           import('./features/works/works-list/works-list.component').then(
             (m) => m.WorksListComponent,
@@ -124,11 +133,20 @@ export const appRoutes: Routes = [
       },
 
       // Cadeia 5W2H Chamado -> Plano de Ação -> Tarefa (com.nimbusflow.tickets/actionplans/tasks
-      // no backend) - leitura aberta a qualquer usuário autenticado, mesmo espírito de
-      // suppliers/works/suggestions acima.
+      // no backend) - cada tela exige sua própria permissão de visualização (CHAMADO_CONSULT/
+      // PLANO_ACAO_CONSULT/TAREFA_CONSULT), mesmo padrão de Segurança (ver security.routes.ts).
+      // /tasks e a rota aninhada abaixo aceitam TAREFA_CONSULT OU TAREFA_EXECUTE - quem só executa
+      // as próprias tarefas continua conseguindo abrir a tela pra ver/mover o que é atribuído a
+      // ele (ver TaskService#findMine no backend).
       {
         path: 'tickets',
         title: 'routes.tickets.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CHAMADO.VIEW],
+        },
         loadComponent: () =>
           import('./features/tickets/tickets-list/tickets-list.component').then(
             (m) => m.TicketsListComponent,
@@ -138,6 +156,12 @@ export const appRoutes: Routes = [
       {
         path: 'action-plans',
         title: 'routes.actionPlans.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PLANO_ACAO.VIEW],
+        },
         loadComponent: () =>
           import('./features/action-plans/action-plans-list/action-plans-list.component').then(
             (m) => m.ActionPlansListComponent,
@@ -147,6 +171,12 @@ export const appRoutes: Routes = [
       {
         path: 'action-plans/:actionPlanId/tasks',
         title: 'routes.actionPlans.tasks.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.TAREFA.VIEW, PERMISSIONS.TAREFA.EXECUTE],
+        },
         loadComponent: () =>
           import('./features/tasks/tasks-list/tasks-list.component').then(
             (m) => m.TasksListComponent,
@@ -156,6 +186,12 @@ export const appRoutes: Routes = [
       {
         path: 'tasks',
         title: 'routes.tasks.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.TAREFA.VIEW, PERMISSIONS.TAREFA.EXECUTE],
+        },
         loadComponent: () =>
           import('./features/tasks/all-tasks-list/all-tasks-list.component').then(
             (m) => m.AllTasksListComponent,
