@@ -21,6 +21,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 
 import { I18nService } from '@core/i18n/i18n.service';
+import { PwaEnvironmentService } from '@core/pwa/pwa-environment.service';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { SitePlanPickerComponent } from '@shared/features/site-plan-picker/site-plan-picker.component';
@@ -80,6 +81,7 @@ export class MeasurementsCreateDialogComponent {
 
   readonly i18n = inject(I18nService);
   readonly facade = inject(MeasurementsFacade);
+  readonly pwa = inject(PwaEnvironmentService);
   readonly acceptedMediaTypes = ACCEPTED_MEDIA_TYPES;
 
   readonly saving = signal(false);

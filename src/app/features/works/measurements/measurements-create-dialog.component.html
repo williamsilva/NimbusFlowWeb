@@ -118,6 +118,16 @@
                        direto (sem passar pelo seletor de galeria/arquivos), diferente do input
                        acima (sem capture), que deixa o navegador/SO escolher de onde vem o
                        arquivo. Os dois gravam no mesmo files() via onFilesSelected. -->
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-upload"
+                    (click)="fileInput.click()"
+                    class="p-button-outlined p-button-sm"
+                    [label]="'measurements.action.addFile' | translate"
+                  ></button>
+
+                  @if (pwa.canUseCamera()) {
                   <input
                     #cameraInput
                     type="file"
@@ -130,20 +140,12 @@
                   <button
                     pButton
                     type="button"
-                    icon="pi pi-upload"
-                    (click)="fileInput.click()"
-                    class="p-button-outlined p-button-sm"
-                    [label]="'measurements.action.addFile' | translate"
-                  ></button>
-
-                  <button
-                    pButton
-                    type="button"
                     icon="pi pi-camera"
                     (click)="cameraInput.click()"
                     class="p-button-outlined p-button-sm ml-2"
                     [label]="'measurements.action.takePhoto' | translate"
                   ></button>
+                  }
 
                   @if (files().length) {
                     <ul class="list-none p-0 m-0 mt-2">
@@ -175,6 +177,9 @@
                   />
                 </div>
 
+                <!-- GPS só faz sentido com o app instalado (PWA) num celular - mesmo gate da
+                     câmera acima (ver PwaEnvironmentService#canUseCamera). -->
+                @if (pwa.canUseCamera()) {
                 <div class="col-12 p-2">
                   <small class="font-semibold block mb-2">{{ 'measurements.fields.deviceLocation' | translate }}</small>
                   <button
@@ -193,6 +198,7 @@
                     <small class="block mt-2 text-red-500">{{ locationError() }}</small>
                   }
                 </div>
+                }
               </div>
             </form>
 
