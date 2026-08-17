@@ -10,13 +10,12 @@ import { DividerModule } from 'primeng/divider';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { MeStore } from '@core/auth/me.store';
-import { UserModel } from '@models/users.models';
 import { BffMeResponse } from '@core/auth/models';
 import { AuthService } from '@core/auth/auth.service';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsTagComponent, CsTagTone } from '@shared/ui';
-import { UsersFacade } from '@features/facade/users.facade';
 import { CsBadgeComponent } from '@shared/ui/badge/cs-badge.component';
+import { AccountProfileService, MyProfileModel } from './account-profile.service';
 import { PushNotificationService } from '@core/push/push-notification.service';
 import {
   UserStatus,
@@ -34,7 +33,7 @@ type ProfileView = {
   username?: string;
   authorities: string[];
   expiresAt?: string;
-  userDetails?: UserModel | null;
+  userDetails?: MyProfileModel | null;
 };
 
 @Component({
@@ -58,7 +57,7 @@ export class ProfilePageComponent {
   readonly i18n = inject(I18nService);
   private readonly meStore = inject(MeStore);
   private readonly auth = inject(AuthService);
-  private readonly usersFacade = inject(UsersFacade);
+  private readonly accountProfileService = inject(AccountProfileService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly pushNotification = inject(PushNotificationService);
 
@@ -149,23 +148,24 @@ export class ProfilePageComponent {
 
       this.profile.set(baseProfile);
 
-      if (baseProfile.userId) {
-        this.usersFacade
-          .getById(baseProfile.userId)
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe({
-            next: (details) => {
-              this.profile.update((current) =>
-                current ? { ...current, userDetails: details } : current,
-              );
-            },
-            error: () => {
-              this.profile.update((current) =>
-                current ? { ...current, userDetails: null } : current,
-              );
-            },
-          });
-      }
+      // Self-service (GET /bff/v1/me/profile) - nunca exige USERS_CONSULT, ao contrário da rota
+      // administrativa "ver qualquer usuário" (UsersFacade.getById), que era usada aqui antes e
+      // bloqueava um usuário comum de ver o próprio perfil.
+      this.accountProfileService
+        .getMyProfile()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (details) => {
+            this.profile.update((current) =>
+              current ? { ...current, userDetails: details } : current,
+            );
+          },
+          error: () => {
+            this.profile.update((current) =>
+              current ? { ...current, userDetails: null } : current,
+            );
+          },
+        });
     } finally {
       this.loading.set(false);
     }
