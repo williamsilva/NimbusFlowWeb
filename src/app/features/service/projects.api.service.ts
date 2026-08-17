@@ -10,6 +10,7 @@ import { ProjectsAdvancedFilters } from '@features/filter/projects.filters';
 import { ProjectStatusEnum } from '@models/enums/project-status.enum';
 import {
   ProjectApiModel,
+  ProjectOptionModel,
   ProjectUpsertInput,
   mapProjectApiModel,
   mapProjectApiModels,
@@ -37,9 +38,16 @@ export class ProjectsApiService {
       );
   }
 
-  /** Pro seletor de Projeto no filtro/formulário de Frente de Serviço - reaproveita o findAll sem paginação já exposto pelo backend. */
+  /** Listagem completa sem paginação - usada só pela própria tela de Projetos (exige
+   *  PROJETO_CONSULT no backend). Pro seletor de Projeto em outras telas, ver `options()` abaixo. */
   findAll() {
     return this.http.get<ProjectApiModel[]>(this.projectsUrl).pipe(map(mapProjectApiModels));
+  }
+
+  /** Pro seletor de Projeto em Obras/Dashboard/Medições e no diálogo de criação de Obra - sem
+   *  gate de permissão no backend (ver ProjectService#options), diferente de `findAll()` acima. */
+  options() {
+    return this.http.get<ProjectOptionModel[]>(`${this.projectsUrl}/options`);
   }
 
   getById(id: string) {

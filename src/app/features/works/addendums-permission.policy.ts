@@ -15,6 +15,11 @@ import { PermissionService } from '@core/auth/permission.service';
 export class AddendumsPermissionPolicy {
   private readonly perms = inject(PermissionService);
 
+  /** Ver a própria tela (menu/rota) exige `ADITIVO_CONSULT`. */
+  canView(): boolean {
+    return this.perms.hasSupportOr(PERMISSIONS.ADITIVO.VIEW);
+  }
+
   canCreate(): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.ADITIVO.CREATE);
   }

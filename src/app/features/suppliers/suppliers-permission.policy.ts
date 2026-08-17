@@ -4,14 +4,17 @@ import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { PermissionService } from '@core/auth/permission.service';
 
 /**
- * Diferente de GroupsPermissionPolicy/SecurityPermissionPolicy: o NimbusFlowServer só tem uma
- * permissão única (`FORNECEDOR_MANAGE`) cobrindo create+update+deactivate - não há variantes
- * VIEW/CREATE/CHANGE/DELETE (leitura é sempre aberta a qualquer usuário autenticado, ver
- * SupplierService no backend).
+ * Uma única permissão de escrita (`FORNECEDOR_MANAGE`) cobrindo create+update+deactivate - não
+ * há variantes CREATE/CHANGE/DELETE. Ver a própria tela (menu/rota) exige `FORNECEDOR_CONSULT` -
+ * ver `canView`.
  */
 @Injectable({ providedIn: 'root' })
 export class SuppliersPermissionPolicy {
   private readonly perms = inject(PermissionService);
+
+  canView(): boolean {
+    return this.perms.hasSupportOr(PERMISSIONS.FORNECEDOR.VIEW);
+  }
 
   canManage(): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.FORNECEDOR.MANAGE);

@@ -77,10 +77,10 @@ export class MeasurementsListComponent implements OnInit {
   readonly work = signal<WorkModel | null>(null);
   readonly upsertVisible = signal(false);
 
-  /** Planta do Projeto da obra - mesmo Projeto já carregado em ProjectsFacade pro dropdown de
-   *  Work, sem chamada extra (ver cs-site-plan-picker no diálogo de nova medição). */
+  /** Planta do Projeto da obra - mesmo Projeto já carregado em ProjectsFacade.optionsItems() pro
+   *  dropdown de Work, sem chamada extra (ver cs-site-plan-picker no diálogo de nova medição). */
   readonly siteplanUrl = computed(
-    () => this.projectsFacade.items().find((p) => p.id === this.work()?.projectId)?.siteplanUrl ?? null,
+    () => this.projectsFacade.optionsItems().find((p) => p.id === this.work()?.projectId)?.siteplanUrl ?? null,
   );
 
   readonly items = computed<MeasurementModel[]>(() => this.facade.items());
@@ -121,7 +121,7 @@ export class MeasurementsListComponent implements OnInit {
     }
 
     this.workId.set(workId);
-    this.projectsFacade.loadAll();
+    this.projectsFacade.loadOptions();
     this.worksFacade
       .getById(workId)
       .pipe(takeUntilDestroyed(this.destroyRef))

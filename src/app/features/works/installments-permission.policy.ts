@@ -7,6 +7,11 @@ import { PermissionService } from '@core/auth/permission.service';
 export class InstallmentsPermissionPolicy {
   private readonly perms = inject(PermissionService);
 
+  /** Ver a própria tela (menu/rota) exige `PARCELA_CONSULT`. */
+  canView(): boolean {
+    return this.perms.hasSupportOr(PERMISSIONS.PARCELA.VIEW);
+  }
+
   canRelease(): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.PARCELA.LIBERAR);
   }

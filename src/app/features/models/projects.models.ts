@@ -29,6 +29,16 @@ export interface ProjectModel {
 
 export type ProjectApiModel = ProjectModel;
 
+/** Lista leve (options() - sem gate de permissão no backend) pro seletor de Projeto em Obras/
+ *  Dashboard e no diálogo de criação de Obra, e pra resolver a planta do Projeto em Medições -
+ *  espelha com.nimbusflow.works.dto.response.ProjectOptionResponse. */
+export interface ProjectOptionModel {
+  id: string;
+  name: string;
+  status: ProjectStatusEnum;
+  siteplanUrl: string | null;
+}
+
 export interface ProjectUpsertInput {
   name: string;
   description: string | null;

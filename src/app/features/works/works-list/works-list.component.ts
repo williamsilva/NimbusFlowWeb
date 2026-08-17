@@ -182,7 +182,7 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
 
   ngOnInit() {
     this.suppliersFacade.loadSupplierOptions();
-    this.projectsFacade.loadAll();
+    this.projectsFacade.loadOptions();
     this.initStatefulList();
   }
 

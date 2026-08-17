@@ -121,17 +121,17 @@ export class WorksCreateDialogComponent {
   });
 
   /** Planta do Projeto selecionado no form - reativo ao trocar de projeto no seletor (mesmo
-   *  projeto já carregado em projectsFacade.items() pro dropdown, sem chamada extra). */
+   *  projeto já carregado em projectsFacade.optionsItems() pro dropdown, sem chamada extra). */
   private readonly selectedProjectId = toSignal(this.form.controls.projectId.valueChanges, {
     initialValue: this.form.controls.projectId.value,
   });
   readonly selectedProjectSiteplanUrl = computed(
-    () => this.projectsFacade.items().find((p) => p.id === this.selectedProjectId())?.siteplanUrl ?? null,
+    () => this.projectsFacade.optionsItems().find((p) => p.id === this.selectedProjectId())?.siteplanUrl ?? null,
   );
 
   constructor() {
     this.suppliersFacade.loadSupplierOptions();
-    this.projectsFacade.loadAll();
+    this.projectsFacade.loadOptions();
 
     effect(() => {
       if (!this.visible()) {

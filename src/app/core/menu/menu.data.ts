@@ -35,10 +35,9 @@ export const APP_MENU: AppMenuItem[] = [
     exact: false,
     permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.TAREFA.VIEW, PERMISSIONS.TAREFA.EXECUTE],
   },
-  /* Fornecedor / Sugestão - leitura aberta a qualquer usuário autenticado, por isso esses itens
-   * não declaram `permissions` (undefined/[] = visível pra todo mundo, ver
-   * PermissionService.hasMenuAccess). Obra é exceção dentro deste mesmo grupo - exige
-   * OBRA_CONSULT, ver seu próprio item abaixo. */
+  /* Fornecedor / Projeto / Obra / Aditivo / Parcela / Medição / Sugestão - cada item exige sua
+   * própria permissão de visualização (*_CONSULT), mesma lista de `permissions` da rota
+   * correspondente (ver app.routes.ts). */
   {
     icon: 'pi pi-building text-green-600',
     labelKey: 'menu.works.title',
@@ -48,12 +47,14 @@ export const APP_MENU: AppMenuItem[] = [
         icon: 'pi pi-truck text-green-400',
         route: '/suppliers',
         exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FORNECEDOR.VIEW],
       },
       {
         labelKey: 'menu.works.projects',
         icon: 'pi pi-briefcase text-green-400',
         route: '/projects',
         exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PROJETO.VIEW],
       },
       {
         labelKey: 'menu.works.works',
@@ -67,24 +68,28 @@ export const APP_MENU: AppMenuItem[] = [
         icon: 'pi pi-file text-green-400',
         route: '/addendums',
         exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.ADITIVO.VIEW],
       },
       {
         labelKey: 'menu.works.installments',
         icon: 'pi pi-wallet text-green-400',
         route: '/installments',
         exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.VIEW],
       },
       {
         labelKey: 'menu.works.measurements',
         icon: 'pi pi-camera text-green-400',
         route: '/measurements',
         exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.MEDICAO.VIEW],
       },
       {
         labelKey: 'menu.works.suggestions',
         icon: 'pi pi-lightbulb text-green-400',
         route: '/suggestions',
         exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SUGESTAO.VIEW],
       },
     ],
   },

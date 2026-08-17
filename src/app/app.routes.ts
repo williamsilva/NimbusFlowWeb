@@ -32,13 +32,18 @@ export const appRoutes: Routes = [
           import('./features/settings/settings.routes').then((m) => m.SETTINGS_ROUTES),
       },
 
-      // Fornecedor / Sugestão (com.nimbusflow.works no backend) - leitura é aberta a qualquer
-      // usuário autenticado (ver SupplierService/SuggestionService no NimbusFlowServer), por isso
-      // não há permissionGuard aqui (diferente de users/groups). Obra (`/works` logo abaixo) é
-      // exceção dentro deste mesmo grupo - exige OBRA_CONSULT, ver seu próprio bloco.
+      // Fornecedor / Projeto / Obra / Aditivo / Parcela / Medição / Sugestão (com.nimbusflow.works
+      // no backend) - cada tela exige sua própria permissão de visualização (*_CONSULT), mesmo
+      // padrão de Segurança (ver security.routes.ts) e da cadeia Chamado/Plano/Tarefa abaixo.
       {
         path: 'suppliers',
         title: 'routes.suppliers.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.FORNECEDOR.VIEW],
+        },
         loadComponent: () =>
           import('./features/suppliers/suppliers-list/suppliers-list.component').then(
             (m) => m.SuppliersListComponent,
@@ -48,6 +53,12 @@ export const appRoutes: Routes = [
       {
         path: 'projects',
         title: 'routes.projects.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PROJETO.VIEW],
+        },
         loadComponent: () =>
           import('./features/projects/projects-list.component').then(
             (m) => m.ProjectsListComponent,
@@ -72,6 +83,12 @@ export const appRoutes: Routes = [
       {
         path: 'addendums',
         title: 'routes.addendums.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.ADITIVO.VIEW],
+        },
         loadComponent: () =>
           import('./features/works/addendums/all-addendums-list.component').then(
             (m) => m.AllAddendumsListComponent,
@@ -81,6 +98,12 @@ export const appRoutes: Routes = [
       {
         path: 'installments',
         title: 'routes.installments.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.VIEW],
+        },
         loadComponent: () =>
           import('./features/works/installments/all-installments-list.component').then(
             (m) => m.AllInstallmentsListComponent,
@@ -90,6 +113,12 @@ export const appRoutes: Routes = [
       {
         path: 'works/:workId/addendums',
         title: 'routes.works.addendums.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.ADITIVO.VIEW],
+        },
         loadComponent: () =>
           import('./features/works/addendums/addendums-list.component').then(
             (m) => m.AddendumsListComponent,
@@ -99,6 +128,12 @@ export const appRoutes: Routes = [
       {
         path: 'works/:workId/installments',
         title: 'routes.works.installments.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.VIEW],
+        },
         loadComponent: () =>
           import('./features/works/installments/installments-list.component').then(
             (m) => m.InstallmentsListComponent,
@@ -108,6 +143,12 @@ export const appRoutes: Routes = [
       {
         path: 'works/:workId/measurements',
         title: 'routes.works.measurements.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.MEDICAO.VIEW],
+        },
         loadComponent: () =>
           import('./features/works/measurements/measurements-list.component').then(
             (m) => m.MeasurementsListComponent,
@@ -117,6 +158,12 @@ export const appRoutes: Routes = [
       {
         path: 'measurements',
         title: 'routes.measurements.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.MEDICAO.VIEW],
+        },
         loadComponent: () =>
           import('./features/works/measurements/all-measurements-list.component').then(
             (m) => m.AllMeasurementsListComponent,
@@ -126,6 +173,12 @@ export const appRoutes: Routes = [
       {
         path: 'suggestions',
         title: 'routes.suggestions.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SUGESTAO.VIEW],
+        },
         loadComponent: () =>
           import('./features/suggestions/suggestions-list/suggestions-list.component').then(
             (m) => m.SuggestionsListComponent,

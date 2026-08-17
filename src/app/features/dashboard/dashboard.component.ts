@@ -149,6 +149,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.facade.load();
     this.projectsFacade.loadAll();
+    this.projectsFacade.loadOptions();
     this.suppliersFacade.loadSupplierOptions();
     this.worksFacade.loadOptions();
   }

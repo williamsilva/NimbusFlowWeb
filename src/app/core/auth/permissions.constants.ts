@@ -184,21 +184,21 @@ export const PERMISSIONS = {
 
   /**
    * Catálogo de negócio do NimbusFlow (com.nimbusflow.works) - diferente do restante deste
-   * arquivo (herdado do CardSync), aqui não existem variantes VIEW/CREATE/CHANGE/DELETE: o
-   * NimbusFlowServer só modela uma permissão única "MANAGE" por entidade, cobrindo todas as
-   * escritas (leitura é aberta a qualquer usuário autenticado - ver SupplierService/WorkService no
-   * backend, por isso as telas de listagem não usam nenhuma dessas permissões no `menu.data.ts`).
+   * arquivo (herdado do CardSync), a maioria não tem variantes CREATE/CHANGE/DELETE: o
+   * NimbusFlowServer modela uma permissão única "MANAGE" por entidade, cobrindo todas as
+   * escritas. VIEW controla acesso à tela (menu + rota) - ver `menu.data.ts`/`app.routes.ts`. Sem
+   * ela, MANAGE por si só não abre a tela (mesmo padrão de CHAMADO/PLANO_ACAO/TAREFA abaixo).
    */
   FORNECEDOR: {
     MANAGE: 'FORNECEDOR_MANAGE',
+    VIEW: 'FORNECEDOR_CONSULT',
   },
 
   PROJETO: {
     MANAGE: 'PROJETO_MANAGE',
+    VIEW: 'PROJETO_CONSULT',
   },
 
-  /** VIEW controla acesso à tela (menu + rota) - ver `menu.data.ts`/`app.routes.ts`. Sem ela,
-   *  MANAGE por si só não abre a tela, mesmo padrão de CHAMADO/PLANO_ACAO/TAREFA abaixo. */
   OBRA: {
     MANAGE: 'OBRA_MANAGE',
     VIEW: 'OBRA_CONSULT',
@@ -206,6 +206,7 @@ export const PERMISSIONS = {
 
   SUGESTAO: {
     MANAGE: 'SUGESTAO_MANAGE',
+    VIEW: 'SUGESTAO_CONSULT',
   },
 
   /**
@@ -236,18 +237,21 @@ export const PERMISSIONS = {
   /**
    * Aditivo contratual e Parcela/Pagamento de Obra (com.nimbusflow.works.core.
    * AddendumApprovalService/InstallmentService) - diferente de OBRA/FORNECEDOR/SUGESTAO, aqui há
-   * variantes distintas por ação (a alçada de aprovação de Aditivo depende do valor solicitado,
-   * ver ApprovalTier no backend).
+   * variantes distintas por ação de escrita (a alçada de aprovação de Aditivo depende do valor
+   * solicitado, ver ApprovalTier no backend). VIEW controla acesso à tela, mesmo padrão do
+   * restante deste bloco.
    */
   ADITIVO: {
     CREATE: 'ADITIVO_CREATE',
     APPROVE_TIER1: 'ADITIVO_APPROVE_TIER1',
     APPROVE_TIER2: 'ADITIVO_APPROVE_TIER2',
+    VIEW: 'ADITIVO_CONSULT',
   },
 
   PARCELA: {
     LIBERAR: 'PARCELA_LIBERAR',
     PAGAR: 'PARCELA_PAGAR',
+    VIEW: 'PARCELA_CONSULT',
   },
 
   /**
@@ -257,6 +261,7 @@ export const PERMISSIONS = {
   MEDICAO: {
     CREATE: 'MEDICAO_CREATE',
     APPROVE: 'MEDICAO_APPROVE',
+    VIEW: 'MEDICAO_CONSULT',
   },
 } as const;
 

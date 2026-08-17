@@ -6,7 +6,7 @@ import { ProjectsApiService } from '@features/service/projects.api.service';
 import { ProjectsAdvancedFilters } from '@features/filter/projects.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { ProjectStatusEnum } from '@models/enums/project-status.enum';
-import { ProjectModel, ProjectUpsertInput } from '@models/projects.models';
+import { ProjectModel, ProjectOptionModel, ProjectUpsertInput } from '@models/projects.models';
 
 type LastQuery = ListQueryDto<ProjectsAdvancedFilters>;
 
@@ -14,8 +14,8 @@ type LastQuery = ListQueryDto<ProjectsAdvancedFilters>;
 export class ProjectsFacade {
   private readonly api = inject(ProjectsApiService);
 
-  // Cache completo (sem paginação) - usado como opções em outras telas (filtro/formulário de
-  // Frente de Serviço, ver options/assignableOptions), não pela tela de listagem de Projetos.
+  // Cache completo (sem paginação, findAll() - exige PROJETO_CONSULT) - usado só pelo widget de
+  // Projetos do Dashboard, que mostra dados financeiros de verdade (contratado/pago/restante).
   private readonly _loading = signal(false);
   private readonly _loadedOnce = signal(false);
   private readonly _items = signal<ProjectModel[]>([]);
@@ -23,6 +23,15 @@ export class ProjectsFacade {
   readonly loading = this._loading.asReadonly();
   readonly loadedOnce = this._loadedOnce.asReadonly();
   readonly items = this._items.asReadonly();
+
+  // Lista leve (options() - sem gate de permissão) - usada como opções em outras telas (filtro/
+  // formulário de Frente de Serviço, planta do Projeto em Medições), nunca pela tela de listagem
+  // de Projetos nem pelo widget financeiro do Dashboard (esses usam _items/loadAll acima).
+  private readonly _optionsLoading = signal(false);
+  private readonly _optionsLoadedOnce = signal(false);
+  private readonly _optionsItems = signal<ProjectOptionModel[]>([]);
+
+  readonly optionsItems = this._optionsItems.asReadonly();
 
   // Paginado (StatefulListPage) - usado só pela tela de listagem de Projetos.
   private readonly _total = signal(0);
@@ -37,7 +46,7 @@ export class ProjectsFacade {
   readonly projectsLoadedOnce = this._pagedLoadedOnce.asReadonly();
 
   /** Opções gerais de Projeto (filtro da listagem de Frentes de Serviço, filtro do dashboard) - todos os status. */
-  readonly options = computed(() => this.items().map((p) => ({ label: p.name, value: p.id })));
+  readonly options = computed(() => this.optionsItems().map((p) => ({ label: p.name, value: p.id })));
 
   /**
    * Opções pro seletor de Projeto no formulário de Frente de Serviço (Work) - só projetos
@@ -45,7 +54,7 @@ export class ProjectsFacade {
    * Concluído/Cancelado não recebem mais nada).
    */
   readonly assignableOptions = computed(() =>
-    this.items()
+    this.optionsItems()
       .filter(
         (p) => p.status === ProjectStatusEnum.IN_PROGRESS || p.status === ProjectStatusEnum.PAUSED,
       )
@@ -67,6 +76,29 @@ export class ProjectsFacade {
         this._items.set([]);
         this._loading.set(false);
         this._loadedOnce.set(true);
+      },
+    });
+  }
+
+  /** Pro multiselect de Projeto em Obras/Dashboard e no diálogo de criação de Obra, e pra
+   *  resolver a planta do Projeto em Medições - consome /projects/options (sem gate de
+   *  permissão), não findAll() (que agora exige PROJETO_CONSULT, só usado pelo widget financeiro
+   *  do Dashboard via loadAll() acima). */
+  loadOptions(force = false): void {
+    if (this._optionsLoading()) return;
+    if (!force && this._optionsLoadedOnce()) return;
+
+    this._optionsLoading.set(true);
+    this.api.options().subscribe({
+      next: (items) => {
+        this._optionsItems.set(items);
+        this._optionsLoading.set(false);
+        this._optionsLoadedOnce.set(true);
+      },
+      error: () => {
+        this._optionsItems.set([]);
+        this._optionsLoading.set(false);
+        this._optionsLoadedOnce.set(true);
       },
     });
   }
@@ -118,6 +150,7 @@ export class ProjectsFacade {
       tap(() => {
         this.reloadLast();
         this.loadAll(true);
+        this.loadOptions(true);
       }),
     );
   }
@@ -127,6 +160,7 @@ export class ProjectsFacade {
       tap(() => {
         this.reloadLast();
         this.loadAll(true);
+        this.loadOptions(true);
       }),
     );
   }
@@ -136,6 +170,7 @@ export class ProjectsFacade {
       tap(() => {
         this.reloadLast();
         this.loadAll(true);
+        this.loadOptions(true);
       }),
     );
   }
@@ -145,6 +180,7 @@ export class ProjectsFacade {
       tap(() => {
         this.reloadLast();
         this.loadAll(true);
+        this.loadOptions(true);
       }),
     );
   }

@@ -11,6 +11,11 @@ import { PermissionService } from '@core/auth/permission.service';
 export class MeasurementsPermissionPolicy {
   private readonly perms = inject(PermissionService);
 
+  /** Ver a própria tela (menu/rota) exige `MEDICAO_CONSULT`. */
+  canView(): boolean {
+    return this.perms.hasSupportOr(PERMISSIONS.MEDICAO.VIEW);
+  }
+
   canCreate(): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.MEDICAO.CREATE);
   }
