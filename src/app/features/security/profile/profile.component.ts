@@ -18,6 +18,7 @@ import { CsTagComponent, CsTagTone } from '@shared/ui';
 import { UsersFacade } from '@features/facade/users.facade';
 import { CsBadgeComponent } from '@shared/ui/badge/cs-badge.component';
 import { PushNotificationService } from '@core/push/push-notification.service';
+import { PwaEnvironmentService } from '@core/pwa/pwa-environment.service';
 import {
   UserStatus,
   userStatusLabel,
@@ -61,6 +62,7 @@ export class ProfilePageComponent {
   private readonly usersFacade = inject(UsersFacade);
   private readonly destroyRef = inject(DestroyRef);
   private readonly pushNotification = inject(PushNotificationService);
+  private readonly pwa = inject(PwaEnvironmentService);
 
   readonly loading = signal(true);
   readonly loadError = signal<string | null>(null);
@@ -72,10 +74,14 @@ export class ProfilePageComponent {
   readonly groups = computed(() => this.profile()?.groups ?? []);
   readonly authorities = computed(() => this.profile()?.authorities ?? []);
 
-  // Opt-in de push notification neste dispositivo/navegador (ver PushNotificationService) -
-  // pushSupported some o botão em navegador/contexto sem suporte (ex.: Safari antigo, dev sem
-  // service worker registrado); pushSubscribed reflete se JÁ existe uma assinatura ativa.
-  readonly pushSupported = signal(false);
+  // Opt-in de push notification neste dispositivo/navegador (ver PushNotificationService) - só
+  // faz sentido oferecer com o app instalado no celular (mesmo gate de
+  // PwaEnvironmentService#canUseCamera, ver isInstalledMobileApp) - um navegador desktop comum
+  // tecnicamente suporta a Push API, mas a UX de notificação é pensada pro app instalado.
+  // browserPushSupported reflete só o suporte técnico do navegador/contexto (ex.: false em Safari
+  // antigo, ou em dev sem service worker registrado); pushSupported combina os dois.
+  private readonly browserPushSupported = signal(false);
+  readonly pushSupported = computed(() => this.browserPushSupported() && this.pwa.isInstalledMobileApp());
   readonly pushSubscribed = signal(false);
   readonly pushBusy = signal(false);
   readonly pushError = signal<string | null>(null);
@@ -112,8 +118,8 @@ export class ProfilePageComponent {
   }
 
   private async loadPushState(): Promise<void> {
-    this.pushSupported.set(this.pushNotification.isSupported);
-    if (!this.pushNotification.isSupported) {
+    this.browserPushSupported.set(this.pushNotification.isSupported);
+    if (!this.pushSupported()) {
       return;
     }
     const subscription = await this.pushNotification.currentSubscription();
