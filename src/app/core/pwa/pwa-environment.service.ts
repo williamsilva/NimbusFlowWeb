@@ -27,8 +27,14 @@ export class PwaEnvironmentService {
     return typeof window !== 'undefined' && window.innerWidth <= MOBILE_MAX_WIDTH;
   }
 
-  /** Só true quando instalado E num celular - desktop instalado como PWA ainda cai em false. */
-  canUseCamera(): boolean {
+  /** Só true quando instalado E num celular - desktop instalado como PWA ainda cai em false.
+   *  Mesmo gate usado pra decidir features "de app" (câmera, opt-in de push no perfil - ver
+   *  ProfilePageComponent) que não fazem sentido oferecer no navegador comum. */
+  isInstalledMobileApp(): boolean {
     return this.isStandalone() && this.isMobileViewport();
+  }
+
+  canUseCamera(): boolean {
+    return this.isInstalledMobileApp();
   }
 }
