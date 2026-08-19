@@ -3013,6 +3013,7 @@
       "GROUP_NAME_ALREADY_EXISTS": "Ya existe un grupo con este nombre.",
       "GROUP_DELETE_SUPPORT_NOT_ALLOWED": "El grupo SUPPORT no puede ser eliminado ni modificado en esta operación.",
       "GROUP_DELETE_IN_USE": "Este grupo tiene usuarios asociados y no puede ser eliminado.",
+      "GROUP_USER_WOULD_BE_ORPHANED": "No es posible quitar este usuario: quedaría sin ningún grupo en este sistema. Agréguelo a otro grupo antes de quitarlo de aquí.",
       "PERMISSION_NOT_FOUND": "Uno o más permisos informados no fueron encontrados.",
       "ESTABLISHMENT_ALREADY_EXISTS": "Ya existe un establecimiento con el mismo PV, empresa y adquirente."
     },
