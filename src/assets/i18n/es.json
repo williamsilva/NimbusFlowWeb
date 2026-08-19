@@ -3699,7 +3699,10 @@
     "eventType": {
       "addendum_approved": "Adenda aprobada",
       "payment_released": "Cuota liberada",
-      "ticket_target": "Ticket"
+      "ticket_target": "Ticket",
+      "ticket_closed": "Ticket cerrado",
+      "password_reset": "Restablecimiento de contraseña",
+      "first_password": "Invitación (primera contraseña)"
     },
     "empty": { "title": "Ningún correo registrado" },
     "detail": {
