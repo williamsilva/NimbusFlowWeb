@@ -13,6 +13,7 @@ import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { PermissionService } from '@core/auth/permission.service';
 import { UsersApiService } from '@features/service/users.api.service';
 import { UserOptionModel } from '@models/groups.models';
+import { UserMinimalModel } from '@models/user-minimal.models';
 import { DepartmentModel } from '@models/departments.models';
 import { DepartmentsFacade } from '@features/facade/departments.facade';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
@@ -63,9 +64,12 @@ export class DepartmentsListComponent implements OnInit {
       });
   }
 
-  userNames(userIds: string[]): string {
-    const byId = new Map(this.userOptions().map((u) => [u.id, u.name]));
-    return userIds.map((id) => byId.get(id) ?? id).join(', ');
+  /** `row.users` já vem resolvido pelo backend (UserDirectoryService) - ver DepartmentModel.users.
+   *  Não cruzar mais com `userOptions` aqui: aquele é o candidato pro multiselect do formulário
+   *  (só quem pertence a algum grupo do nimbusflow AGORA), e por isso não resolvia o nome de
+   *  usuários já removidos de todo grupo (mostrava o UUID cru). */
+  userNames(users: UserMinimalModel[]): string {
+    return users.map((u) => u.name).join(', ');
   }
 
   goNew(): void {

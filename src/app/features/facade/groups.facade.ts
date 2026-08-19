@@ -109,36 +109,39 @@ export class GroupsFacade {
     return this.api.getById(id);
   }
 
+  /**
+   * Sem marcar `_loading` aqui (mesmo motivo de WorksFacade/SuppliersFacade/SuggestionsFacade):
+   * esse signal é o guard de `loadPage()`, e setá-lo antes de chamar a API bloquearia
+   * silenciosamente o `reloadLast()` do `tap` abaixo (o `next` do tap sempre roda antes do
+   * `finalize` do próprio create/update/delete, mesmo com uma única emissão) - era exatamente por
+   * isso que excluir um grupo não atualizava a listagem. `reloadLast()`/`loadPage()` já controlam
+   * seu próprio `_loading` sem ajuda externa; o diálogo de criar/editar tem seu próprio signal
+   * `saving` pro spinner do botão, não depende deste aqui.
+   */
   create(input: GroupCreateInput): Observable<GroupModel> {
-    this._loading.set(true);
     return this.api.create(input).pipe(
       tap(() => {
         this.reloadLast();
         this.reloadOptions();
       }),
-      finalize(() => this._loading.set(false)),
     );
   }
 
   update(id: string, input: GroupUpdateInput): Observable<GroupModel> {
-    this._loading.set(true);
     return this.api.update(id, input).pipe(
       tap(() => {
         this.reloadLast();
         this.reloadOptions();
       }),
-      finalize(() => this._loading.set(false)),
     );
   }
 
   delete(id: string): Observable<void> {
-    this._loading.set(true);
     return this.api.delete(id).pipe(
       tap(() => {
         this.reloadLast();
         this.reloadOptions();
       }),
-      finalize(() => this._loading.set(false)),
     );
   }
 
