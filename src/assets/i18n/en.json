@@ -3699,7 +3699,10 @@
     "eventType": {
       "addendum_approved": "Addendum approved",
       "payment_released": "Installment released",
-      "ticket_target": "Ticket"
+      "ticket_target": "Ticket",
+      "ticket_closed": "Ticket closed",
+      "password_reset": "Password reset",
+      "first_password": "Invite (first password)"
     },
     "empty": { "title": "No emails registered" },
     "detail": {

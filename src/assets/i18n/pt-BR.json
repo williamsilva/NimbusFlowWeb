@@ -3694,7 +3694,10 @@
     "eventType": {
       "addendum_approved": "Aditivo aprovado",
       "payment_released": "Parcela liberada",
-      "ticket_target": "Chamado"
+      "ticket_target": "Chamado",
+      "ticket_closed": "Chamado fechado",
+      "password_reset": "Reset de senha",
+      "first_password": "Convite (primeira senha)"
     },
     "empty": { "title": "Nenhum e-mail registrado" },
     "detail": {
