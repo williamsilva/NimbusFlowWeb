@@ -201,14 +201,10 @@ export class GroupDetailComponent {
             detail: this.i18n.tUi('groups.detail.users.saved' as never),
           });
         },
-        error: () => {
-          this.savingUsers.set(false);
-          this.toast.add({
-            severity: 'error',
-            summary: this.i18n.tUi('common.error'),
-            detail: this.i18n.tUi('groups.detail.users.saveError' as never),
-          });
-        },
+        // Sem toast aqui - o errorInterceptor global já mostra o erro (mapeado, com o motivo
+        // específico via ErrorMapperService) pra qualquer request HTTP que falhe; um toast próprio
+        // aqui duplicaria a mesma mensagem duas vezes na tela.
+        error: () => this.savingUsers.set(false),
       });
   }
 
@@ -287,14 +283,8 @@ export class GroupDetailComponent {
             detail: this.i18n.tUi('groups.detail.users.removeConfirm.success' as never),
           });
         },
-        error: () => {
-          this.savingUsers.set(false);
-          this.toast.add({
-            severity: 'error',
-            summary: this.i18n.tUi('common.error'),
-            detail: this.i18n.tUi('groups.detail.users.saveError' as never),
-          });
-        },
+        // Sem toast aqui - mesmo motivo de saveUsers() (errorInterceptor global já cobre).
+        error: () => this.savingUsers.set(false),
       });
   }
 

@@ -13,6 +13,7 @@ export type GlobalErrorCode =
   | 'GROUP_NAME_ALREADY_EXISTS'
   | 'GROUP_DELETE_SUPPORT_NOT_ALLOWED'
   | 'GROUP_DELETE_IN_USE'
+  | 'GROUP_USER_WOULD_BE_ORPHANED'
   | 'PERMISSION_NOT_FOUND';
 
 export type FieldErrorCode =
