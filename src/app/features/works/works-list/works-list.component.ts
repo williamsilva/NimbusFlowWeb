@@ -238,11 +238,12 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     this.reloadWithCurrentState();
   }
 
-  /** Mesmo padrão do CardSync (CreditOrderListComponent - "Ordens de Pagamento"): status "Em
-   *  andamento" pré-selecionado, mas só quando o painel de filtros está vazio de verdade (nem
-   *  restaurado do localStorage, nem definido pelo usuário) - ver applyDefaultFiltersIfEmpty. */
+  /** Mesmo padrão do CardSync (CreditOrderListComponent - "Ordens de Pagamento"): status
+   *  "Planejado"+"Em andamento" pré-selecionados, mas só quando o painel de filtros está vazio de
+   *  verdade (nem restaurado do localStorage, nem definido pelo usuário) - ver
+   *  applyDefaultFiltersIfEmpty. */
   private defaultStatus(): string[] {
-    return [WorkStatusEnum.IN_PROGRESS];
+    return [WorkStatusEnum.PLANNED, WorkStatusEnum.IN_PROGRESS];
   }
 
   /** Só entra quando NENHUM filtro avançado está setado (painel inteiro vazio) - primeira visita
