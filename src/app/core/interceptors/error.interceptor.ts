@@ -7,13 +7,22 @@ import { catchError, throwError } from 'rxjs';
 import { ToastService } from '../toast/toast.service';
 import { AuthService } from '../auth/auth.service';
 import { ErrorMapperService } from '../errors/error-mapper.service';
-import { isAutoReloginCandidate } from './auth-redirect.interceptor';
+import { isAutoReloginCandidate, isCardsync } from './auth-redirect.interceptor';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
   const router = inject(Router);
   const toast = inject(ToastService);
   const mapper = inject(ErrorMapperService);
+
+  // Chamada externa fora do BFF/API próprio (ex.: CepLookupService -> viacep.com.br) não passa
+  // por nenhum tratamento genérico daqui - o toast de "Não foi possível conectar ao servidor"
+  // duplicava a mensagem própria de quem chamou (ex.: "CEP não encontrado"), mesmo com o CSP já
+  // liberando o domínio (CSP bloqueado ou host de terceiro fora do ar também caem aqui como
+  // status 0 - o chamador já trata isso, não precisa de um segundo toast genérico).
+  if (!isCardsync(req.url)) {
+    return next(req);
+  }
 
   return next(req).pipe(
     catchError((e) => {
