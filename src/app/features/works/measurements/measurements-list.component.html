@@ -37,6 +37,15 @@
   (visibleChange)="onUpsertVisibleChange($event)"
 ></app-measurements-create-dialog>
 
+<app-measurements-edit-dialog
+  [visible]="editVisible()"
+  (updated)="onUpdated()"
+  [measurement]="editingMeasurement()"
+  [totalAmount]="work()?.totalAmount ?? 0"
+  [remainingAmount]="dialogRemainingAmount()"
+  (visibleChange)="onEditVisibleChange($event)"
+></app-measurements-edit-dialog>
+
 <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
   <p-table
     stripedRows
@@ -323,6 +332,20 @@
         </td>
         <td class="text-center mobile-card-actions">
           <div class="table-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="goEdit(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canEdit(row)"
+              [pTooltip]="
+                canEdit(row)
+                  ? ('measurements.action.edit' | translate)
+                  : (editDisabledReason(row) | translate)
+              "
+              tooltipPosition="top"
+            ></button>
             <button
               pButton
               type="button"

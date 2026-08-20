@@ -1,0 +1,129 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '560px', maxWidth: '95vw' }"
+  [header]="'measurements.edit.title' | translate"
+  >
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea
+            rows="4"
+            pTextarea
+            id="editDescription"
+            class="w-full p-inputtext-sm"
+            formControlName="description"
+          ></textarea>
+          <app-error-msg
+            [field]="'description'"
+            [forId]="'editDescription'"
+            [control]="form.controls.description"
+            [label]="'measurements.fields.description' | translate"
+            />
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputNumber
+              size="small"
+              class="w-full"
+              mode="currency"
+              inputId="editAmountToPay"
+              inputStyleClass="w-full"
+              [minFractionDigits]="2"
+              [maxFractionDigits]="2"
+              [currency]="i18n.getCurrencyBrl()"
+              [locale]="i18n.getLocalePtBr()"
+              formControlName="amountToPay"
+            ></p-inputNumber>
+            <app-error-msg
+              [field]="'amountToPay'"
+              [forId]="'editAmountToPay'"
+              [control]="form.controls.amountToPay"
+              [label]="'measurements.fields.amountToPay' | translate"
+              />
+            </p-floatLabel>
+          </div>
+
+          <div class="col-12 md:col-6 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <p-inputNumber
+                size="small"
+                class="w-full"
+                mode="decimal"
+                suffix=" %"
+                [min]="0"
+                [max]="100"
+                inputId="editPercentageCompleted"
+                inputStyleClass="w-full"
+                [minFractionDigits]="2"
+                [maxFractionDigits]="2"
+                formControlName="percentageCompleted"
+              ></p-inputNumber>
+              <app-error-msg
+                [field]="'percentageCompleted'"
+                [forId]="'editPercentageCompleted'"
+                [control]="form.controls.percentageCompleted"
+                [label]="'measurements.fields.percentageCompleted' | translate"
+                />
+              </p-floatLabel>
+            </div>
+
+            <div class="col-12 p-2 -mt-2">
+              <small class="opacity-70 block">
+                {{ 'measurements.form.remainingHint' | translate }}: {{ remainingAmount() | csCurrency }}
+              </small>
+            </div>
+
+            <div class="col-12 md:col-6 p-2">
+              <p-floatLabel variant="on" class="w-full">
+                <p-datepicker
+                  class="w-full"
+                  inputId="editDueDate"
+                  appendTo="body"
+                  [showIcon]="true"
+                  dateFormat="dd/mm/yy"
+                  [readonlyInput]="true"
+                  formControlName="dueDate"
+                ></p-datepicker>
+                <app-error-msg
+                  [field]="'dueDate'"
+                  [forId]="'editDueDate'"
+                  [control]="form.controls.dueDate"
+                  [label]="'measurements.fields.dueDate' | translate"
+                  />
+                </p-floatLabel>
+              </div>
+            </div>
+          </form>
+
+          <ng-template pTemplate="footer">
+            <button
+              pButton
+              type="button"
+              (click)="close()"
+              icon="pi pi-times"
+              class="p-button-text p-button-sm"
+              [label]="'common.cancel' | translate"
+              [disabled]="saving()"
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              (click)="save()"
+              icon="pi pi-save"
+              class="p-button-sm"
+              [loading]="saving()"
+              [label]="'common.save' | translate"
+              [disabled]="saving()"
+            ></button>
+          </ng-template>
+        </p-dialog>

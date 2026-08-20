@@ -3699,6 +3699,7 @@
     "eventType": {
       "addendum_approved": "Adenda aprobada",
       "payment_released": "Cuota liberada",
+      "payment_cancelled": "Cuota cancelada",
       "ticket_target": "Ticket",
       "ticket_closed": "Ticket cerrado",
       "password_reset": "Restablecimiento de contraseña",
@@ -4142,7 +4143,8 @@
     "status": {
       "MEASUREMENT_APPROVED": "Esperando liberación",
       "RELEASED": "Liberada",
-      "PAID": "Pagada"
+      "PAID": "Pagada",
+      "CANCELLED": "Cancelada"
     },
     "form": {
       "saveError": "No se pudo completar la acción. Intente nuevamente."
@@ -4181,6 +4183,9 @@
     "new": {
       "title": "Nueva medición"
     },
+    "edit": {
+      "title": "Editar medición"
+    },
     "fields": {
       "work": "Frente de servicio",
       "description": "Descripción",
@@ -4216,6 +4221,7 @@
     "form": {
       "invalid": "Revise los campos resaltados antes de guardar.",
       "created": "Medición enviada con éxito.",
+      "updated": "Medición actualizada con éxito.",
       "saveError": "No se pudo enviar la medición. Intente nuevamente.",
       "exceedsRemaining": "El valor a pagar no puede ser mayor que el valor restante de la frente de servicio.",
       "remainingHint": "Valor restante de la frente de servicio",
@@ -4226,16 +4232,18 @@
       "title": "Ninguna medición encontrada"
     },
     "action": {
+      "edit": "Editar",
       "approve": "Aprobar",
       "reject": "Reprobar",
       "addFile": "Agregar archivo",
       "takePhoto": "Tomar foto",
       "captureLocation": "Capturar ubicación",
       "installmentGenerated": "Orden de pago generada",
-      "noPermission": "No tiene permiso para decidir esta medición.",
+      "noPermission": "No tiene permiso para esta acción.",
       "alreadyDecided": "Esta medición ya fue decidida por otro usuario. Actualice la página.",
       "requiresSubmittableWork": "La frente de servicio debe estar planificada o en curso para registrar una nueva medición.",
-      "exceedsWorkTotal": "El monto solicitado, sumado a las órdenes de pago ya generadas, superaría el valor total de la frente de servicio."
+      "exceedsWorkTotal": "El monto solicitado, sumado a las órdenes de pago ya generadas, superaría el valor total de la frente de servicio.",
+      "paymentAlreadyPaid": "No se puede editar: el pago generado por esta medición ya fue pagado."
     },
     "approveConfirm": {
       "header": "Aprobar medición",

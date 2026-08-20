@@ -1741,6 +1741,9 @@ export const UI_KEYS = {
     },
   },
   measurements: {
+    edit: {
+      title: 'measurements.edit.title',
+    },
     fields: {
       work: 'measurements.fields.work',
       description: 'measurements.fields.description',
@@ -1751,6 +1754,7 @@ export const UI_KEYS = {
     form: {
       invalid: 'measurements.form.invalid',
       created: 'measurements.form.created',
+      updated: 'measurements.form.updated',
       saveError: 'measurements.form.saveError',
       exceedsRemaining: 'measurements.form.exceedsRemaining',
       locationUnsupported: 'measurements.form.locationUnsupported',
@@ -1760,6 +1764,7 @@ export const UI_KEYS = {
       requiresSubmittableWork: 'measurements.action.requiresSubmittableWork',
       alreadyDecided: 'measurements.action.alreadyDecided',
       exceedsWorkTotal: 'measurements.action.exceedsWorkTotal',
+      paymentAlreadyPaid: 'measurements.action.paymentAlreadyPaid',
     },
     approveConfirm: {
       header: 'measurements.approveConfirm.header',
