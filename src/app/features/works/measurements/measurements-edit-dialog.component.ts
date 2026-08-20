@@ -157,12 +157,21 @@ export class MeasurementsEditDialogComponent {
       }
       this.lastLoadedId = m.id;
 
-      this.form.reset({
-        description: m.description,
-        amountToPay: m.amountToPay,
-        percentageCompleted: m.percentageCompleted,
-        dueDate: parseDateOnlyString(m.dueDate),
-      });
+      // emitEvent: false - sem isso, o reset de amountToPay e percentageCompleted (nessa ordem,
+      // a mesma da definição do form) disparava um os valueChanges do outro em cascata: o reset
+      // de amountToPay recalculava percentageCompleted (silenciosamente), mas o reset de
+      // percentageCompleted que vinha DEPOIS recalculava amountToPay de volta a partir do
+      // percentual (que já tinha só 2 casas decimais) - sobrescrevendo o valor exato carregado
+      // por uma versão arredondada (ex.: R$ 44.000,00 virava R$ 44.008,48).
+      this.form.reset(
+        {
+          description: m.description,
+          amountToPay: m.amountToPay,
+          percentageCompleted: m.percentageCompleted,
+          dueDate: parseDateOnlyString(m.dueDate),
+        },
+        { emitEvent: false },
+      );
       this.planPositionX.set(m.planPositionX);
       this.planPositionY.set(m.planPositionY);
       this.deviceLatitude.set(m.deviceLatitude);
