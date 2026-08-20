@@ -12,7 +12,10 @@ import { API } from '../api/api.config';
 import { AuthService } from '../auth/auth.service';
 import { SessionService } from '../auth/session.service';
 
-function isCardsync(url: string): boolean {
+/** Exportada pro errorInterceptor também usar (ver seu import) - chamada externa fora do BFF/API
+ *  próprio (ex.: CepLookupService -> viacep.com.br) não deve passar pelo tratamento de erro
+ *  genérico daqui, só pelo catchError próprio de quem chamou. */
+export function isCardsync(url: string): boolean {
   if (url.startsWith(API.bffBaseUrl) || url.startsWith(API.apiBaseUrl)) return true;
   return url.startsWith('/bff/') || url === '/bff' || url.startsWith('/api/') || url === '/api';
 }
