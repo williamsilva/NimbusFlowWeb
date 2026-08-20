@@ -20,6 +20,7 @@ import {
 
 import { appRoutes } from './app.routes';
 import { I18nService } from './core/i18n/i18n.service';
+import { AppUpdateService } from './core/pwa/app-update.service';
 import { csrfInterceptor } from './core/api/csrf.interceptor';
 import { AppTitleStrategy } from './core/router/app-title.strategy';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
@@ -92,6 +93,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
 
     provideAppInitializer(() => inject(I18nService).init()),
+    provideAppInitializer(() => inject(AppUpdateService).init()),
 
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
