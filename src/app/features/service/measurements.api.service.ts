@@ -11,6 +11,7 @@ import {
   MeasurementApiModel,
   MeasurementDecisionInput,
   MeasurementSubmitInput,
+  MeasurementUpdateInput,
   MeasurementWithContextApiModel,
   MeasurementWithContextModel,
   mapMeasurementApiModel,
@@ -63,6 +64,13 @@ export class MeasurementsApiService {
 
     return this.http
       .post<MeasurementApiModel>(`${this.worksUrl}/${workId}/measurements`, formData)
+      .pipe(map(mapMeasurementApiModel));
+  }
+
+  /** JSON puro (sem multipart) - editar não reenvia mídia. Espelha MeasurementController.update. */
+  update(id: string, input: MeasurementUpdateInput) {
+    return this.http
+      .put<MeasurementApiModel>(`${this.measurementsUrl}/${id}`, input)
       .pipe(map(mapMeasurementApiModel));
   }
 

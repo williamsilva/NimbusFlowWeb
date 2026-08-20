@@ -7,6 +7,7 @@ import {
   MeasurementDecisionInput,
   MeasurementModel,
   MeasurementSubmitInput,
+  MeasurementUpdateInput,
 } from '@models/measurements.models';
 
 @Injectable({ providedIn: 'root' })
@@ -49,6 +50,10 @@ export class MeasurementsFacade {
 
   submit(workId: string, input: MeasurementSubmitInput): Observable<MeasurementModel> {
     return this.api.submit(workId, input).pipe(tap(() => this.reload()));
+  }
+
+  update(id: string, input: MeasurementUpdateInput): Observable<MeasurementModel> {
+    return this.api.update(id, input).pipe(tap(() => this.reload()));
   }
 
   approve(id: string, input: MeasurementDecisionInput): Observable<MeasurementModel> {

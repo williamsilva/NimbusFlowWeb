@@ -82,6 +82,20 @@ export interface MeasurementDecisionInput {
   decisionNote: string | null;
 }
 
+/** Espelha MeasurementRequest (sem supersedesId/files - editar não reenvia mídia nem faz parte do
+ *  fluxo de reenvio de medição reprovada). Ver MeasurementService.updateMeasurement no backend:
+ *  cancela a parcela gerada (se houver e ainda não estiver paga) e devolve a medição pra PENDING. */
+export interface MeasurementUpdateInput {
+  description: string;
+  percentageCompleted: number;
+  amountToPay: number;
+  dueDate: string;
+  planPositionX: number | null;
+  planPositionY: number | null;
+  deviceLatitude: number | null;
+  deviceLongitude: number | null;
+}
+
 export function mapMeasurementApiModel(input: MeasurementApiModel): MeasurementModel {
   return { ...input };
 }

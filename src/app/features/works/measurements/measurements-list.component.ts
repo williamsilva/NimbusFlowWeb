@@ -33,6 +33,7 @@ import {
   measurementStatusTone,
 } from '@models/enums/measurement-status.enum';
 import { MeasurementsCreateDialogComponent } from '@features/works/measurements/measurements-create-dialog.component';
+import { MeasurementsEditDialogComponent } from '@features/works/measurements/measurements-edit-dialog.component';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
 import { formatSequentialNumber } from '@shared/utils/br-format';
 
@@ -57,6 +58,7 @@ const SUBMITTABLE_WORK_STATUSES = new Set<WorkStatusEnum>([WorkStatusEnum.PLANNE
     PageHeaderComponent,
     StatusBadgeComponent,
     MeasurementsCreateDialogComponent,
+    MeasurementsEditDialogComponent,
     CsCurrencyRangeFilterComponent,
   ],
 })
@@ -76,6 +78,8 @@ export class MeasurementsListComponent implements OnInit {
   readonly workId = signal('');
   readonly work = signal<WorkModel | null>(null);
   readonly upsertVisible = signal(false);
+  readonly editVisible = signal(false);
+  readonly editingMeasurement = signal<MeasurementModel | null>(null);
 
   /** Planta do Projeto da obra - mesmo Projeto já carregado em ProjectsFacade pro dropdown de
    *  Work, sem chamada extra (ver cs-site-plan-picker no diálogo de nova medição). */
@@ -107,6 +111,17 @@ export class MeasurementsListComponent implements OnInit {
       return 'measurements.action.requiresSubmittableWork';
     }
     return null;
+  });
+
+  /** Teto do valor a pagar pro diálogo de edição - soma de volta o amountToPay atual da medição
+   *  em edição (se ela já tiver gerado uma parcela) ao restante da obra, já que salvar cancela
+   *  essa parcela antes de validar o novo valor (mesmo cálculo feito no backend, ver
+   *  MeasurementService.updateMeasurement). Sem isso, o campo ficaria travado abaixo do valor que
+   *  a própria medição já ocupa. */
+  readonly dialogRemainingAmount = computed(() => {
+    const base = this.work()?.remainingAmount ?? 0;
+    const editing = this.editingMeasurement();
+    return editing?.generatedInstallmentId ? base + editing.amountToPay : base;
   });
 
   tableStateKey(): string {
@@ -168,6 +183,33 @@ export class MeasurementsListComponent implements OnInit {
 
   onUpsertVisibleChange(v: boolean): void {
     this.upsertVisible.set(v);
+  }
+
+  /** PENDING exige a mesma permissão de criar; já decidida (APPROVED/REJECTED) exige a de decidir
+   *  - editar pode cancelar uma parcela já liberada ou ressuscitar uma medição já decidida (ver
+   *  MeasurementsPermissionPolicy#canEdit). Uma parcela já PAGA bloqueia a edição, mas isso só é
+   *  validado no backend (esta lista não carrega o status da parcela, só o id gerado). */
+  canEdit(row: MeasurementModel): boolean {
+    return this.policy.canEdit(row.status);
+  }
+
+  editDisabledReason(row: MeasurementModel): string {
+    return this.policy.editDisabledReason(row.status) ?? 'measurements.action.noPermission';
+  }
+
+  goEdit(row: MeasurementModel): void {
+    if (!this.canEdit(row)) return;
+    this.editingMeasurement.set(row);
+    this.editVisible.set(true);
+  }
+
+  onEditVisibleChange(v: boolean): void {
+    this.editVisible.set(v);
+    if (!v) this.editingMeasurement.set(null);
+  }
+
+  onUpdated(): void {
+    this.refresh();
   }
 
   confirmApprove(row: MeasurementModel): void {

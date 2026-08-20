@@ -25,6 +25,8 @@ export interface InstallmentModel {
   releasedById: string | null;
   releasedAt: string | null;
   paidAt: string | null;
+  cancelledById: string | null;
+  cancelledAt: string | null;
   createdAt: string | null;
   updatedAt: string | null;
 }

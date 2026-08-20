@@ -18,6 +18,7 @@ const KNOWN_DETAILS: Array<{ match: string; key: UiKey }> = [
   { match: 'Work status does not accept new measurements', key: 'measurements.action.requiresSubmittableWork' },
   { match: 'Measurement is not pending', key: 'measurements.action.alreadyDecided' },
   { match: 'Payment order exceeds work total amount', key: 'measurements.action.exceedsWorkTotal' },
+  { match: 'Measurement cannot be edited: the generated payment was already paid', key: 'measurements.action.paymentAlreadyPaid' },
 ];
 
 function rawDetail(err: unknown): string | null {

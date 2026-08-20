@@ -9,18 +9,22 @@ export enum InstallmentStatusEnum {
   MEASUREMENT_APPROVED = 'MEASUREMENT_APPROVED',
   RELEASED = 'RELEASED',
   PAID = 'PAID',
+  /** Medição que a gerou foi editada (ver MeasurementService.updateMeasurement) - nunca alcançável a partir de PAID. */
+  CANCELLED = 'CANCELLED',
 }
 
 export const INSTALLMENT_STATUS_VALUES: InstallmentStatusEnum[] = [
   InstallmentStatusEnum.MEASUREMENT_APPROVED,
   InstallmentStatusEnum.RELEASED,
   InstallmentStatusEnum.PAID,
+  InstallmentStatusEnum.CANCELLED,
 ];
 
 const TONE_MAP: Record<InstallmentStatusEnum, StatusTone> = {
   [InstallmentStatusEnum.MEASUREMENT_APPROVED]: 'info',
   [InstallmentStatusEnum.RELEASED]: 'warn',
   [InstallmentStatusEnum.PAID]: 'success',
+  [InstallmentStatusEnum.CANCELLED]: 'danger',
 };
 
 export function installmentStatusTone(

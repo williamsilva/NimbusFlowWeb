@@ -13,6 +13,7 @@
 export const EMAIL_LOG_EVENT_TYPE_VALUES: string[] = [
   'addendum_approved',
   'payment_released',
+  'payment_cancelled',
   'ticket_target',
   'ticket_closed',
   'password_reset',
