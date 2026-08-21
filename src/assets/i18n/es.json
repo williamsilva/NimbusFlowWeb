@@ -4135,6 +4135,7 @@
       "amount": "Monto",
       "dueDate": "Vencimiento",
       "status": "Estado",
+      "releasedBy": "Aprobado por",
       "tier": "Rango de aprobación"
     },
     "approvalRange": {

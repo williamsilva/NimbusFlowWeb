@@ -1,5 +1,6 @@
 import { PeriodEnum } from '@models/enums/period.enum';
 import { ApprovalRangeModel } from '@models/addendums.models';
+import { UserMinimalModel } from '@models/user-minimal.models';
 import { InstallmentStatusEnum } from '@models/enums/installment-status.enum';
 
 /**
@@ -23,6 +24,10 @@ export interface InstallmentModel {
    *  AddendumModel.approvalRanges, exibido na coluna "Alçada" da tela Pagamentos. */
   approvalRanges: ApprovalRangeModel[];
   releasedById: string | null;
+  /** Nome/username de releasedById, resolvido pelo backend (UserDirectoryService) - null
+   *  enquanto a parcela nunca foi liberada ou se o NimbusAuth não puder ser consultado. Exibido
+   *  na coluna "Usuário aprovador" da tela Pagamentos. */
+  releasedBy: UserMinimalModel | null;
   releasedAt: string | null;
   paidAt: string | null;
   cancelledById: string | null;

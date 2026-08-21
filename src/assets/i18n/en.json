@@ -4135,6 +4135,7 @@
       "amount": "Amount",
       "dueDate": "Due date",
       "status": "Status",
+      "releasedBy": "Approved by",
       "tier": "Approval range"
     },
     "approvalRange": {

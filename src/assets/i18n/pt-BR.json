@@ -4130,6 +4130,7 @@
       "amount": "Valor",
       "dueDate": "Vencimento",
       "status": "Status",
+      "releasedBy": "Aprovado por",
       "tier": "Alçada"
     },
     "approvalRange": {

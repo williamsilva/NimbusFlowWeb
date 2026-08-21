@@ -46,6 +46,7 @@
         <col style="width: 150px" />
         <col style="width: 150px" />
         <col style="width: 150px" />
+        <col style="width: 180px" />
         <col style="width: 250px" />
         <col style="width: 70px" />
       </colgroup>
@@ -205,6 +206,17 @@
             <span
               class="th-label"
               tooltipPosition="top"
+              [pTooltip]="'installments.columns.releasedBy' | translate"
+              >{{ 'installments.columns.releasedBy' | translate }}</span
+            >
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
               [pTooltip]="'installments.columns.tier' | translate"
               >{{ 'installments.columns.tier' | translate }}</span
             >
@@ -239,6 +251,14 @@
             [tone]="tone(row.status)"
             [label]="'installments.status.' + row.status | translate"
           ></cs-status-badge>
+        </td>
+        <td class="text-center" [attr.data-label]="'installments.columns.releasedBy' | translate">
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.releasedBy?.name ?? '-'"
+            >{{ row.releasedBy?.name ?? '-' }}</span
+          >
         </td>
         <td class="text-center" [attr.data-label]="'installments.columns.tier' | translate">
           <span

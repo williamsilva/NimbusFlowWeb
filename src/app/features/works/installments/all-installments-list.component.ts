@@ -93,7 +93,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
 
   workName = signal('');
-  status = signal<string[] | null>(null);
+  status = signal<string[] | null>(this.defaultStatus());
   amountFrom = signal<number | null>(null);
   amountTo = signal<number | null>(null);
   dueDate = signal<string | string[] | null>(null);
@@ -338,6 +338,23 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     this.reloadWithCurrentState();
   }
 
+  /** Mesmo padrão do WorksListComponent (status pré-selecionado): "Aguardando liberação"+
+   *  "Liberada" pré-selecionados, mas só quando o painel de filtros está vazio de verdade (nem
+   *  restaurado do localStorage, nem definido pelo usuário) - ver applyDefaultFiltersIfEmpty. */
+  private defaultStatus(): string[] {
+    return [InstallmentStatusEnum.MEASUREMENT_APPROVED, InstallmentStatusEnum.RELEASED];
+  }
+
+  /** Só entra quando NENHUM filtro avançado está setado (painel inteiro vazio) - primeira visita
+   *  à tela (nada persistido ainda), filtros persistidos totalmente vazios, ou logo após
+   *  "Limpar". Checa o painel inteiro, não campo a campo - mesma regra de
+   *  WorksListComponent.applyDefaultFiltersIfEmpty. */
+  private applyDefaultFiltersIfEmpty(): void {
+    if (this.advancedActiveFilters().length > 0) return;
+
+    this.status.set(this.defaultStatus());
+  }
+
   protected override resetFilters(): void {
     this.workName.set('');
     this.status.set(null);
@@ -345,6 +362,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     this.amountTo.set(null);
     this.dueDate.set(null);
     this.periodDueDate.set(null);
+    this.applyDefaultFiltersIfEmpty();
   }
 
   protected override toFiltersState(): InstallmentsFiltersState {
@@ -365,6 +383,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     this.amountTo.set(state.amountTo ?? null);
     this.dueDate.set(state.dueDate ?? null);
     this.periodDueDate.set(state.periodDueDate ?? null);
+    this.applyDefaultFiltersIfEmpty();
   }
 
   protected override buildAdvancedFilters(): Partial<InstallmentsAdvancedFilters> {
