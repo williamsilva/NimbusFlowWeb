@@ -141,6 +141,15 @@ export class WorksCreateDialogComponent {
         return;
       }
 
+      // Este componente nunca é destruído/recriado (fica sempre montado dentro de
+      // WorksListComponent, só alternando `visible`) - sem isto, a lista de fornecedores/projetos
+      // fica presa ao snapshot da primeira abertura da sessão, mesmo que um fornecedor tenha sido
+      // cadastrado depois (outra aba, outro usuário, ou só o tempo passando) - reabrir o diálogo
+      // nunca disparava um refetch por conta própria (só SuppliersFacade.create/update/etc.
+      // invalidava, e só quando a mutação acontecia na mesma aba/sessão Angular).
+      this.suppliersFacade.loadSupplierOptions(true);
+      this.projectsFacade.loadOptions(true);
+
       const work = this.work();
 
       if (!work) {
