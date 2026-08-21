@@ -23,9 +23,11 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { SuppliersFacade } from '@features/facade/suppliers.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { CepLookupService } from '@shared/services/cep-lookup.service';
+import { PhoneMaskDirective } from '@shared/directives/phone-mask.directive';
+import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive';
 import { SuppliersPermissionPolicy } from '@features/suppliers/suppliers-permission.policy';
 import { SupplierModel, SupplierUpsertInput } from '@models/suppliers.models';
-import { onlyDigits, formatTaxId, formatPhone, formatZipCode } from '@shared/utils/br-format';
+import { onlyDigits, formatZipCode } from '@shared/utils/br-format';
 
 /** Exige, após remover não-dígitos, exatamente 11 (CPF) ou 14 (CNPJ) dígitos - mesma regra do
  *  backend (SupplierRequest.taxId, regex `\d{11}|\d{14}`). */
@@ -54,7 +56,9 @@ function taxIdValidator(): ValidatorFn {
     TranslateModule,
     FloatLabelModule,
     ErrorMsgComponent,
+    PhoneMaskDirective,
     ReactiveFormsModule,
+    CpfCnpjMaskDirective,
   ],
 })
 export class SuppliersCreateDialogComponent {
@@ -133,8 +137,8 @@ export class SuppliersCreateDialogComponent {
       this.form.reset({
         companyName: supplier.companyName ?? '',
         tradeName: supplier.tradeName ?? '',
-        taxId: formatTaxId(supplier.taxId),
-        phone: supplier.phone ? formatPhone(supplier.phone) : '',
+        taxId: supplier.taxId ?? '',
+        phone: supplier.phone ?? '',
         email: supplier.email ?? '',
         commercialContact: supplier.commercialContact ?? '',
         addressStreet: supplier.addressStreet ?? '',
@@ -151,14 +155,6 @@ export class SuppliersCreateDialogComponent {
         active: supplier.active,
       });
     });
-  }
-
-  onTaxIdInput(value: string): void {
-    this.form.controls.taxId.setValue(formatTaxId(value));
-  }
-
-  onPhoneInput(value: string): void {
-    this.form.controls.phone.setValue(formatPhone(value));
   }
 
   /** Formata enquanto digita e, ao completar os 8 dígitos, já dispara a busca automaticamente -

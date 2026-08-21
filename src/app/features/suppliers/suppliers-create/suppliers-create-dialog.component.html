@@ -58,9 +58,11 @@
             pInputText
             type="text"
             maxlength="18"
+            csCpfCnpjMask
+            autocomplete="off"
+            inputmode="numeric"
             formControlName="taxId"
             class="w-full p-inputtext-sm"
-            (input)="onTaxIdInput($any($event.target).value)"
           />
           <app-error-msg
             [field]="'taxId'"
@@ -78,9 +80,11 @@
             pInputText
             type="text"
             maxlength="15"
+            csPhoneMask
+            autocomplete="off"
+            inputmode="numeric"
             formControlName="phone"
             class="w-full p-inputtext-sm"
-            (input)="onPhoneInput($any($event.target).value)"
           />
           <app-error-msg
             [required]="false"
