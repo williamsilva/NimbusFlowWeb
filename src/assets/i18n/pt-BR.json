@@ -4169,7 +4169,7 @@
     },
     "resendNotificationConfirm": {
       "header": "Reenviar notificação",
-      "message": "Confirma o reenvio do e-mail de ordem de pagamento da parcela nº {number} para os destinatários configurados?",
+      "message": "Confirma o reenvio do e-mail de notificação da parcela nº {number} para os destinatários configurados?",
       "success": "Notificação reenviada com sucesso."
     }
   },

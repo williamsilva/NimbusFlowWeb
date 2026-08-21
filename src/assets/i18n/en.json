@@ -4174,7 +4174,7 @@
     },
     "resendNotificationConfirm": {
       "header": "Resend notification",
-      "message": "Confirm resending the payment order e-mail for installment #{number} to the configured recipients?",
+      "message": "Confirm resending the notification e-mail for installment #{number} to the configured recipients?",
       "success": "Notification resent successfully."
     }
   },

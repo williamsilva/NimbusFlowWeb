@@ -200,13 +200,19 @@ export class AllInstallmentsListComponent extends StatefulListPage<
 
   canResendNotification(row: InstallmentWithWorkModel): boolean {
     return (
-      (row.status === InstallmentStatusEnum.RELEASED || row.status === InstallmentStatusEnum.PAID) &&
+      (row.status === InstallmentStatusEnum.RELEASED ||
+        row.status === InstallmentStatusEnum.PAID ||
+        row.status === InstallmentStatusEnum.CANCELLED) &&
       this.policy.canResendNotification()
     );
   }
 
   resendNotificationDisabledReason(row: InstallmentWithWorkModel): string {
-    if (row.status !== InstallmentStatusEnum.RELEASED && row.status !== InstallmentStatusEnum.PAID) {
+    if (
+      row.status !== InstallmentStatusEnum.RELEASED &&
+      row.status !== InstallmentStatusEnum.PAID &&
+      row.status !== InstallmentStatusEnum.CANCELLED
+    ) {
       return 'installments.action.requiresReleasedOrPaid';
     }
     return this.policy.resendNotificationDisabledReason() ?? 'installments.action.noPermission';

@@ -71,18 +71,18 @@ export const APP_MENU: AppMenuItem[] = [
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.ADITIVO.VIEW],
       },
       {
-        labelKey: 'menu.works.installments',
-        icon: 'pi pi-wallet text-green-400',
-        route: '/installments',
-        exact: false,
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.VIEW],
-      },
-      {
         labelKey: 'menu.works.measurements',
         icon: 'pi pi-camera text-green-400',
         route: '/measurements',
         exact: false,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.MEDICAO.VIEW],
+      },
+      {
+        labelKey: 'menu.works.installments',
+        icon: 'pi pi-wallet text-green-400',
+        route: '/installments',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.VIEW],
       },
       {
         labelKey: 'menu.works.suggestions',

@@ -158,7 +158,8 @@ export class InstallmentsListComponent implements OnInit {
   canResendNotification(row: InstallmentModel): boolean {
     return (
       (row.status === InstallmentStatusEnum.RELEASED ||
-        row.status === InstallmentStatusEnum.PAID) &&
+        row.status === InstallmentStatusEnum.PAID ||
+        row.status === InstallmentStatusEnum.CANCELLED) &&
       this.policy.canResendNotification()
     );
   }
@@ -166,7 +167,8 @@ export class InstallmentsListComponent implements OnInit {
   resendNotificationDisabledReason(row: InstallmentModel): string {
     if (
       row.status !== InstallmentStatusEnum.RELEASED &&
-      row.status !== InstallmentStatusEnum.PAID
+      row.status !== InstallmentStatusEnum.PAID &&
+      row.status !== InstallmentStatusEnum.CANCELLED
     ) {
       return 'installments.action.requiresReleasedOrPaid';
     }

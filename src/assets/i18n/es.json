@@ -4174,7 +4174,7 @@
     },
     "resendNotificationConfirm": {
       "header": "Reenviar notificación",
-      "message": "¿Confirma el reenvío del correo de orden de pago de la cuota nº {number} a los destinatarios configurados?",
+      "message": "¿Confirma el reenvío del correo de notificación de la cuota nº {number} a los destinatarios configurados?",
       "success": "Notificación reenviada con éxito."
     }
   },
