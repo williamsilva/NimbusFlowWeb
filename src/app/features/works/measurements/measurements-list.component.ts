@@ -139,15 +139,30 @@ export class MeasurementsListComponent implements OnInit {
 
     this.workId.set(workId);
     this.projectsFacade.loadOptions();
+    this.reloadWork({ navigateOnError: true });
+
+    this.facade.loadByWork(workId);
+  }
+
+  /** work() é carregado uma vez em ngOnInit e nunca reagia a mudanças de remainingAmount feitas
+   *  nesta própria página (aprovar medição gera Parcela e reduz o restante da obra) - abrir "Nova
+   *  Medição"/"Editar" logo depois de aprovar mostrava o teto antigo, só corrigia com F5. Refaz a
+   *  busca da obra antes de abrir os diálogos e depois de aprovar/editar. Best-effort (sem navegar
+   *  pra fora em caso de erro, diferente da carga inicial) - falhar aqui não deveria travar a
+   *  tela, só deixar o teto temporariamente desatualizado. */
+  private reloadWork(opts: { navigateOnError: boolean } = { navigateOnError: false }): void {
+    const workId = this.workId();
+    if (!workId) return;
+
     this.worksFacade
       .getById(workId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (work) => this.work.set(work),
-        error: () => this.router.navigate(['/works']),
+        error: () => {
+          if (opts.navigateOnError) this.router.navigate(['/works']);
+        },
       });
-
-    this.facade.loadByWork(workId);
   }
 
   tone(status: string): ReturnType<typeof measurementStatusTone> {
@@ -180,6 +195,7 @@ export class MeasurementsListComponent implements OnInit {
 
   goNew(): void {
     if (!this.canCreate()) return;
+    this.reloadWork();
     this.upsertVisible.set(true);
   }
 
@@ -201,6 +217,7 @@ export class MeasurementsListComponent implements OnInit {
 
   goEdit(row: MeasurementModel): void {
     if (!this.canEdit(row)) return;
+    this.reloadWork();
     this.editingMeasurement.set(row);
     this.editVisible.set(true);
   }
@@ -212,6 +229,9 @@ export class MeasurementsListComponent implements OnInit {
 
   onUpdated(): void {
     this.refresh();
+    // Editar cancela a Parcela gerada anteriormente (ver MeasurementService.updateMeasurement) -
+    // devolve valor pro restante da obra, então work() precisa ser refeito.
+    this.reloadWork();
   }
 
   confirmApprove(row: MeasurementModel): void {
@@ -226,12 +246,15 @@ export class MeasurementsListComponent implements OnInit {
           .approve(row.id, { decisionNote: null })
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
-            next: () =>
+            next: () => {
               this.toast.add({
                 severity: 'success',
                 summary: this.i18n.tUi('common.success'),
                 detail: this.i18n.tUi('measurements.approveConfirm.success'),
-              }),
+              });
+              // Aprovar gera (e pode auto-liberar) uma Parcela, reduzindo o restante da obra.
+              this.reloadWork();
+            },
             error: (err) =>
               this.toast.add({
                 severity: 'error',

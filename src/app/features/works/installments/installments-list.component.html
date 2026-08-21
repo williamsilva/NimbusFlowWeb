@@ -244,8 +244,12 @@
           }}</span>
         </td>
         <td class="text-center mobile-card-title">{{ numberLabel(row) }}</td>
-        <td class="text-right" [attr.data-label]="'installments.columns.amount' | translate">{{ row.amount | csCurrency }}</td>
-        <td class="text-center" [attr.data-label]="'installments.columns.dueDate' | translate">{{ row.dueDate | csDate: 'date' }}</td>
+        <td class="text-right" [attr.data-label]="'installments.columns.amount' | translate">
+          {{ row.amount | csCurrency }}
+        </td>
+        <td class="text-center" [attr.data-label]="'installments.columns.dueDate' | translate">
+          {{ row.dueDate | csDate: 'date' }}
+        </td>
         <td class="text-center" [attr.data-label]="'installments.columns.status' | translate">
           <cs-status-badge
             [tone]="tone(row.status)"
@@ -321,7 +325,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="text-center py-5 opacity-70">
+        <td colspan="8" class="text-center py-5 opacity-70">
           {{
             loadedOnce() ? ('installments.empty.title' | translate) : ('common.loading' | translate)
           }}
