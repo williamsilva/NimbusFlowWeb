@@ -20,6 +20,7 @@ import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { WorksFacade } from '@features/facade/works.facade';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { ProjectsFacade } from '@features/facade/projects.facade';
 import { WorkModel, WorksFiltersState } from '@models/works.models';
 import { SuppliersFacade } from '@features/facade/suppliers.facade';
@@ -73,6 +74,7 @@ import {
     WorksCreateDialogComponent,
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
+    DateInputMaskDirective,
   ],
 })
 export class WorksListComponent extends StatefulListPage<WorksFiltersState, WorksAdvancedFilters> {

@@ -17,6 +17,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { MeasurementsGlobalFacade } from '@features/facade/measurements-global.facade';
@@ -73,6 +74,7 @@ import { formatSequentialNumber } from '@shared/utils/br-format';
     FiltersPanelComponent,
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
+    DateInputMaskDirective,
   ],
 })
 export class AllMeasurementsListComponent extends StatefulListPage<

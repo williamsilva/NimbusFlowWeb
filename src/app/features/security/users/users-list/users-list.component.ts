@@ -33,6 +33,7 @@ import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
 import { UsersCreateDialogComponent } from '@features/security/users/users-create/users-create-dialog.component';
@@ -88,6 +89,7 @@ import {
     DATA_TABLE_SHELL_IMPORTS,
     UsersCreateDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
+    DateInputMaskDirective,
   ],
 })
 export class UsersListComponent extends StatefulListPage<UsersFiltersState, UsersAdvancedFilters> {

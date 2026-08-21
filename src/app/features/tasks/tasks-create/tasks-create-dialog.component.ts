@@ -18,6 +18,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { UsersFacade } from '@features/facade/users.facade';
 import { TasksFacade } from '@features/facade/tasks.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { TaskModel, TaskUpsertInput } from '@models/tasks.models';
 
 function toDateOnlyString(value: Date | null): string | null {
@@ -50,6 +51,7 @@ function fromDateOnlyString(value: string | null | undefined): Date | null {
     DatePickerModule,
     FloatLabelModule,
     ErrorMsgComponent,
+    DateInputMaskDirective,
     ReactiveFormsModule,
   ],
 })

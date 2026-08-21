@@ -6,10 +6,12 @@ import { SelectModule } from 'primeng/select';
 import { FloatLabel } from 'primeng/floatlabel';
 import { DatePickerModule } from 'primeng/datepicker';
 
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+
 @Component({
   standalone: true,
   selector: 'cs-advanced-period-date-filter',
-  imports: [FormsModule, SelectModule, FloatLabel, DatePickerModule],
+  imports: [FormsModule, SelectModule, FloatLabel, DatePickerModule, DateInputMaskDirective],
   styles: [
     `
       :host {
@@ -44,15 +46,18 @@ import { DatePickerModule } from 'primeng/datepicker';
           size="small"
           [view]="view"
           class="w-full"
+          csDateInputMask
           appendTo="body"
           dataType="string"
           [showIcon]="true"
           [ngModel]="pickerValue"
           [disabled]="disabled"
-          [readonlyInput]="true"
+          [readonlyInput]="selectionMode === 'range'"
           [inputId]="dateInputId"
           [dateFormat]="dateFormat"
           [selectionMode]="selectionMode"
+          [csDateInputMaskFormat]="dateFormat"
+          [csDateInputMaskRange]="selectionMode === 'range'"
           (ngModelChange)="valueChange.emit($event ?? null)"
         ></p-datepicker>
 

@@ -17,6 +17,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { WorksFacade } from '@features/facade/works.facade';
@@ -62,6 +63,7 @@ const SUBMITTABLE_WORK_STATUSES = new Set<WorkStatusEnum>([
     StatusBadgeComponent,
     AddendumsCreateDialogComponent,
     CsCurrencyRangeFilterComponent,
+    DateInputMaskDirective,
   ],
 })
 export class AddendumsListComponent implements OnInit {

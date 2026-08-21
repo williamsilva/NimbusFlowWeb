@@ -17,6 +17,7 @@ import { MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { STATE_KEY } from '@features/state-key.constants';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { SuggestionsFacade } from '@features/facade/suggestions.facade';
@@ -65,6 +66,7 @@ import {
     StatusBadgeComponent,
     SuggestionsCreateDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
+    DateInputMaskDirective,
   ],
 })
 export class SuggestionsListComponent extends StatefulListPage<

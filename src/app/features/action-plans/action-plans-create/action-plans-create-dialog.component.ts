@@ -20,6 +20,7 @@ import { UsersFacade } from '@features/facade/users.facade';
 import { TicketModel } from '@models/tickets.models';
 import { ActionPlansFacade } from '@features/facade/action-plans.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { ActionPlanModel, ActionPlanUpsertInput } from '@models/action-plans.models';
 
 function toDateOnlyString(value: Date | null): string | null {
@@ -53,6 +54,7 @@ function fromDateOnlyString(value: string | null | undefined): Date | null {
     FloatLabelModule,
     InputNumberModule,
     ErrorMsgComponent,
+    DateInputMaskDirective,
     ReactiveFormsModule,
   ],
 })
