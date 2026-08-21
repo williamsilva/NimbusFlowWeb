@@ -19,6 +19,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { STATE_KEY } from '@features/state-key.constants';
 import { WorksFacade } from '@features/facade/works.facade';
 import { TicketsFacade } from '@features/facade/tickets.facade';
@@ -77,6 +78,7 @@ import {
     WorksCreateDialogComponent,
     ActionPlansCreateDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
+    DateInputMaskDirective,
   ],
 })
 export class TicketsListComponent extends StatefulListPage<

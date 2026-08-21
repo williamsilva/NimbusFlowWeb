@@ -107,13 +107,15 @@
       <div class="col-12 md:col-4 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-datepicker
+            csDateInputMask
             inputId="targetDate"
             class="w-full"
             appendTo="body"
             [showIcon]="true"
-            dateFormat="dd/mm/yy"
-            [readonlyInput]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            [readonlyInput]="false"
             formControlName="targetDate"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
           ></p-datepicker>
           <label for="targetDate">{{ 'actionPlans.fields.targetDate' | translate }}</label>
         </p-floatLabel>

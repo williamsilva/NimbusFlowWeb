@@ -76,13 +76,15 @@
       <div class="col-12 md:col-4 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-datepicker
+            csDateInputMask
             inputId="startDate"
             class="w-full"
             appendTo="body"
             [showIcon]="true"
-            dateFormat="dd/mm/yy"
-            [readonlyInput]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            [readonlyInput]="false"
             formControlName="startDate"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
           ></p-datepicker>
           <app-error-msg
             [field]="'startDate'"
@@ -96,13 +98,15 @@
       <div class="col-12 md:col-4 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-datepicker
+            csDateInputMask
             inputId="expectedEndDate"
             class="w-full"
             appendTo="body"
             [showIcon]="true"
-            dateFormat="dd/mm/yy"
-            [readonlyInput]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            [readonlyInput]="false"
             formControlName="expectedEndDate"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
           ></p-datepicker>
           <app-error-msg
             [field]="'expectedEndDate'"
@@ -116,13 +120,15 @@
       <div class="col-12 md:col-4 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-datepicker
+            csDateInputMask
             inputId="actualEndDate"
             class="w-full"
             appendTo="body"
             [showIcon]="true"
-            dateFormat="dd/mm/yy"
-            [readonlyInput]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            [readonlyInput]="false"
             formControlName="actualEndDate"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
           ></p-datepicker>
           <app-error-msg
             [required]="false"

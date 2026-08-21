@@ -15,6 +15,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { STATE_KEY } from '@features/state-key.constants';
 import { EmailLogFacade } from '@features/facade/email-log.facade';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
@@ -68,6 +69,7 @@ import {
     StatusBadgeComponent,
     FiltersPanelComponent,
     CsAdvancedPeriodDateFilterComponent,
+    DateInputMaskDirective,
   ],
 })
 export class EmailLogListComponent extends StatefulListPage<

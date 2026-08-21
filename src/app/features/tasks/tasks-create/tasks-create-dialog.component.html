@@ -55,13 +55,15 @@
       <div class="col-12 md:col-6 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-datepicker
+            csDateInputMask
             inputId="dueDate"
             class="w-full"
             appendTo="body"
             [showIcon]="true"
-            dateFormat="dd/mm/yy"
-            [readonlyInput]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            [readonlyInput]="false"
             formControlName="dueDate"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
           ></p-datepicker>
           <label for="dueDate">{{ 'tasks.fields.dueDate' | translate }}</label>
         </p-floatLabel>
