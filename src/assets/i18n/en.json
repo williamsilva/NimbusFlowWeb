@@ -227,6 +227,24 @@
     },
     "tasks": {
       "title": "Tasks"
+    },
+    "equipamentos": {
+      "title": "Equipment"
+    },
+    "manutencoes": {
+      "title": "Maintenance"
+    },
+    "agendaManutencao": {
+      "title": "Maintenance Schedule"
+    },
+    "localizacoes": {
+      "title": "Locations"
+    },
+    "historicoLocalizacao": {
+      "title": "Location History"
+    },
+    "patrimonioDashboard": {
+      "title": "Asset Dashboard"
     }
   },
   "topbar": {
@@ -369,6 +387,15 @@
       "tickets": "Tickets",
       "actionPlans": "Action Plans",
       "tasks": "Tasks"
+    },
+    "patrimonio": {
+      "title": "Assets",
+      "equipamentos": "Equipment",
+      "manutencoes": "Maintenance",
+      "agendaManutencao": "Maintenance Schedule",
+      "localizacoes": "Locations",
+      "historicoLocalizacao": "Location History",
+      "dashboard": "Dashboard"
     }
   },
   "sidebar": {
@@ -433,7 +460,8 @@
     "suggestions": "Suggestions",
     "tickets": "Tickets",
     "actionPlans": "Action Plans",
-    "tasks": "Tasks"
+    "tasks": "Tasks",
+    "patrimonio": "Assets"
   },
   "footer": {
     "copyright": "NimbusFlow Tech",
@@ -3877,6 +3905,263 @@
       "header": "Deactivate supplier",
       "message": "Do you really want to deactivate the supplier {companyName}?",
       "success": "Supplier deactivated successfully."
+    }
+  },
+  "equipamentos": {
+    "subtitle": "Equipment tracked by the Asset Management module",
+    "new": { "title": "New equipment" },
+    "edit": { "title": "Edit equipment" },
+    "fields": {
+      "numeroPatrimonio": "Asset No.",
+      "descricao": "Description",
+      "fornecedorNome": "Supplier",
+      "status": "Status",
+      "voltagem": "Power supply",
+      "preco": "Price",
+      "dataCompra": "Purchase date",
+      "dataChegada": "Arrival date",
+      "inicioGarantia": "Warranty start",
+      "fimGarantia": "Warranty end",
+      "observacao": "Notes"
+    },
+    "columns": {
+      "numeroPatrimonio": "Asset No.",
+      "descricao": "Description",
+      "fornecedorNome": "Supplier",
+      "status": "Status",
+      "preco": "Price",
+      "dataCompra": "Purchased",
+      "totalManutencoes": "Maintenances",
+      "ultimaManutencao": "Last maintenance"
+    },
+    "status": {
+      "ATIVO": "Active",
+      "MANUTENCAO": "In maintenance",
+      "QUEIMADO": "Burned out",
+      "DESCARTADO": "Discarded"
+    },
+    "voltagem": {
+      "MONOFASICO_127": "Single-phase 127V",
+      "MONOFASICO_220": "Single-phase 220V",
+      "BIFASICO_220": "Two-phase 220V",
+      "BIFASICO_380": "Two-phase 380V",
+      "TRIFASICO_220": "Three-phase 220V",
+      "TRIFASICO_380": "Three-phase 380V",
+      "GASOLINA": "Gasoline",
+      "DIESEL": "Diesel",
+      "BIVOLT": "Dual voltage"
+    },
+    "empty": { "title": "No equipment registered" },
+    "form": {
+      "invalid": "Review the highlighted fields before saving.",
+      "created": "Equipment created successfully.",
+      "updated": "Equipment updated successfully.",
+      "saveError": "Could not save the equipment."
+    }
+  },
+  "manutencoes": {
+    "subtitle": "Corrective and preventive equipment maintenance",
+    "new": { "title": "New maintenance" },
+    "edit": { "title": "Edit maintenance" },
+    "fields": {
+      "equipamento": "Equipment",
+      "autorizadaNome": "Service provider",
+      "status": "Status",
+      "tipoManutencao": "Type",
+      "preco": "Price",
+      "dataEnvio": "Sent",
+      "dataRetorno": "Returned",
+      "inicioGarantia": "Warranty start",
+      "fimGarantia": "Warranty end",
+      "descricao": "Description",
+      "observacao": "Notes"
+    },
+    "columns": {
+      "numeroPatrimonio": "Asset No.",
+      "equipamento": "Equipment",
+      "autorizadaNome": "Service provider",
+      "status": "Status",
+      "tipoManutencao": "Type",
+      "dataEnvio": "Sent",
+      "preco": "Price"
+    },
+    "status": {
+      "ORCANDO": "Quoting",
+      "PROPOSTA": "Proposal",
+      "APROVADA": "Approved",
+      "CONCERTADA": "Repaired",
+      "RECEBIDA": "Received"
+    },
+    "tipo": {
+      "CORRETIVA_PROGRAMADA": "Scheduled corrective",
+      "CORRETIVA_URGENTE": "Urgent corrective",
+      "PREVENTIVA": "Preventive",
+      "PREDITIVA": "Predictive",
+      "DETECTIVA": "Detective"
+    },
+    "empty": { "title": "No maintenance registered" },
+    "form": {
+      "invalid": "Review the highlighted fields before saving.",
+      "created": "Maintenance created successfully.",
+      "updated": "Maintenance updated successfully.",
+      "saveError": "Could not save the maintenance."
+    },
+    "action": { "cannotDelete": "Repaired or received maintenances cannot be deleted" },
+    "deleteConfirm": {
+      "header": "Delete maintenance",
+      "message": "Are you sure you want to delete this maintenance?",
+      "success": "Maintenance deleted successfully",
+      "error": "Could not delete the maintenance"
+    }
+  },
+  "agendaManutencao": {
+    "subtitle": "Preventive maintenance schedule for equipment",
+    "new": { "title": "New schedule" },
+    "edit": { "title": "Edit schedule" },
+    "fields": {
+      "equipamento": "Equipment",
+      "status": "Status",
+      "frequencia": "Frequency",
+      "tipoManutencao": "Type",
+      "perfilNotificacao": "Notify",
+      "observacao": "Notes"
+    },
+    "columns": {
+      "numeroPatrimonio": "Asset No.",
+      "equipamento": "Equipment",
+      "status": "Status",
+      "frequencia": "Frequency",
+      "tipoManutencao": "Type",
+      "perfilNotificacao": "Notify",
+      "proximaManutencao": "Next maintenance"
+    },
+    "status": {
+      "AGENDADA": "Scheduled",
+      "VENCIDA": "Overdue"
+    },
+    "frequencia": {
+      "SEMANAL": "Weekly",
+      "QUINZENAL": "Biweekly",
+      "MENSAL": "Monthly",
+      "TRIMESTRAL": "Quarterly",
+      "SEMESTRAL": "Semiannual",
+      "ANUAL": "Yearly"
+    },
+    "perfil": {
+      "USUARIO": "User",
+      "GESTOR": "Manager",
+      "SUPERVISOR": "Supervisor"
+    },
+    "empty": { "title": "No schedules registered" },
+    "form": {
+      "invalid": "Review the highlighted fields before saving.",
+      "created": "Schedule created successfully.",
+      "updated": "Schedule updated successfully.",
+      "saveError": "Could not save the schedule.",
+      "proximaManutencaoHint": "The next maintenance date is calculated automatically from the frequency and the last maintenance sent."
+    },
+    "deleteConfirm": {
+      "header": "Delete schedule",
+      "message": "Are you sure you want to delete this schedule?",
+      "success": "Schedule deleted successfully",
+      "error": "Could not delete the schedule"
+    }
+  },
+  "localizacoes": {
+    "subtitle": "Places where equipment can be located (warehouse, service provider, park sections)",
+    "new": { "title": "New location" },
+    "edit": { "title": "Edit location" },
+    "fields": {
+      "descricao": "Description",
+      "status": "Status"
+    },
+    "columns": {
+      "descricao": "Description",
+      "status": "Status",
+      "createdAt": "Created at"
+    },
+    "status": {
+      "ATIVO": "Active",
+      "INATIVO": "Inactive"
+    },
+    "empty": { "title": "No locations registered" },
+    "action": { "systemProtected": "System-generated location, cannot be edited/deleted" },
+    "form": {
+      "invalid": "Review the highlighted fields before saving.",
+      "created": "Location created successfully.",
+      "updated": "Location updated successfully.",
+      "saveError": "Could not save the location."
+    },
+    "deleteConfirm": {
+      "header": "Delete location",
+      "message": "Are you sure you want to delete this location?",
+      "success": "Location deleted successfully",
+      "error": "Could not delete the location"
+    }
+  },
+  "historicoLocalizacao": {
+    "subtitle": "History of equipment movement between locations",
+    "new": { "title": "New entry" },
+    "edit": { "title": "Edit entry" },
+    "fields": {
+      "equipamento": "Equipment",
+      "localizacao": "Location",
+      "status": "Status",
+      "dataInicial": "Start date",
+      "dataFinal": "End date",
+      "observacao": "Notes"
+    },
+    "columns": {
+      "numeroPatrimonio": "Asset No.",
+      "equipamento": "Equipment",
+      "localizacao": "Location",
+      "status": "Status",
+      "dataInicial": "Start date",
+      "dataFinal": "End date"
+    },
+    "status": {
+      "ATIVO": "Active",
+      "REMOVIDO": "Removed",
+      "MANUTENCAO": "In maintenance",
+      "DESCARTADO": "Discarded"
+    },
+    "empty": { "title": "No history registered" },
+    "action": { "systemProtected": "System-generated history, cannot be edited/deleted" },
+    "form": {
+      "invalid": "Review the highlighted fields before saving.",
+      "created": "Entry created successfully.",
+      "updated": "Entry updated successfully.",
+      "saveError": "Could not save the entry."
+    },
+    "deleteConfirm": {
+      "header": "Delete entry",
+      "message": "Are you sure you want to delete this entry?",
+      "success": "Entry deleted successfully",
+      "error": "Could not delete the entry"
+    }
+  },
+  "patrimonioDashboard": {
+    "subtitle": "Equipment and maintenance statistics",
+    "fields": {
+      "firstPeriod": "From",
+      "finalPeriod": "To"
+    },
+    "cards": {
+      "totalEquipamentos": "Total equipment",
+      "totalManutencoes": "Total maintenances",
+      "equipamentosEmManutencao": "Equipment in maintenance"
+    },
+    "tables": {
+      "topEquipamentos": "Equipment with the most maintenances",
+      "manutencoesPorStatus": "Maintenances by status"
+    },
+    "columns": {
+      "numeroPatrimonio": "Asset No.",
+      "descricao": "Description",
+      "totalManutencoes": "Maintenances",
+      "valorTotal": "Total value",
+      "status": "Status",
+      "total": "Total"
     }
   },
   "works": {

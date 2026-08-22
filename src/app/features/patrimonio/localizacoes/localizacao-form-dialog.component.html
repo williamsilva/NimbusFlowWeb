@@ -1,0 +1,67 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '480px', maxWidth: '95vw' }"
+  [header]="(isEditing() ? 'localizacoes.edit.title' : 'localizacoes.new.title') | translate"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="descricao" class="w-full" formControlName="descricao" />
+          <label for="descricao">{{ 'localizacoes.fields.descricao' | translate }}</label>
+          <app-error-msg
+            [field]="'descricao'"
+            [forId]="'descricao'"
+            [control]="form.controls.descricao"
+            [label]="'localizacoes.fields.descricao' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            optionLabel="label"
+            optionValue="value"
+            inputId="status"
+            [options]="statusOptions"
+            formControlName="status"
+          ></p-select>
+          <label for="status">{{ 'localizacoes.fields.status' | translate }}</label>
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

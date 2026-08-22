@@ -263,6 +263,38 @@ export const PERMISSIONS = {
     APPROVE: 'MEDICAO_APPROVE',
     VIEW: 'MEDICAO_CONSULT',
   },
+
+  /**
+   * Módulo Patrimônio (com.nimbusflow.patrimonio) - Equipamento/Manutenção/Agenda de Manutenção
+   * Preventiva/Localização/Histórico de Localização, migrado do sistema legado NimbusNovax. Mesmo
+   * padrão de par único CONSULT/MANAGE do restante do catálogo de negócio do NimbusFlow (ver
+   * FORNECEDOR acima). O Dashboard de Equipamentos não tem permissão própria - é gated por
+   * EQUIPAMENTO.VIEW (com.nimbusflow.patrimonio.core.PatrimonioDashboardService).
+   */
+  EQUIPAMENTO: {
+    MANAGE: 'EQUIPAMENTO_MANAGE',
+    VIEW: 'EQUIPAMENTO_CONSULT',
+  },
+
+  MANUTENCAO: {
+    MANAGE: 'MANUTENCAO_MANAGE',
+    VIEW: 'MANUTENCAO_CONSULT',
+  },
+
+  AGENDA_MANUTENCAO: {
+    MANAGE: 'AGENDA_MANUTENCAO_MANAGE',
+    VIEW: 'AGENDA_MANUTENCAO_CONSULT',
+  },
+
+  LOCALIZACAO: {
+    MANAGE: 'LOCALIZACAO_MANAGE',
+    VIEW: 'LOCALIZACAO_CONSULT',
+  },
+
+  HISTORICO_LOCALIZACAO: {
+    MANAGE: 'HISTORICO_LOCALIZACAO_MANAGE',
+    VIEW: 'HISTORICO_LOCALIZACAO_CONSULT',
+  },
 } as const;
 
 type ValueOf<T> = T[keyof T];
@@ -300,4 +332,9 @@ export const ALL_PERMISSIONS: Permission[] = [
   ...Object.values(PERMISSIONS.CHAMADO),
   ...Object.values(PERMISSIONS.PLANO_ACAO),
   ...Object.values(PERMISSIONS.TAREFA),
+  ...Object.values(PERMISSIONS.EQUIPAMENTO),
+  ...Object.values(PERMISSIONS.MANUTENCAO),
+  ...Object.values(PERMISSIONS.AGENDA_MANUTENCAO),
+  ...Object.values(PERMISSIONS.LOCALIZACAO),
+  ...Object.values(PERMISSIONS.HISTORICO_LOCALIZACAO),
 ];

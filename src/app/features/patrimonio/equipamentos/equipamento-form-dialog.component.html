@@ -1,0 +1,222 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '760px', maxWidth: '95vw' }"
+  [header]="isEditMode() ? ('equipamentos.edit.title' | translate) : ('equipamentos.new.title' | translate)"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-6 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputNumber
+            size="small"
+            class="w-full"
+            [useGrouping]="false"
+            inputId="numeroPatrimonio"
+            inputStyleClass="w-full"
+            formControlName="numeroPatrimonio"
+          ></p-inputNumber>
+          <app-error-msg
+            [field]="'numeroPatrimonio'"
+            [forId]="'numeroPatrimonio'"
+            [control]="form.controls.numeroPatrimonio"
+            [label]="'equipamentos.fields.numeroPatrimonio' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-9 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="descricao"
+            pInputText
+            type="text"
+            formControlName="descricao"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'descricao'"
+            [forId]="'descricao'"
+            [control]="form.controls.descricao"
+            [label]="'equipamentos.fields.descricao' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input
+            id="fornecedorNome"
+            pInputText
+            type="text"
+            formControlName="fornecedorNome"
+            class="w-full p-inputtext-sm"
+          />
+          <app-error-msg
+            [field]="'fornecedorNome'"
+            [forId]="'fornecedorNome'"
+            [control]="form.controls.fornecedorNome"
+            [label]="'equipamentos.fields.fornecedorNome' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            optionLabel="label"
+            optionValue="value"
+            inputId="status"
+            [options]="statusOptions"
+            formControlName="status"
+          ></p-select>
+          <label for="status">{{ 'equipamentos.fields.status' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            [showClear]="true"
+            optionLabel="label"
+            optionValue="value"
+            inputId="voltagem"
+            [options]="voltagemOptions"
+            formControlName="voltagem"
+          ></p-select>
+          <label for="voltagem">{{ 'equipamentos.fields.voltagem' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputNumber
+            size="small"
+            class="w-full"
+            mode="currency"
+            inputId="preco"
+            inputStyleClass="w-full"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [currency]="i18n.getCurrencyBrl()"
+            [locale]="i18n.getLocalePtBr()"
+            formControlName="preco"
+          ></p-inputNumber>
+          <label for="preco">{{ 'equipamentos.fields.preco' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            csDateInputMask
+            inputId="dataCompra"
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            formControlName="dataCompra"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
+          ></p-datepicker>
+          <label for="dataCompra">{{ 'equipamentos.fields.dataCompra' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            csDateInputMask
+            inputId="dataChegada"
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            formControlName="dataChegada"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
+          ></p-datepicker>
+          <label for="dataChegada">{{ 'equipamentos.fields.dataChegada' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            csDateInputMask
+            inputId="inicioGarantia"
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            formControlName="inicioGarantia"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
+          ></p-datepicker>
+          <label for="inicioGarantia">{{ 'equipamentos.fields.inicioGarantia' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            csDateInputMask
+            inputId="fimGarantia"
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            formControlName="fimGarantia"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
+          ></p-datepicker>
+          <label for="fimGarantia">{{ 'equipamentos.fields.fimGarantia' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea
+            pTextarea
+            id="observacao"
+            rows="2"
+            class="w-full"
+            formControlName="observacao"
+          ></textarea>
+          <label for="observacao">{{ 'equipamentos.fields.observacao' | translate }}</label>
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,112 @@
+<cs-page-header
+  [subtitle]="'localizacoes.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.patrimonio' | translate) },
+    { label: ('routes.localizacoes.title' | translate) },
+  ]"
+>
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    tooltipPosition="top"
+    [disabled]="!canManage()"
+    class="p-button-info p-button-sm"
+    [label]="'localizacoes.new.title' | translate"
+  ></button>
+</cs-page-header>
+
+<app-localizacao-form-dialog
+  [visible]="formVisible()"
+  [editing]="editing()"
+  (visibleChange)="onFormVisibleChange($event)"
+></app-localizacao-form-dialog>
+
+<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+  <p-table
+    stripedRows
+    dataKey="id"
+    size="small"
+    showGridlines
+    [value]="items()"
+    [rowHover]="true"
+    [loading]="loading()"
+    class="cs-admin-table"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: auto" />
+        <col style="width: 120px" />
+        <col style="width: 150px" />
+        <col style="width: 70px" />
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'localizacoes.columns.descricao' | translate">{{ 'localizacoes.columns.descricao' | translate }}</span>
+        </th>
+        <th class="text-center">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'localizacoes.columns.status' | translate">{{ 'localizacoes.columns.status' | translate }}</span>
+        </th>
+        <th class="text-center">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'localizacoes.columns.createdAt' | translate">{{ 'localizacoes.columns.createdAt' | translate }}</span>
+        </th>
+        <th class="text-center">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td class="mobile-card-title">
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.descricao">{{ row.descricao }}</span>
+        </td>
+        <td class="text-center" [attr.data-label]="'localizacoes.columns.status' | translate">
+          <cs-status-badge
+            [tone]="statusTone(row.status)"
+            [label]="('localizacoes.status.' + row.status) | translate"
+          ></cs-status-badge>
+        </td>
+        <td class="text-center" [attr.data-label]="'localizacoes.columns.createdAt' | translate">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
+        <td class="text-center mobile-card-actions">
+          <div class="table-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="goEdit(row)"
+              tooltipPosition="top"
+              [disabled]="!canManage() || isSystem(row)"
+              class="p-button-text p-button-sm"
+              [pTooltip]="isSystem(row) ? ('localizacoes.action.systemProtected' | translate) : ('common.edit' | translate)"
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              tooltipPosition="top"
+              (click)="confirmDelete(row)"
+              [disabled]="!canManage() || isSystem(row)"
+              class="p-button-text p-button-sm p-button-danger"
+              [pTooltip]="isSystem(row) ? ('localizacoes.action.systemProtected' | translate) : ('common.delete' | translate)"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4" class="text-center py-5 opacity-70">
+          {{ loadedOnce() ? ('localizacoes.empty.title' | translate) : ('common.loading' | translate) }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

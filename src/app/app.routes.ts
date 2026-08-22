@@ -251,6 +251,100 @@ export const appRoutes: Routes = [
           ),
       },
 
+      // Patrimônio (com.nimbusflow.patrimonio no backend) - Equipamento/Manutenção/Agenda de
+      // Manutenção Preventiva/Localização/Histórico de Localização, migrado do sistema legado
+      // NimbusNovax. Entradas diretas e planas, mesmo padrão de Fornecedor/Obra acima (não
+      // loadChildren - ver plano de migração). Dashboard usa a mesma permissão de Equipamentos.
+      {
+        path: 'equipamentos',
+        title: 'routes.equipamentos.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.EQUIPAMENTO.VIEW],
+        },
+        loadComponent: () =>
+          import('./features/patrimonio/equipamentos/equipamentos-list.component').then(
+            (m) => m.EquipamentosListComponent,
+          ),
+      },
+
+      {
+        path: 'manutencoes',
+        title: 'routes.manutencoes.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.MANUTENCAO.VIEW],
+        },
+        loadComponent: () =>
+          import('./features/patrimonio/manutencoes/manutencoes-list.component').then(
+            (m) => m.ManutencoesListComponent,
+          ),
+      },
+
+      {
+        path: 'agenda-manutencao',
+        title: 'routes.agendaManutencao.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.AGENDA_MANUTENCAO.VIEW],
+        },
+        loadComponent: () =>
+          import('./features/patrimonio/agenda-manutencao/agenda-manutencao-list.component').then(
+            (m) => m.AgendaManutencaoListComponent,
+          ),
+      },
+
+      {
+        path: 'localizacoes',
+        title: 'routes.localizacoes.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.LOCALIZACAO.VIEW],
+        },
+        loadComponent: () =>
+          import('./features/patrimonio/localizacoes/localizacoes-list.component').then(
+            (m) => m.LocalizacoesListComponent,
+          ),
+      },
+
+      {
+        path: 'historico-localizacao',
+        title: 'routes.historicoLocalizacao.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.HISTORICO_LOCALIZACAO.VIEW],
+        },
+        loadComponent: () =>
+          import('./features/patrimonio/historico-localizacao/historico-localizacao-list.component').then(
+            (m) => m.HistoricoLocalizacaoListComponent,
+          ),
+      },
+
+      {
+        path: 'patrimonio/dashboard',
+        title: 'routes.patrimonioDashboard.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.EQUIPAMENTO.VIEW],
+        },
+        loadComponent: () =>
+          import('./features/patrimonio/dashboard/patrimonio-dashboard.component').then(
+            (m) => m.PatrimonioDashboardComponent,
+          ),
+      },
+
       {
         path: 'forbidden',
         title: 'routes.forbidden.title',

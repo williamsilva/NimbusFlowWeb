@@ -93,6 +93,58 @@ export const APP_MENU: AppMenuItem[] = [
       },
     ],
   },
+  /* Patrimônio (com.nimbusflow.patrimonio) - Equipamento/Manutenção/Agenda de Manutenção
+   * Preventiva/Localização/Histórico de Localização, migrado do sistema legado NimbusNovax. Cada
+   * item exige sua própria permissão de visualização (*_CONSULT), mesmo padrão do restante do
+   * menu. Dashboard usa a mesma permissão de Equipamentos (sem permissão própria). */
+  {
+    icon: 'pi pi-box text-orange-600',
+    labelKey: 'menu.patrimonio.title',
+    children: [
+      {
+        labelKey: 'menu.patrimonio.equipamentos',
+        icon: 'pi pi-desktop text-orange-400',
+        route: '/equipamentos',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.EQUIPAMENTO.VIEW],
+      },
+      {
+        labelKey: 'menu.patrimonio.manutencoes',
+        icon: 'pi pi-wrench text-orange-400',
+        route: '/manutencoes',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.MANUTENCAO.VIEW],
+      },
+      {
+        labelKey: 'menu.patrimonio.agendaManutencao',
+        icon: 'pi pi-calendar-clock text-orange-400',
+        route: '/agenda-manutencao',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.AGENDA_MANUTENCAO.VIEW],
+      },
+      {
+        labelKey: 'menu.patrimonio.localizacoes',
+        icon: 'pi pi-map-marker text-orange-400',
+        route: '/localizacoes',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.LOCALIZACAO.VIEW],
+      },
+      {
+        labelKey: 'menu.patrimonio.historicoLocalizacao',
+        icon: 'pi pi-history text-orange-400',
+        route: '/historico-localizacao',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.HISTORICO_LOCALIZACAO.VIEW],
+      },
+      {
+        labelKey: 'menu.patrimonio.dashboard',
+        icon: 'pi pi-chart-bar text-orange-400',
+        route: '/patrimonio/dashboard',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.EQUIPAMENTO.VIEW],
+      },
+    ],
+  },
   /* Security */
   {
     icon: 'pi pi-shield text-red-600',

@@ -1,0 +1,141 @@
+<cs-page-header
+  [subtitle]="'manutencoes.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.patrimonio' | translate) },
+    { label: ('routes.manutencoes.title' | translate) },
+  ]"
+>
+  <button
+    pButton
+    type="button"
+    (click)="goNew()"
+    icon="pi pi-plus"
+    tooltipPosition="top"
+    [disabled]="!canManage()"
+    class="p-button-info p-button-sm"
+    [label]="'manutencoes.new.title' | translate"
+  ></button>
+</cs-page-header>
+
+<app-manutencao-form-dialog
+  [visible]="formVisible()"
+  [editing]="editing()"
+  (visibleChange)="onFormVisibleChange($event)"
+></app-manutencao-form-dialog>
+
+<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+  <p-table
+    stripedRows
+    dataKey="id"
+    size="small"
+    [rows]="10"
+    showGridlines
+    [value]="items()"
+    [rowHover]="true"
+    [paginator]="true"
+    [loading]="loading()"
+    class="cs-admin-table"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 50]"
+    [paginatorDropdownAppendTo]="'body'"
+    [tableStyle]="{ width: '100%', 'min-width': '60rem' }"
+    [currentPageReportTemplate]="'pagination.report' | translate"
+  >
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: 110px" />
+        <col style="width: auto" />
+        <col style="width: 180px" />
+        <col style="width: 110px" />
+        <col style="width: 170px" />
+        <col style="width: 100px" />
+        <col style="width: 100px" />
+        <col style="width: 70px" />
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.numeroPatrimonio' | translate">{{ 'manutencoes.columns.numeroPatrimonio' | translate }}</span>
+        </th>
+        <th>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.equipamento' | translate">{{ 'manutencoes.columns.equipamento' | translate }}</span>
+        </th>
+        <th>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.autorizadaNome' | translate">{{ 'manutencoes.columns.autorizadaNome' | translate }}</span>
+        </th>
+        <th class="text-center">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.status' | translate">{{ 'manutencoes.columns.status' | translate }}</span>
+        </th>
+        <th class="text-center">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.tipoManutencao' | translate">{{ 'manutencoes.columns.tipoManutencao' | translate }}</span>
+        </th>
+        <th class="text-center">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.dataEnvio' | translate">{{ 'manutencoes.columns.dataEnvio' | translate }}</span>
+        </th>
+        <th class="text-right">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.preco' | translate">{{ 'manutencoes.columns.preco' | translate }}</span>
+        </th>
+        <th class="text-center">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td class="text-center mobile-card-title">{{ row.equipamento.numeroPatrimonio }}</td>
+        <td [attr.data-label]="'manutencoes.columns.equipamento' | translate">
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.equipamento.descricao">{{ row.equipamento.descricao }}</span>
+        </td>
+        <td [attr.data-label]="'manutencoes.columns.autorizadaNome' | translate">
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.autorizadaNome">{{ row.autorizadaNome }}</span>
+        </td>
+        <td class="text-center" [attr.data-label]="'manutencoes.columns.status' | translate">
+          <cs-status-badge
+            [tone]="statusTone(row.status)"
+            [label]="('manutencoes.status.' + row.status) | translate"
+          ></cs-status-badge>
+        </td>
+        <td class="text-center" [attr.data-label]="'manutencoes.columns.tipoManutencao' | translate">{{ ('manutencoes.tipo.' + row.tipoManutencao) | translate }}</td>
+        <td class="text-center" [attr.data-label]="'manutencoes.columns.dataEnvio' | translate">{{ row.dataEnvio | csDate: 'short' }}</td>
+        <td class="text-right" [attr.data-label]="'manutencoes.columns.preco' | translate">{{ row.preco | csCurrency }}</td>
+        <td class="text-center mobile-card-actions">
+          <div class="table-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="goEdit(row)"
+              tooltipPosition="top"
+              [disabled]="!canManage()"
+              class="p-button-text p-button-sm"
+              [pTooltip]="'common.edit' | translate"
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              tooltipPosition="top"
+              (click)="confirmDelete(row)"
+              [disabled]="!canDelete(row)"
+              class="p-button-text p-button-sm p-button-danger"
+              [pTooltip]="canDelete(row) ? ('common.delete' | translate) : ('manutencoes.action.cannotDelete' | translate)"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" class="text-center py-5 opacity-70">
+          {{ loadedOnce() ? ('manutencoes.empty.title' | translate) : ('common.loading' | translate) }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

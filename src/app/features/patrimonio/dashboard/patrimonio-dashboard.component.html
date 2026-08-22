@@ -1,0 +1,145 @@
+<cs-page-header
+  [subtitle]="'patrimonioDashboard.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.patrimonio' | translate) },
+    { label: ('routes.patrimonioDashboard.title' | translate) },
+  ]"
+  [compact]="false"
+>
+</cs-page-header>
+
+<div class="surface-card border-round px-3 py-3 mt-2">
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-6 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          csDateInputMask
+          inputId="firstPeriod"
+          class="w-full"
+          appendTo="body"
+          [showIcon]="true"
+          [dateFormat]="i18n.getDateFormat()"
+          [ngModel]="firstPeriod()"
+          (ngModelChange)="firstPeriod.set($event)"
+          [csDateInputMaskFormat]="i18n.getDateFormat()"
+        ></p-datepicker>
+        <label for="firstPeriod">{{ 'patrimonioDashboard.fields.firstPeriod' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-6 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-datepicker
+          csDateInputMask
+          inputId="finalPeriod"
+          class="w-full"
+          appendTo="body"
+          [showIcon]="true"
+          [dateFormat]="i18n.getDateFormat()"
+          [ngModel]="finalPeriod()"
+          (ngModelChange)="finalPeriod.set($event)"
+          [csDateInputMaskFormat]="i18n.getDateFormat()"
+        ></p-datepicker>
+        <label for="finalPeriod">{{ 'patrimonioDashboard.fields.finalPeriod' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-6 p-1 flex gap-2">
+      <button
+        pButton
+        type="button"
+        (click)="search()"
+        icon="pi pi-search"
+        [loading]="loading()"
+        class="p-button-sm"
+        [label]="'common.filter' | translate"
+      ></button>
+      <button
+        pButton
+        type="button"
+        (click)="clear()"
+        icon="pi pi-times"
+        class="p-button-text p-button-sm"
+        [label]="'common.clear' | translate"
+      ></button>
+    </div>
+  </div>
+</div>
+
+<div class="grid formgrid gap-0 mt-2">
+  <div class="col-12 md:col-6 p-2">
+    <div class="surface-card border-round px-3 py-3 h-full">
+      <div class="text-sm opacity-70 mb-2">{{ 'patrimonioDashboard.cards.totalEquipamentos' | translate }}</div>
+      <div class="text-3xl font-bold">{{ totalEquipamentos()?.totalEquipamentos ?? 0 }}</div>
+      <div class="text-sm opacity-70 mt-1">{{ (totalEquipamentos()?.valorTotal ?? 0) | csCurrency }}</div>
+    </div>
+  </div>
+
+  <div class="col-12 md:col-6 p-2">
+    <div class="surface-card border-round px-3 py-3 h-full">
+      <div class="text-sm opacity-70 mb-2">{{ 'patrimonioDashboard.cards.totalManutencoes' | translate }}</div>
+      <div class="text-3xl font-bold">{{ totalManutencoes()?.totalManutencoes ?? 0 }}</div>
+      <div class="text-sm opacity-70 mt-1">
+        {{ 'patrimonioDashboard.cards.equipamentosEmManutencao' | translate }}: {{ totalManutencoes()?.totalEquipamentosEmManutencao ?? 0 }}
+        &middot; {{ (totalManutencoes()?.valorTotal ?? 0) | csCurrency }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid formgrid gap-0 mt-2">
+  <div class="col-12 md:col-7 p-2">
+    <div class="surface-card border-round px-3 pt-2 pb-3 h-full">
+      <h4 class="mt-0 mb-2 text-sm font-semibold opacity-70">{{ 'patrimonioDashboard.tables.topEquipamentos' | translate }}</h4>
+      <p-table [value]="topEquipamentos()" size="small" [loading]="loading()" styleClass="cs-admin-table">
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="text-center">{{ 'patrimonioDashboard.columns.numeroPatrimonio' | translate }}</th>
+            <th>{{ 'patrimonioDashboard.columns.descricao' | translate }}</th>
+            <th class="text-center">{{ 'patrimonioDashboard.columns.totalManutencoes' | translate }}</th>
+            <th class="text-right">{{ 'patrimonioDashboard.columns.valorTotal' | translate }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td class="text-center">{{ row.numeroPatrimonio }}</td>
+            <td>{{ row.descricao }}</td>
+            <td class="text-center">{{ row.totalManutencoes }}</td>
+            <td class="text-right">{{ row.valorTotal | csCurrency }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="text-center py-4 opacity-70">{{ 'common.noData' | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <div class="col-12 md:col-5 p-2">
+    <div class="surface-card border-round px-3 pt-2 pb-3 h-full">
+      <h4 class="mt-0 mb-2 text-sm font-semibold opacity-70">{{ 'patrimonioDashboard.tables.manutencoesPorStatus' | translate }}</h4>
+      <p-table [value]="manutencoesPorStatus()" size="small" [loading]="loading()" styleClass="cs-admin-table">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ 'patrimonioDashboard.columns.status' | translate }}</th>
+            <th class="text-center">{{ 'patrimonioDashboard.columns.total' | translate }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ ('manutencoes.status.' + row.status) | translate }}</td>
+            <td class="text-center">{{ row.total }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="2" class="text-center py-4 opacity-70">{{ 'common.noData' | translate }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

@@ -227,6 +227,24 @@
     },
     "tasks": {
       "title": "Tareas"
+    },
+    "equipamentos": {
+      "title": "Equipos"
+    },
+    "manutencoes": {
+      "title": "Mantenimientos"
+    },
+    "agendaManutencao": {
+      "title": "Agenda de Mantenimiento"
+    },
+    "localizacoes": {
+      "title": "Ubicaciones"
+    },
+    "historicoLocalizacao": {
+      "title": "Historial de Ubicación"
+    },
+    "patrimonioDashboard": {
+      "title": "Panel de Patrimonio"
     }
   },
   "topbar": {
@@ -369,6 +387,15 @@
       "tickets": "Llamados",
       "actionPlans": "Planes de Acción",
       "tasks": "Tareas"
+    },
+    "patrimonio": {
+      "title": "Patrimonio",
+      "equipamentos": "Equipos",
+      "manutencoes": "Mantenimientos",
+      "agendaManutencao": "Agenda de Mantenimiento",
+      "localizacoes": "Ubicaciones",
+      "historicoLocalizacao": "Historial de Ubicación",
+      "dashboard": "Panel"
     }
   },
   "sidebar": {
@@ -433,7 +460,8 @@
     "suggestions": "Sugerencias",
     "tickets": "Llamados",
     "actionPlans": "Planes de Acción",
-    "tasks": "Tareas"
+    "tasks": "Tareas",
+    "patrimonio": "Patrimonio"
   },
   "footer": {
     "copyright": "NimbusFlow Tech",
@@ -3877,6 +3905,263 @@
       "header": "Desactivar proveedor",
       "message": "¿Realmente desea desactivar el proveedor {companyName}?",
       "success": "Proveedor desactivado con éxito."
+    }
+  },
+  "equipamentos": {
+    "subtitle": "Equipos controlados por el módulo de Patrimonio",
+    "new": { "title": "Nuevo equipo" },
+    "edit": { "title": "Editar equipo" },
+    "fields": {
+      "numeroPatrimonio": "N.º de patrimonio",
+      "descricao": "Descripción",
+      "fornecedorNome": "Proveedor",
+      "status": "Estado",
+      "voltagem": "Alimentación",
+      "preco": "Valor",
+      "dataCompra": "Fecha de compra",
+      "dataChegada": "Fecha de llegada",
+      "inicioGarantia": "Inicio de garantía",
+      "fimGarantia": "Fin de garantía",
+      "observacao": "Observación"
+    },
+    "columns": {
+      "numeroPatrimonio": "N.º de patrimonio",
+      "descricao": "Descripción",
+      "fornecedorNome": "Proveedor",
+      "status": "Estado",
+      "preco": "Valor",
+      "dataCompra": "Compra",
+      "totalManutencoes": "Mantenimientos",
+      "ultimaManutencao": "Último mantenimiento"
+    },
+    "status": {
+      "ATIVO": "Activo",
+      "MANUTENCAO": "En mantenimiento",
+      "QUEIMADO": "Quemado",
+      "DESCARTADO": "Descartado"
+    },
+    "voltagem": {
+      "MONOFASICO_127": "Monofásico 127V",
+      "MONOFASICO_220": "Monofásico 220V",
+      "BIFASICO_220": "Bifásico 220V",
+      "BIFASICO_380": "Bifásico 380V",
+      "TRIFASICO_220": "Trifásico 220V",
+      "TRIFASICO_380": "Trifásico 380V",
+      "GASOLINA": "Gasolina",
+      "DIESEL": "Diésel",
+      "BIVOLT": "Bivoltaje"
+    },
+    "empty": { "title": "Ningún equipo registrado" },
+    "form": {
+      "invalid": "Revise los campos destacados antes de guardar.",
+      "created": "Equipo creado con éxito.",
+      "updated": "Equipo actualizado con éxito.",
+      "saveError": "No fue posible guardar el equipo."
+    }
+  },
+  "manutencoes": {
+    "subtitle": "Mantenimientos correctivos y preventivos de equipos",
+    "new": { "title": "Nuevo mantenimiento" },
+    "edit": { "title": "Editar mantenimiento" },
+    "fields": {
+      "equipamento": "Equipo",
+      "autorizadaNome": "Autorizada",
+      "status": "Estado",
+      "tipoManutencao": "Tipo",
+      "preco": "Valor",
+      "dataEnvio": "Envío",
+      "dataRetorno": "Retorno",
+      "inicioGarantia": "Inicio de garantía",
+      "fimGarantia": "Fin de garantía",
+      "descricao": "Descripción",
+      "observacao": "Observación"
+    },
+    "columns": {
+      "numeroPatrimonio": "N.º de patrimonio",
+      "equipamento": "Equipo",
+      "autorizadaNome": "Autorizada",
+      "status": "Estado",
+      "tipoManutencao": "Tipo",
+      "dataEnvio": "Envío",
+      "preco": "Valor"
+    },
+    "status": {
+      "ORCANDO": "Cotizando",
+      "PROPOSTA": "Propuesta",
+      "APROVADA": "Aprobada",
+      "CONCERTADA": "Reparada",
+      "RECEBIDA": "Recibida"
+    },
+    "tipo": {
+      "CORRETIVA_PROGRAMADA": "Correctiva programada",
+      "CORRETIVA_URGENTE": "Correctiva urgente",
+      "PREVENTIVA": "Preventiva",
+      "PREDITIVA": "Predictiva",
+      "DETECTIVA": "Detectiva"
+    },
+    "empty": { "title": "Ningún mantenimiento registrado" },
+    "form": {
+      "invalid": "Revise los campos destacados antes de guardar.",
+      "created": "Mantenimiento creado con éxito.",
+      "updated": "Mantenimiento actualizado con éxito.",
+      "saveError": "No fue posible guardar el mantenimiento."
+    },
+    "action": { "cannotDelete": "Los mantenimientos reparados o recibidos no pueden eliminarse" },
+    "deleteConfirm": {
+      "header": "Eliminar mantenimiento",
+      "message": "¿Seguro que desea eliminar este mantenimiento?",
+      "success": "Mantenimiento eliminado con éxito",
+      "error": "No fue posible eliminar el mantenimiento"
+    }
+  },
+  "agendaManutencao": {
+    "subtitle": "Agenda de mantenimiento preventivo de los equipos",
+    "new": { "title": "Nueva programación" },
+    "edit": { "title": "Editar programación" },
+    "fields": {
+      "equipamento": "Equipo",
+      "status": "Estado",
+      "frequencia": "Frecuencia",
+      "tipoManutencao": "Tipo",
+      "perfilNotificacao": "Notificar",
+      "observacao": "Observación"
+    },
+    "columns": {
+      "numeroPatrimonio": "N.º de patrimonio",
+      "equipamento": "Equipo",
+      "status": "Estado",
+      "frequencia": "Frecuencia",
+      "tipoManutencao": "Tipo",
+      "perfilNotificacao": "Notificar",
+      "proximaManutencao": "Próximo mantenimiento"
+    },
+    "status": {
+      "AGENDADA": "Programada",
+      "VENCIDA": "Vencida"
+    },
+    "frequencia": {
+      "SEMANAL": "Semanal",
+      "QUINZENAL": "Quincenal",
+      "MENSAL": "Mensual",
+      "TRIMESTRAL": "Trimestral",
+      "SEMESTRAL": "Semestral",
+      "ANUAL": "Anual"
+    },
+    "perfil": {
+      "USUARIO": "Usuario",
+      "GESTOR": "Gestor",
+      "SUPERVISOR": "Supervisor"
+    },
+    "empty": { "title": "Ninguna programación registrada" },
+    "form": {
+      "invalid": "Revise los campos destacados antes de guardar.",
+      "created": "Programación creada con éxito.",
+      "updated": "Programación actualizada con éxito.",
+      "saveError": "No fue posible guardar la programación.",
+      "proximaManutencaoHint": "La próxima fecha de mantenimiento se calcula automáticamente a partir de la frecuencia y del último envío a mantenimiento."
+    },
+    "deleteConfirm": {
+      "header": "Eliminar programación",
+      "message": "¿Seguro que desea eliminar esta programación?",
+      "success": "Programación eliminada con éxito",
+      "error": "No fue posible eliminar la programación"
+    }
+  },
+  "localizacoes": {
+    "subtitle": "Lugares donde puede estar un equipo (almacén, asistencia técnica, sectores del parque)",
+    "new": { "title": "Nueva ubicación" },
+    "edit": { "title": "Editar ubicación" },
+    "fields": {
+      "descricao": "Descripción",
+      "status": "Estado"
+    },
+    "columns": {
+      "descricao": "Descripción",
+      "status": "Estado",
+      "createdAt": "Registrado el"
+    },
+    "status": {
+      "ATIVO": "Activo",
+      "INATIVO": "Inactivo"
+    },
+    "empty": { "title": "Ninguna ubicación registrada" },
+    "action": { "systemProtected": "Ubicación generada por el sistema, no puede editarse/eliminarse" },
+    "form": {
+      "invalid": "Revise los campos destacados antes de guardar.",
+      "created": "Ubicación creada con éxito.",
+      "updated": "Ubicación actualizada con éxito.",
+      "saveError": "No fue posible guardar la ubicación."
+    },
+    "deleteConfirm": {
+      "header": "Eliminar ubicación",
+      "message": "¿Seguro que desea eliminar esta ubicación?",
+      "success": "Ubicación eliminada con éxito",
+      "error": "No fue posible eliminar la ubicación"
+    }
+  },
+  "historicoLocalizacao": {
+    "subtitle": "Historial de movimiento de los equipos entre ubicaciones",
+    "new": { "title": "Nuevo registro" },
+    "edit": { "title": "Editar registro" },
+    "fields": {
+      "equipamento": "Equipo",
+      "localizacao": "Ubicación",
+      "status": "Estado",
+      "dataInicial": "Fecha inicial",
+      "dataFinal": "Fecha final",
+      "observacao": "Observación"
+    },
+    "columns": {
+      "numeroPatrimonio": "N.º de patrimonio",
+      "equipamento": "Equipo",
+      "localizacao": "Ubicación",
+      "status": "Estado",
+      "dataInicial": "Fecha inicial",
+      "dataFinal": "Fecha final"
+    },
+    "status": {
+      "ATIVO": "Activo",
+      "REMOVIDO": "Removido",
+      "MANUTENCAO": "En mantenimiento",
+      "DESCARTADO": "Descartado"
+    },
+    "empty": { "title": "Ningún historial registrado" },
+    "action": { "systemProtected": "Historial generado por el sistema, no puede editarse/eliminarse" },
+    "form": {
+      "invalid": "Revise los campos destacados antes de guardar.",
+      "created": "Registro creado con éxito.",
+      "updated": "Registro actualizado con éxito.",
+      "saveError": "No fue posible guardar el registro."
+    },
+    "deleteConfirm": {
+      "header": "Eliminar registro",
+      "message": "¿Seguro que desea eliminar este registro?",
+      "success": "Registro eliminado con éxito",
+      "error": "No fue posible eliminar el registro"
+    }
+  },
+  "patrimonioDashboard": {
+    "subtitle": "Estadísticas de equipos y mantenimientos",
+    "fields": {
+      "firstPeriod": "Desde",
+      "finalPeriod": "Hasta"
+    },
+    "cards": {
+      "totalEquipamentos": "Total de equipos",
+      "totalManutencoes": "Total de mantenimientos",
+      "equipamentosEmManutencao": "Equipos en mantenimiento"
+    },
+    "tables": {
+      "topEquipamentos": "Equipos con más mantenimientos",
+      "manutencoesPorStatus": "Mantenimientos por estado"
+    },
+    "columns": {
+      "numeroPatrimonio": "N.º de patrimonio",
+      "descricao": "Descripción",
+      "totalManutencoes": "Mantenimientos",
+      "valorTotal": "Valor total",
+      "status": "Estado",
+      "total": "Total"
     }
   },
   "works": {

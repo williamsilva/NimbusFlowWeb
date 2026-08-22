@@ -1,0 +1,148 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '620px', maxWidth: '95vw' }"
+  [header]="isEditMode() ? ('agendaManutencao.edit.title' | translate) : ('agendaManutencao.new.title' | translate)"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <p class="mt-0 mb-3 text-sm opacity-70">{{ 'agendaManutencao.form.proximaManutencaoHint' | translate }}</p>
+
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            optionLabel="label"
+            optionValue="value"
+            inputId="equipamentoId"
+            formControlName="equipamentoId"
+            [options]="equipamentoOptions()"
+          ></p-select>
+          <app-error-msg
+            [field]="'equipamentoId'"
+            [forId]="'equipamentoId'"
+            [control]="form.controls.equipamentoId"
+            [label]="'agendaManutencao.fields.equipamento' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            optionLabel="label"
+            optionValue="value"
+            inputId="status"
+            [options]="statusOptions"
+            formControlName="status"
+          ></p-select>
+          <label for="status">{{ 'agendaManutencao.fields.status' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            optionLabel="label"
+            optionValue="value"
+            inputId="frequencia"
+            [options]="frequenciaOptions"
+            formControlName="frequencia"
+          ></p-select>
+          <app-error-msg
+            [field]="'frequencia'"
+            [forId]="'frequencia'"
+            [control]="form.controls.frequencia"
+            [label]="'agendaManutencao.fields.frequencia' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            optionLabel="label"
+            optionValue="value"
+            inputId="tipoManutencao"
+            [options]="tipoOptions"
+            formControlName="tipoManutencao"
+          ></p-select>
+          <app-error-msg
+            [field]="'tipoManutencao'"
+            [forId]="'tipoManutencao'"
+            [control]="form.controls.tipoManutencao"
+            [label]="'agendaManutencao.fields.tipoManutencao' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-3 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            optionLabel="label"
+            optionValue="value"
+            inputId="perfilNotificacao"
+            [options]="perfilOptions"
+            formControlName="perfilNotificacao"
+          ></p-select>
+          <app-error-msg
+            [field]="'perfilNotificacao'"
+            [forId]="'perfilNotificacao'"
+            [control]="form.controls.perfilNotificacao"
+            [label]="'agendaManutencao.fields.perfilNotificacao' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea pTextarea id="observacao" rows="2" class="w-full" formControlName="observacao"></textarea>
+          <label for="observacao">{{ 'agendaManutencao.fields.observacao' | translate }}</label>
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,142 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '620px', maxWidth: '95vw' }"
+  [header]="(isEditing() ? 'historicoLocalizacao.edit.title' : 'historicoLocalizacao.new.title') | translate"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            optionLabel="label"
+            optionValue="value"
+            inputId="equipamentoId"
+            formControlName="equipamentoId"
+            [options]="equipamentoOptions()"
+          ></p-select>
+          <app-error-msg
+            [field]="'equipamentoId'"
+            [forId]="'equipamentoId'"
+            [control]="form.controls.equipamentoId"
+            [label]="'historicoLocalizacao.fields.equipamento' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            optionLabel="label"
+            optionValue="value"
+            inputId="localizacaoId"
+            formControlName="localizacaoId"
+            [options]="localizacaoOptions()"
+          ></p-select>
+          <app-error-msg
+            [field]="'localizacaoId'"
+            [forId]="'localizacaoId'"
+            [control]="form.controls.localizacaoId"
+            [label]="'historicoLocalizacao.fields.localizacao' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            optionLabel="label"
+            optionValue="value"
+            inputId="status"
+            [options]="statusOptions"
+            formControlName="status"
+          ></p-select>
+          <label for="status">{{ 'historicoLocalizacao.fields.status' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            csDateInputMask
+            inputId="dataInicial"
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            formControlName="dataInicial"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
+          ></p-datepicker>
+          <app-error-msg
+            [field]="'dataInicial'"
+            [forId]="'dataInicial'"
+            [control]="form.controls.dataInicial"
+            [label]="'historicoLocalizacao.fields.dataInicial' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-6 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-datepicker
+            csDateInputMask
+            inputId="dataFinal"
+            class="w-full"
+            appendTo="body"
+            [showIcon]="true"
+            [dateFormat]="i18n.getDateFormat()"
+            formControlName="dataFinal"
+            [csDateInputMaskFormat]="i18n.getDateFormat()"
+          ></p-datepicker>
+          <label for="dataFinal">{{ 'historicoLocalizacao.fields.dataFinal' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea pTextarea id="observacao" rows="2" class="w-full" formControlName="observacao"></textarea>
+          <label for="observacao">{{ 'historicoLocalizacao.fields.observacao' | translate }}</label>
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

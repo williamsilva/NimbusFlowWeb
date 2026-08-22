@@ -137,6 +137,17 @@ export const UI_KEYS = {
       actionPlans: 'menu.works.actionPlans',
       tasks: 'menu.works.tasks',
     },
+    /* Equipamento / Manutenção / Agenda de Manutenção Preventiva / Localização / Histórico de
+     * Localização (com.nimbusflow.patrimonio no backend) */
+    patrimonio: {
+      title: 'menu.patrimonio.title',
+      equipamentos: 'menu.patrimonio.equipamentos',
+      manutencoes: 'menu.patrimonio.manutencoes',
+      agendaManutencao: 'menu.patrimonio.agendaManutencao',
+      localizacoes: 'menu.patrimonio.localizacoes',
+      historicoLocalizacao: 'menu.patrimonio.historicoLocalizacao',
+      dashboard: 'menu.patrimonio.dashboard',
+    },
   },
   sidebar: {
     userFallback: 'sidebar.userFallback',
