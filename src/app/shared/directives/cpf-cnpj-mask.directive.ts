@@ -1,5 +1,6 @@
 import { NgControl } from '@angular/forms';
-import { Directive, ElementRef, HostListener, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DestroyRef, Directive, ElementRef, HostListener, OnInit, inject } from '@angular/core';
 
 /**
  * Máscara simples CPF/CNPJ:
@@ -12,9 +13,41 @@ import { Directive, ElementRef, HostListener, inject } from '@angular/core';
   selector: '[csCpfCnpjMask]',
   standalone: true,
 })
-export class CpfCnpjMaskDirective {
+export class CpfCnpjMaskDirective implements OnInit {
   private readonly el = inject<ElementRef<HTMLInputElement>>(ElementRef);
   private readonly ngControl = inject(NgControl, { optional: true });
+  private readonly destroyRef = inject(DestroyRef);
+
+  /**
+   * `@HostListener('input')` só reage à digitação do usuário - carregar um valor existente via
+   * `form.reset()`/`patchValue()` (ex.: abrir o diálogo em modo edição) escreve direto no DOM via
+   * `DefaultValueAccessor.writeValue()`, sem disparar `input`, então o campo ficava sem máscara
+   * até o usuário mexer nele. `valueChanges` cobre os dois casos.
+   *
+   * Só se aplica quando há um `NgControl` de fato (formControlName/ngModel) - alguns usos desta
+   * diretiva são em campos de filtro com `[value]` puro (sem form), onde não há um "valor do
+   * controle" pra sincronizar; nesses casos a diretiva continua só reagindo a `input`/`blur`,
+   * comportamento inalterado.
+   */
+  ngOnInit(): void {
+    if (!this.ngControl?.control) return;
+
+    this.applyMask();
+
+    this.ngControl.control.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.applyMask());
+  }
+
+  private applyMask(): void {
+    const digits = String(this.ngControl?.control?.value ?? '')
+      .replace(/\D+/g, '')
+      .slice(0, 14);
+    const masked = formatCpfCnpj(digits);
+    if (this.el.nativeElement.value !== masked) {
+      this.el.nativeElement.value = masked;
+    }
+  }
 
   @HostListener('input')
   onInput() {

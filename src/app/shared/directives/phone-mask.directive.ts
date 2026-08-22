@@ -1,5 +1,6 @@
 import { NgControl } from '@angular/forms';
-import { Directive, ElementRef, HostListener, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DestroyRef, Directive, ElementRef, HostListener, OnInit, inject } from '@angular/core';
 
 /**
  * Máscara simples de telefone (mesmo padrão de CpfCnpjMaskDirective):
@@ -15,9 +16,33 @@ import { Directive, ElementRef, HostListener, inject } from '@angular/core';
   selector: '[csPhoneMask]',
   standalone: true,
 })
-export class PhoneMaskDirective {
+export class PhoneMaskDirective implements OnInit {
   private readonly el = inject<ElementRef<HTMLInputElement>>(ElementRef);
   private readonly ngControl = inject(NgControl, { optional: true });
+  private readonly destroyRef = inject(DestroyRef);
+
+  /** Ver o mesmo comentário em CpfCnpjMaskDirective.ngOnInit - `@HostListener('input')` sozinho
+   *  não cobre valor carregado via `form.reset()`/`patchValue()` (modo edição), e o guard de
+   *  `NgControl` preserva o comportamento em campos de filtro com `[value]` puro (sem form). */
+  ngOnInit(): void {
+    if (!this.ngControl?.control) return;
+
+    this.applyMask();
+
+    this.ngControl.control.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.applyMask());
+  }
+
+  private applyMask(): void {
+    const digits = String(this.ngControl?.control?.value ?? '')
+      .replace(/\D+/g, '')
+      .slice(0, 11);
+    const masked = formatPhone(digits);
+    if (this.el.nativeElement.value !== masked) {
+      this.el.nativeElement.value = masked;
+    }
+  }
 
   @HostListener('input')
   onInput() {

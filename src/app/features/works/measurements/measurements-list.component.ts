@@ -217,7 +217,10 @@ export class MeasurementsListComponent implements OnInit {
 
   goEdit(row: MeasurementModel): void {
     if (!this.canEdit(row)) return;
+<<<<<<< HEAD
     this.reloadWork();
+=======
+>>>>>>> feature/tickets-tasks-actionplans
     this.editingMeasurement.set(row);
     this.editVisible.set(true);
   }
@@ -229,9 +232,12 @@ export class MeasurementsListComponent implements OnInit {
 
   onUpdated(): void {
     this.refresh();
+<<<<<<< HEAD
     // Editar cancela a Parcela gerada anteriormente (ver MeasurementService.updateMeasurement) -
     // devolve valor pro restante da obra, então work() precisa ser refeito.
     this.reloadWork();
+=======
+>>>>>>> feature/tickets-tasks-actionplans
   }
 
   confirmApprove(row: MeasurementModel): void {
