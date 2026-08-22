@@ -83,7 +83,7 @@
           <span class="th-label" tooltipPosition="top" [pTooltip]="'tasks.columns.dueDate' | translate">{{ 'tasks.columns.dueDate' | translate }}</span>
         </th>
         <th class="text-center">
-          <span class="th-label">{{ 'common.actions' | translate }}</span>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
         </th>
       </tr>
     </ng-template>
@@ -93,7 +93,9 @@
         <td class="mobile-card-title">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.title">{{ row.title }}</span>
         </td>
-        <td class="text-center" [attr.data-label]="'tasks.columns.assignee' | translate">{{ row.assigneeName ?? '-' }}</td>
+        <td class="text-center" [attr.data-label]="'tasks.columns.assignee' | translate">
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.assigneeName ?? '-'">{{ row.assigneeName ?? '-' }}</span>
+        </td>
         <td class="text-center" [attr.data-label]="'tasks.columns.dependsOnTask' | translate">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.dependsOnTaskTitle">{{ row.dependsOnTaskTitle ?? '-' }}</span>
         </td>

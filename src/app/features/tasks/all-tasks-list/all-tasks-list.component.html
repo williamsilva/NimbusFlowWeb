@@ -224,7 +224,7 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label">{{ 'common.actions' | translate }}</span>
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
           </div>
         </th>
       </tr>
@@ -236,7 +236,9 @@
         <td class="text-center" [attr.data-label]="'tasks.columns.actionPlan' | translate">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.actionPlanTitle">{{ row.actionPlanTitle }}</span>
         </td>
-        <td class="text-center" [attr.data-label]="'tasks.columns.assignee' | translate">{{ row.assigneeName ?? '-' }}</td>
+        <td class="text-center" [attr.data-label]="'tasks.columns.assignee' | translate">
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.assigneeName ?? '-'">{{ row.assigneeName ?? '-' }}</span>
+        </td>
         <td class="text-center" [attr.data-label]="'tasks.columns.dependsOnTask' | translate">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.dependsOnTaskTitle">{{ row.dependsOnTaskTitle ?? '-' }}</span>
         </td>

@@ -46,15 +46,29 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th>{{ 'departments.columns.name' | translate }}</th>
-        <th>{{ 'departments.columns.users' | translate }}</th>
-        <th class="text-center">{{ 'common.actions' | translate }}</th>
+        <th>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'departments.columns.name' | translate">{{
+            'departments.columns.name' | translate
+          }}</span>
+        </th>
+        <th>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'departments.columns.users' | translate">{{
+            'departments.columns.users' | translate
+          }}</span>
+        </th>
+        <th class="text-center">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{
+            'common.actions' | translate
+          }}</span>
+        </th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-row>
       <tr>
-        <td class="mobile-card-title">{{ row.name }}</td>
+        <td class="mobile-card-title">
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.name">{{ row.name }}</span>
+        </td>
         <td [attr.data-label]="'departments.columns.users' | translate">
           <span
             tooltipPosition="top"

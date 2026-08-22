@@ -48,10 +48,26 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th class="text-center">{{ 'approvalLimits.columns.minAmount' | translate }}</th>
-        <th class="text-center">{{ 'approvalLimits.columns.maxAmount' | translate }}</th>
-        <th>{{ 'approvalLimits.columns.users' | translate }}</th>
-        <th class="text-center">{{ 'common.actions' | translate }}</th>
+        <th class="text-center">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'approvalLimits.columns.minAmount' | translate">{{
+            'approvalLimits.columns.minAmount' | translate
+          }}</span>
+        </th>
+        <th class="text-center">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'approvalLimits.columns.maxAmount' | translate">{{
+            'approvalLimits.columns.maxAmount' | translate
+          }}</span>
+        </th>
+        <th>
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'approvalLimits.columns.users' | translate">{{
+            'approvalLimits.columns.users' | translate
+          }}</span>
+        </th>
+        <th class="text-center">
+          <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{
+            'common.actions' | translate
+          }}</span>
+        </th>
       </tr>
     </ng-template>
 
