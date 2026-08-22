@@ -3591,6 +3591,8 @@
       "paymentRecipientsHint": "E-mails que receberão a ordem de pagamento sempre que uma parcela for liberada (manual ou automaticamente). Separe múltiplos endereços por vírgula.",
       "addendumRecipients": "Destinatários de aditivos aprovados",
       "addendumRecipientsHint": "E-mails que receberão um aviso sempre que um aditivo for aprovado (manual ou automaticamente). Separe múltiplos endereços por vírgula.",
+      "workAutoCompleteRecipients": "Destinatários de frentes concluídas automaticamente",
+      "workAutoCompleteRecipientsHint": "E-mails que receberão um aviso sempre que o job diário concluir automaticamente uma Frente de Serviço 100% paga. Separe múltiplos endereços por vírgula.",
       "smtpHost": "Host SMTP",
       "smtpHostHint": "Endereço do servidor de e-mail (ex: smtp.gmail.com).",
       "smtpPort": "Porta",

@@ -328,6 +328,27 @@
           </label>
         </p-floatLabel>
       </div>
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea
+            rows="3"
+            pTextarea
+            class="w-full"
+            style="resize: vertical"
+            id="workAutoCompleteRecipients"
+            formControlName="workAutoCompleteRecipients"
+          ></textarea>
+          <label for="workAutoCompleteRecipients">
+            {{ 'email.settings.workAutoCompleteRecipients' | translate }}
+            <i
+              tooltipPosition="top"
+              style="pointer-events: auto"
+              [pTooltip]="'email.settings.workAutoCompleteRecipientsHint' | translate"
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
     </div>
 
     @if (canEdit()) {
