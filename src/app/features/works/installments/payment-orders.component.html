@@ -4,7 +4,17 @@
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
     { label: ('routes.paymentOrders.title' | translate) },
   ]"
-></cs-page-header>
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [disabled]="!supplierId()"
+    [label]="'common.update' | translate"
+  ></button>
+</cs-page-header>
 
 <div class="grid formgrid gap-0 mt-2">
   <div class="col-12 md:col-4 p-2">

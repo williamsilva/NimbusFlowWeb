@@ -71,7 +71,20 @@ export class PaymentOrdersComponent {
     this.candidates.set([]);
 
     if (!supplierId) return;
+    this.loadCandidates(supplierId);
+  }
 
+  /** Recarrega as candidatas do fornecedor atual - usado pelo botão "Atualizar" e, depois de um
+   *  envio bem-sucedido, pra tirar da lista as Ordens que acabaram de ser enviadas (sem isso elas
+   *  ficavam visíveis e selecionáveis de novo até a página ser recarregada manualmente). */
+  refresh(): void {
+    const supplierId = this.supplierId();
+    if (!supplierId) return;
+    this.selected.set([]);
+    this.loadCandidates(supplierId);
+  }
+
+  private loadCandidates(supplierId: string): void {
     this.loading.set(true);
     this.api
       .findReleasedBySupplier(supplierId)
@@ -99,7 +112,6 @@ export class PaymentOrdersComponent {
       .subscribe({
         next: (result) => {
           this.sending.set(false);
-          this.selected.set([]);
           this.toast.add({
             severity: 'success',
             summary: this.i18n.tUi('common.success'),
@@ -108,6 +120,7 @@ export class PaymentOrdersComponent {
               total: this.i18n.formatBrlCurrency(result.totalAmount),
             }),
           });
+          this.refresh();
         },
         error: (err) => {
           this.sending.set(false);
