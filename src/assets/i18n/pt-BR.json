@@ -208,6 +208,9 @@
     "installments": {
       "title": "Pagamentos"
     },
+    "paymentOrders": {
+      "title": "Ordens de Pagamento"
+    },
     "measurements": {
       "title": "Medições"
     },
@@ -381,6 +384,7 @@
       "works": "Frentes de Serviço",
       "addendums": "Aditivos",
       "installments": "Pagamentos",
+      "paymentOrders": "Ordens de Pagamento",
       "measurements": "Medições",
       "suggestions": "Sugestões",
       "tickets": "Chamados",
@@ -3735,6 +3739,7 @@
       "addendum_approved": "Aditivo aprovado",
       "payment_released": "Parcela liberada",
       "payment_cancelled": "Parcela cancelada",
+      "payment_order_sent": "Ordem de pagamento enviada",
       "ticket_target": "Chamado",
       "ticket_closed": "Chamado fechado",
       "password_reset": "Reset de senha",
@@ -4471,6 +4476,31 @@
       "header": "Reenviar notificação",
       "message": "Confirma o reenvio do e-mail de notificação da parcela nº {number} para os destinatários configurados?",
       "success": "Notificação reenviada com sucesso."
+    }
+  },
+  "paymentOrders": {
+    "subtitle": "Escolha um fornecedor e selecione as parcelas liberadas que serão pagas agora",
+    "fields": {
+      "supplier": "Fornecedor"
+    },
+    "columns": {
+      "project": "Projeto",
+      "work": "Frente de serviço",
+      "number": "Nº",
+      "dueDate": "Vencimento",
+      "releasedAt": "Liberado em",
+      "amount": "Valor"
+    },
+    "empty": "Nenhuma parcela liberada para este fornecedor",
+    "selectedCount": "{count} parcela(s) selecionada(s)",
+    "send": "Enviar Ordem de Pagamento",
+    "sent": "Ordem de pagamento enviada: {count} parcela(s), {total}",
+    "sendError": "Não foi possível enviar a ordem de pagamento.",
+    "action": {
+      "differentSuppliers": "Todas as parcelas selecionadas precisam ser do mesmo fornecedor.",
+      "notAllReleased": "Todas as parcelas selecionadas precisam estar liberadas.",
+      "noRecipients": "Nenhum destinatário configurado para receber a ordem de pagamento.",
+      "notFound": "Uma ou mais parcelas selecionadas não foram encontradas. Atualize a página."
     }
   },
   "measurements": {

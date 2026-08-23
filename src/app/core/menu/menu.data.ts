@@ -85,6 +85,13 @@ export const APP_MENU: AppMenuItem[] = [
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.VIEW],
       },
       {
+        labelKey: 'menu.works.paymentOrders',
+        icon: 'pi pi-send text-green-400',
+        route: '/payment-orders',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.ENVIAR_ORDEM],
+      },
+      {
         labelKey: 'menu.works.suggestions',
         icon: 'pi pi-lightbulb text-green-400',
         route: '/suggestions',

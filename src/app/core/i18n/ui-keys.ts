@@ -132,6 +132,7 @@ export const UI_KEYS = {
       works: 'menu.works.works',
       addendums: 'menu.works.addendums',
       installments: 'menu.works.installments',
+      paymentOrders: 'menu.works.paymentOrders',
       measurements: 'menu.works.measurements',
       suggestions: 'menu.works.suggestions',
       tickets: 'menu.works.tickets',
@@ -1751,6 +1752,16 @@ export const UI_KEYS = {
       header: 'installments.resendNotificationConfirm.header',
       message: 'installments.resendNotificationConfirm.message',
       success: 'installments.resendNotificationConfirm.success',
+    },
+  },
+  paymentOrders: {
+    sent: 'paymentOrders.sent',
+    sendError: 'paymentOrders.sendError',
+    action: {
+      differentSuppliers: 'paymentOrders.action.differentSuppliers',
+      notAllReleased: 'paymentOrders.action.notAllReleased',
+      noRecipients: 'paymentOrders.action.noRecipients',
+      notFound: 'paymentOrders.action.notFound',
     },
   },
   measurements: {

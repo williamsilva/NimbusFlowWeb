@@ -20,6 +20,10 @@ const KNOWN_DETAILS: Array<{ match: string; key: UiKey }> = [
   { match: 'Measurement is not pending', key: 'measurements.action.alreadyDecided' },
   { match: 'Payment order exceeds work total amount', key: 'measurements.action.exceedsWorkTotal' },
   { match: 'Measurement cannot be edited: the generated payment was already paid', key: 'measurements.action.paymentAlreadyPaid' },
+  { match: 'All installments must belong to the same supplier', key: 'paymentOrders.action.differentSuppliers' },
+  { match: 'All installments must be RELEASED', key: 'paymentOrders.action.notAllReleased' },
+  { match: 'No PAYMENT_NOTIFICATION recipients configured', key: 'paymentOrders.action.noRecipients' },
+  { match: 'One or more installments not found', key: 'paymentOrders.action.notFound' },
 ];
 
 function rawDetail(err: unknown): string | null {

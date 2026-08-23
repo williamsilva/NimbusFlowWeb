@@ -213,6 +213,9 @@
     "installments": {
       "title": "Pagos"
     },
+    "paymentOrders": {
+      "title": "Órdenes de Pago"
+    },
     "measurements": {
       "title": "Mediciones"
     },
@@ -386,6 +389,7 @@
       "works": "Frentes de Servicio",
       "addendums": "Adicionales",
       "installments": "Pagos",
+      "paymentOrders": "Órdenes de Pago",
       "measurements": "Mediciones",
       "suggestions": "Sugerencias",
       "tickets": "Llamados",
@@ -3740,6 +3744,7 @@
       "addendum_approved": "Adenda aprobada",
       "payment_released": "Cuota liberada",
       "payment_cancelled": "Cuota cancelada",
+      "payment_order_sent": "Orden de pago enviada",
       "ticket_target": "Ticket",
       "ticket_closed": "Ticket cerrado",
       "password_reset": "Restablecimiento de contraseña",
@@ -4476,6 +4481,31 @@
       "header": "Reenviar notificación",
       "message": "¿Confirma el reenvío del correo de notificación de la cuota nº {number} a los destinatarios configurados?",
       "success": "Notificación reenviada con éxito."
+    }
+  },
+  "paymentOrders": {
+    "subtitle": "Elija un proveedor y seleccione las cuotas liberadas que se pagarán ahora",
+    "fields": {
+      "supplier": "Proveedor"
+    },
+    "columns": {
+      "project": "Proyecto",
+      "work": "Frente de servicio",
+      "number": "Nº",
+      "dueDate": "Vencimiento",
+      "releasedAt": "Liberado en",
+      "amount": "Valor"
+    },
+    "empty": "No hay cuotas liberadas para este proveedor",
+    "selectedCount": "{count} cuota(s) seleccionada(s)",
+    "send": "Enviar Orden de Pago",
+    "sent": "Orden de pago enviada: {count} cuota(s), {total}",
+    "sendError": "No fue posible enviar la orden de pago.",
+    "action": {
+      "differentSuppliers": "Todas las cuotas seleccionadas deben ser del mismo proveedor.",
+      "notAllReleased": "Todas las cuotas seleccionadas deben estar liberadas.",
+      "noRecipients": "No hay destinatario configurado para recibir la orden de pago.",
+      "notFound": "Una o más cuotas seleccionadas no fueron encontradas. Actualice la página."
     }
   },
   "measurements": {

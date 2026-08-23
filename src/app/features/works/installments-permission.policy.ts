@@ -24,6 +24,12 @@ export class InstallmentsPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.PARCELA.LIBERAR);
   }
 
+  /** Ver a tela "Ordens de Pagamento" e enviar exigem a mesma permissão - a tela inteira é sobre
+   *  a ação de enviar, sem modo só-leitura separado. */
+  canSendPaymentOrder(): boolean {
+    return this.perms.hasSupportOr(PERMISSIONS.PARCELA.ENVIAR_ORDEM);
+  }
+
   releaseDisabledReason(): string | null {
     return this.canRelease() ? null : 'installments.action.noPermission';
   }

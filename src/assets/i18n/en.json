@@ -213,6 +213,9 @@
     "installments": {
       "title": "Payments"
     },
+    "paymentOrders": {
+      "title": "Payment Orders"
+    },
     "measurements": {
       "title": "Measurements"
     },
@@ -386,6 +389,7 @@
       "works": "Service Fronts",
       "addendums": "Addendums",
       "installments": "Payments",
+      "paymentOrders": "Payment Orders",
       "measurements": "Measurements",
       "suggestions": "Suggestions",
       "tickets": "Tickets",
@@ -3740,6 +3744,7 @@
       "addendum_approved": "Addendum approved",
       "payment_released": "Installment released",
       "payment_cancelled": "Installment cancelled",
+      "payment_order_sent": "Payment order sent",
       "ticket_target": "Ticket",
       "ticket_closed": "Ticket closed",
       "password_reset": "Password reset",
@@ -4476,6 +4481,31 @@
       "header": "Resend notification",
       "message": "Confirm resending the notification e-mail for installment #{number} to the configured recipients?",
       "success": "Notification resent successfully."
+    }
+  },
+  "paymentOrders": {
+    "subtitle": "Choose a supplier and select the released installments to pay now",
+    "fields": {
+      "supplier": "Supplier"
+    },
+    "columns": {
+      "project": "Project",
+      "work": "Service front",
+      "number": "No.",
+      "dueDate": "Due date",
+      "releasedAt": "Released at",
+      "amount": "Amount"
+    },
+    "empty": "No released installments for this supplier",
+    "selectedCount": "{count} installment(s) selected",
+    "send": "Send Payment Order",
+    "sent": "Payment order sent: {count} installment(s), {total}",
+    "sendError": "Could not send the payment order.",
+    "action": {
+      "differentSuppliers": "All selected installments must belong to the same supplier.",
+      "notAllReleased": "All selected installments must be released.",
+      "noRecipients": "No recipient configured to receive the payment order.",
+      "notFound": "One or more selected installments were not found. Refresh the page."
     }
   },
   "measurements": {

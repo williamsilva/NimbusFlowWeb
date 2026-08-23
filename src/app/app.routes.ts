@@ -109,6 +109,20 @@ export const appRoutes: Routes = [
             (m) => m.AllInstallmentsListComponent,
           ),
       },
+      {
+        path: 'payment-orders',
+        title: 'routes.paymentOrders.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.ENVIAR_ORDEM],
+        },
+        loadComponent: () =>
+          import('./features/works/installments/payment-orders.component').then(
+            (m) => m.PaymentOrdersComponent,
+          ),
+      },
 
       {
         path: 'works/:workId/addendums',
