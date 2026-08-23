@@ -47,6 +47,22 @@ export abstract class StatefulListPage<
   protected onAfterClear(): void {}
   protected clearCustomTableState(_defaultRows: number): void {}
 
+  /** Override to (re)apply screen-specific default advanced-filter values. No-op by default —
+   *  most screens have no defaults and should leave the panel empty after "Limpar". */
+  protected applyDefaultAdvancedFilters(): void {}
+
+  /**
+   * Reapplies the screen's defaults (via applyDefaultAdvancedFilters) only when the advanced panel
+   * is currently completely empty — checked as a whole, not field by field, so a default never
+   * overrides a filter the user set or one restored from the persisted cache. Call this at the end
+   * of resetFilters() (after zeroing the signals) and at the end of applyFiltersState() (after
+   * applying the cached/restored values) — see the cs-filters-panel skill for the full pattern.
+   */
+  protected applyDefaultAdvancedFiltersIfEmpty(): void {
+    if (this.advancedActiveFilters().length > 0) return;
+    this.applyDefaultAdvancedFilters();
+  }
+
   readonly activeFilterGroups = computed<ActiveFilterGroup[]>(() => {
     const groups: ActiveFilterGroup[] = [];
     const advanced = this.advancedActiveFilters();

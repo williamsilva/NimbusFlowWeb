@@ -243,19 +243,12 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
   /** Mesmo padrão do CardSync (CreditOrderListComponent - "Ordens de Pagamento"): status
    *  "Planejado"+"Em andamento" pré-selecionados, mas só quando o painel de filtros está vazio de
    *  verdade (nem restaurado do localStorage, nem definido pelo usuário) - ver
-   *  applyDefaultFiltersIfEmpty. */
+   *  applyDefaultAdvancedFiltersIfEmpty em StatefulListPage. */
   private defaultStatus(): string[] {
     return [WorkStatusEnum.PLANNED, WorkStatusEnum.IN_PROGRESS];
   }
 
-  /** Só entra quando NENHUM filtro avançado está setado (painel inteiro vazio) - primeira visita
-   *  à tela (nada persistido ainda), filtros persistidos totalmente vazios, ou logo após
-   *  "Limpar". Checa o painel inteiro, não campo a campo: se o usuário já definiu qualquer outro
-   *  filtro (ex.: Nome), isso já conta como painel "não vazio" e não deve reaplicar o default -
-   *  senão a escolha dele nunca "gruda". */
-  private applyDefaultFiltersIfEmpty(): void {
-    if (this.advancedActiveFilters().length > 0) return;
-
+  protected override applyDefaultAdvancedFilters(): void {
     this.status.set(this.defaultStatus());
   }
 
@@ -270,7 +263,7 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     this.periodExpectedEndDate.set(null);
     this.totalAmountFrom.set(null);
     this.totalAmountTo.set(null);
-    this.applyDefaultFiltersIfEmpty();
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   protected override toFiltersState(): WorksFiltersState {
@@ -300,7 +293,7 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     this.totalAmountFrom.set(state.totalAmountFrom ?? null);
     this.totalAmountTo.set(state.totalAmountTo ?? null);
 
-    this.applyDefaultFiltersIfEmpty();
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   protected override buildAdvancedFilters(): Partial<WorksAdvancedFilters> {

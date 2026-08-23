@@ -304,3 +304,59 @@ Expression<?> companyName = companyPath.get("fantasyName");
 ```
 This applies to any `*Specs.orderByTableSort()` default-sort branch you write by hand
 outside the shared `tableSort(...)`/`sortJoin(...)` helpers.
+
+## 7. Default advanced filters (optional, opt-in per screen)
+
+Most `*-list` screens have no default: "Limpar" empties every field, and a screen with
+nothing in `localStorage` starts fully empty too. A few screens (`WorksListComponent`,
+`AllInstallmentsListComponent`) instead want the panel to always come back to a specific
+non-empty state — e.g. a pre-selected status filter — whenever it would otherwise be
+empty. `StatefulListPage` provides this as an opt-in hook pair:
+
+```ts
+protected applyDefaultAdvancedFilters(): void {}          // override: set your defaults here
+protected applyDefaultAdvancedFiltersIfEmpty(): void {     // base — do not override
+  if (this.advancedActiveFilters().length > 0) return;
+  this.applyDefaultAdvancedFilters();
+}
+```
+
+To opt a screen in:
+```ts
+protected override applyDefaultAdvancedFilters(): void {
+  this.status.set(this.defaultStatus());
+}
+
+protected override resetFilters(): void {
+  this.name.set('');
+  this.status.set(null);
+  // ...zero every other signal first...
+  this.applyDefaultAdvancedFiltersIfEmpty();   // then reapply the default
+}
+
+protected override applyFiltersState(state: WorksFiltersState): void {
+  // ...apply every cached field literally (no `?? default` fallback per field)...
+  this.applyDefaultAdvancedFiltersIfEmpty();   // gate at the end, once, for the whole panel
+}
+```
+
+Rules, learned from a real bug (`NimbusNovaxWeb`'s `VoucherListComponent` used to apply
+its status default unconditionally per-field instead of through this gate — it silently
+overwrote a cached "no status filter" state even when the user had another filter set):
+
+- **Gate the whole panel, never a single field.** `applyDefaultAdvancedFiltersIfEmpty()`
+  checks `advancedActiveFilters().length` — the count across *every* advanced field — not
+  whether the one field you're defaulting is empty. If the user has set any other filter
+  (e.g. Nome), the panel is "not empty" and the default must NOT be reapplied, even for the
+  field it targets. Otherwise the user's choice never "sticks": clear that one field and the
+  default silently reappears next reload.
+- **`applyFiltersState()` must apply cached values literally** (`state.field ?? null`, never
+  `state.field ?? someDefault()`). The gate decides whether to override, not a per-field
+  fallback — a per-field `??` bypasses the gate and reintroduces the same bug.
+- A field carrying a default may still initialize its signal to that default
+  (`status = signal(this.defaultStatus())`) purely as the pre-`ngOnInit` value — that's fine,
+  since `applyFiltersState()` (if a cache exists) or `applyDefaultAdvancedFiltersIfEmpty()`
+  (if it doesn't) both run before the user ever sees the panel.
+- Keep the actual default values (`defaultStatus()`, etc.) as private methods on the
+  screen — they're a per-screen product decision, not something to generalize into the base
+  class or a shared config.
