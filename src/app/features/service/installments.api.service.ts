@@ -17,14 +17,15 @@ import {
   mapInstallmentWithWorkApiModels,
 } from '@models/installments.models';
 
-/** Nome mantido por herança (era o service da Parcela inteira) - hoje fala com
- *  /bff/v1/payment-orders (Ordem de Pagamento); "marcar como pago" saiu daqui, ver
- *  payments.api.service.ts (Pagamento). */
+/** Nome mantido por herança (era o service da Parcela inteira) - hoje fala majoritariamente com
+ *  /bff/v1/payment-orders (Ordem de Pagamento); markPaid é a exceção, fala com /bff/v1/installments
+ *  (Pagamento em si) - ação exposta na tela "Parcelas Liberadas" por linha de Ordem. */
 @Injectable({ providedIn: 'root' })
 export class InstallmentsApiService {
   private readonly http = inject(HttpClient);
   private readonly worksUrl = `${API.bff}/v1/works`;
   private readonly paymentOrdersUrl = `${API.bff}/v1/payment-orders`;
+  private readonly installmentsUrl = `${API.bff}/v1/installments`;
 
   findByWork(workId: string) {
     return this.http
@@ -68,5 +69,18 @@ export class InstallmentsApiService {
         { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
       )
       .pipe(map(mapInstallmentApiModel));
+  }
+
+  /** @param id o Pagamento (Installment) vinculado à Ordem, não a Ordem em si - ver
+   *  InstallmentWithWorkModel.installmentId.
+   *  @param paidAt data em que o pagamento efetivamente ocorreu (formato yyyy-MM-dd) - informada
+   *  por quem confirma o pagamento, não é "agora" (ver WorkAutoCompleteService no backend, que
+   *  usa essa data pra contar a carência de conclusão automática da Frente). */
+  markInstallmentPaid(id: string, paidAt: string) {
+    return this.http.post<unknown>(
+      `${this.installmentsUrl}/${id}/mark-paid`,
+      { paidAt },
+      { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
+    );
   }
 }

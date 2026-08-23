@@ -68,4 +68,9 @@ export class InstallmentsGlobalFacade {
   resendNotification(id: string): Observable<InstallmentModel> {
     return this.api.resendNotification(id).pipe(tap(() => this.reloadLast()));
   }
+
+  /** @param installmentId o Pagamento vinculado à Ordem (row.installmentId), não a Ordem em si. */
+  markInstallmentPaid(installmentId: string, paidAt: string): Observable<unknown> {
+    return this.api.markInstallmentPaid(installmentId, paidAt).pipe(tap(() => this.reloadLast()));
+  }
 }

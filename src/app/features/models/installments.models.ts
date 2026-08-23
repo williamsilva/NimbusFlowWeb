@@ -1,6 +1,7 @@
 import { PeriodEnum } from '@models/enums/period.enum';
 import { ApprovalRangeModel } from '@models/addendums.models';
 import { UserMinimalModel } from '@models/user-minimal.models';
+import { PaymentStatusEnum } from '@models/enums/payment-status.enum';
 import { InstallmentStatusEnum } from '@models/enums/installment-status.enum';
 
 /**
@@ -17,6 +18,13 @@ export interface InstallmentModel {
   amount: number;
   dueDate: string;
   status: InstallmentStatusEnum;
+  /** Fornecedor da obra desta Ordem - usado pra rotular a confirmação de "Marcar como pago". */
+  supplierName: string;
+  /** Nulo enquanto a Ordem não entrar num envio (tela "Ordens de Pagamento") - a partir daí,
+   *  nunca muda. Junto com installmentStatus, decide se a ação "Marcar como pago" aparece. */
+  installmentId: string | null;
+  installmentStatus: PaymentStatusEnum | null;
+  installmentPaidAt: string | null;
   /** true se o usuário logado pode liberar ESTA ordem agora (status MEASUREMENT_APPROVED +
    *  permissão de liberar + dentro da faixa de valor de Configurações > Alçada) - mesmo padrão de
    *  AddendumModel.canDecide, ver PaymentOrderService.canRelease/canReleasePending. */

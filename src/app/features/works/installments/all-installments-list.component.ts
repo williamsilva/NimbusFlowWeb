@@ -29,7 +29,9 @@ import { formatApprovalRanges } from '@features/works/installments/installments-
 import { formatSequentialNumber } from '@shared/utils/br-format';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { InstallmentWithWorkModel, InstallmentsFiltersState } from '@models/installments.models';
+import { PaymentStatusEnum } from '@models/enums/payment-status.enum';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
+import { MarkInstallmentPaidDialogComponent } from '@features/works/installments/mark-installment-paid-dialog.component';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
 import {
   currencyRangeLabel,
@@ -74,6 +76,7 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     DateInputMaskDirective,
+    MarkInstallmentPaidDialogComponent,
   ],
 })
 export class AllInstallmentsListComponent extends StatefulListPage<
@@ -88,6 +91,9 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   readonly policy = inject(InstallmentsPermissionPolicy);
   private readonly toast = inject(MessageService);
   private readonly confirm = inject(ConfirmationService);
+
+  readonly markPaidDialogVisible = signal(false);
+  readonly markPaidRow = signal<InstallmentWithWorkModel | null>(null);
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
@@ -269,6 +275,55 @@ export class AllInstallmentsListComponent extends StatefulListPage<
           });
       },
     });
+  }
+
+  /** Ação atua sobre o Pagamento vinculado à Ordem (row.installmentId), não sobre a Ordem em si -
+   *  por isso exige installmentStatus SENT, não status da Ordem. */
+  canMarkPaid(row: InstallmentWithWorkModel): boolean {
+    return row.installmentStatus === PaymentStatusEnum.SENT && this.policy.canMarkPaid();
+  }
+
+  markPaidDisabledReason(row: InstallmentWithWorkModel): string {
+    if (!row.installmentId) {
+      return 'installments.action.requiresSent';
+    }
+    if (row.installmentStatus === PaymentStatusEnum.PAID) {
+      return 'installments.action.alreadyPaid';
+    }
+    return this.policy.markPaidDisabledReason() ?? 'installments.action.noPermission';
+  }
+
+  openMarkPaidDialog(row: InstallmentWithWorkModel): void {
+    if (!this.canMarkPaid(row)) return;
+    this.markPaidRow.set(row);
+    this.markPaidDialogVisible.set(true);
+  }
+
+  onMarkPaidConfirmed(paidAt: string): void {
+    const row = this.markPaidRow();
+    if (!row?.installmentId) return;
+
+    this.facade
+      .markInstallmentPaid(row.installmentId, paidAt)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.markPaidDialogVisible.set(false);
+          this.toast.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi('payments.markPaidConfirm.success'),
+          });
+        },
+        error: (err) =>
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail:
+              translateWorksErrorDetail(err, this.i18n) ??
+              this.i18n.tUi('payments.markPaidConfirm.error'),
+          }),
+      });
   }
 
   protected formatDate(value: Date | string): string {

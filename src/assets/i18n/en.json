@@ -216,9 +216,6 @@
     "paymentOrders": {
       "title": "Payment Orders"
     },
-    "payments": {
-      "title": "Payments"
-    },
     "measurements": {
       "title": "Measurements"
     },
@@ -393,7 +390,6 @@
       "addendums": "Addendums",
       "installments": "Released Installments",
       "paymentOrders": "Payment Orders",
-      "payments": "Payments",
       "measurements": "Measurements",
       "suggestions": "Suggestions",
       "tickets": "Tickets",
@@ -468,7 +464,6 @@
     "works": "Service Fronts",
     "addendums": "Addendums",
     "installments": "Released Installments",
-    "payments": "Payments",
     "measurements": "Measurements",
     "suggestions": "Suggestions",
     "tickets": "Tickets",
@@ -4462,9 +4457,12 @@
     "action": {
       "release": "Release",
       "resendNotification": "Resend e-mail notification",
+      "markPaid": "Mark as paid",
       "noPermission": "You do not have permission for this action.",
       "requiresMeasurementApproved": "This payment order was already released or cancelled.",
       "requiresReleasedOrCancelled": "This payment order has not been released yet.",
+      "requiresSent": "Requires a sent payment to mark as paid.",
+      "alreadyPaid": "This payment was already marked as paid.",
       "statusChanged": "This payment order's status was changed by another user. Refresh the page."
     },
     "releaseConfirm": {
@@ -4479,25 +4477,6 @@
     }
   },
   "payments": {
-    "subtitle": "Payments sent to suppliers, consolidating released payment orders",
-    "columns": {
-      "supplier": "Supplier",
-      "amount": "Amount",
-      "orderCount": "Order count",
-      "status": "Status",
-      "sentBy": "Sent by",
-      "sentAt": "Sent at",
-      "paidAt": "Paid at"
-    },
-    "status": {
-      "SENT": "Sent",
-      "PAID": "Paid"
-    },
-    "empty": "No payments found",
-    "action": {
-      "markPaid": "Mark as paid",
-      "requiresSent": "Requires a sent payment to mark as paid."
-    },
     "markPaidConfirm": {
       "header": "Mark payment as paid",
       "message": "Confirm the payment to {supplier} was paid?",

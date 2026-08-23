@@ -8,8 +8,12 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { FloatLabelModule } from 'primeng/floatlabel';
 
 import { I18nService } from '@core/i18n/i18n.service';
-import { PaymentModel } from '@models/payments.models';
 import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+
+/** Só o necessário pra rotular a confirmação - quem abre o dialog decide o resto (id, valor). */
+export interface MarkInstallmentPaidTarget {
+  supplierName: string;
+}
 
 function toDateOnlyString(value: Date | null): string | null {
   if (!value) return null;
@@ -25,7 +29,8 @@ function toDateOnlyString(value: Date | null): string | null {
  * carência de conclusão automática da Frente, WorkAutoCompleteService).
  *
  * <p>Component "burro" de propósito - não chama a API sozinho, só coleta a data e emite
- * `confirmed`; quem abre o dialog (tela "Pagamentos") decide como tratar sucesso/erro (toast).
+ * `confirmed`; quem abre o dialog (tela "Parcelas Liberadas") decide como tratar sucesso/erro
+ * (toast).
  */
 @Component({
   standalone: true,
@@ -43,7 +48,7 @@ function toDateOnlyString(value: Date | null): string | null {
 })
 export class MarkInstallmentPaidDialogComponent {
   visible = input.required<boolean>();
-  payment = input<PaymentModel | null>(null);
+  payment = input<MarkInstallmentPaidTarget | null>(null);
 
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() confirmed = new EventEmitter<string>();

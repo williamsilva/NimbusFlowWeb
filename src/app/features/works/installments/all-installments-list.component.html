@@ -380,6 +380,21 @@
               "
               tooltipPosition="top"
             ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-check-circle"
+              (click)="openMarkPaidDialog(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canMarkPaid(row)"
+              [pTooltip]="
+                canMarkPaid(row)
+                  ? ('installments.action.markPaid' | translate)
+                  : (markPaidDisabledReason(row) | translate)
+              "
+              tooltipPosition="top"
+            ></button>
           </div>
         </td>
       </tr>
@@ -396,3 +411,10 @@
     </ng-template>
   </p-table>
 </div>
+
+<app-mark-installment-paid-dialog
+  [visible]="markPaidDialogVisible()"
+  [payment]="markPaidRow()"
+  (visibleChange)="markPaidDialogVisible.set($event)"
+  (confirmed)="onMarkPaidConfirmed($event)"
+></app-mark-installment-paid-dialog>

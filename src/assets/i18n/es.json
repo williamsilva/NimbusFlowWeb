@@ -216,9 +216,6 @@
     "paymentOrders": {
       "title": "Órdenes de Pago"
     },
-    "payments": {
-      "title": "Pagos"
-    },
     "measurements": {
       "title": "Mediciones"
     },
@@ -393,7 +390,6 @@
       "addendums": "Adicionales",
       "installments": "Cuotas Liberadas",
       "paymentOrders": "Órdenes de Pago",
-      "payments": "Pagos",
       "measurements": "Mediciones",
       "suggestions": "Sugerencias",
       "tickets": "Llamados",
@@ -468,7 +464,6 @@
     "works": "Frentes de Servicio",
     "addendums": "Adicionales",
     "installments": "Cuotas Liberadas",
-    "payments": "Pagos",
     "measurements": "Mediciones",
     "suggestions": "Sugerencias",
     "tickets": "Llamados",
@@ -4462,9 +4457,12 @@
     "action": {
       "release": "Liberar",
       "resendNotification": "Reenviar notificación por correo",
+      "markPaid": "Marcar como pagado",
       "noPermission": "No tiene permiso para esta acción.",
       "requiresMeasurementApproved": "Esta orden ya fue liberada o cancelada.",
       "requiresReleasedOrCancelled": "Esta orden todavía no fue liberada.",
+      "requiresSent": "Requiere pago enviado para marcar como pagado.",
+      "alreadyPaid": "Este pago ya fue marcado como pagado.",
       "statusChanged": "El estado de esta orden fue cambiado por otro usuario. Actualice la página."
     },
     "releaseConfirm": {
@@ -4479,25 +4477,6 @@
     }
   },
   "payments": {
-    "subtitle": "Pagos enviados a proveedores, consolidando órdenes de pago liberadas",
-    "columns": {
-      "supplier": "Proveedor",
-      "amount": "Monto",
-      "orderCount": "Cant. de órdenes",
-      "status": "Estado",
-      "sentBy": "Enviado por",
-      "sentAt": "Enviado en",
-      "paidAt": "Pagado en"
-    },
-    "status": {
-      "SENT": "Enviado",
-      "PAID": "Pagado"
-    },
-    "empty": "Ningún pago encontrado",
-    "action": {
-      "markPaid": "Marcar como pagado",
-      "requiresSent": "Requiere pago enviado para marcar como pagado."
-    },
     "markPaidConfirm": {
       "header": "Marcar pago como pagado",
       "message": "¿Confirma que el pago a {supplier} fue pagado?",

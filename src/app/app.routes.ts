@@ -123,20 +123,6 @@ export const appRoutes: Routes = [
             (m) => m.PaymentOrdersComponent,
           ),
       },
-      {
-        path: 'payments',
-        title: 'routes.payments.title',
-        canActivate: [permissionGuard],
-        data: {
-          requireAll: false,
-          redirectTo: '/forbidden',
-          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.VIEW],
-        },
-        loadComponent: () =>
-          import('./features/works/installments/payments-list.component').then(
-            (m) => m.PaymentsListComponent,
-          ),
-      },
 
       {
         path: 'works/:workId/addendums',
