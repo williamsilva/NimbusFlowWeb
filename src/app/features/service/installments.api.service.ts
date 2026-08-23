@@ -17,21 +17,24 @@ import {
   mapInstallmentWithWorkApiModels,
 } from '@models/installments.models';
 
+/** Nome mantido por herança (era o service da Parcela inteira) - hoje fala com
+ *  /bff/v1/payment-orders (Ordem de Pagamento); "marcar como pago" saiu daqui, ver
+ *  payments.api.service.ts (Pagamento). */
 @Injectable({ providedIn: 'root' })
 export class InstallmentsApiService {
   private readonly http = inject(HttpClient);
   private readonly worksUrl = `${API.bff}/v1/works`;
-  private readonly installmentsUrl = `${API.bff}/v1/installments`;
+  private readonly paymentOrdersUrl = `${API.bff}/v1/payment-orders`;
 
   findByWork(workId: string) {
     return this.http
-      .get<InstallmentApiModel[]>(`${this.worksUrl}/${workId}/installments`)
+      .get<InstallmentApiModel[]>(`${this.worksUrl}/${workId}/payment-orders`)
       .pipe(map(mapInstallmentApiModels));
   }
 
   searchPaged(body: ListQueryDto<InstallmentsAdvancedFilters>) {
     return this.http
-      .post<HalPagedResponse<InstallmentWithWorkApiModel>>(`${this.installmentsUrl}/search`, body)
+      .post<HalPagedResponse<InstallmentWithWorkApiModel>>(`${this.paymentOrdersUrl}/search`, body)
       .pipe(
         map((res) => {
           const content = mapInstallmentWithWorkApiModels(res?._embedded?.content);
@@ -45,26 +48,13 @@ export class InstallmentsApiService {
 
   /** Chamadores (installments-list/all-installments-list) já mostram a mensagem específica do
    *  backend (ver translateWorksErrorDetail) - SKIP_GLOBAL_ERROR_TOAST evita o toast genérico
-   *  duplicado do error.interceptor pra qualquer erro de negócio (ex.: "parcela não está mais
-   *  liberada"). Mesmo motivo nos outros métodos deste service. */
+   *  duplicado do error.interceptor pra qualquer erro de negócio (ex.: "ordem não está mais
+   *  liberada"). Mesmo motivo no outro método deste service. */
   release(id: string) {
     return this.http
       .post<InstallmentApiModel>(
-        `${this.installmentsUrl}/${id}/release`,
+        `${this.paymentOrdersUrl}/${id}/release`,
         {},
-        { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
-      )
-      .pipe(map(mapInstallmentApiModel));
-  }
-
-  /** @param paidAt data em que o pagamento ocorreu (formato yyyy-MM-dd) - informada por quem
-   *  confirma o pagamento, não é mais "agora" (ver WorkAutoCompleteService no backend, que usa
-   *  essa data pra contar a carência de conclusão automática da Frente). */
-  markPaid(id: string, paidAt: string) {
-    return this.http
-      .post<InstallmentApiModel>(
-        `${this.installmentsUrl}/${id}/mark-paid`,
-        { paidAt },
         { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
       )
       .pipe(map(mapInstallmentApiModel));
@@ -73,7 +63,7 @@ export class InstallmentsApiService {
   resendNotification(id: string) {
     return this.http
       .post<InstallmentApiModel>(
-        `${this.installmentsUrl}/${id}/resend-notification`,
+        `${this.paymentOrdersUrl}/${id}/resend-notification`,
         {},
         { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
       )

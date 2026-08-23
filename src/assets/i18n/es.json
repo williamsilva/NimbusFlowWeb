@@ -211,10 +211,13 @@
       "title": "Adicionales"
     },
     "installments": {
-      "title": "Pagos"
+      "title": "Cuotas Liberadas"
     },
     "paymentOrders": {
       "title": "Órdenes de Pago"
+    },
+    "payments": {
+      "title": "Pagos"
     },
     "measurements": {
       "title": "Mediciones"
@@ -388,8 +391,9 @@
       "projects": "Proyectos",
       "works": "Frentes de Servicio",
       "addendums": "Adicionales",
-      "installments": "Pagos",
+      "installments": "Cuotas Liberadas",
       "paymentOrders": "Órdenes de Pago",
+      "payments": "Pagos",
       "measurements": "Mediciones",
       "suggestions": "Sugerencias",
       "tickets": "Llamados",
@@ -463,7 +467,8 @@
     "projects": "Proyectos",
     "works": "Frentes de Servicio",
     "addendums": "Adicionales",
-    "installments": "Pagos",
+    "installments": "Cuotas Liberadas",
+    "payments": "Pagos",
     "measurements": "Mediciones",
     "suggestions": "Sugerencias",
     "tickets": "Llamados",
@@ -4446,41 +4451,60 @@
     "status": {
       "MEASUREMENT_APPROVED": "Esperando liberación",
       "RELEASED": "Liberada",
-      "PAID": "Pagada",
       "CANCELLED": "Cancelada"
     },
     "form": {
       "saveError": "No se pudo completar la acción. Intente nuevamente."
     },
     "empty": {
-      "title": "Ninguna cuota encontrada"
+      "title": "Ninguna orden de pago encontrada"
     },
     "action": {
       "release": "Liberar",
-      "markPaid": "Marcar como pagada",
       "resendNotification": "Reenviar notificación por correo",
       "noPermission": "No tiene permiso para esta acción.",
-      "requiresMeasurementApproved": "Esta cuota ya fue liberada o pagada.",
-      "requiresReleased": "Requiere cuota liberada para marcar como pagada.",
-      "requiresReleasedOrPaid": "Esta cuota todavía no fue liberada.",
-      "statusChanged": "El estado de esta cuota fue cambiado por otro usuario. Actualice la página."
+      "requiresMeasurementApproved": "Esta orden ya fue liberada o cancelada.",
+      "requiresReleasedOrCancelled": "Esta orden todavía no fue liberada.",
+      "statusChanged": "El estado de esta orden fue cambiado por otro usuario. Actualice la página."
     },
     "releaseConfirm": {
       "header": "Liberar cuota",
       "message": "¿Confirma la liberación de la cuota nº {number}?",
       "success": "Cuota liberada con éxito."
     },
-    "markPaidConfirm": {
-      "header": "Marcar cuota como pagada",
-      "message": "¿Confirma que la cuota nº {number} fue pagada?",
-      "dateLabel": "Fecha del pago",
-      "futureDateError": "La fecha del pago no puede ser en el futuro.",
-      "success": "Cuota marcada como pagada con éxito."
-    },
     "resendNotificationConfirm": {
       "header": "Reenviar notificación",
       "message": "¿Confirma el reenvío del correo de notificación de la cuota nº {number} a los destinatarios configurados?",
       "success": "Notificación reenviada con éxito."
+    }
+  },
+  "payments": {
+    "subtitle": "Pagos enviados a proveedores, consolidando órdenes de pago liberadas",
+    "columns": {
+      "supplier": "Proveedor",
+      "amount": "Monto",
+      "orderCount": "Cant. de órdenes",
+      "status": "Estado",
+      "sentBy": "Enviado por",
+      "sentAt": "Enviado en",
+      "paidAt": "Pagado en"
+    },
+    "status": {
+      "SENT": "Enviado",
+      "PAID": "Pagado"
+    },
+    "empty": "Ningún pago encontrado",
+    "action": {
+      "markPaid": "Marcar como pagado",
+      "requiresSent": "Requiere pago enviado para marcar como pagado."
+    },
+    "markPaidConfirm": {
+      "header": "Marcar pago como pagado",
+      "message": "¿Confirma que el pago a {supplier} fue pagado?",
+      "dateLabel": "Fecha del pago",
+      "futureDateError": "La fecha del pago no puede ser en el futuro.",
+      "success": "Pago marcado como pagado con éxito.",
+      "error": "No fue posible marcar el pago como pagado."
     }
   },
   "paymentOrders": {
@@ -4503,9 +4527,10 @@
     "sendError": "No fue posible enviar la orden de pago.",
     "action": {
       "differentSuppliers": "Todas las cuotas seleccionadas deben ser del mismo proveedor.",
-      "notAllReleased": "Todas las cuotas seleccionadas deben estar liberadas.",
+      "notAllReleased": "Todas las cuotas seleccionadas deben estar liberadas y aún no enviadas.",
       "noRecipients": "No hay destinatario configurado para recibir la orden de pago.",
-      "notFound": "Una o más cuotas seleccionadas no fueron encontradas. Actualice la página."
+      "notFound": "Una o más cuotas seleccionadas no fueron encontradas. Actualice la página.",
+      "concurrentSend": "Una o más órdenes seleccionadas ya fueron incluidas en otro envío. Actualice la página."
     }
   },
   "measurements": {
@@ -4573,7 +4598,7 @@
       "alreadyDecided": "Esta medición ya fue decidida por otro usuario. Actualice la página.",
       "requiresSubmittableWork": "La frente de servicio debe estar planificada o en curso para registrar una nueva medición.",
       "exceedsWorkTotal": "El monto solicitado, sumado a las órdenes de pago ya generadas, superaría el valor total de la frente de servicio.",
-      "paymentAlreadyPaid": "No se puede editar: el pago generado por esta medición ya fue pagado."
+      "paymentAlreadyPaid": "No se puede editar: la orden de pago generada por esta medición ya fue enviada para pago."
     },
     "approveConfirm": {
       "header": "Aprobar medición",

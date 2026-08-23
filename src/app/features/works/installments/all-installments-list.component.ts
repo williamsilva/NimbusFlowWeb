@@ -50,7 +50,6 @@ import {
   installmentStatusTone,
 } from '@models/enums/installment-status.enum';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
-import { MarkInstallmentPaidDialogComponent } from '@features/works/installments/mark-installment-paid-dialog.component';
 
 @Component({
   standalone: true,
@@ -75,7 +74,6 @@ import { MarkInstallmentPaidDialogComponent } from '@features/works/installments
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     DateInputMaskDirective,
-    MarkInstallmentPaidDialogComponent,
   ],
 })
 export class AllInstallmentsListComponent extends StatefulListPage<
@@ -93,9 +91,6 @@ export class AllInstallmentsListComponent extends StatefulListPage<
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
-
-  readonly markPaidDialogVisible = signal(false);
-  readonly markPaidRow = signal<InstallmentWithWorkModel | null>(null);
 
   workName = signal('');
   status = signal<string[] | null>(this.defaultStatus());
@@ -192,21 +187,9 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     return formatSequentialNumber('PAG', row.number);
   }
 
-  canMarkPaid(row: InstallmentWithWorkModel): boolean {
-    return row.status === InstallmentStatusEnum.RELEASED && this.policy.canMarkPaid();
-  }
-
-  markPaidDisabledReason(row: InstallmentWithWorkModel): string {
-    if (row.status !== InstallmentStatusEnum.RELEASED) {
-      return 'installments.action.requiresReleased';
-    }
-    return this.policy.markPaidDisabledReason() ?? 'installments.action.noPermission';
-  }
-
   canResendNotification(row: InstallmentWithWorkModel): boolean {
     return (
       (row.status === InstallmentStatusEnum.RELEASED ||
-        row.status === InstallmentStatusEnum.PAID ||
         row.status === InstallmentStatusEnum.CANCELLED) &&
       this.policy.canResendNotification()
     );
@@ -215,10 +198,9 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   resendNotificationDisabledReason(row: InstallmentWithWorkModel): string {
     if (
       row.status !== InstallmentStatusEnum.RELEASED &&
-      row.status !== InstallmentStatusEnum.PAID &&
       row.status !== InstallmentStatusEnum.CANCELLED
     ) {
-      return 'installments.action.requiresReleasedOrPaid';
+      return 'installments.action.requiresReleasedOrCancelled';
     }
     return this.policy.resendNotificationDisabledReason() ?? 'installments.action.noPermission';
   }
@@ -254,39 +236,6 @@ export class AllInstallmentsListComponent extends StatefulListPage<
           });
       },
     });
-  }
-
-  openMarkPaidDialog(row: InstallmentWithWorkModel): void {
-    if (!this.canMarkPaid(row)) return;
-    this.markPaidRow.set(row);
-    this.markPaidDialogVisible.set(true);
-  }
-
-  onMarkPaidConfirmed(paidAt: string): void {
-    const row = this.markPaidRow();
-    if (!row) return;
-
-    this.facade
-      .markPaid(row.id, paidAt)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.markPaidDialogVisible.set(false);
-          this.toast.add({
-            severity: 'success',
-            summary: this.i18n.tUi('common.success'),
-            detail: this.i18n.tUi('installments.markPaidConfirm.success'),
-          });
-        },
-        error: (err) =>
-          this.toast.add({
-            severity: 'error',
-            summary: this.i18n.tUi('common.error'),
-            detail:
-              translateWorksErrorDetail(err, this.i18n) ??
-              this.i18n.tUi('installments.form.saveError'),
-          }),
-      });
   }
 
   confirmResendNotification(row: InstallmentWithWorkModel): void {

@@ -4,10 +4,11 @@ import { UserMinimalModel } from '@models/user-minimal.models';
 import { InstallmentStatusEnum } from '@models/enums/installment-status.enum';
 
 /**
- * Espelha com.nimbusflow.works.dto.response.InstallmentResponse do NimbusFlowServer. Parcela
- * (ordem de pagamento) não é mais cadastrada manualmente - nasce automaticamente quando uma
- * Medição da obra é aprovada (ver measurements.models.ts). Lista não paginada (GET
- * /bff/v1/works/{workId}/installments retorna todas as parcelas da obra de uma vez).
+ * Espelha com.nimbusflow.works.dto.response.InstallmentResponse do NimbusFlowServer (nome mantido
+ * por herança - hoje representa uma Ordem de Pagamento, não mais o ciclo inteiro até o pagamento;
+ * ver payments.models.ts pro Pagamento em si). A Ordem não é cadastrada manualmente - nasce
+ * automaticamente quando uma Medição da obra é aprovada (ver measurements.models.ts). Lista não
+ * paginada (GET /bff/v1/works/{workId}/payment-orders retorna todas as ordens da obra de uma vez).
  */
 export interface InstallmentModel {
   id: string;
@@ -16,20 +17,19 @@ export interface InstallmentModel {
   amount: number;
   dueDate: string;
   status: InstallmentStatusEnum;
-  /** true se o usuário logado pode liberar ESTA parcela agora (status MEASUREMENT_APPROVED +
+  /** true se o usuário logado pode liberar ESTA ordem agora (status MEASUREMENT_APPROVED +
    *  permissão de liberar + dentro da faixa de valor de Configurações > Alçada) - mesmo padrão de
-   *  AddendumModel.canDecide, ver InstallmentService.canRelease/canReleasePending. */
+   *  AddendumModel.canDecide, ver PaymentOrderService.canRelease/canReleasePending. */
   canRelease: boolean;
   /** Faixas de Configurações > Alçada que cobrem {@code amount} agora - mesmo papel de
    *  AddendumModel.approvalRanges, exibido na coluna "Alçada" da tela Pagamentos. */
   approvalRanges: ApprovalRangeModel[];
   releasedById: string | null;
   /** Nome/username de releasedById, resolvido pelo backend (UserDirectoryService) - null
-   *  enquanto a parcela nunca foi liberada ou se o NimbusAuth não puder ser consultado. Exibido
+   *  enquanto a ordem nunca foi liberada ou se o NimbusAuth não puder ser consultado. Exibido
    *  na coluna "Usuário aprovador" da tela Pagamentos. */
   releasedBy: UserMinimalModel | null;
   releasedAt: string | null;
-  paidAt: string | null;
   cancelledById: string | null;
   cancelledAt: string | null;
   createdAt: string | null;

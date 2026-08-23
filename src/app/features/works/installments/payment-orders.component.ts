@@ -104,7 +104,7 @@ export class PaymentOrdersComponent {
             severity: 'success',
             summary: this.i18n.tUi('common.success'),
             detail: this.i18n.tUi('paymentOrders.sent', {
-              count: result.installmentCount,
+              count: result.orderCount,
               total: this.i18n.formatBrlCurrency(result.totalAmount),
             }),
           });

@@ -1,0 +1,97 @@
+<cs-page-header
+  [subtitle]="'payments.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('routes.payments.title' | translate) },
+  ]"
+  [compact]="false"
+>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
+</cs-page-header>
+
+<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
+  <p-table size="small" dataKey="id" showGridlines stripedRows [value]="facade.items()" [loading]="facade.loading()">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>{{ 'payments.columns.supplier' | translate }}</th>
+        <th class="text-right">{{ 'payments.columns.amount' | translate }}</th>
+        <th class="text-center">{{ 'payments.columns.orderCount' | translate }}</th>
+        <th class="text-center">{{ 'payments.columns.status' | translate }}</th>
+        <th>{{ 'payments.columns.sentBy' | translate }}</th>
+        <th class="text-center">{{ 'payments.columns.sentAt' | translate }}</th>
+        <th class="text-center">{{ 'payments.columns.paidAt' | translate }}</th>
+        <th class="text-center">{{ 'common.actions' | translate }}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td [attr.data-label]="'payments.columns.supplier' | translate">
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.supplierName">{{
+            row.supplierName
+          }}</span>
+        </td>
+        <td class="text-right" [attr.data-label]="'payments.columns.amount' | translate">
+          {{ row.amount | csCurrency }}
+        </td>
+        <td class="text-center" [attr.data-label]="'payments.columns.orderCount' | translate">
+          {{ row.orderCount }}
+        </td>
+        <td class="text-center" [attr.data-label]="'payments.columns.status' | translate">
+          <cs-status-badge [tone]="tone(row.status)" [label]="'payments.status.' + row.status | translate"></cs-status-badge>
+        </td>
+        <td [attr.data-label]="'payments.columns.sentBy' | translate">
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.sentBy?.name ?? '-'">{{
+            row.sentBy?.name ?? '-'
+          }}</span>
+        </td>
+        <td class="text-center" [attr.data-label]="'payments.columns.sentAt' | translate">
+          {{ row.sentAt | csDate: 'datetime' }}
+        </td>
+        <td class="text-center" [attr.data-label]="'payments.columns.paidAt' | translate">
+          {{ row.paidAt ? (row.paidAt | csDate: 'date') : '-' }}
+        </td>
+        <td class="text-center">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-check-circle"
+            (click)="openMarkPaidDialog(row)"
+            class="p-button-text p-button-sm"
+            [disabled]="!canMarkPaid(row)"
+            [pTooltip]="
+              canMarkPaid(row)
+                ? ('payments.action.markPaid' | translate)
+                : (markPaidDisabledReason(row) | translate)
+            "
+            tooltipPosition="top"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" class="text-center py-5 opacity-70">
+          {{
+            facade.loadedOnce() ? ('payments.empty' | translate) : ('common.loading' | translate)
+          }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<app-mark-installment-paid-dialog
+  [visible]="markPaidDialogVisible()"
+  [payment]="markPaidRow()"
+  (visibleChange)="markPaidDialogVisible.set($event)"
+  (confirmed)="onMarkPaidConfirmed($event)"
+></app-mark-installment-paid-dialog>

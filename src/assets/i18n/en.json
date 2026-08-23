@@ -211,10 +211,13 @@
       "title": "Addendums"
     },
     "installments": {
-      "title": "Payments"
+      "title": "Released Installments"
     },
     "paymentOrders": {
       "title": "Payment Orders"
+    },
+    "payments": {
+      "title": "Payments"
     },
     "measurements": {
       "title": "Measurements"
@@ -388,8 +391,9 @@
       "projects": "Projects",
       "works": "Service Fronts",
       "addendums": "Addendums",
-      "installments": "Payments",
+      "installments": "Released Installments",
       "paymentOrders": "Payment Orders",
+      "payments": "Payments",
       "measurements": "Measurements",
       "suggestions": "Suggestions",
       "tickets": "Tickets",
@@ -463,7 +467,8 @@
     "projects": "Projects",
     "works": "Service Fronts",
     "addendums": "Addendums",
-    "installments": "Payments",
+    "installments": "Released Installments",
+    "payments": "Payments",
     "measurements": "Measurements",
     "suggestions": "Suggestions",
     "tickets": "Tickets",
@@ -4446,41 +4451,60 @@
     "status": {
       "MEASUREMENT_APPROVED": "Awaiting release",
       "RELEASED": "Released",
-      "PAID": "Paid",
       "CANCELLED": "Cancelled"
     },
     "form": {
       "saveError": "Could not complete the action. Please try again."
     },
     "empty": {
-      "title": "No installments found"
+      "title": "No payment orders found"
     },
     "action": {
       "release": "Release",
-      "markPaid": "Mark as paid",
       "resendNotification": "Resend e-mail notification",
       "noPermission": "You do not have permission for this action.",
-      "requiresMeasurementApproved": "This installment was already released or paid.",
-      "requiresReleased": "Requires a released installment to mark as paid.",
-      "requiresReleasedOrPaid": "This installment has not been released yet.",
-      "statusChanged": "This installment's status was changed by another user. Refresh the page."
+      "requiresMeasurementApproved": "This payment order was already released or cancelled.",
+      "requiresReleasedOrCancelled": "This payment order has not been released yet.",
+      "statusChanged": "This payment order's status was changed by another user. Refresh the page."
     },
     "releaseConfirm": {
       "header": "Release installment",
       "message": "Confirm release of installment #{number}?",
       "success": "Installment released successfully."
     },
-    "markPaidConfirm": {
-      "header": "Mark installment as paid",
-      "message": "Confirm installment #{number} was paid?",
-      "dateLabel": "Payment date",
-      "futureDateError": "The payment date cannot be in the future.",
-      "success": "Installment marked as paid successfully."
-    },
     "resendNotificationConfirm": {
       "header": "Resend notification",
       "message": "Confirm resending the notification e-mail for installment #{number} to the configured recipients?",
       "success": "Notification resent successfully."
+    }
+  },
+  "payments": {
+    "subtitle": "Payments sent to suppliers, consolidating released payment orders",
+    "columns": {
+      "supplier": "Supplier",
+      "amount": "Amount",
+      "orderCount": "Order count",
+      "status": "Status",
+      "sentBy": "Sent by",
+      "sentAt": "Sent at",
+      "paidAt": "Paid at"
+    },
+    "status": {
+      "SENT": "Sent",
+      "PAID": "Paid"
+    },
+    "empty": "No payments found",
+    "action": {
+      "markPaid": "Mark as paid",
+      "requiresSent": "Requires a sent payment to mark as paid."
+    },
+    "markPaidConfirm": {
+      "header": "Mark payment as paid",
+      "message": "Confirm the payment to {supplier} was paid?",
+      "dateLabel": "Payment date",
+      "futureDateError": "The payment date cannot be in the future.",
+      "success": "Payment marked as paid successfully.",
+      "error": "Could not mark the payment as paid."
     }
   },
   "paymentOrders": {
@@ -4503,9 +4527,10 @@
     "sendError": "Could not send the payment order.",
     "action": {
       "differentSuppliers": "All selected installments must belong to the same supplier.",
-      "notAllReleased": "All selected installments must be released.",
+      "notAllReleased": "All selected installments must be released and not yet sent.",
       "noRecipients": "No recipient configured to receive the payment order.",
-      "notFound": "One or more selected installments were not found. Refresh the page."
+      "notFound": "One or more selected installments were not found. Refresh the page.",
+      "concurrentSend": "One or more selected orders were already included in another send. Refresh the page."
     }
   },
   "measurements": {
@@ -4573,7 +4598,7 @@
       "alreadyDecided": "This measurement was already decided by another user. Refresh the page.",
       "requiresSubmittableWork": "The service front must be planned or in progress to submit a new measurement.",
       "exceedsWorkTotal": "The requested amount, added to the payment orders already generated, would exceed the service front's total amount.",
-      "paymentAlreadyPaid": "Cannot edit: the payment generated by this measurement was already paid."
+      "paymentAlreadyPaid": "Cannot edit: the payment order generated by this measurement was already sent for payment."
     },
     "approveConfirm": {
       "header": "Approve measurement",

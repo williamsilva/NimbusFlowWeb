@@ -8,8 +8,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { FloatLabelModule } from 'primeng/floatlabel';
 
 import { I18nService } from '@core/i18n/i18n.service';
-import { InstallmentModel } from '@models/installments.models';
-import { formatSequentialNumber } from '@shared/utils/br-format';
+import { PaymentModel } from '@models/payments.models';
 import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 
 function toDateOnlyString(value: Date | null): string | null {
@@ -21,15 +20,12 @@ function toDateOnlyString(value: Date | null): string | null {
 }
 
 /**
- * Pede a data em que o pagamento efetivamente ocorreu antes de marcar a Parcela como paga - não
- * é mais "agora" (ver InstallmentService#markAsPaid no backend, que usa essa data pra contar a
+ * Pede a data em que o pagamento efetivamente ocorreu antes de marcar o Pagamento como pago - não
+ * é "agora" (ver InstallmentService#markAsPaid no backend, que usa essa data pra contar a
  * carência de conclusão automática da Frente, WorkAutoCompleteService).
  *
- * <p>Component "burro" de propósito: usado pelas duas telas de Parcela (por obra e global), que
- * usam facades diferentes (InstallmentsFacade/InstallmentsGlobalFacade) - por isso não chama a
- * API sozinho, só coleta a data e emite `confirmed`; quem abre o dialog decide qual facade chamar
- * e como tratar sucesso/erro (toast), mesmo padrão de mensagem já usado em installments-list/
- * all-installments-list.
+ * <p>Component "burro" de propósito - não chama a API sozinho, só coleta a data e emite
+ * `confirmed`; quem abre o dialog (tela "Pagamentos") decide como tratar sucesso/erro (toast).
  */
 @Component({
   standalone: true,
@@ -47,7 +43,7 @@ function toDateOnlyString(value: Date | null): string | null {
 })
 export class MarkInstallmentPaidDialogComponent {
   visible = input.required<boolean>();
-  installment = input<InstallmentModel | null>(null);
+  payment = input<PaymentModel | null>(null);
 
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() confirmed = new EventEmitter<string>();
@@ -70,9 +66,8 @@ export class MarkInstallmentPaidDialogComponent {
     });
   }
 
-  numberLabel(): string {
-    const installment = this.installment();
-    return installment ? formatSequentialNumber('PAG', installment.number) : '';
+  supplierLabel(): string {
+    return this.payment()?.supplierName ?? '';
   }
 
   cancel(): void {

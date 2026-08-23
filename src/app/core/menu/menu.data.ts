@@ -28,6 +28,7 @@ export const APP_MENU: AppMenuItem[] = [
     exact: false,
     permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PLANO_ACAO.VIEW],
   },
+  /* Tasks */
   {
     labelKey: 'menu.works.tasks',
     icon: 'pi pi-check-square text-teal-600',
@@ -35,6 +36,7 @@ export const APP_MENU: AppMenuItem[] = [
     exact: false,
     permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.TAREFA.VIEW, PERMISSIONS.TAREFA.EXECUTE],
   },
+  /* Works */
   /* Fornecedor / Projeto / Obra / Aditivo / Parcela / Medição / Sugestão - cada item exige sua
    * própria permissão de visualização (*_CONSULT), mesma lista de `permissions` da rota
    * correspondente (ver app.routes.ts). */
@@ -78,6 +80,13 @@ export const APP_MENU: AppMenuItem[] = [
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.MEDICAO.VIEW],
       },
       {
+        labelKey: 'menu.works.paymentOrders',
+        icon: 'pi pi-send text-green-400',
+        route: '/payment-orders',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.ENVIAR_ORDEM],
+      },
+      {
         labelKey: 'menu.works.installments',
         icon: 'pi pi-wallet text-green-400',
         route: '/installments',
@@ -85,11 +94,11 @@ export const APP_MENU: AppMenuItem[] = [
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.VIEW],
       },
       {
-        labelKey: 'menu.works.paymentOrders',
-        icon: 'pi pi-send text-green-400',
-        route: '/payment-orders',
+        labelKey: 'menu.works.payments',
+        icon: 'pi pi-money-bill text-green-400',
+        route: '/payments',
         exact: false,
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.ENVIAR_ORDEM],
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.VIEW],
       },
       {
         labelKey: 'menu.works.suggestions',

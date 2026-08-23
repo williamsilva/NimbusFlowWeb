@@ -7,10 +7,10 @@
   [visible]="visible()"
   (visibleChange)="visibleChange.emit($event)"
   [style]="{ width: '380px', maxWidth: '95vw' }"
-  [header]="i18n.tUi('installments.markPaidConfirm.header')"
+  [header]="i18n.tUi('payments.markPaidConfirm.header')"
 >
   <p class="mb-3">
-    {{ i18n.tUi('installments.markPaidConfirm.message', { number: numberLabel() }) }}
+    {{ i18n.tUi('payments.markPaidConfirm.message', { supplier: supplierLabel() }) }}
   </p>
 
   <p-floatLabel variant="on" class="w-full">
@@ -26,7 +26,7 @@
       [(ngModel)]="paidAt"
       [csDateInputMaskFormat]="i18n.getDateFormat()"
     ></p-datepicker>
-    <label for="markPaidDate">{{ 'installments.markPaidConfirm.dateLabel' | translate }}</label>
+    <label for="markPaidDate">{{ 'payments.markPaidConfirm.dateLabel' | translate }}</label>
   </p-floatLabel>
 
   <ng-template pTemplate="footer">

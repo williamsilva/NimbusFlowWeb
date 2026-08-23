@@ -8,22 +8,23 @@ import { PaymentOrderCandidateModel, SendPaymentOrderResultModel } from '@models
 @Injectable({ providedIn: 'root' })
 export class PaymentOrdersApiService {
   private readonly http = inject(HttpClient);
+  private readonly paymentOrdersUrl = `${API.bff}/v1/payment-orders`;
   private readonly installmentsUrl = `${API.bff}/v1/installments`;
 
-  /** Parcelas RELEASED do fornecedor, através de TODAS as obras/projetos dele - candidatas a
-   *  entrar na Ordem de Pagamento que o usuário está montando. */
+  /** Ordens RELEASED do fornecedor, através de TODAS as obras/projetos dele, ainda não incluídas
+   *  em nenhum envio - candidatas a entrar no Pagamento que o usuário está montando. */
   findReleasedBySupplier(supplierId: string) {
-    return this.http.get<PaymentOrderCandidateModel[]>(`${this.installmentsUrl}/by-supplier/${supplierId}`);
+    return this.http.get<PaymentOrderCandidateModel[]>(`${this.paymentOrdersUrl}/by-supplier/${supplierId}`);
   }
 
   /** SKIP_GLOBAL_ERROR_TOAST: o componente já mostra a mensagem específica do backend (ver
-   *  translateWorksErrorDetail) pros casos esperados (sem destinatário configurado, parcela não
+   *  translateWorksErrorDetail) pros casos esperados (sem destinatário configurado, ordem não
    *  está mais liberada etc.) - sem isso, o error.interceptor mostraria um segundo toast genérico
    *  por cima (com.nimbusflow.* nunca usa o envelope que ErrorMapperService entende). */
-  sendPaymentOrder(installmentIds: string[]) {
+  sendPaymentOrder(paymentOrderIds: string[]) {
     return this.http.post<SendPaymentOrderResultModel>(
-      `${this.installmentsUrl}/payment-orders`,
-      { installmentIds },
+      `${this.installmentsUrl}/send`,
+      { paymentOrderIds },
       { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
     );
   }

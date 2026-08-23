@@ -133,6 +133,7 @@ export const UI_KEYS = {
       addendums: 'menu.works.addendums',
       installments: 'menu.works.installments',
       paymentOrders: 'menu.works.paymentOrders',
+      payments: 'menu.works.payments',
       measurements: 'menu.works.measurements',
       suggestions: 'menu.works.suggestions',
       tickets: 'menu.works.tickets',
@@ -1735,23 +1736,26 @@ export const UI_KEYS = {
     },
     action: {
       statusChanged: 'installments.action.statusChanged',
-      requiresReleasedOrPaid: 'installments.action.requiresReleasedOrPaid',
+      requiresReleasedOrCancelled: 'installments.action.requiresReleasedOrCancelled',
     },
     releaseConfirm: {
       header: 'installments.releaseConfirm.header',
       message: 'installments.releaseConfirm.message',
       success: 'installments.releaseConfirm.success',
     },
-    markPaidConfirm: {
-      header: 'installments.markPaidConfirm.header',
-      message: 'installments.markPaidConfirm.message',
-      futureDateError: 'installments.markPaidConfirm.futureDateError',
-      success: 'installments.markPaidConfirm.success',
-    },
     resendNotificationConfirm: {
       header: 'installments.resendNotificationConfirm.header',
       message: 'installments.resendNotificationConfirm.message',
       success: 'installments.resendNotificationConfirm.success',
+    },
+  },
+  payments: {
+    markPaidConfirm: {
+      header: 'payments.markPaidConfirm.header',
+      message: 'payments.markPaidConfirm.message',
+      futureDateError: 'payments.markPaidConfirm.futureDateError',
+      success: 'payments.markPaidConfirm.success',
+      error: 'payments.markPaidConfirm.error',
     },
   },
   paymentOrders: {
@@ -1762,6 +1766,7 @@ export const UI_KEYS = {
       notAllReleased: 'paymentOrders.action.notAllReleased',
       noRecipients: 'paymentOrders.action.noRecipients',
       notFound: 'paymentOrders.action.notFound',
+      concurrentSend: 'paymentOrders.action.concurrentSend',
     },
   },
   measurements: {

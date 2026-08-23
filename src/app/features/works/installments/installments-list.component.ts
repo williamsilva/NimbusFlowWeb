@@ -26,7 +26,6 @@ import { PageHeaderComponent } from '@shared/features/page-header/page-header.co
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { InstallmentsPermissionPolicy } from '@features/works/installments-permission.policy';
 import { formatApprovalRanges } from '@features/works/installments/installments-approval-range.util';
-import { MarkInstallmentPaidDialogComponent } from '@features/works/installments/mark-installment-paid-dialog.component';
 import { formatSequentialNumber } from '@shared/utils/br-format';
 import { CsCurrencyRangeFilterComponent } from '@features/list-base/cs-currency-range-filter.component';
 import {
@@ -54,7 +53,6 @@ import {
     StatusBadgeComponent,
     CsCurrencyRangeFilterComponent,
     DateInputMaskDirective,
-    MarkInstallmentPaidDialogComponent,
   ],
 })
 export class InstallmentsListComponent implements OnInit {
@@ -71,9 +69,6 @@ export class InstallmentsListComponent implements OnInit {
 
   readonly workId = signal('');
   readonly work = signal<WorkModel | null>(null);
-
-  readonly markPaidDialogVisible = signal(false);
-  readonly markPaidRow = signal<InstallmentModel | null>(null);
 
   /** InstallmentModel puro não tem workName (endpoint por obra não manda - já implícito na URL/
    *  work() carregado à parte) - a coluna "Frente de serviço" da tabela (mesmo layout da listagem
@@ -149,21 +144,9 @@ export class InstallmentsListComponent implements OnInit {
     return formatSequentialNumber('PAG', row.number);
   }
 
-  canMarkPaid(row: InstallmentModel): boolean {
-    return row.status === InstallmentStatusEnum.RELEASED && this.policy.canMarkPaid();
-  }
-
-  markPaidDisabledReason(row: InstallmentModel): string {
-    if (row.status !== InstallmentStatusEnum.RELEASED) {
-      return 'installments.action.requiresReleased';
-    }
-    return this.policy.markPaidDisabledReason() ?? 'installments.action.noPermission';
-  }
-
   canResendNotification(row: InstallmentModel): boolean {
     return (
       (row.status === InstallmentStatusEnum.RELEASED ||
-        row.status === InstallmentStatusEnum.PAID ||
         row.status === InstallmentStatusEnum.CANCELLED) &&
       this.policy.canResendNotification()
     );
@@ -172,10 +155,9 @@ export class InstallmentsListComponent implements OnInit {
   resendNotificationDisabledReason(row: InstallmentModel): string {
     if (
       row.status !== InstallmentStatusEnum.RELEASED &&
-      row.status !== InstallmentStatusEnum.PAID &&
       row.status !== InstallmentStatusEnum.CANCELLED
     ) {
-      return 'installments.action.requiresReleasedOrPaid';
+      return 'installments.action.requiresReleasedOrCancelled';
     }
     return this.policy.resendNotificationDisabledReason() ?? 'installments.action.noPermission';
   }
@@ -211,39 +193,6 @@ export class InstallmentsListComponent implements OnInit {
           });
       },
     });
-  }
-
-  openMarkPaidDialog(row: InstallmentModel): void {
-    if (!this.canMarkPaid(row)) return;
-    this.markPaidRow.set(row);
-    this.markPaidDialogVisible.set(true);
-  }
-
-  onMarkPaidConfirmed(paidAt: string): void {
-    const row = this.markPaidRow();
-    if (!row) return;
-
-    this.facade
-      .markPaid(row.id, paidAt)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () => {
-          this.markPaidDialogVisible.set(false);
-          this.toast.add({
-            severity: 'success',
-            summary: this.i18n.tUi('common.success'),
-            detail: this.i18n.tUi('installments.markPaidConfirm.success'),
-          });
-        },
-        error: (err) =>
-          this.toast.add({
-            severity: 'error',
-            summary: this.i18n.tUi('common.error'),
-            detail:
-              translateWorksErrorDetail(err, this.i18n) ??
-              this.i18n.tUi('installments.form.saveError'),
-          }),
-      });
   }
 
   confirmResendNotification(row: InstallmentModel): void {

@@ -206,10 +206,13 @@
       "title": "Aditivos"
     },
     "installments": {
-      "title": "Pagamentos"
+      "title": "Parcelas Liberadas"
     },
     "paymentOrders": {
       "title": "Ordens de Pagamento"
+    },
+    "payments": {
+      "title": "Pagamentos"
     },
     "measurements": {
       "title": "Medições"
@@ -383,8 +386,9 @@
       "projects": "Projetos",
       "works": "Frentes de Serviço",
       "addendums": "Aditivos",
-      "installments": "Pagamentos",
+      "installments": "Parcelas Liberadas",
       "paymentOrders": "Ordens de Pagamento",
+      "payments": "Pagamentos",
       "measurements": "Medições",
       "suggestions": "Sugestões",
       "tickets": "Chamados",
@@ -458,7 +462,8 @@
     "projects": "Projetos",
     "works": "Frentes de Serviço",
     "addendums": "Aditivos",
-    "installments": "Pagamentos",
+    "installments": "Parcelas Liberadas",
+    "payments": "Pagamentos",
     "measurements": "Medições",
     "suggestions": "Sugestões",
     "tickets": "Chamados",
@@ -4441,41 +4446,60 @@
     "status": {
       "MEASUREMENT_APPROVED": "Aguardando liberação",
       "RELEASED": "Liberada",
-      "PAID": "Paga",
       "CANCELLED": "Cancelada"
     },
     "form": {
       "saveError": "Não foi possível concluir a ação. Tente novamente."
     },
     "empty": {
-      "title": "Nenhuma parcela encontrada"
+      "title": "Nenhuma ordem de pagamento encontrada"
     },
     "action": {
       "release": "Liberar",
-      "markPaid": "Marcar como pago",
       "resendNotification": "Reenviar notificação por e-mail",
       "noPermission": "Você não tem permissão para esta ação.",
-      "requiresMeasurementApproved": "Esta parcela já foi liberada ou paga.",
-      "requiresReleased": "Requer parcela liberada para marcar como paga.",
-      "requiresReleasedOrPaid": "Esta parcela ainda não foi liberada.",
-      "statusChanged": "O status desta parcela foi alterado por outro usuário. Atualize a página."
+      "requiresMeasurementApproved": "Esta ordem já foi liberada ou cancelada.",
+      "requiresReleasedOrCancelled": "Esta ordem ainda não foi liberada.",
+      "statusChanged": "O status desta ordem foi alterado por outro usuário. Atualize a página."
     },
     "releaseConfirm": {
       "header": "Liberar parcela",
       "message": "Confirma a liberação da parcela nº {number}?",
       "success": "Parcela liberada com sucesso."
     },
-    "markPaidConfirm": {
-      "header": "Marcar parcela como paga",
-      "message": "Confirma que a parcela nº {number} foi paga?",
-      "dateLabel": "Data do pagamento",
-      "futureDateError": "A data do pagamento não pode ser no futuro.",
-      "success": "Parcela marcada como paga com sucesso."
-    },
     "resendNotificationConfirm": {
       "header": "Reenviar notificação",
       "message": "Confirma o reenvio do e-mail de notificação da parcela nº {number} para os destinatários configurados?",
       "success": "Notificação reenviada com sucesso."
+    }
+  },
+  "payments": {
+    "subtitle": "Pagamentos enviados a fornecedores, consolidando ordens de pagamento liberadas",
+    "columns": {
+      "supplier": "Fornecedor",
+      "amount": "Valor",
+      "orderCount": "Qtd. de ordens",
+      "status": "Status",
+      "sentBy": "Enviado por",
+      "sentAt": "Enviado em",
+      "paidAt": "Pago em"
+    },
+    "status": {
+      "SENT": "Enviado",
+      "PAID": "Pago"
+    },
+    "empty": "Nenhum pagamento encontrado",
+    "action": {
+      "markPaid": "Marcar como pago",
+      "requiresSent": "Requer pagamento enviado para marcar como pago."
+    },
+    "markPaidConfirm": {
+      "header": "Marcar pagamento como pago",
+      "message": "Confirma que o pagamento para {supplier} foi pago?",
+      "dateLabel": "Data do pagamento",
+      "futureDateError": "A data do pagamento não pode ser no futuro.",
+      "success": "Pagamento marcado como pago com sucesso.",
+      "error": "Não foi possível marcar o pagamento como pago."
     }
   },
   "paymentOrders": {
@@ -4498,9 +4522,10 @@
     "sendError": "Não foi possível enviar a ordem de pagamento.",
     "action": {
       "differentSuppliers": "Todas as parcelas selecionadas precisam ser do mesmo fornecedor.",
-      "notAllReleased": "Todas as parcelas selecionadas precisam estar liberadas.",
+      "notAllReleased": "Todas as parcelas selecionadas precisam estar liberadas e ainda não enviadas.",
       "noRecipients": "Nenhum destinatário configurado para receber a ordem de pagamento.",
-      "notFound": "Uma ou mais parcelas selecionadas não foram encontradas. Atualize a página."
+      "notFound": "Uma ou mais parcelas selecionadas não foram encontradas. Atualize a página.",
+      "concurrentSend": "Uma ou mais ordens selecionadas já foram incluídas em outro envio. Atualize a página."
     }
   },
   "measurements": {
@@ -4568,7 +4593,7 @@
       "alreadyDecided": "Esta medição já foi decidida por outro usuário. Atualize a página.",
       "requiresSubmittableWork": "A frente de serviço precisa estar planejada ou em andamento para registrar uma nova medição.",
       "exceedsWorkTotal": "O valor solicitado, somado às ordens de pagamento já geradas, passaria do valor total da frente de serviço.",
-      "paymentAlreadyPaid": "Não é possível editar: o pagamento gerado por esta medição já foi pago."
+      "paymentAlreadyPaid": "Não é possível editar: a ordem de pagamento gerada por esta medição já foi enviada para pagamento."
     },
     "approveConfirm": {
       "header": "Aprovar medição",

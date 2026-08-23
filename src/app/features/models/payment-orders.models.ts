@@ -9,6 +9,7 @@ export interface PaymentOrderCandidateModel {
 }
 
 export interface SendPaymentOrderResultModel {
-  installmentCount: number;
+  installmentId: string;
+  orderCount: number;
   totalAmount: number;
 }
