@@ -1,5 +1,5 @@
 
-import { computed, DestroyRef } from '@angular/core';
+import { computed, untracked, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { input, signal, Output, inject, Component, EventEmitter, effect } from '@angular/core';
@@ -147,8 +147,17 @@ export class WorksCreateDialogComponent {
       // cadastrado depois (outra aba, outro usuário, ou só o tempo passando) - reabrir o diálogo
       // nunca disparava um refetch por conta própria (só SuppliersFacade.create/update/etc.
       // invalidava, e só quando a mutação acontecia na mesma aba/sessão Angular).
-      this.suppliersFacade.loadSupplierOptions(true);
-      this.projectsFacade.loadOptions(true);
+      //
+      // untracked() é obrigatório aqui: loadSupplierOptions/loadOptions leem um sinal de "carregando"
+      // como guarda de corrida (`if (this._optionsLoading()) return;`) e, na sequência, escrevem
+      // nesse MESMO sinal - sem untracked(), essa leitura síncrona dentro do effect() registra o
+      // sinal como dependência dele, e a escrita imediata (true, depois false quando a resposta
+      // volta) disparava o effect de novo a cada troca, entrando num loop infinito de chamadas a
+      // /bff/v1/projects/options e /bff/v1/suppliers/options.
+      untracked(() => {
+        this.suppliersFacade.loadSupplierOptions(true);
+        this.projectsFacade.loadOptions(true);
+      });
 
       const work = this.work();
 
