@@ -123,7 +123,7 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
   name = signal('');
   userName = signal('');
   document = signal('');
-  status = signal<UserStatus[] | null>(null);
+  status = signal<UserStatus[] | null>([UserStatus.ACTIVE, UserStatus.PENDING_PASSWORD]);
   createdBy = signal<string[] | null>(null);
   createdAt = signal<string | string[] | null>(null);
   periodCreatedAt = signal<PeriodEnum | null>(null);
