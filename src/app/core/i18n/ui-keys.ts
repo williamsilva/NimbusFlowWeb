@@ -1744,6 +1744,7 @@ export const UI_KEYS = {
     markPaidConfirm: {
       header: 'installments.markPaidConfirm.header',
       message: 'installments.markPaidConfirm.message',
+      futureDateError: 'installments.markPaidConfirm.futureDateError',
       success: 'installments.markPaidConfirm.success',
     },
     resendNotificationConfirm: {

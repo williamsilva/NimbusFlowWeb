@@ -48,9 +48,12 @@ export class InstallmentsApiService {
       .pipe(map(mapInstallmentApiModel));
   }
 
-  markPaid(id: string) {
+  /** @param paidAt data em que o pagamento ocorreu (formato yyyy-MM-dd) - informada por quem
+   *  confirma o pagamento, não é mais "agora" (ver WorkAutoCompleteService no backend, que usa
+   *  essa data pra contar a carência de conclusão automática da Frente). */
+  markPaid(id: string, paidAt: string) {
     return this.http
-      .post<InstallmentApiModel>(`${this.installmentsUrl}/${id}/mark-paid`, {})
+      .post<InstallmentApiModel>(`${this.installmentsUrl}/${id}/mark-paid`, { paidAt })
       .pipe(map(mapInstallmentApiModel));
   }
 

@@ -1,0 +1,52 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  (visibleChange)="visibleChange.emit($event)"
+  [style]="{ width: '380px', maxWidth: '95vw' }"
+  [header]="i18n.tUi('installments.markPaidConfirm.header')"
+>
+  <p class="mb-3">
+    {{ i18n.tUi('installments.markPaidConfirm.message', { number: numberLabel() }) }}
+  </p>
+
+  <p-floatLabel variant="on" class="w-full">
+    <p-datepicker
+      class="w-full"
+      csDateInputMask
+      inputId="markPaidDate"
+      appendTo="body"
+      [showIcon]="true"
+      [maxDate]="today"
+      [dateFormat]="i18n.getDateFormat()"
+      [readonlyInput]="false"
+      [(ngModel)]="paidAt"
+      [csDateInputMaskFormat]="i18n.getDateFormat()"
+    ></p-datepicker>
+    <label for="markPaidDate">{{ 'installments.markPaidConfirm.dateLabel' | translate }}</label>
+  </p-floatLabel>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="cancel()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="confirm()"
+      icon="pi pi-check"
+      class="p-button-sm"
+      [disabled]="!paidAt"
+      [label]="'common.confirm' | translate"
+    ></button>
+  </ng-template>
+</p-dialog>

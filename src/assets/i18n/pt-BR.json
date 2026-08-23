@@ -4470,6 +4470,8 @@
     "markPaidConfirm": {
       "header": "Marcar parcela como paga",
       "message": "Confirma que a parcela nº {number} foi paga?",
+      "dateLabel": "Data do pagamento",
+      "futureDateError": "A data do pagamento não pode ser no futuro.",
       "success": "Parcela marcada como paga com sucesso."
     },
     "resendNotificationConfirm": {

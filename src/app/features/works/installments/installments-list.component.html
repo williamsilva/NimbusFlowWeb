@@ -293,7 +293,7 @@
               pButton
               type="button"
               icon="pi pi-check-circle"
-              (click)="confirmMarkPaid(row)"
+              (click)="openMarkPaidDialog(row)"
               class="p-button-text p-button-sm"
               [disabled]="!canMarkPaid(row)"
               [pTooltip]="
@@ -334,3 +334,10 @@
     </ng-template>
   </p-table>
 </div>
+
+<app-mark-installment-paid-dialog
+  [visible]="markPaidDialogVisible()"
+  [installment]="markPaidRow()"
+  (visibleChange)="markPaidDialogVisible.set($event)"
+  (confirmed)="onMarkPaidConfirmed($event)"
+></app-mark-installment-paid-dialog>

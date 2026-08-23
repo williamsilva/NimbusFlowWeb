@@ -4475,6 +4475,8 @@
     "markPaidConfirm": {
       "header": "Mark installment as paid",
       "message": "Confirm installment #{number} was paid?",
+      "dateLabel": "Payment date",
+      "futureDateError": "The payment date cannot be in the future.",
       "success": "Installment marked as paid successfully."
     },
     "resendNotificationConfirm": {

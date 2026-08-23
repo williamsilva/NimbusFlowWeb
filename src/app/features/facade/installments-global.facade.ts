@@ -65,8 +65,8 @@ export class InstallmentsGlobalFacade {
     return this.api.release(id).pipe(tap(() => this.reloadLast()));
   }
 
-  markPaid(id: string): Observable<InstallmentModel> {
-    return this.api.markPaid(id).pipe(tap(() => this.reloadLast()));
+  markPaid(id: string, paidAt: string): Observable<InstallmentModel> {
+    return this.api.markPaid(id, paidAt).pipe(tap(() => this.reloadLast()));
   }
 
   resendNotification(id: string): Observable<InstallmentModel> {

@@ -50,6 +50,7 @@ import {
   installmentStatusTone,
 } from '@models/enums/installment-status.enum';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
+import { MarkInstallmentPaidDialogComponent } from '@features/works/installments/mark-installment-paid-dialog.component';
 
 @Component({
   standalone: true,
@@ -74,6 +75,7 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     DateInputMaskDirective,
+    MarkInstallmentPaidDialogComponent,
   ],
 })
 export class AllInstallmentsListComponent extends StatefulListPage<
@@ -91,6 +93,9 @@ export class AllInstallmentsListComponent extends StatefulListPage<
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
+
+  readonly markPaidDialogVisible = signal(false);
+  readonly markPaidRow = signal<InstallmentWithWorkModel | null>(null);
 
   workName = signal('');
   status = signal<string[] | null>(this.defaultStatus());
@@ -251,37 +256,37 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     });
   }
 
-  confirmMarkPaid(row: InstallmentWithWorkModel): void {
+  openMarkPaidDialog(row: InstallmentWithWorkModel): void {
     if (!this.canMarkPaid(row)) return;
+    this.markPaidRow.set(row);
+    this.markPaidDialogVisible.set(true);
+  }
 
-    this.confirm.confirm({
-      header: this.i18n.tUi('installments.markPaidConfirm.header'),
-      message: this.i18n.tUi('installments.markPaidConfirm.message', {
-        number: this.numberLabel(row),
-      }),
-      icon: 'pi pi-question-circle',
-      accept: () => {
-        this.facade
-          .markPaid(row.id)
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe({
-            next: () =>
-              this.toast.add({
-                severity: 'success',
-                summary: this.i18n.tUi('common.success'),
-                detail: this.i18n.tUi('installments.markPaidConfirm.success'),
-              }),
-            error: (err) =>
-              this.toast.add({
-                severity: 'error',
-                summary: this.i18n.tUi('common.error'),
-                detail:
-                  translateWorksErrorDetail(err, this.i18n) ??
-                  this.i18n.tUi('installments.form.saveError'),
-              }),
+  onMarkPaidConfirmed(paidAt: string): void {
+    const row = this.markPaidRow();
+    if (!row) return;
+
+    this.facade
+      .markPaid(row.id, paidAt)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.markPaidDialogVisible.set(false);
+          this.toast.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi('installments.markPaidConfirm.success'),
           });
-      },
-    });
+        },
+        error: (err) =>
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail:
+              translateWorksErrorDetail(err, this.i18n) ??
+              this.i18n.tUi('installments.form.saveError'),
+          }),
+      });
   }
 
   confirmResendNotification(row: InstallmentWithWorkModel): void {
@@ -340,18 +345,13 @@ export class AllInstallmentsListComponent extends StatefulListPage<
 
   /** Mesmo padrão do WorksListComponent (status pré-selecionado): "Aguardando liberação"+
    *  "Liberada" pré-selecionados, mas só quando o painel de filtros está vazio de verdade (nem
-   *  restaurado do localStorage, nem definido pelo usuário) - ver applyDefaultFiltersIfEmpty. */
+   *  restaurado do localStorage, nem definido pelo usuário) - ver
+   *  applyDefaultAdvancedFiltersIfEmpty em StatefulListPage. */
   private defaultStatus(): string[] {
     return [InstallmentStatusEnum.MEASUREMENT_APPROVED, InstallmentStatusEnum.RELEASED];
   }
 
-  /** Só entra quando NENHUM filtro avançado está setado (painel inteiro vazio) - primeira visita
-   *  à tela (nada persistido ainda), filtros persistidos totalmente vazios, ou logo após
-   *  "Limpar". Checa o painel inteiro, não campo a campo - mesma regra de
-   *  WorksListComponent.applyDefaultFiltersIfEmpty. */
-  private applyDefaultFiltersIfEmpty(): void {
-    if (this.advancedActiveFilters().length > 0) return;
-
+  protected override applyDefaultAdvancedFilters(): void {
     this.status.set(this.defaultStatus());
   }
 
@@ -362,7 +362,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     this.amountTo.set(null);
     this.dueDate.set(null);
     this.periodDueDate.set(null);
-    this.applyDefaultFiltersIfEmpty();
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   protected override toFiltersState(): InstallmentsFiltersState {
@@ -383,7 +383,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     this.amountTo.set(state.amountTo ?? null);
     this.dueDate.set(state.dueDate ?? null);
     this.periodDueDate.set(state.periodDueDate ?? null);
-    this.applyDefaultFiltersIfEmpty();
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   protected override buildAdvancedFilters(): Partial<InstallmentsAdvancedFilters> {

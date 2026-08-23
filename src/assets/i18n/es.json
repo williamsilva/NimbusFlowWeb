@@ -4475,6 +4475,8 @@
     "markPaidConfirm": {
       "header": "Marcar cuota como pagada",
       "message": "¿Confirma que la cuota nº {number} fue pagada?",
+      "dateLabel": "Fecha del pago",
+      "futureDateError": "La fecha del pago no puede ser en el futuro.",
       "success": "Cuota marcada como pagada con éxito."
     },
     "resendNotificationConfirm": {
