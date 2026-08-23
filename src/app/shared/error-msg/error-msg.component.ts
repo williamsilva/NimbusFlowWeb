@@ -57,15 +57,15 @@ import { ErrorMapperService } from '../../core/errors/error-mapper.service';
         flex: 0 0 auto;
       }
 
-      :root.dark .cs-error-wrap .cs-float-label {
+      :host-context(.dark) .cs-error-wrap .cs-float-label {
         color: #cbd5e1;
       }
 
-      :root.dark .cs-error-wrap .cs-float-label-error {
+      :host-context(.dark) .cs-error-wrap .cs-float-label-error {
         color: #f87171;
       }
 
-      :root.dark .cs-error-tech {
+      :host-context(.dark) .cs-error-tech {
         color: #f87171;
       }
     `,

@@ -71,6 +71,6 @@
   background: rgba(59, 130, 246, 0.14);
 }
 
-:root.dark .bottom-nav-item.active {
+:host-context(.dark) .bottom-nav-item.active {
   background: rgba(59, 130, 246, 0.22);
 }

@@ -91,7 +91,7 @@
   border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-:root.dark .status {
+:host-context(.dark) .status {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -226,12 +226,12 @@
   transform: translateY(-1px);
 }
 
-:root.dark .cs-topbar-trigger {
+:host-context(.dark) .cs-topbar-trigger {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.08);
 }
 
-:root.dark .cs-topbar-trigger:hover {
+:host-context(.dark) .cs-topbar-trigger:hover {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(59, 130, 246, 0.22);
 }
@@ -260,7 +260,7 @@
   border: 1px solid rgba(59, 130, 246, 0.15);
 }
 
-:root.dark .cs-trigger-badge {
+:host-context(.dark) .cs-trigger-badge {
   background: rgba(59, 130, 246, 0.2);
   border: 1px solid rgba(59, 130, 246, 0.18);
 }
@@ -289,7 +289,7 @@
   border: 1px solid rgba(59, 130, 246, 0.18);
 }
 
-:root.dark .cs-account-avatar {
+:host-context(.dark) .cs-account-avatar {
   background: rgba(59, 130, 246, 0.22);
   border: 1px solid rgba(59, 130, 246, 0.2);
 }

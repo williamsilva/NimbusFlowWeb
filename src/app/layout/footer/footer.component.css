@@ -21,7 +21,7 @@
   opacity: 0.6;
 }
 
-:root.dark .footer {
+:host-context(.dark) .footer {
   background: rgba(17, 24, 39, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow:
