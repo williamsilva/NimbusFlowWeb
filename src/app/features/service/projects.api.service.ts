@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
+import { SKIP_GLOBAL_ERROR_TOAST } from '@core/interceptors/error.interceptor';
 import { HalPagedResponse } from '@core/api/page.model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { ProjectsAdvancedFilters } from '@features/filter/projects.filters';
@@ -54,12 +55,23 @@ export class ProjectsApiService {
     return this.http.get<ProjectApiModel>(`${this.projectsUrl}/${id}`).pipe(map(mapProjectApiModel));
   }
 
+  /** Chamador (projects-upsert-dialog) já mostra a mensagem específica do backend (ver
+   *  translateWorksErrorDetail) - SKIP_GLOBAL_ERROR_TOAST evita o toast genérico duplicado do
+   *  error.interceptor. Mesmo motivo em update() abaixo. */
   create(input: ProjectUpsertInput) {
-    return this.http.post<ProjectApiModel>(this.projectsUrl, input).pipe(map(mapProjectApiModel));
+    return this.http
+      .post<ProjectApiModel>(this.projectsUrl, input, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
+      .pipe(map(mapProjectApiModel));
   }
 
   update(id: string, input: ProjectUpsertInput) {
-    return this.http.put<ProjectApiModel>(`${this.projectsUrl}/${id}`, input).pipe(map(mapProjectApiModel));
+    return this.http
+      .put<ProjectApiModel>(`${this.projectsUrl}/${id}`, input, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
+      .pipe(map(mapProjectApiModel));
   }
 
   /** Atalho de mudança de status a partir da listagem - não exige reenviar name/description como

@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
+import { SKIP_GLOBAL_ERROR_TOAST } from '@core/interceptors/error.interceptor';
 import { HalPagedResponse } from '@core/api/page.model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { MeasurementsAdvancedFilters } from '@features/filter/measurements.filters';
@@ -45,7 +46,10 @@ export class MeasurementsApiService {
       );
   }
 
-  /** multipart/form-data: parte "data" (JSON) + partes "files" (0..n) - espelha MeasurementController.submit. */
+  /** multipart/form-data: parte "data" (JSON) + partes "files" (0..n) - espelha MeasurementController.submit.
+   *  Chamador (measurements-create-dialog) já mostra a mensagem específica do backend (ver
+   *  translateWorksErrorDetail) - SKIP_GLOBAL_ERROR_TOAST evita o toast genérico duplicado do
+   *  error.interceptor. Mesmo motivo nos outros métodos deste service. */
   submit(workId: string, input: MeasurementSubmitInput) {
     const formData = new FormData();
     const data = {
@@ -63,26 +67,34 @@ export class MeasurementsApiService {
     input.files.forEach((file) => formData.append('files', file));
 
     return this.http
-      .post<MeasurementApiModel>(`${this.worksUrl}/${workId}/measurements`, formData)
+      .post<MeasurementApiModel>(`${this.worksUrl}/${workId}/measurements`, formData, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
       .pipe(map(mapMeasurementApiModel));
   }
 
   /** JSON puro (sem multipart) - editar não reenvia mídia. Espelha MeasurementController.update. */
   update(id: string, input: MeasurementUpdateInput) {
     return this.http
-      .put<MeasurementApiModel>(`${this.measurementsUrl}/${id}`, input)
+      .put<MeasurementApiModel>(`${this.measurementsUrl}/${id}`, input, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
       .pipe(map(mapMeasurementApiModel));
   }
 
   approve(id: string, input: MeasurementDecisionInput) {
     return this.http
-      .post<MeasurementApiModel>(`${this.measurementsUrl}/${id}/approve`, input)
+      .post<MeasurementApiModel>(`${this.measurementsUrl}/${id}/approve`, input, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
       .pipe(map(mapMeasurementApiModel));
   }
 
   reject(id: string, input: MeasurementDecisionInput) {
     return this.http
-      .post<MeasurementApiModel>(`${this.measurementsUrl}/${id}/reject`, input)
+      .post<MeasurementApiModel>(`${this.measurementsUrl}/${id}/reject`, input, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
       .pipe(map(mapMeasurementApiModel));
   }
 }

@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { HttpContextToken, HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 
 import { catchError, throwError } from 'rxjs';
 
@@ -8,6 +8,19 @@ import { ToastService } from '../toast/toast.service';
 import { AuthService } from '../auth/auth.service';
 import { ErrorMapperService } from '../errors/error-mapper.service';
 import { isAutoReloginCandidate, isCardsync } from './auth-redirect.interceptor';
+
+/**
+ * Passe `{ context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) }` nas options de uma
+ * chamada HTTP cujo chamador já mostra seu próprio toast traduzido (ver translateWorksErrorDetail
+ * em works-error.util.ts) - sem isso, este interceptor TAMBÉM mostra um toast genérico pra
+ * qualquer status não tratado abaixo (404/409/500/400 sem fieldErrors), duplicando a notificação.
+ * com.nimbusflow.* nunca usa o envelope userMessage/code que ErrorMapperService entende (só
+ * ResponseStatusException puro, ver ApiExceptionHandler no backend), então o toast genérico daqui
+ * nunca tem nada de útil pra mostrar nesses casos - só use este token em chamadas cujo componente
+ * já trata a mensagem específica; não use como atalho geral, senão erros de módulos sem
+ * tratamento próprio (tickets/planos de ação/tarefas/patrimônio) ficariam silenciosos.
+ */
+export const SKIP_GLOBAL_ERROR_TOAST = new HttpContextToken<boolean>(() => false);
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
@@ -80,10 +93,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         return throwError(() => err);
       }
 
-      toast.error(mapper.titleForStatus(err.status), mapper.message(apiError), 6000, {
-        context: 'system',
-        correlationId: apiError.correlationId,
-      });
+      if (!req.context.get(SKIP_GLOBAL_ERROR_TOAST)) {
+        toast.error(mapper.titleForStatus(err.status), mapper.message(apiError), 6000, {
+          context: 'system',
+          correlationId: apiError.correlationId,
+        });
+      }
 
       return throwError(() => err);
     }),

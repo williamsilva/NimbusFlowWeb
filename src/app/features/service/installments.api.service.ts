@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
+import { SKIP_GLOBAL_ERROR_TOAST } from '@core/interceptors/error.interceptor';
 import { HalPagedResponse } from '@core/api/page.model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { InstallmentsAdvancedFilters } from '@features/filter/installments.filters';
@@ -42,9 +43,17 @@ export class InstallmentsApiService {
       );
   }
 
+  /** Chamadores (installments-list/all-installments-list) já mostram a mensagem específica do
+   *  backend (ver translateWorksErrorDetail) - SKIP_GLOBAL_ERROR_TOAST evita o toast genérico
+   *  duplicado do error.interceptor pra qualquer erro de negócio (ex.: "parcela não está mais
+   *  liberada"). Mesmo motivo nos outros métodos deste service. */
   release(id: string) {
     return this.http
-      .post<InstallmentApiModel>(`${this.installmentsUrl}/${id}/release`, {})
+      .post<InstallmentApiModel>(
+        `${this.installmentsUrl}/${id}/release`,
+        {},
+        { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
+      )
       .pipe(map(mapInstallmentApiModel));
   }
 
@@ -53,13 +62,21 @@ export class InstallmentsApiService {
    *  essa data pra contar a carência de conclusão automática da Frente). */
   markPaid(id: string, paidAt: string) {
     return this.http
-      .post<InstallmentApiModel>(`${this.installmentsUrl}/${id}/mark-paid`, { paidAt })
+      .post<InstallmentApiModel>(
+        `${this.installmentsUrl}/${id}/mark-paid`,
+        { paidAt },
+        { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
+      )
       .pipe(map(mapInstallmentApiModel));
   }
 
   resendNotification(id: string) {
     return this.http
-      .post<InstallmentApiModel>(`${this.installmentsUrl}/${id}/resend-notification`, {})
+      .post<InstallmentApiModel>(
+        `${this.installmentsUrl}/${id}/resend-notification`,
+        {},
+        { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
+      )
       .pipe(map(mapInstallmentApiModel));
   }
 }

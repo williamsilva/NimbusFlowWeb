@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
+import { SKIP_GLOBAL_ERROR_TOAST } from '@core/interceptors/error.interceptor';
 import { HalPagedResponse } from '@core/api/page.model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { AddendumsAdvancedFilters } from '@features/filter/addendums.filters';
@@ -44,27 +45,40 @@ export class AddendumsApiService {
       );
   }
 
+  /** Chamadores (addendums-create-dialog/addendums-list/all-addendums-list) já mostram a mensagem
+   *  específica do backend (ver translateWorksErrorDetail) - SKIP_GLOBAL_ERROR_TOAST evita o
+   *  toast genérico duplicado do error.interceptor. Mesmo motivo nos outros métodos deste service. */
   submit(workId: string, input: AddendumRequestInput) {
     return this.http
-      .post<AddendumApiModel>(`${this.worksUrl}/${workId}/addendums`, input)
+      .post<AddendumApiModel>(`${this.worksUrl}/${workId}/addendums`, input, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
       .pipe(map(mapAddendumApiModel));
   }
 
   approve(id: string, input: AddendumDecisionInput) {
     return this.http
-      .post<AddendumApiModel>(`${this.addendumsUrl}/${id}/approve`, input)
+      .post<AddendumApiModel>(`${this.addendumsUrl}/${id}/approve`, input, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
       .pipe(map(mapAddendumApiModel));
   }
 
   reject(id: string, input: AddendumDecisionInput) {
     return this.http
-      .post<AddendumApiModel>(`${this.addendumsUrl}/${id}/reject`, input)
+      .post<AddendumApiModel>(`${this.addendumsUrl}/${id}/reject`, input, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
       .pipe(map(mapAddendumApiModel));
   }
 
   resendNotification(id: string) {
     return this.http
-      .post<AddendumApiModel>(`${this.addendumsUrl}/${id}/resend-notification`, {})
+      .post<AddendumApiModel>(
+        `${this.addendumsUrl}/${id}/resend-notification`,
+        {},
+        { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
+      )
       .pipe(map(mapAddendumApiModel));
   }
 }
