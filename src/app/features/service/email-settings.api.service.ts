@@ -15,9 +15,6 @@ export interface EmailSettingsModel {
   brevoBaseUrl: string | null;
   brevoPort: number | null;
   brevoUsername: string | null;
-  paymentRecipients: string | null;
-  addendumRecipients: string | null;
-  workAutoCompleteRecipients: string | null;
   smtpHost: string | null;
   smtpPort: number | null;
   smtpUsername: string | null;
@@ -35,9 +32,6 @@ export interface EmailSettingsRequest {
   brevoBaseUrl: string | null;
   brevoPort: number | null;
   brevoUsername: string | null;
-  paymentRecipients: string | null;
-  addendumRecipients: string | null;
-  workAutoCompleteRecipients: string | null;
   smtpHost: string | null;
   smtpPort: number | null;
   smtpUsername: string | null;

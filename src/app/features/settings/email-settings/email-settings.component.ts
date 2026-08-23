@@ -8,7 +8,6 @@ import { SelectModule } from 'primeng/select';
 import { DividerModule } from 'primeng/divider';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
-import { TextareaModule } from 'primeng/textarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { TranslateModule } from '@ngx-translate/core';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -38,7 +37,6 @@ export const EMAIL_IMPL_OPTIONS = [
     DividerModule,
     TooltipModule,
     CheckboxModule,
-    TextareaModule,
     TranslateModule,
     InputTextModule,
     InputNumberModule,
@@ -84,9 +82,6 @@ export class EmailSettingsComponent {
     brevoBaseUrl: ['', Validators.maxLength(255)],
     brevoPort: [587],
     brevoUsername: ['', Validators.maxLength(255)],
-    paymentRecipients: ['', Validators.maxLength(2000)],
-    addendumRecipients: ['', Validators.maxLength(2000)],
-    workAutoCompleteRecipients: ['', Validators.maxLength(2000)],
     smtpHost: ['', Validators.maxLength(255)],
     smtpPort: [587],
     smtpUsername: ['', Validators.maxLength(255)],
@@ -119,9 +114,6 @@ export class EmailSettingsComponent {
           brevoBaseUrl: s.brevoBaseUrl ?? '',
           brevoPort: s.brevoPort ?? 587,
           brevoUsername: s.brevoUsername ?? '',
-          paymentRecipients: s.paymentRecipients ?? '',
-          addendumRecipients: s.addendumRecipients ?? '',
-          workAutoCompleteRecipients: s.workAutoCompleteRecipients ?? '',
           smtpHost: s.smtpHost ?? '',
           smtpPort: s.smtpPort ?? 587,
           smtpUsername: s.smtpUsername ?? '',
@@ -161,9 +153,6 @@ export class EmailSettingsComponent {
         brevoBaseUrl: v.brevoBaseUrl || null,
         brevoPort: v.brevoPort ?? null,
         brevoUsername: v.brevoUsername || null,
-        paymentRecipients: v.paymentRecipients || null,
-        addendumRecipients: v.addendumRecipients || null,
-        workAutoCompleteRecipients: v.workAutoCompleteRecipients || null,
         smtpHost: v.smtpHost || null,
         smtpPort: v.smtpPort ?? null,
         smtpUsername: v.smtpUsername || null,
