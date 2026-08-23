@@ -121,6 +121,7 @@
         <col style="width: 150px" />
         <col style="width: 150px" />
         <col style="width: 150px" />
+        <col style="width: 150px" />
         <col style="width: 180px" />
         <col style="width: 250px" />
         <col style="width: 70px" />
@@ -281,6 +282,17 @@
             <span
               class="th-label"
               tooltipPosition="top"
+              [pTooltip]="'installments.columns.payment' | translate"
+              >{{ 'installments.columns.payment' | translate }}</span
+            >
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
               [pTooltip]="'installments.columns.releasedBy' | translate"
               >{{ 'installments.columns.releasedBy' | translate }}</span
             >
@@ -332,6 +344,16 @@
             [tone]="tone(row.status)"
             [label]="'installments.status.' + row.status | translate"
           ></cs-status-badge>
+        </td>
+        <td class="text-center" [attr.data-label]="'installments.columns.payment' | translate">
+          @if (row.installmentStatus) {
+            <cs-status-badge
+              [tone]="paymentTone(row.installmentStatus)"
+              [label]="'installments.paymentStatus.' + row.installmentStatus | translate"
+            ></cs-status-badge>
+          } @else {
+            <span class="opacity-60">-</span>
+          }
         </td>
         <td class="text-center" [attr.data-label]="'installments.columns.releasedBy' | translate">
           <span
@@ -402,7 +424,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="8" class="text-center py-5 opacity-70">
+        <td colspan="9" class="text-center py-5 opacity-70">
           {{
             loadedOnce() ? ('installments.empty.title' | translate) : ('common.loading' | translate)
           }}

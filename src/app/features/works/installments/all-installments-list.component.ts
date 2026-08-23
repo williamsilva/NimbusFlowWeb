@@ -29,7 +29,7 @@ import { formatApprovalRanges } from '@features/works/installments/installments-
 import { formatSequentialNumber } from '@shared/utils/br-format';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { InstallmentWithWorkModel, InstallmentsFiltersState } from '@models/installments.models';
-import { PaymentStatusEnum } from '@models/enums/payment-status.enum';
+import { PaymentStatusEnum, paymentStatusTone } from '@models/enums/payment-status.enum';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { MarkInstallmentPaidDialogComponent } from '@features/works/installments/mark-installment-paid-dialog.component';
 import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
@@ -163,6 +163,10 @@ export class AllInstallmentsListComponent extends StatefulListPage<
 
   tone(status: string): ReturnType<typeof installmentStatusTone> {
     return installmentStatusTone(status);
+  }
+
+  paymentTone(status: string): ReturnType<typeof paymentStatusTone> {
+    return paymentStatusTone(status);
   }
 
   clear() {

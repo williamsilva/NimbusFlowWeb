@@ -4432,6 +4432,7 @@
       "amount": "Valor",
       "dueDate": "Vencimento",
       "status": "Status",
+      "payment": "Pagamento",
       "releasedBy": "Aprovado por",
       "tier": "Alçada"
     },
@@ -4442,6 +4443,10 @@
       "MEASUREMENT_APPROVED": "Aguardando liberação",
       "RELEASED": "Liberada",
       "CANCELLED": "Cancelada"
+    },
+    "paymentStatus": {
+      "SENT": "Enviado",
+      "PAID": "Pago"
     },
     "form": {
       "saveError": "Não foi possível concluir a ação. Tente novamente."

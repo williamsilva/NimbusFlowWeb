@@ -4437,6 +4437,7 @@
       "amount": "Amount",
       "dueDate": "Due date",
       "status": "Status",
+      "payment": "Payment",
       "releasedBy": "Approved by",
       "tier": "Approval range"
     },
@@ -4447,6 +4448,10 @@
       "MEASUREMENT_APPROVED": "Awaiting release",
       "RELEASED": "Released",
       "CANCELLED": "Cancelled"
+    },
+    "paymentStatus": {
+      "SENT": "Sent",
+      "PAID": "Paid"
     },
     "form": {
       "saveError": "Could not complete the action. Please try again."

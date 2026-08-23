@@ -4437,6 +4437,7 @@
       "amount": "Monto",
       "dueDate": "Vencimiento",
       "status": "Estado",
+      "payment": "Pago",
       "releasedBy": "Aprobado por",
       "tier": "Rango de aprobación"
     },
@@ -4447,6 +4448,10 @@
       "MEASUREMENT_APPROVED": "Esperando liberación",
       "RELEASED": "Liberada",
       "CANCELLED": "Cancelada"
+    },
+    "paymentStatus": {
+      "SENT": "Enviado",
+      "PAID": "Pagado"
     },
     "form": {
       "saveError": "No se pudo completar la acción. Intente nuevamente."
