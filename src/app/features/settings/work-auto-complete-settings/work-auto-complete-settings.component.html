@@ -1,0 +1,94 @@
+<cs-page-header
+  [subtitle]="'workAutoComplete.settings.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('menu.settings.title' | translate), url: '/settings' },
+    { label: ('routes.settings.workAutoComplete.title' | translate) },
+  ]"
+></cs-page-header>
+
+<p-card class="mt-2 block">
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            [min]="0"
+            [max]="365"
+            class="w-full"
+            inputId="daysSinceLastPayment"
+            [useGrouping]="false"
+            inputStyleClass="w-full p-inputtext-sm"
+            formControlName="daysSinceLastPayment"
+          ></p-inputnumber>
+          <label for="daysSinceLastPayment">
+            {{ 'workAutoComplete.settings.daysSinceLastPayment' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'workAutoComplete.settings.daysSinceLastPaymentHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            [min]="0"
+            [max]="23"
+            class="w-full"
+            inputId="runHour"
+            [useGrouping]="false"
+            inputStyleClass="w-full p-inputtext-sm"
+            formControlName="runHour"
+          ></p-inputnumber>
+          <label for="runHour">
+            {{ 'workAutoComplete.settings.runHour' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'workAutoComplete.settings.runHourHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            [min]="0"
+            [max]="59"
+            class="w-full"
+            inputId="runMinute"
+            [useGrouping]="false"
+            inputStyleClass="w-full p-inputtext-sm"
+            formControlName="runMinute"
+          ></p-inputnumber>
+          <label for="runMinute">
+            {{ 'workAutoComplete.settings.runMinute' | translate }}
+            <i
+              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+              style="pointer-events: auto"
+              [pTooltip]="'workAutoComplete.settings.runMinuteHint' | translate"
+              tooltipPosition="top"
+            ></i>
+          </label>
+        </p-floatLabel>
+      </div>
+    </div>
+
+    @if (canEdit()) {
+      <div class="mt-4 px-2">
+        <p-button
+          type="submit"
+          icon="pi pi-save"
+          [loading]="saving()"
+          [label]="'common.save' | translate"
+          [disabled]="loading() || form.invalid"
+        ></p-button>
+      </div>
+    }
+  </form>
+</p-card>

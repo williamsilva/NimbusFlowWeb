@@ -131,6 +131,9 @@
       },
       "emailLog": {
         "title": "Auditoria de E-mail"
+      },
+      "workAutoComplete": {
+        "title": "Conclusão Automática"
       }
     },
     "transactions": {
@@ -353,7 +356,8 @@
       "backup": "Backup",
       "approvalLimits": "Alçada",
       "departments": "Departamentos",
-      "emailLog": "Auditoria de E-mail"
+      "emailLog": "Auditoria de E-mail",
+      "workAutoComplete": "Conclusão Automática"
     },
     "file": {
       "processing": {
@@ -3637,6 +3641,19 @@
       "smtpSslHint": "Habilita conexão SSL/TLS direta. Recomendado para a porta 465.",
       "saved": "Configurações de e-mail salvas com sucesso.",
       "saveError": "Não foi possível salvar as configurações de e-mail."
+    }
+  },
+  "workAutoComplete": {
+    "settings": {
+      "subtitle": "Conclusão automática de Frentes de Serviço 100% pagas.",
+      "daysSinceLastPayment": "Carência (dias)",
+      "daysSinceLastPaymentHint": "Dias desde o pagamento da última parcela para a Frente ser concluída automaticamente. As mudanças aqui valem para a próxima execução do job, sem precisar reiniciar o servidor.",
+      "runHour": "Hora",
+      "runHourHint": "Hora do dia (0-23, horário de Brasília) em que o job roda diariamente.",
+      "runMinute": "Minuto",
+      "runMinuteHint": "Minuto da hora em que o job roda diariamente.",
+      "saved": "Configuração de conclusão automática salva com sucesso.",
+      "saveError": "Não foi possível salvar a configuração de conclusão automática."
     }
   },
   "approvalLimits": {

@@ -121,6 +121,7 @@ export const UI_KEYS = {
       approvalLimits: 'menu.settings.approvalLimits',
       departments: 'menu.settings.departments',
       emailLog: 'menu.settings.emailLog',
+      workAutoComplete: 'menu.settings.workAutoComplete',
     },
     reconciliation: 'menu.reconciliation',
     /* Fornecedor / Obra / Sugestão (com.nimbusflow.works no backend) */
@@ -1911,6 +1912,12 @@ export const UI_KEYS = {
     settings: {
       saved: 'email.settings.saved',
       saveError: 'email.settings.saveError',
+    },
+  },
+  workAutoComplete: {
+    settings: {
+      saved: 'workAutoComplete.settings.saved',
+      saveError: 'workAutoComplete.settings.saveError',
     },
   },
   backup: {

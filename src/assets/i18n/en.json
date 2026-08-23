@@ -136,6 +136,9 @@
       },
       "emailLog": {
         "title": "Email Audit"
+      },
+      "workAutoComplete": {
+        "title": "Auto Completion"
       }
     },
     "transactions": {
@@ -358,7 +361,8 @@
       "backup": "Backup",
       "approvalLimits": "Approval limits",
       "departments": "Departments",
-      "emailLog": "Email Audit"
+      "emailLog": "Email Audit",
+      "workAutoComplete": "Auto Completion"
     },
     "file": {
       "processing": {
@@ -3642,6 +3646,19 @@
       "smtpSslHint": "Enables direct SSL/TLS connection. Recommended for port 465.",
       "saved": "Email settings saved successfully.",
       "saveError": "Could not save email settings."
+    }
+  },
+  "workAutoComplete": {
+    "settings": {
+      "subtitle": "Automatic completion of fully paid Work Fronts.",
+      "daysSinceLastPayment": "Grace period (days)",
+      "daysSinceLastPaymentHint": "Days since the last installment was paid before the Work Front is completed automatically. Changes here take effect on the job's next run, no server restart needed.",
+      "runHour": "Hour",
+      "runHourHint": "Hour of the day (0-23, São Paulo time) the job runs daily.",
+      "runMinute": "Minute",
+      "runMinuteHint": "Minute of the hour the job runs daily.",
+      "saved": "Auto-completion settings saved successfully.",
+      "saveError": "Could not save the auto-completion settings."
     }
   },
   "approvalLimits": {

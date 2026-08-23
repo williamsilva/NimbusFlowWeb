@@ -206,6 +206,13 @@ export const APP_MENU: AppMenuItem[] = [
         icon: 'pi pi-history text-indigo-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.EMAIL_LOG_VIEW],
       },
+      {
+        exact: false,
+        route: '/settings/work-auto-complete',
+        labelKey: 'menu.settings.workAutoComplete',
+        icon: 'pi pi-clock text-indigo-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.WORK_AUTO_COMPLETE_VIEW],
+      },
     ],
   },
 ];

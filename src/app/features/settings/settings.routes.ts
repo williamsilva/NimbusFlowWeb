@@ -76,6 +76,20 @@ export const SETTINGS_ROUTES: Routes = [
       ),
   },
   {
+    path: 'work-auto-complete',
+    title: 'routes.settings.workAutoComplete.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.WORK_AUTO_COMPLETE_VIEW],
+    },
+    loadComponent: () =>
+      import('./work-auto-complete-settings/work-auto-complete-settings.component').then(
+        (m) => m.WorkAutoCompleteSettingsComponent,
+      ),
+  },
+  {
     path: '**',
     title: 'routes.notFound.title',
     loadComponent: () => import('../error/not-found/not-found.page').then((m) => m.NotFoundPage),

@@ -136,6 +136,9 @@
       },
       "emailLog": {
         "title": "Auditoría de E-mail"
+      },
+      "workAutoComplete": {
+        "title": "Conclusión Automática"
       }
     },
     "transactions": {
@@ -358,7 +361,8 @@
       "backup": "Backup",
       "approvalLimits": "Alzada de aprobación",
       "departments": "Departamentos",
-      "emailLog": "Auditoría de E-mail"
+      "emailLog": "Auditoría de E-mail",
+      "workAutoComplete": "Conclusión Automática"
     },
     "file": {
       "processing": {
@@ -3642,6 +3646,19 @@
       "smtpStarttlsHint": "Habilita la actualización de la conexión a TLS mediante STARTTLS. Recomendado para el puerto 587.",
       "smtpSsl": "SSL/TLS",
       "smtpSslHint": "Habilita conexión SSL/TLS directa. Recomendado para el puerto 465."
+    }
+  },
+  "workAutoComplete": {
+    "settings": {
+      "subtitle": "Conclusión automática de Frentes de Servicio 100% pagadas.",
+      "daysSinceLastPayment": "Carencia (días)",
+      "daysSinceLastPaymentHint": "Días desde el pago de la última cuota para que la Frente se concluya automáticamente. Los cambios aquí valen desde la próxima ejecución del trabajo, sin necesidad de reiniciar el servidor.",
+      "runHour": "Hora",
+      "runHourHint": "Hora del día (0-23, horario de São Paulo) en que el trabajo se ejecuta diariamente.",
+      "runMinute": "Minuto",
+      "runMinuteHint": "Minuto de la hora en que el trabajo se ejecuta diariamente.",
+      "saved": "Configuración de conclusión automática guardada con éxito.",
+      "saveError": "No fue posible guardar la configuración de conclusión automática."
     }
   },
   "approvalLimits": {
