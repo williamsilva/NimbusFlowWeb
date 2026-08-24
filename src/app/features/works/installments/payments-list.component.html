@@ -323,20 +323,42 @@
     </ng-template>
 
     <ng-template pTemplate="expandedrow" let-row>
-      <tr>
+      <tr class="cs-linked-orders-row">
         <td colspan="7" class="p-0">
-          <div class="surface-100 px-4 py-3">
-            <div class="font-semibold mb-2 text-sm">
+          <div class="cs-linked-orders px-4 py-3">
+            <div class="cs-linked-orders__title">
+              <i class="pi pi-list"></i>
               {{ 'payments.linkedOrders' | translate }}
             </div>
-            <table class="w-full text-sm">
+            <table class="cs-linked-orders__table">
+              <colgroup>
+                <col style="width: 260px" />
+                <col style="width: 100px" />
+                <col style="width: 130px" />
+                <col style="width: 140px" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th class="text-left">{{ 'installments.columns.work' | translate }}</th>
+                  <th class="text-center">{{ 'installments.columns.number' | translate }}</th>
+                  <th class="text-center">{{ 'installments.columns.dueDate' | translate }}</th>
+                  <th class="text-right">{{ 'installments.columns.amount' | translate }}</th>
+                </tr>
+              </thead>
               <tbody>
                 @for (order of row.orders; track order.id) {
                   <tr>
-                    <td class="py-1">{{ order.workName }}</td>
-                    <td class="py-1 text-center">{{ orderNumberLabel(order.number) }}</td>
-                    <td class="py-1 text-center">{{ order.dueDate | csDate: 'date' }}</td>
-                    <td class="py-1 text-right">{{ order.amount | csCurrency }}</td>
+                    <td class="text-left">
+                      <span
+                        tooltipPosition="top"
+                        class="cs-table-cell-ellipsis"
+                        [pTooltip]="order.workName"
+                        >{{ order.workName }}</span
+                      >
+                    </td>
+                    <td class="text-center">{{ orderNumberLabel(order.number) }}</td>
+                    <td class="text-center">{{ order.dueDate | csDate: 'date' }}</td>
+                    <td class="text-right">{{ order.amount | csCurrency }}</td>
                   </tr>
                 }
               </tbody>

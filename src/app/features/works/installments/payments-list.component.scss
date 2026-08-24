@@ -3,3 +3,67 @@
 // Mobile: tabela vira lista de cards - ver mobile-card-table.scss pro que isso faz e por quê.
 // mobile-card-title/mobile-card-actions marcados manualmente no <td> certo, no HTML desta tela.
 @include mct.mobile-card-table;
+
+// Painel de expansão (Ordens incluídas no Pagamento) - borda esquerda de destaque pra deixar
+// claro que é um detalhe da linha de cima, não uma linha normal da tabela.
+.cs-linked-orders {
+  border-left: 3px solid var(--primary-color);
+}
+
+.cs-linked-orders__title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+
+  .pi {
+    font-size: 0.75rem;
+  }
+}
+
+.cs-linked-orders__table {
+  // Largura própria (não 100% da linha pai) - senão a coluna "auto" da Frente absorve todo o
+  // espaço sobrando até a largura da tabela inteira, empurrando Nº/Vencimento/Valor pra longe do
+  // texto com um vão vazio no meio.
+  width: 100%;
+  max-width: 630px;
+  table-layout: fixed;
+  font-size: 0.8rem;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 0.4rem 0.6rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  th {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--text-color-secondary);
+    border-bottom: 1px solid var(--surface-border);
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--surface-border);
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    &:hover {
+      background: color-mix(in srgb, var(--surface-100) 60%, transparent);
+    }
+  }
+}
+
+:host-context(.dark) .cs-linked-orders__table tbody tr:hover {
+  background: color-mix(in srgb, var(--surface-900) 45%, transparent);
+}
