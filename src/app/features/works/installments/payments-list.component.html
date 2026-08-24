@@ -325,44 +325,46 @@
     <ng-template pTemplate="expandedrow" let-row>
       <tr class="cs-linked-orders-row">
         <td colspan="7" class="p-0">
-          <div class="cs-linked-orders px-4 py-3">
-            <div class="cs-linked-orders__title">
-              <i class="pi pi-list"></i>
-              {{ 'payments.linkedOrders' | translate }}
-            </div>
-            <table class="cs-linked-orders__table">
-              <colgroup>
-                <col style="width: 260px" />
-                <col style="width: 100px" />
-                <col style="width: 130px" />
-                <col style="width: 140px" />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th class="text-left">{{ 'installments.columns.work' | translate }}</th>
-                  <th class="text-center">{{ 'installments.columns.number' | translate }}</th>
-                  <th class="text-center">{{ 'installments.columns.dueDate' | translate }}</th>
-                  <th class="text-right">{{ 'installments.columns.amount' | translate }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (order of row.orders; track order.id) {
+          <div class="cs-linked-orders-wrapper py-3">
+            <div class="cs-linked-orders px-4 py-3">
+              <div class="cs-linked-orders__title">
+                <i class="pi pi-list"></i>
+                {{ 'payments.linkedOrders' | translate }}
+              </div>
+              <table class="cs-linked-orders__table">
+                <colgroup>
+                  <col style="width: 260px" />
+                  <col style="width: 100px" />
+                  <col style="width: 130px" />
+                  <col style="width: 140px" />
+                </colgroup>
+                <thead>
                   <tr>
-                    <td class="text-left">
-                      <span
-                        tooltipPosition="top"
-                        class="cs-table-cell-ellipsis"
-                        [pTooltip]="order.workName"
-                        >{{ order.workName }}</span
-                      >
-                    </td>
-                    <td class="text-center">{{ orderNumberLabel(order.number) }}</td>
-                    <td class="text-center">{{ order.dueDate | csDate: 'date' }}</td>
-                    <td class="text-right">{{ order.amount | csCurrency }}</td>
+                    <th class="text-left">{{ 'installments.columns.work' | translate }}</th>
+                    <th class="text-center">{{ 'installments.columns.number' | translate }}</th>
+                    <th class="text-center">{{ 'installments.columns.dueDate' | translate }}</th>
+                    <th class="text-right">{{ 'installments.columns.amount' | translate }}</th>
                   </tr>
-                }
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  @for (order of row.orders; track order.id) {
+                    <tr>
+                      <td class="text-left">
+                        <span
+                          tooltipPosition="top"
+                          class="cs-table-cell-ellipsis"
+                          [pTooltip]="order.workName"
+                          >{{ order.workName }}</span
+                        >
+                      </td>
+                      <td class="text-center">{{ orderNumberLabel(order.number) }}</td>
+                      <td class="text-center">{{ order.dueDate | csDate: 'date' }}</td>
+                      <td class="text-right">{{ order.amount | csCurrency }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
           </div>
         </td>
       </tr>

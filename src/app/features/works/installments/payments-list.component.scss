@@ -4,10 +4,23 @@
 // mobile-card-title/mobile-card-actions marcados manualmente no <td> certo, no HTML desta tela.
 @include mct.mobile-card-table;
 
-// Painel de expansão (Ordens incluídas no Pagamento) - borda esquerda de destaque pra deixar
-// claro que é um detalhe da linha de cima, não uma linha normal da tabela.
+// Painel de expansão (Ordens incluídas no Pagamento) - width:100% do <td> (colspan="7") faria o
+// painel esticar até a largura inteira da linha mesmo com poucas colunas dentro; centralizado e
+// do tamanho do próprio conteúdo (fit-content), não da linha pai.
+.cs-linked-orders-wrapper {
+  display: flex;
+  overflow-x: auto;
+  justify-content: center;
+}
+
+// Borda esquerda de destaque pra deixar claro que é um detalhe da linha de cima, não uma linha
+// normal da tabela. --primary-color não tem definição em nenhum CSS estático da app (só
+// --surface-*/--text-color-secondary/--green-500 etc. resolvem de verdade) - sem fallback,
+// var() com custom property indefinida invalida a declaração inteira (vira "none"/0px).
 .cs-linked-orders {
-  border-left: 3px solid var(--primary-color);
+  width: fit-content;
+  max-width: 100%;
+  border-left: 3px solid var(--primary-color, #6366f1);
 }
 
 .cs-linked-orders__title {
@@ -25,11 +38,10 @@
 }
 
 .cs-linked-orders__table {
-  // Largura própria (não 100% da linha pai) - senão a coluna "auto" da Frente absorve todo o
-  // espaço sobrando até a largura da tabela inteira, empurrando Nº/Vencimento/Valor pra longe do
-  // texto com um vão vazio no meio.
-  width: 100%;
-  max-width: 630px;
+  // Largura fixa (soma exata do colgroup) - width:100% aqui dependeria da largura do próprio
+  // .cs-linked-orders (fit-content), que por sua vez dependeria do conteúdo desta tabela: um
+  // ciclo. Fixo evita ambiguidade e garante que Nº/Vencimento/Valor fiquem encostados, sem vão.
+  width: 630px;
   table-layout: fixed;
   font-size: 0.8rem;
   border-collapse: collapse;
