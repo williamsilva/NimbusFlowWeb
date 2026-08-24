@@ -110,20 +110,6 @@ export const appRoutes: Routes = [
           ),
       },
       {
-        path: 'payment-orders',
-        title: 'routes.paymentOrders.title',
-        canActivate: [permissionGuard],
-        data: {
-          requireAll: false,
-          redirectTo: '/forbidden',
-          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.ENVIAR_ORDEM],
-        },
-        loadComponent: () =>
-          import('./features/works/installments/payment-orders.component').then(
-            (m) => m.PaymentOrdersComponent,
-          ),
-      },
-      {
         path: 'payments',
         title: 'routes.payments.title',
         canActivate: [permissionGuard],

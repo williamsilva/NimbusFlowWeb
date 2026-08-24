@@ -24,8 +24,9 @@ export class InstallmentsPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.PARCELA.LIBERAR);
   }
 
-  /** Ver a tela "Ordens de Pagamento" e enviar exigem a mesma permissão - a tela inteira é sobre
-   *  a ação de enviar, sem modo só-leitura separado. */
+  /** Controla a visibilidade da coluna de seleção + botão "Enviar Ordem de Pagamento" dentro de
+   *  "Parcelas Liberadas" (extinta tela dedicada "Ordens de Pagamento" incorporada ali em
+   *  2026-08-24) - quem não tem essa permissão só vê a listagem normal, sem selecionar/enviar. */
   canSendPaymentOrder(): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.PARCELA.ENVIAR_ORDEM);
   }

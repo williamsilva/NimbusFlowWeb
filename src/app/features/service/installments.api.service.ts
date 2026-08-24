@@ -12,19 +12,23 @@ import {
   InstallmentApiModel,
   InstallmentWithWorkApiModel,
   InstallmentWithWorkModel,
+  SendPaymentOrderResultModel,
   mapInstallmentApiModel,
   mapInstallmentApiModels,
   mapInstallmentWithWorkApiModels,
 } from '@models/installments.models';
 
 /** Nome mantido por herança (era o service da Parcela inteira) - hoje fala só com
- *  /bff/v1/payment-orders (Ordem de Pagamento); ver payments.api.service.ts pro Pagamento
- *  (Installment) em si, incluindo markPaid. */
+ *  /bff/v1/payment-orders (Ordem de Pagamento), incluindo o envio (send fala com
+ *  /bff/v1/installments/send mas a ação nasce daqui - a tela "Parcelas Liberadas" que
+ *  seleciona e envia); ver payments.api.service.ts pro Pagamento (Installment) em si, incluindo
+ *  markPaid. */
 @Injectable({ providedIn: 'root' })
 export class InstallmentsApiService {
   private readonly http = inject(HttpClient);
   private readonly worksUrl = `${API.bff}/v1/works`;
   private readonly paymentOrdersUrl = `${API.bff}/v1/payment-orders`;
+  private readonly installmentsUrl = `${API.bff}/v1/installments`;
 
   findByWork(workId: string) {
     return this.http
@@ -68,5 +72,16 @@ export class InstallmentsApiService {
         { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
       )
       .pipe(map(mapInstallmentApiModel));
+  }
+
+  /** Seleciona N Ordens RELEASED do mesmo fornecedor (tela "Parcelas Liberadas") e gera 1
+   *  Pagamento consolidado - SKIP_GLOBAL_ERROR_TOAST pelo mesmo motivo de release/
+   *  resendNotification acima (o componente já mostra a mensagem específica do backend). */
+  sendPaymentOrder(paymentOrderIds: string[]) {
+    return this.http.post<SendPaymentOrderResultModel>(
+      `${this.installmentsUrl}/send`,
+      { paymentOrderIds },
+      { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
+    );
   }
 }

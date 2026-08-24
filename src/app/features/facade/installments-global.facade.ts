@@ -5,7 +5,11 @@ import { Observable, finalize, tap } from 'rxjs';
 import { InstallmentsApiService } from '@features/service/installments.api.service';
 import { InstallmentsAdvancedFilters } from '@features/filter/installments.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
-import { InstallmentModel, InstallmentWithWorkModel } from '@models/installments.models';
+import {
+  InstallmentModel,
+  InstallmentWithWorkModel,
+  SendPaymentOrderResultModel,
+} from '@models/installments.models';
 
 type LastQuery = ListQueryDto<InstallmentsAdvancedFilters>;
 
@@ -13,8 +17,9 @@ type LastQuery = ListQueryDto<InstallmentsAdvancedFilters>;
  * Estado separado de InstallmentsFacade (que é por obra) - a listagem global (menu "Parcelas
  * Liberadas", todas as obras) precisa do campo workName e é paginada/filtrada/ordenada no backend
  * (mesmo padrão de WorksFacade), recarregando a última página buscada (reloadLast()) após
- * liberar/reenviar notificação. Só mostra Ordens que ainda não entraram num envio - ver
- * PaymentsFacade pro Pagamento em si.
+ * liberar/reenviar notificação/enviar. Só mostra Ordens que ainda não entraram num envio - uma
+ * vez enviada (sendPaymentOrder), a Ordem some da lista no reload; ver PaymentsFacade pro
+ * Pagamento em si.
  */
 @Injectable({ providedIn: 'root' })
 export class InstallmentsGlobalFacade {
@@ -68,5 +73,11 @@ export class InstallmentsGlobalFacade {
 
   resendNotification(id: string): Observable<InstallmentModel> {
     return this.api.resendNotification(id).pipe(tap(() => this.reloadLast()));
+  }
+
+  /** Ordens enviadas ganham installmentId - somem da lista (ver PaymentOrderService.
+   *  filterOrders) no reload, por isso reloadLast() aqui também. */
+  sendPaymentOrder(paymentOrderIds: string[]): Observable<SendPaymentOrderResultModel> {
+    return this.api.sendPaymentOrder(paymentOrderIds).pipe(tap(() => this.reloadLast()));
   }
 }

@@ -62,14 +62,22 @@ export interface InstallmentOrderSummaryModel {
   dueDate: string;
 }
 
-/** Espelha InstallmentWithWorkResponse - usado pela listagem global (menu "Pagamentos", através de todas as obras). */
+/** Espelha InstallmentWithWorkResponse - usado pela listagem global (menu "Parcelas Liberadas", através de todas as obras). */
 export interface InstallmentWithWorkModel extends InstallmentModel {
   workName: string;
 }
 
 export type InstallmentWithWorkApiModel = InstallmentWithWorkModel;
 
-/** Estado persistido do painel de filtros avançados da listagem global (menu "Pagamentos"). */
+/** Resultado do envio (tela "Parcelas Liberadas" - selecionar Ordens RELEASED do mesmo
+ *  fornecedor e enviar gera 1 Pagamento consolidado). */
+export interface SendPaymentOrderResultModel {
+  installmentId: string;
+  orderCount: number;
+  totalAmount: number;
+}
+
+/** Estado persistido do painel de filtros avançados da listagem global (menu "Parcelas Liberadas"). */
 export type InstallmentsFiltersState = {
   workName: string;
   status: string[] | null;

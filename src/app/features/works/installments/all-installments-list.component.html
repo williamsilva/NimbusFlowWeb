@@ -104,6 +104,7 @@
     stateStorage="local"
     class="cs-admin-table"
     [loading]="loading()"
+    [selection]="selection()"
     [stateKey]="tableStateKey()"
     [showCurrentPageReport]="true"
     [totalRecords]="totalRecords()"
@@ -111,11 +112,14 @@
     [paginatorDropdownAppendTo]="'body'"
     (onPage)="onPageChange($event)"
     [rowsPerPageOptions]="rowsPerPageOptions"
+    [rowSelectable]="rowSelectable"
+    (selectionChange)="onSelectionChange($event)"
     [tableStyle]="{ width: '100%', 'min-width': '52rem' }"
     [currentPageReportTemplate]="'pagination.report' | translate"
   >
     <ng-template pTemplate="colgroup">
       <colgroup>
+        <col style="width: 46px" />
         <col style="width: auto" />
         <col style="width: 80px" />
         <col style="width: 150px" />
@@ -129,6 +133,9 @@
 
     <ng-template pTemplate="header">
       <tr>
+        <th style="width: 46px">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
         <th pSortableColumn="workName">
           <div class="th-flex text-center">
             <span
@@ -313,6 +320,9 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
+        <td class="text-center">
+          <p-tableCheckbox [value]="row" [disabled]="!canSelectForSend(row)"></p-tableCheckbox>
+        </td>
         <td class="mobile-card-title">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.workName">{{
             row.workName
@@ -387,7 +397,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="8" class="text-center py-5 opacity-70">
+        <td colspan="9" class="text-center py-5 opacity-70">
           {{
             loadedOnce() ? ('installments.empty.title' | translate) : ('common.loading' | translate)
           }}
@@ -395,4 +405,23 @@
       </tr>
     </ng-template>
   </p-table>
+
+  @if (policy.canSendPaymentOrder()) {
+    <div class="flex align-items-center justify-content-between mt-3 px-2">
+      <span class="text-sm text-color-secondary">
+        {{ 'paymentOrders.selectedCount' | translate: { count: selection().length } }}
+        @if (selection().length) {
+          &middot; {{ selectedTotal() | csCurrency }}
+        }
+      </span>
+
+      <p-button
+        icon="pi pi-send"
+        [loading]="sending()"
+        (onClick)="send()"
+        [disabled]="!selection().length"
+        [label]="'paymentOrders.send' | translate"
+      ></p-button>
+    </div>
+  }
 </div>

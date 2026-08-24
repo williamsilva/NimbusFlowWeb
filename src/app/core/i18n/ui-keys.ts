@@ -132,7 +132,6 @@ export const UI_KEYS = {
       works: 'menu.works.works',
       addendums: 'menu.works.addendums',
       installments: 'menu.works.installments',
-      paymentOrders: 'menu.works.paymentOrders',
       payments: 'menu.works.payments',
       measurements: 'menu.works.measurements',
       suggestions: 'menu.works.suggestions',

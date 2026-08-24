@@ -213,9 +213,6 @@
     "installments": {
       "title": "Cuotas Liberadas"
     },
-    "paymentOrders": {
-      "title": "Órdenes de Pago"
-    },
     "payments": {
       "title": "Pagos"
     },
@@ -392,7 +389,6 @@
       "works": "Frentes de Servicio",
       "addendums": "Adicionales",
       "installments": "Cuotas Liberadas",
-      "paymentOrders": "Órdenes de Pago",
       "payments": "Pagos",
       "measurements": "Mediciones",
       "suggestions": "Sugerencias",
@@ -4514,19 +4510,6 @@
     }
   },
   "paymentOrders": {
-    "subtitle": "Elija un proveedor y seleccione las cuotas liberadas que se pagarán ahora",
-    "fields": {
-      "supplier": "Proveedor"
-    },
-    "columns": {
-      "project": "Proyecto",
-      "work": "Frente de servicio",
-      "number": "Nº",
-      "dueDate": "Vencimiento",
-      "releasedAt": "Liberado en",
-      "amount": "Valor"
-    },
-    "empty": "No hay cuotas liberadas para este proveedor",
     "selectedCount": "{count} cuota(s) seleccionada(s)",
     "send": "Enviar Orden de Pago",
     "sent": "Orden de pago enviada: {count} cuota(s), {total}",

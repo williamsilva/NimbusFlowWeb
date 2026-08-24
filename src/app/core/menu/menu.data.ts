@@ -80,13 +80,6 @@ export const APP_MENU: AppMenuItem[] = [
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.MEDICAO.VIEW],
       },
       {
-        labelKey: 'menu.works.paymentOrders',
-        icon: 'pi pi-send text-green-400',
-        route: '/payment-orders',
-        exact: false,
-        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.ENVIAR_ORDEM],
-      },
-      {
         labelKey: 'menu.works.installments',
         icon: 'pi pi-wallet text-green-400',
         route: '/installments',

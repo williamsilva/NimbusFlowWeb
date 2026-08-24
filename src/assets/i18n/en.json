@@ -213,9 +213,6 @@
     "installments": {
       "title": "Released Installments"
     },
-    "paymentOrders": {
-      "title": "Payment Orders"
-    },
     "payments": {
       "title": "Payments"
     },
@@ -392,7 +389,6 @@
       "works": "Service Fronts",
       "addendums": "Addendums",
       "installments": "Released Installments",
-      "paymentOrders": "Payment Orders",
       "payments": "Payments",
       "measurements": "Measurements",
       "suggestions": "Suggestions",
@@ -4514,19 +4510,6 @@
     }
   },
   "paymentOrders": {
-    "subtitle": "Choose a supplier and select the released installments to pay now",
-    "fields": {
-      "supplier": "Supplier"
-    },
-    "columns": {
-      "project": "Project",
-      "work": "Service front",
-      "number": "No.",
-      "dueDate": "Due date",
-      "releasedAt": "Released at",
-      "amount": "Amount"
-    },
-    "empty": "No released installments for this supplier",
     "selectedCount": "{count} installment(s) selected",
     "send": "Send Payment Order",
     "sent": "Payment order sent: {count} installment(s), {total}",

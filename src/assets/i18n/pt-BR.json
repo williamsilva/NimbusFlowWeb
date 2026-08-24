@@ -208,9 +208,6 @@
     "installments": {
       "title": "Parcelas Liberadas"
     },
-    "paymentOrders": {
-      "title": "Ordens de Pagamento"
-    },
     "payments": {
       "title": "Pagamentos"
     },
@@ -387,7 +384,6 @@
       "works": "Frentes de Serviço",
       "addendums": "Aditivos",
       "installments": "Parcelas Liberadas",
-      "paymentOrders": "Ordens de Pagamento",
       "payments": "Pagamentos",
       "measurements": "Medições",
       "suggestions": "Sugestões",
@@ -4509,19 +4505,6 @@
     }
   },
   "paymentOrders": {
-    "subtitle": "Escolha um fornecedor e selecione as parcelas liberadas que serão pagas agora",
-    "fields": {
-      "supplier": "Fornecedor"
-    },
-    "columns": {
-      "project": "Projeto",
-      "work": "Frente de serviço",
-      "number": "Nº",
-      "dueDate": "Vencimento",
-      "releasedAt": "Liberado em",
-      "amount": "Valor"
-    },
-    "empty": "Nenhuma parcela liberada para este fornecedor",
     "selectedCount": "{count} parcela(s) selecionada(s)",
     "send": "Enviar Ordem de Pagamento",
     "sent": "Ordem de pagamento enviada: {count} parcela(s), {total}",

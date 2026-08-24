@@ -92,6 +92,16 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
 
+  /** Seleção pro envio (ver send()) - mantida entre páginas de propósito: o dataKey="id" da
+   *  tabela deixa o PrimeNG reconciliar quem está marcado mesmo trocando de página, então
+   *  seleção nunca é limitada à página atual. */
+  readonly selection = signal<InstallmentWithWorkModel[]>([]);
+  readonly sending = signal(false);
+
+  readonly selectedTotal = computed(() =>
+    this.selection().reduce((sum, r) => sum + r.amount, 0),
+  );
+
   workName = signal('');
   status = signal<string[] | null>(this.defaultStatus());
   amountFrom = signal<number | null>(null);
@@ -160,6 +170,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   }
 
   clear() {
+    this.selection.set([]);
     this.clearTableAndReload(this.dt);
   }
 
@@ -275,6 +286,71 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     });
   }
 
+  /** Só Ordens RELEASED (e, pelo filtro do backend, ainda não enviadas - ver
+   *  PaymentOrderService.filterOrders) podem entrar num envio. */
+  canSelectForSend(row: InstallmentWithWorkModel): boolean {
+    return row.status === InstallmentStatusEnum.RELEASED;
+  }
+
+  /** Passada pro [rowSelectable] da tabela - o PrimeNG usa isso tanto pro checkbox de cada linha
+   *  quanto pro "selecionar tudo" do cabeçalho (nunca marca uma linha não-RELEASED mesmo em
+   *  "selecionar tudo"). [disabled] do <p-tableCheckbox> de cada linha (canSelectForSend) ainda
+   *  é necessário à parte - o PrimeNG não deriva o estado visual/clique do checkbox a partir
+   *  disso automaticamente. */
+  readonly rowSelectable = (event: { data: InstallmentWithWorkModel }): boolean =>
+    this.canSelectForSend(event.data);
+
+  onSelectionChange(selection: InstallmentWithWorkModel[]): void {
+    this.selection.set(selection);
+  }
+
+  /** Ação da extinta tela "Ordens de Pagamento" (2026-08-24: incorporada aqui, a pedido do
+   *  usuário, pra não precisar escolher fornecedor antes de ver as Ordens) - seleciona N Ordens
+   *  RELEASED do mesmo fornecedor e gera 1 Pagamento consolidado. Fornecedor único é validado
+   *  aqui ANTES de chamar a API (evita um round-trip só pra descobrir um erro que já dá pra
+   *  checar no cliente) - o backend valida de novo mesmo assim (defesa em profundidade). */
+  send(): void {
+    const selected = this.selection();
+    if (selected.length === 0 || this.sending()) return;
+
+    const supplierNames = new Set(selected.map((r) => r.supplierName));
+    if (supplierNames.size > 1) {
+      this.toast.add({
+        severity: 'error',
+        summary: this.i18n.tUi('common.error'),
+        detail: this.i18n.tUi('paymentOrders.action.differentSuppliers'),
+      });
+      return;
+    }
+
+    this.sending.set(true);
+    this.facade
+      .sendPaymentOrder(selected.map((r) => r.id))
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (result) => {
+          this.sending.set(false);
+          this.selection.set([]);
+          this.toast.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi('paymentOrders.sent', {
+              count: result.orderCount,
+              total: this.i18n.formatBrlCurrency(result.totalAmount),
+            }),
+          });
+        },
+        error: (err) => {
+          this.sending.set(false);
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: translateWorksErrorDetail(err, this.i18n) ?? this.i18n.tUi('paymentOrders.sendError'),
+          });
+        },
+      });
+  }
+
   protected formatDate(value: Date | string): string {
     const date = value instanceof Date ? value : new Date(value);
     return new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(date);
@@ -293,6 +369,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   }
 
   protected override refresh(): void {
+    this.selection.set([]);
     this.reloadWithCurrentState();
   }
 
