@@ -52,7 +52,7 @@
       </p-floatLabel>
     </div>
 
-    <div class="col-12 md:col-3 p-1">
+    <div class="col-12 md:col-2 p-1">
       <p-floatLabel variant="on" class="w-full">
         <p-multiSelect
           size="small"
@@ -372,22 +372,36 @@
             row.workName
           }}</span>
         </td>
-        <td class="text-center" [attr.data-label]="'measurements.columns.number' | translate">{{ numberLabel(row) }}</td>
+        <td class="text-center" [attr.data-label]="'measurements.columns.number' | translate">
+          {{ numberLabel(row) }}
+        </td>
         <td [attr.data-label]="'measurements.columns.description' | translate">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.description">{{
             row.description
           }}</span>
         </td>
-        <td class="text-center" [attr.data-label]="'measurements.columns.percentageCompleted' | translate">{{ row.percentageCompleted | number: '1.0-2' }}%</td>
-        <td class="text-right" [attr.data-label]="'measurements.columns.amountToPay' | translate">{{ row.amountToPay | csCurrency }}</td>
-        <td class="text-center" [attr.data-label]="'measurements.columns.dueDate' | translate">{{ row.dueDate | csDate: 'date' }}</td>
+        <td
+          class="text-center"
+          [attr.data-label]="'measurements.columns.percentageCompleted' | translate"
+        >
+          {{ row.percentageCompleted | number: '1.0-2' }}%
+        </td>
+        <td class="text-right" [attr.data-label]="'measurements.columns.amountToPay' | translate">
+          {{ row.amountToPay | csCurrency }}
+        </td>
+        <td class="text-center" [attr.data-label]="'measurements.columns.dueDate' | translate">
+          {{ row.dueDate | csDate: 'date' }}
+        </td>
         <td class="text-center" [attr.data-label]="'measurements.columns.status' | translate">
           <cs-status-badge
             [tone]="tone(row.status)"
             [label]="'measurements.status.' + row.status | translate"
           ></cs-status-badge>
         </td>
-        <td class="text-center" [attr.data-label]="'measurements.columns.generatedInstallment' | translate">
+        <td
+          class="text-center"
+          [attr.data-label]="'measurements.columns.generatedInstallment' | translate"
+        >
           @if (row.generatedInstallmentId) {
             <i
               class="pi pi-check-circle text-green-600"

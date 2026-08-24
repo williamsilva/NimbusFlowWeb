@@ -134,7 +134,7 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th style="width: 46px">
+        <th style="width: 46px" class="text-center">
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
         <th pSortableColumn="workName">
@@ -333,7 +333,10 @@
     <ng-template pTemplate="body" let-row>
       <tr>
         <td class="text-center">
-          <span tooltipPosition="top" [pTooltip]="canSelectForSend(row) ? '' : selectDisabledReason(row)">
+          <span
+            tooltipPosition="top"
+            [pTooltip]="canSelectForSend(row) ? '' : selectDisabledReason(row)"
+          >
             <p-tableCheckbox [value]="row" [disabled]="!canSelectForSend(row)"></p-tableCheckbox>
           </span>
         </td>
