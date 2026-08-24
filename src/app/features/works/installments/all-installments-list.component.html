@@ -111,7 +111,6 @@
     [paginatorDropdownAppendTo]="'body'"
     (onPage)="onPageChange($event)"
     [rowsPerPageOptions]="rowsPerPageOptions"
-    [expandedRowKeys]="expandedRowKeys()"
     [tableStyle]="{ width: '100%', 'min-width': '52rem' }"
     [currentPageReportTemplate]="'pagination.report' | translate"
   >
@@ -325,7 +324,7 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-row>
-      <tr [class.cursor-pointer]="canExpand(row)" (click)="toggleRow(row)">
+      <tr [pRowToggler]="row" [pRowTogglerDisabled]="!canExpand(row)" [class.cursor-pointer]="canExpand(row)">
         <td class="mobile-card-title">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.workName">{{
             row.workName
@@ -357,8 +356,8 @@
                 {{ row.installmentAmount | csCurrency }}
                 <i
                   class="pi"
-                  [class.pi-chevron-down]="!expandedRowKeys()[row.id]"
-                  [class.pi-chevron-up]="expandedRowKeys()[row.id]"
+                  [class.pi-chevron-down]="!dt.isRowExpanded(row)"
+                  [class.pi-chevron-up]="dt.isRowExpanded(row)"
                 ></i>
               </span>
             </div>
