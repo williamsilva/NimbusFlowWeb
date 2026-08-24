@@ -4462,7 +4462,8 @@
       "noPermission": "You do not have permission for this action.",
       "requiresMeasurementApproved": "This payment order was already released or cancelled.",
       "requiresReleasedOrCancelled": "This payment order has not been released yet.",
-      "statusChanged": "This payment order's status was changed by another user. Refresh the page."
+      "statusChanged": "This payment order's status was changed by another user. Refresh the page.",
+      "alreadySent": "This order was already included in a sent payment."
     },
     "releaseConfirm": {
       "header": "Release installment",

@@ -1737,6 +1737,7 @@ export const UI_KEYS = {
     action: {
       statusChanged: 'installments.action.statusChanged',
       requiresReleasedOrCancelled: 'installments.action.requiresReleasedOrCancelled',
+      alreadySent: 'installments.action.alreadySent',
     },
     releaseConfirm: {
       header: 'installments.releaseConfirm.header',

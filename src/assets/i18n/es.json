@@ -4462,7 +4462,8 @@
       "noPermission": "No tiene permiso para esta acción.",
       "requiresMeasurementApproved": "Esta orden ya fue liberada o cancelada.",
       "requiresReleasedOrCancelled": "Esta orden todavía no fue liberada.",
-      "statusChanged": "El estado de esta orden fue cambiado por otro usuario. Actualice la página."
+      "statusChanged": "El estado de esta orden fue cambiado por otro usuario. Actualice la página.",
+      "alreadySent": "Esta orden ya fue incluida en un pago enviado."
     },
     "releaseConfirm": {
       "header": "Liberar cuota",

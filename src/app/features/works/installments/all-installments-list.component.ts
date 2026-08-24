@@ -313,22 +313,29 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     });
   }
 
-  /** Só Ordens RELEASED (e, pelo filtro do backend, ainda não enviadas - ver
-   *  PaymentOrderService.filterOrders) podem entrar num envio - e, uma vez que já há alguma
-   *  selecionada, só Ordens do MESMO fornecedor (envio é 1 Pagamento por fornecedor, ver send())
-   *  continuam selecionáveis. Isso impede a mistura de fornecedores já na hora de marcar o
-   *  checkbox, em vez de só reagir depois com um toast de erro em send(). */
+  /** Só Ordens RELEASED e ainda não enviadas (row.installmentId nulo) podem entrar num envio - a
+   *  tela agora mostra Ordens já enviadas também (a pedido do usuário, controlado pelo filtro de
+   *  Status em vez de escondidas automaticamente - ver PaymentOrderService.filterOrders), então
+   *  installmentId precisa ser checado aqui no cliente, coisa que antes o próprio filtro do
+   *  backend já garantia por tabela inteira. E, uma vez que já há alguma selecionada, só Ordens do
+   *  MESMO fornecedor (envio é 1 Pagamento por fornecedor, ver send()) continuam selecionáveis -
+   *  isso impede a mistura de fornecedores já na hora de marcar o checkbox, em vez de só reagir
+   *  depois com um toast de erro em send(). */
   canSelectForSend(row: InstallmentWithWorkModel): boolean {
-    if (row.status !== InstallmentStatusEnum.RELEASED) return false;
+    if (row.status !== InstallmentStatusEnum.RELEASED || row.installmentId !== null) return false;
     const supplier = this.selectedSupplierName();
     return supplier === null || row.supplierName === supplier;
   }
 
   /** Explica pro usuário por que o checkbox está desabilitado quando o motivo não é óbvio pela
-   *  coluna Status (ou seja, quando a Ordem já é RELEASED mas é de outro fornecedor que não o da
-   *  seleção atual) - string vazia = sem tooltip (motivo já visível na coluna Status). */
+   *  coluna Status (ou seja, quando a Ordem já é RELEASED mas já foi enviada, ou é de outro
+   *  fornecedor que não o da seleção atual) - string vazia = sem tooltip (motivo já visível na
+   *  coluna Status, ex.: não é RELEASED). */
   selectDisabledReason(row: InstallmentWithWorkModel): string {
     if (row.status !== InstallmentStatusEnum.RELEASED) return '';
+    if (row.installmentId !== null) {
+      return this.i18n.tUi('installments.action.alreadySent');
+    }
     const supplier = this.selectedSupplierName();
     if (supplier && row.supplierName !== supplier) {
       return this.i18n.tUi('paymentOrders.action.differentSuppliers');

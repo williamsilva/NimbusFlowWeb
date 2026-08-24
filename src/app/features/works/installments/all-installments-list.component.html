@@ -388,6 +388,11 @@
             [tone]="tone(row.status)"
             [label]="'installments.status.' + row.status | translate"
           ></cs-status-badge>
+          @if (row.installmentId) {
+            <div class="text-xs text-color-secondary mt-1">
+              {{ 'payments.status.' + row.installmentStatus | translate }}
+            </div>
+          }
         </td>
         <td class="text-center" [attr.data-label]="'installments.columns.releasedBy' | translate">
           <span

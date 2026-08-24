@@ -4457,7 +4457,8 @@
       "noPermission": "Você não tem permissão para esta ação.",
       "requiresMeasurementApproved": "Esta ordem já foi liberada ou cancelada.",
       "requiresReleasedOrCancelled": "Esta ordem ainda não foi liberada.",
-      "statusChanged": "O status desta ordem foi alterado por outro usuário. Atualize a página."
+      "statusChanged": "O status desta ordem foi alterado por outro usuário. Atualize a página.",
+      "alreadySent": "Esta ordem já foi incluída em um pagamento enviado."
     },
     "releaseConfirm": {
       "header": "Liberar parcela",
