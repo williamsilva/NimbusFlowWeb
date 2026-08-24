@@ -1786,6 +1786,7 @@ export const UI_KEYS = {
       title: 'measurements.edit.title',
     },
     fields: {
+      supplier: 'measurements.fields.supplier',
       work: 'measurements.fields.work',
       description: 'measurements.fields.description',
       status: 'measurements.fields.status',

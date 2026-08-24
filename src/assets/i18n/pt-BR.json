@@ -4535,6 +4535,7 @@
       "title": "Editar medição"
     },
     "fields": {
+      "supplier": "Fornecedor",
       "work": "Frente de serviço",
       "description": "Descrição",
       "status": "Status",

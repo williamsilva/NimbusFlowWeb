@@ -20,6 +20,7 @@ import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
+import { SuppliersFacade } from '@features/facade/suppliers.facade';
 import { MeasurementsGlobalFacade } from '@features/facade/measurements-global.facade';
 import { MeasurementsAdvancedFilters } from '@features/filter/measurements.filters';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
@@ -89,6 +90,11 @@ export class AllMeasurementsListComponent extends StatefulListPage<
   readonly policy = inject(MeasurementsPermissionPolicy);
   private readonly toast = inject(MessageService);
   private readonly confirm = inject(ConfirmationService);
+  private readonly suppliersFacade = inject(SuppliersFacade);
+
+  /** Opções do filtro avançado por fornecedor (multiselect) - carregadas em ngOnInit, mesmo
+   *  padrão de AllInstallmentsListComponent.supplierOptions/WorksListComponent.supplierOptions. */
+  readonly supplierOptions = this.suppliersFacade.options;
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
@@ -103,9 +109,10 @@ export class AllMeasurementsListComponent extends StatefulListPage<
     this.selection().reduce((sum, r) => sum + r.amountToPay, 0),
   );
 
+  supplierId = signal<string[] | null>(null);
   workName = signal('');
   description = signal('');
-  status = signal<string[] | null>(null);
+  status = signal<string[] | null>(this.defaultStatus());
   amountToPayFrom = signal<number | null>(null);
   amountToPayTo = signal<number | null>(null);
   dueDate = signal<string | string[] | null>(null);
@@ -132,12 +139,20 @@ export class AllMeasurementsListComponent extends StatefulListPage<
   protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
     const items: ActiveFilterItem[] = [];
 
+    const supplierId = this.supplierId();
     const workName = this.workName().trim();
     const description = this.description().trim();
     const status = this.status();
     const amountToPayFrom = this.amountToPayFrom();
     const amountToPayTo = this.amountToPayTo();
 
+    if (supplierId?.length) {
+      const labels = this.supplierOptions()
+        .filter((opt) => supplierId.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+      items.push({ label: this.i18n.tUi('measurements.fields.supplier'), value: labels });
+    }
     if (workName) {
       items.push({ label: this.i18n.tUi('measurements.fields.work'), value: workName });
     }
@@ -173,6 +188,7 @@ export class AllMeasurementsListComponent extends StatefulListPage<
     // proteção existir (não deveria acontecer em produção, já que esta tela nunca teve seleção
     // antes, mas é uma limpeza barata e sem efeito colateral se não houver nada a limpar).
     this.stripSelectionFromPersistedTableState();
+    this.suppliersFacade.loadSupplierOptions();
     this.initStatefulList();
   }
 
@@ -364,7 +380,20 @@ export class AllMeasurementsListComponent extends StatefulListPage<
     this.reloadWithCurrentState();
   }
 
+  /** Mesmo padrão de AllInstallmentsListComponent/WorksListComponent (status pré-selecionado):
+   *  "Pendente" pré-selecionado, mas só quando o painel de filtros está vazio de verdade (nem
+   *  restaurado do localStorage, nem definido pelo usuário) - ver
+   *  applyDefaultAdvancedFiltersIfEmpty em StatefulListPage. */
+  private defaultStatus(): string[] {
+    return [MeasurementStatusEnum.PENDING];
+  }
+
+  protected override applyDefaultAdvancedFilters(): void {
+    this.status.set(this.defaultStatus());
+  }
+
   protected override resetFilters(): void {
+    this.supplierId.set(null);
     this.workName.set('');
     this.description.set('');
     this.status.set(null);
@@ -372,10 +401,12 @@ export class AllMeasurementsListComponent extends StatefulListPage<
     this.amountToPayTo.set(null);
     this.dueDate.set(null);
     this.periodDueDate.set(null);
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   protected override toFiltersState(): MeasurementsFiltersState {
     return {
+      supplierId: this.supplierId()?.length ? this.supplierId() : null,
       workName: this.workName(),
       description: this.description(),
       status: this.status()?.length ? this.status() : null,
@@ -387,6 +418,7 @@ export class AllMeasurementsListComponent extends StatefulListPage<
   }
 
   protected override applyFiltersState(state: MeasurementsFiltersState): void {
+    this.supplierId.set(state.supplierId ?? null);
     this.workName.set(state.workName ?? '');
     this.description.set(state.description ?? '');
     this.status.set(state.status ?? null);
@@ -394,10 +426,12 @@ export class AllMeasurementsListComponent extends StatefulListPage<
     this.amountToPayTo.set(state.amountToPayTo ?? null);
     this.dueDate.set(state.dueDate ?? null);
     this.periodDueDate.set(state.periodDueDate ?? null);
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   protected override buildAdvancedFilters(): Partial<MeasurementsAdvancedFilters> {
     return {
+      supplierId: this.supplierId()?.length ? this.supplierId() : undefined,
       workName: this.workName().trim() || undefined,
       description: this.description().trim() || undefined,
       status: this.status()?.length ? this.status() : undefined,

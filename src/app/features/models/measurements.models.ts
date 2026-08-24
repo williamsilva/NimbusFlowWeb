@@ -54,12 +54,16 @@ export type MeasurementApiModel = MeasurementModel;
 /** Espelha MeasurementWithContextResponse - usado pela listagem global (menu "Medições", através de todas as obras). */
 export interface MeasurementWithContextModel extends MeasurementModel {
   workName: string;
+  /** Id do fornecedor da obra desta medição - usado pelo filtro avançado por fornecedor
+   *  (multiselect) do painel de filtros. */
+  supplierId: string;
 }
 
 export type MeasurementWithContextApiModel = MeasurementWithContextModel;
 
 /** Estado persistido do painel de filtros avançados da listagem global (menu "Medições"). */
 export type MeasurementsFiltersState = {
+  supplierId: string[] | null;
   workName: string;
   description: string;
   status: string[] | null;

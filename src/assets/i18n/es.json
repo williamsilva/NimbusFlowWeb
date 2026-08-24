@@ -4540,6 +4540,7 @@
       "title": "Editar medición"
     },
     "fields": {
+      "supplier": "Proveedor",
       "work": "Frente de servicio",
       "description": "Descripción",
       "status": "Estado",

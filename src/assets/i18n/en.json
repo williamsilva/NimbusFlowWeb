@@ -4540,6 +4540,7 @@
       "title": "Edit measurement"
     },
     "fields": {
+      "supplier": "Supplier",
       "work": "Service front",
       "description": "Description",
       "status": "Status",
