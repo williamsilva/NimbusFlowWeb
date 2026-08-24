@@ -4433,6 +4433,7 @@
     },
     "columns": {
       "work": "Service front",
+      "supplier": "Supplier",
       "number": "#",
       "amount": "Amount",
       "dueDate": "Due date",

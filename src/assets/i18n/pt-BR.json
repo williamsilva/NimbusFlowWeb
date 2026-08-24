@@ -4428,6 +4428,7 @@
     },
     "columns": {
       "work": "Frente de serviço",
+      "supplier": "Fornecedor",
       "number": "Nº",
       "amount": "Valor",
       "dueDate": "Vencimento",

@@ -4433,6 +4433,7 @@
     },
     "columns": {
       "work": "Frente de servicio",
+      "supplier": "Proveedor",
       "number": "Nº",
       "amount": "Monto",
       "dueDate": "Vencimiento",

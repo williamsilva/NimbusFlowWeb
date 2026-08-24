@@ -102,6 +102,11 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     this.selection().reduce((sum, r) => sum + r.amount, 0),
   );
 
+  /** Fornecedor da seleção atual (todas as linhas selecionadas são sempre do mesmo fornecedor -
+   *  ver canSelectForSend) - null enquanto nada estiver selecionado, e nesse caso qualquer
+   *  fornecedor RELEASED pode ser marcado. */
+  readonly selectedSupplierName = computed(() => this.selection()[0]?.supplierName ?? null);
+
   workName = signal('');
   status = signal<string[] | null>(this.defaultStatus());
   amountFrom = signal<number | null>(null);
@@ -287,16 +292,33 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   }
 
   /** Só Ordens RELEASED (e, pelo filtro do backend, ainda não enviadas - ver
-   *  PaymentOrderService.filterOrders) podem entrar num envio. */
+   *  PaymentOrderService.filterOrders) podem entrar num envio - e, uma vez que já há alguma
+   *  selecionada, só Ordens do MESMO fornecedor (envio é 1 Pagamento por fornecedor, ver send())
+   *  continuam selecionáveis. Isso impede a mistura de fornecedores já na hora de marcar o
+   *  checkbox, em vez de só reagir depois com um toast de erro em send(). */
   canSelectForSend(row: InstallmentWithWorkModel): boolean {
-    return row.status === InstallmentStatusEnum.RELEASED;
+    if (row.status !== InstallmentStatusEnum.RELEASED) return false;
+    const supplier = this.selectedSupplierName();
+    return supplier === null || row.supplierName === supplier;
+  }
+
+  /** Explica pro usuário por que o checkbox está desabilitado quando o motivo não é óbvio pela
+   *  coluna Status (ou seja, quando a Ordem já é RELEASED mas é de outro fornecedor que não o da
+   *  seleção atual) - string vazia = sem tooltip (motivo já visível na coluna Status). */
+  selectDisabledReason(row: InstallmentWithWorkModel): string {
+    if (row.status !== InstallmentStatusEnum.RELEASED) return '';
+    const supplier = this.selectedSupplierName();
+    if (supplier && row.supplierName !== supplier) {
+      return this.i18n.tUi('paymentOrders.action.differentSuppliers');
+    }
+    return '';
   }
 
   /** Passada pro [rowSelectable] da tabela - o PrimeNG usa isso tanto pro checkbox de cada linha
-   *  quanto pro "selecionar tudo" do cabeçalho (nunca marca uma linha não-RELEASED mesmo em
-   *  "selecionar tudo"). [disabled] do <p-tableCheckbox> de cada linha (canSelectForSend) ainda
-   *  é necessário à parte - o PrimeNG não deriva o estado visual/clique do checkbox a partir
-   *  disso automaticamente. */
+   *  quanto pro "selecionar tudo" do cabeçalho (nunca marca uma linha não-selecionável, seja por
+   *  status ou por fornecedor diferente, mesmo em "selecionar tudo"). [disabled] do
+   *  <p-tableCheckbox> de cada linha (canSelectForSend) ainda é necessário à parte - o PrimeNG
+   *  não deriva o estado visual/clique do checkbox a partir disso automaticamente. */
   readonly rowSelectable = (event: { data: InstallmentWithWorkModel }): boolean =>
     this.canSelectForSend(event.data);
 
@@ -306,9 +328,10 @@ export class AllInstallmentsListComponent extends StatefulListPage<
 
   /** Ação da extinta tela "Ordens de Pagamento" (2026-08-24: incorporada aqui, a pedido do
    *  usuário, pra não precisar escolher fornecedor antes de ver as Ordens) - seleciona N Ordens
-   *  RELEASED do mesmo fornecedor e gera 1 Pagamento consolidado. Fornecedor único é validado
-   *  aqui ANTES de chamar a API (evita um round-trip só pra descobrir um erro que já dá pra
-   *  checar no cliente) - o backend valida de novo mesmo assim (defesa em profundidade). */
+   *  RELEASED do mesmo fornecedor e gera 1 Pagamento consolidado. canSelectForSend já impede
+   *  marcar Ordens de fornecedores diferentes na própria seleção - o check abaixo é só uma
+   *  segunda camada (ex.: a lista foi recarregada entre a seleção e o clique) antes de chamar a
+   *  API, e o backend valida de novo mesmo assim (defesa em profundidade). */
   send(): void {
     const selected = this.selection();
     if (selected.length === 0 || this.sending()) return;
