@@ -25,6 +25,11 @@ export interface InstallmentModel {
   installmentId: string | null;
   installmentStatus: PaymentStatusEnum | null;
   installmentPaidAt: string | null;
+  /** Valor TOTAL do Pagamento consolidado (soma de todas as Ordens do mesmo envio, não só o
+   *  amount desta Ordem) e quantas Ordens ele cobre - é isso que a coluna "Pagamento" mostra pra
+   *  o usuário conseguir achar "a parcela" que o envio gerou. */
+  installmentAmount: number | null;
+  installmentOrderCount: number;
   /** true se o usuário logado pode liberar ESTA ordem agora (status MEASUREMENT_APPROVED +
    *  permissão de liberar + dentro da faixa de valor de Configurações > Alçada) - mesmo padrão de
    *  AddendumModel.canDecide, ver PaymentOrderService.canRelease/canReleasePending. */

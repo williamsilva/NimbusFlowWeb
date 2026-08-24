@@ -347,10 +347,16 @@
         </td>
         <td class="text-center" [attr.data-label]="'installments.columns.payment' | translate">
           @if (row.installmentStatus) {
-            <cs-status-badge
-              [tone]="paymentTone(row.installmentStatus)"
-              [label]="'installments.paymentStatus.' + row.installmentStatus | translate"
-            ></cs-status-badge>
+            <div class="flex flex-column align-items-center gap-1">
+              <cs-status-badge
+                [tone]="paymentTone(row.installmentStatus)"
+                [label]="'installments.paymentStatus.' + row.installmentStatus | translate"
+              ></cs-status-badge>
+              <span class="text-xs opacity-80">
+                {{ row.installmentAmount | csCurrency }} ·
+                {{ 'installments.paymentOrderCount' | translate: { count: row.installmentOrderCount } }}
+              </span>
+            </div>
           } @else {
             <span class="opacity-60">-</span>
           }

@@ -4453,6 +4453,7 @@
       "SENT": "Enviado",
       "PAID": "Pagado"
     },
+    "paymentOrderCount": "{count, plural, one {# orden} other {# órdenes}}",
     "form": {
       "saveError": "No se pudo completar la acción. Intente nuevamente."
     },
