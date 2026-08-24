@@ -1722,6 +1722,7 @@ export const UI_KEYS = {
   },
   installments: {
     fields: {
+      supplier: 'installments.fields.supplier',
       work: 'installments.fields.work',
       amount: 'installments.fields.amount',
       status: 'installments.fields.status',

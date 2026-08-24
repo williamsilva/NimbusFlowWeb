@@ -107,6 +107,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
    *  fornecedor RELEASED pode ser marcado. */
   readonly selectedSupplierName = computed(() => this.selection()[0]?.supplierName ?? null);
 
+  supplierName = signal('');
   workName = signal('');
   status = signal<string[] | null>(this.defaultStatus());
   amountFrom = signal<number | null>(null);
@@ -135,11 +136,15 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
     const items: ActiveFilterItem[] = [];
 
+    const supplierName = this.supplierName().trim();
     const workName = this.workName().trim();
     const status = this.status();
     const amountFrom = this.amountFrom();
     const amountTo = this.amountTo();
 
+    if (supplierName) {
+      items.push({ label: this.i18n.tUi('installments.fields.supplier'), value: supplierName });
+    }
     if (workName) {
       items.push({ label: this.i18n.tUi('installments.fields.work'), value: workName });
     }
@@ -409,6 +414,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   }
 
   protected override resetFilters(): void {
+    this.supplierName.set('');
     this.workName.set('');
     this.status.set(null);
     this.amountFrom.set(null);
@@ -420,6 +426,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
 
   protected override toFiltersState(): InstallmentsFiltersState {
     return {
+      supplierName: this.supplierName(),
       workName: this.workName(),
       status: this.status()?.length ? this.status() : null,
       amountFrom: this.amountFrom(),
@@ -430,6 +437,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   }
 
   protected override applyFiltersState(state: InstallmentsFiltersState): void {
+    this.supplierName.set(state.supplierName ?? '');
     this.workName.set(state.workName ?? '');
     this.status.set(state.status ?? null);
     this.amountFrom.set(state.amountFrom ?? null);
@@ -441,6 +449,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
 
   protected override buildAdvancedFilters(): Partial<InstallmentsAdvancedFilters> {
     return {
+      supplierName: this.supplierName().trim() || undefined,
       workName: this.workName().trim() || undefined,
       status: this.status()?.length ? this.status() : undefined,
       amountFrom: this.amountFrom() ?? undefined,

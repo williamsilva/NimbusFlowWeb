@@ -79,6 +79,7 @@ export interface SendPaymentOrderResultModel {
 
 /** Estado persistido do painel de filtros avançados da listagem global (menu "Parcelas Liberadas"). */
 export type InstallmentsFiltersState = {
+  supplierName: string;
   workName: string;
   status: string[] | null;
   amountFrom: number | null;

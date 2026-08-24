@@ -29,6 +29,19 @@
     <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
         <input
+          id="supplierName"
+          pInputText
+          [value]="supplierName()"
+          class="w-full p-inputtext-sm"
+          (input)="supplierName.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="supplierName">{{ 'installments.fields.supplier' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
           id="workName"
           pInputText
           [value]="workName()"

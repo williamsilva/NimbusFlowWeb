@@ -4425,6 +4425,7 @@
   "installments": {
     "subtitle": "Órdenes de pago generadas por mediciones aprobadas, en todas las frentes de servicio",
     "fields": {
+      "supplier": "Proveedor",
       "work": "Frente de servicio",
       "amount": "Monto",
       "status": "Estado",

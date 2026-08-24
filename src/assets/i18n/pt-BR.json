@@ -4420,6 +4420,7 @@
   "installments": {
     "subtitle": "Ordens de pagamento geradas por medições aprovadas, em todas as frentes de serviço",
     "fields": {
+      "supplier": "Fornecedor",
       "work": "Frente de serviço",
       "amount": "Valor",
       "status": "Status",
