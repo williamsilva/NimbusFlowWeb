@@ -4506,9 +4506,9 @@
     }
   },
   "paymentOrders": {
-    "selectedCount": "{count} parcela(s) selecionada(s)",
+    "selectedCount": "{count, plural, =0 {Nenhuma parcela selecionada} one {# parcela selecionada} other {# parcelas selecionadas}}",
     "send": "Enviar Ordem de Pagamento",
-    "sent": "Ordem de pagamento enviada: {count} parcela(s), {total}",
+    "sent": "Ordem de pagamento enviada: {count, plural, one {# parcela} other {# parcelas}}, {total}",
     "sendError": "Não foi possível enviar a ordem de pagamento.",
     "action": {
       "differentSuppliers": "Todas as parcelas selecionadas precisam ser do mesmo fornecedor.",

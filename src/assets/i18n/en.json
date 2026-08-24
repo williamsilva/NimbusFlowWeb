@@ -4511,9 +4511,9 @@
     }
   },
   "paymentOrders": {
-    "selectedCount": "{count} installment(s) selected",
+    "selectedCount": "{count, plural, =0 {No installments selected} one {# installment selected} other {# installments selected}}",
     "send": "Send Payment Order",
-    "sent": "Payment order sent: {count} installment(s), {total}",
+    "sent": "Payment order sent: {count, plural, one {# installment} other {# installments}}, {total}",
     "sendError": "Could not send the payment order.",
     "action": {
       "differentSuppliers": "All selected installments must belong to the same supplier.",

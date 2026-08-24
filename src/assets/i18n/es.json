@@ -4511,9 +4511,9 @@
     }
   },
   "paymentOrders": {
-    "selectedCount": "{count} cuota(s) seleccionada(s)",
+    "selectedCount": "{count, plural, =0 {Ninguna cuota seleccionada} one {# cuota seleccionada} other {# cuotas seleccionadas}}",
     "send": "Enviar Orden de Pago",
-    "sent": "Orden de pago enviada: {count} cuota(s), {total}",
+    "sent": "Orden de pago enviada: {count, plural, one {# cuota} other {# cuotas}}, {total}",
     "sendError": "No fue posible enviar la orden de pago.",
     "action": {
       "differentSuppliers": "Todas las cuotas seleccionadas deben ser del mismo proveedor.",
