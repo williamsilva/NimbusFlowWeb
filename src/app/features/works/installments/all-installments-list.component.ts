@@ -182,6 +182,12 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   });
 
   ngOnInit() {
+    // Achado real (2026-08-24, ver StatefulListPage.stripSelectionFromPersistedTableState): o
+    // PrimeNG persiste `selection` no state salvo (stateStorage="local") e pode reaplicar uma
+    // seleção obsoleta assim que a tabela recarrega de novo - essa tela já tinha seleção em
+    // produção antes desse fix existir, então esta chamada (além do (onStateSave) do template)
+    // também limpa um state que já possa ter sido salvo com `selection` antes de hoje.
+    this.stripSelectionFromPersistedTableState();
     this.suppliersFacade.loadSupplierOptions();
     this.initStatefulList();
   }

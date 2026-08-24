@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 
-import { Observable, finalize, tap } from 'rxjs';
+import { Observable, catchError, concatMap, finalize, from, map, of, tap, toArray } from 'rxjs';
 
 import { MeasurementsApiService } from '@features/service/measurements.api.service';
 import { MeasurementsAdvancedFilters } from '@features/filter/measurements.filters';
@@ -8,6 +8,7 @@ import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import {
   MeasurementDecisionInput,
   MeasurementModel,
+  MeasurementBatchApproveResult,
   MeasurementWithContextModel,
 } from '@models/measurements.models';
 
@@ -71,5 +72,30 @@ export class MeasurementsGlobalFacade {
 
   reject(id: string, input: MeasurementDecisionInput): Observable<MeasurementModel> {
     return this.api.reject(id, input).pipe(tap(() => this.reloadLast()));
+  }
+
+  /** Aprova N medições selecionadas (checkbox na tela "Medições") - não existe endpoint em lote no
+   *  backend (cada aprovação tem efeito colateral independente por obra, ver
+   *  MeasurementService.approveMeasurement/PaymentOrderService.createFromMeasurement, então não há
+   *  invariante entre itens do lote que exija tudo-ou-nada como em InstallmentService.send).
+   *  Reaproveita o endpoint de aprovação individual (api.approve), uma chamada por medição, EM
+   *  SÉRIE (concatMap, não em paralelo) - evita disputar a mesma obra concorrentemente dentro do
+   *  próprio lote, e mantém best-effort: cada item tem seu próprio resultado (sucesso ou erro),
+   *  então uma medição que falhe (ex.: valor excede o total da obra) não desfaz as demais que já
+   *  passaram. reloadLast() só UMA vez ao final (não por item, que recarregaria a lista N vezes). */
+  approveMany(
+    ids: string[],
+    input: MeasurementDecisionInput,
+  ): Observable<MeasurementBatchApproveResult[]> {
+    return from(ids).pipe(
+      concatMap((id) =>
+        this.api.approve(id, input).pipe(
+          map((): MeasurementBatchApproveResult => ({ id, success: true })),
+          catchError((error) => of<MeasurementBatchApproveResult>({ id, success: false, error })),
+        ),
+      ),
+      toArray(),
+      tap(() => this.reloadLast()),
+    );
   }
 }

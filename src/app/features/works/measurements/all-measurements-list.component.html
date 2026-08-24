@@ -117,6 +117,7 @@
     stateStorage="local"
     class="cs-admin-table"
     [loading]="loading()"
+    [selection]="selection()"
     [stateKey]="tableStateKey()"
     [showCurrentPageReport]="true"
     [totalRecords]="totalRecords()"
@@ -124,11 +125,15 @@
     [paginatorDropdownAppendTo]="'body'"
     (onPage)="onPageChange($event)"
     [rowsPerPageOptions]="rowsPerPageOptions"
+    [rowSelectable]="rowSelectable"
+    (selectionChange)="onSelectionChange($event)"
+    (onStateSave)="stripSelectionFromPersistedTableState()"
     [tableStyle]="{ width: '100%', 'min-width': '82rem' }"
     [currentPageReportTemplate]="'pagination.report' | translate"
   >
     <ng-template pTemplate="colgroup">
       <colgroup>
+        <col style="width: 46px" />
         <col style="width: auto" />
         <col style="width: 100px" />
         <col style="width: auto" />
@@ -144,6 +149,9 @@
 
     <ng-template pTemplate="header">
       <tr>
+        <th style="width: 46px" class="text-center">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
         <th pSortableColumn="workName">
           <div class="th-flex text-center">
             <span
@@ -367,6 +375,14 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
+        <td class="text-center">
+          <span
+            tooltipPosition="top"
+            [pTooltip]="canSelectForApprove(row) ? '' : (decideDisabledReason(row) | translate)"
+          >
+            <p-tableCheckbox [value]="row" [disabled]="!canSelectForApprove(row)"></p-tableCheckbox>
+          </span>
+        </td>
         <td class="mobile-card-title">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.workName">{{
             row.workName
@@ -402,14 +418,14 @@
           class="text-center"
           [attr.data-label]="'measurements.columns.generatedInstallment' | translate"
         >
-          @if (row.generatedInstallmentId) {
+          @if (row.generatedPaymentOrderId) {
             <i
               class="pi pi-check-circle text-green-600"
               [pTooltip]="'measurements.action.installmentGenerated' | translate"
               tooltipPosition="top"
             ></i>
           }
-          @if (!row.generatedInstallmentId) {
+          @if (!row.generatedPaymentOrderId) {
             -
           }
         </td>
@@ -473,7 +489,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="10" class="text-center py-5 opacity-70">
+        <td colspan="11" class="text-center py-5 opacity-70">
           {{
             loadedOnce() ? ('measurements.empty.title' | translate) : ('common.loading' | translate)
           }}
@@ -481,4 +497,23 @@
       </tr>
     </ng-template>
   </p-table>
+
+  @if (policy.canDecide()) {
+    <div class="flex align-items-center justify-content-between mt-3 px-2">
+      <span class="text-sm text-color-secondary">
+        {{ 'measurements.selectedCount' | translate: { count: selection().length } }}
+        @if (selection().length) {
+          &middot; {{ selectedTotal() | csCurrency }}
+        }
+      </span>
+
+      <p-button
+        icon="pi pi-check"
+        [loading]="approvingBatch()"
+        (onClick)="confirmApproveSelected()"
+        [disabled]="!selection().length"
+        [label]="'measurements.action.approveSelected' | translate"
+      ></p-button>
+    </div>
+  }
 </div>

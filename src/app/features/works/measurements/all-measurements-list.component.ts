@@ -93,6 +93,16 @@ export class AllMeasurementsListComponent extends StatefulListPage<
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
 
+  /** Seleção pra aprovação em lote (ver confirmApproveSelected()) - mantida entre páginas de
+   *  propósito, mesmo padrão de AllInstallmentsListComponent.selection (dataKey="id" + PrimeNG
+   *  reconciliando quem está marcado independente da página atual). */
+  readonly selection = signal<MeasurementWithContextModel[]>([]);
+  readonly approvingBatch = signal(false);
+
+  readonly selectedTotal = computed(() =>
+    this.selection().reduce((sum, r) => sum + r.amountToPay, 0),
+  );
+
   workName = signal('');
   description = signal('');
   status = signal<string[] | null>(null);
@@ -158,6 +168,11 @@ export class AllMeasurementsListComponent extends StatefulListPage<
   });
 
   ngOnInit() {
+    // Defesa extra além do (onStateSave) do template - ver StatefulListPage.
+    // stripSelectionFromPersistedTableState: cobre um state já corrompido de antes desta
+    // proteção existir (não deveria acontecer em produção, já que esta tela nunca teve seleção
+    // antes, mas é uma limpeza barata e sem efeito colateral se não houver nada a limpar).
+    this.stripSelectionFromPersistedTableState();
     this.initStatefulList();
   }
 
@@ -186,7 +201,83 @@ export class AllMeasurementsListComponent extends StatefulListPage<
   }
 
   clear() {
+    this.selection.set([]);
     this.clearTableAndReload(this.dt);
+  }
+
+  /** Só medições que a própria linha já permitiria decidir individualmente (PENDING + permissão) -
+   *  ver canDecide(). Diferente de AllInstallmentsListComponent.canSelectForSend, não há restrição
+   *  adicional entre itens do lote (cada aprovação é independente por obra). */
+  canSelectForApprove(row: MeasurementWithContextModel): boolean {
+    return this.canDecide(row);
+  }
+
+  /** Passada pro [rowSelectable] da tabela - mesmo papel de AllInstallmentsListComponent.
+   *  rowSelectable ("selecionar tudo" do cabeçalho nunca marca uma linha não-elegível). */
+  readonly rowSelectable = (event: { data: MeasurementWithContextModel }): boolean =>
+    this.canSelectForApprove(event.data);
+
+  onSelectionChange(selection: MeasurementWithContextModel[]): void {
+    this.selection.set(selection);
+  }
+
+  /** Aprova todas as medições selecionadas de uma vez (ver MeasurementsGlobalFacade.approveMany) -
+   *  best-effort: mesmo que alguma falhe, as demais do lote continuam aprovadas. O toast final
+   *  resume sucesso/falha; a tabela (recarregada 1x ao fim) já mostra o status atualizado de cada
+   *  uma (Aprovada x continua Pendente), então não repetimos o detalhe de cada erro no toast. */
+  confirmApproveSelected(): void {
+    const selected = this.selection();
+    if (selected.length === 0 || this.approvingBatch()) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('measurements.approveManyConfirm.header'),
+      message: this.i18n.tUi('measurements.approveManyConfirm.message', { count: selected.length }),
+      icon: 'pi pi-question-circle',
+      accept: () => {
+        this.approvingBatch.set(true);
+        this.facade
+          .approveMany(
+            selected.map((r) => r.id),
+            { decisionNote: null },
+          )
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (results) => {
+              this.approvingBatch.set(false);
+              this.selection.set([]);
+
+              const succeeded = results.filter((r) => r.success).length;
+              const failed = results.length - succeeded;
+
+              if (failed === 0) {
+                this.toast.add({
+                  severity: 'success',
+                  summary: this.i18n.tUi('common.success'),
+                  detail: this.i18n.tUi('measurements.approveManyConfirm.success', { count: succeeded }),
+                });
+              } else if (succeeded === 0) {
+                this.toast.add({
+                  severity: 'error',
+                  summary: this.i18n.tUi('common.error'),
+                  detail: this.i18n.tUi('measurements.approveManyConfirm.allFailed', { count: failed }),
+                });
+              } else {
+                this.toast.add({
+                  severity: 'warn',
+                  summary: this.i18n.tUi('common.warning'),
+                  detail: this.i18n.tUi('measurements.approveManyConfirm.partial', {
+                    succeeded,
+                    failed,
+                  }),
+                });
+              }
+            },
+            error: () => {
+              this.approvingBatch.set(false);
+            },
+          });
+      },
+    });
   }
 
   confirmApprove(row: MeasurementWithContextModel): void {
@@ -269,6 +360,7 @@ export class AllMeasurementsListComponent extends StatefulListPage<
   }
 
   protected override refresh(): void {
+    this.selection.set([]);
     this.reloadWithCurrentState();
   }
 

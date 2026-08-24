@@ -123,7 +123,7 @@ export class MeasurementsListComponent implements OnInit {
   readonly dialogRemainingAmount = computed(() => {
     const base = this.work()?.remainingAmount ?? 0;
     const editing = this.editingMeasurement();
-    return editing?.generatedInstallmentId ? base + editing.amountToPay : base;
+    return editing?.generatedPaymentOrderId ? base + editing.amountToPay : base;
   });
 
   tableStateKey(): string {

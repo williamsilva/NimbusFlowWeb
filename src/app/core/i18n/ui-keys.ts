@@ -1817,6 +1817,13 @@ export const UI_KEYS = {
       message: 'measurements.rejectConfirm.message',
       success: 'measurements.rejectConfirm.success',
     },
+    approveManyConfirm: {
+      header: 'measurements.approveManyConfirm.header',
+      message: 'measurements.approveManyConfirm.message',
+      success: 'measurements.approveManyConfirm.success',
+      allFailed: 'measurements.approveManyConfirm.allFailed',
+      partial: 'measurements.approveManyConfirm.partial',
+    },
   },
   projects: {
     fields: {

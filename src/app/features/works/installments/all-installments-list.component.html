@@ -134,6 +134,7 @@
     [rowsPerPageOptions]="rowsPerPageOptions"
     [rowSelectable]="rowSelectable"
     (selectionChange)="onSelectionChange($event)"
+    (onStateSave)="stripSelectionFromPersistedTableState()"
     [tableStyle]="{ width: '100%', 'min-width': '52rem' }"
     [currentPageReportTemplate]="'pagination.report' | translate"
   >

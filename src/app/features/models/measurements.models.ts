@@ -5,7 +5,7 @@ import { MediaTypeEnum, MeasurementStatusEnum } from '@models/enums/measurement-
  * Espelha com.nimbusflow.works.dto.{request.MeasurementRequest,request.MeasurementDecisionRequest,
  * response.MeasurementResponse,response.MeasurementMediaResponse} do NimbusFlowServer. Medição é
  * feita direto na Obra (não mais amarrada a uma Parcela) - ao ser aprovada, gera a Parcela (ordem
- * de pagamento) automaticamente com amountToPay/dueDate (ver generatedInstallmentId). Sem
+ * de pagamento) automaticamente com amountToPay/dueDate (ver generatedPaymentOrderId). Sem
  * geolocalização nesta primeira versão. Lista não paginada (GET /bff/v1/works/{workId}/measurements
  * retorna todas as medições da obra de uma vez).
  */
@@ -32,8 +32,12 @@ export interface MeasurementModel {
   decisionDate: string | null;
   decisionNote: string | null;
   supersedesId: string | null;
-  /** Preenchido só quando status = APPROVED - id da Parcela (ordem de pagamento) gerada. */
-  generatedInstallmentId: string | null;
+  /** Preenchido só quando status = APPROVED - id da Ordem de Pagamento gerada. Espelha
+   *  MeasurementResponse.generatedPaymentOrderId no backend (nome trocado em 2026-08-23, quando
+   *  a antiga Parcela virou Ordem de Pagamento + Pagamento - este model nunca tinha sido
+   *  atualizado, então a coluna "Ordem gerada" sempre mostrava "-" mesmo com a ordem gerada
+   *  corretamente no banco). */
+  generatedPaymentOrderId: string | null;
   media: MeasurementMediaModel[];
   /** Ponto relativo (0-100%) na planta do Projeto da obra - ver WorkModel.planPositionX/Y. */
   planPositionX: number | null;
@@ -80,6 +84,15 @@ export interface MeasurementSubmitInput {
 
 export interface MeasurementDecisionInput {
   decisionNote: string | null;
+}
+
+/** Resultado de 1 medição dentro de uma aprovação em lote (checkbox na tela "Medições") - ver
+ *  MeasurementsGlobalFacade.approveMany. Best-effort por item: uma medição pode falhar (ex.: valor
+ *  excede o total da obra) sem desfazer as demais já aprovadas no mesmo lote. */
+export interface MeasurementBatchApproveResult {
+  id: string;
+  success: boolean;
+  error?: unknown;
 }
 
 /** Espelha MeasurementRequest (sem supersedesId/files - editar não reenvia mídia nem faz parte do

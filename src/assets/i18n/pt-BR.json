@@ -4583,6 +4583,7 @@
       "edit": "Editar",
       "approve": "Aprovar",
       "reject": "Reprovar",
+      "approveSelected": "Aprovar Selecionadas",
       "addFile": "Adicionar arquivo",
       "takePhoto": "Tirar foto",
       "captureLocation": "Capturar localização",
@@ -4593,6 +4594,7 @@
       "exceedsWorkTotal": "O valor solicitado, somado às ordens de pagamento já geradas, passaria do valor total da frente de serviço.",
       "paymentAlreadyPaid": "Não é possível editar: a ordem de pagamento gerada por esta medição já foi enviada para pagamento."
     },
+    "selectedCount": "{count} medição(ões) selecionada(s)",
     "approveConfirm": {
       "header": "Aprovar medição",
       "message": "Confirma a aprovação desta medição? Isso vai gerar uma ordem de pagamento.",
@@ -4602,6 +4604,13 @@
       "header": "Reprovar medição",
       "message": "Confirma a reprovação desta medição?",
       "success": "Medição reprovada com sucesso."
+    },
+    "approveManyConfirm": {
+      "header": "Aprovar medições selecionadas",
+      "message": "Confirma a aprovação de {count} medição(ões) selecionada(s)? Isso vai gerar as ordens de pagamento correspondentes.",
+      "success": "{count} medição(ões) aprovada(s) com sucesso.",
+      "allFailed": "Não foi possível aprovar nenhuma das {count} medição(ões) selecionada(s).",
+      "partial": "{succeeded} medição(ões) aprovada(s), {failed} falharam - confira o status de cada uma na tabela."
     }
   },
   "suggestions": {

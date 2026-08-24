@@ -298,14 +298,14 @@
           ></cs-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'measurements.columns.generatedInstallment' | translate">
-          @if (row.generatedInstallmentId) {
+          @if (row.generatedPaymentOrderId) {
             <i
               class="pi pi-check-circle text-green-600"
               [pTooltip]="'measurements.action.installmentGenerated' | translate"
               tooltipPosition="top"
             ></i>
           }
-          @if (!row.generatedInstallmentId) {
+          @if (!row.generatedPaymentOrderId) {
             -
           }
         </td>
