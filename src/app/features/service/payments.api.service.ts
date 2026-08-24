@@ -42,4 +42,17 @@ export class PaymentsApiService {
       )
       .pipe(map(mapPaymentApiModel));
   }
+
+  /** Reenvia o e-mail com o PDF consolidado (mesmo conteúdo enviado no ato de "Enviar Ordem de
+   *  Pagamento") - SKIP_GLOBAL_ERROR_TOAST pelo mesmo motivo de markPaid (o componente já mostra
+   *  a mensagem específica do backend, ex.: "nenhum destinatário configurado"). */
+  resendNotification(id: string) {
+    return this.http
+      .post<PaymentApiModel>(
+        `${this.installmentsUrl}/${id}/resend-notification`,
+        {},
+        { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
+      )
+      .pipe(map(mapPaymentApiModel));
+  }
 }

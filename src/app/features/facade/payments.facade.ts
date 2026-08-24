@@ -61,4 +61,10 @@ export class PaymentsFacade {
   markPaid(id: string, paidAt: string): Observable<PaymentModel> {
     return this.api.markPaid(id, paidAt).pipe(tap(() => this.reloadLast()));
   }
+
+  /** Não altera nada no Pagamento (só reenvia um e-mail) - sem necessidade de reloadLast() como
+   *  markPaid faz. */
+  resendNotification(id: string): Observable<PaymentModel> {
+    return this.api.resendNotification(id);
+  }
 }

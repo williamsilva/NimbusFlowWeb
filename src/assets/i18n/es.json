@@ -4499,6 +4499,7 @@
     "empty": "Ningún pago encontrado",
     "action": {
       "markPaid": "Marcar como pagado",
+      "resendNotification": "Reenviar notificación por correo",
       "alreadyPaid": "Este pago ya fue marcado como pagado."
     },
     "markPaidConfirm": {
@@ -4508,6 +4509,12 @@
       "futureDateError": "La fecha del pago no puede ser en el futuro.",
       "success": "Pago marcado como pagado con éxito.",
       "error": "No fue posible marcar el pago como pagado."
+    },
+    "resendNotificationConfirm": {
+      "header": "Reenviar notificación",
+      "message": "¿Confirma el reenvío del correo con el PDF consolidado de este pago para {supplier}?",
+      "success": "Notificación reenviada con éxito.",
+      "error": "No fue posible reenviar la notificación."
     }
   },
   "paymentOrders": {

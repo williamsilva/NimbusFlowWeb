@@ -1762,6 +1762,12 @@ export const UI_KEYS = {
       success: 'payments.markPaidConfirm.success',
       error: 'payments.markPaidConfirm.error',
     },
+    resendNotificationConfirm: {
+      header: 'payments.resendNotificationConfirm.header',
+      message: 'payments.resendNotificationConfirm.message',
+      success: 'payments.resendNotificationConfirm.success',
+      error: 'payments.resendNotificationConfirm.error',
+    },
   },
   paymentOrders: {
     sent: 'paymentOrders.sent',

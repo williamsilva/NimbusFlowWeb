@@ -4499,6 +4499,7 @@
     "empty": "No payments found",
     "action": {
       "markPaid": "Mark as paid",
+      "resendNotification": "Resend email notification",
       "alreadyPaid": "This payment was already marked as paid."
     },
     "markPaidConfirm": {
@@ -4508,6 +4509,12 @@
       "futureDateError": "The payment date cannot be in the future.",
       "success": "Payment marked as paid successfully.",
       "error": "Could not mark the payment as paid."
+    },
+    "resendNotificationConfirm": {
+      "header": "Resend notification",
+      "message": "Resend the email with this payment's consolidated PDF to {supplier}?",
+      "success": "Notification resent successfully.",
+      "error": "Could not resend the notification."
     }
   },
   "paymentOrders": {

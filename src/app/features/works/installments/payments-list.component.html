@@ -317,6 +317,22 @@
               "
               tooltipPosition="top"
             ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-envelope"
+              class="p-button-text p-button-sm"
+              (click)="confirmResendNotification(row)"
+              [loading]="resendingId() === row.id"
+              [disabled]="!canResendNotification() || (resendingId() !== null && resendingId() !== row.id)"
+              [pTooltip]="
+                canResendNotification()
+                  ? ('payments.action.resendNotification' | translate)
+                  : (resendNotificationDisabledReason() | translate)
+              "
+              tooltipPosition="top"
+            ></button>
           </div>
         </td>
       </tr>

@@ -3,6 +3,8 @@ import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef } from '@angular/core';
 
+import { finalize } from 'rxjs';
+
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -11,7 +13,7 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TranslateModule } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
@@ -84,9 +86,14 @@ export class PaymentsListComponent extends StatefulListPage<
   readonly facade = inject(PaymentsFacade);
   readonly policy = inject(InstallmentsPermissionPolicy);
   private readonly toast = inject(MessageService);
+  private readonly confirm = inject(ConfirmationService);
 
   readonly markPaidDialogVisible = signal(false);
   readonly markPaidRow = signal<PaymentModel | null>(null);
+
+  /** id do Pagamento com reenvio de notificação em andamento (no máximo 1 por vez) - trava só o
+   *  botão dessa linha pra evitar duplo clique, o resto da tela continua usável. */
+  readonly resendingId = signal<string | null>(null);
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
@@ -210,6 +217,53 @@ export class PaymentsListComponent extends StatefulListPage<
               this.i18n.tUi('payments.markPaidConfirm.error'),
           }),
       });
+  }
+
+  /** Ação nova (2026-08-24, movida do conceito equivalente por Ordem em "Parcelas Liberadas" a
+   *  pedido do usuário) - reenvia o e-mail com o PDF consolidado deste Pagamento, mesma authority
+   *  de enviar (ver policy.canSendPaymentOrder()/InstallmentService.resendNotification). Sem
+   *  restrição por status: útil tanto pra um pagamento SENT quanto já PAID (ex.: o financeiro
+   *  perdeu o e-mail original). */
+  canResendNotification(): boolean {
+    return this.policy.canSendPaymentOrder();
+  }
+
+  resendNotificationDisabledReason(): string {
+    return 'installments.action.noPermission';
+  }
+
+  confirmResendNotification(row: PaymentModel): void {
+    if (!this.canResendNotification() || this.resendingId()) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('payments.resendNotificationConfirm.header'),
+      message: this.i18n.tUi('payments.resendNotificationConfirm.message', {
+        supplier: row.supplierName,
+      }),
+      icon: 'pi pi-question-circle',
+      accept: () => {
+        this.resendingId.set(row.id);
+        this.facade
+          .resendNotification(row.id)
+          .pipe(finalize(() => this.resendingId.set(null)), takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () =>
+              this.toast.add({
+                severity: 'success',
+                summary: this.i18n.tUi('common.success'),
+                detail: this.i18n.tUi('payments.resendNotificationConfirm.success'),
+              }),
+            error: (err) =>
+              this.toast.add({
+                severity: 'error',
+                summary: this.i18n.tUi('common.error'),
+                detail:
+                  translateWorksErrorDetail(err, this.i18n) ??
+                  this.i18n.tUi('payments.resendNotificationConfirm.error'),
+              }),
+          });
+      },
+    });
   }
 
   protected formatDate(value: Date | string): string {
