@@ -95,6 +95,10 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   readonly markPaidDialogVisible = signal(false);
   readonly markPaidRow = signal<InstallmentWithWorkModel | null>(null);
 
+  /** Chave = InstallmentWithWorkModel.id (dataKey da tabela) - só linhas com installmentId têm
+   *  algo pra expandir (as outras Ordens do mesmo Pagamento), ver toggleRow. */
+  readonly expandedRowKeys = signal<Record<string, boolean>>({});
+
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
 
@@ -194,7 +198,23 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   /** Sequencial por obra com prefixo "PAG-" (ex.: PAG-0001) - mesmo padrão de
    *  Addendums/MeasurementsListComponent ("ADT-"/"MED-"). */
   numberLabel(row: InstallmentWithWorkModel): string {
-    return formatSequentialNumber('PAG', row.number);
+    return this.orderNumberLabel(row.number);
+  }
+
+  orderNumberLabel(number: number): string {
+    return formatSequentialNumber('PAG', number);
+  }
+
+  /** Só Ordens já incluídas num Pagamento têm algo pra expandir (as outras Ordens do mesmo
+   *  envio, ver InstallmentWithWorkModel.installmentOrders) - clique em qualquer outra linha não
+   *  faz nada. */
+  canExpand(row: InstallmentWithWorkModel): boolean {
+    return !!row.installmentId;
+  }
+
+  toggleRow(row: InstallmentWithWorkModel): void {
+    if (!this.canExpand(row)) return;
+    this.expandedRowKeys.update((keys) => ({ ...keys, [row.id]: !keys[row.id] }));
   }
 
   canResendNotification(row: InstallmentWithWorkModel): boolean {

@@ -26,10 +26,12 @@ export interface InstallmentModel {
   installmentStatus: PaymentStatusEnum | null;
   installmentPaidAt: string | null;
   /** Valor TOTAL do Pagamento consolidado (soma de todas as Ordens do mesmo envio, não só o
-   *  amount desta Ordem) e quantas Ordens ele cobre - é isso que a coluna "Pagamento" mostra pra
-   *  o usuário conseguir achar "a parcela" que o envio gerou. */
+   *  amount desta Ordem) - é isso que a coluna "Pagamento" mostra pra o usuário conseguir achar
+   *  "a parcela" que o envio gerou. */
   installmentAmount: number | null;
-  installmentOrderCount: number;
+  /** Todas as Ordens (podendo ser de obras diferentes) incluídas no mesmo Pagamento - vazia
+   *  enquanto installmentId for nulo. Mostrado ao expandir a linha. */
+  installmentOrders: InstallmentOrderSummaryModel[];
   /** true se o usuário logado pode liberar ESTA ordem agora (status MEASUREMENT_APPROVED +
    *  permissão de liberar + dentro da faixa de valor de Configurações > Alçada) - mesmo padrão de
    *  AddendumModel.canDecide, ver PaymentOrderService.canRelease/canReleasePending. */
@@ -50,6 +52,15 @@ export interface InstallmentModel {
 }
 
 export type InstallmentApiModel = InstallmentModel;
+
+/** Espelha InstallmentOrderSummaryResponse - 1 Ordem incluída no mesmo Pagamento consolidado. */
+export interface InstallmentOrderSummaryModel {
+  id: string;
+  workName: string;
+  number: number;
+  amount: number;
+  dueDate: string;
+}
 
 /** Espelha InstallmentWithWorkResponse - usado pela listagem global (menu "Pagamentos", através de todas as obras). */
 export interface InstallmentWithWorkModel extends InstallmentModel {

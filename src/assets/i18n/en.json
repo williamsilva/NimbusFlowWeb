@@ -4453,7 +4453,7 @@
       "SENT": "Sent",
       "PAID": "Paid"
     },
-    "paymentOrderCount": "{count, plural, one {# order} other {# orders}}",
+    "linkedOrders": "Orders included in this payment",
     "form": {
       "saveError": "Could not complete the action. Please try again."
     },

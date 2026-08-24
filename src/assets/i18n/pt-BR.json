@@ -4448,7 +4448,7 @@
       "SENT": "Enviado",
       "PAID": "Pago"
     },
-    "paymentOrderCount": "{count, plural, one {# ordem} other {# ordens}}",
+    "linkedOrders": "Ordens incluídas neste pagamento",
     "form": {
       "saveError": "Não foi possível concluir a ação. Tente novamente."
     },
