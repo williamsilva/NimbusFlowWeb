@@ -18,6 +18,9 @@ export interface InstallmentModel {
   amount: number;
   dueDate: string;
   status: InstallmentStatusEnum;
+  /** Id do fornecedor da obra desta Ordem - usado pelo filtro avançado por fornecedor
+   *  (multiselect) da tela "Parcelas Liberadas". */
+  supplierId: string;
   /** Fornecedor da obra desta Ordem - usado pra rotular a confirmação de "Marcar como pago". */
   supplierName: string;
   /** Nulo enquanto a Ordem não entrar num envio (tela "Ordens de Pagamento") - a partir daí,
@@ -79,7 +82,7 @@ export interface SendPaymentOrderResultModel {
 
 /** Estado persistido do painel de filtros avançados da listagem global (menu "Parcelas Liberadas"). */
 export type InstallmentsFiltersState = {
-  supplierName: string;
+  supplierId: string[] | null;
   workName: string;
   status: string[] | null;
   amountFrom: number | null;

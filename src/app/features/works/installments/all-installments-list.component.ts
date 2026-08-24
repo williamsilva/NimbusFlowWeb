@@ -19,6 +19,7 @@ import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
+import { SuppliersFacade } from '@features/facade/suppliers.facade';
 import { InstallmentsGlobalFacade } from '@features/facade/installments-global.facade';
 import { InstallmentsAdvancedFilters } from '@features/filter/installments.filters';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
@@ -88,6 +89,11 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   readonly policy = inject(InstallmentsPermissionPolicy);
   private readonly toast = inject(MessageService);
   private readonly confirm = inject(ConfirmationService);
+  private readonly suppliersFacade = inject(SuppliersFacade);
+
+  /** Opções do filtro avançado por fornecedor (multiselect) - carregadas em ngOnInit, mesmo
+   *  padrão de WorksListComponent.supplierOptions. */
+  readonly supplierOptions = this.suppliersFacade.options;
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
@@ -107,7 +113,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
    *  fornecedor RELEASED pode ser marcado. */
   readonly selectedSupplierName = computed(() => this.selection()[0]?.supplierName ?? null);
 
-  supplierName = signal('');
+  supplierId = signal<string[] | null>(null);
   workName = signal('');
   status = signal<string[] | null>(this.defaultStatus());
   amountFrom = signal<number | null>(null);
@@ -136,14 +142,18 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
     const items: ActiveFilterItem[] = [];
 
-    const supplierName = this.supplierName().trim();
+    const supplierId = this.supplierId();
     const workName = this.workName().trim();
     const status = this.status();
     const amountFrom = this.amountFrom();
     const amountTo = this.amountTo();
 
-    if (supplierName) {
-      items.push({ label: this.i18n.tUi('installments.fields.supplier'), value: supplierName });
+    if (supplierId?.length) {
+      const labels = this.supplierOptions()
+        .filter((opt) => supplierId.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+      items.push({ label: this.i18n.tUi('installments.fields.supplier'), value: labels });
     }
     if (workName) {
       items.push({ label: this.i18n.tUi('installments.fields.work'), value: workName });
@@ -172,6 +182,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   });
 
   ngOnInit() {
+    this.suppliersFacade.loadSupplierOptions();
     this.initStatefulList();
   }
 
@@ -414,7 +425,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   }
 
   protected override resetFilters(): void {
-    this.supplierName.set('');
+    this.supplierId.set(null);
     this.workName.set('');
     this.status.set(null);
     this.amountFrom.set(null);
@@ -426,7 +437,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
 
   protected override toFiltersState(): InstallmentsFiltersState {
     return {
-      supplierName: this.supplierName(),
+      supplierId: this.supplierId()?.length ? this.supplierId() : null,
       workName: this.workName(),
       status: this.status()?.length ? this.status() : null,
       amountFrom: this.amountFrom(),
@@ -437,7 +448,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   }
 
   protected override applyFiltersState(state: InstallmentsFiltersState): void {
-    this.supplierName.set(state.supplierName ?? '');
+    this.supplierId.set(state.supplierId ?? null);
     this.workName.set(state.workName ?? '');
     this.status.set(state.status ?? null);
     this.amountFrom.set(state.amountFrom ?? null);
@@ -449,7 +460,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
 
   protected override buildAdvancedFilters(): Partial<InstallmentsAdvancedFilters> {
     return {
-      supplierName: this.supplierName().trim() || undefined,
+      supplierId: this.supplierId()?.length ? this.supplierId() : undefined,
       workName: this.workName().trim() || undefined,
       status: this.status()?.length ? this.status() : undefined,
       amountFrom: this.amountFrom() ?? undefined,

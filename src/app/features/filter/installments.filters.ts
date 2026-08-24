@@ -1,7 +1,7 @@
 import { PeriodEnum } from '@models/enums/period.enum';
 
 export interface InstallmentsAdvancedFilters {
-  supplierName?: string;
+  supplierId?: string[] | null;
 
   workName?: string;
 

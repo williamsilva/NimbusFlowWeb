@@ -28,22 +28,29 @@
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
-        <input
-          id="supplierName"
-          pInputText
-          [value]="supplierName()"
-          class="w-full p-inputtext-sm"
-          (input)="supplierName.set(($any($event.target).value ?? '').toString())"
-        />
-        <label for="supplierName">{{ 'installments.fields.supplier' | translate }}</label>
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          [showClear]="true"
+          inputId="supplierId"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="supplierId()"
+          [showToggleAll]="false"
+          [options]="supplierOptions()"
+          (ngModelChange)="supplierId.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="supplierId">{{ 'installments.fields.supplier' | translate }}</label>
       </p-floatLabel>
     </div>
 
-    <div class="col-12 md:col-3 p-1">
+    <div class="col-12 md:col-2 p-1">
       <p-floatLabel variant="on" class="w-full">
         <input
-          id="workName"
           pInputText
+          id="workName"
           [value]="workName()"
           class="w-full p-inputtext-sm"
           (input)="workName.set(($any($event.target).value ?? '').toString())"
