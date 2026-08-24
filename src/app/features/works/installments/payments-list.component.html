@@ -1,8 +1,8 @@
 <cs-page-header
-  [subtitle]="'installments.subtitle' | translate"
+  [subtitle]="'payments.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
-    { label: ('breadcrumb.installments' | translate) },
+    { label: ('routes.payments.title' | translate) },
   ]"
   [compact]="false"
 >
@@ -29,13 +29,13 @@
     <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
         <input
-          id="workName"
+          id="supplierName"
           pInputText
-          [value]="workName()"
+          [value]="supplierName()"
           class="w-full p-inputtext-sm"
-          (input)="workName.set(($any($event.target).value ?? '').toString())"
+          (input)="supplierName.set(($any($event.target).value ?? '').toString())"
         />
-        <label for="workName">{{ 'installments.fields.work' | translate }}</label>
+        <label for="supplierName">{{ 'payments.fields.supplier' | translate }}</label>
       </p-floatLabel>
     </div>
 
@@ -54,24 +54,24 @@
           [options]="statusOptions()"
           (ngModelChange)="status.set($event?.length ? $event : null)"
         ></p-multiSelect>
-        <label for="status">{{ 'installments.fields.status' | translate }}</label>
+        <label for="status">{{ 'payments.fields.status' | translate }}</label>
       </p-floatLabel>
     </div>
 
     <cs-advanced-period-date-filter
-      dateInputId="dueDate"
-      periodInputId="periodDueDate"
-      [value]="dueDate()"
-      [period]="periodDueDate()"
+      dateInputId="sentAt"
+      periodInputId="periodSentAt"
+      [value]="sentAt()"
+      [period]="periodSentAt()"
       class="col-12 md:col-3 p-1"
-      (valueChange)="dueDate.set($event)"
+      (valueChange)="sentAt.set($event)"
       [periodOptions]="periodEnumOptions()"
-      [view]="setViewFormat(periodDueDate())"
-      [dateFormat]="setDateFormat(periodDueDate())"
-      [selectionMode]="setSelectionMode(periodDueDate())"
-      [dateLabel]="'installments.fields.dueDate' | translate"
-      [periodLabel]="'installments.fields.periodDueDate' | translate"
-      (periodChange)="onPeriodColumnChange(periodDueDate, dueDate, $event)"
+      [view]="setViewFormat(periodSentAt())"
+      [dateFormat]="setDateFormat(periodSentAt())"
+      [selectionMode]="setSelectionMode(periodSentAt())"
+      [dateLabel]="'payments.fields.sentAt' | translate"
+      [periodLabel]="'payments.fields.periodSentAt' | translate"
+      (periodChange)="onPeriodColumnChange(periodSentAt, sentAt, $event)"
     ></cs-advanced-period-date-filter>
   </div>
 
@@ -79,7 +79,7 @@
     <div class="col-12 md:col-6 p-2">
       <cs-currency-range-filter
         [inputId]="'amount'"
-        [label]="'installments.fields.amount' | translate"
+        [label]="'payments.fields.amount' | translate"
         [value]="{ start: amountFrom(), end: amountTo() }"
         (valueChange)="amountFrom.set($event.start); amountTo.set($event.end)"
       ></cs-currency-range-filter>
@@ -117,33 +117,32 @@
     <ng-template pTemplate="colgroup">
       <colgroup>
         <col style="width: auto" />
-        <col style="width: 80px" />
         <col style="width: 150px" />
-        <col style="width: 150px" />
-        <col style="width: 150px" />
+        <col style="width: 130px" />
         <col style="width: 180px" />
-        <col style="width: 250px" />
+        <col style="width: 160px" />
+        <col style="width: 160px" />
         <col style="width: 70px" />
       </colgroup>
     </ng-template>
 
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="workName">
+        <th pSortableColumn="supplierName">
           <div class="th-flex text-center">
             <span
               class="th-label"
               tooltipPosition="top"
-              [pTooltip]="'installments.columns.work' | translate"
-              >{{ 'installments.columns.work' | translate }}</span
+              [pTooltip]="'payments.columns.supplier' | translate"
+              >{{ 'payments.columns.supplier' | translate }}</span
             >
             <span class="th-icons">
-              <p-sortIcon field="workName"></p-sortIcon>
+              <p-sortIcon field="supplierName"></p-sortIcon>
               <p-columnFilter
                 type="text"
                 display="menu"
                 class="ml-auto"
-                field="workName"
+                field="supplierName"
                 matchMode="contains"
                 [useGrouping]="false"
                 [showOperator]="false"
@@ -154,27 +153,13 @@
           </div>
         </th>
 
-        <th pSortableColumn="number">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'installments.columns.number' | translate"
-              >{{ 'installments.columns.number' | translate }}</span
-            >
-            <span class="th-icons">
-              <p-sortIcon field="number"></p-sortIcon>
-            </span>
-          </div>
-        </th>
-
         <th pSortableColumn="amount">
           <div class="th-flex text-center">
             <span
               class="th-label"
               tooltipPosition="top"
-              [pTooltip]="'installments.columns.amount' | translate"
-              >{{ 'installments.columns.amount' | translate }}</span
+              [pTooltip]="'payments.columns.amount' | translate"
+              >{{ 'payments.columns.amount' | translate }}</span
             >
             <span class="th-icons">
               <p-sortIcon field="amount"></p-sortIcon>
@@ -190,49 +175,10 @@
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                   <cs-currency-range-filter
                     [inputId]="'amountCol'"
-                    [label]="'installments.fields.amount' | translate"
+                    [label]="'payments.fields.amount' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
                   ></cs-currency-range-filter>
-                </ng-template>
-              </p-columnFilter>
-            </span>
-          </div>
-        </th>
-
-        <th pSortableColumn="dueDate">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'installments.columns.dueDate' | translate"
-              >{{ 'installments.columns.dueDate' | translate }}</span
-            >
-            <span class="th-icons">
-              <p-sortIcon field="dueDate"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                field="dueDate"
-                matchMode="between"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="false"
-                styleClass="cs-colfilter"
-              >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-datepicker
-                    class="w-full"
-                    csDateInputMask
-                    appendTo="body"
-                    [showIcon]="true"
-                    [ngModel]="value"
-                    selectionMode="range"
-                    dateFormat="dd/mm/yy"
-                    [readonlyInput]="true"
-                    [csDateInputMaskRange]="true"
-                    (ngModelChange)="filter($event)"
-                    [placeholder]="'common.period' | translate"
-                  ></p-datepicker>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -244,8 +190,8 @@
             <span
               class="th-label"
               tooltipPosition="top"
-              [pTooltip]="'installments.columns.status' | translate"
-              >{{ 'installments.columns.status' | translate }}</span
+              [pTooltip]="'payments.columns.status' | translate"
+              >{{ 'payments.columns.status' | translate }}</span
             >
             <span class="th-icons">
               <p-sortIcon field="status"></p-sortIcon>
@@ -281,9 +227,23 @@
             <span
               class="th-label"
               tooltipPosition="top"
-              [pTooltip]="'installments.columns.releasedBy' | translate"
-              >{{ 'installments.columns.releasedBy' | translate }}</span
+              [pTooltip]="'payments.columns.sentBy' | translate"
+              >{{ 'payments.columns.sentBy' | translate }}</span
             >
+          </div>
+        </th>
+
+        <th pSortableColumn="sentAt">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'payments.columns.sentAt' | translate"
+              >{{ 'payments.columns.sentAt' | translate }}</span
+            >
+            <span class="th-icons">
+              <p-sortIcon field="sentAt"></p-sortIcon>
+            </span>
           </div>
         </th>
 
@@ -292,8 +252,8 @@
             <span
               class="th-label"
               tooltipPosition="top"
-              [pTooltip]="'installments.columns.tier' | translate"
-              >{{ 'installments.columns.tier' | translate }}</span
+              [pTooltip]="'payments.columns.paidAt' | translate"
+              >{{ 'payments.columns.paidAt' | translate }}</span
             >
           </div>
         </th>
@@ -312,71 +272,48 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-row>
-      <tr>
+      <tr [pRowToggler]="row" class="cursor-pointer">
         <td class="mobile-card-title">
-          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.workName">{{
-            row.workName
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.supplierName">{{
+            row.supplierName
           }}</span>
         </td>
-        <td class="text-center" [attr.data-label]="'installments.columns.number' | translate">
-          {{ numberLabel(row) }}
-        </td>
-        <td class="text-right" [attr.data-label]="'installments.columns.amount' | translate">
+        <td class="text-right" [attr.data-label]="'payments.columns.amount' | translate">
           {{ row.amount | csCurrency }}
         </td>
-        <td class="text-center" [attr.data-label]="'installments.columns.dueDate' | translate">
-          {{ row.dueDate | csDate: 'date' }}
-        </td>
-        <td class="text-center" [attr.data-label]="'installments.columns.status' | translate">
+        <td class="text-center" [attr.data-label]="'payments.columns.status' | translate">
           <cs-status-badge
             [tone]="tone(row.status)"
-            [label]="'installments.status.' + row.status | translate"
+            [label]="'payments.status.' + row.status | translate"
           ></cs-status-badge>
         </td>
-        <td class="text-center" [attr.data-label]="'installments.columns.releasedBy' | translate">
+        <td class="text-center" [attr.data-label]="'payments.columns.sentBy' | translate">
           <span
             tooltipPosition="top"
             class="cs-table-cell-ellipsis"
-            [pTooltip]="row.releasedBy?.name ?? '-'"
-            >{{ row.releasedBy?.name ?? '-' }}</span
+            [pTooltip]="row.sentBy?.name ?? '-'"
+            >{{ row.sentBy?.name ?? '-' }}</span
           >
         </td>
-        <td class="text-center" [attr.data-label]="'installments.columns.tier' | translate">
-          <span
-            tooltipPosition="top"
-            class="cs-table-cell-ellipsis"
-            [pTooltip]="approvalRangeLabel(row)"
-            >{{ approvalRangeLabel(row) }}</span
-          >
+        <td class="text-center" [attr.data-label]="'payments.columns.sentAt' | translate">
+          {{ row.sentAt ? (row.sentAt | csDate: 'datetime') : '-' }}
         </td>
-        <td class="text-center mobile-card-actions">
+        <td class="text-center" [attr.data-label]="'payments.columns.paidAt' | translate">
+          {{ row.paidAt ? (row.paidAt | csDate: 'date') : '-' }}
+        </td>
+        <td class="text-center mobile-card-actions" (click)="$event.stopPropagation()">
           <div class="table-actions">
             <button
               pButton
               type="button"
-              icon="pi pi-send"
-              (click)="confirmRelease(row)"
+              icon="pi pi-check-circle"
+              (click)="openMarkPaidDialog(row)"
               class="p-button-text p-button-sm"
-              [disabled]="!canRelease(row)"
+              [disabled]="!canMarkPaid(row)"
               [pTooltip]="
-                canRelease(row)
-                  ? ('installments.action.release' | translate)
-                  : (releaseDisabledReason(row) | translate)
-              "
-              tooltipPosition="top"
-            ></button>
-
-            <button
-              pButton
-              type="button"
-              icon="pi pi-envelope"
-              (click)="confirmResendNotification(row)"
-              class="p-button-text p-button-sm"
-              [disabled]="!canResendNotification(row)"
-              [pTooltip]="
-                canResendNotification(row)
-                  ? ('installments.action.resendNotification' | translate)
-                  : (resendNotificationDisabledReason(row) | translate)
+                canMarkPaid(row)
+                  ? ('payments.action.markPaid' | translate)
+                  : (markPaidDisabledReason(row) | translate)
               "
               tooltipPosition="top"
             ></button>
@@ -385,14 +322,43 @@
       </tr>
     </ng-template>
 
+    <ng-template pTemplate="expandedrow" let-row>
+      <tr>
+        <td colspan="7" class="p-0">
+          <div class="surface-100 px-4 py-3">
+            <div class="font-semibold mb-2 text-sm">
+              {{ 'payments.linkedOrders' | translate }}
+            </div>
+            <table class="w-full text-sm">
+              <tbody>
+                @for (order of row.orders; track order.id) {
+                  <tr>
+                    <td class="py-1">{{ order.workName }}</td>
+                    <td class="py-1 text-center">{{ orderNumberLabel(order.number) }}</td>
+                    <td class="py-1 text-center">{{ order.dueDate | csDate: 'date' }}</td>
+                    <td class="py-1 text-right">{{ order.amount | csCurrency }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="8" class="text-center py-5 opacity-70">
-          {{
-            loadedOnce() ? ('installments.empty.title' | translate) : ('common.loading' | translate)
-          }}
+        <td colspan="7" class="text-center py-5 opacity-70">
+          {{ loadedOnce() ? ('payments.empty' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
+
+<app-mark-installment-paid-dialog
+  [visible]="markPaidDialogVisible()"
+  [payment]="markPaidRow()"
+  (visibleChange)="markPaidDialogVisible.set($event)"
+  (confirmed)="onMarkPaidConfirmed($event)"
+></app-mark-installment-paid-dialog>

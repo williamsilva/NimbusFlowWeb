@@ -2,28 +2,24 @@ import { Injectable, inject, signal } from '@angular/core';
 
 import { Observable, finalize, tap } from 'rxjs';
 
-import { InstallmentsApiService } from '@features/service/installments.api.service';
-import { InstallmentsAdvancedFilters } from '@features/filter/installments.filters';
+import { PaymentsApiService } from '@features/service/payments.api.service';
+import { PaymentsAdvancedFilters } from '@features/filter/payments.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
-import { InstallmentModel, InstallmentWithWorkModel } from '@models/installments.models';
+import { PaymentModel } from '@models/payments.models';
 
-type LastQuery = ListQueryDto<InstallmentsAdvancedFilters>;
+type LastQuery = ListQueryDto<PaymentsAdvancedFilters>;
 
-/**
- * Estado separado de InstallmentsFacade (que é por obra) - a listagem global (menu "Parcelas
- * Liberadas", todas as obras) precisa do campo workName e é paginada/filtrada/ordenada no backend
- * (mesmo padrão de WorksFacade), recarregando a última página buscada (reloadLast()) após
- * liberar/reenviar notificação. Só mostra Ordens que ainda não entraram num envio - ver
- * PaymentsFacade pro Pagamento em si.
- */
+/** Estado da listagem paginada/filtrada/ordenada da tela "Pagamentos" (mesmo padrão de
+ *  InstallmentsGlobalFacade, do lado da Ordem), recarregando a última página buscada
+ *  (reloadLast()) depois de marcar como pago. */
 @Injectable({ providedIn: 'root' })
-export class InstallmentsGlobalFacade {
-  private readonly api = inject(InstallmentsApiService);
+export class PaymentsFacade {
+  private readonly api = inject(PaymentsApiService);
 
   private readonly _total = signal(0);
   private readonly _loading = signal(false);
   private readonly _loadedOnce = signal(false);
-  private readonly _items = signal<InstallmentWithWorkModel[]>([]);
+  private readonly _items = signal<PaymentModel[]>([]);
   private readonly _lastQuery = signal<LastQuery | null>(null);
 
   readonly loading = this._loading.asReadonly();
@@ -62,11 +58,7 @@ export class InstallmentsGlobalFacade {
     this.loadPage(last);
   }
 
-  release(id: string): Observable<InstallmentModel> {
-    return this.api.release(id).pipe(tap(() => this.reloadLast()));
-  }
-
-  resendNotification(id: string): Observable<InstallmentModel> {
-    return this.api.resendNotification(id).pipe(tap(() => this.reloadLast()));
+  markPaid(id: string, paidAt: string): Observable<PaymentModel> {
+    return this.api.markPaid(id, paidAt).pipe(tap(() => this.reloadLast()));
   }
 }

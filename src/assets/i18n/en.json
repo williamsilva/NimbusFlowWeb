@@ -216,6 +216,9 @@
     "paymentOrders": {
       "title": "Payment Orders"
     },
+    "payments": {
+      "title": "Payments"
+    },
     "measurements": {
       "title": "Measurements"
     },
@@ -390,6 +393,7 @@
       "addendums": "Addendums",
       "installments": "Released Installments",
       "paymentOrders": "Payment Orders",
+      "payments": "Payments",
       "measurements": "Measurements",
       "suggestions": "Suggestions",
       "tickets": "Tickets",
@@ -4437,7 +4441,6 @@
       "amount": "Amount",
       "dueDate": "Due date",
       "status": "Status",
-      "payment": "Payment",
       "releasedBy": "Approved by",
       "tier": "Approval range"
     },
@@ -4449,11 +4452,6 @@
       "RELEASED": "Released",
       "CANCELLED": "Cancelled"
     },
-    "paymentStatus": {
-      "SENT": "Sent",
-      "PAID": "Paid"
-    },
-    "linkedOrders": "Orders included in this payment",
     "form": {
       "saveError": "Could not complete the action. Please try again."
     },
@@ -4463,12 +4461,9 @@
     "action": {
       "release": "Release",
       "resendNotification": "Resend e-mail notification",
-      "markPaid": "Mark as paid",
       "noPermission": "You do not have permission for this action.",
       "requiresMeasurementApproved": "This payment order was already released or cancelled.",
       "requiresReleasedOrCancelled": "This payment order has not been released yet.",
-      "requiresSent": "Requires a sent payment to mark as paid.",
-      "alreadyPaid": "This payment was already marked as paid.",
       "statusChanged": "This payment order's status was changed by another user. Refresh the page."
     },
     "releaseConfirm": {
@@ -4483,6 +4478,32 @@
     }
   },
   "payments": {
+    "subtitle": "Payments sent to suppliers, consolidating released payment orders",
+    "fields": {
+      "supplier": "Supplier",
+      "status": "Status",
+      "amount": "Amount",
+      "sentAt": "Sent at",
+      "periodSentAt": "Sent period"
+    },
+    "columns": {
+      "supplier": "Supplier",
+      "amount": "Amount",
+      "status": "Status",
+      "sentBy": "Sent by",
+      "sentAt": "Sent at",
+      "paidAt": "Paid at"
+    },
+    "status": {
+      "SENT": "Sent",
+      "PAID": "Paid"
+    },
+    "linkedOrders": "Orders included in this payment",
+    "empty": "No payments found",
+    "action": {
+      "markPaid": "Mark as paid",
+      "alreadyPaid": "This payment was already marked as paid."
+    },
     "markPaidConfirm": {
       "header": "Mark payment as paid",
       "message": "Confirm the payment to {supplier} was paid?",

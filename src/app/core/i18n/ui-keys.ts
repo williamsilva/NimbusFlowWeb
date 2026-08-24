@@ -133,6 +133,7 @@ export const UI_KEYS = {
       addendums: 'menu.works.addendums',
       installments: 'menu.works.installments',
       paymentOrders: 'menu.works.paymentOrders',
+      payments: 'menu.works.payments',
       measurements: 'menu.works.measurements',
       suggestions: 'menu.works.suggestions',
       tickets: 'menu.works.tickets',
@@ -1749,6 +1750,12 @@ export const UI_KEYS = {
     },
   },
   payments: {
+    fields: {
+      supplier: 'payments.fields.supplier',
+      status: 'payments.fields.status',
+      amount: 'payments.fields.amount',
+      sentAt: 'payments.fields.sentAt',
+    },
     markPaidConfirm: {
       header: 'payments.markPaidConfirm.header',
       message: 'payments.markPaidConfirm.message',

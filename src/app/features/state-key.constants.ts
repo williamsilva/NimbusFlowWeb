@@ -72,6 +72,13 @@ export const STATE_KEY = {
         },
         FILTERS: { V1: 'nimbusflow.all-installments.filters.v1' },
       },
+      PAYMENTS: {
+        TABLE: {
+          ROWS: { V1: 'payments.table.rows' },
+          STATE: { V1: 'nimbusflow.payments.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.payments.filters.v1' },
+      },
       MEASUREMENTS: {
         TABLE: {
           STATE: { V1: 'nimbusflow.measurements.table.state.v1' },

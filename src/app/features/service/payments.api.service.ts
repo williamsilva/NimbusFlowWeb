@@ -1,0 +1,45 @@
+import { HttpClient, HttpContext } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+
+import { map } from 'rxjs/operators';
+
+import { API } from '@core/api/api.config';
+import { SKIP_GLOBAL_ERROR_TOAST } from '@core/interceptors/error.interceptor';
+import { HalPagedResponse } from '@core/api/page.model';
+import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { PaymentsAdvancedFilters } from '@features/filter/payments.filters';
+import { PaymentApiModel, PaymentModel, mapPaymentApiModel, mapPaymentApiModels } from '@models/payments.models';
+
+/** Pagamento (envio consolidado de N Ordens de Pagamento) - tela "Pagamentos". */
+@Injectable({ providedIn: 'root' })
+export class PaymentsApiService {
+  private readonly http = inject(HttpClient);
+  private readonly installmentsUrl = `${API.bff}/v1/installments`;
+
+  searchPaged(body: ListQueryDto<PaymentsAdvancedFilters>) {
+    return this.http
+      .post<HalPagedResponse<PaymentApiModel>>(`${this.installmentsUrl}/search`, body)
+      .pipe(
+        map((res) => {
+          const content = mapPaymentApiModels(res?._embedded?.content);
+          return {
+            ...res,
+            _embedded: { ...(res?._embedded ?? {}), content },
+          } as HalPagedResponse<PaymentModel>;
+        }),
+      );
+  }
+
+  /** @param paidAt data em que o pagamento efetivamente ocorreu (formato yyyy-MM-dd) - informada
+   *  por quem confirma o pagamento, não é "agora" (ver WorkAutoCompleteService no backend, que
+   *  usa essa data pra contar a carência de conclusão automática da Frente). */
+  markPaid(id: string, paidAt: string) {
+    return this.http
+      .post<PaymentApiModel>(
+        `${this.installmentsUrl}/${id}/mark-paid`,
+        { paidAt },
+        { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
+      )
+      .pipe(map(mapPaymentApiModel));
+  }
+}

@@ -94,6 +94,13 @@ export const APP_MENU: AppMenuItem[] = [
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.VIEW],
       },
       {
+        labelKey: 'menu.works.payments',
+        icon: 'pi pi-money-bill text-green-400',
+        route: '/payments',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PARCELA.VIEW],
+      },
+      {
         labelKey: 'menu.works.suggestions',
         icon: 'pi pi-lightbulb text-green-400',
         route: '/suggestions',

@@ -216,6 +216,9 @@
     "paymentOrders": {
       "title": "Órdenes de Pago"
     },
+    "payments": {
+      "title": "Pagos"
+    },
     "measurements": {
       "title": "Mediciones"
     },
@@ -390,6 +393,7 @@
       "addendums": "Adicionales",
       "installments": "Cuotas Liberadas",
       "paymentOrders": "Órdenes de Pago",
+      "payments": "Pagos",
       "measurements": "Mediciones",
       "suggestions": "Sugerencias",
       "tickets": "Llamados",
@@ -4437,7 +4441,6 @@
       "amount": "Monto",
       "dueDate": "Vencimiento",
       "status": "Estado",
-      "payment": "Pago",
       "releasedBy": "Aprobado por",
       "tier": "Rango de aprobación"
     },
@@ -4449,11 +4452,6 @@
       "RELEASED": "Liberada",
       "CANCELLED": "Cancelada"
     },
-    "paymentStatus": {
-      "SENT": "Enviado",
-      "PAID": "Pagado"
-    },
-    "linkedOrders": "Órdenes incluidas en este pago",
     "form": {
       "saveError": "No se pudo completar la acción. Intente nuevamente."
     },
@@ -4463,12 +4461,9 @@
     "action": {
       "release": "Liberar",
       "resendNotification": "Reenviar notificación por correo",
-      "markPaid": "Marcar como pagado",
       "noPermission": "No tiene permiso para esta acción.",
       "requiresMeasurementApproved": "Esta orden ya fue liberada o cancelada.",
       "requiresReleasedOrCancelled": "Esta orden todavía no fue liberada.",
-      "requiresSent": "Requiere pago enviado para marcar como pagado.",
-      "alreadyPaid": "Este pago ya fue marcado como pagado.",
       "statusChanged": "El estado de esta orden fue cambiado por otro usuario. Actualice la página."
     },
     "releaseConfirm": {
@@ -4483,6 +4478,32 @@
     }
   },
   "payments": {
+    "subtitle": "Pagos enviados a proveedores, consolidando órdenes de pago liberadas",
+    "fields": {
+      "supplier": "Proveedor",
+      "status": "Estado",
+      "amount": "Monto",
+      "sentAt": "Enviado en",
+      "periodSentAt": "Período del envío"
+    },
+    "columns": {
+      "supplier": "Proveedor",
+      "amount": "Monto",
+      "status": "Estado",
+      "sentBy": "Enviado por",
+      "sentAt": "Enviado en",
+      "paidAt": "Pagado en"
+    },
+    "status": {
+      "SENT": "Enviado",
+      "PAID": "Pagado"
+    },
+    "linkedOrders": "Órdenes incluidas en este pago",
+    "empty": "Ningún pago encontrado",
+    "action": {
+      "markPaid": "Marcar como pagado",
+      "alreadyPaid": "Este pago ya fue marcado como pagado."
+    },
     "markPaidConfirm": {
       "header": "Marcar pago como pagado",
       "message": "¿Confirma que el pago a {supplier} fue pagado?",
