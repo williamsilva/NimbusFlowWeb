@@ -4436,6 +4436,7 @@
       "work": "Frente de servicio",
       "amount": "Monto",
       "status": "Estado",
+      "paymentStatus": "Estado del pago",
       "dueDate": "Vencimiento",
       "periodDueDate": "Período del vencimiento"
     },
@@ -4446,6 +4447,7 @@
       "amount": "Monto",
       "dueDate": "Vencimiento",
       "status": "Estado",
+      "paymentStatus": "Pago",
       "releasedBy": "Aprobado por",
       "tier": "Rango de aprobación"
     },
@@ -4456,6 +4458,11 @@
       "MEASUREMENT_APPROVED": "Esperando liberación",
       "RELEASED": "Liberada",
       "CANCELLED": "Cancelada"
+    },
+    "paymentStatus": {
+      "NOT_SENT": "No enviado",
+      "SENT": "Enviado",
+      "PAID": "Pagado"
     },
     "form": {
       "saveError": "No se pudo completar la acción. Intente nuevamente."

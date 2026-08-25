@@ -85,6 +85,7 @@ export type InstallmentsFiltersState = {
   supplierId: string[] | null;
   workName: string;
   status: string[] | null;
+  paymentStatus: string[] | null;
   amountFrom: number | null;
   amountTo: number | null;
   dueDate: string | string[] | null;

@@ -1727,6 +1727,7 @@ export const UI_KEYS = {
       work: 'installments.fields.work',
       amount: 'installments.fields.amount',
       status: 'installments.fields.status',
+      paymentStatus: 'installments.fields.paymentStatus',
       dueDate: 'installments.fields.dueDate',
     },
     approvalRange: {

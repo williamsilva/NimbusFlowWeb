@@ -23,3 +23,46 @@ const TONE_MAP: Record<PaymentStatusEnum, StatusTone> = {
 export function paymentStatusTone(status: PaymentStatusEnum | string | null | undefined): StatusTone {
   return status ? TONE_MAP[status as PaymentStatusEnum] ?? 'neutral' : 'neutral';
 }
+
+/**
+ * Extensão só de frontend de PaymentStatusEnum, usada pela coluna/filtro "Pagamento" da tela
+ * "Parcelas Liberadas" (`AllInstallmentsListComponent`) - NOT_SENT é um sentinela sem
+ * correspondente em com.nimbusflow.works.model.PaymentStatus, representando uma Ordem que ainda
+ * não entrou em nenhum Pagamento (installmentId nulo). Ver PaymentOrderService.paymentStatusKey
+ * no backend, que usa a mesma string "NOT_SENT" pro filtro/ordenação.
+ */
+export enum PaymentOrderPaymentStatusEnum {
+  NOT_SENT = 'NOT_SENT',
+  SENT = 'SENT',
+  PAID = 'PAID',
+}
+
+export const PAYMENT_ORDER_PAYMENT_STATUS_VALUES: PaymentOrderPaymentStatusEnum[] = [
+  PaymentOrderPaymentStatusEnum.NOT_SENT,
+  PaymentOrderPaymentStatusEnum.SENT,
+  PaymentOrderPaymentStatusEnum.PAID,
+];
+
+const ORDER_PAYMENT_TONE_MAP: Record<PaymentOrderPaymentStatusEnum, StatusTone> = {
+  [PaymentOrderPaymentStatusEnum.NOT_SENT]: 'neutral',
+  [PaymentOrderPaymentStatusEnum.SENT]: 'warn',
+  [PaymentOrderPaymentStatusEnum.PAID]: 'success',
+};
+
+export function paymentOrderPaymentStatusTone(
+  status: PaymentOrderPaymentStatusEnum | string | null | undefined,
+): StatusTone {
+  return status ? ORDER_PAYMENT_TONE_MAP[status as PaymentOrderPaymentStatusEnum] ?? 'neutral' : 'neutral';
+}
+
+/** Deriva a chave de status do Pagamento pra uma linha da Ordem (coluna/filtro "Pagamento") -
+ *  mesma regra usada no backend (PaymentOrderService.paymentStatusKey). */
+export function paymentOrderPaymentStatusKey(
+  installmentId: string | null,
+  installmentStatus: PaymentStatusEnum | null,
+): PaymentOrderPaymentStatusEnum {
+  if (installmentId === null || installmentStatus === null) {
+    return PaymentOrderPaymentStatusEnum.NOT_SENT;
+  }
+  return installmentStatus as unknown as PaymentOrderPaymentStatusEnum;
+}

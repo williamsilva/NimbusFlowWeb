@@ -96,6 +96,25 @@
   </div>
 
   <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="paymentStatus"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="paymentStatus()"
+          [showToggleAll]="false"
+          [options]="paymentStatusOptions()"
+          (ngModelChange)="paymentStatus.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="paymentStatus">{{ 'installments.fields.paymentStatus' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
     <div class="col-12 md:col-6 p-2">
       <cs-currency-range-filter
         [inputId]="'amount'"
@@ -144,6 +163,7 @@
         <col style="width: auto" />
         <col style="width: 180px" />
         <col style="width: 80px" />
+        <col style="width: 150px" />
         <col style="width: 150px" />
         <col style="width: 150px" />
         <col style="width: 150px" />
@@ -316,6 +336,43 @@
           </div>
         </th>
 
+        <th pSortableColumn="paymentStatus">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'installments.columns.paymentStatus' | translate"
+              >{{ 'installments.columns.paymentStatus' | translate }}</span
+            >
+            <span class="th-icons">
+              <p-sortIcon field="paymentStatus"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="paymentStatus"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="paymentStatusOptions()"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
+        </th>
+
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
             <span
@@ -388,11 +445,12 @@
             [tone]="tone(row.status)"
             [label]="'installments.status.' + row.status | translate"
           ></cs-status-badge>
-          @if (row.installmentId) {
-            <div class="text-xs text-color-secondary mt-1">
-              {{ 'payments.status.' + row.installmentStatus | translate }}
-            </div>
-          }
+        </td>
+        <td class="text-center" [attr.data-label]="'installments.columns.paymentStatus' | translate">
+          <cs-status-badge
+            [tone]="paymentTone(row)"
+            [label]="'installments.paymentStatus.' + paymentStatusKey(row) | translate"
+          ></cs-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'installments.columns.releasedBy' | translate">
           <span
@@ -448,7 +506,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="10" class="text-center py-5 opacity-70">
+        <td colspan="11" class="text-center py-5 opacity-70">
           {{
             loadedOnce() ? ('installments.empty.title' | translate) : ('common.loading' | translate)
           }}

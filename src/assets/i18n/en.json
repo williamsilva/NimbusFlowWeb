@@ -4436,6 +4436,7 @@
       "work": "Service front",
       "amount": "Amount",
       "status": "Status",
+      "paymentStatus": "Payment status",
       "dueDate": "Due date",
       "periodDueDate": "Due date period"
     },
@@ -4446,6 +4447,7 @@
       "amount": "Amount",
       "dueDate": "Due date",
       "status": "Status",
+      "paymentStatus": "Payment",
       "releasedBy": "Approved by",
       "tier": "Approval range"
     },
@@ -4456,6 +4458,11 @@
       "MEASUREMENT_APPROVED": "Awaiting release",
       "RELEASED": "Released",
       "CANCELLED": "Cancelled"
+    },
+    "paymentStatus": {
+      "NOT_SENT": "Not sent",
+      "SENT": "Sent",
+      "PAID": "Paid"
     },
     "form": {
       "saveError": "Could not complete the action. Please try again."

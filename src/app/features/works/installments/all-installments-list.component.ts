@@ -50,6 +50,11 @@ import {
   InstallmentStatusEnum,
   installmentStatusTone,
 } from '@models/enums/installment-status.enum';
+import {
+  PAYMENT_ORDER_PAYMENT_STATUS_VALUES,
+  paymentOrderPaymentStatusKey,
+  paymentOrderPaymentStatusTone,
+} from '@models/enums/payment-status.enum';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
 
 @Component({
@@ -116,6 +121,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   supplierId = signal<string[] | null>(null);
   workName = signal('');
   status = signal<string[] | null>(this.defaultStatus());
+  paymentStatus = signal<string[] | null>(null);
   amountFrom = signal<number | null>(null);
   amountTo = signal<number | null>(null);
   dueDate = signal<string | string[] | null>(null);
@@ -136,6 +142,17 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     return INSTALLMENT_STATUS_VALUES.map((value) => ({
       value,
       label: this.i18n.tUi(`installments.status.${value}` as never),
+    }));
+  });
+
+  /** Opções do filtro (painel avançado + coluna) por status do Pagamento - distinto do status da
+   *  Ordem acima. Inclui "NOT_SENT" (sentinela sem correspondente em PaymentStatusEnum) pra cobrir
+   *  Ordens que ainda não entraram em nenhum envio - ver payment-status.enum.ts. */
+  readonly paymentStatusOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return PAYMENT_ORDER_PAYMENT_STATUS_VALUES.map((value) => ({
+      value,
+      label: this.i18n.tUi(`installments.paymentStatus.${value}` as never),
     }));
   });
 
@@ -164,6 +181,14 @@ export class AllInstallmentsListComponent extends StatefulListPage<
         .map((opt) => opt.label)
         .join(', ');
       items.push({ label: this.i18n.tUi('installments.fields.status'), value: labels });
+    }
+    const paymentStatus = this.paymentStatus();
+    if (paymentStatus?.length) {
+      const labels = this.paymentStatusOptions()
+        .filter((opt) => paymentStatus.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+      items.push({ label: this.i18n.tUi('installments.fields.paymentStatus'), value: labels });
     }
     const amountLabel = currencyRangeLabel(this.i18n, amountFrom, amountTo);
     if (amountLabel) {
@@ -194,6 +219,16 @@ export class AllInstallmentsListComponent extends StatefulListPage<
 
   tone(status: string): ReturnType<typeof installmentStatusTone> {
     return installmentStatusTone(status);
+  }
+
+  /** Status do Pagamento (não da Ordem) pra linha - coluna "Pagamento", separada da coluna
+   *  "Status" desde 2026-08-25 (antes era só uma 2ª linha sob o badge de status da Ordem). */
+  paymentStatusKey(row: InstallmentWithWorkModel): ReturnType<typeof paymentOrderPaymentStatusKey> {
+    return paymentOrderPaymentStatusKey(row.installmentId, row.installmentStatus);
+  }
+
+  paymentTone(row: InstallmentWithWorkModel): ReturnType<typeof paymentOrderPaymentStatusTone> {
+    return paymentOrderPaymentStatusTone(this.paymentStatusKey(row));
   }
 
   clear() {
@@ -441,6 +476,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     this.supplierId.set(null);
     this.workName.set('');
     this.status.set(null);
+    this.paymentStatus.set(null);
     this.amountFrom.set(null);
     this.amountTo.set(null);
     this.dueDate.set(null);
@@ -453,6 +489,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
       supplierId: this.supplierId()?.length ? this.supplierId() : null,
       workName: this.workName(),
       status: this.status()?.length ? this.status() : null,
+      paymentStatus: this.paymentStatus()?.length ? this.paymentStatus() : null,
       amountFrom: this.amountFrom(),
       amountTo: this.amountTo(),
       dueDate: this.dueDate(),
@@ -464,6 +501,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     this.supplierId.set(state.supplierId ?? null);
     this.workName.set(state.workName ?? '');
     this.status.set(state.status ?? null);
+    this.paymentStatus.set(state.paymentStatus ?? null);
     this.amountFrom.set(state.amountFrom ?? null);
     this.amountTo.set(state.amountTo ?? null);
     this.dueDate.set(state.dueDate ?? null);
@@ -476,6 +514,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
       supplierId: this.supplierId()?.length ? this.supplierId() : undefined,
       workName: this.workName().trim() || undefined,
       status: this.status()?.length ? this.status() : undefined,
+      paymentStatus: this.paymentStatus()?.length ? this.paymentStatus() : undefined,
       amountFrom: this.amountFrom() ?? undefined,
       amountTo: this.amountTo() ?? undefined,
       dueDate: this.dueDate() ?? undefined,
@@ -501,6 +540,17 @@ export class AllInstallmentsListComponent extends StatefulListPage<
       items.push({
         label: this.i18n.tUi('installments.fields.status'),
         value: (labels.length ? labels : statusValues).join(', '),
+      });
+    }
+
+    const paymentStatusValues = readArrayFilterValues(filters, 'paymentStatus');
+    if (paymentStatusValues.length) {
+      const labels = this.paymentStatusOptions()
+        .filter((option) => paymentStatusValues.includes(option.value))
+        .map((option) => option.label);
+      items.push({
+        label: this.i18n.tUi('installments.fields.paymentStatus'),
+        value: (labels.length ? labels : paymentStatusValues).join(', '),
       });
     }
 
