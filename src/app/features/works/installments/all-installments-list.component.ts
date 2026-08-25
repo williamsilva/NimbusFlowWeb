@@ -52,6 +52,7 @@ import {
 } from '@models/enums/installment-status.enum';
 import {
   PAYMENT_ORDER_PAYMENT_STATUS_VALUES,
+  PaymentOrderPaymentStatusEnum,
   paymentOrderPaymentStatusKey,
   paymentOrderPaymentStatusTone,
 } from '@models/enums/payment-status.enum';
@@ -121,7 +122,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
   supplierId = signal<string[] | null>(null);
   workName = signal('');
   status = signal<string[] | null>(this.defaultStatus());
-  paymentStatus = signal<string[] | null>(null);
+  paymentStatus = signal<string[] | null>(this.defaultPaymentStatus());
   amountFrom = signal<number | null>(null);
   amountTo = signal<number | null>(null);
   dueDate = signal<string | string[] | null>(null);
@@ -468,8 +469,16 @@ export class AllInstallmentsListComponent extends StatefulListPage<
     return [InstallmentStatusEnum.MEASUREMENT_APPROVED, InstallmentStatusEnum.RELEASED];
   }
 
+  /** Status do pagamento pré-selecionado: "Não enviado" - mesmo espírito de defaultStatus(),
+   *  só quando o painel de filtros está vazio de verdade (ver applyDefaultAdvancedFiltersIfEmpty
+   *  em StatefulListPage). Evita que Ordens já enviadas/pagas poluam a visão padrão da tela. */
+  private defaultPaymentStatus(): string[] {
+    return [PaymentOrderPaymentStatusEnum.NOT_SENT];
+  }
+
   protected override applyDefaultAdvancedFilters(): void {
     this.status.set(this.defaultStatus());
+    this.paymentStatus.set(this.defaultPaymentStatus());
   }
 
   protected override resetFilters(): void {

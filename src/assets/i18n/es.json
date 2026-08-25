@@ -4615,7 +4615,7 @@
       "exceedsWorkTotal": "El monto solicitado, sumado a las órdenes de pago ya generadas, superaría el valor total de la frente de servicio.",
       "paymentAlreadyPaid": "No se puede editar: la orden de pago generada por esta medición ya fue enviada para pago."
     },
-    "selectedCount": "{count} medición(es) seleccionada(s)",
+    "selectedCount": "{count, plural, =0 {Ninguna medición seleccionada} one {# medición seleccionada} other {# mediciones seleccionadas}}",
     "approveConfirm": {
       "header": "Aprobar medición",
       "message": "¿Confirma la aprobación de esta medición? Esto generará una orden de pago.",
