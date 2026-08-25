@@ -1,0 +1,108 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '560px', maxWidth: '95vw' }"
+  [header]="'addendums.edit.title' | translate"
+>
+  @if (isReopening()) {
+    <div class="surface-100 border-1 border-orange-300 border-round p-2 text-sm text-orange-800 mb-3">
+      <i class="pi pi-exclamation-triangle mr-1"></i>
+      {{ 'addendums.edit.reopenWarning' | translate }}
+    </div>
+  }
+
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputNumber
+            size="small"
+            class="w-full"
+            mode="currency"
+            inputId="editAmount"
+            inputStyleClass="w-full"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [currency]="i18n.getCurrencyBrl()"
+            [locale]="i18n.getLocalePtBr()"
+            formControlName="amount"
+          ></p-inputNumber>
+          <app-error-msg
+            [field]="'amount'"
+            [forId]="'editAmount'"
+            [control]="form.controls.amount"
+            [label]="'addendums.fields.amount' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputNumber
+            size="small"
+            class="w-full"
+            mode="decimal"
+            suffix=" %"
+            inputId="editPercentage"
+            inputStyleClass="w-full"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            formControlName="percentage"
+          ></p-inputNumber>
+          <app-error-msg
+            [field]="'percentage'"
+            [forId]="'editPercentage'"
+            [control]="form.controls.percentage"
+            [label]="'addendums.fields.percentage' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea
+            rows="4"
+            pTextarea
+            id="editJustification"
+            class="w-full p-inputtext-sm"
+            formControlName="justification"
+          ></textarea>
+          <app-error-msg
+            [field]="'justification'"
+            [forId]="'editJustification'"
+            [control]="form.controls.justification"
+            [label]="'addendums.fields.justification' | translate"
+          />
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

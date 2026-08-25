@@ -7,6 +7,7 @@ import {
   AddendumDecisionInput,
   AddendumModel,
   AddendumRequestInput,
+  AddendumUpdateInput,
 } from '@models/addendums.models';
 
 @Injectable({ providedIn: 'root' })
@@ -49,6 +50,10 @@ export class AddendumsFacade {
 
   submit(workId: string, input: AddendumRequestInput): Observable<AddendumModel> {
     return this.api.submit(workId, input).pipe(tap(() => this.reload()));
+  }
+
+  update(id: string, input: AddendumUpdateInput): Observable<AddendumModel> {
+    return this.api.update(id, input).pipe(tap(() => this.reload()));
   }
 
   approve(id: string, input: AddendumDecisionInput): Observable<AddendumModel> {

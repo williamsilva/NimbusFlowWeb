@@ -4360,6 +4360,10 @@
     "new": {
       "title": "New addendum"
     },
+    "edit": {
+      "title": "Edit addendum",
+      "reopenWarning": "This addendum has already been decided. Saving will revert it to Pending and a new decision will be required."
+    },
     "fields": {
       "work": "Service front",
       "amount": "Amount",
@@ -4392,6 +4396,7 @@
     "form": {
       "invalid": "Review the highlighted fields before saving.",
       "created": "Addendum submitted successfully.",
+      "updated": "Addendum updated successfully.",
       "saveError": "Could not save the addendum. Please try again."
     },
     "empty": {
@@ -4400,11 +4405,13 @@
     "action": {
       "approve": "Approve",
       "reject": "Reject",
+      "edit": "Edit addendum",
       "resendNotification": "Resend e-mail notification",
       "noPermission": "You do not have permission to decide this addendum.",
       "alreadyDecided": "This addendum was already decided by another user. Refresh the page.",
       "requiresSubmittableWork": "The service front must be planned or in progress to request a new addendum.",
-      "requiresApproved": "This addendum has not been approved yet."
+      "requiresApproved": "This addendum has not been approved yet.",
+      "cannotEdit": "This addendum cannot be edited: check whether the service front still accepts editing, whether the contracted amount is already fully measured, and whether you have permission for this action."
     },
     "approveConfirm": {
       "header": "Approve addendum",

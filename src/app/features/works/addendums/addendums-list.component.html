@@ -35,6 +35,13 @@
   (visibleChange)="onUpsertVisibleChange($event)"
 ></app-addendums-create-dialog>
 
+<app-addendums-edit-dialog
+  [visible]="editVisible()"
+  [addendum]="editingAddendum()"
+  [initialAmount]="work()?.initialAmount ?? 0"
+  (visibleChange)="onEditVisibleChange($event)"
+></app-addendums-edit-dialog>
+
 <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
   <p-table
     stripedRows
@@ -342,6 +349,18 @@
                 canResendNotification(row)
                   ? ('addendums.action.resendNotification' | translate)
                   : (resendNotificationDisabledReason(row) | translate)
+              "
+              tooltipPosition="top"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="openEdit(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!row.canEdit"
+              [pTooltip]="
+                (row.canEdit ? 'addendums.action.edit' : editDisabledReason()) | translate
               "
               tooltipPosition="top"
             ></button>

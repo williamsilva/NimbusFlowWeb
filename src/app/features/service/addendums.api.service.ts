@@ -12,6 +12,7 @@ import {
   AddendumApiModel,
   AddendumDecisionInput,
   AddendumRequestInput,
+  AddendumUpdateInput,
   AddendumWithWorkApiModel,
   AddendumWithWorkModel,
   mapAddendumApiModel,
@@ -51,6 +52,16 @@ export class AddendumsApiService {
   submit(workId: string, input: AddendumRequestInput) {
     return this.http
       .post<AddendumApiModel>(`${this.worksUrl}/${workId}/addendums`, input, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
+      .pipe(map(mapAddendumApiModel));
+  }
+
+  /** Editar um aditivo já decidido (APPROVED/REJECTED) o devolve pra PENDING (o backend dispara o
+   *  e-mail/push de "aditivo reaberto") - ver AddendumApprovalService.updateAddendum. */
+  update(id: string, input: AddendumUpdateInput) {
+    return this.http
+      .put<AddendumApiModel>(`${this.addendumsUrl}/${id}`, input, {
         context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
       })
       .pipe(map(mapAddendumApiModel));

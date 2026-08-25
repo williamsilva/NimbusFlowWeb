@@ -5,7 +5,12 @@ import { Observable, finalize, tap } from 'rxjs';
 import { AddendumsApiService } from '@features/service/addendums.api.service';
 import { AddendumsAdvancedFilters } from '@features/filter/addendums.filters';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
-import { AddendumDecisionInput, AddendumModel, AddendumWithWorkModel } from '@models/addendums.models';
+import {
+  AddendumDecisionInput,
+  AddendumModel,
+  AddendumUpdateInput,
+  AddendumWithWorkModel,
+} from '@models/addendums.models';
 
 type LastQuery = ListQueryDto<AddendumsAdvancedFilters>;
 
@@ -58,6 +63,10 @@ export class AddendumsGlobalFacade {
     const last = this._lastQuery();
     if (!last) return;
     this.loadPage(last);
+  }
+
+  update(id: string, input: AddendumUpdateInput): Observable<AddendumModel> {
+    return this.api.update(id, input).pipe(tap(() => this.reloadLast()));
   }
 
   approve(id: string, input: AddendumDecisionInput): Observable<AddendumModel> {

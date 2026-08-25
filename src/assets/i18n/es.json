@@ -4360,6 +4360,10 @@
     "new": {
       "title": "Nuevo adicional"
     },
+    "edit": {
+      "title": "Editar adicional",
+      "reopenWarning": "Este adicional ya fue decidido. Al guardar, volverá a Pendiente y será necesaria una nueva decisión."
+    },
     "fields": {
       "work": "Frente de servicio",
       "amount": "Monto",
@@ -4392,6 +4396,7 @@
     "form": {
       "invalid": "Revise los campos resaltados antes de guardar.",
       "created": "Adicional solicitado con éxito.",
+      "updated": "Adicional actualizado con éxito.",
       "saveError": "No se pudo guardar el adicional. Intente nuevamente."
     },
     "empty": {
@@ -4400,11 +4405,13 @@
     "action": {
       "approve": "Aprobar",
       "reject": "Rechazar",
+      "edit": "Editar adicional",
       "resendNotification": "Reenviar notificación por correo",
       "noPermission": "No tiene permiso para decidir este adicional.",
       "alreadyDecided": "Este adicional ya fue decidido por otro usuario. Actualice la página.",
       "requiresSubmittableWork": "La frente de servicio debe estar planificada o en curso para solicitar un nuevo adicional.",
-      "requiresApproved": "Este adicional todavía no fue aprobado."
+      "requiresApproved": "Este adicional todavía no fue aprobado.",
+      "cannotEdit": "Este adicional no puede editarse: verifique si la frente de servicio todavía acepta edición, si el monto contratado ya no está totalmente medido y si usted tiene permiso para esta acción."
     },
     "approveConfirm": {
       "header": "Aprobar adicional",

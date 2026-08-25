@@ -27,6 +27,10 @@ export interface AddendumModel {
    *  (status PENDING + permissão de aprovar + dentro da faixa de Configurações > Alçada). Usar
    *  direto em vez de recalcular no cliente (era a causa do bug da coluna "Alçada" desalinhada). */
   canDecide: boolean;
+  /** Se o usuário logado pode EDITAR este aditivo agora - já resolvido pelo backend (authority +
+   *  a frente de serviço ainda aceita edição + ainda sobra valor pra medir na frente). Editar um
+   *  aditivo já decidido o reabre (volta pra Pendente). */
+  canEdit: boolean;
   /** Faixas de Configurações > Alçada que cobrem `amount` agora - mostrado na coluna "Alçada". */
   approvalRanges: ApprovalRangeModel[];
   requestedById: string;
@@ -65,6 +69,13 @@ export interface AddendumRequestInput {
   amount: number;
   justification: string;
   supersedesId: string | null;
+}
+
+/** Espelha AddendumRequest também (reaproveitado no backend pro update, sem supersedesId - editar
+ *  não muda o encadeamento de reenvio). Editar um aditivo já decidido o devolve pra Pendente. */
+export interface AddendumUpdateInput {
+  amount: number;
+  justification: string;
 }
 
 export interface AddendumDecisionInput {

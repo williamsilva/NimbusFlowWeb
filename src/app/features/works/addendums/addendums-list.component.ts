@@ -31,6 +31,7 @@ import { WorkModel } from '@models/works.models';
 import { WorkStatusEnum } from '@models/enums/work-status.enum';
 import { ADDENDUM_STATUS_VALUES, AddendumStatusEnum, addendumStatusTone } from '@models/enums/addendum-status.enum';
 import { AddendumsCreateDialogComponent } from '@features/works/addendums/addendums-create-dialog.component';
+import { AddendumsEditDialogComponent } from '@features/works/addendums/addendums-edit-dialog.component';
 import { formatApprovalRanges } from '@features/works/addendums/addendums-approval-range.util';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
 import { formatSequentialNumber } from '@shared/utils/br-format';
@@ -62,6 +63,7 @@ const SUBMITTABLE_WORK_STATUSES = new Set<WorkStatusEnum>([
     PageHeaderComponent,
     StatusBadgeComponent,
     AddendumsCreateDialogComponent,
+    AddendumsEditDialogComponent,
     CsCurrencyRangeFilterComponent,
     DateInputMaskDirective,
   ],
@@ -81,6 +83,8 @@ export class AddendumsListComponent implements OnInit {
   readonly workId = signal('');
   readonly work = signal<WorkModel | null>(null);
   readonly upsertVisible = signal(false);
+  readonly editVisible = signal(false);
+  readonly editingAddendum = signal<AddendumModel | null>(null);
 
   readonly items = computed<AddendumModel[]>(() => this.facade.items());
   readonly loading = computed(() => this.facade.loading());
@@ -184,6 +188,28 @@ export class AddendumsListComponent implements OnInit {
 
   onUpsertVisibleChange(v: boolean): void {
     this.upsertVisible.set(v);
+  }
+
+  /** row.canEdit já resolvido pelo backend (authority + frente aceita edição + ainda sobra valor
+   *  pra medir - ver AddendumApprovalService.canEditNow) - mesmo espírito de row.canDecide, não
+   *  recalcular no cliente (ver javadoc de AddendumsPermissionPolicy). Um motivo só, genérico, pro
+   *  tooltip: distinguir qual das 3 condições falhou exigiria expor cada uma separada do backend,
+   *  desnecessário pra uma ação secundária como esta. */
+  editDisabledReason(): string {
+    return 'addendums.action.cannotEdit';
+  }
+
+  openEdit(row: AddendumModel): void {
+    if (!row.canEdit) return;
+    this.editingAddendum.set(row);
+    this.editVisible.set(true);
+  }
+
+  onEditVisibleChange(v: boolean): void {
+    this.editVisible.set(v);
+    if (!v) {
+      this.editingAddendum.set(null);
+    }
   }
 
   confirmApprove(row: AddendumModel): void {

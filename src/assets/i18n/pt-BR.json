@@ -4355,6 +4355,10 @@
     "new": {
       "title": "Novo aditivo"
     },
+    "edit": {
+      "title": "Editar aditivo",
+      "reopenWarning": "Este aditivo já foi decidido. Ao salvar, ele volta para Pendente e uma nova decisão será necessária."
+    },
     "fields": {
       "work": "Frente de serviço",
       "amount": "Valor",
@@ -4387,6 +4391,7 @@
     "form": {
       "invalid": "Revise os campos destacados antes de salvar.",
       "created": "Aditivo solicitado com sucesso.",
+      "updated": "Aditivo atualizado com sucesso.",
       "saveError": "Não foi possível salvar o aditivo. Tente novamente."
     },
     "empty": {
@@ -4395,11 +4400,13 @@
     "action": {
       "approve": "Aprovar",
       "reject": "Reprovar",
+      "edit": "Editar aditivo",
       "resendNotification": "Reenviar notificação por e-mail",
       "noPermission": "Você não tem permissão para decidir este aditivo.",
       "alreadyDecided": "Este aditivo já foi decidido por outro usuário. Atualize a página.",
       "requiresSubmittableWork": "A frente de serviço precisa estar planejada ou em andamento para solicitar um novo aditivo.",
-      "requiresApproved": "Este aditivo ainda não foi aprovado."
+      "requiresApproved": "Este aditivo ainda não foi aprovado.",
+      "cannotEdit": "Este aditivo não pode ser editado: verifique se a frente de serviço ainda aceita edição, se o valor contratado já não está totalmente medido e se você tem permissão para esta ação."
     },
     "approveConfirm": {
       "header": "Aprovar aditivo",

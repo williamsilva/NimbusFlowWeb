@@ -1697,6 +1697,7 @@ export const UI_KEYS = {
     form: {
       invalid: 'addendums.form.invalid',
       created: 'addendums.form.created',
+      updated: 'addendums.form.updated',
       saveError: 'addendums.form.saveError',
     },
     action: {
