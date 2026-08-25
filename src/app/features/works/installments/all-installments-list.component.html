@@ -46,7 +46,7 @@
       </p-floatLabel>
     </div>
 
-    <div class="col-12 md:col-2 p-1">
+    <div class="col-12 md:col-3 p-1">
       <p-floatLabel variant="on" class="w-full">
         <input
           pInputText
@@ -56,25 +56,6 @@
           (input)="workName.set(($any($event.target).value ?? '').toString())"
         />
         <label for="workName">{{ 'installments.fields.work' | translate }}</label>
-      </p-floatLabel>
-    </div>
-
-    <div class="col-12 md:col-3 p-1">
-      <p-floatLabel variant="on" class="w-full">
-        <p-multiSelect
-          size="small"
-          class="w-full"
-          appendTo="body"
-          [showClear]="true"
-          inputId="status"
-          optionLabel="label"
-          optionValue="value"
-          [ngModel]="status()"
-          [showToggleAll]="false"
-          [options]="statusOptions()"
-          (ngModelChange)="status.set($event?.length ? $event : null)"
-        ></p-multiSelect>
-        <label for="status">{{ 'installments.fields.status' | translate }}</label>
       </p-floatLabel>
     </div>
 
@@ -102,19 +83,40 @@
           size="small"
           class="w-full"
           appendTo="body"
+          inputId="status"
           [showClear]="true"
-          inputId="paymentStatus"
           optionLabel="label"
           optionValue="value"
-          [ngModel]="paymentStatus()"
+          [ngModel]="status()"
           [showToggleAll]="false"
+          [options]="statusOptions()"
+          (ngModelChange)="status.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="status">{{ 'installments.fields.status' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value"
+          inputId="paymentStatus"
+          [showToggleAll]="false"
+          [ngModel]="paymentStatus()"
           [options]="paymentStatusOptions()"
           (ngModelChange)="paymentStatus.set($event?.length ? $event : null)"
         ></p-multiSelect>
         <label for="paymentStatus">{{ 'installments.fields.paymentStatus' | translate }}</label>
       </p-floatLabel>
     </div>
+  </div>
 
+  <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-6 p-2">
       <cs-currency-range-filter
         [inputId]="'amount'"
@@ -141,20 +143,20 @@
     sortMode="multiple"
     filterDisplay="menu"
     stateStorage="local"
-    class="cs-admin-table"
     [loading]="loading()"
+    class="cs-admin-table"
     [selection]="selection()"
     [stateKey]="tableStateKey()"
     [showCurrentPageReport]="true"
     [totalRecords]="totalRecords()"
+    [rowSelectable]="rowSelectable"
+    (onPage)="onPageChange($event)"
     (onLazyLoad)="onLazyLoad($event)"
     [paginatorDropdownAppendTo]="'body'"
-    (onPage)="onPageChange($event)"
     [rowsPerPageOptions]="rowsPerPageOptions"
-    [rowSelectable]="rowSelectable"
     (selectionChange)="onSelectionChange($event)"
-    (onStateSave)="stripSelectionFromPersistedTableState()"
     [tableStyle]="{ width: '100%', 'min-width': '52rem' }"
+    (onStateSave)="stripSelectionFromPersistedTableState()"
     [currentPageReportTemplate]="'pagination.report' | translate"
   >
     <ng-template pTemplate="colgroup">
@@ -446,7 +448,10 @@
             [label]="'installments.status.' + row.status | translate"
           ></cs-status-badge>
         </td>
-        <td class="text-center" [attr.data-label]="'installments.columns.paymentStatus' | translate">
+        <td
+          class="text-center"
+          [attr.data-label]="'installments.columns.paymentStatus' | translate"
+        >
           <cs-status-badge
             [tone]="paymentTone(row)"
             [label]="'installments.paymentStatus.' + paymentStatusKey(row) | translate"
