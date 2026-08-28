@@ -303,6 +303,21 @@
               "
               tooltipPosition="top"
             ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-history"
+              (click)="confirmCancelOrder(row)"
+              [disabled]="!canCancelOrder(row)"
+              class="p-button-text p-button-sm p-button-danger"
+              [pTooltip]="
+                canCancelOrder(row)
+                  ? ('installments.action.cancelOrder' | translate)
+                  : (cancelOrderDisabledReason(row) | translate)
+              "
+              tooltipPosition="top"
+            ></button>
           </div>
         </td>
       </tr>

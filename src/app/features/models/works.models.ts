@@ -37,6 +37,10 @@ export interface WorkModel {
    *  marcou ainda ou se o Projeto não tem planta cadastrada. */
   planPositionX: number | null;
   planPositionY: number | null;
+  /** true se o usuário logado pode excluir esta Frente agora (sem nenhum Aditivo/Medição/Ordem de
+   *  Pagamento, mesmo cancelada + permissão OBRA_DELETE) - não reflete Chamado/Plano de Ação
+   *  vinculado (só checado pelo backend no momento do DELETE, ver WorkService.delete). */
+  canDelete: boolean;
   createdAt: string | null;
   updatedAt: string | null;
 }

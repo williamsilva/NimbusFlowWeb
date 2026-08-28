@@ -376,6 +376,20 @@
               "
               tooltipPosition="top"
             ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              (click)="confirmDelete(row)"
+              class="p-button-text p-button-sm p-button-danger"
+              [disabled]="!canDelete(row)"
+              [pTooltip]="
+                canDelete(row)
+                  ? ('measurements.action.delete' | translate)
+                  : (deleteDisabledReason(row) | translate)
+              "
+              tooltipPosition="top"
+            ></button>
           </div>
         </td>
       </tr>

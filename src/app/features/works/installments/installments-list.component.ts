@@ -227,4 +227,56 @@ export class InstallmentsListComponent implements OnInit {
       },
     });
   }
+
+  /** row.canCancel já cobre status != CANCELLED, não vinculada a nenhum Pagamento + permissão
+   *  MEDICAO_REABRIR (ver PaymentOrderService.canCancel) - mesmo padrão de canRelease, não
+   *  recalcular no cliente. */
+  canCancelOrder(row: InstallmentModel): boolean {
+    return row.canCancel;
+  }
+
+  cancelOrderDisabledReason(row: InstallmentModel): string {
+    if (row.status === InstallmentStatusEnum.CANCELLED) {
+      return 'installments.action.alreadyCancelled';
+    }
+    if (row.installmentId !== null) {
+      return 'installments.action.alreadySent';
+    }
+    return this.policy.cancelOrderDisabledReason() ?? 'installments.action.noPermission';
+  }
+
+  /** Cancela a Ordem e reabre a Medição que a gerou pra PENDING - desfaz "todo o processo" desde a
+   *  liberação, não só a liberação em si (ver MeasurementService.cancelGeneratedOrderAndReopen). */
+  confirmCancelOrder(row: InstallmentModel): void {
+    if (!this.canCancelOrder(row)) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('installments.cancelOrderConfirm.header'),
+      message: this.i18n.tUi('installments.cancelOrderConfirm.message', {
+        number: this.numberLabel(row),
+      }),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.facade
+          .cancel(row.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () =>
+              this.toast.add({
+                severity: 'success',
+                summary: this.i18n.tUi('common.success'),
+                detail: this.i18n.tUi('installments.cancelOrderConfirm.success'),
+              }),
+            error: (err) =>
+              this.toast.add({
+                severity: 'error',
+                summary: this.i18n.tUi('common.error'),
+                detail:
+                  translateWorksErrorDetail(err, this.i18n) ??
+                  this.i18n.tUi('installments.form.saveError'),
+              }),
+          });
+      },
+    });
+  }
 }

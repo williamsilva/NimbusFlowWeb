@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
+import { SKIP_GLOBAL_ERROR_TOAST } from '@core/interceptors/error.interceptor';
 import { HalPagedResponse } from '@core/api/page.model';
 import { ListQueryDto } from '@shared/features/list-query/list-query.types';
 import { WorksAdvancedFilters } from '@features/filter/works.filters';
@@ -67,5 +68,14 @@ export class WorksApiService {
 
   update(id: string, input: WorkUpsertInput) {
     return this.http.put<WorkApiModel>(`${this.baseUrl}/${id}`, input).pipe(map(mapWorkApiModel));
+  }
+
+  /** Exclui uma Frente de Serviço vazia (sem Aditivo/Medição/Ordem de Pagamento, mesmo cancelada -
+   *  ver WorkService.delete). SKIP_GLOBAL_ERROR_TOAST: o componente já mostra a mensagem
+   *  específica do backend (o que está bloqueando a exclusão). */
+  delete(id: string) {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`, {
+      context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+    });
   }
 }

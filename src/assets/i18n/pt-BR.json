@@ -4231,7 +4231,14 @@
       "noPermission": "Você não tem permissão para gerenciar frentes de serviço.",
       "viewAddendums": "Aditivos",
       "viewInstallments": "Pagamentos",
-      "viewMeasurements": "Medições"
+      "viewMeasurements": "Medições",
+      "hasLinkedRecords": "Esta frente de serviço tem aditivos, medições ou ordens de pagamento vinculados."
+    },
+    "deleteConfirm": {
+      "header": "Excluir frente de serviço",
+      "message": "Tem certeza que deseja excluir a frente de serviço {name}? Esta ação não pode ser desfeita.",
+      "success": "Frente de serviço excluída com sucesso.",
+      "error": "Não foi possível excluir a frente de serviço."
     }
   },
   "dashboard": {
@@ -4472,7 +4479,9 @@
       "requiresMeasurementApproved": "Esta ordem já foi liberada ou cancelada.",
       "requiresReleasedOrCancelled": "Esta ordem ainda não foi liberada.",
       "statusChanged": "O status desta ordem foi alterado por outro usuário. Atualize a página.",
-      "alreadySent": "Esta ordem já foi incluída em um pagamento enviado."
+      "alreadySent": "Esta ordem já foi incluída em um pagamento enviado.",
+      "alreadyCancelled": "Esta ordem já foi cancelada.",
+      "cancelOrder": "Cancelar ordem"
     },
     "releaseConfirm": {
       "header": "Liberar parcela",
@@ -4483,6 +4492,11 @@
       "header": "Reenviar notificação",
       "message": "Confirma o reenvio do e-mail de notificação da parcela nº {number} para os destinatários configurados?",
       "success": "Notificação reenviada com sucesso."
+    },
+    "cancelOrderConfirm": {
+      "header": "Cancelar ordem",
+      "message": "Confirma o cancelamento da ordem nº {number}? A medição que a gerou volta a ficar pendente de decisão.",
+      "success": "Ordem cancelada e medição reaberta com sucesso."
     }
   },
   "payments": {
@@ -4511,7 +4525,10 @@
     "action": {
       "markPaid": "Marcar como pago",
       "resendNotification": "Reenviar notificação por e-mail",
-      "alreadyPaid": "Este pagamento já foi marcado como pago."
+      "alreadyPaid": "Este pagamento já foi marcado como pago.",
+      "notPaidYet": "Este pagamento ainda não foi marcado como pago.",
+      "undoMarkPaid": "Desfazer pagamento",
+      "undoSend": "Desfazer envio"
     },
     "markPaidConfirm": {
       "header": "Marcar pagamento como pago",
@@ -4526,6 +4543,18 @@
       "message": "Confirma o reenvio do e-mail com o PDF consolidado deste pagamento para {supplier}?",
       "success": "Notificação reenviada com sucesso.",
       "error": "Não foi possível reenviar a notificação."
+    },
+    "undoMarkPaidConfirm": {
+      "header": "Desfazer pagamento",
+      "message": "Confirma desfazer o pagamento de {supplier}? Ele volta a ficar como enviado, aguardando confirmação.",
+      "success": "Pagamento desfeito com sucesso.",
+      "error": "Não foi possível desfazer o pagamento."
+    },
+    "undoSendConfirm": {
+      "header": "Desfazer envio",
+      "message": "Confirma desfazer o envio deste pagamento para {supplier}? As ordens incluídas voltam a não estar liberadas.",
+      "success": "Envio desfeito com sucesso.",
+      "error": "Não foi possível desfazer o envio."
     }
   },
   "paymentOrders": {
@@ -4608,7 +4637,9 @@
       "alreadyDecided": "Esta medição já foi decidida por outro usuário. Atualize a página.",
       "requiresSubmittableWork": "A frente de serviço precisa estar planejada ou em andamento para registrar uma nova medição.",
       "exceedsWorkTotal": "O valor solicitado, somado às ordens de pagamento já geradas, passaria do valor total da frente de serviço.",
-      "paymentAlreadyPaid": "Não é possível editar: a ordem de pagamento gerada por esta medição já foi enviada para pagamento."
+      "paymentAlreadyPaid": "Não é possível editar: a ordem de pagamento gerada por esta medição já foi enviada para pagamento.",
+      "delete": "Excluir",
+      "hasLivePaymentOrder": "Esta medição tem uma ordem de pagamento ativa - cancele a ordem antes de excluir."
     },
     "selectedCount": "{count, plural, =0 {Nenhuma medição selecionada} one {# medição selecionada} other {# medições selecionadas}}",
     "approveConfirm": {
@@ -4627,6 +4658,12 @@
       "success": "{count} medição(ões) aprovada(s) com sucesso.",
       "allFailed": "Não foi possível aprovar nenhuma das {count} medição(ões) selecionada(s).",
       "partial": "{succeeded} medição(ões) aprovada(s), {failed} falharam - confira o status de cada uma na tabela."
+    },
+    "deleteConfirm": {
+      "header": "Excluir medição",
+      "message": "Tem certeza que deseja excluir a medição {number}? Esta ação não pode ser desfeita.",
+      "success": "Medição excluída com sucesso.",
+      "error": "Não foi possível excluir a medição."
     }
   },
   "suggestions": {

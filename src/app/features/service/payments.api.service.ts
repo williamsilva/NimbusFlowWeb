@@ -55,4 +55,25 @@ export class PaymentsApiService {
       )
       .pipe(map(mapPaymentApiModel));
   }
+
+  /** Desfaz markAsPaid - volta o Pagamento de PAID pra SENT. */
+  undoMarkPaid(id: string) {
+    return this.http
+      .post<PaymentApiModel>(
+        `${this.installmentsUrl}/${id}/undo-mark-paid`,
+        {},
+        { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
+      )
+      .pipe(map(mapPaymentApiModel));
+  }
+
+  /** Desfaz o envio - dissolve o Pagamento (cada Ordem incluída volta pra MEASUREMENT_APPROVED,
+   *  ver InstallmentService.undoSend). Sem corpo de resposta - o Pagamento deixa de existir. */
+  undoSend(id: string) {
+    return this.http.post<void>(
+      `${this.installmentsUrl}/${id}/undo-send`,
+      {},
+      { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
+    );
+  }
 }

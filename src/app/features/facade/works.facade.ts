@@ -101,4 +101,8 @@ export class WorksFacade {
   update(id: string, input: WorkUpsertInput): Observable<WorkModel> {
     return this.api.update(id, input).pipe(tap(() => this.reloadLast()));
   }
+
+  delete(id: string): Observable<void> {
+    return this.api.delete(id).pipe(tap(() => this.reloadLast()));
+  }
 }

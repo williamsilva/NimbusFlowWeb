@@ -1681,6 +1681,12 @@ export const UI_KEYS = {
       updated: 'works.form.updated',
       saveError: 'works.form.saveError',
     },
+    deleteConfirm: {
+      header: 'works.deleteConfirm.header',
+      message: 'works.deleteConfirm.message',
+      success: 'works.deleteConfirm.success',
+      error: 'works.deleteConfirm.error',
+    },
   },
   addendums: {
     fields: {
@@ -1751,6 +1757,11 @@ export const UI_KEYS = {
       message: 'installments.resendNotificationConfirm.message',
       success: 'installments.resendNotificationConfirm.success',
     },
+    cancelOrderConfirm: {
+      header: 'installments.cancelOrderConfirm.header',
+      message: 'installments.cancelOrderConfirm.message',
+      success: 'installments.cancelOrderConfirm.success',
+    },
   },
   payments: {
     fields: {
@@ -1771,6 +1782,18 @@ export const UI_KEYS = {
       message: 'payments.resendNotificationConfirm.message',
       success: 'payments.resendNotificationConfirm.success',
       error: 'payments.resendNotificationConfirm.error',
+    },
+    undoMarkPaidConfirm: {
+      header: 'payments.undoMarkPaidConfirm.header',
+      message: 'payments.undoMarkPaidConfirm.message',
+      success: 'payments.undoMarkPaidConfirm.success',
+      error: 'payments.undoMarkPaidConfirm.error',
+    },
+    undoSendConfirm: {
+      header: 'payments.undoSendConfirm.header',
+      message: 'payments.undoSendConfirm.message',
+      success: 'payments.undoSendConfirm.success',
+      error: 'payments.undoSendConfirm.error',
     },
   },
   paymentOrders: {
@@ -1827,6 +1850,12 @@ export const UI_KEYS = {
       success: 'measurements.approveManyConfirm.success',
       allFailed: 'measurements.approveManyConfirm.allFailed',
       partial: 'measurements.approveManyConfirm.partial',
+    },
+    deleteConfirm: {
+      header: 'measurements.deleteConfirm.header',
+      message: 'measurements.deleteConfirm.message',
+      success: 'measurements.deleteConfirm.success',
+      error: 'measurements.deleteConfirm.error',
     },
   },
   projects: {

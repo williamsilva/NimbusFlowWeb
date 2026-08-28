@@ -204,6 +204,9 @@ export const PERMISSIONS = {
   OBRA: {
     MANAGE: 'OBRA_MANAGE',
     VIEW: 'OBRA_CONSULT',
+    /** Exclui uma Frente de Serviço sem Aditivo/Medição/Ordem de Pagamento vinculados - permissão
+     *  dedicada (não reaproveita MANAGE), pedido do usuário 2026-08-28. */
+    DELETE: 'OBRA_DELETE',
   },
 
   SUGESTAO: {
@@ -255,6 +258,12 @@ export const PERMISSIONS = {
     PAGAR: 'PARCELA_PAGAR',
     ENVIAR_ORDEM: 'PARCELA_ENVIAR_ORDEM',
     VIEW: 'PARCELA_CONSULT',
+    /** Desfaz "marcar como pago" (Pagamento PAID -> SENT) - permissão dedicada, não reaproveita
+     *  PAGAR. Pedido do usuário 2026-08-28 (desfazer todo o processo). */
+    DESFAZER_PAGAMENTO: 'PARCELA_DESFAZER_PAGAMENTO',
+    /** Desfaz o envio (Pagamento SENT dissolvido, cada Ordem incluída volta direto pra
+     *  MEASUREMENT_APPROVED - não RELEASED) - permissão dedicada, não reaproveita ENVIAR_ORDEM. */
+    DESFAZER_ENVIO: 'PARCELA_DESFAZER_ENVIO',
   },
 
   /**
@@ -265,6 +274,12 @@ export const PERMISSIONS = {
     CREATE: 'MEDICAO_CREATE',
     APPROVE: 'MEDICAO_APPROVE',
     VIEW: 'MEDICAO_CONSULT',
+    /** Cancela a Ordem de Pagamento de uma Medição (ainda não enviada) e reabre a decisão pra
+     *  PENDING - ação vive na tela de Ordens, não na de Medições, mas a permissão é sobre a
+     *  Medição (mesmo efeito de PaymentOrderService.cancel + reabertura). */
+    REABRIR: 'MEDICAO_REABRIR',
+    /** Exclui uma Medição sem nenhum artefato financeiro vivo. */
+    DELETE: 'MEDICAO_DELETE',
   },
 
   /**

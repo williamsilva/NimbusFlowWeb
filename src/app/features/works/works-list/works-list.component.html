@@ -691,6 +691,21 @@
               [routerLink]="['/works', row.id, 'installments']"
               [pTooltip]="'works.action.viewInstallments' | translate"
             ></a>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              tooltipPosition="top"
+              (click)="confirmDelete(row)"
+              [disabled]="!canDelete(row)"
+              class="p-button-text p-button-sm p-button-danger"
+              [pTooltip]="
+                canDelete(row)
+                  ? ('common.delete' | translate)
+                  : (deleteDisabledReason(row) | translate)
+              "
+            ></button>
           </div>
         </td>
       </tr>

@@ -266,6 +266,97 @@ export class PaymentsListComponent extends StatefulListPage<
     });
   }
 
+  /** row.canUndoMarkPaid já cobre status == PAID + permissão PARCELA_DESFAZER_PAGAMENTO (ver
+   *  InstallmentService.toResponse). */
+  canUndoMarkPaid(row: PaymentModel): boolean {
+    return row.canUndoMarkPaid;
+  }
+
+  undoMarkPaidDisabledReason(row: PaymentModel): string {
+    if (row.status !== PaymentStatusEnum.PAID) {
+      return 'payments.action.notPaidYet';
+    }
+    return this.policy.undoMarkPaidDisabledReason() ?? 'installments.action.noPermission';
+  }
+
+  /** Desfaz "marcar como pago" - volta o Pagamento pra SENT (ver InstallmentService.undoMarkAsPaid). */
+  confirmUndoMarkPaid(row: PaymentModel): void {
+    if (!this.canUndoMarkPaid(row)) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('payments.undoMarkPaidConfirm.header'),
+      message: this.i18n.tUi('payments.undoMarkPaidConfirm.message', { supplier: row.supplierName }),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.facade
+          .undoMarkPaid(row.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () =>
+              this.toast.add({
+                severity: 'success',
+                summary: this.i18n.tUi('common.success'),
+                detail: this.i18n.tUi('payments.undoMarkPaidConfirm.success'),
+              }),
+            error: (err) =>
+              this.toast.add({
+                severity: 'error',
+                summary: this.i18n.tUi('common.error'),
+                detail:
+                  translateWorksErrorDetail(err, this.i18n) ??
+                  this.i18n.tUi('payments.undoMarkPaidConfirm.error'),
+              }),
+          });
+      },
+    });
+  }
+
+  /** row.canUndoSend já cobre status == SENT + permissão PARCELA_DESFAZER_ENVIO (ver
+   *  InstallmentService.toResponse). */
+  canUndoSend(row: PaymentModel): boolean {
+    return row.canUndoSend;
+  }
+
+  undoSendDisabledReason(row: PaymentModel): string {
+    if (row.status !== PaymentStatusEnum.SENT) {
+      return 'payments.action.alreadyPaid';
+    }
+    return this.policy.undoSendDisabledReason() ?? 'installments.action.noPermission';
+  }
+
+  /** Desfaz o envio - o Pagamento deixa de existir e cada Ordem incluída volta direto pra
+   *  MEASUREMENT_APPROVED, não liberada (pedido do usuário, ver InstallmentService.undoSend). */
+  confirmUndoSend(row: PaymentModel): void {
+    if (!this.canUndoSend(row)) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('payments.undoSendConfirm.header'),
+      message: this.i18n.tUi('payments.undoSendConfirm.message', { supplier: row.supplierName }),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.facade
+          .undoSend(row.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () =>
+              this.toast.add({
+                severity: 'success',
+                summary: this.i18n.tUi('common.success'),
+                detail: this.i18n.tUi('payments.undoSendConfirm.success'),
+              }),
+            error: (err) =>
+              this.toast.add({
+                severity: 'error',
+                summary: this.i18n.tUi('common.error'),
+                detail:
+                  translateWorksErrorDetail(err, this.i18n) ??
+                  this.i18n.tUi('payments.undoSendConfirm.error'),
+              }),
+          });
+      },
+    });
+  }
+
   protected formatDate(value: Date | string): string {
     const date = value instanceof Date ? value : new Date(value);
     return new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(date);

@@ -25,6 +25,10 @@ export class MeasurementsPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.MEDICAO.APPROVE);
   }
 
+  canDelete(): boolean {
+    return this.perms.hasSupportOr(PERMISSIONS.MEDICAO.DELETE);
+  }
+
   /** PENDING (sem parcela gerada ainda) exige a mesma permissão de criar. Já decidida
    *  (APPROVED/REJECTED) exige a de decidir - editar pode cancelar uma parcela já liberada ou
    *  ressuscitar uma medição já decidida, mesmo nível de MeasurementService.requireEditAuthority. */
@@ -38,6 +42,10 @@ export class MeasurementsPermissionPolicy {
 
   decideDisabledReason(): string | null {
     return this.canDecide() ? null : 'measurements.action.noPermission';
+  }
+
+  deleteDisabledReason(): string | null {
+    return this.canDelete() ? null : 'measurements.action.noPermission';
   }
 
   editDisabledReason(status: MeasurementStatusEnum): string | null {

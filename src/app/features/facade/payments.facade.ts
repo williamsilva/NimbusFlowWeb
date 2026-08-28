@@ -67,4 +67,15 @@ export class PaymentsFacade {
   resendNotification(id: string): Observable<PaymentModel> {
     return this.api.resendNotification(id);
   }
+
+  /** Desfaz markAsPaid - volta o Pagamento de PAID pra SENT. */
+  undoMarkPaid(id: string): Observable<PaymentModel> {
+    return this.api.undoMarkPaid(id).pipe(tap(() => this.reloadLast()));
+  }
+
+  /** Desfaz o envio - o Pagamento deixa de existir (cada Ordem incluída volta pra
+   *  MEASUREMENT_APPROVED). */
+  undoSend(id: string): Observable<void> {
+    return this.api.undoSend(id).pipe(tap(() => this.reloadLast()));
+  }
 }

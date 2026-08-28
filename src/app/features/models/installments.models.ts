@@ -39,6 +39,10 @@ export interface InstallmentModel {
    *  permissão de liberar + dentro da faixa de valor de Configurações > Alçada) - mesmo padrão de
    *  AddendumModel.canDecide, ver PaymentOrderService.canRelease/canReleasePending. */
   canRelease: boolean;
+  /** true se o usuário logado pode cancelar ESTA ordem agora (status != CANCELLED, ainda não
+   *  incluída em nenhum Pagamento + permissão MEDICAO_REABRIR) - cancelar reabre a Medição que a
+   *  gerou pra PENDING. Mesmo padrão de canRelease. */
+  canCancel: boolean;
   /** Faixas de Configurações > Alçada que cobrem {@code amount} agora - mesmo papel de
    *  AddendumModel.approvalRanges, exibido na coluna "Alçada" da tela Pagamentos. */
   approvalRanges: ApprovalRangeModel[];

@@ -98,4 +98,8 @@ export class MeasurementsGlobalFacade {
       tap(() => this.reloadLast()),
     );
   }
+
+  delete(id: string): Observable<void> {
+    return this.api.delete(id).pipe(tap(() => this.reloadLast()));
+  }
 }

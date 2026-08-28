@@ -63,4 +63,8 @@ export class MeasurementsFacade {
   reject(id: string, input: MeasurementDecisionInput): Observable<MeasurementModel> {
     return this.api.reject(id, input).pipe(tap(() => this.reload()));
   }
+
+  delete(id: string): Observable<void> {
+    return this.api.delete(id).pipe(tap(() => this.reload()));
+  }
 }

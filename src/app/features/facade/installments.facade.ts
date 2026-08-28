@@ -50,4 +50,9 @@ export class InstallmentsFacade {
   resendNotification(id: string): Observable<InstallmentModel> {
     return this.api.resendNotification(id).pipe(tap(() => this.reload()));
   }
+
+  /** Cancela a Ordem (ainda não enviada) e reabre a Medição que a gerou pra PENDING. */
+  cancel(id: string): Observable<unknown> {
+    return this.api.cancel(id).pipe(tap(() => this.reload()));
+  }
 }

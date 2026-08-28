@@ -333,6 +333,36 @@
               "
               tooltipPosition="top"
             ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-history"
+              (click)="confirmUndoMarkPaid(row)"
+              [disabled]="!canUndoMarkPaid(row)"
+              class="p-button-text p-button-sm p-button-danger"
+              [pTooltip]="
+                canUndoMarkPaid(row)
+                  ? ('payments.action.undoMarkPaid' | translate)
+                  : (undoMarkPaidDisabledReason(row) | translate)
+              "
+              tooltipPosition="top"
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-replay"
+              (click)="confirmUndoSend(row)"
+              [disabled]="!canUndoSend(row)"
+              class="p-button-text p-button-sm p-button-danger"
+              [pTooltip]="
+                canUndoSend(row)
+                  ? ('payments.action.undoSend' | translate)
+                  : (undoSendDisabledReason(row) | translate)
+              "
+              tooltipPosition="top"
+            ></button>
           </div>
         </td>
       </tr>

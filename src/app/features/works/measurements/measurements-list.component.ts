@@ -298,4 +298,49 @@ export class MeasurementsListComponent implements OnInit {
       },
     });
   }
+
+  /** row.canDelete já cobre "sem Ordem viva gerada, sem outra Medição reenviando esta" + permissão
+   *  MEDICAO_DELETE (ver MeasurementService.canDelete) - mesmo padrão de canDecide, não recalcular
+   *  no cliente. */
+  canDelete(row: MeasurementModel): boolean {
+    return row.canDelete;
+  }
+
+  deleteDisabledReason(row: MeasurementModel): string {
+    if (row.generatedPaymentOrderId) {
+      return 'measurements.action.hasLivePaymentOrder';
+    }
+    return this.policy.deleteDisabledReason() ?? 'measurements.action.noPermission';
+  }
+
+  confirmDelete(row: MeasurementModel): void {
+    if (!this.canDelete(row)) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('measurements.deleteConfirm.header'),
+      message: this.i18n.tUi('measurements.deleteConfirm.message', { number: this.numberLabel(row) }),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.facade
+          .delete(row.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () =>
+              this.toast.add({
+                severity: 'success',
+                summary: this.i18n.tUi('common.success'),
+                detail: this.i18n.tUi('measurements.deleteConfirm.success'),
+              }),
+            error: (err) =>
+              this.toast.add({
+                severity: 'error',
+                summary: this.i18n.tUi('common.error'),
+                detail:
+                  translateWorksErrorDetail(err, this.i18n) ??
+                  this.i18n.tUi('measurements.deleteConfirm.error'),
+              }),
+          });
+      },
+    });
+  }
 }

@@ -97,4 +97,11 @@ export class MeasurementsApiService {
       })
       .pipe(map(mapMeasurementApiModel));
   }
+
+  /** Exclui uma Medição sem nenhum artefato financeiro vivo (ver MeasurementService.deleteMeasurement). */
+  delete(id: string) {
+    return this.http.delete<void>(`${this.measurementsUrl}/${id}`, {
+      context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+    });
+  }
 }

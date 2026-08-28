@@ -1,11 +1,12 @@
 import { RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { DestroyRef, Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -28,6 +29,7 @@ import { WorksAdvancedFilters } from '@features/filter/works.filters';
 import { StatefulListPage } from '@features/list-base/stateful-list-page';
 import { buildListQuery } from '@shared/features/list-query/list-query.builder';
 import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
+import { translateWorksErrorDetail } from '@features/works/works-error.util';
 import { WORK_STATUS_VALUES, WorkStatusEnum, workStatusTone } from '@models/enums/work-status.enum';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
@@ -86,6 +88,8 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
   protected readonly toast = inject(MessageService);
   readonly suppliersFacade = inject(SuppliersFacade);
   protected readonly policy = inject(WorksPermissionPolicy);
+  private readonly confirm = inject(ConfirmationService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly supplierOptions = this.suppliersFacade.options;
   readonly projectOptions = this.projectsFacade.options;
@@ -213,6 +217,51 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     if (!v) {
       this.work.set(null);
     }
+  }
+
+  /** row.canDelete já cobre "sem Aditivo/Medição/Ordem de Pagamento" + permissão OBRA_DELETE (ver
+   *  WorkService.canDelete) - não reflete Chamado/Plano de Ação vinculado (só o backend sabe, ver
+   *  WorkService.delete), então o clique ainda pode falhar mesmo com o botão habilitado. */
+  canDelete(row: WorkModel): boolean {
+    return row.canDelete;
+  }
+
+  deleteDisabledReason(row: WorkModel): string {
+    if (row.addendumsCount > 0 || row.installmentsCount > 0) {
+      return 'works.action.hasLinkedRecords';
+    }
+    return this.policy.deleteDisabledReason() ?? 'works.action.noPermission';
+  }
+
+  confirmDelete(row: WorkModel): void {
+    if (!this.canDelete(row)) return;
+
+    this.confirm.confirm({
+      header: this.i18n.tUi('works.deleteConfirm.header'),
+      message: this.i18n.tUi('works.deleteConfirm.message', { name: row.name }),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.facade
+          .delete(row.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () =>
+              this.toast.add({
+                severity: 'success',
+                summary: this.i18n.tUi('common.success'),
+                detail: this.i18n.tUi('works.deleteConfirm.success'),
+              }),
+            error: (err) =>
+              this.toast.add({
+                severity: 'error',
+                summary: this.i18n.tUi('common.error'),
+                detail:
+                  translateWorksErrorDetail(err, this.i18n) ??
+                  this.i18n.tUi('works.deleteConfirm.error'),
+              }),
+          });
+      },
+    });
   }
 
   clear() {

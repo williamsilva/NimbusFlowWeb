@@ -80,4 +80,9 @@ export class InstallmentsGlobalFacade {
   sendPaymentOrder(paymentOrderIds: string[]): Observable<SendPaymentOrderResultModel> {
     return this.api.sendPaymentOrder(paymentOrderIds).pipe(tap(() => this.reloadLast()));
   }
+
+  /** Cancela a Ordem (ainda não enviada) e reabre a Medição que a gerou pra PENDING. */
+  cancel(id: string): Observable<unknown> {
+    return this.api.cancel(id).pipe(tap(() => this.reloadLast()));
+  }
 }

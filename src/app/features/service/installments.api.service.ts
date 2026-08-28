@@ -84,4 +84,15 @@ export class InstallmentsApiService {
       { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
     );
   }
+
+  /** Cancela a Ordem (ainda não enviada) e reabre a Medição que a gerou pra PENDING - o backend
+   *  devolve a Medição atualizada, não a Ordem (ver PaymentOrderController.cancel), mas quem
+   *  chama só precisa saber que deu certo e recarregar a listagem de Ordens. */
+  cancel(id: string) {
+    return this.http.post(
+      `${this.paymentOrdersUrl}/${id}/cancel`,
+      {},
+      { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
+    );
+  }
 }

@@ -32,6 +32,13 @@ export interface PaymentModel {
   /** Todas as Ordens (podendo ser de obras/projetos diferentes) incluídas neste envio - mostrado
    *  ao expandir a linha. */
   orders: InstallmentOrderSummaryModel[];
+  /** true se o usuário logado pode desfazer "marcar como pago" agora (status == PAID + permissão
+   *  PARCELA_DESFAZER_PAGAMENTO) - volta pra SENT. */
+  canUndoMarkPaid: boolean;
+  /** true se o usuário logado pode desfazer o envio agora (status == SENT + permissão
+   *  PARCELA_DESFAZER_ENVIO) - as Ordens incluídas voltam a MEASUREMENT_APPROVED (não liberadas) e
+   *  este Pagamento é excluído. */
+  canUndoSend: boolean;
   createdAt: string | null;
   updatedAt: string | null;
 }

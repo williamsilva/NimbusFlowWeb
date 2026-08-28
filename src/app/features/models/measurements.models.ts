@@ -45,6 +45,9 @@ export interface MeasurementModel {
   /** Geolocalização real do dispositivo capturada no envio (navigator.geolocation) - opcional. */
   deviceLatitude: number | null;
   deviceLongitude: number | null;
+  /** true se o usuário logado pode excluir esta Medição agora (sem Ordem de Pagamento viva
+   *  gerada, sem nenhuma outra Medição reenviando esta + permissão MEDICAO_DELETE). */
+  canDelete: boolean;
   createdAt: string | null;
   updatedAt: string | null;
 }
