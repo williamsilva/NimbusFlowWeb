@@ -99,7 +99,7 @@ export class PaymentsListComponent extends StatefulListPage<
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
 
   supplierName = signal('');
-  status = signal<string[] | null>(null);
+  status = signal<string[] | null>(this.defaultStatus());
   amountFrom = signal<number | null>(null);
   amountTo = signal<number | null>(null);
   sentAt = signal<string | string[] | null>(null);
@@ -391,6 +391,18 @@ export class PaymentsListComponent extends StatefulListPage<
     this.reloadWithCurrentState();
   }
 
+  /** Mesmo padrão de WorksListComponent/AllInstallmentsListComponent/AllMeasurementsListComponent
+   *  (status pré-selecionado): "Enviado" pré-selecionado, mas só quando o painel de filtros está
+   *  vazio de verdade (nem restaurado do localStorage, nem definido pelo usuário) - ver
+   *  applyDefaultAdvancedFiltersIfEmpty em StatefulListPage. */
+  private defaultStatus(): string[] {
+    return [PaymentStatusEnum.SENT];
+  }
+
+  protected override applyDefaultAdvancedFilters(): void {
+    this.status.set(this.defaultStatus());
+  }
+
   protected override resetFilters(): void {
     this.supplierName.set('');
     this.status.set(null);
@@ -398,6 +410,7 @@ export class PaymentsListComponent extends StatefulListPage<
     this.amountTo.set(null);
     this.sentAt.set(null);
     this.periodSentAt.set(null);
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   protected override toFiltersState(): PaymentsFiltersState {
@@ -418,6 +431,7 @@ export class PaymentsListComponent extends StatefulListPage<
     this.amountTo.set(state.amountTo ?? null);
     this.sentAt.set(state.sentAt ?? null);
     this.periodSentAt.set(state.periodSentAt ?? null);
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   protected override buildAdvancedFilters(): Partial<PaymentsAdvancedFilters> {
