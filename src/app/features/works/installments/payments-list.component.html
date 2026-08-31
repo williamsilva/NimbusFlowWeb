@@ -121,6 +121,7 @@
         <col style="width: 130px" />
         <col style="width: 180px" />
         <col style="width: 160px" />
+        <col style="width: 130px" />
         <col style="width: 160px" />
         <col style="width: 70px" />
       </colgroup>
@@ -252,6 +253,17 @@
             <span
               class="th-label"
               tooltipPosition="top"
+              [pTooltip]="'payments.columns.dueDate' | translate"
+              >{{ 'payments.columns.dueDate' | translate }}</span
+            >
+          </div>
+        </th>
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
               [pTooltip]="'payments.columns.paidAt' | translate"
               >{{ 'payments.columns.paidAt' | translate }}</span
             >
@@ -297,6 +309,9 @@
         </td>
         <td class="text-center" [attr.data-label]="'payments.columns.sentAt' | translate">
           {{ row.sentAt ? (row.sentAt | csDate: 'datetime') : '-' }}
+        </td>
+        <td class="text-center" [attr.data-label]="'payments.columns.dueDate' | translate">
+          {{ dueDate(row) ? (dueDate(row) | csDate: 'date') : '-' }}
         </td>
         <td class="text-center" [attr.data-label]="'payments.columns.paidAt' | translate">
           {{ row.paidAt ? (row.paidAt | csDate: 'date') : '-' }}
@@ -370,7 +385,7 @@
 
     <ng-template pTemplate="expandedrow" let-row>
       <tr class="cs-linked-orders-row">
-        <td colspan="7" class="p-0">
+        <td colspan="8" class="p-0">
           <div class="cs-linked-orders-wrapper py-3">
             <div class="cs-linked-orders px-4 py-3">
               <div class="cs-linked-orders__title">
@@ -418,7 +433,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="text-center py-5 opacity-70">
+        <td colspan="8" class="text-center py-5 opacity-70">
           {{ loadedOnce() ? ('payments.empty' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>

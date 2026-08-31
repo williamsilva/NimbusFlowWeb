@@ -175,6 +175,19 @@ export class PaymentsListComponent extends StatefulListPage<
     return formatSequentialNumber('PAG', number);
   }
 
+  /** Vencimento mais próximo entre as Ordens incluídas neste Pagamento - um Pagamento pode
+   *  consolidar Ordens de obras/projetos diferentes, cada uma com seu próprio vencimento (ver
+   *  Ordens vinculadas ao expandir a linha); a coluna mostra o mais urgente (mais antigo) como
+   *  referência da linha, sem precisar expandir. Comparação por string funciona porque dueDate já
+   *  vem no formato ISO (yyyy-MM-dd). */
+  dueDate(row: PaymentModel): string | null {
+    if (!row.orders?.length) return null;
+    return row.orders.reduce(
+      (earliest, o) => (o.dueDate < earliest ? o.dueDate : earliest),
+      row.orders[0].dueDate,
+    );
+  }
+
   canMarkPaid(row: PaymentModel): boolean {
     return row.status === PaymentStatusEnum.SENT && this.policy.canMarkPaid();
   }

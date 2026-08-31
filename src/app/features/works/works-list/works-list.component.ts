@@ -226,11 +226,17 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     return row.canDelete;
   }
 
+  /** Se a permissão em si está ok (policy.canDelete()) mas row.canDelete ainda é false, a razão só
+   *  pode ser "tem algo vinculado" - não dá pra confiar só em addendumsCount/installmentsCount pra
+   *  decidir isso: os dois já excluem CANCELLED/REJECTED (ver WorkResponse), então um Aditivo/
+   *  Medição REJECTED ou Ordem CANCELLED residual (que também bloqueava até 2026-08-31, ver
+   *  WorkService.hasNoFinancialArtifact) não aparecia em nenhuma coluna e a mensagem caía,
+   *  errada, em "sem permissão" mesmo com a permissão concedida. */
   deleteDisabledReason(row: WorkModel): string {
-    if (row.addendumsCount > 0 || row.installmentsCount > 0) {
-      return 'works.action.hasLinkedRecords';
+    if (!this.policy.canDelete()) {
+      return this.policy.deleteDisabledReason() ?? 'works.action.noPermission';
     }
-    return this.policy.deleteDisabledReason() ?? 'works.action.noPermission';
+    return 'works.action.hasLinkedRecords';
   }
 
   confirmDelete(row: WorkModel): void {

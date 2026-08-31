@@ -4519,6 +4519,7 @@
       "status": "Status",
       "sentBy": "Sent by",
       "sentAt": "Sent at",
+      "dueDate": "Due date",
       "paidAt": "Paid at"
     },
     "status": {

@@ -4519,6 +4519,7 @@
       "status": "Estado",
       "sentBy": "Enviado por",
       "sentAt": "Enviado en",
+      "dueDate": "Vencimiento",
       "paidAt": "Pagado en"
     },
     "status": {
