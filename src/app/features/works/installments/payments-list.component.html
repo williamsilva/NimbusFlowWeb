@@ -248,25 +248,31 @@
           </div>
         </th>
 
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
+        <th pSortableColumn="dueDate">
+          <div class="th-flex text-center">
             <span
               class="th-label"
               tooltipPosition="top"
               [pTooltip]="'payments.columns.dueDate' | translate"
               >{{ 'payments.columns.dueDate' | translate }}</span
             >
+            <span class="th-icons">
+              <p-sortIcon field="dueDate"></p-sortIcon>
+            </span>
           </div>
         </th>
 
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
+        <th pSortableColumn="paidAt">
+          <div class="th-flex text-center">
             <span
               class="th-label"
               tooltipPosition="top"
               [pTooltip]="'payments.columns.paidAt' | translate"
               >{{ 'payments.columns.paidAt' | translate }}</span
             >
+            <span class="th-icons">
+              <p-sortIcon field="paidAt"></p-sortIcon>
+            </span>
           </div>
         </th>
 
