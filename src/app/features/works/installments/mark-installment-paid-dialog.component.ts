@@ -23,6 +23,15 @@ function toDateOnlyString(value: Date | null): string | null {
   return `${y}-${m}-${d}`;
 }
 
+/** Inverso de toDateOnlyString - "2026-03-01" (LocalDate serializado) -> Date local, sem passar
+ *  por UTC (new Date("2026-03-01") interpretaria como meia-noite UTC, que pode virar o dia
+ *  anterior dependendo do fuso do navegador). Mesmo helper de measurements-edit-dialog.component.ts. */
+function parseDateOnlyString(value: string | null): Date | null {
+  if (!value) return null;
+  const [y, m, d] = value.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
 /**
  * Pede a data em que o pagamento efetivamente ocorreu antes de marcar o Pagamento como pago - não
  * é "agora" (ver InstallmentService#markAsPaid no backend, que usa essa data pra contar a
@@ -49,6 +58,11 @@ function toDateOnlyString(value: Date | null): string | null {
 export class MarkInstallmentPaidDialogComponent {
   visible = input.required<boolean>();
   payment = input<MarkInstallmentPaidTarget | null>(null);
+  /** Vencimento mais próximo entre as Ordens incluídas neste Pagamento (mesmo cálculo da coluna
+   *  "Vencimento" da tela, ver PaymentsListComponent.dueDate) - sugerido como data de pagamento
+   *  por padrão, pedido do usuário (2026-09-01): a maioria dos pagamentos ocorre no vencimento,
+   *  não no dia em que alguém confirma isso no sistema. */
+  suggestedDate = input<string | null>(null);
 
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() confirmed = new EventEmitter<string>();
@@ -62,11 +76,12 @@ export class MarkInstallmentPaidDialogComponent {
   protected paidAt: Date | null = null;
 
   constructor() {
-    // Reabre sempre com a data de hoje sugerida (maioria dos pagamentos é registrada no mesmo
-    // dia) - o usuário pode trocar antes de confirmar.
+    // Reabre sugerindo o vencimento (suggestedDate) quando disponível - cai pra hoje só se o
+    // Pagamento não tiver nenhuma Ordem vinculada (não deveria acontecer em dado real). O usuário
+    // pode trocar antes de confirmar, de qualquer forma.
     effect(() => {
       if (this.visible()) {
-        this.paidAt = new Date();
+        this.paidAt = parseDateOnlyString(this.suggestedDate()) ?? new Date();
       }
     });
   }

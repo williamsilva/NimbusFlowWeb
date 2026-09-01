@@ -450,6 +450,7 @@
 <app-mark-installment-paid-dialog
   [visible]="markPaidDialogVisible()"
   [payment]="markPaidRow()"
+  [suggestedDate]="markPaidSuggestedDate()"
   (visibleChange)="markPaidDialogVisible.set($event)"
   (confirmed)="onMarkPaidConfirmed($event)"
 ></app-mark-installment-paid-dialog>

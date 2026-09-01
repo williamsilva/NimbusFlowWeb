@@ -90,6 +90,12 @@ export class PaymentsListComponent extends StatefulListPage<
 
   readonly markPaidDialogVisible = signal(false);
   readonly markPaidRow = signal<PaymentModel | null>(null);
+  /** Vencimento mais próximo entre as Ordens do Pagamento sendo marcado - sugerido como data de
+   *  pagamento no diálogo (ver dueDate() abaixo, mesmo cálculo da coluna "Vencimento"). */
+  readonly markPaidSuggestedDate = computed(() => {
+    const row = this.markPaidRow();
+    return row ? this.dueDate(row) : null;
+  });
 
   /** id do Pagamento com reenvio de notificação em andamento (no máximo 1 por vez) - trava só o
    *  botão dessa linha pra evitar duplo clique, o resto da tela continua usável. */
