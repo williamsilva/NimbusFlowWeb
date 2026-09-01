@@ -1833,6 +1833,7 @@ export const UI_KEYS = {
       alreadyDecided: 'measurements.action.alreadyDecided',
       exceedsWorkTotal: 'measurements.action.exceedsWorkTotal',
       paymentAlreadyPaid: 'measurements.action.paymentAlreadyPaid',
+      olderPending: 'measurements.action.olderPending',
     },
     approveConfirm: {
       header: 'measurements.approveConfirm.header',

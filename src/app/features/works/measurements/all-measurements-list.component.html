@@ -398,7 +398,7 @@
         <td class="text-center">
           <span
             tooltipPosition="top"
-            [pTooltip]="canSelectForApprove(row) ? '' : (decideDisabledReason(row) | translate)"
+            [pTooltip]="canSelectForApprove(row) ? '' : (approveDisabledReason(row) | translate)"
           >
             <p-tableCheckbox [value]="row" [disabled]="!canSelectForApprove(row)"></p-tableCheckbox>
           </span>
@@ -480,11 +480,11 @@
               icon="pi pi-check"
               (click)="confirmApprove(row)"
               class="p-button-text p-button-sm"
-              [disabled]="!canDecide(row)"
+              [disabled]="!canApprove(row)"
               [pTooltip]="
-                canDecide(row)
+                canApprove(row)
                   ? ('measurements.action.approve' | translate)
-                  : (decideDisabledReason(row) | translate)
+                  : (approveDisabledReason(row) | translate)
               "
               tooltipPosition="top"
             ></button>

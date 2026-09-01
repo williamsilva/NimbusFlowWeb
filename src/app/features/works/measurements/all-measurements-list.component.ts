@@ -211,6 +211,23 @@ export class AllMeasurementsListComponent extends StatefulListPage<
     return this.policy.decideDisabledReason() ?? 'measurements.action.noPermission';
   }
 
+  /** row.canApprove já cobre PENDING + permissão + nenhuma Medição mais antiga da mesma Frente
+   *  ainda pendente (ver MeasurementService.canApprove) - Reprovar continua usando canDecide, sem
+   *  essa restrição extra. */
+  canApprove(row: MeasurementWithContextModel): boolean {
+    return row.canApprove;
+  }
+
+  approveDisabledReason(row: MeasurementWithContextModel): string {
+    if (!this.isPending(row)) {
+      return 'measurements.action.alreadyDecided';
+    }
+    if (!this.policy.canDecide()) {
+      return this.policy.decideDisabledReason() ?? 'measurements.action.noPermission';
+    }
+    return 'measurements.action.olderPending';
+  }
+
   /** Sequencial por obra com prefixo "MED-" (ex.: MED-0001) - mesmo padrão de InstallmentsListComponent. */
   numberLabel(row: MeasurementWithContextModel): string {
     return formatSequentialNumber('MED', row.number);
@@ -221,11 +238,12 @@ export class AllMeasurementsListComponent extends StatefulListPage<
     this.clearTableAndReload(this.dt);
   }
 
-  /** Só medições que a própria linha já permitiria decidir individualmente (PENDING + permissão) -
-   *  ver canDecide(). Diferente de AllInstallmentsListComponent.canSelectForSend, não há restrição
-   *  adicional entre itens do lote (cada aprovação é independente por obra). */
+  /** Só medições que a própria linha já permitiria aprovar individualmente (PENDING + permissão +
+   *  nenhuma Medição mais antiga da mesma Frente ainda pendente) - ver canApprove(). Diferente de
+   *  AllInstallmentsListComponent.canSelectForSend, a restrição entre itens do lote já vem pronta
+   *  do backend por linha (não precisa recalcular contra as outras linhas selecionadas aqui). */
   canSelectForApprove(row: MeasurementWithContextModel): boolean {
-    return this.canDecide(row);
+    return this.canApprove(row);
   }
 
   /** Passada pro [rowSelectable] da tabela - mesmo papel de AllInstallmentsListComponent.
@@ -297,7 +315,7 @@ export class AllMeasurementsListComponent extends StatefulListPage<
   }
 
   confirmApprove(row: MeasurementWithContextModel): void {
-    if (!this.canDecide(row)) return;
+    if (!this.canApprove(row)) return;
 
     this.confirm.confirm({
       header: this.i18n.tUi('measurements.approveConfirm.header'),

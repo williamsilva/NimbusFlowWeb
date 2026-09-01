@@ -23,6 +23,7 @@ const KNOWN_DETAILS: Array<{ match: string; key: UiKey }> = [
   { match: 'Measurement is not pending', key: 'measurements.action.alreadyDecided' },
   { match: 'Payment order exceeds work total amount', key: 'measurements.action.exceedsWorkTotal' },
   { match: 'the generated payment order was already sent for payment', key: 'measurements.action.paymentAlreadyPaid' },
+  { match: 'an older measurement of this work is still pending decision', key: 'measurements.action.olderPending' },
   { match: 'All payment orders must belong to the same supplier', key: 'paymentOrders.action.differentSuppliers' },
   { match: 'must be RELEASED and not already sent', key: 'paymentOrders.action.notAllReleased' },
   { match: 'No PAYMENT_NOTIFICATION recipients configured', key: 'paymentOrders.action.noRecipients' },

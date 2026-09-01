@@ -4644,6 +4644,7 @@
       "requiresSubmittableWork": "La frente de servicio debe estar planificada o en curso para registrar una nueva medición.",
       "exceedsWorkTotal": "El monto solicitado, sumado a las órdenes de pago ya generadas, superaría el valor total de la frente de servicio.",
       "paymentAlreadyPaid": "No se puede editar: la orden de pago generada por esta medición ya fue enviada para pago.",
+      "olderPending": "Existe una medición más antigua de esta frente de servicio todavía pendiente de decisión - apruébela primero.",
       "delete": "Eliminar",
       "hasLivePaymentOrder": "Esta medición tiene una orden de pago activa - cancele la orden antes de eliminar."
     },

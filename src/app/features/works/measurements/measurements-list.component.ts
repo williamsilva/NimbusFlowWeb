@@ -188,6 +188,23 @@ export class MeasurementsListComponent implements OnInit {
     return this.policy.decideDisabledReason() ?? 'measurements.action.noPermission';
   }
 
+  /** row.canApprove já cobre PENDING + permissão + nenhuma Medição mais antiga da mesma Frente
+   *  ainda pendente (ver MeasurementService.canApprove) - Reprovar continua usando canDecide, sem
+   *  essa restrição extra (aprovar em ordem não impede reprovar uma medição fora de ordem). */
+  canApprove(row: MeasurementModel): boolean {
+    return row.canApprove;
+  }
+
+  approveDisabledReason(row: MeasurementModel): string {
+    if (!this.isPending(row)) {
+      return 'measurements.action.alreadyDecided';
+    }
+    if (!this.policy.canDecide()) {
+      return this.policy.decideDisabledReason() ?? 'measurements.action.noPermission';
+    }
+    return 'measurements.action.olderPending';
+  }
+
   /** Sequencial por obra com prefixo "MED-" (ex.: MED-0001) - mesmo padrão de InstallmentsListComponent. */
   numberLabel(row: MeasurementModel): string {
     return formatSequentialNumber('MED', row.number);
@@ -235,7 +252,7 @@ export class MeasurementsListComponent implements OnInit {
   }
 
   confirmApprove(row: MeasurementModel): void {
-    if (!this.canDecide(row)) return;
+    if (!this.canApprove(row)) return;
 
     this.confirm.confirm({
       header: this.i18n.tUi('measurements.approveConfirm.header'),

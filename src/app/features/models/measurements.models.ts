@@ -39,6 +39,10 @@ export interface MeasurementModel {
    *  corretamente no banco). */
   generatedPaymentOrderId: string | null;
   media: MeasurementMediaModel[];
+  /** true se o usuário logado pode aprovar esta Medição agora (PENDENTE + permissão +
+   *  nenhuma Medição mais antiga da MESMA Frente ainda pendente de decisão - precisam ser
+   *  aprovadas em ordem crescente). Reprovar não usa este campo. */
+  canApprove: boolean;
   /** Ponto relativo (0-100%) na planta do Projeto da obra - ver WorkModel.planPositionX/Y. */
   planPositionX: number | null;
   planPositionY: number | null;
