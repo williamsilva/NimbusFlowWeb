@@ -11,6 +11,7 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
@@ -53,6 +54,7 @@ import { readSingleFilterValue, readArrayFilterValues } from '@features/list-bas
     FormsModule,
     TableModule,
     ButtonModule,
+    ProgressBarModule,
     CsCurrencyPipe,
     TooltipModule,
     InputTextModule,

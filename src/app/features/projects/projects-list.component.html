@@ -383,7 +383,16 @@
         <td class="text-right" [attr.data-label]="'projects.columns.totalContractedAmount' | translate">{{ row.totalContractedAmount | csCurrency }}</td>
         <td class="text-right" [attr.data-label]="'projects.columns.totalPaidAmount' | translate">{{ row.totalPaidAmount | csCurrency }}</td>
         <td class="text-right" [attr.data-label]="'projects.columns.remainingAmount' | translate">{{ row.remainingAmount | csCurrency }}</td>
-        <td class="text-center" [attr.data-label]="'projects.columns.progress' | translate">{{ row.progressPercentage | number: '1.0-2' }}%</td>
+        <td class="text-center" [attr.data-label]="'projects.columns.progress' | translate">
+          <div class="flex align-items-center gap-2">
+            <p-progressBar
+              [showValue]="false"
+              [value]="row.progressPercentage"
+              [style]="{ height: '8px', flex: '1' }"
+            ></p-progressBar>
+            <small>{{ row.progressPercentage | number: '1.0-2' }}%</small>
+          </div>
+        </td>
         <td class="text-center" [attr.data-label]="'projects.columns.status' | translate">
           <cs-status-badge
             [tone]="tone(row.status)"
