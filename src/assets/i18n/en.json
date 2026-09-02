@@ -4455,6 +4455,7 @@
       "dueDate": "Due date",
       "status": "Status",
       "paymentStatus": "Payment",
+      "paidAt": "Paid on",
       "releasedBy": "Approved by",
       "tier": "Approval range"
     },

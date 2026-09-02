@@ -46,6 +46,7 @@
         <col style="width: 150px" />
         <col style="width: 150px" />
         <col style="width: 150px" />
+        <col style="width: 150px" />
         <col style="width: 180px" />
         <col style="width: 250px" />
         <col style="width: 70px" />
@@ -201,6 +202,20 @@
           </div>
         </th>
 
+        <th pSortableColumn="installmentPaidAt">
+          <div class="th-flex text-center">
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'installments.columns.paidAt' | translate"
+              >{{ 'installments.columns.paidAt' | translate }}</span
+            >
+            <span class="th-icons">
+              <p-sortIcon field="installmentPaidAt"></p-sortIcon>
+            </span>
+          </div>
+        </th>
+
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
             <span
@@ -255,6 +270,9 @@
             [tone]="tone(row.status)"
             [label]="'installments.status.' + row.status | translate"
           ></cs-status-badge>
+        </td>
+        <td class="text-center" [attr.data-label]="'installments.columns.paidAt' | translate">
+          {{ row.installmentPaidAt ? (row.installmentPaidAt | csDate: 'date') : '-' }}
         </td>
         <td class="text-center" [attr.data-label]="'installments.columns.releasedBy' | translate">
           <span
@@ -325,7 +343,7 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="8" class="text-center py-5 opacity-70">
+        <td colspan="9" class="text-center py-5 opacity-70">
           {{
             loadedOnce() ? ('installments.empty.title' | translate) : ('common.loading' | translate)
           }}

@@ -4455,6 +4455,7 @@
       "dueDate": "Vencimiento",
       "status": "Estado",
       "paymentStatus": "Pago",
+      "paidAt": "Fecha de pago",
       "releasedBy": "Aprobado por",
       "tier": "Rango de aprobación"
     },
