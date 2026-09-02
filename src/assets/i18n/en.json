@@ -4469,7 +4469,7 @@
     },
     "paymentStatus": {
       "NOT_SENT": "Not sent",
-      "SENT": "Sent",
+      "SENT": "Awaiting payment",
       "PAID": "Paid"
     },
     "form": {
@@ -4524,7 +4524,7 @@
       "paidAt": "Paid at"
     },
     "status": {
-      "SENT": "Sent",
+      "SENT": "Awaiting payment",
       "PAID": "Paid"
     },
     "linkedOrders": "Orders included in this payment",

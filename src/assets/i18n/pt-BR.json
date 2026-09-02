@@ -4464,7 +4464,7 @@
     },
     "paymentStatus": {
       "NOT_SENT": "Não enviado",
-      "SENT": "Enviado",
+      "SENT": "Aguardando pagamento",
       "PAID": "Pago"
     },
     "form": {
@@ -4519,7 +4519,7 @@
       "paidAt": "Pago em"
     },
     "status": {
-      "SENT": "Enviado",
+      "SENT": "Aguardando pagamento",
       "PAID": "Pago"
     },
     "linkedOrders": "Ordens incluídas neste pagamento",

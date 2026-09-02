@@ -398,9 +398,9 @@ export class PaymentsListComponent extends StatefulListPage<
   }
 
   /** Mesmo padrão de WorksListComponent/AllInstallmentsListComponent/AllMeasurementsListComponent
-   *  (status pré-selecionado): "Enviado" pré-selecionado, mas só quando o painel de filtros está
-   *  vazio de verdade (nem restaurado do localStorage, nem definido pelo usuário) - ver
-   *  applyDefaultAdvancedFiltersIfEmpty em StatefulListPage. */
+   *  (status pré-selecionado): "Aguardando pagamento" (PaymentStatusEnum.SENT) pré-selecionado, mas
+   *  só quando o painel de filtros está vazio de verdade (nem restaurado do localStorage, nem
+   *  definido pelo usuário) - ver applyDefaultAdvancedFiltersIfEmpty em StatefulListPage. */
   private defaultStatus(): string[] {
     return [PaymentStatusEnum.SENT];
   }

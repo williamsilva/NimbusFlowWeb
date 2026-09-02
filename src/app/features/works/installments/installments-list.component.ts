@@ -33,6 +33,10 @@ import {
   installmentStatusTone,
   INSTALLMENT_STATUS_VALUES,
 } from '@models/enums/installment-status.enum';
+import {
+  paymentOrderPaymentStatusKey,
+  paymentOrderPaymentStatusTone,
+} from '@models/enums/payment-status.enum';
 
 @Component({
   standalone: true,
@@ -114,6 +118,17 @@ export class InstallmentsListComponent implements OnInit {
 
   tone(status: string): ReturnType<typeof installmentStatusTone> {
     return installmentStatusTone(status);
+  }
+
+  /** Status do Pagamento (não da Ordem) - mesma derivação da listagem global (ver
+   *  AllInstallmentsListComponent.paymentStatusKey/paymentTone): NOT_SENT enquanto a Ordem não
+   *  entrar em nenhum Pagamento (installmentId nulo), depois espelha PaymentStatus (SENT/PAID). */
+  paymentStatusKey(row: InstallmentModel): ReturnType<typeof paymentOrderPaymentStatusKey> {
+    return paymentOrderPaymentStatusKey(row.installmentId, row.installmentStatus);
+  }
+
+  paymentTone(row: InstallmentModel): ReturnType<typeof paymentOrderPaymentStatusTone> {
+    return paymentOrderPaymentStatusTone(this.paymentStatusKey(row));
   }
 
   refresh(): void {
