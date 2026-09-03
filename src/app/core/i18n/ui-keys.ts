@@ -1688,6 +1688,59 @@ export const UI_KEYS = {
       error: 'works.deleteConfirm.error',
     },
   },
+  /* Equipamento / Manutenção / Agenda de Manutenção Preventiva / Localização / Histórico de
+   * Localização (com.nimbusflow.patrimonio no backend) - só os leafs de fato usados via tUi()
+   * (chip de filtro ativo); o resto (columns/status/form/etc.) é consumido via `| translate` no
+   * template, sem passar por aqui. */
+  equipamentos: {
+    fields: {
+      descricao: 'equipamentos.fields.descricao',
+      fornecedorNome: 'equipamentos.fields.fornecedorNome',
+      status: 'equipamentos.fields.status',
+      preco: 'equipamentos.fields.preco',
+      dataCompra: 'equipamentos.fields.dataCompra',
+      periodDataCompra: 'equipamentos.fields.periodDataCompra',
+    },
+  },
+  manutencoes: {
+    fields: {
+      equipamento: 'manutencoes.fields.equipamento',
+      autorizadaNome: 'manutencoes.fields.autorizadaNome',
+      status: 'manutencoes.fields.status',
+      tipoManutencao: 'manutencoes.fields.tipoManutencao',
+      preco: 'manutencoes.fields.preco',
+      dataEnvio: 'manutencoes.fields.dataEnvio',
+      periodDataEnvio: 'manutencoes.fields.periodDataEnvio',
+    },
+  },
+  agendaManutencao: {
+    fields: {
+      equipamento: 'agendaManutencao.fields.equipamento',
+      status: 'agendaManutencao.fields.status',
+      frequencia: 'agendaManutencao.fields.frequencia',
+      tipoManutencao: 'agendaManutencao.fields.tipoManutencao',
+      perfilNotificacao: 'agendaManutencao.fields.perfilNotificacao',
+      proximaManutencao: 'agendaManutencao.fields.proximaManutencao',
+      periodProximaManutencao: 'agendaManutencao.fields.periodProximaManutencao',
+    },
+  },
+  localizacoes: {
+    fields: {
+      descricao: 'localizacoes.fields.descricao',
+      status: 'localizacoes.fields.status',
+      createdAt: 'localizacoes.fields.createdAt',
+      periodCreatedAt: 'localizacoes.fields.periodCreatedAt',
+    },
+  },
+  historicoLocalizacao: {
+    fields: {
+      equipamento: 'historicoLocalizacao.fields.equipamento',
+      localizacao: 'historicoLocalizacao.fields.localizacao',
+      status: 'historicoLocalizacao.fields.status',
+      dataInicial: 'historicoLocalizacao.fields.dataInicial',
+      periodDataInicial: 'historicoLocalizacao.fields.periodDataInicial',
+    },
+  },
   addendums: {
     fields: {
       work: 'addendums.fields.work',

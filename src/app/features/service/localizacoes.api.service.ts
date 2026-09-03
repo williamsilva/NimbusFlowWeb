@@ -4,6 +4,9 @@ import { Injectable, inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
+import { HalPagedResponse } from '@core/api/page.model';
+import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { LocalizacoesAdvancedFilters } from '@features/filter/localizacoes.filters';
 import {
   LocalizacaoApiModel,
   LocalizacaoModel,
@@ -17,6 +20,18 @@ import {
 export class LocalizacoesApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API.bff}/v1/localizacoes`;
+
+  searchPaged(body: ListQueryDto<LocalizacoesAdvancedFilters>) {
+    return this.http.post<HalPagedResponse<LocalizacaoApiModel>>(`${this.baseUrl}/search`, body).pipe(
+      map((res) => {
+        const content = mapLocalizacaoApiModels(res?._embedded?.content);
+        return {
+          ...res,
+          _embedded: { ...(res?._embedded ?? {}), content },
+        } as HalPagedResponse<LocalizacaoModel>;
+      }),
+    );
+  }
 
   list() {
     return this.http.get<LocalizacaoApiModel[]>(this.baseUrl).pipe(map(mapLocalizacaoApiModels));

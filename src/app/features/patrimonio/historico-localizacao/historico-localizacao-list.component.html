@@ -24,22 +24,104 @@
   (visibleChange)="onFormVisibleChange($event)"
 ></app-historico-localizacao-form-dialog>
 
+<cs-filters-panel
+  [collapsed]="true"
+  (clear)="clear()"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeFilterGroups]="activeFilterGroups()"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="equipamento"
+          pInputText
+          [value]="equipamento()"
+          class="w-full p-inputtext-sm"
+          (input)="equipamento.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="equipamento">{{ 'historicoLocalizacao.fields.equipamento' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="localizacao"
+          pInputText
+          [value]="localizacao()"
+          class="w-full p-inputtext-sm"
+          (input)="localizacao.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="localizacao">{{ 'historicoLocalizacao.fields.localizacao' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="status"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="status()"
+          [showToggleAll]="false"
+          [options]="statusOptions"
+          (ngModelChange)="status.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="status">{{ 'historicoLocalizacao.fields.status' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <cs-advanced-period-date-filter
+      dateInputId="dataInicial"
+      periodInputId="periodDataInicial"
+      [value]="dataInicial()"
+      [period]="periodDataInicial()"
+      class="col-12 md:col-3 p-1"
+      (valueChange)="dataInicial.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodDataInicial())"
+      [dateFormat]="setDateFormat(periodDataInicial())"
+      [selectionMode]="setSelectionMode(periodDataInicial())"
+      [dateLabel]="'historicoLocalizacao.fields.dataInicial' | translate"
+      [periodLabel]="'historicoLocalizacao.fields.periodDataInicial' | translate"
+      (periodChange)="onPeriodColumnChange(periodDataInicial, dataInicial, $event)"
+    ></cs-advanced-period-date-filter>
+  </div>
+</cs-filters-panel>
+
 <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
   <p-table
+    #dt
     stripedRows
     dataKey="id"
     size="small"
-    [rows]="10"
+    [rows]="rows"
+    [lazy]="true"
     showGridlines
-    [value]="items()"
     [rowHover]="true"
+    [value]="items()"
     [paginator]="true"
-    [loading]="loading()"
+    sortMode="multiple"
+    filterDisplay="menu"
+    stateStorage="local"
     class="cs-admin-table"
+    [loading]="facade.loading()"
+    [stateKey]="tableStateKey()"
     [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10, 20, 50]"
+    [totalRecords]="totalRecords()"
+    (onLazyLoad)="onLazyLoad($event)"
     [paginatorDropdownAppendTo]="'body'"
-    [tableStyle]="{ width: '100%', 'min-width': '54rem' }"
+    (onPage)="onPageChange($event)"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [tableStyle]="{ width: '100%', 'min-width': '60rem' }"
     [currentPageReportTemplate]="'pagination.report' | translate"
   >
     <ng-template pTemplate="colgroup">
@@ -47,10 +129,10 @@
         <col style="width: 130px" />
         <col style="width: auto" />
         <col style="width: 180px" />
+        <col style="width: 140px" />
+        <col style="width: 140px" />
         <col style="width: 110px" />
-        <col style="width: 110px" />
-        <col style="width: 110px" />
-        <col style="width: 70px" />
+        <col style="width: 90px" />
       </colgroup>
     </ng-template>
 
@@ -59,21 +141,115 @@
         <th class="text-center">
           <span class="th-label" tooltipPosition="top" [pTooltip]="'historicoLocalizacao.columns.numeroPatrimonio' | translate">{{ 'historicoLocalizacao.columns.numeroPatrimonio' | translate }}</span>
         </th>
-        <th>
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'historicoLocalizacao.columns.equipamento' | translate">{{ 'historicoLocalizacao.columns.equipamento' | translate }}</span>
+
+        <th pSortableColumn="equipamento">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'historicoLocalizacao.columns.equipamento' | translate">{{ 'historicoLocalizacao.columns.equipamento' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="equipamento"></p-sortIcon>
+              <p-columnFilter
+                field="equipamento"
+                type="text"
+                display="menu"
+                class="ml-auto"
+                matchMode="contains"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th>
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'historicoLocalizacao.columns.localizacao' | translate">{{ 'historicoLocalizacao.columns.localizacao' | translate }}</span>
+
+        <th pSortableColumn="localizacao">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'historicoLocalizacao.columns.localizacao' | translate">{{ 'historicoLocalizacao.columns.localizacao' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="localizacao"></p-sortIcon>
+              <p-columnFilter
+                type="text"
+                display="menu"
+                class="ml-auto"
+                matchMode="contains"
+                field="localizacao"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'historicoLocalizacao.columns.status' | translate">{{ 'historicoLocalizacao.columns.status' | translate }}</span>
+
+        <th pSortableColumn="status">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'historicoLocalizacao.columns.status' | translate">{{ 'historicoLocalizacao.columns.status' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="status"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="status"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="statusOptions"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'historicoLocalizacao.columns.dataInicial' | translate">{{ 'historicoLocalizacao.columns.dataInicial' | translate }}</span>
+
+        <th pSortableColumn="dataInicial">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'historicoLocalizacao.columns.dataInicial' | translate">{{ 'historicoLocalizacao.columns.dataInicial' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="dataInicial"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="dataInicial"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-datepicker
+                    class="w-full"
+                    csDateInputMask
+                    appendTo="body"
+                    [showIcon]="true"
+                    [ngModel]="value"
+                    selectionMode="range"
+                    dateFormat="dd/mm/yy"
+                    [readonlyInput]="true"
+                    [csDateInputMaskRange]="true"
+                    (ngModelChange)="filter($event)"
+                    [placeholder]="'common.period' | translate"
+                  ></p-datepicker>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
+
         <th class="text-center">
           <span class="th-label" tooltipPosition="top" [pTooltip]="'historicoLocalizacao.columns.dataFinal' | translate">{{ 'historicoLocalizacao.columns.dataFinal' | translate }}</span>
         </th>
+
         <th class="text-center">
           <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
         </th>
@@ -128,7 +304,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="7" class="text-center py-5 opacity-70">
-          {{ loadedOnce() ? ('historicoLocalizacao.empty.title' | translate) : ('common.loading' | translate) }}
+          {{ facade.loadedOnce() ? ('historicoLocalizacao.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
     </ng-template>

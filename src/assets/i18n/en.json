@@ -3934,6 +3934,7 @@
       "voltagem": "Power supply",
       "preco": "Price",
       "dataCompra": "Purchase date",
+      "periodDataCompra": "Purchase date period",
       "dataChegada": "Arrival date",
       "inicioGarantia": "Warranty start",
       "fimGarantia": "Warranty end",
@@ -3985,6 +3986,7 @@
       "tipoManutencao": "Type",
       "preco": "Price",
       "dataEnvio": "Sent",
+      "periodDataEnvio": "Sent date period",
       "dataRetorno": "Returned",
       "inicioGarantia": "Warranty start",
       "fimGarantia": "Warranty end",
@@ -4039,6 +4041,8 @@
       "frequencia": "Frequency",
       "tipoManutencao": "Type",
       "perfilNotificacao": "Notify",
+      "proximaManutencao": "Next maintenance",
+      "periodProximaManutencao": "Next maintenance period",
       "observacao": "Notes"
     },
     "columns": {
@@ -4088,7 +4092,9 @@
     "edit": { "title": "Edit location" },
     "fields": {
       "descricao": "Description",
-      "status": "Status"
+      "status": "Status",
+      "createdAt": "Created at",
+      "periodCreatedAt": "Creation date period"
     },
     "columns": {
       "descricao": "Description",
@@ -4123,6 +4129,7 @@
       "localizacao": "Location",
       "status": "Status",
       "dataInicial": "Start date",
+      "periodDataInicial": "Start date period",
       "dataFinal": "End date",
       "observacao": "Notes"
     },

@@ -3929,6 +3929,7 @@
       "voltagem": "Alimentação",
       "preco": "Valor",
       "dataCompra": "Data da compra",
+      "periodDataCompra": "Período da compra",
       "dataChegada": "Data de chegada",
       "inicioGarantia": "Início da garantia",
       "fimGarantia": "Fim da garantia",
@@ -3980,6 +3981,7 @@
       "tipoManutencao": "Tipo",
       "preco": "Valor",
       "dataEnvio": "Envio",
+      "periodDataEnvio": "Período do envio",
       "dataRetorno": "Retorno",
       "inicioGarantia": "Início da garantia",
       "fimGarantia": "Fim da garantia",
@@ -4034,6 +4036,8 @@
       "frequencia": "Frequência",
       "tipoManutencao": "Tipo",
       "perfilNotificacao": "Notificar",
+      "proximaManutencao": "Próxima manutenção",
+      "periodProximaManutencao": "Período da próxima manutenção",
       "observacao": "Observação"
     },
     "columns": {
@@ -4083,7 +4087,9 @@
     "edit": { "title": "Editar localização" },
     "fields": {
       "descricao": "Descrição",
-      "status": "Status"
+      "status": "Status",
+      "createdAt": "Cadastrado em",
+      "periodCreatedAt": "Período do cadastro"
     },
     "columns": {
       "descricao": "Descrição",
@@ -4118,6 +4124,7 @@
       "localizacao": "Localização",
       "status": "Status",
       "dataInicial": "Data inicial",
+      "periodDataInicial": "Período da data inicial",
       "dataFinal": "Data final",
       "observacao": "Observação"
     },

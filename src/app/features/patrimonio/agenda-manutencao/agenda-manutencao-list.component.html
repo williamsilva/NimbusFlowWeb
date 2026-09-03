@@ -24,34 +24,160 @@
   (visibleChange)="onFormVisibleChange($event)"
 ></app-agenda-manutencao-form-dialog>
 
+<cs-filters-panel
+  [collapsed]="true"
+  (clear)="clear()"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeFilterGroups]="activeFilterGroups()"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="equipamento"
+          pInputText
+          [value]="equipamento()"
+          class="w-full p-inputtext-sm"
+          (input)="equipamento.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="equipamento">{{ 'agendaManutencao.fields.equipamento' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="status"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="status()"
+          [showToggleAll]="false"
+          [options]="statusOptions"
+          (ngModelChange)="status.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="status">{{ 'agendaManutencao.fields.status' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="frequencia"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="frequencia()"
+          [showToggleAll]="false"
+          [options]="frequenciaOptions"
+          (ngModelChange)="frequencia.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="frequencia">{{ 'agendaManutencao.fields.frequencia' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="tipoManutencao"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="tipoManutencao()"
+          [showToggleAll]="false"
+          [options]="tipoOptions"
+          (ngModelChange)="tipoManutencao.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="tipoManutencao">{{ 'agendaManutencao.fields.tipoManutencao' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="perfilNotificacao"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="perfilNotificacao()"
+          [showToggleAll]="false"
+          [options]="perfilOptions"
+          (ngModelChange)="perfilNotificacao.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="perfilNotificacao">{{ 'agendaManutencao.fields.perfilNotificacao' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <cs-advanced-period-date-filter
+      dateInputId="proximaManutencao"
+      periodInputId="periodProximaManutencao"
+      [value]="proximaManutencao()"
+      [period]="periodProximaManutencao()"
+      class="col-12 md:col-3 p-1"
+      (valueChange)="proximaManutencao.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodProximaManutencao())"
+      [dateFormat]="setDateFormat(periodProximaManutencao())"
+      [selectionMode]="setSelectionMode(periodProximaManutencao())"
+      [dateLabel]="'agendaManutencao.fields.proximaManutencao' | translate"
+      [periodLabel]="'agendaManutencao.fields.periodProximaManutencao' | translate"
+      (periodChange)="onPeriodColumnChange(periodProximaManutencao, proximaManutencao, $event)"
+    ></cs-advanced-period-date-filter>
+  </div>
+</cs-filters-panel>
+
 <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
   <p-table
+    #dt
     stripedRows
     dataKey="id"
     size="small"
-    [rows]="10"
+    [rows]="rows"
+    [lazy]="true"
     showGridlines
-    [value]="items()"
     [rowHover]="true"
+    [value]="items()"
     [paginator]="true"
-    [loading]="loading()"
+    sortMode="multiple"
+    filterDisplay="menu"
+    stateStorage="local"
     class="cs-admin-table"
+    [loading]="facade.loading()"
+    [stateKey]="tableStateKey()"
     [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10, 20, 50]"
+    [totalRecords]="totalRecords()"
+    (onLazyLoad)="onLazyLoad($event)"
     [paginatorDropdownAppendTo]="'body'"
-    [tableStyle]="{ width: '100%', 'min-width': '58rem' }"
+    (onPage)="onPageChange($event)"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [tableStyle]="{ width: '100%', 'min-width': '68rem' }"
     [currentPageReportTemplate]="'pagination.report' | translate"
   >
     <ng-template pTemplate="colgroup">
       <colgroup>
         <col style="width: 110px" />
         <col style="width: auto" />
-        <col style="width: 110px" />
         <col style="width: 130px" />
+        <col style="width: 150px" />
         <col style="width: 170px" />
-        <col style="width: 130px" />
-        <col style="width: 130px" />
-        <col style="width: 70px" />
+        <col style="width: 150px" />
+        <col style="width: 150px" />
+        <col style="width: 90px" />
       </colgroup>
     </ng-template>
 
@@ -60,24 +186,188 @@
         <th class="text-center">
           <span class="th-label" tooltipPosition="top" [pTooltip]="'agendaManutencao.columns.numeroPatrimonio' | translate">{{ 'agendaManutencao.columns.numeroPatrimonio' | translate }}</span>
         </th>
-        <th>
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'agendaManutencao.columns.equipamento' | translate">{{ 'agendaManutencao.columns.equipamento' | translate }}</span>
+
+        <th pSortableColumn="equipamento">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'agendaManutencao.columns.equipamento' | translate">{{ 'agendaManutencao.columns.equipamento' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="equipamento"></p-sortIcon>
+              <p-columnFilter
+                field="equipamento"
+                type="text"
+                display="menu"
+                class="ml-auto"
+                matchMode="contains"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'agendaManutencao.columns.status' | translate">{{ 'agendaManutencao.columns.status' | translate }}</span>
+
+        <th pSortableColumn="status">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'agendaManutencao.columns.status' | translate">{{ 'agendaManutencao.columns.status' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="status"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="status"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="statusOptions"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'agendaManutencao.columns.frequencia' | translate">{{ 'agendaManutencao.columns.frequencia' | translate }}</span>
+
+        <th pSortableColumn="frequencia">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'agendaManutencao.columns.frequencia' | translate">{{ 'agendaManutencao.columns.frequencia' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="frequencia"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="frequencia"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="frequenciaOptions"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'agendaManutencao.columns.tipoManutencao' | translate">{{ 'agendaManutencao.columns.tipoManutencao' | translate }}</span>
+
+        <th pSortableColumn="tipoManutencao">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'agendaManutencao.columns.tipoManutencao' | translate">{{ 'agendaManutencao.columns.tipoManutencao' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="tipoManutencao"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="tipoManutencao"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="tipoOptions"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'agendaManutencao.columns.perfilNotificacao' | translate">{{ 'agendaManutencao.columns.perfilNotificacao' | translate }}</span>
+
+        <th pSortableColumn="perfilNotificacao">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'agendaManutencao.columns.perfilNotificacao' | translate">{{ 'agendaManutencao.columns.perfilNotificacao' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="perfilNotificacao"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="perfilNotificacao"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="perfilOptions"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'agendaManutencao.columns.proximaManutencao' | translate">{{ 'agendaManutencao.columns.proximaManutencao' | translate }}</span>
+
+        <th pSortableColumn="proximaManutencao">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'agendaManutencao.columns.proximaManutencao' | translate">{{ 'agendaManutencao.columns.proximaManutencao' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="proximaManutencao"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="proximaManutencao"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-datepicker
+                    class="w-full"
+                    csDateInputMask
+                    appendTo="body"
+                    [showIcon]="true"
+                    [ngModel]="value"
+                    selectionMode="range"
+                    dateFormat="dd/mm/yy"
+                    [readonlyInput]="true"
+                    [csDateInputMaskRange]="true"
+                    (ngModelChange)="filter($event)"
+                    [placeholder]="'common.period' | translate"
+                  ></p-datepicker>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
+
         <th class="text-center">
           <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
         </th>
@@ -131,7 +421,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="8" class="text-center py-5 opacity-70">
-          {{ loadedOnce() ? ('agendaManutencao.empty.title' | translate) : ('common.loading' | translate) }}
+          {{ facade.loadedOnce() ? ('agendaManutencao.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
     </ng-template>

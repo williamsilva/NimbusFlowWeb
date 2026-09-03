@@ -1,3 +1,4 @@
+import { PeriodEnum } from '@models/enums/period.enum';
 import { GeracaoRegistro, StatusHistoricoLocalizacao } from '@models/patrimonio-enums';
 import { EquipamentoOptionModel } from '@models/equipamentos.models';
 import { LocalizacaoOptionModel } from '@models/localizacoes.models';
@@ -29,6 +30,14 @@ export interface HistoricoLocalizacaoUpsertInput {
   dataFinal: string | null;
   observacao: string | null;
 }
+
+export type HistoricoLocalizacaoFiltersState = {
+  equipamento: string;
+  localizacao: string;
+  status: string[] | null;
+  dataInicial: string | string[] | null;
+  periodDataInicial: PeriodEnum | null;
+};
 
 export function mapHistoricoLocalizacaoApiModel(
   input: HistoricoLocalizacaoApiModel,

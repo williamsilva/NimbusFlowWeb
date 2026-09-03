@@ -24,22 +24,134 @@
   (visibleChange)="onFormVisibleChange($event)"
 ></app-manutencao-form-dialog>
 
+<cs-filters-panel
+  [collapsed]="true"
+  (clear)="clear()"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeFilterGroups]="activeFilterGroups()"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="equipamento"
+          pInputText
+          [value]="equipamento()"
+          class="w-full p-inputtext-sm"
+          (input)="equipamento.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="equipamento">{{ 'manutencoes.fields.equipamento' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="autorizadaNome"
+          pInputText
+          [value]="autorizadaNome()"
+          class="w-full p-inputtext-sm"
+          (input)="autorizadaNome.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="autorizadaNome">{{ 'manutencoes.fields.autorizadaNome' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="status"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="status()"
+          [showToggleAll]="false"
+          [options]="statusOptions"
+          (ngModelChange)="status.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="status">{{ 'manutencoes.fields.status' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="tipoManutencao"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="tipoManutencao()"
+          [showToggleAll]="false"
+          [options]="tipoOptions"
+          (ngModelChange)="tipoManutencao.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="tipoManutencao">{{ 'manutencoes.fields.tipoManutencao' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <cs-advanced-period-date-filter
+      dateInputId="dataEnvio"
+      periodInputId="periodDataEnvio"
+      [value]="dataEnvio()"
+      [period]="periodDataEnvio()"
+      class="col-12 md:col-3 p-1"
+      (valueChange)="dataEnvio.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodDataEnvio())"
+      [dateFormat]="setDateFormat(periodDataEnvio())"
+      [selectionMode]="setSelectionMode(periodDataEnvio())"
+      [dateLabel]="'manutencoes.fields.dataEnvio' | translate"
+      [periodLabel]="'manutencoes.fields.periodDataEnvio' | translate"
+      (periodChange)="onPeriodColumnChange(periodDataEnvio, dataEnvio, $event)"
+    ></cs-advanced-period-date-filter>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-6 p-2">
+      <cs-currency-range-filter
+        [inputId]="'preco'"
+        [label]="'manutencoes.fields.preco' | translate"
+        [value]="{ start: precoDe(), end: precoAte() }"
+        (valueChange)="precoDe.set($event.start); precoAte.set($event.end)"
+      ></cs-currency-range-filter>
+    </div>
+  </div>
+</cs-filters-panel>
+
 <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
   <p-table
+    #dt
     stripedRows
     dataKey="id"
     size="small"
-    [rows]="10"
+    [rows]="rows"
+    [lazy]="true"
     showGridlines
-    [value]="items()"
     [rowHover]="true"
+    [value]="items()"
     [paginator]="true"
-    [loading]="loading()"
+    sortMode="multiple"
+    filterDisplay="menu"
+    stateStorage="local"
     class="cs-admin-table"
+    [loading]="facade.loading()"
+    [stateKey]="tableStateKey()"
     [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10, 20, 50]"
+    [totalRecords]="totalRecords()"
+    (onLazyLoad)="onLazyLoad($event)"
     [paginatorDropdownAppendTo]="'body'"
-    [tableStyle]="{ width: '100%', 'min-width': '60rem' }"
+    (onPage)="onPageChange($event)"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [tableStyle]="{ width: '100%', 'min-width': '68rem' }"
     [currentPageReportTemplate]="'pagination.report' | translate"
   >
     <ng-template pTemplate="colgroup">
@@ -47,11 +159,11 @@
         <col style="width: 110px" />
         <col style="width: auto" />
         <col style="width: 180px" />
-        <col style="width: 110px" />
+        <col style="width: 130px" />
         <col style="width: 170px" />
-        <col style="width: 100px" />
-        <col style="width: 100px" />
-        <col style="width: 70px" />
+        <col style="width: 140px" />
+        <col style="width: 140px" />
+        <col style="width: 90px" />
       </colgroup>
     </ng-template>
 
@@ -60,24 +172,170 @@
         <th class="text-center">
           <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.numeroPatrimonio' | translate">{{ 'manutencoes.columns.numeroPatrimonio' | translate }}</span>
         </th>
-        <th>
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.equipamento' | translate">{{ 'manutencoes.columns.equipamento' | translate }}</span>
+
+        <th pSortableColumn="equipamento">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.equipamento' | translate">{{ 'manutencoes.columns.equipamento' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="equipamento"></p-sortIcon>
+              <p-columnFilter
+                field="equipamento"
+                type="text"
+                display="menu"
+                class="ml-auto"
+                matchMode="contains"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th>
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.autorizadaNome' | translate">{{ 'manutencoes.columns.autorizadaNome' | translate }}</span>
+
+        <th pSortableColumn="autorizadaNome">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.autorizadaNome' | translate">{{ 'manutencoes.columns.autorizadaNome' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="autorizadaNome"></p-sortIcon>
+              <p-columnFilter
+                type="text"
+                display="menu"
+                class="ml-auto"
+                matchMode="contains"
+                field="autorizadaNome"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.status' | translate">{{ 'manutencoes.columns.status' | translate }}</span>
+
+        <th pSortableColumn="status">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.status' | translate">{{ 'manutencoes.columns.status' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="status"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="status"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="statusOptions"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.tipoManutencao' | translate">{{ 'manutencoes.columns.tipoManutencao' | translate }}</span>
+
+        <th pSortableColumn="tipoManutencao">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.tipoManutencao' | translate">{{ 'manutencoes.columns.tipoManutencao' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="tipoManutencao"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="tipoManutencao"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="tipoOptions"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.dataEnvio' | translate">{{ 'manutencoes.columns.dataEnvio' | translate }}</span>
+
+        <th pSortableColumn="dataEnvio">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.dataEnvio' | translate">{{ 'manutencoes.columns.dataEnvio' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="dataEnvio"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="dataEnvio"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-datepicker
+                    class="w-full"
+                    csDateInputMask
+                    appendTo="body"
+                    [showIcon]="true"
+                    [ngModel]="value"
+                    selectionMode="range"
+                    dateFormat="dd/mm/yy"
+                    [readonlyInput]="true"
+                    [csDateInputMaskRange]="true"
+                    (ngModelChange)="filter($event)"
+                    [placeholder]="'common.period' | translate"
+                  ></p-datepicker>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-right">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.preco' | translate">{{ 'manutencoes.columns.preco' | translate }}</span>
+
+        <th pSortableColumn="preco">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'manutencoes.columns.preco' | translate">{{ 'manutencoes.columns.preco' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="preco"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="preco"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [inputId]="'precoCol'"
+                    [label]="'manutencoes.columns.preco' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
+
         <th class="text-center">
           <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{ 'common.actions' | translate }}</span>
         </th>
@@ -133,7 +391,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="8" class="text-center py-5 opacity-70">
-          {{ loadedOnce() ? ('manutencoes.empty.title' | translate) : ('common.loading' | translate) }}
+          {{ facade.loadedOnce() ? ('manutencoes.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
     </ng-template>

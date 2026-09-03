@@ -1,3 +1,4 @@
+import { PeriodEnum } from '@models/enums/period.enum';
 import { StatusManutencao, TipoManutencao } from '@models/patrimonio-enums';
 import { EquipamentoOptionModel } from '@models/equipamentos.models';
 
@@ -38,6 +39,17 @@ export interface ManutencaoUpsertInput {
   descricao: string;
   observacao: string | null;
 }
+
+export type ManutencoesFiltersState = {
+  equipamento: string;
+  autorizadaNome: string;
+  status: string[] | null;
+  tipoManutencao: string[] | null;
+  precoDe: number | null;
+  precoAte: number | null;
+  dataEnvio: string | string[] | null;
+  periodDataEnvio: PeriodEnum | null;
+};
 
 export function mapManutencaoApiModel(input: ManutencaoApiModel): ManutencaoModel {
   return { ...input };

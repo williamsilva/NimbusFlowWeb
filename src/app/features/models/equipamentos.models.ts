@@ -1,8 +1,10 @@
+import { PeriodEnum } from '@models/enums/period.enum';
 import { StatusEquipamento, VoltagemEquipamento } from '@models/patrimonio-enums';
 
 /** Espelha com.nimbusflow.patrimonio.dto.{request.EquipamentoRequest,response.EquipamentoResponse}
- *  do NimbusFlowServer. Sem paginação server-side (volume pequeno, dezenas de registros) - lista
- *  carregada por completo via GET, mesmo racional de DepartmentModel. */
+ *  do NimbusFlowServer. A tela de listagem usa `/equipamentos/search` (paginação/filtro/ordenação
+ *  em memória, ver EquipamentoService#search) - `list()`/`GET` continua servindo os seletores que
+ *  precisam da listagem completa. */
 export interface EquipamentoModel {
   id: string;
   numeroPatrimonio: number;
@@ -45,6 +47,16 @@ export interface EquipamentoOptionModel {
   descricao: string;
   status: StatusEquipamento;
 }
+
+export type EquipamentosFiltersState = {
+  descricao: string;
+  fornecedorNome: string;
+  status: string[] | null;
+  precoDe: number | null;
+  precoAte: number | null;
+  dataCompra: string | string[] | null;
+  periodDataCompra: PeriodEnum | null;
+};
 
 export function mapEquipamentoApiModel(input: EquipamentoApiModel): EquipamentoModel {
   return { ...input };

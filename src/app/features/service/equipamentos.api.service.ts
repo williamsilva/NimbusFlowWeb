@@ -4,6 +4,9 @@ import { Injectable, inject } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
+import { HalPagedResponse } from '@core/api/page.model';
+import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { EquipamentosAdvancedFilters } from '@features/filter/equipamentos.filters';
 import {
   EquipamentoApiModel,
   EquipamentoModel,
@@ -18,6 +21,20 @@ export class EquipamentosApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API.bff}/v1/equipamentos`;
 
+  searchPaged(body: ListQueryDto<EquipamentosAdvancedFilters>) {
+    return this.http.post<HalPagedResponse<EquipamentoApiModel>>(`${this.baseUrl}/search`, body).pipe(
+      map((res) => {
+        const content = mapEquipamentoApiModels(res?._embedded?.content);
+        return {
+          ...res,
+          _embedded: { ...(res?._embedded ?? {}), content },
+        } as HalPagedResponse<EquipamentoModel>;
+      }),
+    );
+  }
+
+  /** Listagem completa sem paginação - usada só pelos seletores/dashboard. Pro seletor de
+   *  Equipamento nos formulários de Manutenção/Agenda/Histórico, ver `options()` abaixo. */
   list() {
     return this.http.get<EquipamentoApiModel[]>(this.baseUrl).pipe(map(mapEquipamentoApiModels));
   }

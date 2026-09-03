@@ -1,58 +1,136 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { DestroyRef, Component, ViewChild, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DestroyRef } from '@angular/core';
 
+import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { FloatLabel } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { LocalizacaoModel } from '@models/localizacoes.models';
+import { STATE_KEY } from '@features/state-key.constants';
+import { LocalizacaoModel, LocalizacoesFiltersState } from '@models/localizacoes.models';
 import { LocalizacoesFacade } from '@features/facade/localizacoes.facade';
-import { statusLocalizacaoTone } from '@models/patrimonio-enums';
+import { LocalizacoesAdvancedFilters } from '@features/filter/localizacoes.filters';
+import { statusLocalizacaoTone, STATUS_LOCALIZACAO_VALUES } from '@models/patrimonio-enums';
+import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
+import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
 import { StatusBadgeComponent, StatusTone } from '@shared/features/status-badge/status-badge.component';
 import { PatrimonioPermissionPolicy } from '@features/patrimonio/patrimonio-permission.policy';
 import { LocalizacaoFormDialogComponent } from '@features/patrimonio/localizacoes/localizacao-form-dialog.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import {
+  ActiveFilterItem,
+  FiltersPanelComponent,
+} from '@shared/features/filters-panel/filters-panel.component';
+import {
+  readSingleFilterValue,
+  readArrayFilterValues,
+  readDateRangeFilterValue,
+} from '@features/list-base/table-filter-readers';
 
 @Component({
   standalone: true,
   selector: 'app-localizacoes-list',
   templateUrl: './localizacoes-list.component.html',
   imports: [
+    FloatLabel,
+    FormsModule,
     CsDatePipe,
     TableModule,
     ButtonModule,
     TooltipModule,
+    InputTextModule,
     TranslateModule,
+    DatePickerModule,
+    MultiSelectModule,
     PageHeaderComponent,
+    FiltersPanelComponent,
     StatusBadgeComponent,
+    DateInputMaskDirective,
     LocalizacaoFormDialogComponent,
+    CsAdvancedPeriodDateFilterComponent,
   ],
 })
-export class LocalizacoesListComponent implements OnInit {
+export class LocalizacoesListComponent extends StatefulListPage<
+  LocalizacoesFiltersState,
+  LocalizacoesAdvancedFilters
+> {
+  @ViewChild('dt') private dt?: Table;
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly toast = inject(MessageService);
   private readonly confirm = inject(ConfirmationService);
 
-  readonly i18n = inject(I18nService);
+  protected override readonly i18n = inject(I18nService);
   readonly facade = inject(LocalizacoesFacade);
   readonly policy = inject(PatrimonioPermissionPolicy);
 
-  readonly items = computed(() => this.facade.items());
-  readonly loading = computed(() => this.facade.loading());
-  readonly loadedOnce = computed(() => this.facade.loadedOnce());
+  override rows =
+    Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
+
+  descricao = signal('');
+  status = signal<string[] | null>(null);
+  createdAt = signal<string | string[] | null>(null);
+  periodCreatedAt = signal<PeriodEnum | null>(null);
+
+  readonly periodEnumOptions = computed(() => {
+    this.i18n.getAppliedLang();
+    return allPeriodEnum().map((value) => ({ label: periodEnumLabel(value, this.i18n), value }));
+  });
+
+  readonly statusOptions = STATUS_LOCALIZACAO_VALUES.map((value) => ({
+    value,
+    label: this.i18n.tUi(`localizacoes.status.${value}` as never),
+  }));
 
   readonly formVisible = signal(false);
   readonly editing = signal<LocalizacaoModel | null>(null);
 
   readonly canManage = computed(() => this.policy.canManageLocalizacoes());
+  readonly totalRecords = computed(() => this.facade.totalRecords());
+  readonly items = computed<LocalizacaoModel[]>(() => this.facade.items());
 
-  ngOnInit(): void {
-    this.facade.load();
+  protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
+    const items: ActiveFilterItem[] = [];
+
+    const descricao = this.descricao().trim();
+    const status = this.status();
+
+    if (descricao) {
+      items.push({ label: this.i18n.tUi('localizacoes.fields.descricao'), value: descricao });
+    }
+    if (status?.length) {
+      const labels = this.statusOptions
+        .filter((opt) => status.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+      items.push({ label: this.i18n.tUi('localizacoes.fields.status'), value: labels });
+    }
+    const createdAtLabel = this.formatActiveFilterPeriodDateValue(
+      this.periodCreatedAt(),
+      this.createdAt(),
+      this.i18n,
+    );
+    if (createdAtLabel) {
+      items.push({ label: this.i18n.tUi('localizacoes.fields.createdAt'), value: createdAtLabel });
+    }
+
+    return items;
+  });
+
+  ngOnInit() {
+    this.initStatefulList();
   }
 
   statusTone(status: string): StatusTone {
@@ -77,6 +155,10 @@ export class LocalizacoesListComponent implements OnInit {
 
   onFormVisibleChange(v: boolean): void {
     this.formVisible.set(v);
+  }
+
+  clear() {
+    this.clearTableAndReload(this.dt);
   }
 
   confirmDelete(row: LocalizacaoModel): void {
@@ -107,4 +189,97 @@ export class LocalizacoesListComponent implements OnInit {
       },
     });
   }
+
+  protected formatDate(value: Date | string): string {
+    const date = value instanceof Date ? value : new Date(value);
+    return new Intl.DateTimeFormat(this.i18n.getLang(), { dateStyle: 'short' }).format(date);
+  }
+
+  protected override tableStateKey(): string {
+    return STATE_KEY.NIMBUSFLOW.PATRIMONIO.LOCALIZACOES.TABLE.STATE.V1;
+  }
+
+  protected override tableRowsKey(): string {
+    return STATE_KEY.NIMBUSFLOW.PATRIMONIO.LOCALIZACOES.TABLE.ROWS.V1;
+  }
+
+  protected override filtersKey(): string {
+    return STATE_KEY.NIMBUSFLOW.PATRIMONIO.LOCALIZACOES.FILTERS.V1;
+  }
+
+  protected override refresh(): void {
+    this.reloadWithCurrentState();
+  }
+
+  protected override resetFilters(): void {
+    this.descricao.set('');
+    this.status.set(null);
+    this.createdAt.set(null);
+    this.periodCreatedAt.set(null);
+    this.applyDefaultAdvancedFiltersIfEmpty();
+  }
+
+  protected override toFiltersState(): LocalizacoesFiltersState {
+    return {
+      descricao: this.descricao(),
+      status: this.status()?.length ? this.status() : null,
+      createdAt: this.createdAt(),
+      periodCreatedAt: this.periodCreatedAt(),
+    };
+  }
+
+  protected override applyFiltersState(state: LocalizacoesFiltersState): void {
+    this.descricao.set(state.descricao ?? '');
+    this.status.set(state.status ?? null);
+    this.createdAt.set(state.createdAt ?? null);
+    this.periodCreatedAt.set(state.periodCreatedAt ?? null);
+
+    this.applyDefaultAdvancedFiltersIfEmpty();
+  }
+
+  protected override buildAdvancedFilters(): Partial<LocalizacoesAdvancedFilters> {
+    return {
+      descricao: this.descricao().trim() || undefined,
+      status: this.status()?.length ? this.status() : undefined,
+      createdAt: this.createdAt() ?? undefined,
+      periodCreatedAt: this.periodCreatedAt() ?? undefined,
+    };
+  }
+
+  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+    this.i18n.getAppliedLang();
+
+    const items: ActiveFilterItem[] = [];
+
+    const descricao = readSingleFilterValue(filters, 'descricao');
+    if (descricao) {
+      items.push({ label: this.i18n.tUi('localizacoes.fields.descricao'), value: descricao });
+    }
+
+    const statusValues = readArrayFilterValues(filters, 'status');
+    if (statusValues.length) {
+      const labels = this.statusOptions
+        .filter((option) => statusValues.includes(option.value))
+        .map((option) => option.label);
+      items.push({
+        label: this.i18n.tUi('localizacoes.fields.status'),
+        value: (labels.length ? labels : statusValues).join(', '),
+      });
+    }
+
+    const createdAt = readDateRangeFilterValue(filters, 'createdAt', this.formatDate.bind(this));
+    if (createdAt) {
+      items.push({ label: this.i18n.tUi('localizacoes.fields.createdAt'), value: createdAt });
+    }
+
+    return items;
+  }
+
+  protected override loadPage(
+    query: ReturnType<typeof buildListQuery<LocalizacoesAdvancedFilters>>,
+  ): void {
+    this.facade.loadPage(query);
+  }
+
+  protected override loadFirstPage(): void {}
 }

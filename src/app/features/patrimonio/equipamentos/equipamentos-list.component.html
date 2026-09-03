@@ -24,21 +24,114 @@
   (visibleChange)="onFormVisibleChange($event)"
 ></app-equipamento-form-dialog>
 
+<cs-filters-panel
+  [collapsed]="true"
+  (clear)="clear()"
+  (search)="search()"
+  [actionsAlign]="'start'"
+  [activeFilterGroups]="activeFilterGroups()"
+  [activeCount]="activeFiltersCount()"
+  [title]="'common.filter' | translate"
+>
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="descricao"
+          pInputText
+          [value]="descricao()"
+          class="w-full p-inputtext-sm"
+          (input)="descricao.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="descricao">{{ 'equipamentos.fields.descricao' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <input
+          id="fornecedorNome"
+          pInputText
+          [value]="fornecedorNome()"
+          class="w-full p-inputtext-sm"
+          (input)="fornecedorNome.set(($any($event.target).value ?? '').toString())"
+        />
+        <label for="fornecedorNome">{{ 'equipamentos.fields.fornecedorNome' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-3 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          appendTo="body"
+          [showClear]="true"
+          inputId="status"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="status()"
+          [showToggleAll]="false"
+          [options]="statusOptions"
+          (ngModelChange)="status.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="status">{{ 'equipamentos.fields.status' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <cs-advanced-period-date-filter
+      dateInputId="dataCompra"
+      periodInputId="periodDataCompra"
+      [value]="dataCompra()"
+      [period]="periodDataCompra()"
+      class="col-12 md:col-3 p-1"
+      (valueChange)="dataCompra.set($event)"
+      [periodOptions]="periodEnumOptions()"
+      [view]="setViewFormat(periodDataCompra())"
+      [dateFormat]="setDateFormat(periodDataCompra())"
+      [selectionMode]="setSelectionMode(periodDataCompra())"
+      [dateLabel]="'equipamentos.fields.dataCompra' | translate"
+      [periodLabel]="'equipamentos.fields.periodDataCompra' | translate"
+      (periodChange)="onPeriodColumnChange(periodDataCompra, dataCompra, $event)"
+    ></cs-advanced-period-date-filter>
+  </div>
+
+  <div class="grid formgrid gap-0 align-items-end">
+    <div class="col-12 md:col-6 p-2">
+      <cs-currency-range-filter
+        [inputId]="'preco'"
+        [label]="'equipamentos.fields.preco' | translate"
+        [value]="{ start: precoDe(), end: precoAte() }"
+        (valueChange)="precoDe.set($event.start); precoAte.set($event.end)"
+      ></cs-currency-range-filter>
+    </div>
+  </div>
+</cs-filters-panel>
+
 <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
   <p-table
+    #dt
     stripedRows
     dataKey="id"
     size="small"
-    [rows]="10"
+    [rows]="rows"
+    [lazy]="true"
     showGridlines
-    [value]="items()"
     [rowHover]="true"
+    [value]="items()"
     [paginator]="true"
-    [loading]="loading()"
+    sortMode="multiple"
+    filterDisplay="menu"
+    stateStorage="local"
     class="cs-admin-table"
+    [loading]="facade.loading()"
+    [stateKey]="tableStateKey()"
     [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10, 20, 50]"
+    [totalRecords]="totalRecords()"
+    (onLazyLoad)="onLazyLoad($event)"
     [paginatorDropdownAppendTo]="'body'"
+    (onPage)="onPageChange($event)"
+    [rowsPerPageOptions]="rowsPerPageOptions"
     [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
     [currentPageReportTemplate]="'pagination.report' | translate"
   >
@@ -48,8 +141,8 @@
         <col style="width: auto" />
         <col style="width: 200px" />
         <col style="width: 110px" />
-        <col style="width: 120px" />
-        <col style="width: 120px" />
+        <col style="width: 140px" />
+        <col style="width: 140px" />
         <col style="width: 100px" />
         <col style="width: 130px" />
         <col style="width: 70px" />
@@ -58,24 +151,144 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th class="text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'equipamentos.columns.numeroPatrimonio' | translate">{{ 'equipamentos.columns.numeroPatrimonio' | translate }}</span>
+        <th pSortableColumn="numeroPatrimonio">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'equipamentos.columns.numeroPatrimonio' | translate">{{ 'equipamentos.columns.numeroPatrimonio' | translate }}</span>
+            <p-sortIcon field="numeroPatrimonio"></p-sortIcon>
+          </div>
         </th>
-        <th>
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'equipamentos.columns.descricao' | translate">{{ 'equipamentos.columns.descricao' | translate }}</span>
+
+        <th pSortableColumn="descricao">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'equipamentos.columns.descricao' | translate">{{ 'equipamentos.columns.descricao' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="descricao"></p-sortIcon>
+              <p-columnFilter
+                field="descricao"
+                type="text"
+                display="menu"
+                class="ml-auto"
+                matchMode="contains"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th>
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'equipamentos.columns.fornecedorNome' | translate">{{ 'equipamentos.columns.fornecedorNome' | translate }}</span>
+
+        <th pSortableColumn="fornecedorNome">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'equipamentos.columns.fornecedorNome' | translate">{{ 'equipamentos.columns.fornecedorNome' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="fornecedorNome"></p-sortIcon>
+              <p-columnFilter
+                type="text"
+                display="menu"
+                class="ml-auto"
+                matchMode="contains"
+                field="fornecedorNome"
+                [showOperator]="false"
+                [showAddButton]="false"
+                styleClass="cs-colfilter"
+              ></p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'equipamentos.columns.status' | translate">{{ 'equipamentos.columns.status' | translate }}</span>
+
+        <th pSortableColumn="status">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'equipamentos.columns.status' | translate">{{ 'equipamentos.columns.status' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="status"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="status"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="statusOptions"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-right">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'equipamentos.columns.preco' | translate">{{ 'equipamentos.columns.preco' | translate }}</span>
+
+        <th pSortableColumn="preco">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'equipamentos.columns.preco' | translate">{{ 'equipamentos.columns.preco' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="preco"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="preco"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <cs-currency-range-filter
+                    [inputId]="'precoCol'"
+                    [label]="'equipamentos.columns.preco' | translate"
+                    [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
+                    (valueChange)="filter([$event.start, $event.end])"
+                  ></cs-currency-range-filter>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
-        <th class="text-center">
-          <span class="th-label" tooltipPosition="top" [pTooltip]="'equipamentos.columns.dataCompra' | translate">{{ 'equipamentos.columns.dataCompra' | translate }}</span>
+
+        <th pSortableColumn="dataCompra">
+          <div class="th-flex text-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'equipamentos.columns.dataCompra' | translate">{{ 'equipamentos.columns.dataCompra' | translate }}</span>
+            <span class="th-icons">
+              <p-sortIcon field="dataCompra"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                field="dataCompra"
+                matchMode="between"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-datepicker
+                    class="w-full"
+                    csDateInputMask
+                    appendTo="body"
+                    [showIcon]="true"
+                    [ngModel]="value"
+                    selectionMode="range"
+                    dateFormat="dd/mm/yy"
+                    [readonlyInput]="true"
+                    [csDateInputMaskRange]="true"
+                    (ngModelChange)="filter($event)"
+                    [placeholder]="'common.period' | translate"
+                  ></p-datepicker>
+                </ng-template>
+              </p-columnFilter>
+            </span>
+          </div>
         </th>
+
         <th class="text-center">
           <span class="th-label" tooltipPosition="top" [pTooltip]="'equipamentos.columns.totalManutencoes' | translate">{{ 'equipamentos.columns.totalManutencoes' | translate }}</span>
         </th>
@@ -127,7 +340,7 @@
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="9" class="text-center py-5 opacity-70">
-          {{ loadedOnce() ? ('equipamentos.empty.title' | translate) : ('common.loading' | translate) }}
+          {{ facade.loadedOnce() ? ('equipamentos.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
     </ng-template>

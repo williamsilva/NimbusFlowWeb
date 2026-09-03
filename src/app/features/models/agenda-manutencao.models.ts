@@ -1,3 +1,4 @@
+import { PeriodEnum } from '@models/enums/period.enum';
 import {
   FrequenciaManutencao,
   PerfilNotificacao,
@@ -33,6 +34,16 @@ export interface AgendaManutencaoUpsertInput {
   perfilNotificacao: PerfilNotificacao;
   observacao: string | null;
 }
+
+export type AgendaManutencaoFiltersState = {
+  equipamento: string;
+  status: string[] | null;
+  frequencia: string[] | null;
+  tipoManutencao: string[] | null;
+  perfilNotificacao: string[] | null;
+  proximaManutencao: string | string[] | null;
+  periodProximaManutencao: PeriodEnum | null;
+};
 
 export function mapAgendaManutencaoApiModel(input: AgendaManutencaoApiModel): AgendaManutencaoModel {
   return { ...input };

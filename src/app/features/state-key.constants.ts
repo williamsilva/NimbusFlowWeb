@@ -121,6 +121,46 @@ export const STATE_KEY = {
       },
     },
 
+    /* Equipamento / Manutenção / Agenda de Manutenção Preventiva / Localização / Histórico de
+     * Localização (com.nimbusflow.patrimonio no backend) */
+    PATRIMONIO: {
+      EQUIPAMENTOS: {
+        TABLE: {
+          ROWS: { V1: 'equipamentos.table.rows' },
+          STATE: { V1: 'nimbusflow.equipamentos.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.equipamentos.filters.v1' },
+      },
+      MANUTENCOES: {
+        TABLE: {
+          ROWS: { V1: 'manutencoes.table.rows' },
+          STATE: { V1: 'nimbusflow.manutencoes.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.manutencoes.filters.v1' },
+      },
+      AGENDA_MANUTENCAO: {
+        TABLE: {
+          ROWS: { V1: 'agenda-manutencao.table.rows' },
+          STATE: { V1: 'nimbusflow.agenda-manutencao.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.agenda-manutencao.filters.v1' },
+      },
+      LOCALIZACOES: {
+        TABLE: {
+          ROWS: { V1: 'localizacoes.table.rows' },
+          STATE: { V1: 'nimbusflow.localizacoes.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.localizacoes.filters.v1' },
+      },
+      HISTORICO_LOCALIZACAO: {
+        TABLE: {
+          ROWS: { V1: 'historico-localizacao.table.rows' },
+          STATE: { V1: 'nimbusflow.historico-localizacao.table.state.v1' },
+        },
+        FILTERS: { V1: 'nimbusflow.historico-localizacao.filters.v1' },
+      },
+    },
+
     /* Configurações > Auditoria de E-mail (com.nimbusflow.common.notification.mail no backend) */
     SETTINGS: {
       EMAIL_LOG: {
