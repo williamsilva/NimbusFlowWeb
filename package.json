@@ -42,6 +42,7 @@
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
     "@primeng/themes": "^21.0.4",
+    "@williamsilva/nimbus-web-commons": "^0.1.0",
     "chart.js": "^4.5.1",
     "intl-messageformat": "^11.1.2",
     "ngx-translate-messageformat-compiler": "^7.2.0",

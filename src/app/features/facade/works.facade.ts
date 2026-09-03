@@ -5,7 +5,7 @@ import { Observable, finalize, tap } from 'rxjs';
 import { WorksApiService } from '@features/service/works.api.service';
 import { WorksAdvancedFilters } from '@features/filter/works.filters';
 import { WorkStatusEnum } from '@models/enums/work-status.enum';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { WorkModel, WorkUpsertInput } from '@models/works.models';
 
 type LastQuery = ListQueryDto<WorksAdvancedFilters>;

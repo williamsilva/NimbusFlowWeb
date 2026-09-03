@@ -17,11 +17,11 @@ import { MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { STATE_KEY } from '@features/state-key.constants';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { SuggestionsFacade } from '@features/facade/suggestions.facade';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { SuggestionsAdvancedFilters } from '@features/filter/suggestions.filters';
 import { SuggestionsPermissionPolicy } from '@features/suggestions/suggestions-permission.policy';
@@ -33,16 +33,16 @@ import {
 import { SuggestionModel, SuggestionsFiltersState } from '@models/suggestions.models';
 import { SuggestionsCreateDialogComponent } from '@features/suggestions/suggestions-create/suggestions-create-dialog.component';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   readSingleFilterValue,
   readArrayFilterValues,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,

@@ -4,7 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { SuppliersApiService } from '@features/service/suppliers.api.service';
 import { SuppliersAdvancedFilters } from '@features/filter/suppliers.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { SelectOptionGroup } from '@models/select-option.model';
 import { SupplierModel, SupplierUpsertInput } from '@models/suppliers.models';
 

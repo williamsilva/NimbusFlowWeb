@@ -4,7 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { ProjectsApiService } from '@features/service/projects.api.service';
 import { ProjectsAdvancedFilters } from '@features/filter/projects.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { ProjectStatusEnum } from '@models/enums/project-status.enum';
 import { ProjectModel, ProjectOptionModel, ProjectUpsertInput } from '@models/projects.models';
 

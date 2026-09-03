@@ -22,8 +22,8 @@ import { STATE_KEY } from '@features/state-key.constants';
 import { UsersFacade } from '@features/facade/users.facade';
 import { PermissionService } from '@core/auth/permission.service';
 import { TasksGlobalFacade } from '@features/facade/tasks-global.facade';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { TasksAdvancedFilters } from '@features/filter/tasks.filters';
 import { TasksPermissionPolicy } from '@features/tasks/tasks-permission.policy';
@@ -36,16 +36,16 @@ import {
 } from '@models/enums/task-status.enum';
 import { TaskWithActionPlanModel, TasksFiltersState } from '@models/tasks.models';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   readSingleFilterValue,
   readArrayFilterValues,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,

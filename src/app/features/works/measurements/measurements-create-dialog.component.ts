@@ -24,7 +24,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { PwaEnvironmentService } from '@core/pwa/pwa-environment.service';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { SitePlanPickerComponent } from '@shared/features/site-plan-picker/site-plan-picker.component';
 import { MeasurementsFacade } from '@features/facade/measurements.facade';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';

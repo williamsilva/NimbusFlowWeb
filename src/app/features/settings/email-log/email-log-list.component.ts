@@ -15,26 +15,26 @@ import { MultiSelectModule } from 'primeng/multiselect';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { STATE_KEY } from '@features/state-key.constants';
 import { EmailLogFacade } from '@features/facade/email-log.facade';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { EmailLogAdvancedFilters } from '@features/filter/email-log.filters';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { EmailLogModel, EmailLogFiltersState } from '@models/email-log.models';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   readSingleFilterValue,
   readArrayFilterValues,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 import {
   EmailLogStatusEnum,
   emailLogStatusTone,

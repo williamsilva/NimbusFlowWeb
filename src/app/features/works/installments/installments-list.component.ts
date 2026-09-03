@@ -15,7 +15,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { WorkModel } from '@models/works.models';
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { STATE_KEY } from '@features/state-key.constants';
 import { WorksFacade } from '@features/facade/works.facade';
 import { InstallmentModel, InstallmentWithWorkModel } from '@models/installments.models';

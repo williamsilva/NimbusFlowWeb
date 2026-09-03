@@ -14,7 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { EquipamentosFacade } from '@features/facade/equipamentos.facade';
 import { LocalizacoesFacade } from '@features/facade/localizacoes.facade';
 import { HistoricoLocalizacaoFacade } from '@features/facade/historico-localizacao.facade';

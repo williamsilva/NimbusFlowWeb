@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { SuppliersAdvancedFilters } from '@features/filter/suppliers.filters';
 import {
   SupplierModel,

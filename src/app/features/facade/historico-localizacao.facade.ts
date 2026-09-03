@@ -4,7 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { HistoricoLocalizacaoApiService } from '@features/service/historico-localizacao.api.service';
 import { HistoricoLocalizacaoAdvancedFilters } from '@features/filter/historico-localizacao.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import {
   HistoricoLocalizacaoModel,
   HistoricoLocalizacaoUpsertInput,

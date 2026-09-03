@@ -9,6 +9,8 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 
+import { NIMBUS_THEME_CONFIG } from '@williamsilva/nimbus-web-commons';
+
 import Lara from '@primeng/themes/lara';
 import { providePrimeNG } from 'primeng/config';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -33,6 +35,11 @@ import { timezoneStrictInterceptor } from './core/interceptors/timezone-audit.in
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
+
+    // appId igual ao valor já hardcoded antes da extração pra @williamsilva/nimbus-web-commons -
+    // preserva a mesma chave de localStorage ("nimbusflow.theme"), senão quem já tinha escolhido
+    // dark mode nesse navegador voltaria a ver light na próxima visita.
+    { provide: NIMBUS_THEME_CONFIG, useValue: { appId: 'nimbusflow' } },
 
     provideRouter(
       appRoutes,

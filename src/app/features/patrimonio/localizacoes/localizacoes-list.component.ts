@@ -20,24 +20,24 @@ import { LocalizacaoModel, LocalizacoesFiltersState } from '@models/localizacoes
 import { LocalizacoesFacade } from '@features/facade/localizacoes.facade';
 import { LocalizacoesAdvancedFilters } from '@features/filter/localizacoes.filters';
 import { statusLocalizacaoTone, STATUS_LOCALIZACAO_VALUES } from '@models/patrimonio-enums';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { StatusBadgeComponent, StatusTone } from '@shared/features/status-badge/status-badge.component';
 import { PatrimonioPermissionPolicy } from '@features/patrimonio/patrimonio-permission.policy';
 import { LocalizacaoFormDialogComponent } from '@features/patrimonio/localizacoes/localizacao-form-dialog.component';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   readSingleFilterValue,
   readArrayFilterValues,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,

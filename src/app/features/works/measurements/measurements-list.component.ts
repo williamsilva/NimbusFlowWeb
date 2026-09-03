@@ -15,7 +15,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { WorksFacade } from '@features/facade/works.facade';
 import { ProjectsFacade } from '@features/facade/projects.facade';

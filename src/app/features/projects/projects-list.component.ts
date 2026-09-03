@@ -19,8 +19,8 @@ import { STATE_KEY } from '@features/state-key.constants';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { ProjectsFacade } from '@features/facade/projects.facade';
 import { ProjectsAdvancedFilters } from '@features/filter/projects.filters';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { ProjectsPermissionPolicy } from '@features/projects/projects-permission.policy';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
@@ -40,8 +40,8 @@ import { ProjectsUpsertDialogComponent } from '@features/projects/projects-upser
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
-import { readSingleFilterValue, readArrayFilterValues } from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
+import { readSingleFilterValue, readArrayFilterValues } from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,

@@ -5,7 +5,7 @@ import { Observable, finalize, tap } from 'rxjs';
 import { SelectOption } from '@models/select-option.model';
 import { UsersAdvancedFilters } from '@features/filter/users.filters';
 import { UsersApiService } from '@features/service/users.api.service';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { UserCreateInput, UserModel, UserUpdateInput } from '@models/users.models';
 
 type LastQuery = ListQueryDto<UsersAdvancedFilters>;

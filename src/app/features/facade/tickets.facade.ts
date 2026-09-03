@@ -4,7 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { TicketsApiService } from '@features/service/tickets.api.service';
 import { TicketsAdvancedFilters } from '@features/filter/tickets.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import {
   TicketModel,
   TicketCreateInput,

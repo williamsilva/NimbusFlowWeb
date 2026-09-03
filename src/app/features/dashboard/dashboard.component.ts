@@ -9,7 +9,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ProgressBarModule } from 'primeng/progressbar';
 
 import { I18nService } from '@core/i18n/i18n.service';
-import { ThemeService } from '@core/theme/theme.service';
+import { ThemeService } from '@williamsilva/nimbus-web-commons';
 import { WorksFacade } from '@features/facade/works.facade';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { DashboardFacade } from '@features/facade/dashboard.facade';
@@ -27,7 +27,7 @@ import {
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 
 /** Mesmas cores do status-badge (status-badge.component.scss) - um status tem sempre a mesma cor em toda a tela. */
 const STATUS_COLORS: Record<WorkStatusEnum, string> = {

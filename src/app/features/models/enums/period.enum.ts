@@ -1,110 +1,16 @@
-import { CsTagTone } from '@shared/ui';
-import { I18nService } from '@core/i18n/i18n.service';
-
-export enum PeriodEnum {
-  NULL = 'NULL',
-  DAY = 'DAY',
-  END = 'END',
-  YEAR = 'YEAR',
-  MONTH = 'MONTH',
-  START = 'START',
-  INTERVAL = 'INTERVAL',
-}
-
-export type PeriodInput = PeriodEnum | string | number | null | undefined;
-
-export const STATUS_CODE_MAP: Record<number, PeriodEnum> = {
-  0: PeriodEnum.NULL,
-  1: PeriodEnum.DAY,
-  2: PeriodEnum.END,
-  3: PeriodEnum.YEAR,
-  4: PeriodEnum.MONTH,
-  5: PeriodEnum.START,
-  6: PeriodEnum.INTERVAL,
-};
-
-export function normalizePeriodEnum(status: PeriodInput): PeriodEnum | null {
-  if (status == null) return null;
-
-  if (typeof status === 'number') {
-    return STATUS_CODE_MAP[status] ?? null;
-  }
-
-  const normalized = String(status).trim().toUpperCase();
-
-  switch (normalized) {
-    case PeriodEnum.NULL:
-      return PeriodEnum.NULL;
-    case PeriodEnum.DAY:
-      return PeriodEnum.DAY;
-    case PeriodEnum.END:
-      return PeriodEnum.END;
-    case PeriodEnum.YEAR:
-      return PeriodEnum.YEAR;
-    case PeriodEnum.MONTH:
-      return PeriodEnum.MONTH;
-    case PeriodEnum.START:
-      return PeriodEnum.START;
-    case PeriodEnum.INTERVAL:
-      return PeriodEnum.INTERVAL;
-
-    default:
-      return null;
-  }
-}
-
-export function periodEnumSeverity(status: PeriodInput): CsTagTone {
-  switch (normalizePeriodEnum(status)) {
-    case PeriodEnum.DAY:
-      return 'success';
-
-    case PeriodEnum.START:
-      return 'warn';
-
-    case PeriodEnum.END:
-      return 'danger';
-
-    case PeriodEnum.NULL:
-    default:
-      return 'contrast';
-  }
-}
-
-export function periodEnumLabel(status: PeriodInput, i18n: I18nService): string {
-  switch (normalizePeriodEnum(status)) {
-    case PeriodEnum.DAY:
-      return i18n.tUi('enum.periodEnum.day');
-
-    case PeriodEnum.END:
-      return i18n.tUi('enum.periodEnum.end');
-
-    case PeriodEnum.YEAR:
-      return i18n.tUi('enum.periodEnum.year');
-
-    case PeriodEnum.START:
-      return i18n.tUi('enum.periodEnum.start');
-
-    case PeriodEnum.MONTH:
-      return i18n.tUi('enum.periodEnum.month');
-
-    case PeriodEnum.INTERVAL:
-      return i18n.tUi('enum.periodEnum.interval');
-
-    case PeriodEnum.NULL:
-      return i18n.tUi('enum.periodEnum.null', 'N/A');
-
-    default:
-      return i18n.tUi('enum.periodEnum.unknown', 'Desconhecido');
-  }
-}
-
-export function allPeriodEnum(): PeriodEnum[] {
-  return [
-    PeriodEnum.DAY,
-    PeriodEnum.MONTH,
-    PeriodEnum.YEAR,
-    PeriodEnum.START,
-    PeriodEnum.END,
-    PeriodEnum.INTERVAL,
-  ];
-}
+// Fase 1 (frontend) do levantamento de duplicação: PeriodEnum (e o resto deste módulo) foi
+// extraído pra @williamsilva/nimbus-web-commons - re-exportado aqui pra manter o caminho
+// @models/enums/period.enum estável pros dezenas de arquivos que já importam dele. É um
+// re-export de verdade (não uma cópia) de propósito: PeriodEnum é um enum de string, nominal -
+// dois enums declarados em arquivos diferentes com os mesmos membros NÃO são o mesmo tipo pro
+// TypeScript, então StatefulListPage (que vive na lib e espera o PeriodEnum de lá) só aceita
+// exatamente este re-export, nunca uma cópia local.
+export {
+  PeriodEnum,
+  STATUS_CODE_MAP,
+  normalizePeriodEnum,
+  periodEnumSeverity,
+  periodEnumLabel,
+  allPeriodEnum,
+} from '@williamsilva/nimbus-web-commons';
+export type { PeriodInput } from '@williamsilva/nimbus-web-commons';

@@ -18,16 +18,16 @@ import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { EquipamentosFacade } from '@features/facade/equipamentos.facade';
 import { statusEquipamentoTone, STATUS_EQUIPAMENTO_VALUES } from '@models/patrimonio-enums';
 import { EquipamentosAdvancedFilters } from '@features/filter/equipamentos.filters';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { EquipamentoModel, EquipamentosFiltersState } from '@models/equipamentos.models';
 import { StatusBadgeComponent, StatusTone } from '@shared/features/status-badge/status-badge.component';
 import { PatrimonioPermissionPolicy } from '@features/patrimonio/patrimonio-permission.policy';
 import { EquipamentoFormDialogComponent } from '@features/patrimonio/equipamentos/equipamento-form-dialog.component';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
   currencyRangeLabel,
   CsCurrencyRangeFilterComponent,
@@ -35,12 +35,12 @@ import {
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   readSingleFilterValue,
   readArrayFilterValues,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,

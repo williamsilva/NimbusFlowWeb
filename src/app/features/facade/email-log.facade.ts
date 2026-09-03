@@ -5,7 +5,7 @@ import { finalize } from 'rxjs';
 import { EmailLogModel } from '@models/email-log.models';
 import { EmailLogApiService } from '@features/service/email-log.api.service';
 import { EmailLogAdvancedFilters } from '@features/filter/email-log.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 
 type LastQuery = ListQueryDto<EmailLogAdvancedFilters>;
 

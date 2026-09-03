@@ -20,7 +20,7 @@ import { WorksFacade } from '@features/facade/works.facade';
 import { SuppliersFacade } from '@features/facade/suppliers.facade';
 import { ProjectsFacade } from '@features/facade/projects.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { SitePlanPickerComponent } from '@shared/features/site-plan-picker/site-plan-picker.component';
 import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
 import { WORK_STATUS_VALUES, WorkStatusEnum } from '@models/enums/work-status.enum';

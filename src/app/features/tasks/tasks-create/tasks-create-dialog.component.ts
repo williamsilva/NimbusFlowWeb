@@ -18,7 +18,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { UsersFacade } from '@features/facade/users.facade';
 import { TasksFacade } from '@features/facade/tasks.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { TaskModel, TaskUpsertInput } from '@models/tasks.models';
 
 function toDateOnlyString(value: Date | null): string | null {

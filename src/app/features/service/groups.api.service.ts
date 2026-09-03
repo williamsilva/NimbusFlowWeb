@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { API, APP_KEY } from '@core/api/api.config';
 import { HalPagedResponse } from '@core/api/page.model';
 import { GroupsAdvancedFilters } from '@features/filter/groups.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import {
   GroupModel,
   GroupApiModel,

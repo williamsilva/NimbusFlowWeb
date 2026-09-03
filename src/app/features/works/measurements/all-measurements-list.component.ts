@@ -17,20 +17,20 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { SuppliersFacade } from '@features/facade/suppliers.facade';
 import { MeasurementsGlobalFacade } from '@features/facade/measurements-global.facade';
 import { MeasurementsAdvancedFilters } from '@features/filter/measurements.filters';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { MeasurementsPermissionPolicy } from '@features/works/measurements-permission.policy';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { MeasurementWithContextModel, MeasurementsFiltersState } from '@models/measurements.models';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
   currencyRangeLabel,
   CsCurrencyRangeFilterComponent,
@@ -38,12 +38,12 @@ import {
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   readSingleFilterValue,
   readArrayFilterValues,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 import {
   MEASUREMENT_STATUS_VALUES,
   MeasurementStatusEnum,

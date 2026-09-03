@@ -4,7 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { AgendaManutencaoApiService } from '@features/service/agenda-manutencao.api.service';
 import { AgendaManutencaoAdvancedFilters } from '@features/filter/agenda-manutencao.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { AgendaManutencaoModel, AgendaManutencaoUpsertInput } from '@models/agenda-manutencao.models';
 
 type LastQuery = ListQueryDto<AgendaManutencaoAdvancedFilters>;
