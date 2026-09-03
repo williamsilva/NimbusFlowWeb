@@ -441,12 +441,18 @@ export class I18nService {
     document.cookie = `${LOCALE_COOKIE}=${lang}; path=/; max-age=31536000; SameSite=Lax`;
   }
 
+  /**
+   * Um `fallback` explícito (ex.: `ApiError.detail`/`.message` vindo do backend, uma mensagem de
+   * negócio específica) tem prioridade sobre a tradução genérica - antes desta correção, a ordem
+   * era invertida (sempre tentava `errors.global.GENERIC_ERROR` primeiro, e como essa chave quase
+   * sempre existe traduzida, o `fallback` real nunca era usado, descartando silenciosamente
+   * qualquer mensagem específica do backend em favor do texto genérico "Ocorreu um erro
+   * inesperado"). Sem `fallback`, cai na tradução genérica como sempre.
+   */
   private genericError(fallback?: string): string {
-    return this.instantOrFallback(
-      'errors.global.GENERIC_ERROR',
-      undefined,
-      fallback ?? 'Ocorreu um erro inesperado.',
-    );
+    if (fallback) return fallback;
+
+    return this.instantOrFallback('errors.global.GENERIC_ERROR', undefined, 'Ocorreu um erro inesperado.');
   }
 
   private broadcast(msg: I18nSyncMessage): void {
