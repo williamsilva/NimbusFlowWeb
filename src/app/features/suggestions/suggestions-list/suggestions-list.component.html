@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'suggestions.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -23,7 +23,7 @@
     class="p-button-info p-button-sm"
     [label]="'suggestions.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-suggestions-create-dialog
   [visible]="newVisible()"
@@ -240,10 +240,10 @@
             ></p-select>
           }
           @if (!canManageStatus()) {
-            <cs-status-badge
+            <app-status-badge
               [tone]="tone(row.status)"
               [label]="('suggestions.status.' + row.status) | translate"
-            ></cs-status-badge>
+            ></app-status-badge>
           }
         </td>
         <td class="text-center" [attr.data-label]="'suggestions.columns.attachment' | translate">

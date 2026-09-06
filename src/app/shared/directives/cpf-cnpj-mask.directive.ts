@@ -10,7 +10,7 @@ import { DestroyRef, Directive, ElementRef, HostListener, OnInit, inject } from 
  * Mantém o valor do FormControl como SOMENTE DÍGITOS.
  */
 @Directive({
-  selector: '[csCpfCnpjMask]',
+  selector: '[appCpfCnpjMask]',
   standalone: true,
 })
 export class CpfCnpjMaskDirective implements OnInit {

@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'approvalLimits.subtitle' | translate"
   [breadcrumb]="[
     { label: ('menu.settings.title' | translate), url: '/settings' },
@@ -16,7 +16,7 @@
     [label]="'approvalLimits.new.title' | translate"
     [pTooltip]="!canChange() ? ('approvalLimits.action.noPermission' | translate) : ''"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-approval-limit-form-dialog
   [editing]="editing()"
@@ -76,7 +76,7 @@
         <td class="text-right mobile-card-title">{{ row.minAmount | csCurrency }}</td>
         <td class="text-right" [attr.data-label]="'approvalLimits.columns.maxAmount' | translate">
           {{
-            row.maxAmount != null
+            row.maxAmount !== null
               ? (row.maxAmount | csCurrency)
               : ('approvalLimits.unbounded' | translate)
           }}
@@ -105,6 +105,11 @@
                   ? ('common.edit' | translate)
                   : ('approvalLimits.action.noPermission' | translate)
               "
+              [attr.aria-label]="
+                canChange()
+                  ? ('common.edit' | translate)
+                  : ('approvalLimits.action.noPermission' | translate)
+              "
             ></button>
 
             <button
@@ -116,6 +121,11 @@
               (click)="confirmDelete(row)"
               class="p-button-text p-button-sm p-button-danger"
               [pTooltip]="
+                canChange()
+                  ? ('common.delete' | translate)
+                  : ('approvalLimits.action.noPermission' | translate)
+              "
+              [attr.aria-label]="
                 canChange()
                   ? ('common.delete' | translate)
                   : ('approvalLimits.action.noPermission' | translate)

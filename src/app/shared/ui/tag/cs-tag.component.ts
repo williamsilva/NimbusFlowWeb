@@ -6,7 +6,7 @@ import { CsTagTone, tagClassFromTone, tagSeverityFromTone } from './tag-tone.typ
 
 @Component({
   standalone: true,
-  selector: 'cs-tag',
+  selector: 'app-tag',
   imports: [TagModule],
   template: `<p-tag [value]="displayValue()" [severity]="severity()" [class]="tagClass()" [title]="displayValue()" />`,
   styles: [`

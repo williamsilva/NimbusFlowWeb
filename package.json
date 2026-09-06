@@ -14,7 +14,8 @@
     "build:pages": "npm run validate:i18n && ng build --configuration production",
     "pages:preview": "npx wrangler pages dev dist/nimbusflow/browser",
     "build:pwa-local": "ng build --configuration pwaLocal",
-    "pwa-local:preview": "npm run build:pwa-local && npx serve -s dist/nimbusflow/browser -l 4201"
+    "pwa-local:preview": "npm run build:pwa-local && npx serve -s dist/nimbusflow/browser -l 4201",
+    "lint": "ng lint"
   },
   "prettier": {
     "printWidth": 100,
@@ -57,11 +58,15 @@
     "@angular/build": "^21.1.0",
     "@angular/cli": "^21.1.0",
     "@angular/compiler-cli": "^21.1.0",
+    "@eslint/js": "^10.0.1",
     "@messageformat/core": "^3.4.0",
     "@tailwindcss/postcss": "^4.2.0",
+    "angular-eslint": "22.2.0",
     "concurrently": "^9.2.1",
+    "eslint": "^10.9.0",
     "nodemon": "^3.1.14",
     "prettier": "3.9.6",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "typescript-eslint": "8.67.0"
   }
 }

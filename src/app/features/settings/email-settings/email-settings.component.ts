@@ -28,7 +28,7 @@ export const EMAIL_IMPL_OPTIONS = [
 
 @Component({
   standalone: true,
-  selector: 'cs-email-settings',
+  selector: 'app-email-settings',
   templateUrl: './email-settings.component.html',
   imports: [
     CardModule,

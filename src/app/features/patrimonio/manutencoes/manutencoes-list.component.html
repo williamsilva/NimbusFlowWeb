@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'manutencoes.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -16,7 +16,7 @@
     class="p-button-info p-button-sm"
     [label]="'manutencoes.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-manutencao-form-dialog
   [visible]="formVisible()"
@@ -117,12 +117,12 @@
 
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-6 p-2">
-      <cs-currency-range-filter
+      <app-currency-range-filter
         [inputId]="'preco'"
         [label]="'manutencoes.fields.preco' | translate"
         [value]="{ start: precoDe(), end: precoAte() }"
         (valueChange)="precoDe.set($event.start); precoAte.set($event.end)"
-      ></cs-currency-range-filter>
+      ></app-currency-range-filter>
     </div>
   </div>
 </cs-filters-panel>
@@ -324,12 +324,12 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [inputId]="'precoCol'"
                     [label]="'manutencoes.columns.preco' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -352,10 +352,10 @@
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.autorizadaNome">{{ row.autorizadaNome }}</span>
         </td>
         <td class="text-center" [attr.data-label]="'manutencoes.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="statusTone(row.status)"
             [label]="('manutencoes.status.' + row.status) | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'manutencoes.columns.tipoManutencao' | translate">{{ ('manutencoes.tipo.' + row.tipoManutencao) | translate }}</td>
         <td class="text-center" [attr.data-label]="'manutencoes.columns.dataEnvio' | translate">{{ row.dataEnvio | csDate: 'short' }}</td>
@@ -371,6 +371,7 @@
               [disabled]="!canManage()"
               class="p-button-text p-button-sm"
               [pTooltip]="'common.edit' | translate"
+              [attr.aria-label]="'common.edit' | translate"
             ></button>
 
             <button
@@ -382,6 +383,7 @@
               [disabled]="!canDelete(row)"
               class="p-button-text p-button-sm p-button-danger"
               [pTooltip]="canDelete(row) ? ('common.delete' | translate) : ('manutencoes.action.cannotDelete' | translate)"
+              [attr.aria-label]="canDelete(row) ? ('common.delete' | translate) : ('manutencoes.action.cannotDelete' | translate)"
             ></button>
           </div>
         </td>

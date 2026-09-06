@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'equipamentos.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -16,7 +16,7 @@
     class="p-button-info p-button-sm"
     [label]="'equipamentos.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-equipamento-form-dialog
   [visible]="formVisible()"
@@ -98,12 +98,12 @@
 
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-6 p-2">
-      <cs-currency-range-filter
+      <app-currency-range-filter
         [inputId]="'preco'"
         [label]="'equipamentos.fields.preco' | translate"
         [value]="{ start: precoDe(), end: precoAte() }"
         (valueChange)="precoDe.set($event.start); precoAte.set($event.end)"
-      ></cs-currency-range-filter>
+      ></app-currency-range-filter>
     </div>
   </div>
 </cs-filters-panel>
@@ -243,12 +243,12 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [inputId]="'precoCol'"
                     [label]="'equipamentos.columns.preco' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -311,10 +311,10 @@
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.fornecedorNome">{{ row.fornecedorNome }}</span>
         </td>
         <td class="text-center" [attr.data-label]="'equipamentos.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="statusTone(row.status)"
             [label]="('equipamentos.status.' + row.status) | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-right" [attr.data-label]="'equipamentos.columns.preco' | translate">{{ row.preco | csCurrency }}</td>
         <td class="text-center" [attr.data-label]="'equipamentos.columns.dataCompra' | translate">{{ row.dataCompra ? (row.dataCompra | csDate: 'short') : '-' }}</td>
@@ -331,6 +331,7 @@
               [disabled]="!canManage()"
               class="p-button-text p-button-sm"
               [pTooltip]="'common.edit' | translate"
+              [attr.aria-label]="'common.edit' | translate"
             ></button>
           </div>
         </td>

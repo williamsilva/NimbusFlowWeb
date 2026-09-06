@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'payments.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -14,7 +14,7 @@
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <cs-filters-panel
   [collapsed]="true"
@@ -77,12 +77,12 @@
 
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-6 p-2">
-      <cs-currency-range-filter
+      <app-currency-range-filter
         [inputId]="'amount'"
         [label]="'payments.fields.amount' | translate"
         [value]="{ start: amountFrom(), end: amountTo() }"
         (valueChange)="amountFrom.set($event.start); amountTo.set($event.end)"
-      ></cs-currency-range-filter>
+      ></app-currency-range-filter>
     </div>
   </div>
 </cs-filters-panel>
@@ -174,12 +174,12 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [inputId]="'amountCol'"
                     [label]="'payments.fields.amount' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -300,10 +300,10 @@
           {{ row.amount | csCurrency }}
         </td>
         <td class="text-center" [attr.data-label]="'payments.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="tone(row.status)"
             [label]="'payments.status.' + row.status | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'payments.columns.sentBy' | translate">
           <span
@@ -336,6 +336,11 @@
                   ? ('payments.action.markPaid' | translate)
                   : (markPaidDisabledReason(row) | translate)
               "
+              [attr.aria-label]="
+                canMarkPaid(row)
+                  ? ('payments.action.markPaid' | translate)
+                  : (markPaidDisabledReason(row) | translate)
+              "
               tooltipPosition="top"
             ></button>
 
@@ -348,6 +353,11 @@
               [loading]="resendingId() === row.id"
               [disabled]="!canResendNotification() || (resendingId() !== null && resendingId() !== row.id)"
               [pTooltip]="
+                canResendNotification()
+                  ? ('payments.action.resendNotification' | translate)
+                  : (resendNotificationDisabledReason() | translate)
+              "
+              [attr.aria-label]="
                 canResendNotification()
                   ? ('payments.action.resendNotification' | translate)
                   : (resendNotificationDisabledReason() | translate)
@@ -367,6 +377,11 @@
                   ? ('payments.action.undoMarkPaid' | translate)
                   : (undoMarkPaidDisabledReason(row) | translate)
               "
+              [attr.aria-label]="
+                canUndoMarkPaid(row)
+                  ? ('payments.action.undoMarkPaid' | translate)
+                  : (undoMarkPaidDisabledReason(row) | translate)
+              "
               tooltipPosition="top"
             ></button>
 
@@ -378,6 +393,11 @@
               [disabled]="!canUndoSend(row)"
               class="p-button-text p-button-sm p-button-danger"
               [pTooltip]="
+                canUndoSend(row)
+                  ? ('payments.action.undoSend' | translate)
+                  : (undoSendDisabledReason(row) | translate)
+              "
+              [attr.aria-label]="
                 canUndoSend(row)
                   ? ('payments.action.undoSend' | translate)
                   : (undoSendDisabledReason(row) | translate)

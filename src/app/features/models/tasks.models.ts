@@ -46,14 +46,14 @@ export interface TaskStatusInput {
   status: TaskStatusEnum;
 }
 
-export type TasksFiltersState = {
+export interface TasksFiltersState {
   title: string;
   status: string[] | null;
   assigneeIds: string[] | null;
   actionPlanIds: string[] | null;
   createdAt: string | string[] | null;
   periodCreatedAt: PeriodEnum | null;
-};
+}
 
 export function mapTaskApiModel(input: TaskApiModel): TaskModel {
   return { ...input };

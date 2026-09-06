@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'agendaManutencao.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -16,7 +16,7 @@
     class="p-button-info p-button-sm"
     [label]="'agendaManutencao.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-agenda-manutencao-form-dialog
   [visible]="formVisible()"
@@ -381,10 +381,10 @@
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.equipamento.descricao">{{ row.equipamento.descricao }}</span>
         </td>
         <td class="text-center" [attr.data-label]="'agendaManutencao.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="statusTone(row.status)"
             [label]="('agendaManutencao.status.' + row.status) | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'agendaManutencao.columns.frequencia' | translate">{{ ('agendaManutencao.frequencia.' + row.frequencia) | translate }}</td>
         <td class="text-center" [attr.data-label]="'agendaManutencao.columns.tipoManutencao' | translate">{{ ('manutencoes.tipo.' + row.tipoManutencao) | translate }}</td>
@@ -401,6 +401,7 @@
               [disabled]="!canManage()"
               class="p-button-text p-button-sm"
               [pTooltip]="'common.edit' | translate"
+              [attr.aria-label]="'common.edit' | translate"
             ></button>
 
             <button
@@ -412,6 +413,7 @@
               [disabled]="!canManage()"
               class="p-button-text p-button-sm p-button-danger"
               [pTooltip]="'common.delete' | translate"
+              [attr.aria-label]="'common.delete' | translate"
             ></button>
           </div>
         </td>

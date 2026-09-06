@@ -17,25 +17,26 @@ export class ToastService {
   private readonly messageService = inject(MessageService);
   private readonly i18n = inject(I18nService);
 
-  success(summary?: string, detail?: string, life = 4000, _meta?: ToastMeta): void {
-    this.show('success', summary, detail, life);
+  success(summary?: string, detail?: string, life = 4000, meta?: ToastMeta): void {
+    this.show('success', summary, this.withCorrelationId(detail, meta), life);
   }
 
-  info(summary?: string, detail?: string, life = 4000, _meta?: ToastMeta): void {
-    this.show('info', summary, detail, life);
+  info(summary?: string, detail?: string, life = 4000, meta?: ToastMeta): void {
+    this.show('info', summary, this.withCorrelationId(detail, meta), life);
   }
 
-  warn(summary?: string, detail?: string, life = 5000, _meta?: ToastMeta): void {
-    this.show('warn', summary, detail, life);
+  warn(summary?: string, detail?: string, life = 5000, meta?: ToastMeta): void {
+    this.show('warn', summary, this.withCorrelationId(detail, meta), life);
   }
 
   error(summary?: string, detail?: string, life = 6000, meta?: ToastMeta): void {
-    const finalDetail =
-      meta?.correlationId && detail
-        ? `${detail} (${this.i18n.tUi('common.correlationId' as never, 'Correlation ID')}: ${meta.correlationId})`
-        : detail;
+    this.show('error', summary, this.withCorrelationId(detail, meta), life);
+  }
 
-    this.show('error', summary, finalDetail, life);
+  private withCorrelationId(detail?: string, meta?: ToastMeta): string | undefined {
+    return meta?.correlationId && detail
+      ? `${detail} (${this.i18n.tUi('common.correlationId' as never, 'Correlation ID')}: ${meta.correlationId})`
+      : detail;
   }
 
   private show(severity: ToastSeverity, summary?: string, detail?: string, life = 4000): void {

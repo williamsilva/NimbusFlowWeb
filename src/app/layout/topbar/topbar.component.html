@@ -32,8 +32,12 @@
       class="status"
       tooltipPosition="bottom"
       [attr.aria-label]="statusLabel()"
+      [attr.role]="sessionExpired() ? 'button' : null"
+      [attr.tabindex]="sessionExpired() ? 0 : null"
       [class.expired]="sessionExpired()"
       (click)="sessionExpired() && auth.startLogin()"
+      (keydown.enter)="sessionExpired() && auth.startLogin()"
+      (keydown.space)="sessionExpired() && auth.startLogin()"
       [pTooltip]="sessionExpired() ? statusTooltip() : undefined"
       >
       <span class="dot"></span>

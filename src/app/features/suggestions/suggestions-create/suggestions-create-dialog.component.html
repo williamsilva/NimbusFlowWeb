@@ -30,10 +30,10 @@
       </div>
 
       <div class="col-12 p-2">
-        <label class="block mb-2 text-sm opacity-80">
+        <label for="attachment" class="block mb-2 text-sm opacity-80">
           {{ 'suggestions.fields.attachment' | translate }}
         </label>
-        <input type="file" (change)="onFileSelected($event)" />
+        <input id="attachment" type="file" (change)="onFileSelected($event)" />
       </div>
     </div>
   </form>

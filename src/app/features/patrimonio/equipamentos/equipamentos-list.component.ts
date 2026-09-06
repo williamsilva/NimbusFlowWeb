@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { FilterMetadata } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
@@ -70,7 +71,7 @@ import {
 export class EquipamentosListComponent extends StatefulListPage<
   EquipamentosFiltersState,
   EquipamentosAdvancedFilters
-> {
+> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   protected override readonly i18n = inject(I18nService);
@@ -242,7 +243,7 @@ export class EquipamentosListComponent extends StatefulListPage<
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];
@@ -273,7 +274,8 @@ export class EquipamentosListComponent extends StatefulListPage<
       items.push({ label: this.i18n.tUi('equipamentos.fields.dataCompra'), value: dataCompra });
     }
 
-    const precoRange = filters?.['preco']?.value ?? filters?.['preco']?.[0]?.value;
+    const precoMeta = filters?.['preco'] as FilterMetadata | FilterMetadata[] | undefined;
+    const precoRange = Array.isArray(precoMeta) ? precoMeta[0]?.value : precoMeta?.value;
     if (Array.isArray(precoRange) && (precoRange[0] != null || precoRange[1] != null)) {
       const label = currencyRangeLabel(this.i18n, precoRange[0], precoRange[1]);
       if (label) {
@@ -290,5 +292,9 @@ export class EquipamentosListComponent extends StatefulListPage<
     this.facade.loadPage(query);
   }
 
+  // reload dessa lista
+  // já é disparado pelo effect() de filtros da própria StatefulListPage, não precisa de
+  // lógica extra aqui.
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected override loadFirstPage(): void {}
 }

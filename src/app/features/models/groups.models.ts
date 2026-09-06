@@ -56,13 +56,13 @@ export interface GroupApiModel {
   users?: UserOptionApiModel[] | null;
 }
 
-export type GroupsFiltersState = {
+export interface GroupsFiltersState {
   name: string;
   description: string;
   createdBy: string[] | null;
   createdAt: string | string[] | null;
   periodCreatedAt: PeriodEnum | null;
-};
+}
 
 export interface PermissionOptionApiModel {
   id: string;

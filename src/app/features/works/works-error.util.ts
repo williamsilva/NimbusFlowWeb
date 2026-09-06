@@ -11,7 +11,7 @@ import { UiKey } from '@core/i18n/ui-keys';
  * (ver PaymentOrderService/InstallmentService/MeasurementService, 2026-08-23) - não é uma
  * checagem estrutural, é substring puro.
  */
-const KNOWN_DETAILS: Array<{ match: string; key: UiKey }> = [
+const KNOWN_DETAILS: { match: string; key: UiKey }[] = [
   { match: 'Work status does not accept new addendums', key: 'addendums.action.requiresSubmittableWork' },
   { match: 'Addendum is not pending', key: 'addendums.action.alreadyDecided' },
   { match: 'Payment order is not measurement-approved', key: 'installments.action.statusChanged' },

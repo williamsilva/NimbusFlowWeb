@@ -8,7 +8,7 @@ const ISO_DATETIME_NO_TZ = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?$/
 const ISO_DATETIME_WITH_TZ =
   /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:Z|[+-]\d{2}:\d{2})$/;
 
-type Finding = { path: string; value: string };
+interface Finding { path: string; value: string }
 
 function scan(value: unknown, path = '$', out: Finding[] = []): Finding[] {
   if (value === null || value === undefined) return out;
@@ -52,7 +52,7 @@ export const timezoneStrictInterceptor: HttpInterceptorFn = (
 
   return next(req).pipe(
     tap({
-      next: (event: any) => {
+      next: (event: HttpEvent<unknown>) => {
         if (!event || !('body' in event)) return;
 
         const findings = scan(event.body);

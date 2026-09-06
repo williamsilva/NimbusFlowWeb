@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'emailLog.subtitle' | translate"
   [breadcrumb]="[
     { label: ('menu.settings.title' | translate), url: '/settings' },
@@ -14,7 +14,7 @@
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <cs-filters-panel
   [collapsed]="true"
@@ -346,10 +346,10 @@
         </td>
         <td class="text-center">{{ eventTypeLabel(row.eventType) }}</td>
         <td class="text-center">
-          <cs-status-badge
+          <app-status-badge
             [tone]="tone(row.status)"
             [label]="'emailLog.status.' + row.status | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center">{{ row.sentAt | csDate: 'datetime' }}</td>
         <td class="text-center">
@@ -362,6 +362,7 @@
               class="p-button-text p-button-sm"
               tooltipPosition="top"
               [pTooltip]="'common.view' | translate"
+              [attr.aria-label]="'common.view' | translate"
             ></button>
           </div>
         </td>

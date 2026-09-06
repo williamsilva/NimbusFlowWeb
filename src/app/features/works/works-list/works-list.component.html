@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'works.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -25,7 +25,7 @@
     class="p-button-info p-button-sm"
     [label]="'works.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-works-create-dialog
   [work]="work()"
@@ -151,12 +151,12 @@
 
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-6 p-2">
-      <cs-currency-range-filter
+      <app-currency-range-filter
         [inputId]="'totalAmount'"
         [label]="'works.fields.totalAmount' | translate"
         [value]="{ start: totalAmountFrom(), end: totalAmountTo() }"
         (valueChange)="totalAmountFrom.set($event.start); totalAmountTo.set($event.end)"
-      ></cs-currency-range-filter>
+      ></app-currency-range-filter>
     </div>
   </div>
 </cs-filters-panel>
@@ -450,12 +450,12 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [inputId]="'initialAmountCol'"
                     [label]="'works.columns.initialAmount' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -493,12 +493,12 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [inputId]="'addendumsAmountCol'"
                     [label]="'works.columns.addendumsAmount' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -525,12 +525,12 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [inputId]="'totalAmountCol'"
                     [label]="'works.fields.totalAmount' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -568,12 +568,12 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [inputId]="'remainingAmountCol'"
                     [label]="'works.columns.remainingAmount' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -625,10 +625,10 @@
           }}</span>
         </td>
         <td class="text-center" [attr.data-label]="'works.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="tone(row.status)"
             [label]="'works.status.' + row.status | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'works.columns.startDate' | translate">{{ row.startDate | csDate: 'date' }}</td>
         <td class="text-center" [attr.data-label]="'works.columns.expectedEndDate' | translate">{{ row.expectedEndDate | csDate: 'date' }}</td>
@@ -663,6 +663,11 @@
                   ? ('common.edit' | translate)
                   : (policy.editDisabledReason() ?? 'works.action.noPermission' | translate)
               "
+              [attr.aria-label]="
+                policy.canEdit()
+                  ? ('common.edit' | translate)
+                  : (policy.editDisabledReason() ?? 'works.action.noPermission' | translate)
+              "
             ></button>
 
             <a
@@ -672,6 +677,7 @@
               [routerLink]="['/works', row.id, 'addendums']"
               class="p-button-text p-button-sm p-button-danger"
               [pTooltip]="'works.action.viewAddendums' | translate"
+              [attr.aria-label]="'works.action.viewAddendums' | translate"
             ></a>
 
             <a
@@ -681,6 +687,7 @@
               class="p-button-text p-button-sm p-button-warn"
               [routerLink]="['/works', row.id, 'measurements']"
               [pTooltip]="'works.action.viewMeasurements' | translate"
+              [attr.aria-label]="'works.action.viewMeasurements' | translate"
             ></a>
 
             <a
@@ -690,6 +697,7 @@
               class="p-button-text p-button-sm p-button-info"
               [routerLink]="['/works', row.id, 'installments']"
               [pTooltip]="'works.action.viewInstallments' | translate"
+              [attr.aria-label]="'works.action.viewInstallments' | translate"
             ></a>
 
             <button
@@ -701,6 +709,11 @@
               [disabled]="!canDelete(row)"
               class="p-button-text p-button-sm p-button-danger"
               [pTooltip]="
+                canDelete(row)
+                  ? ('common.delete' | translate)
+                  : (deleteDisabledReason(row) | translate)
+              "
+              [attr.aria-label]="
                 canDelete(row)
                   ? ('common.delete' | translate)
                   : (deleteDisabledReason(row) | translate)

@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { ApiError } from './api-error.model';
 import { I18nService } from '../i18n/i18n.service';
 
 @Injectable({ providedIn: 'root' })
 export class ErrorMapperService {
-  constructor(private i18n: I18nService) {}
+  private i18n = inject(I18nService);
+
 
   ui(key: string, fallback?: string, params?: Record<string, unknown>): string {
     return this.i18n.tUi(key as never, params, fallback);
@@ -38,12 +40,13 @@ export class ErrorMapperService {
   }
 
   normalize(err: unknown): ApiError {
-    const e = (err as any)?.error;
+    const httpErr = err as HttpErrorResponse | undefined;
+    const e = httpErr?.error;
     if (e && typeof e === 'object') return e as ApiError;
 
     return {
-      status: (err as any)?.status,
-      message: (err as any)?.message,
+      status: httpErr?.status,
+      message: httpErr?.message,
     };
   }
 

@@ -17,7 +17,7 @@ import { PageHeaderComponent } from '@shared/features/page-header/page-header.co
 
 @Component({
   standalone: true,
-  selector: 'cs-backup-settings',
+  selector: 'app-backup-settings',
   templateUrl: './backup-settings.component.html',
   imports: [
     CardModule,

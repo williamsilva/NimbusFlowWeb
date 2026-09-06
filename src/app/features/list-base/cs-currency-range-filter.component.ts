@@ -16,7 +16,7 @@ export type CsCurrencyRangeMask = 'currency' | 'decimal' | 'percent';
 
 @Component({
   standalone: true,
-  selector: 'cs-currency-range-filter',
+  selector: 'app-currency-range-filter',
   imports: [FormsModule, InputNumberModule, FloatLabel],
   host: {
     class: 'block',

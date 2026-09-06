@@ -28,11 +28,11 @@ export class PermissionService {
     return this.authoritySet().has(permission);
   }
 
-  hasAny(...permissions: Array<Permission | string | null | undefined>): boolean {
+  hasAny(...permissions: (Permission | string | null | undefined)[]): boolean {
     return permissions.some((permission) => this.has(permission));
   }
 
-  hasAll(...permissions: Array<Permission | string | null | undefined>): boolean {
+  hasAll(...permissions: (Permission | string | null | undefined)[]): boolean {
     return permissions.every((permission) => this.has(permission));
   }
 
@@ -44,11 +44,11 @@ export class PermissionService {
     return this.hasSupport() || this.has(permission);
   }
 
-  hasSupportOrAny(...permissions: Array<Permission | string | null | undefined>): boolean {
+  hasSupportOrAny(...permissions: (Permission | string | null | undefined)[]): boolean {
     return this.hasSupport() || this.hasAny(...permissions);
   }
 
-  hasSupportOrAll(...permissions: Array<Permission | string | null | undefined>): boolean {
+  hasSupportOrAll(...permissions: (Permission | string | null | undefined)[]): boolean {
     return this.hasSupport() || this.hasAll(...permissions);
   }
 
@@ -56,16 +56,16 @@ export class PermissionService {
     return this.has(permission);
   }
 
-  canAny(...permissions: Array<Permission | string | null | undefined>): boolean {
+  canAny(...permissions: (Permission | string | null | undefined)[]): boolean {
     return this.hasAny(...permissions);
   }
 
-  canAll(...permissions: Array<Permission | string | null | undefined>): boolean {
+  canAll(...permissions: (Permission | string | null | undefined)[]): boolean {
     return this.hasAll(...permissions);
   }
 
   canAccess(
-    permissions: Array<Permission | string | null | undefined>,
+    permissions: (Permission | string | null | undefined)[],
     requireAll = false,
   ): boolean {
     if (!permissions.length) {
@@ -76,7 +76,7 @@ export class PermissionService {
   }
 
   hasMenuAccess(
-    permissions?: Array<Permission | string | null | undefined>,
+    permissions?: (Permission | string | null | undefined)[],
     requireAll = false,
   ): boolean {
     if (!permissions?.length) {

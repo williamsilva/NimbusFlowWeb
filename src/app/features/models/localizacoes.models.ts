@@ -28,12 +28,12 @@ export interface LocalizacaoOptionModel {
   descricao: string;
 }
 
-export type LocalizacoesFiltersState = {
+export interface LocalizacoesFiltersState {
   descricao: string;
   status: string[] | null;
   createdAt: string | string[] | null;
   periodCreatedAt: PeriodEnum | null;
-};
+}
 
 export function mapLocalizacaoApiModel(input: LocalizacaoApiModel): LocalizacaoModel {
   return { ...input };

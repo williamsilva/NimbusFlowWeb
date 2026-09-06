@@ -22,12 +22,12 @@ import {
 } from './i18n.config';
 import { PeriodEnum } from '@models/enums/period.enum';
 
-type I18nSyncMessage = {
+interface I18nSyncMessage {
   type: 'lang-changed';
   lang: Lang;
   origin: string;
   at: number;
-};
+}
 
 @Injectable({ providedIn: 'root' })
 export class I18nService {

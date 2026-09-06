@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
   standalone: true,
-  selector: 'cs-forbidden-page',
+  selector: 'app-forbidden-page',
   imports: [RouterLink, ButtonModule],
   template: `
     <div class="cs-page p-4 md:p-6">

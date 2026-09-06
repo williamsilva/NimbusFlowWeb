@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'actionPlans.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -25,7 +25,7 @@
       [label]="'actionPlans.new.title' | translate"
     ></button>
   }
-</cs-page-header>
+</app-page-header>
 
 <app-action-plans-create-dialog
   [visible]="newVisible()"
@@ -317,10 +317,10 @@
           }}</span>
         </td>
         <td class="text-center" [attr.data-label]="'actionPlans.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="tone(row.status)"
             [label]="'actionPlans.status.' + row.status | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'actionPlans.columns.tasks' | translate">
           {{ 'actionPlans.tasksCount' | translate: { count: row.tasksCount } }}
@@ -351,6 +351,7 @@
               (click)="goTasks(row)"
               class="p-button-text p-button-sm"
               [pTooltip]="'actionPlans.action.viewTasks' | translate"
+              [attr.aria-label]="'actionPlans.action.viewTasks' | translate"
               tooltipPosition="top"
             ></button>
             <button
@@ -361,6 +362,7 @@
               class="p-button-text p-button-sm"
               [disabled]="!canEdit(row)"
               [pTooltip]="'common.edit' | translate"
+              [attr.aria-label]="'common.edit' | translate"
               tooltipPosition="top"
             ></button>
             <button
@@ -371,6 +373,7 @@
               class="p-button-text p-button-sm"
               [disabled]="!canStart(row)"
               [pTooltip]="'actionPlans.action.start' | translate"
+              [attr.aria-label]="'actionPlans.action.start' | translate"
               tooltipPosition="top"
             ></button>
             <button
@@ -381,6 +384,7 @@
               class="p-button-text p-button-sm"
               [disabled]="!canComplete(row)"
               [pTooltip]="completeTooltip(row)"
+              [attr.aria-label]="completeTooltip(row)"
               tooltipPosition="top"
             ></button>
             <button
@@ -391,6 +395,7 @@
               (click)="confirmCancel(row)"
               [disabled]="!canCancel(row)"
               [pTooltip]="'actionPlans.action.cancel' | translate"
+              [attr.aria-label]="'actionPlans.action.cancel' | translate"
               tooltipPosition="top"
             ></button>
             <button
@@ -401,6 +406,7 @@
               class="p-button-text p-button-sm"
               [disabled]="!canCreateProject(row)"
               [pTooltip]="'actionPlans.action.createProject' | translate"
+              [attr.aria-label]="'actionPlans.action.createProject' | translate"
               tooltipPosition="top"
             ></button>
             <button
@@ -411,6 +417,7 @@
               class="p-button-text p-button-sm"
               [disabled]="!canCreateWork(row)"
               [pTooltip]="'actionPlans.action.createWork' | translate"
+              [attr.aria-label]="'actionPlans.action.createWork' | translate"
               tooltipPosition="top"
             ></button>
           </div>

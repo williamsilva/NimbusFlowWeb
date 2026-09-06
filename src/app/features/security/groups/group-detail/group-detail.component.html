@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'groups.detail.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -25,7 +25,7 @@
     [disabled]="!canEdit()"
     [label]="'common.edit' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-groups-create-dialog
   [group]="group()"
@@ -49,38 +49,52 @@
               <div class="cs-profile-username">{{ descriptionText() }}</div>
               <div class="cs-profile-tags">
                 @if (isSupportGroup()) {
-                  <cs-tag severity="warn" value="SUPPORT"></cs-tag>
+                  <app-tag severity="warn" value="SUPPORT"></app-tag>
                 }
-                <cs-tag
+                <app-tag
                   severity="info"
                   [value]="('groups.detail.permissions.title' | translate) + ': ' + permissionsCount()"
-                ></cs-tag>
-                <cs-tag
+                ></app-tag>
+                <app-tag
                   severity="success"
                   [value]="('groups.detail.users.title' | translate) + ': ' + usersCount()"
-                ></cs-tag>
+                ></app-tag>
               </div>
             </div>
             <div class="cs-profile-metrics-list">
-              <div class="cs-permission-chip-card is-permissions" (click)="setTab('permissions')">
+              <div
+                role="button"
+                tabindex="0"
+                class="cs-permission-chip-card is-permissions"
+                (click)="setTab('permissions')"
+                (keydown.enter)="setTab('permissions')"
+                (keydown.space)="setTab('permissions')"
+              >
                 <span class="cs-permission-chip-index">1</span>
                 <div class="cs-permission-chip-content">
                   <span class="cs-permission-chip-text">
                     {{ 'groups.detail.permissions.title' | translate }}
                   </span>
                   <span class="cs-permission-chip-raw">
-                    <cs-badge severity="info" [value]="permissionsCount()"></cs-badge>
+                    <app-badge severity="info" [value]="permissionsCount()"></app-badge>
                   </span>
                 </div>
               </div>
-              <div class="cs-permission-chip-card is-users" (click)="setTab('users')">
+              <div
+                role="button"
+                tabindex="0"
+                class="cs-permission-chip-card is-users"
+                (click)="setTab('users')"
+                (keydown.enter)="setTab('users')"
+                (keydown.space)="setTab('users')"
+              >
                 <span class="cs-permission-chip-index">2</span>
                 <div class="cs-permission-chip-content">
                   <span class="cs-permission-chip-text">
                     {{ 'groups.detail.users.title' | translate }}
                   </span>
                   <span class="cs-permission-chip-raw">
-                    <cs-badge severity="success" [value]="usersCount()"></cs-badge>
+                    <app-badge severity="success" [value]="usersCount()"></app-badge>
                   </span>
                 </div>
               </div>
@@ -127,7 +141,7 @@
               >
               <i class="pi pi-shield"></i>
               <span>{{ 'groups.detail.tabs.permissions' | translate }}</span>
-              <cs-badge severity="info" [value]="permissionsCount()"></cs-badge>
+              <app-badge severity="info" [value]="permissionsCount()"></app-badge>
             </button>
             <button
               pButton
@@ -138,7 +152,7 @@
               >
               <i class="pi pi-users"></i>
               <span>{{ 'groups.detail.tabs.users' | translate }}</span>
-              <cs-badge severity="success" [value]="usersCount()"></cs-badge>
+              <app-badge severity="success" [value]="usersCount()"></app-badge>
             </button>
           </div>
           @if (activeTab() === 'summary') {
@@ -150,7 +164,7 @@
                     <span class="cs-summary-block-title-text">{{
                       'groups.detail.users.title' | translate
                     }}</span>
-                    <cs-badge severity="success" [value]="usersCount()"></cs-badge>
+                    <app-badge severity="success" [value]="usersCount()"></app-badge>
                   </div>
                   @if (g.users?.length) {
                     <div class="cs-summary-mini-grid cs-summary-mini-grid-3">
@@ -175,7 +189,7 @@
                     <span class="cs-summary-block-title-text">{{
                       'groups.detail.permissions.title' | translate
                     }}</span>
-                    <cs-badge severity="info" [value]="permissionsCount()"></cs-badge>
+                    <app-badge severity="info" [value]="permissionsCount()"></app-badge>
                   </div>
                   @if (g.permissions?.length) {
                     <div
@@ -262,6 +276,7 @@
                             class="p-button-text p-button-sm p-button-danger"
                             [disabled]="!canManagePermissions() || savingPermissions()"
                             [pTooltip]="'groups.detail.permissions.removeConfirm.action' | translate"
+                            [attr.aria-label]="'groups.detail.permissions.removeConfirm.action' | translate"
                             tooltipPosition="top"
                           ></button>
                         </div>
@@ -336,6 +351,7 @@
                             class="p-button-text p-button-sm p-button-danger"
                             [disabled]="!canManageUsers() || savingUsers()"
                             [pTooltip]="'groups.detail.users.removeConfirm.action' | translate"
+                            [attr.aria-label]="'groups.detail.users.removeConfirm.action' | translate"
                             tooltipPosition="top"
                           ></button>
                         </div>

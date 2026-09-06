@@ -5,7 +5,7 @@ import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   standalone: true,
-  selector: 'cs-row-action-button',
+  selector: 'app-row-action-button',
   imports: [ButtonModule, TooltipModule],
   template: `
     <button
@@ -17,6 +17,7 @@ import { TooltipModule } from 'primeng/tooltip';
       (click)="clicked.emit()"
       class="p-button-text p-button-sm"
       [pTooltip]="tooltip || undefined"
+      [attr.aria-label]="tooltip || undefined"
     ></button>
   `,
 })

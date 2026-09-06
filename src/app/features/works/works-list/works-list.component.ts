@@ -1,12 +1,12 @@
 import { RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DestroyRef, Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { DestroyRef, Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, FilterMetadata, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -79,7 +79,7 @@ import {
     DateInputMaskDirective,
   ],
 })
-export class WorksListComponent extends StatefulListPage<WorksFiltersState, WorksAdvancedFilters> {
+export class WorksListComponent extends StatefulListPage<WorksFiltersState, WorksAdvancedFilters> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   protected override readonly i18n = inject(I18nService);
@@ -232,6 +232,9 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
    *  Medição REJECTED ou Ordem CANCELLED residual (que também bloqueava até 2026-08-31, ver
    *  WorkService.hasNoFinancialArtifact) não aparecia em nenhuma coluna e a mensagem caía,
    *  errada, em "sem permissão" mesmo com a permissão concedida. */
+  // row mantido pra bater com a assinatura usada no template (deleteDisabledReason(row) |
+  // translate), mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   deleteDisabledReason(row: WorkModel): string {
     if (!this.policy.canDelete()) {
       return this.policy.deleteDisabledReason() ?? 'works.action.noPermission';
@@ -366,7 +369,7 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];
@@ -401,8 +404,13 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
       items.push({ label: this.i18n.tUi('works.fields.expectedEndDate'), value: expectedEndDate });
     }
 
-    const totalAmountRange =
-      filters?.['totalAmount']?.value ?? filters?.['totalAmount']?.[0]?.value;
+    const totalAmountMeta = filters?.['totalAmount'] as
+      | FilterMetadata
+      | FilterMetadata[]
+      | undefined;
+    const totalAmountRange = Array.isArray(totalAmountMeta)
+      ? totalAmountMeta[0]?.value
+      : totalAmountMeta?.value;
     if (
       Array.isArray(totalAmountRange) &&
       (totalAmountRange[0] != null || totalAmountRange[1] != null)
@@ -422,5 +430,9 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     this.facade.loadPage(query);
   }
 
+  // reload dessa lista
+  // já é disparado pelo effect() de filtros da própria StatefulListPage, não precisa de
+  // lógica extra aqui.
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected override loadFirstPage(): void {}
 }

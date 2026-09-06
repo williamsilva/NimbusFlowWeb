@@ -12,7 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
  */
 @Component({
   standalone: true,
-  selector: 'cs-site-plan-picker',
+  selector: 'app-site-plan-picker',
   templateUrl: './site-plan-picker.component.html',
   styleUrl: './site-plan-picker.component.scss',
   imports: [TranslateModule],

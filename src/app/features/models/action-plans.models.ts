@@ -59,13 +59,13 @@ export interface ActionPlanWorkLinkInput {
   workId: string;
 }
 
-export type ActionPlansFiltersState = {
+export interface ActionPlansFiltersState {
   title: string;
   status: string[] | null;
   workIds: string[] | null;
   createdAt: string | string[] | null;
   periodCreatedAt: PeriodEnum | null;
-};
+}
 
 export function mapActionPlanApiModel(input: ActionPlanApiModel): ActionPlanModel {
   return { ...input };

@@ -13,7 +13,7 @@ import { DestroyRef, Directive, ElementRef, HostListener, OnInit, inject } from 
  * Mantém o valor do FormControl como SOMENTE DÍGITOS.
  */
 @Directive({
-  selector: '[csPhoneMask]',
+  selector: '[appPhoneMask]',
   standalone: true,
 })
 export class PhoneMaskDirective implements OnInit {

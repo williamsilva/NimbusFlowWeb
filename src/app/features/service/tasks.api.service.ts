@@ -8,7 +8,6 @@ import { HalPagedResponse } from '@core/api/page.model';
 import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { TasksAdvancedFilters } from '@features/filter/tasks.filters';
 import {
-  TaskModel,
   TaskApiModel,
   TaskUpsertInput,
   TaskStatusInput,

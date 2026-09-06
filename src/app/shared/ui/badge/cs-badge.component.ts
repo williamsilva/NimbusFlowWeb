@@ -8,7 +8,7 @@ export type CsBadgeSize = 'large' | 'xlarge';
 
 @Component({
   standalone: true,
-  selector: 'cs-badge',
+  selector: 'app-badge',
   imports: [BadgeModule],
   template: `
     @if (visible()) {
@@ -30,7 +30,7 @@ export class CsBadgeComponent {
    * Quando true, mostra somente a bolinha do badge, sem texto.
    *
    * Exemplo:
-   * <cs-badge tone="danger" [dot]="true" />
+   * <app-badge tone="danger" [dot]="true" />
    */
   readonly dot = input(false);
 

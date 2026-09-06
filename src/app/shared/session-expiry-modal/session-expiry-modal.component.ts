@@ -10,7 +10,7 @@ import { SessionService } from '../../core/auth/session.service';
 
 @Component({
   standalone: true,
-  selector: 'cs-session-expiry-modal',
+  selector: 'app-session-expiry-modal',
   templateUrl: './sesseion-expiry-modal.html',
   styleUrls: ['./sesseion-expiry-modal.scss'],
   imports: [DialogModule, ButtonModule, TranslateModule],

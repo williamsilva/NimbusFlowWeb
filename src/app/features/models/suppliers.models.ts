@@ -59,7 +59,7 @@ export interface SupplierOptionModel {
   active: boolean;
 }
 
-export type SuppliersFiltersState = {
+export interface SuppliersFiltersState {
   companyName: string;
   tradeName: string;
   taxId: string;
@@ -68,7 +68,7 @@ export type SuppliersFiltersState = {
   active: string[] | null;
   createdAt: string | string[] | null;
   periodCreatedAt: PeriodEnum | null;
-};
+}
 
 export function mapSupplierApiModel(input: SupplierApiModel): SupplierModel {
   return { ...input };

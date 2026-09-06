@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'tasks.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -23,7 +23,7 @@
     class="p-button-secondary p-button-sm"
     [label]="'tasks.action.mine' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <cs-filters-panel
   [collapsed]="true"
@@ -243,10 +243,10 @@
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.dependsOnTaskTitle">{{ row.dependsOnTaskTitle ?? '-' }}</span>
         </td>
         <td class="text-center" [attr.data-label]="'tasks.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="tone(row.status)"
             [label]="('tasks.status.' + row.status) | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'tasks.columns.dueDate' | translate">{{ row.dueDate ? (row.dueDate | csDate: 'short') : '-' }}</td>
         <td class="text-center mobile-card-actions" [attr.data-label]="'common.actions' | translate">
@@ -259,6 +259,7 @@
               class="p-button-text p-button-sm"
               [disabled]="!canAdvance(row)"
               [pTooltip]="advanceLabel(row) || ('tasks.action.advance' | translate)"
+              [attr.aria-label]="advanceLabel(row) || ('tasks.action.advance' | translate)"
               tooltipPosition="top"
             ></button>
           </div>

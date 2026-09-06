@@ -25,7 +25,7 @@ import {
   normalizeUserStatus,
 } from '@models/enums/user-status.enum';
 
-type ProfileView = {
+interface ProfileView {
   authenticated: boolean;
   iss?: string;
   groups: string[];
@@ -35,7 +35,7 @@ type ProfileView = {
   authorities: string[];
   expiresAt?: string;
   userDetails?: MyProfileModel | null;
-};
+}
 
 @Component({
   standalone: true,
@@ -105,7 +105,12 @@ export class ProfilePageComponent {
         this.pushSubscribed.set(true);
       }
     } catch {
-      this.pushError.set(this.i18n.tUi('profile.push.error' as any, 'Não foi possível ativar as notificações. Tente novamente.'));
+      this.pushError.set(
+        this.i18n.tUi(
+          'profile.push.error' as never,
+          'Não foi possível ativar as notificações. Tente novamente.',
+        ),
+      );
     } finally {
       this.pushBusy.set(false);
     }
@@ -248,8 +253,8 @@ export class ProfilePageComponent {
   }
 
   blockedStateLabel(blockedUntil?: string | Date | null): string {
-    const yes = this.i18n.tUi('common.yes' as any, 'Sim');
-    const no = this.i18n.tUi('common.no' as any, 'Não');
+    const yes = this.i18n.tUi('common.yes' as never, 'Sim');
+    const no = this.i18n.tUi('common.no' as never, 'Não');
 
     if (!blockedUntil) return no;
 
@@ -261,31 +266,31 @@ export class ProfilePageComponent {
 
   passwordExpiryLabel(passwordExpiresAt?: string | Date | null): string {
     if (!passwordExpiresAt) {
-      return this.i18n.tUi('profile.password.notInformed' as any, 'Não informado');
+      return this.i18n.tUi('profile.password.notInformed' as never, 'Não informado');
     }
 
     const d = new Date(passwordExpiresAt);
     if (Number.isNaN(d.getTime())) {
-      return this.i18n.tUi('profile.password.notInformed' as any, 'Não informado');
+      return this.i18n.tUi('profile.password.notInformed' as never, 'Não informado');
     }
 
     const diff = d.getTime() - Date.now();
 
     if (diff <= 0) {
-      return this.i18n.tUi('profile.password.expired' as any, 'Expirada');
+      return this.i18n.tUi('profile.password.expired' as never, 'Expirada');
     }
 
     const days = Math.floor(diff / 86400000);
 
     if (days <= 0) {
-      return this.i18n.tUi('profile.password.today' as any, 'Hoje');
+      return this.i18n.tUi('profile.password.today' as never, 'Hoje');
     }
 
     if (days === 1) {
-      return `1 ${this.i18n.tUi('profile.password.day' as any, 'dia')}`;
+      return `1 ${this.i18n.tUi('profile.password.day' as never, 'dia')}`;
     }
 
-    return `${days} ${this.i18n.tUi('profile.password.days' as any, 'dias')}`;
+    return `${days} ${this.i18n.tUi('profile.password.days' as never, 'dias')}`;
   }
 
   /** Realça cada permissão pela cor já usada no menu lateral pra mesma área da tela
@@ -369,14 +374,14 @@ export class ProfilePageComponent {
     const value = (permission ?? '').trim().toUpperCase();
     if (!value) return '';
 
-    return this.i18n.tUi(`profile.permissionDescription.${value}` as any, this.humanizeEnum(value));
+    return this.i18n.tUi(`profile.permissionDescription.${value}` as never, this.humanizeEnum(value));
   }
 
   groupLabel(group?: string | null): string {
     const value = (group ?? '').trim().toUpperCase();
     if (!value) return '—';
 
-    const translated = this.i18n.tUi(`profile.group.${value}` as any, this.humanizeEnum(value));
+    const translated = this.i18n.tUi(`profile.group.${value}` as never, this.humanizeEnum(value));
 
     return translated;
   }

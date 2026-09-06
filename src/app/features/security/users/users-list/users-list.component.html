@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'users.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -44,7 +44,7 @@
     [disabled]="!secPolicy.canCreate()"
     [label]="'users.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-users-create-dialog
   [user]="user()"
@@ -94,7 +94,7 @@
         <input
           pInputText
           id="document"
-          csCpfCnpjMask
+          appCpfCnpjMask
           [value]="document()"
           class="w-full p-inputtext-sm"
           (input)="document.set(($any($event.target).value ?? '').toString().replace(/\D+/g, ''))"
@@ -554,7 +554,7 @@
       </td>
 
       <td class="cell-muted text-center" [attr.data-label]="'users.columns.status' | translate">
-        <cs-tag [value]="statusLabel(row.status)" [tone]="severity(row.status)" />
+        <app-tag [value]="statusLabel(row.status)" [tone]="severity(row.status)" />
       </td>
 
       <td
@@ -602,6 +602,7 @@
             class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canEdit(row)"
             [pTooltip]="!secPolicy.canEdit(row) ? undefined : ('common.edit' | translate)"
+            [attr.aria-label]="!secPolicy.canEdit(row) ? undefined : ('common.edit' | translate)"
           ></button>
 
           <button
@@ -612,6 +613,11 @@
             class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canActivate(row)"
             [pTooltip]="
+              secPolicy.canActivate(row)
+                ? ('users.action.activate.label' | translate)
+                : (secPolicy.activateDisabledReason(row) ?? '' | translate)
+            "
+            [attr.aria-label]="
               secPolicy.canActivate(row)
                 ? ('users.action.activate.label' | translate)
                 : (secPolicy.activateDisabledReason(row) ?? '' | translate)
@@ -627,6 +633,11 @@
             class="p-button-text p-button-sm"
             [disabled]="!secPolicy.canDeactivate(row)"
             [pTooltip]="
+              secPolicy.canDeactivate(row)
+                ? ('users.action.deactivate.label' | translate)
+                : (secPolicy.deactivateDisabledReason(row) ?? '' | translate)
+            "
+            [attr.aria-label]="
               secPolicy.canDeactivate(row)
                 ? ('users.action.deactivate.label' | translate)
                 : (secPolicy.deactivateDisabledReason(row) ?? '' | translate)

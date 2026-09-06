@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'localizacoes.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -16,7 +16,7 @@
     class="p-button-info p-button-sm"
     [label]="'localizacoes.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-localizacao-form-dialog
   [visible]="formVisible()"
@@ -219,10 +219,10 @@
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.descricao">{{ row.descricao }}</span>
         </td>
         <td class="text-center" [attr.data-label]="'localizacoes.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="statusTone(row.status)"
             [label]="('localizacoes.status.' + row.status) | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'localizacoes.columns.createdAt' | translate">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
         <td class="text-center mobile-card-actions">
@@ -236,6 +236,7 @@
               [disabled]="!canManage() || isSystem(row)"
               class="p-button-text p-button-sm"
               [pTooltip]="isSystem(row) ? ('localizacoes.action.systemProtected' | translate) : ('common.edit' | translate)"
+              [attr.aria-label]="isSystem(row) ? ('localizacoes.action.systemProtected' | translate) : ('common.edit' | translate)"
             ></button>
 
             <button
@@ -247,6 +248,7 @@
               [disabled]="!canManage() || isSystem(row)"
               class="p-button-text p-button-sm p-button-danger"
               [pTooltip]="isSystem(row) ? ('localizacoes.action.systemProtected' | translate) : ('common.delete' | translate)"
+              [attr.aria-label]="isSystem(row) ? ('localizacoes.action.systemProtected' | translate) : ('common.delete' | translate)"
             ></button>
           </div>
         </td>

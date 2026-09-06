@@ -4,7 +4,7 @@ import { GroupModel } from '@models/groups.models';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { PermissionService } from '@core/auth/permission.service';
 
-export interface GroupPermissionTarget extends Pick<GroupModel, 'id' | 'name'> {}
+export type GroupPermissionTarget = Pick<GroupModel, 'id' | 'name'>;
 
 @Injectable({ providedIn: 'root' })
 export class GroupsPermissionPolicy {
@@ -18,18 +18,24 @@ export class GroupsPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.GROUPS.CREATE);
   }
 
+  // row mantido pra uniformizar a assinatura com as outras policies (o chamador sempre passa a
+  // linha), mesmo sem uso aqui já que essa permissão não depende do registro.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canEdit(_row: GroupPermissionTarget): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.GROUPS.CHANGE);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- ver canEdit acima.
   canDelete(_row: GroupPermissionTarget): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.GROUPS.DELETE);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- ver canEdit acima.
   canManagePermissions(_row: GroupPermissionTarget): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.GROUPS.MANAGE_PERMISSIONS);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- ver canEdit acima.
   canManageUsers(_row: GroupPermissionTarget): boolean {
     return this.perms.hasSupportOr(PERMISSIONS.GROUPS.MANAGE_USERS);
   }

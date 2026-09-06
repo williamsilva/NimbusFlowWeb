@@ -5,11 +5,11 @@ import { Permission } from './permissions.constants';
 import { ToastService } from '../toast/toast.service';
 import { PermissionService } from './permission.service';
 
-type RoutePermissionData = {
+interface RoutePermissionData {
   permissions?: Permission[];
   requireAll?: boolean;
   redirectTo?: string;
-};
+}
 
 export const permissionGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,

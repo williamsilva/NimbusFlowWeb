@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'installments.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -14,7 +14,7 @@
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <cs-filters-panel
   [collapsed]="true"
@@ -118,12 +118,12 @@
 
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-6 p-2">
-      <cs-currency-range-filter
+      <app-currency-range-filter
         [inputId]="'amount'"
         [label]="'installments.fields.amount' | translate"
         [value]="{ start: amountFrom(), end: amountTo() }"
         (valueChange)="amountFrom.set($event.start); amountTo.set($event.end)"
-      ></cs-currency-range-filter>
+      ></app-currency-range-filter>
     </div>
   </div>
 </cs-filters-panel>
@@ -250,12 +250,12 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [inputId]="'amountCol'"
                     [label]="'installments.fields.amount' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -443,19 +443,19 @@
           {{ row.dueDate | csDate: 'date' }}
         </td>
         <td class="text-center" [attr.data-label]="'installments.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="tone(row.status)"
             [label]="'installments.status.' + row.status | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td
           class="text-center"
           [attr.data-label]="'installments.columns.paymentStatus' | translate"
         >
-          <cs-status-badge
+          <app-status-badge
             [tone]="paymentTone(row)"
             [label]="'installments.paymentStatus.' + paymentStatusKey(row) | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'installments.columns.releasedBy' | translate">
           <span
@@ -487,6 +487,11 @@
                   ? ('installments.action.release' | translate)
                   : (releaseDisabledReason(row) | translate)
               "
+              [attr.aria-label]="
+                canRelease(row)
+                  ? ('installments.action.release' | translate)
+                  : (releaseDisabledReason(row) | translate)
+              "
               tooltipPosition="top"
             ></button>
 
@@ -502,6 +507,11 @@
                   ? ('installments.action.resendNotification' | translate)
                   : (resendNotificationDisabledReason(row) | translate)
               "
+              [attr.aria-label]="
+                canResendNotification(row)
+                  ? ('installments.action.resendNotification' | translate)
+                  : (resendNotificationDisabledReason(row) | translate)
+              "
               tooltipPosition="top"
             ></button>
 
@@ -513,6 +523,11 @@
               [disabled]="!canCancelOrder(row)"
               class="p-button-text p-button-sm p-button-danger"
               [pTooltip]="
+                canCancelOrder(row)
+                  ? ('installments.action.cancelOrder' | translate)
+                  : (cancelOrderDisabledReason(row) | translate)
+              "
+              [attr.aria-label]="
                 canCancelOrder(row)
                   ? ('installments.action.cancelOrder' | translate)
                   : (cancelOrderDisabledReason(row) | translate)

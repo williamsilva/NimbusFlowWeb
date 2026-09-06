@@ -69,7 +69,7 @@ export interface MeasurementWithContextModel extends MeasurementModel {
 export type MeasurementWithContextApiModel = MeasurementWithContextModel;
 
 /** Estado persistido do painel de filtros avançados da listagem global (menu "Medições"). */
-export type MeasurementsFiltersState = {
+export interface MeasurementsFiltersState {
   supplierId: string[] | null;
   workName: string;
   description: string;
@@ -78,7 +78,7 @@ export type MeasurementsFiltersState = {
   amountToPayTo: number | null;
   dueDate: string | string[] | null;
   periodDueDate: PeriodEnum | null;
-};
+}
 
 export interface MeasurementSubmitInput {
   description: string;
