@@ -3,10 +3,12 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 
-import { TopbarComponent } from './topbar/topbar.component';
-import { FooterComponent } from '@williamsilva/nimbus-web-commons';
+import {
+  FooterComponent,
+  SidebarComponent,
+  TopbarComponent,
+} from '@williamsilva/nimbus-web-commons';
 import { LayoutStateService } from './layout-state.service';
-import { SidebarComponent } from './sidebar/sidebar.component';
 import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
 
 @Component({
