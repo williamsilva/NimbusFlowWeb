@@ -1,4 +1,4 @@
-<cs-page-header [subtitle]="'dashboard.subtitle' | translate" [compact]="false"></cs-page-header>
+<app-page-header [subtitle]="'dashboard.subtitle' | translate" [compact]="false"></app-page-header>
 
 <cs-filters-panel
   [collapsed]="true"
@@ -73,12 +73,12 @@
 
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-6 p-2">
-      <cs-currency-range-filter
+      <app-currency-range-filter
         [inputId]="'totalAmount'"
         [label]="'dashboard.filters.totalAmount' | translate"
         [value]="{ start: totalAmountFrom(), end: totalAmountTo() }"
         (valueChange)="totalAmountFrom.set($event.start); totalAmountTo.set($event.end)"
-      ></cs-currency-range-filter>
+      ></app-currency-range-filter>
     </div>
   </div>
 </cs-filters-panel>
@@ -117,7 +117,7 @@
       <div class="text-2xl font-bold mb-2">{{ worksTotalCount() }}</div>
       <div class="flex flex-wrap gap-1">
         @for (entry of worksByStatusEntries(); track entry.status) {
-          <cs-status-badge [tone]="tone(entry.status)" [label]="entry.count + ' ' + statusLabel(entry.status)" />
+          <app-status-badge [tone]="tone(entry.status)" [label]="entry.count + ' ' + statusLabel(entry.status)" />
         }
       </div>
     </div>
@@ -164,7 +164,7 @@
       <div class="font-semibold mb-2">{{ 'dashboard.charts.valueByStatus.title' | translate }}</div>
       <div class="flex flex-wrap gap-2 mb-3">
         @for (item of facade.analytics()?.valueByStatus ?? []; track item.status) {
-          <cs-status-badge [tone]="tone(item.status)" [label]="statusLabel(item.status) + ': ' + (item.amount | csCurrency)" />
+          <app-status-badge [tone]="tone(item.status)" [label]="statusLabel(item.status) + ': ' + (item.amount | csCurrency)" />
         }
       </div>
       <div style="height: 90px">
@@ -220,10 +220,10 @@
             <div class="surface-ground border-round p-3 h-full">
               <div class="flex align-items-center justify-content-between mb-2">
                 <span class="font-medium">{{ project.name }}</span>
-                <cs-status-badge
+                <app-status-badge
                   [tone]="projectTone(project.status)"
                   [label]="('projects.status.' + project.status) | translate"
-                ></cs-status-badge>
+                ></app-status-badge>
               </div>
 
               <div class="flex justify-content-between text-sm mb-1">

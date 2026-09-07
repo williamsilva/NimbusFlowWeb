@@ -40,7 +40,7 @@ export interface ManutencaoUpsertInput {
   observacao: string | null;
 }
 
-export type ManutencoesFiltersState = {
+export interface ManutencoesFiltersState {
   equipamento: string;
   autorizadaNome: string;
   status: string[] | null;
@@ -49,7 +49,7 @@ export type ManutencoesFiltersState = {
   precoAte: number | null;
   dataEnvio: string | string[] | null;
   periodDataEnvio: PeriodEnum | null;
-};
+}
 
 export function mapManutencaoApiModel(input: ManutencaoApiModel): ManutencaoModel {
   return { ...input };

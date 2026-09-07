@@ -4,7 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { GroupsApiService } from '@features/service/groups.api.service';
 import { GroupsAdvancedFilters } from '@features/filter/groups.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import {
   GroupModel,
   GroupCreateInput,

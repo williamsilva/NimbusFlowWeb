@@ -60,7 +60,7 @@ export interface WorkUpsertInput {
   planPositionY: number | null;
 }
 
-export type WorksFiltersState = {
+export interface WorksFiltersState {
   name: string;
   supplierId: string[] | null;
   projectId: string[] | null;
@@ -71,7 +71,7 @@ export type WorksFiltersState = {
   periodExpectedEndDate: PeriodEnum | null;
   totalAmountFrom: number | null;
   totalAmountTo: number | null;
-};
+}
 
 export function mapWorkApiModel(input: WorkApiModel): WorkModel {
   return { ...input };

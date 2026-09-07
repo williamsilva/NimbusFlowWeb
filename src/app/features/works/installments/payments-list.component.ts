@@ -1,7 +1,7 @@
 import { FormsModule } from '@angular/forms';
 import { Component, ViewChild, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DestroyRef } from '@angular/core';
+import { DestroyRef, OnInit } from '@angular/core';
 
 import { finalize } from 'rxjs';
 
@@ -21,8 +21,8 @@ import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { PaymentsFacade } from '@features/facade/payments.facade';
 import { PaymentsAdvancedFilters } from '@features/filter/payments.filters';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { InstallmentsPermissionPolicy } from '@features/works/installments-permission.policy';
 import { formatSequentialNumber } from '@shared/utils/br-format';
@@ -31,7 +31,7 @@ import { PaymentModel, PaymentsFiltersState } from '@models/payments.models';
 import { PAYMENT_STATUS_VALUES, PaymentStatusEnum, paymentStatusTone } from '@models/enums/payment-status.enum';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { MarkInstallmentPaidDialogComponent } from '@features/works/installments/mark-installment-paid-dialog.component';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
   currencyRangeLabel,
   CsCurrencyRangeFilterComponent,
@@ -39,12 +39,12 @@ import {
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   readSingleFilterValue,
   readArrayFilterValues,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
 
 /** Listagem global paginada/filtrada/ordenada de Pagamentos (envio consolidado de N Ordens de
@@ -78,7 +78,7 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
 export class PaymentsListComponent extends StatefulListPage<
   PaymentsFiltersState,
   PaymentsAdvancedFilters
-> {
+> implements OnInit {
   @ViewChild('dt') private dt?: Table;
   private readonly destroyRef = inject(DestroyRef);
 
@@ -451,7 +451,7 @@ export class PaymentsListComponent extends StatefulListPage<
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];
@@ -486,5 +486,9 @@ export class PaymentsListComponent extends StatefulListPage<
     this.facade.loadPage(query);
   }
 
+  // reload dessa lista
+  // já é disparado pelo effect() de filtros da própria StatefulListPage, não precisa de
+  // lógica extra aqui.
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected override loadFirstPage(): void {}
 }

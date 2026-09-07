@@ -1,6 +1,10 @@
 export class MassageValidations {
-  static getErrorMsg(fieldName: string, validatorName: string, validatorValue?: any) {
-    const config: any = {
+  static getErrorMsg(
+    fieldName: string,
+    validatorName: string,
+    validatorValue?: Record<string, unknown>,
+  ) {
+    const config: Record<string, string> = {
       equalTo: 'Não conferem.',
       email: 'E-mail inválido.',
       cpfNotValid: 'CPF inválido.',
@@ -14,10 +18,10 @@ export class MassageValidations {
       notUnique: `${fieldName} já cadastrado.`,
       timeValidator: `${fieldName} é invalida.`,
       pattern: `${fieldName} está em formato inválido.`,
-      min: `${fieldName} deve ser no mínimo ${validatorValue.min}.`,
-      max: `${fieldName} deve ser no máximo ${validatorValue.max}.`,
-      minlength: `Mínimo ${validatorValue.requiredLength} caracteres.`,
-      maxlength: `Máximo ${validatorValue.requiredLength} caracteres.`,
+      min: `${fieldName} deve ser no mínimo ${validatorValue?.['min']}.`,
+      max: `${fieldName} deve ser no máximo ${validatorValue?.['max']}.`,
+      minlength: `Mínimo ${validatorValue?.['requiredLength']} caracteres.`,
+      maxlength: `Máximo ${validatorValue?.['requiredLength']} caracteres.`,
       dateComparison: `A data final deve ser maior que a data inicial.`,
       endsWithSpace: `${fieldName} não pode terminar com espaço em branco`,
       startsWithSpace: `${fieldName} não pode começar com espaço em branco`,

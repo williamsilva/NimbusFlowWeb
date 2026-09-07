@@ -37,7 +37,7 @@
             </div>
 
             <div class="cs-profile-tags">
-              <cs-tag
+              <app-tag
                 [value]="statusLabel(p.userDetails?.status)"
                 [tone]="statusSeverity(p.userDetails?.status)"
               />
@@ -63,11 +63,11 @@
                 </span>
 
                 <span class="cs-permission-chip-raw">
-                  <cs-badge
+                  <app-badge
                     class="ml-2"
                     severity="info"
                     [value]="'profile.items' | translate: { count: groups().length }"
-                  ></cs-badge>
+                  ></app-badge>
                 </span>
               </div>
             </div>
@@ -89,11 +89,11 @@
                 </span>
 
                 <span class="cs-permission-chip-raw">
-                  <cs-badge
+                  <app-badge
                     class="ml-2"
                     severity="warn"
                     [value]="'profile.items' | translate: { count: authorities().length }"
-                  ></cs-badge>
+                  ></app-badge>
                 </span>
               </div>
             </div>

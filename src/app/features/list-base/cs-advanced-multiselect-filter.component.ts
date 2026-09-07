@@ -17,7 +17,7 @@ import { CsAdvancedFilterItemTemplateDirective } from './cs-advanced-filter-item
 
 @Component({
   standalone: true,
-  selector: 'cs-advanced-multiselect-filter',
+  selector: 'app-advanced-multiselect-filter',
   imports: [CommonModule, FormsModule, FloatLabel, MultiSelectModule],
   host: {
     class: 'block',
@@ -59,8 +59,8 @@ import { CsAdvancedFilterItemTemplateDirective } from './cs-advanced-filter-item
 export class CsAdvancedMultiselectFilterComponent implements OnChanges {
   @Input() label = '';
   @Input() inputId = '';
-  @Input() options: any[] = [];
-  @Input() value: any[] | null = null;
+  @Input() options: Record<string, unknown>[] = [];
+  @Input() value: unknown[] | null = null;
 
   @Input() optionLabel = 'label';
   @Input() optionValue = 'value';
@@ -70,7 +70,7 @@ export class CsAdvancedMultiselectFilterComponent implements OnChanges {
   @Input() showClear = true;
   @Input() showToggleAll = false;
 
-  @Output() valueChange = new EventEmitter<any[] | null>();
+  @Output() valueChange = new EventEmitter<unknown[] | null>();
 
   @ContentChild(CsAdvancedFilterItemTemplateDirective)
   itemTemplate?: CsAdvancedFilterItemTemplateDirective;
@@ -88,11 +88,11 @@ export class CsAdvancedMultiselectFilterComponent implements OnChanges {
     }
   }
 
-  onValueChange(value: any[] | null | undefined): void {
+  onValueChange(value: unknown[] | null | undefined): void {
     this.valueChange.emit(value?.length ? value : null);
   }
 
-  getOptionLabel(option: any): string {
+  getOptionLabel(option: Record<string, unknown>): string {
     if (!option) {
       return '';
     }

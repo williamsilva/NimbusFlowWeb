@@ -4,7 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { TasksApiService } from '@features/service/tasks.api.service';
 import { TasksAdvancedFilters } from '@features/filter/tasks.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import {
   TaskModel,
   TaskStatusInput,

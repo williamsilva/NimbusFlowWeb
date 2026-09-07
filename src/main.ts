@@ -8,7 +8,7 @@ import localeEs from '@angular/common/locales/es';
 
 import { App } from './app/app';
 import { appConfig } from './app/app.config';
-import { ThemeService } from './app/core/theme/theme.service';
+import { ThemeService } from '@williamsilva/nimbus-web-commons';
 
 // ✅ registra data/number formats
 registerLocaleData(localePt, 'pt-BR');

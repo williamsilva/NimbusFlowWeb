@@ -7,7 +7,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   standalone: true,
-  selector: 'th[cs-selection-header]',
+  selector: 'app-selection-header',
   imports: [FormsModule, CheckboxModule, TooltipModule],
   template: `
     @if (enabled) {
@@ -15,7 +15,7 @@ import { CheckboxModule } from 'primeng/checkbox';
         [binary]="true"
         [ngModel]="checked"
         [indeterminate]="indeterminate"
-        (onChange)="toggle.emit(!!$event.checked)"
+        (onChange)="selectionToggle.emit(!!$event.checked)"
       ></p-checkbox>
     } @else {
       <i class="pi pi-info-circle opacity-70" [pTooltip]="hintTooltip" tooltipPosition="top"></i>
@@ -29,5 +29,5 @@ export class CsSelectionHeaderComponent {
   @Input() indeterminate = false;
   @Input() hintTooltip = '';
 
-  @Output() toggle = new EventEmitter<boolean>();
+  @Output() selectionToggle = new EventEmitter<boolean>();
 }

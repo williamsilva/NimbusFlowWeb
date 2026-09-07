@@ -83,6 +83,7 @@
                   icon="pi pi-times"
                   (click)="removeFile(i)"
                   class="p-button-text p-button-sm p-button-danger"
+                  [attr.aria-label]="'common.remove' | translate"
                 ></button>
               </li>
             }

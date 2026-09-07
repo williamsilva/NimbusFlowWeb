@@ -85,7 +85,7 @@ export interface SendPaymentOrderResultModel {
 }
 
 /** Estado persistido do painel de filtros avançados da listagem global (menu "Parcelas Liberadas"). */
-export type InstallmentsFiltersState = {
+export interface InstallmentsFiltersState {
   supplierId: string[] | null;
   workName: string;
   status: string[] | null;
@@ -94,7 +94,7 @@ export type InstallmentsFiltersState = {
   amountTo: number | null;
   dueDate: string | string[] | null;
   periodDueDate: PeriodEnum | null;
-};
+}
 
 export function mapInstallmentApiModel(input: InstallmentApiModel): InstallmentModel {
   return { ...input };

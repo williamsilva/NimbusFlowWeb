@@ -75,7 +75,7 @@ export interface TicketWorkLinkInput {
   workId: string;
 }
 
-export type TicketsFiltersState = {
+export interface TicketsFiltersState {
   title: string;
   status: string[] | null;
   types: string[] | null;
@@ -83,7 +83,7 @@ export type TicketsFiltersState = {
   workIds: string[] | null;
   createdAt: string | string[] | null;
   periodCreatedAt: PeriodEnum | null;
-};
+}
 
 export function mapTicketApiModel(input: TicketApiModel): TicketModel {
   return { ...input };

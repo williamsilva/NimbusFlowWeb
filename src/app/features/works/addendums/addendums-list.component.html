@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="work()?.name ?? ''"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -26,7 +26,7 @@
     [label]="'addendums.new.title' | translate"
     [pTooltip]="!canCreate() ? (createDisabledReason() | translate) : ''"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-addendums-create-dialog
   [workId]="workId()"
@@ -139,12 +139,12 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [inputId]="'amountCol'"
                     [label]="'addendums.fields.amount' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -297,10 +297,10 @@
           >
         </td>
         <td class="text-center" [attr.data-label]="'addendums.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="tone(row.status)"
             [label]="'addendums.status.' + row.status | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'addendums.columns.approvedBy' | translate">
           <span
@@ -324,6 +324,9 @@
               [pTooltip]="
                 (row.canDecide ? 'addendums.action.approve' : decideDisabledReason(row)) | translate
               "
+              [attr.aria-label]="
+                (row.canDecide ? 'addendums.action.approve' : decideDisabledReason(row)) | translate
+              "
               tooltipPosition="top"
             ></button>
             <button
@@ -334,6 +337,9 @@
               class="p-button-text p-button-sm p-button-danger"
               [disabled]="!row.canDecide"
               [pTooltip]="
+                (row.canDecide ? 'addendums.action.reject' : decideDisabledReason(row)) | translate
+              "
+              [attr.aria-label]="
                 (row.canDecide ? 'addendums.action.reject' : decideDisabledReason(row)) | translate
               "
               tooltipPosition="top"
@@ -350,6 +356,11 @@
                   ? ('addendums.action.resendNotification' | translate)
                   : (resendNotificationDisabledReason(row) | translate)
               "
+              [attr.aria-label]="
+                canResendNotification(row)
+                  ? ('addendums.action.resendNotification' | translate)
+                  : (resendNotificationDisabledReason(row) | translate)
+              "
               tooltipPosition="top"
             ></button>
             <button
@@ -360,6 +371,9 @@
               class="p-button-text p-button-sm"
               [disabled]="!row.canEdit"
               [pTooltip]="
+                (row.canEdit ? 'addendums.action.edit' : editDisabledReason()) | translate
+              "
+              [attr.aria-label]="
                 (row.canEdit ? 'addendums.action.edit' : editDisabledReason()) | translate
               "
               tooltipPosition="top"

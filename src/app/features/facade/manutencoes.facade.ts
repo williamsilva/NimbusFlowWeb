@@ -5,7 +5,7 @@ import { Observable, finalize, tap } from 'rxjs';
 import { EquipamentosFacade } from '@features/facade/equipamentos.facade';
 import { ManutencoesApiService } from '@features/service/manutencoes.api.service';
 import { ManutencoesAdvancedFilters } from '@features/filter/manutencoes.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { ManutencaoModel, ManutencaoUpsertInput } from '@models/manutencoes.models';
 
 type LastQuery = ListQueryDto<ManutencoesAdvancedFilters>;

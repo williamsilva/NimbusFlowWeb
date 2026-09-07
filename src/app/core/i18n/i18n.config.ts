@@ -8,13 +8,13 @@ export const LANG_KEY = 'nimbusflow.i18n.lang';
 export const EVENT_KEY = 'nimbusflow.i18n.event';
 export const LOCALE_COOKIE = 'NIMBUSFLOW_LOCALE';
 
-type LangConfig = {
+interface LangConfig {
   locale: 'pt-BR' | 'en-US' | 'es-ES';
   currency: 'BRL' | 'USD' | 'EUR';
   documentLang: string;
   primengFile: string;
   timeZone: string;
-};
+}
 
 export const LANG_CONFIG: Record<Lang, LangConfig> = {
   'pt-BR': {

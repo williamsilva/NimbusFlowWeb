@@ -20,7 +20,7 @@ import { UsersFacade } from '@features/facade/users.facade';
 import { TicketModel } from '@models/tickets.models';
 import { ActionPlansFacade } from '@features/facade/action-plans.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { ActionPlanModel, ActionPlanUpsertInput } from '@models/action-plans.models';
 
 function toDateOnlyString(value: Date | null): string | null {

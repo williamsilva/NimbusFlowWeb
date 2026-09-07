@@ -4,7 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { EquipamentosApiService } from '@features/service/equipamentos.api.service';
 import { EquipamentosAdvancedFilters } from '@features/filter/equipamentos.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import {
   EquipamentoModel,
   EquipamentoOptionModel,

@@ -46,7 +46,7 @@ export interface ProjectUpsertInput {
 }
 
 /** Estado persistido do painel de filtros avançados da listagem de Projetos. */
-export type ProjectsFiltersState = {
+export interface ProjectsFiltersState {
   name: string;
   status: string[] | null;
   serviceFrontsCountFrom: number | null;
@@ -59,7 +59,7 @@ export type ProjectsFiltersState = {
   remainingAmountTo: number | null;
   progressPercentageFrom: number | null;
   progressPercentageTo: number | null;
-};
+}
 
 export function mapProjectApiModel(input: ProjectApiModel): ProjectModel {
   return { ...input };

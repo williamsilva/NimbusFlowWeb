@@ -46,14 +46,14 @@ export interface PaymentModel {
 export type PaymentApiModel = PaymentModel;
 
 /** Estado persistido do painel de filtros avançados da tela "Pagamentos". */
-export type PaymentsFiltersState = {
+export interface PaymentsFiltersState {
   supplierName: string;
   status: string[] | null;
   amountFrom: number | null;
   amountTo: number | null;
   sentAt: string | string[] | null;
   periodSentAt: PeriodEnum | null;
-};
+}
 
 export function mapPaymentApiModel(input: PaymentApiModel): PaymentModel {
   return { ...input };

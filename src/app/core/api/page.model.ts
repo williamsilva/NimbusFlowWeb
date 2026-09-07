@@ -17,9 +17,7 @@ export interface HalPageMeta {
 }
 
 export interface HalPagedResponse<T, TCollectionKey extends string = 'content'> {
-  _embedded?: {
-    [K in TCollectionKey]: T[];
-  };
+  _embedded?: Record<TCollectionKey, T[]>;
   _links?: HalLinks;
   page?: HalPageMeta;
 }

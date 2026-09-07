@@ -2,7 +2,7 @@ export type Primitive = string;
 
 export type DeepLeafPaths<T, P extends string = ''> = T extends Primitive
   ? P
-  : T extends Record<string, any>
+  : T extends Record<string, unknown>
     ? {
         [K in keyof T & string]: DeepLeafPaths<T[K], P extends '' ? K : `${P}.${K}`>;
       }[keyof T & string]
@@ -16,6 +16,14 @@ export type DeepGet<T, Path extends string> = Path extends `${infer A}.${infer B
     ? T[Path]
     : never;
 
-export function getByPath<T extends object>(obj: T, path: string): any {
-  return path.split('.').reduce((acc: any, key) => (acc ? acc[key] : undefined), obj);
+export function getByPath<T extends object, Path extends string>(
+  obj: T,
+  path: Path,
+): DeepGet<T, Path> {
+  return path
+    .split('.')
+    .reduce(
+      (acc: unknown, key) => (acc && typeof acc === 'object' ? (acc as Record<string, unknown>)[key] : undefined),
+      obj as unknown,
+    ) as DeepGet<T, Path>;
 }

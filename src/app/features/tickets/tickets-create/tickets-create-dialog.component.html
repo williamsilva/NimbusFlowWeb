@@ -85,7 +85,7 @@
       </div>
 
       <div class="col-12 p-2">
-        <label class="block mb-2 text-sm opacity-80">
+        <label for="targetType" id="targetType-label" class="block mb-2 text-sm opacity-80">
           {{ 'tickets.fields.targetType' | translate }}
         </label>
         <p-selectButton
@@ -93,6 +93,7 @@
           optionLabel="label"
           optionValue="value"
           formControlName="targetType"
+          aria-labelledby="targetType-label"
         ></p-selectButton>
       </div>
 
@@ -143,10 +144,10 @@
       }
 
       <div class="col-12 p-2">
-        <label class="block mb-2 text-sm opacity-80">
+        <label for="attachment" class="block mb-2 text-sm opacity-80">
           {{ 'tickets.fields.attachment' | translate }}
         </label>
-        <input type="file" (change)="onFileSelected($event)" />
+        <input id="attachment" type="file" (change)="onFileSelected($event)" />
       </div>
     </div>
   </form>

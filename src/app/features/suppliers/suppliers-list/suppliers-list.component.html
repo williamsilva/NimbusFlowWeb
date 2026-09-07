@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'suppliers.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -25,7 +25,7 @@
     class="p-button-info p-button-sm"
     [label]="'suppliers.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-suppliers-create-dialog
   (saved)="onSaved()"
@@ -428,10 +428,10 @@
         </td>
         <td [attr.data-label]="'suppliers.columns.phone' | translate">{{ row.phone ? (row.phone | phone) : '-' }}</td>
         <td class="text-center" [attr.data-label]="'suppliers.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="row.active ? 'success' : 'neutral'"
             [label]="(row.active ? 'common.active' : 'common.inactive') | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'suppliers.columns.createdAt' | translate">{{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}</td>
         <td class="text-center mobile-card-actions">
@@ -445,6 +445,11 @@
               [disabled]="!policy.canEdit()"
               class="p-button-text p-button-sm"
               [pTooltip]="
+                policy.canEdit()
+                  ? ('common.edit' | translate)
+                  : (policy.editDisabledReason() ?? 'suppliers.action.noPermission' | translate)
+              "
+              [attr.aria-label]="
                 policy.canEdit()
                   ? ('common.edit' | translate)
                   : (policy.editDisabledReason() ?? 'suppliers.action.noPermission' | translate)
@@ -464,6 +469,11 @@
                   ? ('suppliers.action.activate' | translate)
                   : (activateDisabledReason(row) | translate)
               "
+              [attr.aria-label]="
+                canActivate(row)
+                  ? ('suppliers.action.activate' | translate)
+                  : (activateDisabledReason(row) | translate)
+              "
             ></button>
 
             <button
@@ -475,6 +485,11 @@
               class="p-button-text p-button-sm"
               [disabled]="!canDeactivate(row)"
               [pTooltip]="
+                canDeactivate(row)
+                  ? ('suppliers.action.deactivate' | translate)
+                  : (deactivateDisabledReason(row) | translate)
+              "
+              [attr.aria-label]="
                 canDeactivate(row)
                   ? ('suppliers.action.deactivate' | translate)
                   : (deactivateDisabledReason(row) | translate)

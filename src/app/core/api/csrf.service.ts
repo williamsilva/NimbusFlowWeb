@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { firstValueFrom } from 'rxjs';
@@ -7,7 +7,8 @@ import { API } from './api.config';
 
 @Injectable({ providedIn: 'root' })
 export class CsrfService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+
 
   async ensureCsrfCookie(): Promise<void> {
     try {

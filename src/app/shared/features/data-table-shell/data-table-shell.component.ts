@@ -1,48 +1,50 @@
 
-import { Component, ContentChild, Directive, Input, TemplateRef } from '@angular/core';
+import { Component, ContentChild, Directive, Input, TemplateRef, inject } from '@angular/core';
 
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 
 @Directive({
-  selector: 'ng-template[csTableHeader]',
+  selector: 'ng-template[appTableHeader]',
   standalone: true,
 })
-export class CsTableHeaderTpl {
-  constructor(public tpl: TemplateRef<unknown>) {}
+export class CsTableHeaderTpl {  tpl = inject<TemplateRef<unknown>>(TemplateRef);
+
 }
 
 @Directive({
-  selector: 'ng-template[csTableBody]',
+  selector: 'ng-template[appTableBody]',
   standalone: true,
 })
-export class CsTableBodyTpl<T = unknown> {
-  constructor(public tpl: TemplateRef<{ $implicit: T }>) {}
+export class CsTableBodyTpl<T = unknown> {  tpl = inject<TemplateRef<{
+    $implicit: T;
+}>>(TemplateRef);
+
 }
 
 @Directive({
-  selector: 'ng-template[csTableLoading]',
+  selector: 'ng-template[appTableLoading]',
   standalone: true,
 })
-export class CsTableLoadingTpl {
-  constructor(public tpl: TemplateRef<unknown>) {}
+export class CsTableLoadingTpl {  tpl = inject<TemplateRef<unknown>>(TemplateRef);
+
 }
 
 @Directive({
-  selector: 'ng-template[csTableEmpty]',
+  selector: 'ng-template[appTableEmpty]',
   standalone: true,
 })
-export class CsTableEmptyTpl {
-  constructor(public tpl: TemplateRef<unknown>) {}
+export class CsTableEmptyTpl {  tpl = inject<TemplateRef<unknown>>(TemplateRef);
+
 }
 
 @Component({
-  selector: 'cs-data-table-shell',
+  selector: 'app-data-table-shell',
   standalone: true,
   imports: [TableModule, CardModule],
   templateUrl: './data-table-shell.component.html',
 })
-export class DataTableShellComponent<T extends { id?: any }> {
+export class DataTableShellComponent<T extends { id?: string | number }> {
   @Input() title = '';
   @Input() subtitle = '';
   @Input() value: T[] = [];

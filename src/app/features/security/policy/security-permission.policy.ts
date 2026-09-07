@@ -142,11 +142,11 @@ export class SecurityPermissionPolicy {
     return this.modeForRow(row) === mode;
   }
 
-  canActivateBulk(rows: ReadonlyArray<UserRowPermissionTarget> | null | undefined): boolean {
+  canActivateBulk(rows: readonly UserRowPermissionTarget[] | null | undefined): boolean {
     return !!rows?.length && rows.every((row) => this.modeForRow(row) === 'activate');
   }
 
-  canDeactivateBulk(rows: ReadonlyArray<UserRowPermissionTarget> | null | undefined): boolean {
+  canDeactivateBulk(rows: readonly UserRowPermissionTarget[] | null | undefined): boolean {
     return !!rows?.length && rows.every((row) => this.modeForRow(row) === 'deactivate');
   }
 

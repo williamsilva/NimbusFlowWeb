@@ -24,14 +24,14 @@ export interface EmailLogModel {
 export type EmailLogApiModel = EmailLogModel;
 
 /** Estado persistido do painel de filtros avançados da listagem de Auditoria de E-mail. */
-export type EmailLogFiltersState = {
+export interface EmailLogFiltersState {
   recipients: string;
   subject: string;
   status: string[] | null;
   eventType: string[] | null;
   sentAt: string | string[] | null;
   periodSentAt: PeriodEnum | null;
-};
+}
 
 export function mapEmailLogApiModel(input: EmailLogApiModel): EmailLogModel {
   return { ...input };

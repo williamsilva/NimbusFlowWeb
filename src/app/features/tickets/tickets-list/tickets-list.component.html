@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'tickets.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -23,7 +23,7 @@
     class="p-button-info p-button-sm"
     [label]="'tickets.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-tickets-create-dialog
   (created)="onCreated()"
@@ -413,10 +413,10 @@
           {{ 'tickets.type.' + row.type | translate }}
         </td>
         <td class="text-center" [attr.data-label]="'tickets.columns.priority' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="priorityTone(row.priority)"
             [label]="'tickets.priority.' + row.priority | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'tickets.columns.work' | translate">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.workName ?? '-'">{{
@@ -424,10 +424,10 @@
           }}</span>
         </td>
         <td class="text-center" [attr.data-label]="'tickets.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="tone(row.status)"
             [label]="'tickets.status.' + row.status | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'tickets.columns.reportedBy' | translate">
           <span
@@ -477,6 +477,7 @@
               class="p-button-text p-button-sm"
               [disabled]="!canEdit(row)"
               [pTooltip]="'common.edit' | translate"
+              [attr.aria-label]="'common.edit' | translate"
               tooltipPosition="top"
             ></button>
             <button
@@ -487,6 +488,7 @@
               class="p-button-text p-button-sm"
               [disabled]="!canOpenWorkFront(row)"
               [pTooltip]="'tickets.action.openWorkFront' | translate"
+              [attr.aria-label]="'tickets.action.openWorkFront' | translate"
               tooltipPosition="top"
             ></button>
             <button
@@ -497,6 +499,7 @@
               class="p-button-text p-button-sm"
               [disabled]="!canConvert(row)"
               [pTooltip]="'tickets.action.convert' | translate"
+              [attr.aria-label]="'tickets.action.convert' | translate"
               tooltipPosition="top"
             ></button>
             <button
@@ -507,6 +510,7 @@
               class="p-button-text p-button-sm"
               [disabled]="!canClose(row)"
               [pTooltip]="'tickets.action.close' | translate"
+              [attr.aria-label]="'tickets.action.close' | translate"
               tooltipPosition="top"
             ></button>
             <button
@@ -517,6 +521,7 @@
               (click)="confirmCancel(row)"
               [disabled]="!canCancel(row)"
               [pTooltip]="'tickets.action.cancel' | translate"
+              [attr.aria-label]="'tickets.action.cancel' | translate"
               tooltipPosition="top"
             ></button>
           </div>

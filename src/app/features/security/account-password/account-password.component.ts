@@ -52,6 +52,8 @@ function passwordMatchValidator(): ValidatorFn {
     if (!confirmPasswordControl) return null;
 
     const currentErrors = confirmPasswordControl.errors ?? {};
+    // destructuring só pra excluir passwordMismatch de otherErrors, valor descartado de propósito.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { passwordMismatch: _passwordMismatch, ...otherErrors } = currentErrors;
 
     if (!newPassword || !confirmPassword) {
@@ -75,15 +77,15 @@ function passwordMatchValidator(): ValidatorFn {
 type PolicyRuleState = 'idle' | 'valid' | 'invalid';
 type PasswordStrengthLevel = 'empty' | 'weak' | 'medium' | 'strong';
 
-type PolicyRuleVm = {
+interface PolicyRuleVm {
   code: string;
   message: string;
   state: PolicyRuleState;
-};
+}
 
 @Component({
   standalone: true,
-  selector: 'cs-account-password-page',
+  selector: 'app-account-password-page',
   styleUrl: './account-password.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './account-password.component.html',
@@ -349,6 +351,8 @@ export class AccountPasswordComponent {
   private clearApiError(control: AbstractControl | null): void {
     if (!control?.errors?.['api']) return;
 
+    // destructuring só pra excluir api de rest, valor descartado de propósito.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { api: _api, ...rest } = control.errors ?? {};
     control.setErrors(Object.keys(rest).length ? rest : null);
   }

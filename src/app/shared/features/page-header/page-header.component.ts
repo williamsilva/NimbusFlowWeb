@@ -9,7 +9,7 @@ export interface PageBreadcrumbItem {
 
 @Component({
   standalone: true,
-  selector: 'cs-page-header',
+  selector: 'app-page-header',
   templateUrl: './page-header.component.html',
   imports: [RouterLink],
 })

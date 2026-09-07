@@ -4,7 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { SuggestionsApiService } from '@features/service/suggestions.api.service';
 import { SuggestionsAdvancedFilters } from '@features/filter/suggestions.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { SuggestionStatusEnum } from '@models/enums/suggestion-status.enum';
 import { SuggestionModel, SuggestionCreateInput } from '@models/suggestions.models';
 

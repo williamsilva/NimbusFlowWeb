@@ -27,12 +27,12 @@ export interface SuggestionStatusInput {
   status: SuggestionStatusEnum;
 }
 
-export type SuggestionsFiltersState = {
+export interface SuggestionsFiltersState {
   description: string;
   status: string[] | null;
   createdAt: string | string[] | null;
   periodCreatedAt: PeriodEnum | null;
-};
+}
 
 export function mapSuggestionApiModel(input: SuggestionApiModel): SuggestionModel {
   return { ...input };

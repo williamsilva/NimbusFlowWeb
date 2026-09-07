@@ -22,7 +22,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { I18nService } from '@core/i18n/i18n.service';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { MeasurementModel } from '@models/measurements.models';
 import { MeasurementsFacade } from '@features/facade/measurements.facade';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';

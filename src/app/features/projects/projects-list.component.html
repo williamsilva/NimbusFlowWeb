@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'projects.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -26,7 +26,7 @@
     [label]="'projects.new.title' | translate"
     [pTooltip]="!policy.canManage() ? (policy.createDisabledReason() ?? '' | translate) : ''"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-projects-upsert-dialog
   [visible]="upsertVisible()"
@@ -79,14 +79,14 @@
 
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-6 p-2">
-      <cs-currency-range-filter
+      <app-currency-range-filter
         [inputId]="'totalContractedAmount'"
         [label]="'projects.fields.totalContractedAmount' | translate"
         [value]="{ start: totalContractedAmountFrom(), end: totalContractedAmountTo() }"
         (valueChange)="
           totalContractedAmountFrom.set($event.start); totalContractedAmountTo.set($event.end)
         "
-      ></cs-currency-range-filter>
+      ></app-currency-range-filter>
     </div>
   </div>
 </cs-filters-panel>
@@ -178,7 +178,7 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [mask]="'decimal'"
                     [minFractionDigits]="0"
                     [maxFractionDigits]="0"
@@ -186,7 +186,7 @@
                     [label]="'projects.columns.serviceFrontsCount' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -213,12 +213,12 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [inputId]="'totalContractedAmountCol'"
                     [label]="'projects.columns.totalContractedAmount' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -245,12 +245,12 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [inputId]="'totalPaidAmountCol'"
                     [label]="'projects.columns.totalPaidAmount' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -277,12 +277,12 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [inputId]="'remainingAmountCol'"
                     [label]="'projects.columns.remainingAmount' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -309,13 +309,13 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [mask]="'percent'"
                     [inputId]="'progressPercentageCol'"
                     [label]="'projects.columns.progress' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -394,10 +394,10 @@
           </div>
         </td>
         <td class="text-center" [attr.data-label]="'projects.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="tone(row.status)"
             [label]="'projects.status.' + row.status | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center mobile-card-actions">
           <div class="table-actions">
@@ -410,6 +410,11 @@
               [disabled]="!policy.canEdit()"
               class="p-button-text p-button-sm"
               [pTooltip]="
+                policy.canEdit()
+                  ? ('common.edit' | translate)
+                  : (policy.editDisabledReason() ?? 'projects.action.noPermission' | translate)
+              "
+              [attr.aria-label]="
                 policy.canEdit()
                   ? ('common.edit' | translate)
                   : (policy.editDisabledReason() ?? 'projects.action.noPermission' | translate)
@@ -429,6 +434,11 @@
                   ? ('projects.action.markInProgress' | translate)
                   : (markInProgressDisabledReason(row) | translate)
               "
+              [attr.aria-label]="
+                canMarkInProgress(row)
+                  ? ('projects.action.markInProgress' | translate)
+                  : (markInProgressDisabledReason(row) | translate)
+              "
             ></button>
 
             <button
@@ -444,6 +454,11 @@
                   ? ('projects.action.markPaused' | translate)
                   : (markPausedDisabledReason(row) | translate)
               "
+              [attr.aria-label]="
+                canMarkPaused(row)
+                  ? ('projects.action.markPaused' | translate)
+                  : (markPausedDisabledReason(row) | translate)
+              "
             ></button>
 
             <button
@@ -455,6 +470,11 @@
               class="p-button-text p-button-sm"
               [disabled]="!canMarkCompleted(row)"
               [pTooltip]="
+                canMarkCompleted(row)
+                  ? ('projects.action.markCompleted' | translate)
+                  : (markCompletedDisabledReason(row) | translate)
+              "
+              [attr.aria-label]="
                 canMarkCompleted(row)
                   ? ('projects.action.markCompleted' | translate)
                   : (markCompletedDisabledReason(row) | translate)

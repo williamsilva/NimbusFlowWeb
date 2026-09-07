@@ -31,13 +31,13 @@ export interface HistoricoLocalizacaoUpsertInput {
   observacao: string | null;
 }
 
-export type HistoricoLocalizacaoFiltersState = {
+export interface HistoricoLocalizacaoFiltersState {
   equipamento: string;
   localizacao: string;
   status: string[] | null;
   dataInicial: string | string[] | null;
   periodDataInicial: PeriodEnum | null;
-};
+}
 
 export function mapHistoricoLocalizacaoApiModel(
   input: HistoricoLocalizacaoApiModel,

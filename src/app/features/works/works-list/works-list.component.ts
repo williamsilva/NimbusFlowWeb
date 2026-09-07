@@ -1,12 +1,12 @@
 import { RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DestroyRef, Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { DestroyRef, Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, FilterMetadata, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -21,13 +21,13 @@ import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { WorksFacade } from '@features/facade/works.facade';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { ProjectsFacade } from '@features/facade/projects.facade';
 import { WorkModel, WorksFiltersState } from '@models/works.models';
 import { SuppliersFacade } from '@features/facade/suppliers.facade';
 import { WorksAdvancedFilters } from '@features/filter/works.filters';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
 import { WORK_STATUS_VALUES, WorkStatusEnum, workStatusTone } from '@models/enums/work-status.enum';
@@ -35,7 +35,7 @@ import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { WorksCreateDialogComponent } from '@features/works/works-create/works-create-dialog.component';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
   currencyRangeLabel,
   CsCurrencyRangeFilterComponent,
@@ -43,12 +43,12 @@ import {
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   readSingleFilterValue,
   readArrayFilterValues,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,
@@ -79,7 +79,7 @@ import {
     DateInputMaskDirective,
   ],
 })
-export class WorksListComponent extends StatefulListPage<WorksFiltersState, WorksAdvancedFilters> {
+export class WorksListComponent extends StatefulListPage<WorksFiltersState, WorksAdvancedFilters> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   protected override readonly i18n = inject(I18nService);
@@ -232,6 +232,9 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
    *  Medição REJECTED ou Ordem CANCELLED residual (que também bloqueava até 2026-08-31, ver
    *  WorkService.hasNoFinancialArtifact) não aparecia em nenhuma coluna e a mensagem caía,
    *  errada, em "sem permissão" mesmo com a permissão concedida. */
+  // row mantido pra bater com a assinatura usada no template (deleteDisabledReason(row) |
+  // translate), mesmo sem uso aqui.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   deleteDisabledReason(row: WorkModel): string {
     if (!this.policy.canDelete()) {
       return this.policy.deleteDisabledReason() ?? 'works.action.noPermission';
@@ -366,7 +369,7 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];
@@ -401,8 +404,13 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
       items.push({ label: this.i18n.tUi('works.fields.expectedEndDate'), value: expectedEndDate });
     }
 
-    const totalAmountRange =
-      filters?.['totalAmount']?.value ?? filters?.['totalAmount']?.[0]?.value;
+    const totalAmountMeta = filters?.['totalAmount'] as
+      | FilterMetadata
+      | FilterMetadata[]
+      | undefined;
+    const totalAmountRange = Array.isArray(totalAmountMeta)
+      ? totalAmountMeta[0]?.value
+      : totalAmountMeta?.value;
     if (
       Array.isArray(totalAmountRange) &&
       (totalAmountRange[0] != null || totalAmountRange[1] != null)
@@ -422,5 +430,9 @@ export class WorksListComponent extends StatefulListPage<WorksFiltersState, Work
     this.facade.loadPage(query);
   }
 
+  // reload dessa lista
+  // já é disparado pelo effect() de filtros da própria StatefulListPage, não precisa de
+  // lógica extra aqui.
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected override loadFirstPage(): void {}
 }

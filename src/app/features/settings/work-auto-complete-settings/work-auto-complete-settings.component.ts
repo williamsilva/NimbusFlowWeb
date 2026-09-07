@@ -17,7 +17,7 @@ import { WorkAutoCompleteSettingsApiService } from '@features/service/work-auto-
 
 @Component({
   standalone: true,
-  selector: 'cs-work-auto-complete-settings',
+  selector: 'app-work-auto-complete-settings',
   templateUrl: './work-auto-complete-settings.component.html',
   imports: [
     CardModule,

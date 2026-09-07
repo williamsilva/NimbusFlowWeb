@@ -1,6 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DestroyRef, Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { DestroyRef, Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { Table } from 'primeng/table';
@@ -12,15 +12,15 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, FilterMetadata, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { STATE_KEY } from '@features/state-key.constants';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { ProjectsFacade } from '@features/facade/projects.facade';
 import { ProjectsAdvancedFilters } from '@features/filter/projects.filters';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { ProjectsPermissionPolicy } from '@features/projects/projects-permission.policy';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
@@ -40,8 +40,8 @@ import { ProjectsUpsertDialogComponent } from '@features/projects/projects-upser
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
-import { readSingleFilterValue, readArrayFilterValues } from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
+import { readSingleFilterValue, readArrayFilterValues } from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,
@@ -70,7 +70,7 @@ import { readSingleFilterValue, readArrayFilterValues } from '@features/list-bas
 export class ProjectsListComponent extends StatefulListPage<
   ProjectsFiltersState,
   ProjectsAdvancedFilters
-> {
+> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   private readonly destroyRef = inject(DestroyRef);
@@ -345,7 +345,7 @@ export class ProjectsListComponent extends StatefulListPage<
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];
@@ -366,8 +366,8 @@ export class ProjectsListComponent extends StatefulListPage<
       });
     }
 
-    const serviceFrontsCountRange =
-      filters?.['serviceFrontsCount']?.value ?? filters?.['serviceFrontsCount']?.[0]?.value;
+    const serviceFrontsCountMeta = filters?.['serviceFrontsCount'] as FilterMetadata | FilterMetadata[] | undefined;
+    const serviceFrontsCountRange = Array.isArray(serviceFrontsCountMeta) ? serviceFrontsCountMeta[0]?.value : serviceFrontsCountMeta?.value;
     if (
       Array.isArray(serviceFrontsCountRange) &&
       (serviceFrontsCountRange[0] != null || serviceFrontsCountRange[1] != null)
@@ -378,8 +378,8 @@ export class ProjectsListComponent extends StatefulListPage<
       }
     }
 
-    const totalContractedRange =
-      filters?.['totalContractedAmount']?.value ?? filters?.['totalContractedAmount']?.[0]?.value;
+    const totalContractedMeta = filters?.['totalContractedAmount'] as FilterMetadata | FilterMetadata[] | undefined;
+    const totalContractedRange = Array.isArray(totalContractedMeta) ? totalContractedMeta[0]?.value : totalContractedMeta?.value;
     if (
       Array.isArray(totalContractedRange) &&
       (totalContractedRange[0] != null || totalContractedRange[1] != null)
@@ -390,8 +390,8 @@ export class ProjectsListComponent extends StatefulListPage<
       }
     }
 
-    const totalPaidRange =
-      filters?.['totalPaidAmount']?.value ?? filters?.['totalPaidAmount']?.[0]?.value;
+    const totalPaidMeta = filters?.['totalPaidAmount'] as FilterMetadata | FilterMetadata[] | undefined;
+    const totalPaidRange = Array.isArray(totalPaidMeta) ? totalPaidMeta[0]?.value : totalPaidMeta?.value;
     if (Array.isArray(totalPaidRange) && (totalPaidRange[0] != null || totalPaidRange[1] != null)) {
       const label = currencyRangeLabel(this.i18n, totalPaidRange[0], totalPaidRange[1]);
       if (label) {
@@ -399,8 +399,8 @@ export class ProjectsListComponent extends StatefulListPage<
       }
     }
 
-    const remainingRange =
-      filters?.['remainingAmount']?.value ?? filters?.['remainingAmount']?.[0]?.value;
+    const remainingMeta = filters?.['remainingAmount'] as FilterMetadata | FilterMetadata[] | undefined;
+    const remainingRange = Array.isArray(remainingMeta) ? remainingMeta[0]?.value : remainingMeta?.value;
     if (Array.isArray(remainingRange) && (remainingRange[0] != null || remainingRange[1] != null)) {
       const label = currencyRangeLabel(this.i18n, remainingRange[0], remainingRange[1]);
       if (label) {
@@ -408,8 +408,8 @@ export class ProjectsListComponent extends StatefulListPage<
       }
     }
 
-    const progressRange =
-      filters?.['progressPercentage']?.value ?? filters?.['progressPercentage']?.[0]?.value;
+    const progressMeta = filters?.['progressPercentage'] as FilterMetadata | FilterMetadata[] | undefined;
+    const progressRange = Array.isArray(progressMeta) ? progressMeta[0]?.value : progressMeta?.value;
     if (Array.isArray(progressRange) && (progressRange[0] != null || progressRange[1] != null)) {
       const label = percentRangeLabel(this.i18n, progressRange[0], progressRange[1]);
       if (label) {
@@ -426,5 +426,9 @@ export class ProjectsListComponent extends StatefulListPage<
     this.facade.loadPage(query);
   }
 
+  // reload dessa lista
+  // já é disparado pelo effect() de filtros da própria StatefulListPage, não precisa de
+  // lógica extra aqui.
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected override loadFirstPage(): void {}
 }

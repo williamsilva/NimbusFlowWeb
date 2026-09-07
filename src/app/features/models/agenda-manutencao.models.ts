@@ -35,7 +35,7 @@ export interface AgendaManutencaoUpsertInput {
   observacao: string | null;
 }
 
-export type AgendaManutencaoFiltersState = {
+export interface AgendaManutencaoFiltersState {
   equipamento: string;
   status: string[] | null;
   frequencia: string[] | null;
@@ -43,7 +43,7 @@ export type AgendaManutencaoFiltersState = {
   perfilNotificacao: string[] | null;
   proximaManutencao: string | string[] | null;
   periodProximaManutencao: PeriodEnum | null;
-};
+}
 
 export function mapAgendaManutencaoApiModel(input: AgendaManutencaoApiModel): AgendaManutencaoModel {
   return { ...input };

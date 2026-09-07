@@ -13,7 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { PatrimonioDashboardApiService } from '@features/service/patrimonio-dashboard.api.service';
 import {

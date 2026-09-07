@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
 
@@ -6,12 +6,12 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class AppTitleStrategy extends TitleStrategy {
+  private readonly title = inject(Title);
+  private readonly translate = inject(TranslateService);
+
   private lastSnapshot: RouterStateSnapshot | null = null;
 
-  constructor(
-    private readonly title: Title,
-    private readonly translate: TranslateService,
-  ) {
+  constructor() {
     super();
 
     // ✅ atualiza o title quando mudar o idioma (sem Router e sem super)

@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'historicoLocalizacao.subtitle' | translate"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -16,7 +16,7 @@
     class="p-button-info p-button-sm"
     [label]="'historicoLocalizacao.new.title' | translate"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-historico-localizacao-form-dialog
   [visible]="formVisible()"
@@ -266,10 +266,10 @@
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.localizacao.descricao">{{ row.localizacao.descricao }}</span>
         </td>
         <td class="text-center" [attr.data-label]="'historicoLocalizacao.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="statusTone(row.status)"
             [label]="('historicoLocalizacao.status.' + row.status) | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'historicoLocalizacao.columns.dataInicial' | translate">{{ row.dataInicial | csDate: 'short' }}</td>
         <td class="text-center" [attr.data-label]="'historicoLocalizacao.columns.dataFinal' | translate">{{ row.dataFinal ? (row.dataFinal | csDate: 'short') : '-' }}</td>
@@ -284,6 +284,7 @@
               [disabled]="!canManage() || isSystem(row)"
               class="p-button-text p-button-sm"
               [pTooltip]="isSystem(row) ? ('historicoLocalizacao.action.systemProtected' | translate) : ('common.edit' | translate)"
+              [attr.aria-label]="isSystem(row) ? ('historicoLocalizacao.action.systemProtected' | translate) : ('common.edit' | translate)"
             ></button>
 
             <button
@@ -295,6 +296,7 @@
               [disabled]="!canManage() || isSystem(row)"
               class="p-button-text p-button-sm p-button-danger"
               [pTooltip]="isSystem(row) ? ('historicoLocalizacao.action.systemProtected' | translate) : ('common.delete' | translate)"
+              [attr.aria-label]="isSystem(row) ? ('historicoLocalizacao.action.systemProtected' | translate) : ('common.delete' | translate)"
             ></button>
           </div>
         </td>

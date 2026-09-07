@@ -4,7 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { LocalizacoesApiService } from '@features/service/localizacoes.api.service';
 import { LocalizacoesAdvancedFilters } from '@features/filter/localizacoes.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import {
   LocalizacaoModel,
   LocalizacaoOptionModel,

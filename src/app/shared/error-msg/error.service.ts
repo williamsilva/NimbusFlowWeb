@@ -7,22 +7,20 @@ import { MassageValidations } from './message-validations';
   providedIn: 'root',
 })
 export class ErrorService {
-  controlError!: any;
+  controlError!: unknown;
 
-  constructor() {}
-
-  hasErrors(control: any, label: string) {
+  hasErrors(control: AbstractControl, label: string) {
     for (const propertyName in control.errors) {
-      if (control.errors.hasOwnProperty(propertyName) && control.touched) {
+      if (Object.prototype.hasOwnProperty.call(control.errors, propertyName) && control.touched) {
         return MassageValidations.getErrorMsg(label, propertyName, control.errors[propertyName]);
       }
     }
     return null;
   }
 
-  hasErrorsMsg(control: any, label: string, required = true) {
+  hasErrorsMsg(control: AbstractControl, label: string, required = true) {
     for (const propertyName in control.errors) {
-      if (control.errors.hasOwnProperty(propertyName) && control.touched) {
+      if (Object.prototype.hasOwnProperty.call(control.errors, propertyName) && control.touched) {
         return MassageValidations.getErrorMsg(label, propertyName, control.errors[propertyName]);
       }
     }
@@ -34,9 +32,9 @@ export class ErrorService {
     }
   }
 
-  hasControlErrors(control: any) {
+  hasControlErrors(control: AbstractControl) {
     for (const propertyName in control.errors) {
-      if (control.errors.hasOwnProperty(propertyName) && control.touched) {
+      if (Object.prototype.hasOwnProperty.call(control.errors, propertyName) && control.touched) {
         return true;
       }
     }
@@ -61,7 +59,7 @@ export class ErrorService {
     });
   }
 
-  hasClassError(control: any) {
+  hasClassError(control: AbstractControl) {
     if (this.hasControlErrors(control)) {
       return 'red';
     }

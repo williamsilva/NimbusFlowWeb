@@ -48,7 +48,7 @@ export interface EquipamentoOptionModel {
   status: StatusEquipamento;
 }
 
-export type EquipamentosFiltersState = {
+export interface EquipamentosFiltersState {
   descricao: string;
   fornecedorNome: string;
   status: string[] | null;
@@ -56,7 +56,7 @@ export type EquipamentosFiltersState = {
   precoAte: number | null;
   dataCompra: string | string[] | null;
   periodDataCompra: PeriodEnum | null;
-};
+}
 
 export function mapEquipamentoApiModel(input: EquipamentoApiModel): EquipamentoModel {
   return { ...input };

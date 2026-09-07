@@ -15,7 +15,7 @@ import { MeStore } from '../../core/auth/me.store';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { AuthService } from '../../core/auth/auth.service';
 import { LayoutStateService } from '../layout-state.service';
-import { ThemeService } from '../../core/theme/theme.service';
+import { ThemeService } from '@williamsilva/nimbus-web-commons';
 import { SessionService } from '../../core/auth/session.service';
 import { SessionPingService } from '../../core/auth/session-ping.service';
 

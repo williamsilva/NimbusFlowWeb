@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="'departments.subtitle' | translate"
   [breadcrumb]="[
     { label: ('menu.settings.title' | translate), url: '/settings' },
@@ -16,7 +16,7 @@
     [label]="'departments.new.title' | translate"
     [pTooltip]="!canChange() ? ('departments.action.noPermission' | translate) : ''"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-department-form-dialog
   [editing]="editing()"
@@ -93,6 +93,11 @@
                   ? ('common.edit' | translate)
                   : ('departments.action.noPermission' | translate)
               "
+              [attr.aria-label]="
+                canChange()
+                  ? ('common.edit' | translate)
+                  : ('departments.action.noPermission' | translate)
+              "
             ></button>
 
             <button
@@ -104,6 +109,11 @@
               (click)="confirmDelete(row)"
               class="p-button-text p-button-sm p-button-danger"
               [pTooltip]="
+                canChange()
+                  ? ('common.delete' | translate)
+                  : ('departments.action.noPermission' | translate)
+              "
+              [attr.aria-label]="
                 canChange()
                   ? ('common.delete' | translate)
                   : ('departments.action.noPermission' | translate)

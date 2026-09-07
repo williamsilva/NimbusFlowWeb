@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { DestroyRef, Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { DestroyRef, Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { Table } from 'primeng/table';
@@ -11,7 +11,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, FilterMetadata, MessageService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
@@ -21,15 +21,15 @@ import { ManutencaoModel, ManutencoesFiltersState } from '@models/manutencoes.mo
 import { ManutencoesFacade } from '@features/facade/manutencoes.facade';
 import { ManutencoesAdvancedFilters } from '@features/filter/manutencoes.filters';
 import { statusManutencaoTone, STATUS_MANUTENCAO_VALUES, TIPO_MANUTENCAO_VALUES } from '@models/patrimonio-enums';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { StatusBadgeComponent, StatusTone } from '@shared/features/status-badge/status-badge.component';
 import { PatrimonioPermissionPolicy } from '@features/patrimonio/patrimonio-permission.policy';
 import { ManutencaoFormDialogComponent } from '@features/patrimonio/manutencoes/manutencao-form-dialog.component';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
   currencyRangeLabel,
   CsCurrencyRangeFilterComponent,
@@ -37,12 +37,12 @@ import {
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   readSingleFilterValue,
   readArrayFilterValues,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,
@@ -72,7 +72,7 @@ import {
 export class ManutencoesListComponent extends StatefulListPage<
   ManutencoesFiltersState,
   ManutencoesAdvancedFilters
-> {
+> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   private readonly destroyRef = inject(DestroyRef);
@@ -299,7 +299,7 @@ export class ManutencoesListComponent extends StatefulListPage<
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];
@@ -341,7 +341,8 @@ export class ManutencoesListComponent extends StatefulListPage<
       items.push({ label: this.i18n.tUi('manutencoes.fields.dataEnvio'), value: dataEnvio });
     }
 
-    const precoRange = filters?.['preco']?.value ?? filters?.['preco']?.[0]?.value;
+    const precoMeta = filters?.['preco'] as FilterMetadata | FilterMetadata[] | undefined;
+    const precoRange = Array.isArray(precoMeta) ? precoMeta[0]?.value : precoMeta?.value;
     if (Array.isArray(precoRange) && (precoRange[0] != null || precoRange[1] != null)) {
       const label = currencyRangeLabel(this.i18n, precoRange[0], precoRange[1]);
       if (label) {
@@ -358,5 +359,9 @@ export class ManutencoesListComponent extends StatefulListPage<
     this.facade.loadPage(query);
   }
 
+  // reload dessa lista
+  // já é disparado pelo effect() de filtros da própria StatefulListPage, não precisa de
+  // lógica extra aqui.
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected override loadFirstPage(): void {}
 }

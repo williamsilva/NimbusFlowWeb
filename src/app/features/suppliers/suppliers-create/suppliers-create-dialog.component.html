@@ -58,7 +58,7 @@
             pInputText
             type="text"
             maxlength="18"
-            csCpfCnpjMask
+            appCpfCnpjMask
             autocomplete="off"
             inputmode="numeric"
             formControlName="taxId"
@@ -80,7 +80,7 @@
             pInputText
             type="text"
             maxlength="15"
-            csPhoneMask
+            appPhoneMask
             autocomplete="off"
             inputmode="numeric"
             formControlName="phone"
@@ -174,6 +174,7 @@
             (click)="searchZipCode()"
             class="p-button-sm flex-shrink-0"
             [pTooltip]="'suppliers.cep.searchTooltip' | translate"
+            [attr.aria-label]="'suppliers.cep.searchTooltip' | translate"
           ></button>
         </div>
       </div>

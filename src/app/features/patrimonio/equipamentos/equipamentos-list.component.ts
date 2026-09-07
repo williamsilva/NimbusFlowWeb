@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { FilterMetadata } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
@@ -18,16 +19,16 @@ import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
 import { EquipamentosFacade } from '@features/facade/equipamentos.facade';
 import { statusEquipamentoTone, STATUS_EQUIPAMENTO_VALUES } from '@models/patrimonio-enums';
 import { EquipamentosAdvancedFilters } from '@features/filter/equipamentos.filters';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { EquipamentoModel, EquipamentosFiltersState } from '@models/equipamentos.models';
 import { StatusBadgeComponent, StatusTone } from '@shared/features/status-badge/status-badge.component';
 import { PatrimonioPermissionPolicy } from '@features/patrimonio/patrimonio-permission.policy';
 import { EquipamentoFormDialogComponent } from '@features/patrimonio/equipamentos/equipamento-form-dialog.component';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
   currencyRangeLabel,
   CsCurrencyRangeFilterComponent,
@@ -35,12 +36,12 @@ import {
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   readSingleFilterValue,
   readArrayFilterValues,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,
@@ -70,7 +71,7 @@ import {
 export class EquipamentosListComponent extends StatefulListPage<
   EquipamentosFiltersState,
   EquipamentosAdvancedFilters
-> {
+> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   protected override readonly i18n = inject(I18nService);
@@ -242,7 +243,7 @@ export class EquipamentosListComponent extends StatefulListPage<
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];
@@ -273,7 +274,8 @@ export class EquipamentosListComponent extends StatefulListPage<
       items.push({ label: this.i18n.tUi('equipamentos.fields.dataCompra'), value: dataCompra });
     }
 
-    const precoRange = filters?.['preco']?.value ?? filters?.['preco']?.[0]?.value;
+    const precoMeta = filters?.['preco'] as FilterMetadata | FilterMetadata[] | undefined;
+    const precoRange = Array.isArray(precoMeta) ? precoMeta[0]?.value : precoMeta?.value;
     if (Array.isArray(precoRange) && (precoRange[0] != null || precoRange[1] != null)) {
       const label = currencyRangeLabel(this.i18n, precoRange[0], precoRange[1]);
       if (label) {
@@ -290,5 +292,9 @@ export class EquipamentosListComponent extends StatefulListPage<
     this.facade.loadPage(query);
   }
 
+  // reload dessa lista
+  // já é disparado pelo effect() de filtros da própria StatefulListPage, não precisa de
+  // lógica extra aqui.
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected override loadFirstPage(): void {}
 }

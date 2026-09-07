@@ -4,7 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { InstallmentsApiService } from '@features/service/installments.api.service';
 import { InstallmentsAdvancedFilters } from '@features/filter/installments.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import {
   InstallmentModel,
   InstallmentWithWorkModel,

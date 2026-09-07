@@ -6,7 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   standalone: true,
-  selector: 'cs-advanced-text-filter',
+  selector: 'app-advanced-text-filter',
   imports: [FloatLabel, InputTextModule],
   host: {
     class: 'block',

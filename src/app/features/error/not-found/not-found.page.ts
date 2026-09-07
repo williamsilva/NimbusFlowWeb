@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   standalone: true,
-  selector: 'cs-not-found-page',
+  selector: 'app-not-found-page',
   imports: [RouterLink, TranslateModule, ButtonModule],
   template: `
     <div class="cs-page p-4 md:p-6">

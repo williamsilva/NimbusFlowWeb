@@ -8,7 +8,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { FloatLabelModule } from 'primeng/floatlabel';
 
 import { I18nService } from '@core/i18n/i18n.service';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 
 /** Só o necessário pra rotular a confirmação - quem abre o dialog decide o resto (id, valor). */
 export interface MarkInstallmentPaidTarget {

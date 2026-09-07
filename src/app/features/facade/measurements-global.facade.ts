@@ -4,7 +4,7 @@ import { Observable, catchError, concatMap, finalize, from, map, of, tap, toArra
 
 import { MeasurementsApiService } from '@features/service/measurements.api.service';
 import { MeasurementsAdvancedFilters } from '@features/filter/measurements.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import {
   MeasurementDecisionInput,
   MeasurementModel,

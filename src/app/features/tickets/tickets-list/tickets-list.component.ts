@@ -2,7 +2,7 @@
 import { FormsModule } from '@angular/forms';
 import { DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -19,12 +19,12 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { STATE_KEY } from '@features/state-key.constants';
 import { WorksFacade } from '@features/facade/works.facade';
 import { TicketsFacade } from '@features/facade/tickets.facade';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { TicketsAdvancedFilters } from '@features/filter/tickets.filters';
 import { TicketsPermissionPolicy } from '@features/tickets/tickets-permission.policy';
@@ -40,16 +40,16 @@ import { TicketsCloseDialogComponent } from '@features/tickets/tickets-close/tic
 import { WorksCreateDialogComponent } from '@features/works/works-create/works-create-dialog.component';
 import { ActionPlansCreateDialogComponent } from '@features/action-plans/action-plans-create/action-plans-create-dialog.component';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   readSingleFilterValue,
   readArrayFilterValues,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,
@@ -84,7 +84,7 @@ import {
 export class TicketsListComponent extends StatefulListPage<
   TicketsFiltersState,
   TicketsAdvancedFilters
-> {
+> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   protected override readonly i18n = inject(I18nService);
@@ -465,7 +465,7 @@ export class TicketsListComponent extends StatefulListPage<
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];
@@ -500,5 +500,9 @@ export class TicketsListComponent extends StatefulListPage<
     this.facade.loadPage(query);
   }
 
+  // reload dessa lista
+  // já é disparado pelo effect() de filtros da própria StatefulListPage, não precisa de
+  // lógica extra aqui.
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected override loadFirstPage(): void {}
 }

@@ -4,7 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { PaymentsApiService } from '@features/service/payments.api.service';
 import { PaymentsAdvancedFilters } from '@features/filter/payments.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { PaymentModel } from '@models/payments.models';
 
 type LastQuery = ListQueryDto<PaymentsAdvancedFilters>;

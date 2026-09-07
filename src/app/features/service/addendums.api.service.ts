@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { API } from '@core/api/api.config';
 import { SKIP_GLOBAL_ERROR_TOAST } from '@core/interceptors/error.interceptor';
 import { HalPagedResponse } from '@core/api/page.model';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { AddendumsAdvancedFilters } from '@features/filter/addendums.filters';
 import {
   AddendumApiModel,

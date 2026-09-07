@@ -1,4 +1,4 @@
-<cs-page-header
+<app-page-header
   [subtitle]="work()?.name ?? ''"
   [breadcrumb]="[
     { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
@@ -26,7 +26,7 @@
     [label]="'measurements.new.title' | translate"
     [pTooltip]="!canCreate() ? (createDisabledReason() | translate) : ''"
   ></button>
-</cs-page-header>
+</app-page-header>
 
 <app-measurements-create-dialog
   [workId]="workId()"
@@ -157,12 +157,12 @@
                 styleClass="cs-colfilter"
               >
                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <cs-currency-range-filter
+                  <app-currency-range-filter
                     [inputId]="'amountToPayCol'"
                     [label]="'measurements.fields.amountToPay' | translate"
                     [value]="{ start: value?.[0] ?? null, end: value?.[1] ?? null }"
                     (valueChange)="filter([$event.start, $event.end])"
-                  ></cs-currency-range-filter>
+                  ></app-currency-range-filter>
                 </ng-template>
               </p-columnFilter>
             </span>
@@ -292,10 +292,10 @@
         <td class="text-right" [attr.data-label]="'measurements.columns.amountToPay' | translate">{{ row.amountToPay | csCurrency }}</td>
         <td class="text-center" [attr.data-label]="'measurements.columns.dueDate' | translate">{{ row.dueDate | csDate: 'date' }}</td>
         <td class="text-center" [attr.data-label]="'measurements.columns.status' | translate">
-          <cs-status-badge
+          <app-status-badge
             [tone]="tone(row.status)"
             [label]="'measurements.status.' + row.status | translate"
-          ></cs-status-badge>
+          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'measurements.columns.generatedInstallment' | translate">
           @if (row.generatedPaymentOrderId) {
@@ -346,6 +346,11 @@
                   ? ('measurements.action.edit' | translate)
                   : (editDisabledReason(row) | translate)
               "
+              [attr.aria-label]="
+                canEdit(row)
+                  ? ('measurements.action.edit' | translate)
+                  : (editDisabledReason(row) | translate)
+              "
               tooltipPosition="top"
             ></button>
             <button
@@ -356,6 +361,11 @@
               class="p-button-text p-button-sm"
               [disabled]="!canApprove(row)"
               [pTooltip]="
+                canApprove(row)
+                  ? ('measurements.action.approve' | translate)
+                  : (approveDisabledReason(row) | translate)
+              "
+              [attr.aria-label]="
                 canApprove(row)
                   ? ('measurements.action.approve' | translate)
                   : (approveDisabledReason(row) | translate)
@@ -374,6 +384,11 @@
                   ? ('measurements.action.reject' | translate)
                   : (decideDisabledReason(row) | translate)
               "
+              [attr.aria-label]="
+                canDecide(row)
+                  ? ('measurements.action.reject' | translate)
+                  : (decideDisabledReason(row) | translate)
+              "
               tooltipPosition="top"
             ></button>
             <button
@@ -384,6 +399,11 @@
               class="p-button-text p-button-sm p-button-danger"
               [disabled]="!canDelete(row)"
               [pTooltip]="
+                canDelete(row)
+                  ? ('measurements.action.delete' | translate)
+                  : (deleteDisabledReason(row) | translate)
+              "
+              [attr.aria-label]="
                 canDelete(row)
                   ? ('measurements.action.delete' | translate)
                   : (deleteDisabledReason(row) | translate)

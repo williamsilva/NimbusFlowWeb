@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 
-import { Component, ViewChild, computed, inject, signal } from '@angular/core';
+import { Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
@@ -29,20 +29,20 @@ import { CsDocumentPipe } from '@shared/pipes/cs-document.pipe';
 import { PermissionService } from '@core/auth/permission.service';
 import { UserModel, UsersFiltersState } from '@models/users.models';
 import { UsersAdvancedFilters } from '@features/filter/users.filters';
-import { StatefulListPage } from '@features/list-base/stateful-list-page';
+import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { BulkActionListPage } from '@features/list-base/bulk-action-list-page';
-import { buildListQuery } from '@shared/features/list-query/list-query.builder';
+import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { CpfCnpjMaskDirective } from '@shared/directives/cpf-cnpj-mask.directive';
-import { DateInputMaskDirective } from '@shared/directives/date-input-mask.directive';
+import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { DATA_TABLE_SHELL_IMPORTS } from '@shared/features/data-table-shell/data-table-shell.component';
 import { UsersCreateDialogComponent } from '@features/security/users/users-create/users-create-dialog.component';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
-import { CsAdvancedPeriodDateFilterComponent } from '@features/list-base/cs-advanced-period-date-filter.component';
+import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
   ActiveFilterItem,
   FiltersPanelComponent,
-} from '@shared/features/filters-panel/filters-panel.component';
+} from '@williamsilva/nimbus-web-commons';
 import {
   UserStatus,
   userStatusLabel,
@@ -57,7 +57,7 @@ import {
   readSingleFilterValue,
   readArrayFilterValues,
   readDateRangeFilterValue,
-} from '@features/list-base/table-filter-readers';
+} from '@williamsilva/nimbus-web-commons';
 
 @Component({
   standalone: true,
@@ -92,7 +92,7 @@ import {
     DateInputMaskDirective,
   ],
 })
-export class UsersListComponent extends StatefulListPage<UsersFiltersState, UsersAdvancedFilters> {
+export class UsersListComponent extends StatefulListPage<UsersFiltersState, UsersAdvancedFilters> implements OnInit {
   @ViewChild('dt') private dt?: Table;
 
   protected override readonly i18n = inject(I18nService);
@@ -475,10 +475,7 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
 
   protected loadFirstPage() {
     const tableQuery = { page: 0, size: this.rows };
-    const query = buildListQuery<UsersAdvancedFilters>(
-      tableQuery as any,
-      this.buildAdvancedFilters(),
-    );
+    const query = buildListQuery<UsersAdvancedFilters>(tableQuery, this.buildAdvancedFilters());
 
     this.clearSelection();
     this.facade.loadPage(query);
@@ -571,7 +568,7 @@ export class UsersListComponent extends StatefulListPage<UsersFiltersState, User
     };
   }
 
-  protected override mapTableFiltersToActiveItems(filters: any): ActiveFilterItem[] {
+  protected override mapTableFiltersToActiveItems(filters: Record<string, unknown>): ActiveFilterItem[] {
     this.i18n.getAppliedLang();
 
     const items: ActiveFilterItem[] = [];

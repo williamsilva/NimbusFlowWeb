@@ -1,13 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Input,
-  Output,
-  signal,
-  computed,
-  Component,
-  EventEmitter,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Input, Output, signal, computed, Component, EventEmitter, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { CsTagTone } from '@shared/ui';
 import { TranslateModule } from '@ngx-translate/core';
@@ -25,6 +17,8 @@ export type BannerType = CsTagTone;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorBannerComponent {
+  private mapper = inject(ErrorMapperService);
+
   @Input() type: BannerType = 'error';
   @Input() error: ApiError | null = null;
   @Input() title?: string;
@@ -38,8 +32,6 @@ export class ErrorBannerComponent {
 
   private _visible = signal(true);
   visible = this._visible.asReadonly();
-
-  constructor(private mapper: ErrorMapperService) {}
 
   readonly inferredType = computed<BannerType>(() => {
     if (!this.error) return this.type;

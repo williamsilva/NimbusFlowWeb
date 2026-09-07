@@ -18,6 +18,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { UsersFacade } from '@features/facade/users.facade';
 import { GroupsFacade } from '@features/facade/groups.facade';
 import { UserCreateInput, UserModel } from '@models/users.models';
+import { GroupModel } from '@models/groups.models';
 import { isPendingPassword } from '@models/enums/user-status.enum';
 import { cpfCnpjValidator } from '@shared/validators/cpf-cnpj.validator';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
@@ -109,7 +110,7 @@ export class UsersCreateDialogComponent {
       this.loadingUser.set(true);
 
       const digitsDoc = String(user?.document ?? '').replace(/\D+/g, '');
-      const groupsRaw = Array.isArray(user?.groups) ? (user.groups as any[]) : [];
+      const groupsRaw = Array.isArray(user?.groups) ? (user.groups as GroupModel[] | string[]) : [];
 
       // AdminUserResponse.groups só traz grupos do NimbusFlow (o backend já filtra por appKey e
       // funde com os grupos de outros apps no update - ver AdminUserService.update no

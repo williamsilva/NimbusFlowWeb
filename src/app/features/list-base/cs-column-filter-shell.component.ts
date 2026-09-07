@@ -4,9 +4,10 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
   standalone: true,
-  selector: 'cs-column-filter-shell',
+  selector: 'app-column-filter-shell',
   imports: [ButtonModule],
   template: `
+    <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- só existe pra impedir que o clique dentro do painel feche o overlay por propagação, não é uma interação em si -->
     <div
       [style.min-width]="minWidth"
       style="padding-top: 0.25rem"

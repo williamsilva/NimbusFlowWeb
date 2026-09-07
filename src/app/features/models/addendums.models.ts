@@ -55,7 +55,7 @@ export interface AddendumWithWorkModel extends AddendumModel {
 export type AddendumWithWorkApiModel = AddendumWithWorkModel;
 
 /** Estado persistido do painel de filtros avançados da listagem global (menu "Aditivos"). */
-export type AddendumsFiltersState = {
+export interface AddendumsFiltersState {
   workName: string;
   justification: string;
   status: string[] | null;
@@ -63,7 +63,7 @@ export type AddendumsFiltersState = {
   amountTo: number | null;
   createdAt: string | string[] | null;
   periodCreatedAt: PeriodEnum | null;
-};
+}
 
 export interface AddendumRequestInput {
   amount: number;

@@ -4,7 +4,7 @@ import { Observable, finalize, tap } from 'rxjs';
 
 import { AddendumsApiService } from '@features/service/addendums.api.service';
 import { AddendumsAdvancedFilters } from '@features/filter/addendums.filters';
-import { ListQueryDto } from '@shared/features/list-query/list-query.types';
+import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import {
   AddendumDecisionInput,
   AddendumModel,
