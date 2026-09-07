@@ -31,6 +31,7 @@ import { TicketsPermissionPolicy } from '@features/tickets/tickets-permission.po
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { TICKET_STATUS_VALUES, TicketStatusEnum, ticketStatusTone } from '@models/enums/ticket-status.enum';
 import { TICKET_TYPE_VALUES } from '@models/enums/ticket-type.enum';
+import { TICKET_TARGET_TYPE_VALUES } from '@models/enums/ticket-target-type.enum';
 import { TICKET_PRIORITY_VALUES, ticketPriorityTone } from '@models/enums/ticket-priority.enum';
 import { TicketModel, TicketsFiltersState } from '@models/tickets.models';
 import { WorkModel } from '@models/works.models';
@@ -132,6 +133,14 @@ export class TicketsListComponent extends StatefulListPage<
   readonly priorityOptions = TICKET_PRIORITY_VALUES.map((value) => ({
     value,
     label: this.i18n.tUi(`tickets.priority.${value}` as never),
+  }));
+
+  /** Filtro por coluna de "Direcionado para" (th-icons) - sem contrapartida no painel de filtros
+   *  avançados, diferente de status/type/priority (decisão de escopo: só a coluna, ver pedido do
+   *  usuário). */
+  readonly targetTypeOptions = TICKET_TARGET_TYPE_VALUES.map((value) => ({
+    value,
+    label: this.i18n.tUi(`tickets.targetType.${value}` as never),
   }));
 
   readonly periodEnumOptions = computed(() => {
@@ -483,6 +492,17 @@ export class TicketsListComponent extends StatefulListPage<
       items.push({
         label: this.i18n.tUi('tickets.fields.status'),
         value: (labels.length ? labels : statusValues).join(', '),
+      });
+    }
+
+    const targetTypeValues = readArrayFilterValues(filters, 'targetType');
+    if (targetTypeValues.length) {
+      const labels = this.targetTypeOptions
+        .filter((option) => targetTypeValues.includes(option.value))
+        .map((option) => option.label);
+      items.push({
+        label: this.i18n.tUi('tickets.fields.targetType'),
+        value: (labels.length ? labels : targetTypeValues).join(', '),
       });
     }
 

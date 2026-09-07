@@ -1954,6 +1954,7 @@ export const UI_KEYS = {
       work: 'tickets.fields.work',
       createdAt: 'tickets.fields.createdAt',
       periodCreatedAt: 'tickets.fields.periodCreatedAt',
+      targetType: 'tickets.fields.targetType',
     },
     form: {
       invalid: 'tickets.form.invalid',

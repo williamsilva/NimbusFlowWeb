@@ -11,6 +11,30 @@
   display: none;
 }
 
+// Coluna "Direcionado para": ícone (USER/DEPARTMENT) + nome. Sem isso o ícone (inline) fica
+// acima do nome (cs-table-cell-ellipsis é display:block), um em cima do outro.
+.target-cell {
+  display: inline-flex;
+  gap: 0.4rem;
+  min-width: 0;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.target-cell .cs-table-cell-ellipsis {
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+// Mesmo tamanho dos ícones de ação da tabela (.cs-admin-table .table-actions .p-button .pi,
+// ver table.scss) - só o tamanho é compartilhado, a cor diverge por tipo (mesma convenção
+// de menu.data.ts: pi-user vermelho, pi-sitemap índigo).
+.target-cell-icon {
+  flex: 0 0 auto;
+  font-size: 0.58rem;
+}
+
 @media (max-width: 768px) {
   .mobile-only {
     display: inline;

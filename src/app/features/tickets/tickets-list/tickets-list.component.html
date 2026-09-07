@@ -32,9 +32,9 @@
 ></app-tickets-create-dialog>
 
 <app-tickets-edit-dialog
-  [ticket]="editingTicket()"
-  [visible]="editVisible()"
   (updated)="onUpdated()"
+  [visible]="editVisible()"
+  [ticket]="editingTicket()"
   (visibleChange)="onEditVisibleChange($event)"
 ></app-tickets-edit-dialog>
 
@@ -66,9 +66,9 @@
   (clear)="clear()"
   (search)="search()"
   [actionsAlign]="'start'"
-  [activeFilterGroups]="activeFilterGroups()"
   [activeCount]="activeFiltersCount()"
   [title]="'common.filter' | translate"
+  [activeFilterGroups]="activeFilterGroups()"
 >
   <div class="grid formgrid gap-0 align-items-end">
     <div class="col-12 md:col-3 p-1">
@@ -234,10 +234,10 @@
               <p-sortIcon field="title"></p-sortIcon>
               <p-columnFilter
                 type="text"
+                field="title"
                 display="menu"
                 class="ml-auto"
                 matchMode="contains"
-                field="title"
                 [useGrouping]="false"
                 [showOperator]="false"
                 [showAddButton]="false"
@@ -328,14 +328,40 @@
           </div>
         </th>
 
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
+        <th pSortableColumn="targetType">
+          <div class="th-flex text-center">
             <span
               class="th-label"
               tooltipPosition="top"
               [pTooltip]="'tickets.columns.target' | translate"
               >{{ 'tickets.columns.target' | translate }}</span
             >
+            <span class="th-icons">
+              <p-sortIcon field="targetType"></p-sortIcon>
+              <p-columnFilter
+                display="menu"
+                matchMode="in"
+                field="targetType"
+                [showOperator]="false"
+                [showAddButton]="false"
+                [showMatchModes]="false"
+                styleClass="cs-colfilter"
+              >
+                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                  <p-multiSelect
+                    class="w-full"
+                    appendTo="body"
+                    [ngModel]="value"
+                    [showClear]="true"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="targetTypeOptions"
+                    (onChange)="filter($event.value)"
+                    [placeholder]="'common.all' | translate"
+                  ></p-multiSelect>
+                </ng-template>
+              </p-columnFilter>
+            </span>
           </div>
         </th>
 
@@ -391,9 +417,12 @@
 
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'common.actions' | translate">{{
-              'common.actions' | translate
-            }}</span>
+            <span
+              class="th-label"
+              tooltipPosition="top"
+              [pTooltip]="'common.actions' | translate"
+              >{{ 'common.actions' | translate }}</span
+            >
           </div>
         </th>
       </tr>
@@ -419,9 +448,12 @@
           ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'tickets.columns.work' | translate">
-          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.workName ?? '-'">{{
-            row.workName ?? '-'
-          }}</span>
+          <span
+            class="cs-table-cell-ellipsis"
+            tooltipPosition="top"
+            [pTooltip]="row.workName ?? '-'"
+            >{{ row.workName ?? '-' }}</span
+          >
         </td>
         <td class="text-center" [attr.data-label]="'tickets.columns.status' | translate">
           <app-status-badge
@@ -445,18 +477,27 @@
                   }
           }}</span>
         </td>
+
         <td class="text-center" [attr.data-label]="'tickets.columns.target' | translate">
-          <i
-            class="pi"
-            [class.pi-user]="row.targetType === 'USER'"
-            [class.pi-sitemap]="row.targetType === 'DEPARTMENT'"
-          ></i>
-          <span
-            class="cs-table-cell-ellipsis"
-            tooltipPosition="top"
-            [pTooltip]="(row.targetType === 'USER' ? row.targetUserName : row.targetDepartmentName) ?? '-'"
-            >{{ (row.targetType === 'USER' ? row.targetUserName : row.targetDepartmentName) ?? '-' }}</span
-          >
+          <span class="target-cell">
+            <i
+              class="pi target-cell-icon"
+              [class.pi-user]="row.targetType === 'USER'"
+              [class.text-red-400]="row.targetType === 'USER'"
+              [class.pi-sitemap]="row.targetType === 'DEPARTMENT'"
+              [class.text-indigo-400]="row.targetType === 'DEPARTMENT'"
+            ></i>
+            <span
+              tooltipPosition="top"
+              class="cs-table-cell-ellipsis"
+              [pTooltip]="
+                (row.targetType === 'USER' ? row.targetUserName : row.targetDepartmentName) ?? '-'
+              "
+              >{{
+                (row.targetType === 'USER' ? row.targetUserName : row.targetDepartmentName) ?? '-'
+              }}</span
+            >
+          </span>
         </td>
         <td class="text-center" [attr.data-label]="'tickets.columns.createdAt' | translate">
           {{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}
