@@ -81,6 +81,21 @@ export const appRoutes: Routes = [
       },
 
       {
+        path: 'works/:workId',
+        title: 'routes.works.detail.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.OBRA.VIEW],
+        },
+        loadComponent: () =>
+          import('./features/works/works-detail/works-detail.component').then(
+            (m) => m.WorksDetailComponent,
+          ),
+      },
+
+      {
         path: 'addendums',
         title: 'routes.addendums.title',
         canActivate: [permissionGuard],

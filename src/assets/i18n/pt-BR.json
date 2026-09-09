@@ -192,6 +192,9 @@
     },
     "works": {
       "title": "Frentes de Serviço",
+      "detail": {
+        "title": "Detalhes da Frente de Serviço"
+      },
       "addendums": {
         "title": "Aditivos"
       },
@@ -457,6 +460,7 @@
     "suppliers": "Fornecedores",
     "projects": "Projetos",
     "works": "Frentes de Serviço",
+    "worksDetail": "Detalhes",
     "addendums": "Aditivos",
     "installments": "Parcelas Liberadas",
     "measurements": "Medições",
@@ -4236,6 +4240,7 @@
     },
     "action": {
       "noPermission": "Você não tem permissão para gerenciar frentes de serviço.",
+      "viewDetails": "Ver detalhes",
       "viewAddendums": "Aditivos",
       "viewInstallments": "Pagamentos",
       "viewMeasurements": "Medições",

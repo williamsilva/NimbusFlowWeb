@@ -197,6 +197,9 @@
     },
     "works": {
       "title": "Service Fronts",
+      "detail": {
+        "title": "Service Front Details"
+      },
       "addendums": {
         "title": "Addendums"
       },
@@ -462,6 +465,7 @@
     "suppliers": "Suppliers",
     "projects": "Projects",
     "works": "Service Fronts",
+    "worksDetail": "Details",
     "addendums": "Addendums",
     "installments": "Released Installments",
     "measurements": "Measurements",
@@ -4241,6 +4245,7 @@
     },
     "action": {
       "noPermission": "You do not have permission to manage service fronts.",
+      "viewDetails": "View details",
       "viewAddendums": "Addendums",
       "viewInstallments": "Payments",
       "viewMeasurements": "Measurements",

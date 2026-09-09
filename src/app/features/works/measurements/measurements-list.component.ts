@@ -1,7 +1,7 @@
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, Input, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef } from '@angular/core';
 
@@ -56,6 +56,7 @@ const SUBMITTABLE_WORK_STATUSES = new Set<WorkStatusEnum>([WorkStatusEnum.PLANNE
     TranslateModule,
     DatePickerModule,
     MultiSelectModule,
+    NgTemplateOutlet,
     PageHeaderComponent,
     StatusBadgeComponent,
     MeasurementsCreateDialogComponent,
@@ -76,6 +77,10 @@ export class MeasurementsListComponent implements OnInit {
   private readonly projectsFacade = inject(ProjectsFacade);
   private readonly toast = inject(MessageService);
   private readonly confirm = inject(ConfirmationService);
+
+  /** Mesmo mecanismo de "embutido dentro de aba" de AddendumsListComponent - ver comentário lá. */
+  @Input() embedded = false;
+  @Input() presetWorkId: string | null = null;
 
   readonly workId = signal('');
   readonly work = signal<WorkModel | null>(null);
@@ -131,15 +136,15 @@ export class MeasurementsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const workId = this.route.snapshot.paramMap.get('workId');
+    const workId = this.embedded ? (this.presetWorkId ?? '') : this.route.snapshot.paramMap.get('workId');
     if (!workId) {
-      this.router.navigate(['/works']);
+      if (!this.embedded) this.router.navigate(['/works']);
       return;
     }
 
     this.workId.set(workId);
     this.projectsFacade.loadOptions();
-    this.reloadWork({ navigateOnError: true });
+    this.reloadWork({ navigateOnError: !this.embedded });
 
     this.facade.loadByWork(workId);
   }

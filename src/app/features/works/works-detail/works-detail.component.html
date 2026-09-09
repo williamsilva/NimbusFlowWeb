@@ -1,0 +1,140 @@
+<app-page-header
+  [subtitle]="work()?.name ?? ''"
+  [breadcrumb]="[
+    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+    { label: ('breadcrumb.works' | translate), url: '/works' },
+    { label: ('breadcrumb.worksDetail' | translate) },
+  ]"
+  [compact]="false"
+>
+  <a
+    pButton
+    icon="pi pi-arrow-left"
+    [routerLink]="['/works']"
+    class="p-button-text p-button-sm"
+    [label]="'common.back' | translate"
+  ></a>
+</app-page-header>
+
+@if (work(); as w) {
+  <div class="surface-card border-round px-3 py-3 mt-2">
+    <div class="grid formgrid">
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.supplier' | translate }}</div>
+        <div class="font-medium cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="w.supplierName">
+          {{ w.supplierName }}
+        </div>
+      </div>
+
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.project' | translate }}</div>
+        <div class="font-medium cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="w.projectName">
+          {{ w.projectName }}
+        </div>
+      </div>
+
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.status' | translate }}</div>
+        <app-status-badge
+          [tone]="tone(w.status)"
+          [label]="'works.status.' + w.status | translate"
+        ></app-status-badge>
+      </div>
+
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.startDate' | translate }}</div>
+        <div class="font-medium">{{ w.startDate | csDate: 'date' }}</div>
+      </div>
+
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.expectedEndDate' | translate }}</div>
+        <div class="font-medium">{{ w.expectedEndDate | csDate: 'date' }}</div>
+      </div>
+
+      @if (w.actualEndDate) {
+        <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+          <div class="text-500 text-xs mb-1">{{ 'works.fields.actualEndDate' | translate }}</div>
+          <div class="font-medium">{{ w.actualEndDate | csDate: 'date' }}</div>
+        </div>
+      }
+
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.initialAmount' | translate }}</div>
+        <div class="font-medium">{{ w.initialAmount | csCurrency }}</div>
+      </div>
+
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.addendumsCount' | translate }}</div>
+        <div class="font-medium">{{ w.addendumsCount }}</div>
+      </div>
+
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.addendumsAmount' | translate }}</div>
+        <div class="font-medium">{{ w.addendumsAmount | csCurrency }}</div>
+      </div>
+
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.totalAmount' | translate }}</div>
+        <div class="font-medium">{{ w.totalAmount | csCurrency }}</div>
+      </div>
+
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.installmentsCount' | translate }}</div>
+        <div class="font-medium">{{ w.installmentsCount }}</div>
+      </div>
+
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.remainingAmount' | translate }}</div>
+        <div class="font-medium">{{ w.remainingAmount | csCurrency }}</div>
+      </div>
+
+      <div class="col-12 sm:col-8 md:col-6 lg:col-4 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.progress' | translate }}</div>
+        <div class="flex align-items-center gap-2">
+          <p-progressBar
+            [showValue]="false"
+            [value]="w.progressPercentage"
+            [style]="{ height: '8px', flex: '1' }"
+          ></p-progressBar>
+          <small class="font-medium">{{ w.progressPercentage | number: '1.0-2' }}%</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-2">
+    <p-tabs [value]="defaultTab()" [lazy]="true">
+      <p-tablist>
+        @if (addendumsPolicy.canView()) {
+          <p-tab value="addendums">{{ 'works.action.viewAddendums' | translate }}</p-tab>
+        }
+        @if (measurementsPolicy.canView()) {
+          <p-tab value="measurements">{{ 'works.action.viewMeasurements' | translate }}</p-tab>
+        }
+        @if (installmentsPolicy.canView()) {
+          <p-tab value="installments">{{ 'works.action.viewInstallments' | translate }}</p-tab>
+        }
+      </p-tablist>
+
+      <p-tabpanels>
+        @if (addendumsPolicy.canView()) {
+          <p-tabpanel value="addendums">
+            <app-addendums-list [embedded]="true" [presetWorkId]="workId()"></app-addendums-list>
+          </p-tabpanel>
+        }
+        @if (measurementsPolicy.canView()) {
+          <p-tabpanel value="measurements">
+            <app-measurements-list [embedded]="true" [presetWorkId]="workId()"></app-measurements-list>
+          </p-tabpanel>
+        }
+        @if (installmentsPolicy.canView()) {
+          <p-tabpanel value="installments">
+            <app-installments-list [embedded]="true" [presetWorkId]="workId()"></app-installments-list>
+          </p-tabpanel>
+        }
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+} @else {
+  <div class="text-center py-6 opacity-70">{{ 'common.loading' | translate }}</div>
+}

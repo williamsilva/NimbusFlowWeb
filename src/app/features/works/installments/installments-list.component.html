@@ -1,12 +1,4 @@
-<app-page-header
-  [subtitle]="work()?.name ?? ''"
-  [breadcrumb]="[
-    { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
-    { label: ('breadcrumb.works' | translate), url: '/works' },
-    { label: ('breadcrumb.installments' | translate) },
-  ]"
-  [compact]="false"
->
+<ng-template #installmentsActions>
   <button
     pButton
     type="button"
@@ -15,7 +7,25 @@
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
   ></button>
-</app-page-header>
+</ng-template>
+
+@if (embedded) {
+  <div class="flex justify-content-end gap-2 mb-2">
+    <ng-container *ngTemplateOutlet="installmentsActions"></ng-container>
+  </div>
+} @else {
+  <app-page-header
+    [subtitle]="work()?.name ?? ''"
+    [breadcrumb]="[
+      { label: ('breadcrumb.dashboard.title' | translate), url: '/' },
+      { label: ('breadcrumb.works' | translate), url: '/works' },
+      { label: ('breadcrumb.installments' | translate) },
+    ]"
+    [compact]="false"
+  >
+    <ng-container *ngTemplateOutlet="installmentsActions"></ng-container>
+  </app-page-header>
+}
 
 <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
   <p-table
