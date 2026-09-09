@@ -1,0 +1,15 @@
+# Sobe o frontend do NimbusFlow sozinho (build de produção servido via nginx dentro do
+# container). Uso normal é via ../docker-compose.yml (na raiz do produto, "include:" deste
+# arquivo + do NimbusFlowServer/docker-compose.yml) - rode daqui direto só se já tiver o backend
+# rodando de outro jeito e só quiser o frontend em container.
+services:
+  frontend:
+    build:
+      context: .
+      # NODE_AUTH_TOKEN: mesmo achado do backend acima, versão npm - o .npmrc do projeto
+      # (@williamsilva:registry) precisa dessa var pra autenticar no GitHub Packages durante
+      # `npm ci`. Sete no seu .env (não commitado).
+      args:
+        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-4202}:80"
