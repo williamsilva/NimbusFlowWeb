@@ -1,6 +1,7 @@
 
+import { NgTemplateOutlet } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, Input, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DestroyRef } from '@angular/core';
 
@@ -60,6 +61,7 @@ const SUBMITTABLE_WORK_STATUSES = new Set<WorkStatusEnum>([
     TranslateModule,
     DatePickerModule,
     MultiSelectModule,
+    NgTemplateOutlet,
     PageHeaderComponent,
     StatusBadgeComponent,
     AddendumsCreateDialogComponent,
@@ -79,6 +81,12 @@ export class AddendumsListComponent implements OnInit {
   private readonly worksFacade = inject(WorksFacade);
   private readonly toast = inject(MessageService);
   private readonly confirm = inject(ConfirmationService);
+
+  /** Usado pela tela de Detalhes da Frente (app-works-detail) pra embutir esta mesma lista dentro
+   *  de uma aba, sem o page-header/breadcrumb próprio (a tela-mãe já tem o dela) - workId vem por
+   *  Input em vez do parâmetro de rota, que não existe nesse contexto. */
+  @Input() embedded = false;
+  @Input() presetWorkId: string | null = null;
 
   readonly workId = signal('');
   readonly work = signal<WorkModel | null>(null);
@@ -117,9 +125,9 @@ export class AddendumsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const workId = this.route.snapshot.paramMap.get('workId');
+    const workId = this.embedded ? (this.presetWorkId ?? '') : this.route.snapshot.paramMap.get('workId');
     if (!workId) {
-      this.router.navigate(['/works']);
+      if (!this.embedded) this.router.navigate(['/works']);
       return;
     }
 
@@ -129,7 +137,9 @@ export class AddendumsListComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (work) => this.work.set(work),
-        error: () => this.router.navigate(['/works']),
+        error: () => {
+          if (!this.embedded) this.router.navigate(['/works']);
+        },
       });
 
     this.facade.loadByWork(workId);

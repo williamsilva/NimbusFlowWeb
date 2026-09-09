@@ -1,0 +1,7 @@
+// As 3 abas (Aditivos/Medições/Pagamentos) embutem app-addendums-list/measurements-list/
+// installments-list em modo `embedded` - cada uma já traz seu próprio espaçamento superior
+// (mt-2 no wrapper da tabela). p-tabpanels do PrimeNG soma um padding-top default por cima disso,
+// dobrando o respiro entre a linha de tabs e a tabela - removido aqui.
+:host ::ng-deep .p-tabpanels {
+  padding-top: 0;
+}

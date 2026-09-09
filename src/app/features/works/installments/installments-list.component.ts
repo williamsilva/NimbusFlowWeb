@@ -1,8 +1,9 @@
 import { DestroyRef } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, Input, OnInit, computed, inject, signal } from '@angular/core';
 
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -53,6 +54,7 @@ import {
     TranslateModule,
     DatePickerModule,
     MultiSelectModule,
+    NgTemplateOutlet,
     PageHeaderComponent,
     StatusBadgeComponent,
     CsCurrencyRangeFilterComponent,
@@ -70,6 +72,10 @@ export class InstallmentsListComponent implements OnInit {
   private readonly worksFacade = inject(WorksFacade);
   private readonly toast = inject(MessageService);
   private readonly confirm = inject(ConfirmationService);
+
+  /** Mesmo mecanismo de "embutido dentro de aba" de AddendumsListComponent - ver comentário lá. */
+  @Input() embedded = false;
+  @Input() presetWorkId: string | null = null;
 
   readonly workId = signal('');
   readonly work = signal<WorkModel | null>(null);
@@ -98,9 +104,9 @@ export class InstallmentsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const workId = this.route.snapshot.paramMap.get('workId');
+    const workId = this.embedded ? (this.presetWorkId ?? '') : this.route.snapshot.paramMap.get('workId');
     if (!workId) {
-      this.router.navigate(['/works']);
+      if (!this.embedded) this.router.navigate(['/works']);
       return;
     }
 
@@ -110,7 +116,9 @@ export class InstallmentsListComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (work) => this.work.set(work),
-        error: () => this.router.navigate(['/works']),
+        error: () => {
+          if (!this.embedded) this.router.navigate(['/works']);
+        },
       });
 
     this.facade.loadByWork(workId);
