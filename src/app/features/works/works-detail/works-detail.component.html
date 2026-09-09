@@ -22,91 +22,137 @@
     class="p-button-text p-button-sm"
     [label]="'common.update' | translate"
   ></button>
+  <button
+    pButton
+    type="button"
+    icon="pi pi-pencil"
+    (click)="goEdit()"
+    tooltipPosition="top"
+    [disabled]="!policy.canEdit()"
+    class="p-button-text p-button-sm"
+    [label]="'common.edit' | translate"
+    [pTooltip]="!policy.canEdit() ? ((policy.editDisabledReason() ?? 'works.action.noPermission') | translate) : ''"
+  ></button>
 </app-page-header>
 
+<app-works-create-dialog
+  [work]="work()"
+  (saved)="onSaved()"
+  [visible]="editVisible()"
+  (visibleChange)="onEditVisibleChange($event)"
+></app-works-create-dialog>
+
 @if (work(); as w) {
-  <div class="surface-card border-round px-3 py-3 mt-2">
-    <div class="grid formgrid">
-      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+  <div class="grid formgrid mt-2">
+    <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #3b82f6">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.supplier' | translate }}</div>
         <div class="font-medium cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="w.supplierName">
           {{ w.supplierName }}
         </div>
       </div>
+    </div>
 
-      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+    <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #06b6d4">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.project' | translate }}</div>
         <div class="font-medium cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="w.projectName">
           {{ w.projectName }}
         </div>
       </div>
+    </div>
 
-      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+    <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #8b5cf6">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.status' | translate }}</div>
         <app-status-badge
           [tone]="tone(w.status)"
           [label]="'works.status.' + w.status | translate"
         ></app-status-badge>
       </div>
+    </div>
 
-      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+    <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #14b8a6">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.startDate' | translate }}</div>
         <div class="font-medium">{{ w.startDate | csDate: 'date' }}</div>
       </div>
+    </div>
 
-      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+    <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #6366f1">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.expectedEndDate' | translate }}</div>
         <div class="font-medium">{{ w.expectedEndDate | csDate: 'date' }}</div>
       </div>
+    </div>
 
-      @if (w.actualEndDate) {
-        <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+    @if (w.actualEndDate) {
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="wd-card p-3 h-full" style="--wd-accent: #0ea5e9">
           <div class="text-500 text-xs mb-1">{{ 'works.fields.actualEndDate' | translate }}</div>
           <div class="font-medium">{{ w.actualEndDate | csDate: 'date' }}</div>
         </div>
-      }
+      </div>
+    }
 
-      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+    <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #f59e0b">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.initialAmount' | translate }}</div>
         <div class="font-medium">{{ w.initialAmount | csCurrency }}</div>
       </div>
+    </div>
 
-      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+    <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #f97316">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.addendumsCount' | translate }}</div>
         <div class="font-medium">{{ w.addendumsCount }}</div>
       </div>
+    </div>
 
-      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+    <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #d946ef">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.addendumsAmount' | translate }}</div>
         <div class="font-medium">{{ w.addendumsAmount | csCurrency }}</div>
       </div>
+    </div>
 
-      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+    <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #22c55e">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.totalAmount' | translate }}</div>
         <div class="font-medium">{{ w.totalAmount | csCurrency }}</div>
       </div>
+    </div>
 
-      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+    <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #84cc16">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.measurementsApprovedAmount' | translate }}</div>
         <div class="font-medium">{{ w.measurementsApprovedAmount | csCurrency }}</div>
       </div>
+    </div>
 
-      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+    <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #10b981">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.paidAmount' | translate }}</div>
         <div class="font-medium">{{ w.paidAmount | csCurrency }}</div>
       </div>
+    </div>
 
-      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+    <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #ec4899">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.installmentsCount' | translate }}</div>
         <div class="font-medium">{{ w.installmentsCount }}</div>
       </div>
+    </div>
 
-      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+    <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #ef4444">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.remainingAmount' | translate }}</div>
         <div class="font-medium">{{ w.remainingAmount | csCurrency }}</div>
       </div>
+    </div>
 
-      <div class="col-12 sm:col-8 md:col-6 lg:col-4 p-2">
+    <div class="col-12 sm:col-8 md:col-6 lg:col-4 p-2">
+      <div class="wd-card p-3 h-full" style="--wd-accent: #a855f7">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.progress' | translate }}</div>
         <div class="flex align-items-center gap-2">
           <p-progressBar
