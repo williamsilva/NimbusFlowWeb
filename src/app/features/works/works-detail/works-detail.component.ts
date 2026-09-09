@@ -17,6 +17,8 @@ import { WorkModel } from '@models/works.models';
 import { workStatusTone } from '@models/enums/work-status.enum';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
+import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
+import { WorksCreateDialogComponent } from '@features/works/works-create/works-create-dialog.component';
 import { AddendumsListComponent } from '@features/works/addendums/addendums-list.component';
 import { AddendumsPermissionPolicy } from '@features/works/addendums-permission.policy';
 import { MeasurementsListComponent } from '@features/works/measurements/measurements-list.component';
@@ -35,8 +37,7 @@ import { InstallmentsPermissionPolicy } from '@features/works/installments-permi
  * breadcrumb próprio de cada um - só o toolbar de ações) - nenhuma lógica de negócio duplicada,
  * cada aba continua se auto-carregando (facade.loadByWork) e resolvendo sua própria permissão.
  *
- * Cabeçalho fica com "Voltar" + "Atualizar" (pedido explícito do usuário, 2026-09-09) - "Editar"
- * continua acessível só pela listagem (works-list), sem duplicar aqui.
+ * Cabeçalho: "Voltar" + "Atualizar" + "Editar" (pedido explícito do usuário, 2026-09-09).
  */
 @Component({
   standalone: true,
@@ -55,6 +56,7 @@ import { InstallmentsPermissionPolicy } from '@features/works/installments-permi
     ProgressBarModule,
     PageHeaderComponent,
     StatusBadgeComponent,
+    WorksCreateDialogComponent,
     AddendumsListComponent,
     MeasurementsListComponent,
     InstallmentsListComponent,
@@ -67,12 +69,14 @@ export class WorksDetailComponent implements OnInit {
 
   readonly i18n = inject(I18nService);
   readonly facade = inject(WorksFacade);
+  readonly policy = inject(WorksPermissionPolicy);
   readonly addendumsPolicy = inject(AddendumsPermissionPolicy);
   readonly measurementsPolicy = inject(MeasurementsPermissionPolicy);
   readonly installmentsPolicy = inject(InstallmentsPermissionPolicy);
 
   readonly workId = signal('');
   readonly work = signal<WorkModel | null>(null);
+  readonly editVisible = signal(false);
 
   ngOnInit(): void {
     const workId = this.route.snapshot.paramMap.get('workId');
@@ -111,5 +115,18 @@ export class WorksDetailComponent implements OnInit {
 
   tone(status: string): ReturnType<typeof workStatusTone> {
     return workStatusTone(status);
+  }
+
+  goEdit(): void {
+    if (!this.policy.canEdit()) return;
+    this.editVisible.set(true);
+  }
+
+  onEditVisibleChange(v: boolean): void {
+    this.editVisible.set(v);
+  }
+
+  onSaved(): void {
+    this.refresh();
   }
 }

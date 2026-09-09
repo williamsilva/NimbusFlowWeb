@@ -5,3 +5,20 @@
 :host ::ng-deep .p-tabpanels {
   padding-top: 0;
 }
+
+// Card de cada campo do resumo (Fornecedor/Projeto/Status/valores/etc.) - pedido do usuário pra
+// virar "cards, cada um de uma cor" em vez de um grid de rótulo+valor dentro de 1 card só. A cor
+// de cada um vem de --wd-accent, setado inline no template (style="--wd-accent: #...") por
+// campo - cor fixa por campo (não por posição), então continua a mesma mesmo quando um campo
+// condicional (ex.: Fim real) não aparece.
+//
+// Não usa var(--blue-500) etc. do PrimeNG/PrimeFlex de propósito - essas tokens não existem de
+// verdade no bundle desta app (achado ao investigar esta mudança: cs-toast-content.cs-toast-info
+// já referencia var(--blue-500) sem nunca funcionar, silenciosamente sem cor nenhuma) - hex
+// literal aqui garante a cor de verdade, independente disso.
+.wd-card {
+  height: 100%;
+  border-radius: 10px;
+  border: 2px solid var(--wd-accent, var(--surface-border));
+  background: color-mix(in srgb, var(--wd-accent, transparent) 10%, var(--surface-card));
+}
