@@ -4225,6 +4225,8 @@
       "totalAmount": "Total amount",
       "installmentsCount": "# payments",
       "remainingAmount": "Remaining amount",
+      "measurementsApprovedAmount": "Approved measurements amount",
+      "paidAmount": "Paid amount",
       "progress": "Progress"
     },
     "status": {

@@ -28,6 +28,12 @@ export interface WorkModel {
   totalAmount: number;
   /** totalAmount menos a soma de todas as Parcelas (ordens de pagamento) já geradas para a obra. */
   remainingAmount: number;
+  /** Soma das Ordens de Pagamento geradas por Medições ainda APPROVED (exclui CANCELLED) - mesmo
+   *  total usado pra calcular remainingAmount, só que exposto direto. */
+  measurementsApprovedAmount: number;
+  /** Subconjunto de measurementsApprovedAmount cuja Ordem já está num Pagamento com status PAID -
+   *  mesma base de progressPercentage, em valor absoluto. */
+  paidAmount: number;
   addendumsCount: number;
   installmentsCount: number;
   /** Soma das Parcelas com status PAID dividida por totalAmount, em percentual (0 quando ainda não houve pagamento). */

@@ -35,9 +35,8 @@ import { InstallmentsPermissionPolicy } from '@features/works/installments-permi
  * breadcrumb próprio de cada um - só o toolbar de ações) - nenhuma lógica de negócio duplicada,
  * cada aba continua se auto-carregando (facade.loadByWork) e resolvendo sua própria permissão.
  *
- * Cabeçalho fica só com "Voltar" (pedido explícito do usuário, 2026-09-09) - "Atualizar" some
- * porque cada aba já tem o seu próprio, e "Editar" continua acessível pela listagem (works-list),
- * sem duplicar aqui.
+ * Cabeçalho fica com "Voltar" + "Atualizar" (pedido explícito do usuário, 2026-09-09) - "Editar"
+ * continua acessível só pela listagem (works-list), sem duplicar aqui.
  */
 @Component({
   standalone: true,
@@ -83,13 +82,21 @@ export class WorksDetailComponent implements OnInit {
     }
 
     this.workId.set(workId);
+    this.load();
+  }
+
+  private load(): void {
     this.facade
-      .getById(workId)
+      .getById(this.workId())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (work) => this.work.set(work),
         error: () => this.router.navigate(['/works']),
       });
+  }
+
+  refresh(): void {
+    this.load();
   }
 
   /** Aba padrão: a primeira, entre Aditivos/Medições/Pagamentos, que o usuário de fato tem

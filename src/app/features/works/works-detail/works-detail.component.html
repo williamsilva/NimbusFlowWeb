@@ -14,6 +14,14 @@
     class="p-button-text p-button-sm"
     [label]="'common.back' | translate"
   ></a>
+  <button
+    pButton
+    type="button"
+    (click)="refresh()"
+    icon="pi pi-refresh"
+    class="p-button-text p-button-sm"
+    [label]="'common.update' | translate"
+  ></button>
 </app-page-header>
 
 @if (work(); as w) {
@@ -76,6 +84,16 @@
       <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
         <div class="text-500 text-xs mb-1">{{ 'works.columns.totalAmount' | translate }}</div>
         <div class="font-medium">{{ w.totalAmount | csCurrency }}</div>
+      </div>
+
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.measurementsApprovedAmount' | translate }}</div>
+        <div class="font-medium">{{ w.measurementsApprovedAmount | csCurrency }}</div>
+      </div>
+
+      <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">
+        <div class="text-500 text-xs mb-1">{{ 'works.columns.paidAmount' | translate }}</div>
+        <div class="font-medium">{{ w.paidAmount | csCurrency }}</div>
       </div>
 
       <div class="col-6 sm:col-4 md:col-3 lg:col-2 p-2">

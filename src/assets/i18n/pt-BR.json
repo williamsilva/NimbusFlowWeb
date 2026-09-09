@@ -4220,6 +4220,8 @@
       "totalAmount": "Valor total",
       "installmentsCount": "Nº pagamentos",
       "remainingAmount": "Valor restante",
+      "measurementsApprovedAmount": "Valor medições aprovadas",
+      "paidAmount": "Valor pago",
       "progress": "Progresso"
     },
     "status": {
