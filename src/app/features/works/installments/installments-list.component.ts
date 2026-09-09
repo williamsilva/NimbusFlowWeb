@@ -83,10 +83,19 @@ export class InstallmentsListComponent implements OnInit {
   /** InstallmentModel puro não tem workName (endpoint por obra não manda - já implícito na URL/
    *  work() carregado à parte) - a coluna "Frente de serviço" da tabela (mesmo layout da listagem
    *  global) precisa do campo no próprio row pra sort/filter do PrimeNG funcionarem, então
-   *  completa aqui com o nome já carregado em work(), igual pra todas as linhas desta página. */
+   *  completa aqui com o nome já carregado em work(), igual pra todas as linhas desta página.
+   *
+   *  Exclui CANCELLED (pedido do usuário, 2026-09-09) - diferente da listagem global "Parcelas
+   *  Liberadas" (AllInstallmentsListComponent), que mostra todos os status por decisão explícita
+   *  anterior (ver corte automático revertido a pedido do usuário). Aqui, por Frente, só o que
+   *  ainda é relevante (Liberada/Aguardando liberação) - mesmo espírito de installmentsCount no
+   *  WorkResponse, que já exclui CANCELLED do total. */
   readonly items = computed<InstallmentWithWorkModel[]>(() => {
     const workName = this.work()?.name ?? '';
-    return this.facade.items().map((item) => ({ ...item, workName }));
+    return this.facade
+      .items()
+      .filter((item) => item.status !== InstallmentStatusEnum.CANCELLED)
+      .map((item) => ({ ...item, workName }));
   });
   readonly loading = computed(() => this.facade.loading());
   readonly loadedOnce = computed(() => this.facade.loadedOnce());
