@@ -4801,12 +4801,19 @@
       "openWorkFront": "Open Service Front",
       "workLinked": "Service Front linked successfully.",
       "workLinkError": "Could not link the Service Front.",
+      "unlinkWork": "Undo Service Front",
       "addFile": "Add file",
       "takePhoto": "Take photo"
     },
     "cancelConfirm": {
       "header": "Cancel ticket",
       "message": "Confirm cancellation of this ticket?"
+    },
+    "unlinkWorkConfirm": {
+      "header": "Undo Service Front",
+      "message": "Undo the Service Front \"{workName}\"? It will be deleted (only possible with no addendums, measurements or payments).",
+      "success": "Service Front undone and deleted successfully.",
+      "error": "Could not undo: the Service Front already has addendums, measurements or payments linked."
     },
     "mobile": {
       "createdBy": "Created by {name} on {date}"

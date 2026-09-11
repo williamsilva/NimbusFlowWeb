@@ -87,4 +87,8 @@ export class TicketsFacade {
   linkWork(id: string, input: TicketWorkLinkInput): Observable<TicketModel> {
     return this.api.linkWork(id, input).pipe(tap(() => this.reloadLast()));
   }
+
+  unlinkWork(id: string): Observable<TicketModel> {
+    return this.api.unlinkWork(id).pipe(tap(() => this.reloadLast()));
+  }
 }

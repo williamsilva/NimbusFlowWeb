@@ -4801,12 +4801,19 @@
       "openWorkFront": "Abrir Frente de Servicio",
       "workLinked": "Frente de Servicio vinculada con éxito.",
       "workLinkError": "No se pudo vincular la Frente de Servicio.",
+      "unlinkWork": "Deshacer Frente de Servicio",
       "addFile": "Agregar archivo",
       "takePhoto": "Tomar foto"
     },
     "cancelConfirm": {
       "header": "Cancelar llamado",
       "message": "¿Confirma la cancelación de este llamado?"
+    },
+    "unlinkWorkConfirm": {
+      "header": "Deshacer Frente de Servicio",
+      "message": "¿Deshacer la Frente \"{workName}\"? Será eliminada (solo es posible sin adicionales, mediciones o pagos).",
+      "success": "Frente de Servicio deshecha y eliminada con éxito.",
+      "error": "No se pudo deshacer: la Frente de Servicio ya tiene adicionales, mediciones o pagos vinculados."
     },
     "mobile": {
       "createdBy": "Creado por {name} el {date}"
