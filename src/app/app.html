@@ -55,7 +55,7 @@
 >
   <ng-template pTemplate="icon">
     <div class="cs-confirm-icon">
-      <i class="pi pi-sign-out"></i>
+      <i [ngClass]="confirmIcon()"></i>
     </div>
   </ng-template>
 </p-confirmDialog>
