@@ -49,7 +49,11 @@
   (visibleChange)="onCreateWorkVisibleChange($event)"
 ></app-works-create-dialog>
 
-<p-confirmDialog key="actionPlans"></p-confirmDialog>
+<p-confirmDialog
+  key="actionPlans"
+  [style]="{ width: '480px' }"
+  [breakpoints]="{ '640px': '95vw' }"
+></p-confirmDialog>
 
 <cs-filters-panel
   [collapsed]="true"

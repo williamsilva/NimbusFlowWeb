@@ -240,9 +240,11 @@ export class TicketsListComponent extends StatefulListPage<
   }
 
   /** Mesma elegibilidade de EDITABLE_STATUSES no backend (TicketService#update) - só chamado
-   *  ainda OPEN aceita edição. */
+   *  ainda OPEN aceita edição. workId!=null bloqueia (chamado vinculado a uma Frente de Serviço
+   *  passa a ser tratado só por ela - ver TicketService.requireNotLinkedToWork no backend); usar
+   *  "Desfazer Frente de Serviço" pra liberar de novo. */
   canEdit(row: TicketModel): boolean {
-    return this.canManage() && row.status === TicketStatusEnum.OPEN;
+    return this.canManage() && row.workId == null && row.status === TicketStatusEnum.OPEN;
   }
 
   goEdit(row: TicketModel): void {
@@ -263,28 +265,41 @@ export class TicketsListComponent extends StatefulListPage<
   canClose(row: TicketModel): boolean {
     return (
       this.canManage() &&
+      row.workId == null &&
       (row.status === TicketStatusEnum.OPEN || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
     );
   }
 
   canCancel(row: TicketModel): boolean {
-    return this.canManage() && row.status === TicketStatusEnum.OPEN;
+    return this.canManage() && row.workId == null && row.status === TicketStatusEnum.OPEN;
   }
 
   /** Não existe endpoint separado de "converter" - criar um Plano de Ação com ticketId JÁ é a
    *  conversão (ver ActionPlanService.create no backend). */
   canConvert(row: TicketModel): boolean {
-    return this.canManage() && row.status === TicketStatusEnum.OPEN;
+    return this.canManage() && row.workId == null && row.status === TicketStatusEnum.OPEN;
   }
 
   /** Mesma elegibilidade de canClose - um chamado já convertido em plano ainda pode precisar de
    *  uma Frente de Serviço pra executar (ver TicketService.WORK_LINKABLE_STATUSES no backend).
-   *  workId==null pra impedir vincular de novo (trocar) pela UI - o backend ainda aceita
-   *  sobrescrever via API direta, restrição é só de tela mesmo. */
+   *  workId==null porque, uma vez vinculado, o chamado fica bloqueado (ver canEdit) - o próprio
+   *  backend agora rejeita vincular de novo sem desfazer antes (TicketService.linkWork), não é só
+   *  restrição de tela. */
   canOpenWorkFront(row: TicketModel): boolean {
     return (
       this.canManage() &&
       row.workId == null &&
+      (row.status === TicketStatusEnum.OPEN || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
+    );
+  }
+
+  /** "Desfazer Frente de Serviço" - solta o vínculo e libera o chamado pra edição/fechamento/
+   *  cancelamento/conversão direto de novo (ver TicketService.unlinkWork no backend). Mesma
+   *  elegibilidade de status de canOpenWorkFront, só invertendo a condição de workId. */
+  canUnlinkWork(row: TicketModel): boolean {
+    return (
+      this.canManage() &&
+      row.workId != null &&
       (row.status === TicketStatusEnum.OPEN || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
     );
   }
@@ -355,6 +370,36 @@ export class TicketsListComponent extends StatefulListPage<
             detail: this.i18n.tUi('tickets.action.workLinkError' as never),
           }),
       });
+  }
+
+  confirmUnlinkWork(row: TicketModel): void {
+    if (!this.canUnlinkWork(row)) return;
+
+    this.confirm.confirm({
+      key: 'tickets',
+      header: this.i18n.tUi('tickets.unlinkWorkConfirm.header' as never),
+      message: this.i18n.tUi('tickets.unlinkWorkConfirm.message' as never, { workName: row.workName ?? '' }),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.facade
+          .unlinkWork(row.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () =>
+              this.toast.add({
+                severity: 'success',
+                summary: this.i18n.tUi('common.success'),
+                detail: this.i18n.tUi('tickets.unlinkWorkConfirm.success' as never),
+              }),
+            error: () =>
+              this.toast.add({
+                severity: 'error',
+                summary: this.i18n.tUi('common.error'),
+                detail: this.i18n.tUi('tickets.unlinkWorkConfirm.error' as never),
+              }),
+          });
+      },
+    });
   }
 
   confirmCancel(row: TicketModel): void {

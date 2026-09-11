@@ -59,7 +59,11 @@
   (visibleChange)="onCreateWorkVisibleChange($event)"
 ></app-works-create-dialog>
 
-<p-confirmDialog key="tickets"></p-confirmDialog>
+<p-confirmDialog
+  key="tickets"
+  [style]="{ width: '480px' }"
+  [breakpoints]="{ '640px': '95vw' }"
+></p-confirmDialog>
 
 <cs-filters-panel
   [collapsed]="true"
@@ -521,17 +525,31 @@
               [attr.aria-label]="'common.edit' | translate"
               tooltipPosition="top"
             ></button>
-            <button
-              pButton
-              type="button"
-              icon="pi pi-building"
-              (click)="goOpenWorkFront(row)"
-              class="p-button-text p-button-sm"
-              [disabled]="!canOpenWorkFront(row)"
-              [pTooltip]="'tickets.action.openWorkFront' | translate"
-              [attr.aria-label]="'tickets.action.openWorkFront' | translate"
-              tooltipPosition="top"
-            ></button>
+            @if (row.workId === null) {
+              <button
+                pButton
+                type="button"
+                icon="pi pi-building"
+                (click)="goOpenWorkFront(row)"
+                class="p-button-text p-button-sm"
+                [disabled]="!canOpenWorkFront(row)"
+                [pTooltip]="'tickets.action.openWorkFront' | translate"
+                [attr.aria-label]="'tickets.action.openWorkFront' | translate"
+                tooltipPosition="top"
+              ></button>
+            } @else {
+              <button
+                pButton
+                type="button"
+                icon="pi pi-unlock"
+                class="p-button-text p-button-sm p-button-danger"
+                (click)="confirmUnlinkWork(row)"
+                [disabled]="!canUnlinkWork(row)"
+                [pTooltip]="'tickets.action.unlinkWork' | translate"
+                [attr.aria-label]="'tickets.action.unlinkWork' | translate"
+                tooltipPosition="top"
+              ></button>
+            }
             <button
               pButton
               type="button"
