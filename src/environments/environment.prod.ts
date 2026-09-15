@@ -11,4 +11,5 @@ export const environment = {
   // chaves incompatível).
   vapidPublicKey:
     'BB_Q1Wx9g-kTPdKhxEFclCDY-shInF1YPVZvhAs7KNeHd8xUACRMzMcthMx8g6428KX85pvHsyxHndlIpGas7GM',
+  nimbusAuthWebUrl: 'https://nimbussystems.com.br',
 }

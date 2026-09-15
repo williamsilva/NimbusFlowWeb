@@ -1,3 +1,6 @@
+import { environment } from 'environments/environment';
+
+import { APP_KEY } from '@core/api/api.config';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 
 import { AppMenuItem } from './menu.model';
@@ -162,15 +165,13 @@ export const APP_MENU: AppMenuItem[] = [
       {
         labelKey: 'menu.security.users',
         icon: 'pi pi-user text-red-400',
-        route: '/security/users',
-        exact: false,
+        externalUrl: `${environment.nimbusAuthWebUrl}/users?appKey=${APP_KEY}`,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.USERS.VIEW],
       },
       {
         labelKey: 'menu.security.groups',
         icon: 'pi pi-id-card text-red-400',
-        route: '/security/groups',
-        exact: false,
+        externalUrl: `${environment.nimbusAuthWebUrl}/groups?appKey=${APP_KEY}`,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.GROUPS.VIEW],
       },
     ],

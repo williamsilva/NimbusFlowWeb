@@ -6,6 +6,8 @@ export interface AppMenuItem {
   icon: string;
   activeIcon?: string;
   route?: string;
+  /** Link externo (abre em nova aba); mutuamente exclusivo com `route`. */
+  externalUrl?: string;
   children?: AppMenuItem[];
   exact?: boolean;
   permissions?: Permission[];
