@@ -297,16 +297,13 @@ export type Permission = DeepValueOf<typeof PERMISSIONS>;
 
 export const ALL_PERMISSIONS: Permission[] = [
   PERMISSIONS.SUPPORT,
-  ...Object.values(PERMISSIONS.USERS),
   ...Object.values(PERMISSIONS.COMPANIES),
   ...Object.values(PERMISSIONS.ACQUIRER),
   ...Object.values(PERMISSIONS.ESTABLISHMENT),
   ...Object.values(PERMISSIONS.FLAGS),
   ...Object.values(PERMISSIONS.CONTRACTS),
-  ...Object.values(PERMISSIONS.GROUPS),
   ...Object.values(PERMISSIONS.HOLIDAYS),
   ...Object.values(PERMISSIONS.BANKS),
-  ...Object.values(PERMISSIONS.AUDIT),
   ...Object.values(PERMISSIONS.BANKING_DOMICILE),
   ...Object.values(PERMISSIONS.NO_FILE_DAY),
   ...Object.values(PERMISSIONS.FILE_PROCESSING),
