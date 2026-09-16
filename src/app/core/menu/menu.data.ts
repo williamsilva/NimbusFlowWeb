@@ -208,10 +208,9 @@ export const APP_MENU: AppMenuItem[] = [
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.DEPARTAMENTO_VIEW],
       },
       {
-        exact: false,
-        route: '/settings/email-log',
         labelKey: 'menu.settings.emailLog',
         icon: 'pi pi-history text-indigo-400',
+        externalUrl: `${environment.nimbusAuthWebUrl}/apps-email-log?appKey=${APP_KEY}`,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.EMAIL_LOG_VIEW],
       },
       {

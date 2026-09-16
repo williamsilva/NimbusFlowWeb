@@ -34,20 +34,6 @@ export const SETTINGS_ROUTES: Routes = [
       ),
   },
   {
-    path: 'email-log',
-    title: 'routes.settings.emailLog.title',
-    canActivate: [permissionGuard],
-    data: {
-      requireAll: false,
-      redirectTo: '/forbidden',
-      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.EMAIL_LOG_VIEW],
-    },
-    loadComponent: () =>
-      import('./email-log/email-log-list.component').then(
-        (m) => m.EmailLogListComponent,
-      ),
-  },
-  {
     path: 'work-auto-complete',
     title: 'routes.settings.workAutoComplete.title',
     canActivate: [permissionGuard],
