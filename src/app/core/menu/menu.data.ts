@@ -182,17 +182,15 @@ export const APP_MENU: AppMenuItem[] = [
     labelKey: 'menu.settings.title',
     children: [
       {
-        exact: false,
-        route: '/settings/email',
         labelKey: 'menu.settings.email',
         icon: 'pi pi-envelope text-indigo-400',
+        externalUrl: `${environment.nimbusAuthWebUrl}/apps-email-settings?appKey=${APP_KEY}`,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.EMAIL_VIEW],
       },
       {
-        exact: false,
-        route: '/settings/backup',
         labelKey: 'menu.settings.backup',
         icon: 'pi pi-database text-indigo-400',
+        externalUrl: `${environment.nimbusAuthWebUrl}/backup`,
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.BACKUP_PROCESS],
       },
       {
