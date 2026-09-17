@@ -25,6 +25,7 @@ import {
   CsCurrencyRangeFilterComponent,
 } from '@features/list-base/cs-currency-range-filter.component';
 import {
+  ActiveFilterGroup,
   ActiveFilterItem,
   FiltersPanelComponent,
 } from '@williamsilva/nimbus-web-commons';
@@ -131,6 +132,16 @@ export class DashboardComponent implements OnInit {
     }
 
     return items;
+  });
+
+  /** Só 1 grupo aqui (sem "Filtros da tabela") - este dashboard não tem p-table/p-columnFilter,
+   *  só os filtros do painel (projeto/fornecedor/frente/valor) alimentando os gráficos - não há
+   *  uma segunda fonte de filtro de tabela pra separar, mesmo motivo de file-processing-dashboard/
+   *  management-dashboard (CardSyncWeb). Ainda assim usa o mesmo componente/visual de grupo com
+   *  título das outras telas (StatefulListPage), em vez da lista plana sem título de antes. */
+  readonly activeFilterGroups = computed<ActiveFilterGroup[]>(() => {
+    const filters = this.activeFilters();
+    return filters.length ? [{ title: this.i18n.tUi('common.advancedFilters'), filters }] : [];
   });
 
   readonly worksTotalCount = computed(() => {
