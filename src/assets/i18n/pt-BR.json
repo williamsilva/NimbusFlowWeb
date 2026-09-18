@@ -607,10 +607,8 @@
       "cardSubtitle": "Conclui automaticamente Frentes de Serviço 100% pagas.",
       "daysSinceLastPayment": "Carência (dias)",
       "daysSinceLastPaymentHint": "Dias desde o pagamento da última parcela para a Frente ser concluída automaticamente. As mudanças aqui valem para a próxima execução do job, sem precisar reiniciar o servidor.",
-      "runHour": "Hora",
-      "runHourHint": "Hora do dia (0-23, horário de Brasília) em que o job roda diariamente.",
-      "runMinute": "Minuto",
-      "runMinuteHint": "Minuto da hora em que o job roda diariamente.",
+      "runTime": "Horário",
+      "runTimeHint": "Horário do dia (horário de Brasília) em que o job roda diariamente.",
       "saved": "Configuração de conclusão automática salva com sucesso.",
       "saveError": "Não foi possível salvar a configuração de conclusão automática."
     }
@@ -621,10 +619,8 @@
       "cardSubtitle": "Conclui automaticamente Projetos 100% concluídos e pagos.",
       "daysSinceLastPayment": "Carência (dias)",
       "daysSinceLastPaymentHint": "Dias desde o último pagamento do Projeto (entre todas as Frentes) para ele ser concluído automaticamente, quando todas as Frentes não canceladas já estiverem concluídas. As mudanças aqui valem para a próxima execução do job, sem precisar reiniciar o servidor.",
-      "runHour": "Hora",
-      "runHourHint": "Hora do dia (0-23, horário de Brasília) em que o job roda diariamente.",
-      "runMinute": "Minuto",
-      "runMinuteHint": "Minuto da hora em que o job roda diariamente.",
+      "runTime": "Horário",
+      "runTimeHint": "Horário do dia (horário de Brasília) em que o job roda diariamente.",
       "saved": "Configuração de conclusão automática de Projeto salva com sucesso.",
       "saveError": "Não foi possível salvar a configuração de conclusão automática de Projeto."
     }
@@ -635,10 +631,8 @@
       "cardSubtitle": "Desativa automaticamente Fornecedores sem nenhuma Frente de Serviço ativa.",
       "daysWithoutActiveProject": "Carência (dias)",
       "daysWithoutActiveProjectHint": "Dias sem nenhuma Frente de Serviço ativa (ou sem nenhuma Frente desde o cadastro) para o Fornecedor ser desativado automaticamente. As mudanças aqui valem para a próxima execução do job, sem precisar reiniciar o servidor.",
-      "runHour": "Hora",
-      "runHourHint": "Hora do dia (0-23, horário de Brasília) em que o job roda diariamente.",
-      "runMinute": "Minuto",
-      "runMinuteHint": "Minuto da hora em que o job roda diariamente.",
+      "runTime": "Horário",
+      "runTimeHint": "Horário do dia (horário de Brasília) em que o job roda diariamente.",
       "saved": "Configuração de desativação automática de Fornecedor salva com sucesso.",
       "saveError": "Não foi possível salvar a configuração de desativação automática de Fornecedor."
     }
