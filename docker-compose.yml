@@ -8,8 +8,15 @@ services:
       context: .
       # NODE_AUTH_TOKEN: mesmo achado do backend acima, versão npm - o .npmrc do projeto
       # (@williamsilva:registry) precisa dessa var pra autenticar no GitHub Packages durante
-      # `npm ci`. Sete no seu .env (não commitado).
-      args:
-        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+      # `npm ci`. Sete no seu .env (não commitado). Via secrets (não args/build-arg) - achado real
+      # 2026-09-19: build-arg (+ o antigo `ENV NODE_AUTH_TOKEN=$NODE_AUTH_TOKEN` do Dockerfile)
+      # deixava o token gravado permanentemente na imagem/container; secret só existe durante o
+      # RUN que o monta explicitamente, mesmo padrão já usado no CardSyncWeb.
+      secrets:
+        - node_auth_token
     ports:
       - "127.0.0.1:${FRONTEND_PORT:-4202}:80"
+
+secrets:
+  node_auth_token:
+    environment: NODE_AUTH_TOKEN
