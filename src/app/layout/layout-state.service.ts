@@ -1,4 +1,5 @@
 import { Injectable, effect, signal } from '@angular/core';
+import { NimbusLayoutMode } from '@williamsilva/nimbus-web-commons';
 
 /**
  * Estado de layout (Sakai-like) compartilhado entre Topbar/Sidebar/Layout.
@@ -7,9 +8,13 @@ import { Injectable, effect, signal } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class LayoutStateService {
   private static readonly STORAGE_KEY = 'nimbusflow.layout.sidebarVisible';
+  private static readonly MODE_STORAGE_KEY = 'nimbusflow.layout.mode';
 
   /** Controla se o menu lateral está visível. */
   readonly sidebarVisible = signal(true);
+
+  /** Modo de layout escolhido pelo usuário (Static/Slim/Horizontal/Drawer - estilo Apollo). */
+  readonly layoutMode = signal<NimbusLayoutMode>('static');
 
   constructor() {
     if (!this.isBrowser()) return;
@@ -31,6 +36,11 @@ export class LayoutStateService {
       }
     }
 
+    const savedMode = window.localStorage.getItem(LayoutStateService.MODE_STORAGE_KEY);
+    if (savedMode === 'static' || savedMode === 'slim' || savedMode === 'horizontal' || savedMode === 'drawer') {
+      this.layoutMode.set(savedMode);
+    }
+
     // Sempre que mudar, salva (no mobile isso grava "true" enquanto o overlay estiver aberto,
     // mas não importa - o próximo boot força false de novo, acima, antes de ler isso).
     effect(() => {
@@ -38,6 +48,10 @@ export class LayoutStateService {
         LayoutStateService.STORAGE_KEY,
         String(this.sidebarVisible())
       );
+    });
+
+    effect(() => {
+      window.localStorage.setItem(LayoutStateService.MODE_STORAGE_KEY, this.layoutMode());
     });
   }
 
@@ -55,5 +69,9 @@ export class LayoutStateService {
 
   hideSidebar(): void {
     this.sidebarVisible.set(false);
+  }
+
+  setLayoutMode(mode: NimbusLayoutMode): void {
+    this.layoutMode.set(mode);
   }
 }

@@ -109,7 +109,14 @@
     "langAria": "Selecionar idioma",
     "sessionExpired": "Sessão expirada",
     "sessionExpireTooltip": "Sessão expira por inatividade",
-    "sessionExpiredTooltip": "Faça login novamente"
+    "sessionExpiredTooltip": "Faça login novamente",
+    "layoutMode": {
+      "label": "Modo de layout",
+      "static": "Padrão",
+      "slim": "Compacto",
+      "horizontal": "Horizontal",
+      "drawer": "Sobreposto"
+    }
   },
   "menu": {
     "me": "Minha conta",

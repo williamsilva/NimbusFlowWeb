@@ -26,6 +26,7 @@ export class LayoutComponent {
 
   /** Exposto para template (signals) */
   readonly sidebarVisible = this.layout.sidebarVisible;
+  readonly layoutMode = this.layout.layoutMode;
 
   constructor() {
     // Fecha o overlay do menu no mobile sozinho ao navegar (escolheu um item, fecha - igual
@@ -43,12 +44,5 @@ export class LayoutComponent {
           this.layout.hideSidebar();
         }
       });
-  }
-
-  /** Fecha o overlay do menu no mobile (ver layout.component.css) - clique no fundo escurecido.
-   *  No desktop isso não tem efeito visual (a sidebar já é uma coluna do grid, não um overlay),
-   *  então é seguro chamar sem checar breakpoint aqui. */
-  closeSidebarOverlay(): void {
-    this.layout.hideSidebar();
   }
 }
