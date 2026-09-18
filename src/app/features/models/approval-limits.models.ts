@@ -10,7 +10,7 @@ export interface ApprovalLimitModel {
   minAmount: number;
   /** Nulo = sem limite superior. */
   maxAmount: number | null;
-  /** Ids do NimbusAuth (não há tabela própria de usuário no NimbusFlowServer) - usado só pra
+  /** Ids do NimbusCore (não há tabela própria de usuário no NimbusFlowServer) - usado só pra
    *  prefill do multiselect do formulário de edição (candidatos vêm de
    *  UsersApiService.getOptions()). Não usar pra exibir o nome na listagem - ver `users`. */
   userIds: string[];

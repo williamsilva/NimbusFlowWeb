@@ -27,7 +27,7 @@ export class AccountProfileService {
    *  do token, sem parâmetro de id), nunca exige USERS_CONSULT. Diferente de
    *  UsersApiService.getById, que é a rota administrativa "ver qualquer usuário" e por isso é
    *  bloqueada pra quem não gerencia usuários - ver BffAccountController#getMyProfile no
-   *  NimbusFlowServer / MeProfileController no NimbusAuth. */
+   *  NimbusFlowServer / MeProfileController no NimbusCore. */
   getMyProfile(): Observable<MyProfileModel> {
     return this.http.get<MyProfileModel>(`${API.bff}/v1/me/profile`, { withCredentials: true });
   }

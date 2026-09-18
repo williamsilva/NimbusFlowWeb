@@ -6,8 +6,8 @@ export const environment = {
   // segredo (só a privada é), pode ficar em texto claro aqui como qualquer chave pública.
   vapidPublicKey:
     'BFiLh6vWMZFxoyeplAguywWEibNuf_VaFiKUDJAwPtvXC9iJC3mWYIdUMCkq0KIQOutArqq6FnY0znVwKX6LkBI',
-  // NimbusAuthWeb roda em ng serve na mesma porta padrão (4200) - pra testar o link de
+  // NimbusCoreWeb roda em ng serve na mesma porta padrão (4200) - pra testar o link de
   // Segurança > Usuários/Grupos de verdade em dev, suba este app noutra porta
-  // (ng serve --port 4201) enquanto o NimbusAuthWeb ocupa a 4200.
+  // (ng serve --port 4201) enquanto o NimbusCoreWeb ocupa a 4200.
   nimbusAuthWebUrl: 'http://localhost:4200',
 };

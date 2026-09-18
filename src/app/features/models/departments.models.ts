@@ -8,7 +8,7 @@ import { UserMinimalModel } from '@models/user-minimal.models';
 export interface DepartmentModel {
   id: string;
   name: string;
-  /** Ids do NimbusAuth (não há tabela própria de usuário no NimbusFlowServer) - usado só pra
+  /** Ids do NimbusCore (não há tabela própria de usuário no NimbusFlowServer) - usado só pra
    *  prefill do multiselect do formulário de edição (candidatos vêm de
    *  UsersApiService.getOptions()). Não usar pra exibir o nome na listagem - ver `users`. */
   userIds: string[];

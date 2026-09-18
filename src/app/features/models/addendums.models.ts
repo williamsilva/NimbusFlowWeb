@@ -36,7 +36,7 @@ export interface AddendumModel {
   requestedById: string;
   approvedById: string | null;
   /** Nome/username de approvedById, resolvido pelo backend (UserDirectoryService) - null
-   *  enquanto pendente ou se o NimbusAuth não puder ser consultado. */
+   *  enquanto pendente ou se o NimbusCore não puder ser consultado. */
   approvedBy: UserMinimalModel | null;
   decisionDate: string | null;
   decisionNote: string | null;

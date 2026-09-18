@@ -64,7 +64,7 @@ export function isAutoReloginCandidate(
  * disparava seu PRÓPRIO redirect concorrente, brigando pela mesma sessão/cookie e produzindo
  * "invalid session id" mesmo com a sessão HTTP ainda longe do timeout configurado (mesmo bug
  * encontrado e corrigido no CardSyncWeb). 15s (não 3s) para cobrir o round-trip completo do
- * redirect OAuth2 (BFF -> NimbusAuth -> BFF).
+ * redirect OAuth2 (BFF -> NimbusCore -> BFF).
  */
 function canTriggerLoginNow(): boolean {
   const key = 'nf_login_redirect_lock';

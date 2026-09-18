@@ -133,8 +133,8 @@ export class AuthService {
       sessionStorage.removeItem(AuthService.RETURN_URL_KEY);
     }
 
-    // logoutUrl aponta pro RP-Initiated Logout do NimbusAuth (/connect/logout), que encerra
-    // a sessão de login de lá também - sem isso, o NimbusAuth ficava logado e o próximo
+    // logoutUrl aponta pro RP-Initiated Logout do NimbusCore (/connect/logout), que encerra
+    // a sessão de login de lá também - sem isso, o NimbusCore ficava logado e o próximo
     // /oauth2/authorize reautenticava via SSO silenciosamente (logout "não funcionava").
     window.location.href = logoutUrl;
   }

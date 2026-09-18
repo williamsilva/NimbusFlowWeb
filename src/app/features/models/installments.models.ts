@@ -48,7 +48,7 @@ export interface InstallmentModel {
   approvalRanges: ApprovalRangeModel[];
   releasedById: string | null;
   /** Nome/username de releasedById, resolvido pelo backend (UserDirectoryService) - null
-   *  enquanto a ordem nunca foi liberada ou se o NimbusAuth não puder ser consultado. Exibido
+   *  enquanto a ordem nunca foi liberada ou se o NimbusCore não puder ser consultado. Exibido
    *  na coluna "Usuário aprovador" da tela Pagamentos. */
   releasedBy: UserMinimalModel | null;
   releasedAt: string | null;
