@@ -455,6 +455,18 @@ export const UI_KEYS = {
       saveError: 'workAutoComplete.settings.saveError',
     },
   },
+  projectAutoComplete: {
+    settings: {
+      saved: 'projectAutoComplete.settings.saved',
+      saveError: 'projectAutoComplete.settings.saveError',
+    },
+  },
+  supplierAutoDeactivate: {
+    settings: {
+      saved: 'supplierAutoDeactivate.settings.saved',
+      saveError: 'supplierAutoDeactivate.settings.saveError',
+    },
+  },
   approvalLimits: {
     form: {
       invalid: 'approvalLimits.form.invalid',

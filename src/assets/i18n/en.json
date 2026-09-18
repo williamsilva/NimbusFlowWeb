@@ -602,7 +602,9 @@
   },
   "workAutoComplete": {
     "settings": {
-      "subtitle": "Automatic completion of fully paid Work Fronts.",
+      "subtitle": "Settings for NimbusFlow's daily auto-completion and auto-deactivation jobs.",
+      "cardTitle": "Work Front",
+      "cardSubtitle": "Automatically completes fully paid Work Fronts.",
       "daysSinceLastPayment": "Grace period (days)",
       "daysSinceLastPaymentHint": "Days since the last installment was paid before the Work Front is completed automatically. Changes here take effect on the job's next run, no server restart needed.",
       "runHour": "Hour",
@@ -611,6 +613,34 @@
       "runMinuteHint": "Minute of the hour the job runs daily.",
       "saved": "Auto-completion settings saved successfully.",
       "saveError": "Could not save the auto-completion settings."
+    }
+  },
+  "projectAutoComplete": {
+    "settings": {
+      "cardTitle": "Project",
+      "cardSubtitle": "Automatically completes fully paid Projects that are 100% complete.",
+      "daysSinceLastPayment": "Grace period (days)",
+      "daysSinceLastPaymentHint": "Days since the Project's last payment (across all its Work Fronts) before it's completed automatically, once all its non-cancelled Work Fronts are already completed. Changes here take effect on the job's next run, no server restart needed.",
+      "runHour": "Hour",
+      "runHourHint": "Hour of the day (0-23, São Paulo time) the job runs daily.",
+      "runMinute": "Minute",
+      "runMinuteHint": "Minute of the hour the job runs daily.",
+      "saved": "Project auto-completion settings saved successfully.",
+      "saveError": "Could not save the Project auto-completion settings."
+    }
+  },
+  "supplierAutoDeactivate": {
+    "settings": {
+      "cardTitle": "Supplier",
+      "cardSubtitle": "Automatically deactivates Suppliers with no active Work Front.",
+      "daysWithoutActiveProject": "Grace period (days)",
+      "daysWithoutActiveProjectHint": "Days without any active Work Front (or without any Work Front since registration) before the Supplier is deactivated automatically. Changes here take effect on the job's next run, no server restart needed.",
+      "runHour": "Hour",
+      "runHourHint": "Hour of the day (0-23, São Paulo time) the job runs daily.",
+      "runMinute": "Minute",
+      "runMinuteHint": "Minute of the hour the job runs daily.",
+      "saved": "Supplier auto-deactivation settings saved successfully.",
+      "saveError": "Could not save the Supplier auto-deactivation settings."
     }
   },
   "approvalLimits": {

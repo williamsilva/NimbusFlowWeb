@@ -6,89 +6,281 @@
   ]"
 ></app-page-header>
 
-<p-card class="mt-2 block">
-  <form [formGroup]="form" (ngSubmit)="save()">
-    <div class="grid formgrid gap-0">
-      <div class="col-12 md:col-4 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <p-inputnumber
-            [min]="0"
-            [max]="365"
-            class="w-full"
-            inputId="daysSinceLastPayment"
-            [useGrouping]="false"
-            inputStyleClass="w-full p-inputtext-sm"
-            formControlName="daysSinceLastPayment"
-          ></p-inputnumber>
-          <label for="daysSinceLastPayment">
-            {{ 'workAutoComplete.settings.daysSinceLastPayment' | translate }}
-            <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'workAutoComplete.settings.daysSinceLastPaymentHint' | translate"
-              tooltipPosition="top"
-            ></i>
-          </label>
-        </p-floatLabel>
+@if (canViewWork()) {
+  <p-card
+    class="mt-2 block"
+    [header]="'workAutoComplete.settings.cardTitle' | translate"
+    [subheader]="'workAutoComplete.settings.cardSubtitle' | translate"
+  >
+    <form [formGroup]="workForm" (ngSubmit)="saveWork()">
+      <div class="grid formgrid gap-0">
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              [min]="0"
+              [max]="365"
+              class="w-full"
+              inputId="workDaysSinceLastPayment"
+              [useGrouping]="false"
+              inputStyleClass="w-full p-inputtext-sm"
+              formControlName="daysSinceLastPayment"
+            ></p-inputnumber>
+            <label for="workDaysSinceLastPayment">
+              {{ 'workAutoComplete.settings.daysSinceLastPayment' | translate }}
+              <i
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+                style="pointer-events: auto"
+                [pTooltip]="'workAutoComplete.settings.daysSinceLastPaymentHint' | translate"
+                tooltipPosition="top"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              [min]="0"
+              [max]="23"
+              class="w-full"
+              inputId="workRunHour"
+              [useGrouping]="false"
+              inputStyleClass="w-full p-inputtext-sm"
+              formControlName="runHour"
+            ></p-inputnumber>
+            <label for="workRunHour">
+              {{ 'workAutoComplete.settings.runHour' | translate }}
+              <i
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+                style="pointer-events: auto"
+                [pTooltip]="'workAutoComplete.settings.runHourHint' | translate"
+                tooltipPosition="top"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              [min]="0"
+              [max]="59"
+              class="w-full"
+              inputId="workRunMinute"
+              [useGrouping]="false"
+              inputStyleClass="w-full p-inputtext-sm"
+              formControlName="runMinute"
+            ></p-inputnumber>
+            <label for="workRunMinute">
+              {{ 'workAutoComplete.settings.runMinute' | translate }}
+              <i
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+                style="pointer-events: auto"
+                [pTooltip]="'workAutoComplete.settings.runMinuteHint' | translate"
+                tooltipPosition="top"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
       </div>
 
-      <div class="col-12 md:col-4 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <p-inputnumber
-            [min]="0"
-            [max]="23"
-            class="w-full"
-            inputId="runHour"
-            [useGrouping]="false"
-            inputStyleClass="w-full p-inputtext-sm"
-            formControlName="runHour"
-          ></p-inputnumber>
-          <label for="runHour">
-            {{ 'workAutoComplete.settings.runHour' | translate }}
-            <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'workAutoComplete.settings.runHourHint' | translate"
-              tooltipPosition="top"
-            ></i>
-          </label>
-        </p-floatLabel>
+      @if (canEditWork()) {
+        <div class="mt-4 px-2">
+          <p-button
+            type="submit"
+            icon="pi pi-save"
+            [loading]="savingWork()"
+            [label]="'common.save' | translate"
+            [disabled]="loadingWork() || workForm.invalid"
+          ></p-button>
+        </div>
+      }
+    </form>
+  </p-card>
+}
+
+@if (canViewProject()) {
+  <p-card
+    class="mt-3 block"
+    [header]="'projectAutoComplete.settings.cardTitle' | translate"
+    [subheader]="'projectAutoComplete.settings.cardSubtitle' | translate"
+  >
+    <form [formGroup]="projectForm" (ngSubmit)="saveProject()">
+      <div class="grid formgrid gap-0">
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              [min]="0"
+              [max]="365"
+              class="w-full"
+              inputId="projectDaysSinceLastPayment"
+              [useGrouping]="false"
+              inputStyleClass="w-full p-inputtext-sm"
+              formControlName="daysSinceLastPayment"
+            ></p-inputnumber>
+            <label for="projectDaysSinceLastPayment">
+              {{ 'projectAutoComplete.settings.daysSinceLastPayment' | translate }}
+              <i
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+                style="pointer-events: auto"
+                [pTooltip]="'projectAutoComplete.settings.daysSinceLastPaymentHint' | translate"
+                tooltipPosition="top"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              [min]="0"
+              [max]="23"
+              class="w-full"
+              inputId="projectRunHour"
+              [useGrouping]="false"
+              inputStyleClass="w-full p-inputtext-sm"
+              formControlName="runHour"
+            ></p-inputnumber>
+            <label for="projectRunHour">
+              {{ 'projectAutoComplete.settings.runHour' | translate }}
+              <i
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+                style="pointer-events: auto"
+                [pTooltip]="'projectAutoComplete.settings.runHourHint' | translate"
+                tooltipPosition="top"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              [min]="0"
+              [max]="59"
+              class="w-full"
+              inputId="projectRunMinute"
+              [useGrouping]="false"
+              inputStyleClass="w-full p-inputtext-sm"
+              formControlName="runMinute"
+            ></p-inputnumber>
+            <label for="projectRunMinute">
+              {{ 'projectAutoComplete.settings.runMinute' | translate }}
+              <i
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+                style="pointer-events: auto"
+                [pTooltip]="'projectAutoComplete.settings.runMinuteHint' | translate"
+                tooltipPosition="top"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
       </div>
 
-      <div class="col-12 md:col-4 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <p-inputnumber
-            [min]="0"
-            [max]="59"
-            class="w-full"
-            inputId="runMinute"
-            [useGrouping]="false"
-            inputStyleClass="w-full p-inputtext-sm"
-            formControlName="runMinute"
-          ></p-inputnumber>
-          <label for="runMinute">
-            {{ 'workAutoComplete.settings.runMinute' | translate }}
-            <i
-              class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
-              style="pointer-events: auto"
-              [pTooltip]="'workAutoComplete.settings.runMinuteHint' | translate"
-              tooltipPosition="top"
-            ></i>
-          </label>
-        </p-floatLabel>
-      </div>
-    </div>
+      @if (canEditProject()) {
+        <div class="mt-4 px-2">
+          <p-button
+            type="submit"
+            icon="pi pi-save"
+            [loading]="savingProject()"
+            [label]="'common.save' | translate"
+            [disabled]="loadingProject() || projectForm.invalid"
+          ></p-button>
+        </div>
+      }
+    </form>
+  </p-card>
+}
 
-    @if (canEdit()) {
-      <div class="mt-4 px-2">
-        <p-button
-          type="submit"
-          icon="pi pi-save"
-          [loading]="saving()"
-          [label]="'common.save' | translate"
-          [disabled]="loading() || form.invalid"
-        ></p-button>
+@if (canViewSupplier()) {
+  <p-card
+    class="mt-3 block"
+    [header]="'supplierAutoDeactivate.settings.cardTitle' | translate"
+    [subheader]="'supplierAutoDeactivate.settings.cardSubtitle' | translate"
+  >
+    <form [formGroup]="supplierForm" (ngSubmit)="saveSupplier()">
+      <div class="grid formgrid gap-0">
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              [min]="0"
+              [max]="3650"
+              class="w-full"
+              inputId="supplierDaysWithoutActiveProject"
+              [useGrouping]="false"
+              inputStyleClass="w-full p-inputtext-sm"
+              formControlName="daysWithoutActiveProject"
+            ></p-inputnumber>
+            <label for="supplierDaysWithoutActiveProject">
+              {{ 'supplierAutoDeactivate.settings.daysWithoutActiveProject' | translate }}
+              <i
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+                style="pointer-events: auto"
+                [pTooltip]="'supplierAutoDeactivate.settings.daysWithoutActiveProjectHint' | translate"
+                tooltipPosition="top"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              [min]="0"
+              [max]="23"
+              class="w-full"
+              inputId="supplierRunHour"
+              [useGrouping]="false"
+              inputStyleClass="w-full p-inputtext-sm"
+              formControlName="runHour"
+            ></p-inputnumber>
+            <label for="supplierRunHour">
+              {{ 'supplierAutoDeactivate.settings.runHour' | translate }}
+              <i
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+                style="pointer-events: auto"
+                [pTooltip]="'supplierAutoDeactivate.settings.runHourHint' | translate"
+                tooltipPosition="top"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-4 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              [min]="0"
+              [max]="59"
+              class="w-full"
+              inputId="supplierRunMinute"
+              [useGrouping]="false"
+              inputStyleClass="w-full p-inputtext-sm"
+              formControlName="runMinute"
+            ></p-inputnumber>
+            <label for="supplierRunMinute">
+              {{ 'supplierAutoDeactivate.settings.runMinute' | translate }}
+              <i
+                class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+                style="pointer-events: auto"
+                [pTooltip]="'supplierAutoDeactivate.settings.runMinuteHint' | translate"
+                tooltipPosition="top"
+              ></i>
+            </label>
+          </p-floatLabel>
+        </div>
       </div>
-    }
-  </form>
-</p-card>
+
+      @if (canEditSupplier()) {
+        <div class="mt-4 px-2">
+          <p-button
+            type="submit"
+            icon="pi pi-save"
+            [loading]="savingSupplier()"
+            [label]="'common.save' | translate"
+            [disabled]="loadingSupplier() || supplierForm.invalid"
+          ></p-button>
+        </div>
+      }
+    </form>
+  </p-card>
+}

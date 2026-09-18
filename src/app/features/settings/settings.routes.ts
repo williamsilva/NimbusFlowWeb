@@ -40,7 +40,12 @@ export const SETTINGS_ROUTES: Routes = [
     data: {
       requireAll: false,
       redirectTo: '/forbidden',
-      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.WORK_AUTO_COMPLETE_VIEW],
+      permissions: [
+        PERMISSIONS.SUPPORT,
+        PERMISSIONS.SETTINGS.WORK_AUTO_COMPLETE_VIEW,
+        PERMISSIONS.SETTINGS.PROJECT_AUTO_COMPLETE_VIEW,
+        PERMISSIONS.SETTINGS.SUPPLIER_AUTO_DEACTIVATE_VIEW,
+      ],
     },
     loadComponent: () =>
       import('./work-auto-complete-settings/work-auto-complete-settings.component').then(
