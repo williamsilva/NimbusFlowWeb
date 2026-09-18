@@ -1412,6 +1412,11 @@
     "send": "Enviar Orden de Pago",
     "sent": "Orden de pago enviada: {count, plural, one {# cuota} other {# cuotas}}, {total}",
     "sendError": "No fue posible enviar la orden de pago.",
+    "sendDialog": {
+      "header": "Enviar Orden de Pago",
+      "message": "{count, plural, one {¿Confirma el envío de # cuota de {supplier}, por un total de {total}?} other {¿Confirma el envío de # cuotas de {supplier}, por un total de {total}?}}",
+      "attachInvoice": "Adjuntar factura (opcional)"
+    },
     "action": {
       "differentSuppliers": "Todas las cuotas seleccionadas deben ser del mismo proveedor.",
       "notAllReleased": "Todas las cuotas seleccionadas deben estar liberadas y aún no enviadas.",

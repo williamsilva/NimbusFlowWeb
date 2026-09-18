@@ -1412,6 +1412,11 @@
     "send": "Send Payment Order",
     "sent": "Payment order sent: {count, plural, one {# installment} other {# installments}}, {total}",
     "sendError": "Could not send the payment order.",
+    "sendDialog": {
+      "header": "Send Payment Order",
+      "message": "{count, plural, one {Confirm sending # installment from {supplier}, totaling {total}?} other {Confirm sending # installments from {supplier}, totaling {total}?}}",
+      "attachInvoice": "Attach invoice (optional)"
+    },
     "action": {
       "differentSuppliers": "All selected installments must belong to the same supplier.",
       "notAllReleased": "All selected installments must be released and not yet sent.",

@@ -292,6 +292,10 @@ export const UI_KEYS = {
   paymentOrders: {
     sent: 'paymentOrders.sent',
     sendError: 'paymentOrders.sendError',
+    sendDialog: {
+      header: 'paymentOrders.sendDialog.header',
+      message: 'paymentOrders.sendDialog.message',
+    },
     action: {
       differentSuppliers: 'paymentOrders.action.differentSuppliers',
       notAllReleased: 'paymentOrders.action.notAllReleased',

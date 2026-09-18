@@ -57,6 +57,10 @@ import {
   paymentOrderPaymentStatusTone,
 } from '@models/enums/payment-status.enum';
 import { translateWorksErrorDetail } from '@features/works/works-error.util';
+import {
+  SendPaymentOrderDialogComponent,
+  SendPaymentOrderTarget,
+} from '@features/works/installments/send-payment-order-dialog.component';
 
 @Component({
   standalone: true,
@@ -81,6 +85,7 @@ import { translateWorksErrorDetail } from '@features/works/works-error.util';
     CsCurrencyRangeFilterComponent,
     CsAdvancedPeriodDateFilterComponent,
     DateInputMaskDirective,
+    SendPaymentOrderDialogComponent,
   ],
 })
 export class AllInstallmentsListComponent extends StatefulListPage<
@@ -109,6 +114,7 @@ export class AllInstallmentsListComponent extends StatefulListPage<
    *  seleção nunca é limitada à página atual. */
   readonly selection = signal<InstallmentWithWorkModel[]>([]);
   readonly sending = signal(false);
+  readonly sendDialogVisible = signal(false);
 
   readonly selectedTotal = computed(() =>
     this.selection().reduce((sum, r) => sum + r.amount, 0),
@@ -447,8 +453,12 @@ export class AllInstallmentsListComponent extends StatefulListPage<
    *  usuário, pra não precisar escolher fornecedor antes de ver as Ordens) - seleciona N Ordens
    *  RELEASED do mesmo fornecedor e gera 1 Pagamento consolidado. canSelectForSend já impede
    *  marcar Ordens de fornecedores diferentes na própria seleção - o check abaixo é só uma
-   *  segunda camada (ex.: a lista foi recarregada entre a seleção e o clique) antes de chamar a
-   *  API, e o backend valida de novo mesmo assim (defesa em profundidade). */
+   *  segunda camada (ex.: a lista foi recarregada entre a seleção e o clique) antes de abrir o
+   *  dialog de confirmação (ver confirmSend), que é quem de fato chama a API.
+   *
+   * <p>2026-09-18: só abre o dialog (SendPaymentOrderDialogComponent) em vez de chamar a API
+   *  direto - pedido do usuário: opção de anexar o PDF da nota fiscal do fornecedor antes de
+   *  confirmar o envio. */
   send(): void {
     const selected = this.selection();
     if (selected.length === 0 || this.sending()) return;
@@ -463,13 +473,33 @@ export class AllInstallmentsListComponent extends StatefulListPage<
       return;
     }
 
+    this.sendDialogVisible.set(true);
+  }
+
+  sendDialogTarget(): SendPaymentOrderTarget | null {
+    const selected = this.selection();
+    if (selected.length === 0) return null;
+    return {
+      supplierName: selected[0].supplierName,
+      orderCount: selected.length,
+      totalAmount: this.selectedTotal(),
+    };
+  }
+
+  /** Chamada pelo SendPaymentOrderDialogComponent (evento `confirmed`) - `invoice` é o PDF da
+   *  nota fiscal opcional escolhido no dialog, ou null se o usuário não anexou nada. */
+  confirmSend(invoice: File | null): void {
+    const selected = this.selection();
+    if (selected.length === 0 || this.sending()) return;
+
     this.sending.set(true);
     this.facade
-      .sendPaymentOrder(selected.map((r) => r.id))
+      .sendPaymentOrder(selected.map((r) => r.id), invoice)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (result) => {
           this.sending.set(false);
+          this.sendDialogVisible.set(false);
           this.selection.set([]);
           this.toast.add({
             severity: 'success',

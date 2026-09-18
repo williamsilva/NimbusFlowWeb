@@ -1412,6 +1412,11 @@
     "send": "Enviar Ordem de Pagamento",
     "sent": "Ordem de pagamento enviada: {count, plural, one {# parcela} other {# parcelas}}, {total}",
     "sendError": "Não foi possível enviar a ordem de pagamento.",
+    "sendDialog": {
+      "header": "Enviar Ordem de Pagamento",
+      "message": "{count, plural, one {Confirma o envio de # parcela de {supplier}, no valor de {total}?} other {Confirma o envio de # parcelas de {supplier}, no valor total de {total}?}}",
+      "attachInvoice": "Anexar nota fiscal (opcional)"
+    },
     "action": {
       "differentSuppliers": "Todas as parcelas selecionadas precisam ser do mesmo fornecedor.",
       "notAllReleased": "Todas as parcelas selecionadas precisam estar liberadas e ainda não enviadas.",

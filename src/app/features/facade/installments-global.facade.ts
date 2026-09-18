@@ -77,8 +77,8 @@ export class InstallmentsGlobalFacade {
 
   /** Ordens enviadas ganham installmentId - somem da lista (ver PaymentOrderService.
    *  filterOrders) no reload, por isso reloadLast() aqui também. */
-  sendPaymentOrder(paymentOrderIds: string[]): Observable<SendPaymentOrderResultModel> {
-    return this.api.sendPaymentOrder(paymentOrderIds).pipe(tap(() => this.reloadLast()));
+  sendPaymentOrder(paymentOrderIds: string[], invoice: File | null): Observable<SendPaymentOrderResultModel> {
+    return this.api.sendPaymentOrder(paymentOrderIds, invoice).pipe(tap(() => this.reloadLast()));
   }
 
   /** Cancela a Ordem (ainda não enviada) e reabre a Medição que a gerou pra PENDING. */

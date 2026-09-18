@@ -76,11 +76,19 @@ export class InstallmentsApiService {
 
   /** Seleciona N Ordens RELEASED do mesmo fornecedor (tela "Parcelas Liberadas") e gera 1
    *  Pagamento consolidado - SKIP_GLOBAL_ERROR_TOAST pelo mesmo motivo de release/
-   *  resendNotification acima (o componente já mostra a mensagem específica do backend). */
-  sendPaymentOrder(paymentOrderIds: string[]) {
+   *  resendNotification acima (o componente já mostra a mensagem específica do backend).
+   *  {@code invoice} (PDF da nota fiscal do fornecedor) é opcional - multipart em vez de JSON
+   *  puro só por causa desse anexo, mesmo padrão de SuggestionsApiService.create. */
+  sendPaymentOrder(paymentOrderIds: string[], invoice: File | null) {
+    const formData = new FormData();
+    formData.append('data', new Blob([JSON.stringify({ paymentOrderIds })], { type: 'application/json' }));
+    if (invoice) {
+      formData.append('invoice', invoice);
+    }
+
     return this.http.post<SendPaymentOrderResultModel>(
       `${this.installmentsUrl}/send`,
-      { paymentOrderIds },
+      formData,
       { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) },
     );
   }

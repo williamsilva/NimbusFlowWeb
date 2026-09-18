@@ -567,5 +567,13 @@
         [label]="'paymentOrders.send' | translate"
       ></p-button>
     </div>
+
+    <app-send-payment-order-dialog
+      [visible]="sendDialogVisible()"
+      [target]="sendDialogTarget()"
+      [sending]="sending()"
+      (visibleChange)="sendDialogVisible.set($event)"
+      (confirmed)="confirmSend($event)"
+    ></app-send-payment-order-dialog>
   }
 </div>
