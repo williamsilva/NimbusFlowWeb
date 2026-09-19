@@ -1,0 +1,187 @@
+<p-confirmDialog key="ticketDetail" />
+
+<app-page-header
+  [subtitle]="ticket()?.title ?? ''"
+  [breadcrumb]="[
+    { label: ('menu.dashboard' | translate), url: '/' },
+    { label: ('breadcrumb.tickets' | translate), url: '/tickets' },
+    { label: ticket() ? formatNumero(ticket()!.numero) : '' },
+  ]"
+>
+  <a pButton icon="pi pi-arrow-left" [routerLink]="['/tickets']" class="p-button-text p-button-sm" [label]="'common.back' | translate"></a>
+
+  @if (canEdit()) {
+    <button pButton type="button" icon="pi pi-pencil" (click)="goEdit()" class="p-button-text p-button-sm" [label]="'common.edit' | translate"></button>
+  }
+  @if (canStart()) {
+    <button pButton type="button" icon="pi pi-play" (click)="goStart()" [loading]="starting()" class="p-button-text p-button-sm" [label]="'tickets.action.start' | translate"></button>
+  }
+  @if (canClose()) {
+    <button pButton type="button" icon="pi pi-check" (click)="goClose()" class="p-button-sm" [label]="'tickets.action.close' | translate"></button>
+  }
+  @if (canCancel()) {
+    <button pButton type="button" icon="pi pi-times" (click)="confirmCancel()" class="p-button-text p-button-sm p-button-danger" [label]="'tickets.action.cancel' | translate"></button>
+  }
+</app-page-header>
+
+<app-tickets-edit-dialog
+  [visible]="editVisible()"
+  [ticket]="ticket()"
+  (updated)="onUpdated()"
+  (visibleChange)="onEditVisibleChange($event)"
+></app-tickets-edit-dialog>
+
+<app-tickets-close-dialog
+  [visible]="closeVisible()"
+  [ticketId]="ticketId()"
+  (closed)="onClosed()"
+  (visibleChange)="onCloseVisibleChange($event)"
+></app-tickets-close-dialog>
+
+@if (ticket(); as t) {
+  <div class="ticket-header-card surface-card border-round mt-2 p-3">
+    <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+      <div class="flex align-items-center gap-2 flex-wrap">
+        <span class="ticket-numero">{{ formatNumero(t.numero) }}</span>
+        @if (company()?.name) {
+          <span class="ticket-company">{{ company()?.name }}</span>
+        }
+      </div>
+      <div class="flex align-items-center gap-2 flex-wrap">
+        <app-status-badge [tone]="priorityTone(t.priority)" [label]="'tickets.priority.' + t.priority | translate"></app-status-badge>
+        <app-status-badge [tone]="tone(t.status)" [label]="'tickets.status.' + t.status | translate"></app-status-badge>
+      </div>
+    </div>
+
+    <div class="mt-2 text-sm opacity-80">
+      <span class="font-medium">{{ 'tickets.detail.target' | translate }}:</span>
+      {{ (t.targetType === 'USER' ? t.targetUserName : t.targetDepartmentName) ?? '-' }}
+    </div>
+  </div>
+
+  @if (isMobile()) {
+    <p-tabs [value]="activeTab()" class="mt-2 block" (valueChange)="activeTab.set($any($event))">
+      <p-tablist>
+        <p-tab value="content">{{ 'tickets.detail.tabContent' | translate }}</p-tab>
+        <p-tab value="comments">{{ 'tickets.detail.tabComments' | translate }}</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel value="content">
+          <ng-container *ngTemplateOutlet="contentSection; context: { $implicit: t }"></ng-container>
+        </p-tabpanel>
+        <p-tabpanel value="comments">
+          <ng-container *ngTemplateOutlet="commentsSection"></ng-container>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  } @else {
+    <div class="grid formgrid gap-0 mt-2">
+      <div class="col-12 lg:col-6 p-2">
+        <div class="surface-card border-round p-3 h-full">
+          <ng-container *ngTemplateOutlet="contentSection; context: { $implicit: t }"></ng-container>
+        </div>
+      </div>
+      <div class="col-12 lg:col-6 p-2">
+        <div class="surface-card border-round p-3 h-full">
+          <ng-container *ngTemplateOutlet="commentsSection"></ng-container>
+        </div>
+      </div>
+    </div>
+  }
+} @else {
+  <div class="text-center py-6 opacity-70">{{ 'common.loading' | translate }}</div>
+}
+
+<ng-template #contentSection let-t>
+  <div class="section-title mb-2">{{ 'tickets.detail.tabContent' | translate }}</div>
+  <p class="ticket-description">{{ t.description }}</p>
+
+  <dl class="cs-detail-list mt-3">
+    <dt>{{ 'tickets.columns.type' | translate }}</dt>
+    <dd>{{ 'tickets.type.' + t.type | translate }}</dd>
+
+    <dt>{{ 'tickets.columns.reportedBy' | translate }}</dt>
+    <dd>{{ t.reportedByName ?? '-' }}</dd>
+
+    <dt>{{ 'tickets.columns.createdAt' | translate }}</dt>
+    <dd>{{ t.createdAt ? (t.createdAt | csDate: 'short') : '-' }}</dd>
+
+    @if (t.workName) {
+      <dt>{{ 'tickets.columns.work' | translate }}</dt>
+      <dd>{{ t.workName }}</dd>
+    }
+
+    @if (t.resolutionNote) {
+      <dt>{{ 'tickets.detail.resolutionNote' | translate }}</dt>
+      <dd>{{ t.resolutionNote }}</dd>
+    }
+  </dl>
+</ng-template>
+
+<ng-template #commentsSection>
+  <div class="section-title mb-2">{{ 'tickets.detail.tabComments' | translate }}</div>
+
+  @if (loadingComments()) {
+    <div class="text-center py-3 opacity-70">{{ 'common.loading' | translate }}</div>
+  } @else if (!comments().length) {
+    <div class="text-center py-3 opacity-70">{{ 'tickets.comments.empty' | translate }}</div>
+  }
+
+  <div class="flex flex-column gap-2 mb-3">
+    @for (c of comments(); track c.id) {
+      <div class="comment-bubble border-round p-2">
+        <div class="flex justify-content-between align-items-center gap-2 mb-1">
+          <span class="font-medium text-sm">{{ c.authorName ?? '-' }}</span>
+          <span class="text-xs opacity-70">{{ c.createdAt | csDate: 'short' }}</span>
+        </div>
+        <div class="comment-message">{{ c.message }}</div>
+        @if (c.attachments.length) {
+          <div class="flex flex-wrap gap-2 mt-2">
+            @for (a of c.attachments; track a.id) {
+              <a [href]="a.url" target="_blank" rel="noopener" class="comment-attachment">
+                <i class="pi pi-paperclip"></i> {{ a.filename }}
+              </a>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  @if (policy.canManage()) {
+    <div class="flex flex-column gap-2">
+      <textarea
+        pTextarea
+        rows="4"
+        class="w-full"
+        [ngModel]="commentMessage()"
+        (ngModelChange)="commentMessage.set($event)"
+        [placeholder]="'tickets.comments.placeholder' | translate"
+      ></textarea>
+
+      <div class="flex align-items-center gap-2 flex-wrap">
+        <input #commentFileInput type="file" multiple hidden (change)="onCommentFilesSelected($event)" />
+        <button pButton type="button" icon="pi pi-paperclip" class="p-button-text p-button-sm" [label]="'tickets.action.addFile' | translate" (click)="commentFileInput.click()"></button>
+        @for (file of commentFiles(); track $index) {
+          <span class="comment-file-chip">
+            {{ file.name }}
+            <i class="pi pi-times ml-1 cursor-pointer" (click)="removeCommentFile($index)"></i>
+          </span>
+        }
+      </div>
+
+      <div class="flex justify-content-end">
+        <button
+          pButton
+          type="button"
+          icon="pi pi-send"
+          (click)="sendComment()"
+          class="p-button-sm"
+          [loading]="sendingComment()"
+          [label]="'tickets.comments.send' | translate"
+          [disabled]="sendingComment() || !commentMessage().trim()"
+        ></button>
+      </div>
+    </div>
+  }
+</ng-template>

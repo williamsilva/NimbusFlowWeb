@@ -11,6 +11,8 @@ import {
   TicketUpsertInput,
   TicketCloseInput,
   TicketWorkLinkInput,
+  TicketCommentModel,
+  TicketCommentCreateInput,
 } from '@models/tickets.models';
 
 type LastQuery = ListQueryDto<TicketsAdvancedFilters>;
@@ -90,5 +92,23 @@ export class TicketsFacade {
 
   unlinkWork(id: string): Observable<TicketModel> {
     return this.api.unlinkWork(id).pipe(tap(() => this.reloadLast()));
+  }
+
+  start(id: string): Observable<TicketModel> {
+    return this.api.start(id).pipe(tap(() => this.reloadLast()));
+  }
+
+  /** Usada pela página de detalhe (`/tickets/:id`) - não passa pelo signal `_data`/`_loading` da
+   *  lista, é uma consulta isolada de 1 chamado só. */
+  getById(id: string): Observable<TicketModel> {
+    return this.api.getById(id);
+  }
+
+  getComments(id: string): Observable<TicketCommentModel[]> {
+    return this.api.getComments(id);
+  }
+
+  createComment(id: string, input: TicketCommentCreateInput): Observable<TicketCommentModel> {
+    return this.api.createComment(id, input);
   }
 }

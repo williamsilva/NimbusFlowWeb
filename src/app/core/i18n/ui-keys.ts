@@ -23,6 +23,7 @@ export const UI_KEYS = {
       approvalLimits: 'menu.settings.approvalLimits',
       departments: 'menu.settings.departments',
       workAutoComplete: 'menu.settings.workAutoComplete',
+      company: 'menu.settings.company',
     },
     /* Fornecedor / Obra / Sugestão (com.nimbusflow.works no backend) */
     works: {
@@ -454,6 +455,10 @@ export const UI_KEYS = {
       saved: 'workAutoComplete.settings.saved',
       saveError: 'workAutoComplete.settings.saveError',
     },
+  },
+  companySettings: {
+    saved: 'companySettings.saved',
+    saveError: 'companySettings.saveError',
   },
   projectAutoComplete: {
     settings: {

@@ -11,6 +11,25 @@
   display: none;
 }
 
+// Linha inteira navega pro detalhe (/tickets/:id) - stopPropagation nos botões de ação evita
+// abrir o detalhe ao clicar neles (ver tickets-list.component.html).
+.cs-clickable-row {
+  cursor: pointer;
+
+  &:hover {
+    background: var(--surface-100);
+  }
+}
+
+// Número sequencial do chamado, antes do título (mesmo espírito dos prints de referência,
+// 2026-09-19) - inline pra não interferir no grid mobile (mobile-card-title continua sendo
+// 1 <td> só, ver colgroup/nth-child abaixo).
+.cs-table-cell-numero {
+  font-weight: 700;
+  opacity: 0.6;
+  margin-right: 0.4rem;
+}
+
 // Coluna "Direcionado para": ícone (USER/DEPARTMENT) + nome. Sem isso o ícone (inline) fica
 // acima do nome (cs-table-cell-ellipsis é display:block), um em cima do outro.
 .target-cell {

@@ -20,6 +20,9 @@ export interface TicketClosePhotoModel {
  */
 export interface TicketModel {
   id: string;
+  /** Número sequencial exibido ao usuário (ex.: 40, mostrado formatado como "040" - ver
+   *  formatTicketNumero) - pedido do usuário 2026-09-19. */
+  numero: number;
   title: string;
   description: string;
   type: TicketTypeEnum;
@@ -91,4 +94,34 @@ export function mapTicketApiModel(input: TicketApiModel): TicketModel {
 
 export function mapTicketApiModels(items: TicketApiModel[] | null | undefined): TicketModel[] {
   return (items ?? []).map(mapTicketApiModel);
+}
+
+/** Sempre com 3 dígitos no mínimo (ex.: 40 -> "040") - pedido do usuário 2026-09-19. */
+export function formatTicketNumero(numero: number): string {
+  return String(numero).padStart(3, '0');
+}
+
+/** Anexo de um comentário - mesma cautela de attachmentUrl/closePhotos: `url` é pré-assinada
+ *  (expira), não deve ser cacheada/persistida. */
+export interface TicketCommentAttachmentModel {
+  id: string;
+  filename: string;
+  contentType: string;
+  sizeBytes: number;
+  url: string;
+}
+
+/** Espelha com.nimbusflow.tickets.dto.response.TicketCommentResponse do NimbusFlowServer. */
+export interface TicketCommentModel {
+  id: string;
+  authorId: string;
+  authorName: string | null;
+  message: string;
+  attachments: TicketCommentAttachmentModel[];
+  createdAt: string;
+}
+
+export interface TicketCommentCreateInput {
+  message: string;
+  files: File[];
 }

@@ -15,6 +15,8 @@ import {
   TicketUpsertInput,
   TicketCloseInput,
   TicketWorkLinkInput,
+  TicketCommentModel,
+  TicketCommentCreateInput,
   mapTicketApiModel,
   mapTicketApiModels,
 } from '@models/tickets.models';
@@ -143,5 +145,33 @@ export class TicketsApiService {
         context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
       })
       .pipe(map(mapTicketApiModel));
+  }
+
+  /** "Iniciar atendimento" (OPEN -> IN_PROGRESS) - pedido do usuário 2026-09-19. Chamador
+   *  (TicketsListComponent#goStart) já mostra tickets.action.startError - ver comentário de
+   *  create(). */
+  start(id: string) {
+    return this.http
+      .put<TicketApiModel>(`${this.baseUrl}/${id}/start`, {}, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
+      .pipe(map(mapTicketApiModel));
+  }
+
+  getComments(id: string) {
+    return this.http.get<TicketCommentModel[]>(`${this.baseUrl}/${id}/comments`);
+  }
+
+  /** multipart/form-data com 2 parts: "data" (JSON de {message}) e "files" (0..n arquivos) - mesmo
+   *  formato de close()/create(). Chamador (ticket-detail) já mostra tickets.comments.saveError -
+   *  ver comentário de create(). */
+  createComment(id: string, input: TicketCommentCreateInput) {
+    const formData = new FormData();
+    formData.append('data', new Blob([JSON.stringify({ message: input.message })], { type: 'application/json' }));
+    input.files.forEach((file) => formData.append('files', file));
+
+    return this.http.post<TicketCommentModel>(`${this.baseUrl}/${id}/comments`, formData, {
+      context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+    });
   }
 }

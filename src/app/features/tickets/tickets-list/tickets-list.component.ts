@@ -1,5 +1,6 @@
 
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
@@ -35,7 +36,7 @@ import { TICKET_STATUS_VALUES, TicketStatusEnum, ticketStatusTone } from '@model
 import { TICKET_TYPE_VALUES } from '@models/enums/ticket-type.enum';
 import { TICKET_TARGET_TYPE_VALUES } from '@models/enums/ticket-target-type.enum';
 import { TICKET_PRIORITY_VALUES, ticketPriorityTone } from '@models/enums/ticket-priority.enum';
-import { TicketModel, TicketsFiltersState } from '@models/tickets.models';
+import { TicketModel, TicketsFiltersState, formatTicketNumero } from '@models/tickets.models';
 import { WorkModel } from '@models/works.models';
 import { TicketsCreateDialogComponent } from '@features/tickets/tickets-create/tickets-create-dialog.component';
 import { TicketsEditDialogComponent } from '@features/tickets/tickets-edit/tickets-edit-dialog.component';
@@ -99,6 +100,7 @@ export class TicketsListComponent extends StatefulListPage<
   protected readonly worksPolicy = inject(WorksPermissionPolicy);
   protected readonly actionPlansPolicy = inject(ActionPlansPermissionPolicy);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
@@ -243,12 +245,54 @@ export class TicketsListComponent extends StatefulListPage<
     this.newVisible.set(v);
   }
 
-  /** Mesma elegibilidade de EDITABLE_STATUSES no backend (TicketService#update) - só chamado
-   *  ainda OPEN aceita edição. workId!=null bloqueia (chamado vinculado a uma Frente de Serviço
-   *  passa a ser tratado só por ela - ver TicketService.requireNotLinkedToWork no backend); usar
-   *  "Desfazer Frente de Serviço" pra liberar de novo. */
+  /** OPEN e IN_PROGRESS contam como "ainda ativo" (mesmo racional de OPEN_LIKE_STATUSES no
+   *  backend) - pedido do usuário 2026-09-19 (status novo "Em andamento"). */
+  private isOpenLike(row: TicketModel): boolean {
+    return row.status === TicketStatusEnum.OPEN || row.status === TicketStatusEnum.IN_PROGRESS;
+  }
+
+  /** Mesma elegibilidade de EDITABLE_STATUSES no backend (TicketService#update). workId!=null
+   *  bloqueia (chamado vinculado a uma Frente de Serviço passa a ser tratado só por ela - ver
+   *  TicketService.requireNotLinkedToWork no backend); usar "Desfazer Frente de Serviço" pra
+   *  liberar de novo. */
   canEdit(row: TicketModel): boolean {
+    return this.canManage() && row.workId == null && this.isOpenLike(row);
+  }
+
+  /** "Iniciar atendimento" (OPEN -> IN_PROGRESS) - só sai de OPEN, não faz sentido iniciar de
+   *  novo um chamado já em andamento. Pedido do usuário 2026-09-19. */
+  canStart(row: TicketModel): boolean {
     return this.canManage() && row.workId == null && row.status === TicketStatusEnum.OPEN;
+  }
+
+  goStart(row: TicketModel): void {
+    if (!this.canStart(row)) return;
+
+    this.facade
+      .start(row.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () =>
+          this.toast.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi('tickets.status.IN_PROGRESS' as never),
+          }),
+        error: () =>
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('tickets.action.startError' as never),
+          }),
+      });
+  }
+
+  goDetail(row: TicketModel): void {
+    void this.router.navigate(['/tickets', row.id]);
+  }
+
+  formatNumero(numero: number): string {
+    return formatTicketNumero(numero);
   }
 
   goEdit(row: TicketModel): void {
@@ -270,14 +314,14 @@ export class TicketsListComponent extends StatefulListPage<
     return (
       this.canManage() &&
       row.workId == null &&
-      (row.status === TicketStatusEnum.OPEN || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
+      (this.isOpenLike(row) || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
     );
   }
 
   /** CHAMADO_CANCEL dedicada, não CHAMADO_MANAGE (achado real 2026-09-19, pedido do usuário:
    *  grupo Operacional pode editar/fechar chamados mas não deve poder cancelar). */
   canCancel(row: TicketModel): boolean {
-    return this.policy.canCancel() && row.workId == null && row.status === TicketStatusEnum.OPEN;
+    return this.policy.canCancel() && row.workId == null && this.isOpenLike(row);
   }
 
   /** Não existe endpoint separado de "converter" - criar um Plano de Ação com ticketId JÁ é a
@@ -290,7 +334,7 @@ export class TicketsListComponent extends StatefulListPage<
       this.canManage() &&
       this.actionPlansPolicy.canManage() &&
       row.workId == null &&
-      row.status === TicketStatusEnum.OPEN
+      this.isOpenLike(row)
     );
   }
 
@@ -307,7 +351,7 @@ export class TicketsListComponent extends StatefulListPage<
       this.canManage() &&
       this.worksPolicy.canManage() &&
       row.workId == null &&
-      (row.status === TicketStatusEnum.OPEN || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
+      (this.isOpenLike(row) || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
     );
   }
 
@@ -318,7 +362,7 @@ export class TicketsListComponent extends StatefulListPage<
     return (
       this.canManage() &&
       row.workId != null &&
-      (row.status === TicketStatusEnum.OPEN || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
+      (this.isOpenLike(row) || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
     );
   }
 

@@ -1,0 +1,81 @@
+<app-page-header
+  [subtitle]="'companySettings.subtitle' | translate"
+  [breadcrumb]="[
+    { label: ('menu.settings.title' | translate), url: '/settings' },
+    { label: ('routes.settings.company.title' | translate) },
+  ]"
+></app-page-header>
+
+<p-card class="mt-2 block">
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="name" class="w-full" formControlName="name" />
+          <label for="name">{{ 'companySettings.name' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="document" class="w-full" formControlName="document" />
+          <label for="document">{{ 'companySettings.document' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="addressLine" class="w-full" formControlName="addressLine" />
+          <label for="addressLine">{{ 'companySettings.addressLine' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="city" class="w-full" formControlName="city" />
+          <label for="city">{{ 'companySettings.city' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="state" class="w-full" formControlName="state" />
+          <label for="state">{{ 'companySettings.state' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-4 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="postalCode" class="w-full" formControlName="postalCode" />
+          <label for="postalCode">{{ 'companySettings.postalCode' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="phone" class="w-full" formControlName="phone" />
+          <label for="phone">{{ 'companySettings.phone' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="email" class="w-full" formControlName="email" />
+          <label for="email">{{ 'companySettings.email' | translate }}</label>
+        </p-floatLabel>
+      </div>
+    </div>
+
+    @if (canEdit()) {
+      <div class="mt-4 px-2">
+        <p-button
+          type="submit"
+          icon="pi pi-save"
+          [loading]="saving()"
+          [label]="'common.save' | translate"
+          [disabled]="loading() || form.invalid"
+        ></p-button>
+      </div>
+    }
+  </form>
+</p-card>

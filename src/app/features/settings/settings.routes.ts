@@ -53,6 +53,20 @@ export const SETTINGS_ROUTES: Routes = [
       ),
   },
   {
+    path: 'company',
+    title: 'routes.settings.company.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.COMPANY_VIEW],
+    },
+    loadComponent: () =>
+      import('./company-settings/company-settings-page.component').then(
+        (m) => m.CompanySettingsPageComponent,
+      ),
+  },
+  {
     path: '**',
     title: 'routes.notFound.title',
     loadComponent: () => import('../error/not-found/not-found.page').then((m) => m.NotFoundPage),

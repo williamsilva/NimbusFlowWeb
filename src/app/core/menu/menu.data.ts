@@ -180,6 +180,13 @@ export const APP_MENU: AppMenuItem[] = [
         icon: 'pi pi-clock text-indigo-400',
         permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.WORK_AUTO_COMPLETE_VIEW],
       },
+      {
+        exact: false,
+        route: '/settings/company',
+        labelKey: 'menu.settings.company',
+        icon: 'pi pi-building text-indigo-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.COMPANY_VIEW],
+      },
     ],
   },
 ];

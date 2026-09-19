@@ -234,6 +234,20 @@ export const appRoutes: Routes = [
             (m) => m.TicketsListComponent,
           ),
       },
+      {
+        path: 'tickets/:id',
+        title: 'routes.tickets.detail.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CHAMADO.VIEW],
+        },
+        loadComponent: () =>
+          import('./features/tickets/ticket-detail/ticket-detail.component').then(
+            (m) => m.TicketDetailComponent,
+          ),
+      },
 
       {
         path: 'action-plans',
