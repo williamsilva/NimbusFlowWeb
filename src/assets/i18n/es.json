@@ -121,6 +121,7 @@
   "menu": {
     "me": "Mi cuenta",
     "dashboard": "Dashboard",
+    "more": "Más",
     "security": {
       "changePassword": "Cambiar contraseña"
     },
