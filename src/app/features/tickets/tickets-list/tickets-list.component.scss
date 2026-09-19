@@ -167,6 +167,14 @@
     grid-row: 7;
   }
 
+  // "Abrir Frente de Serviço"/"Converter em plano de ação" desabilitados (sem OBRA_MANAGE/
+  // PLANO_ACAO_MANAGE) ficam ocultos no celular em vez de acinzentados (pedido do usuário
+  // 2026-09-19) - diferente de Editar/Fechar/Cancelar/Desfazer, que continuam visíveis mesmo
+  // desabilitados (esses dependem também do status do chamado, não só de permissão do usuário).
+  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td.mobile-card-actions .mobile-hide-disabled:disabled {
+    display: none;
+  }
+
   // Selo de alerta (só pra chamados do tipo Alerta - ver row.type na <td> do título)
   :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td.mobile-card-title .mobile-card-alert-icon {
     position: absolute;
