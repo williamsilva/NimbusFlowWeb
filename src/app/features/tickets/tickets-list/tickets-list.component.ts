@@ -274,8 +274,10 @@ export class TicketsListComponent extends StatefulListPage<
     );
   }
 
+  /** CHAMADO_CANCEL dedicada, não CHAMADO_MANAGE (achado real 2026-09-19, pedido do usuário:
+   *  grupo Operacional pode editar/fechar chamados mas não deve poder cancelar). */
   canCancel(row: TicketModel): boolean {
-    return this.canManage() && row.workId == null && row.status === TicketStatusEnum.OPEN;
+    return this.policy.canCancel() && row.workId == null && row.status === TicketStatusEnum.OPEN;
   }
 
   /** Não existe endpoint separado de "converter" - criar um Plano de Ação com ticketId JÁ é a

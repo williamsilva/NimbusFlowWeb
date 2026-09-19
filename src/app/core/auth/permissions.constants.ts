@@ -204,6 +204,10 @@ export const PERMISSIONS = {
   CHAMADO: {
     MANAGE: 'CHAMADO_MANAGE',
     VIEW: 'CHAMADO_CONSULT',
+    /** Permissão dedicada (não reaproveita MANAGE) - mesmo padrão de OBRA_DELETE/MEDICAO_DELETE,
+     *  pedido do usuário 2026-08-28/2026-09-19 de separar quem pode editar/fechar de quem pode
+     *  cancelar. */
+    CANCEL: 'CHAMADO_CANCEL',
   },
 
   PLANO_ACAO: {
