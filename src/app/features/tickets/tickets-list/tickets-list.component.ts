@@ -28,6 +28,8 @@ import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { TicketsAdvancedFilters } from '@features/filter/tickets.filters';
 import { TicketsPermissionPolicy } from '@features/tickets/tickets-permission.policy';
+import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
+import { ActionPlansPermissionPolicy } from '@features/action-plans/action-plans-permission.policy';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { TICKET_STATUS_VALUES, TicketStatusEnum, ticketStatusTone } from '@models/enums/ticket-status.enum';
 import { TICKET_TYPE_VALUES } from '@models/enums/ticket-type.enum';
@@ -94,6 +96,8 @@ export class TicketsListComponent extends StatefulListPage<
   protected readonly toast = inject(MessageService);
   protected readonly confirm = inject(ConfirmationService);
   protected readonly policy = inject(TicketsPermissionPolicy);
+  protected readonly worksPolicy = inject(WorksPermissionPolicy);
+  protected readonly actionPlansPolicy = inject(ActionPlansPermissionPolicy);
   private readonly destroyRef = inject(DestroyRef);
 
   override rows =
@@ -275,19 +279,31 @@ export class TicketsListComponent extends StatefulListPage<
   }
 
   /** Não existe endpoint separado de "converter" - criar um Plano de Ação com ticketId JÁ é a
-   *  conversão (ver ActionPlanService.create no backend). */
+   *  conversão (ver ActionPlanService.create no backend), que exige PLANO_ACAO_MANAGE - não
+   *  CHAMADO_MANAGE. Sem esse segundo check aqui, um usuário só com CHAMADO_MANAGE via
+   *  Operacional (achado real 2026-09-19, pedido do usuário) via até o diálogo de conversão e só
+   *  levava um 403 do backend ao salvar - a tela não devia nem oferecer a ação. */
   canConvert(row: TicketModel): boolean {
-    return this.canManage() && row.workId == null && row.status === TicketStatusEnum.OPEN;
+    return (
+      this.canManage() &&
+      this.actionPlansPolicy.canManage() &&
+      row.workId == null &&
+      row.status === TicketStatusEnum.OPEN
+    );
   }
 
   /** Mesma elegibilidade de canClose - um chamado já convertido em plano ainda pode precisar de
    *  uma Frente de Serviço pra executar (ver TicketService.WORK_LINKABLE_STATUSES no backend).
    *  workId==null porque, uma vez vinculado, o chamado fica bloqueado (ver canEdit) - o próprio
    *  backend agora rejeita vincular de novo sem desfazer antes (TicketService.linkWork), não é só
-   *  restrição de tela. */
+   *  restrição de tela. Exige também OBRA_MANAGE (não só CHAMADO_MANAGE) - abrir Frente de
+   *  Serviço cria uma Work de verdade (WorkService.create exige OBRA_MANAGE) e o próprio
+   *  TicketService.linkWork passou a exigir OBRA_MANAGE também (achado real 2026-09-19, pedido do
+   *  usuário: grupo Operacional não pode abrir Frente de Serviço a partir de um chamado). */
   canOpenWorkFront(row: TicketModel): boolean {
     return (
       this.canManage() &&
+      this.worksPolicy.canManage() &&
       row.workId == null &&
       (row.status === TicketStatusEnum.OPEN || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
     );

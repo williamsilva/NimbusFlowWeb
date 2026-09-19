@@ -163,7 +163,7 @@
       icon="pi pi-save"
       class="p-button-sm"
       [loading]="saving()"
-      [disabled]="saving()"
+      [disabled]="saving() || !canSubmit()"
       [label]="'common.save' | translate"
     ></button>
   </ng-template>

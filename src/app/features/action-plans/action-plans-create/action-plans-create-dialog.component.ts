@@ -19,6 +19,7 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { UsersFacade } from '@features/facade/users.facade';
 import { TicketModel } from '@models/tickets.models';
 import { ActionPlansFacade } from '@features/facade/action-plans.facade';
+import { ActionPlansPermissionPolicy } from '@features/action-plans/action-plans-permission.policy';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { ActionPlanModel, ActionPlanUpsertInput } from '@models/action-plans.models';
@@ -78,10 +79,18 @@ export class ActionPlansCreateDialogComponent {
   readonly i18n = inject(I18nService);
   readonly actionPlans = inject(ActionPlansFacade);
   readonly usersFacade = inject(UsersFacade);
+  readonly policy = inject(ActionPlansPermissionPolicy);
   readonly responsibleOptions = this.usersFacade.options;
 
   readonly isEditMode = computed(() => !!this.actionPlan());
   readonly saving = signal(false);
+  /** PLANO_ACAO_MANAGE cobre criar+editar (ver ActionPlansPermissionPolicy) - faltava aqui, único
+   *  jeito de abrir este diálogo sem essa checagem (o de Chamados abre com [fromTicket] sem passar
+   *  por ActionPlansPermissionPolicy.canManage() nenhuma vez - achado real 2026-09-19, pedido do
+   *  usuário: grupo Operacional não pode converter chamado em Plano de Ação). O backend já exigia
+   *  PLANO_ACAO_MANAGE (ActionPlanService.create) - sem isto aqui, o usuário só via um 403 depois
+   *  de preencher tudo. */
+  readonly canSubmit = computed(() => this.policy.canManage());
 
   private lastLoadedId: string | null = null;
   /** Evita resetar o form de novo em modo criação a cada re-execução do effect() (ver
@@ -171,6 +180,8 @@ export class ActionPlansCreateDialogComponent {
   }
 
   save(): void {
+    if (!this.canSubmit()) return;
+
     this.form.markAllAsTouched();
     this.form.updateValueAndValidity();
 
