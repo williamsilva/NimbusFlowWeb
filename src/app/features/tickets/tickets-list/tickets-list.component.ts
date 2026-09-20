@@ -3,10 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Component, ViewChild, computed, inject, signal, OnInit } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
 
-import { Table } from 'primeng/table';
-import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -17,10 +15,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 
 import { I18nService } from '@core/i18n/i18n.service';
-import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { STATE_KEY } from '@features/state-key.constants';
 import { WorksFacade } from '@features/facade/works.facade';
 import { TicketsFacade } from '@features/facade/tickets.facade';
@@ -37,6 +34,8 @@ import { TICKET_TYPE_VALUES } from '@models/enums/ticket-type.enum';
 import { TICKET_TARGET_TYPE_VALUES } from '@models/enums/ticket-target-type.enum';
 import { TICKET_PRIORITY_VALUES, ticketPriorityTone } from '@models/enums/ticket-priority.enum';
 import { TicketModel, TicketsFiltersState, formatTicketNumero } from '@models/tickets.models';
+import { CompanySettingsApiService } from '@features/service/company-settings.api.service';
+import { CompanySettingsModel } from '@models/company-settings.models';
 import { WorkModel } from '@models/works.models';
 import { TicketsCreateDialogComponent } from '@features/tickets/tickets-create/tickets-create-dialog.component';
 import { TicketsCloseDialogComponent } from '@features/tickets/tickets-close/tickets-close-dialog.component';
@@ -60,11 +59,9 @@ import {
   templateUrl: './tickets-list.component.html',
   styleUrl: './tickets-list.component.scss',
   imports: [
-    CsDatePipe,
     FloatLabel,
     FormsModule,
     SelectModule,
-    TableModule,
     ButtonModule,
     TooltipModule,
     InputTextModule,
@@ -72,6 +69,7 @@ import {
     DatePickerModule,
     MultiSelectModule,
     ConfirmDialogModule,
+    PaginatorModule,
     PageHeaderComponent,
     FiltersPanelComponent,
     StatusBadgeComponent,
@@ -80,15 +78,12 @@ import {
     WorksCreateDialogComponent,
     ActionPlansCreateDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
-    DateInputMaskDirective,
   ],
 })
 export class TicketsListComponent extends StatefulListPage<
   TicketsFiltersState,
   TicketsAdvancedFilters
 > implements OnInit {
-  @ViewChild('dt') private dt?: Table;
-
   protected override readonly i18n = inject(I18nService);
   readonly facade = inject(TicketsFacade);
   readonly worksFacade = inject(WorksFacade);
@@ -99,6 +94,11 @@ export class TicketsListComponent extends StatefulListPage<
   protected readonly actionPlansPolicy = inject(ActionPlansPermissionPolicy);
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
+  private readonly companyApi = inject(CompanySettingsApiService);
+
+  /** Config única de empresa (mesmo padrão do cabeçalho de TicketDetailComponent) - mostrada
+   *  como "{numero} - {nome}" no cartão da lista (pedido do usuário 2026-09-20). */
+  readonly company = signal<CompanySettingsModel | null>(null);
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
@@ -219,6 +219,10 @@ export class TicketsListComponent extends StatefulListPage<
   ngOnInit() {
     this.worksFacade.loadOptions();
     this.initStatefulList();
+    this.companyApi
+      .getDisplaySettings()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({ next: (c) => this.company.set(c) });
   }
 
   tone(status: string): ReturnType<typeof ticketStatusTone> {
@@ -227,6 +231,58 @@ export class TicketsListComponent extends StatefulListPage<
 
   priorityTone(priority: string): ReturnType<typeof ticketPriorityTone> {
     return ticketPriorityTone(priority);
+  }
+
+  /** Cor de destaque do cartão por status (mesma paleta do app-status-badge) - pedido do usuário
+   *  2026-09-20: "borda com detalhes coloridos" pra diferenciar 1 cartão do outro de relance. */
+  private static readonly ACCENT_COLOR: Record<string, string> = {
+    success: '#22c55e',
+    info: '#3b82f6',
+    warn: '#f59e0b',
+    danger: '#ef4444',
+    neutral: '#94a3b8',
+  };
+
+  cardAccentColor(status: string): string {
+    return TicketsListComponent.ACCENT_COLOR[this.tone(status)] ?? TicketsListComponent.ACCENT_COLOR['neutral'];
+  }
+
+  /** "Direcionado para" - usuário ou departamento, mutuamente exclusivos (ver
+   *  TicketService#resolveTarget no backend). Reaproveitado no ícone (mobile) e no avatar
+   *  (desktop, pedido do usuário 2026-09-20). */
+  responsavelName(row: TicketModel): string | null {
+    return row.targetType === 'USER' ? row.targetUserName : row.targetDepartmentName;
+  }
+
+  /** 2 primeiras letras do nome (usuário ou departamento) - pedido explícito do usuário
+   *  2026-09-20, não "1ª letra de até 2 palavras" (a maioria dos departamentos é 1 palavra só,
+   *  ex.: "Manutenção" -> "MA"). */
+  initials(name: string | null): string {
+    const trimmed = name?.trim();
+    if (!trimmed) return '?';
+    return trimmed.slice(0, 2).toUpperCase();
+  }
+
+  /** Cor do avatar por hash simples do nome - mesmo nome sempre cai na mesma cor, paleta fixa
+   *  (pedido do usuário 2026-09-20, print de referência com avatares coloridos). */
+  private static readonly AVATAR_PALETTE = [
+    '#7c3aed',
+    '#0891b2',
+    '#059669',
+    '#d97706',
+    '#dc2626',
+    '#4f46e5',
+    '#0d9488',
+    '#65a30d',
+  ];
+
+  avatarColor(name: string | null): string {
+    if (!name) return TicketsListComponent.AVATAR_PALETTE[0];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+    }
+    return TicketsListComponent.AVATAR_PALETTE[hash % TicketsListComponent.AVATAR_PALETTE.length];
   }
 
   goNew() {
@@ -253,6 +309,23 @@ export class TicketsListComponent extends StatefulListPage<
 
   formatNumero(numero: number): string {
     return formatTicketNumero(numero);
+  }
+
+  /** Sem <p-table> não tem mais restauração automática de estado (stateStorage="local") - só o
+   *  necessário pro cartão (página atual) fica guardado, sort/filtro de coluna nunca existiram
+   *  fora do próprio painel "Filtrar" (ver mapTableFiltersToActiveItems). */
+  paginatorFirst(): number {
+    return this.lastLazyEvent?.first ?? 0;
+  }
+
+  onCardPageChange(event: PaginatorState): void {
+    const rows = event.rows ?? this.rows;
+    const first = event.first ?? 0;
+    this.rows = rows;
+    localStorage.setItem(this.tableRowsKey(), String(this.rows));
+    this.lastLazyEvent = { ...(this.lastLazyEvent ?? {}), first, rows };
+    localStorage.setItem(this.tableStateKey(), JSON.stringify({ first, rows }));
+    this.reloadWithCurrentState();
   }
 
   canClose(row: TicketModel): boolean {
@@ -440,7 +513,7 @@ export class TicketsListComponent extends StatefulListPage<
   }
 
   clear() {
-    this.clearTableAndReload(this.dt);
+    this.clearTableAndReload();
   }
 
   /** Da abertura (createdAt) até o fechamento (closedAt) - closedAt também é preenchido ao

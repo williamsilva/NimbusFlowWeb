@@ -175,346 +175,79 @@
   </div>
 </cs-filters-panel>
 
-<div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
-  <p-table
-    #dt
-    stripedRows
-    dataKey="id"
-    size="small"
-    [rows]="rows"
-    [lazy]="true"
-    showGridlines
-    [rowHover]="true"
-    [paginator]="true"
-    sortMode="multiple"
-    [value]="tickets()"
-    filterDisplay="menu"
-    stateStorage="local"
-    class="cs-admin-table"
-    [loading]="facade.loading()"
-    [stateKey]="tableStateKey()"
-    [showCurrentPageReport]="true"
-    [totalRecords]="totalRecords()"
-    (onLazyLoad)="onLazyLoad($event)"
-    [paginatorDropdownAppendTo]="'body'"
-    (onPage)="onPageChange($event)"
-    [rowsPerPageOptions]="rowsPerPageOptions"
-    [tableStyle]="{ width: '100%', 'min-width': '82rem' }"
-    [currentPageReportTemplate]="'pagination.report' | translate"
-  >
-    <ng-template pTemplate="colgroup">
-      <colgroup>
-        <col style="width: auto" />
-        <col style="width: 110px" />
-        <col style="width: 110px" />
-        <col style="width: 180px" />
-        <col style="width: 130px" />
-        <col style="width: 150px" />
-        <col style="width: 170px" />
-        <col style="width: 150px" />
-        <col style="width: 110px" />
-        <col style="width: 90px" />
-      </colgroup>
-    </ng-template>
-
-    <ng-template pTemplate="header">
-      <tr>
-        <th pSortableColumn="title">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'tickets.columns.title' | translate"
-              >{{ 'tickets.columns.title' | translate }}</span
-            >
-            <span class="th-icons">
-              <p-sortIcon field="title"></p-sortIcon>
-              <p-columnFilter
-                type="text"
-                field="title"
-                display="menu"
-                class="ml-auto"
-                matchMode="contains"
-                [useGrouping]="false"
-                [showOperator]="false"
-                [showAddButton]="false"
-                styleClass="cs-colfilter"
-              ></p-columnFilter>
-            </span>
-          </div>
-        </th>
-
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'tickets.columns.type' | translate"
-              >{{ 'tickets.columns.type' | translate }}</span
-            >
-          </div>
-        </th>
-
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'tickets.columns.priority' | translate"
-              >{{ 'tickets.columns.priority' | translate }}</span
-            >
-          </div>
-        </th>
-
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'tickets.columns.work' | translate"
-              >{{ 'tickets.columns.work' | translate }}</span
-            >
-          </div>
-        </th>
-
-        <th pSortableColumn="status">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'tickets.columns.status' | translate"
-              >{{ 'tickets.columns.status' | translate }}</span
-            >
-            <span class="th-icons">
-              <p-sortIcon field="status"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                matchMode="in"
-                field="status"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="false"
-                styleClass="cs-colfilter"
-              >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-multiSelect
-                    class="w-full"
-                    appendTo="body"
-                    [ngModel]="value"
-                    [showClear]="true"
-                    optionLabel="label"
-                    optionValue="value"
-                    [options]="statusOptions"
-                    (onChange)="filter($event.value)"
-                    [placeholder]="'common.all' | translate"
-                  ></p-multiSelect>
-                </ng-template>
-              </p-columnFilter>
-            </span>
-          </div>
-        </th>
-
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'tickets.columns.reportedBy' | translate"
-              >{{ 'tickets.columns.reportedBy' | translate }}</span
-            >
-          </div>
-        </th>
-
-        <th pSortableColumn="targetType">
-          <div class="th-flex text-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'tickets.columns.target' | translate"
-              >{{ 'tickets.columns.target' | translate }}</span
-            >
-            <span class="th-icons">
-              <p-sortIcon field="targetType"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                matchMode="in"
-                field="targetType"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="false"
-                styleClass="cs-colfilter"
-              >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-multiSelect
-                    class="w-full"
-                    appendTo="body"
-                    [ngModel]="value"
-                    [showClear]="true"
-                    optionLabel="label"
-                    optionValue="value"
-                    [options]="targetTypeOptions"
-                    (onChange)="filter($event.value)"
-                    [placeholder]="'common.all' | translate"
-                  ></p-multiSelect>
-                </ng-template>
-              </p-columnFilter>
-            </span>
-          </div>
-        </th>
-
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'tickets.columns.createdAt' | translate"
-              >{{ 'tickets.columns.createdAt' | translate }}</span
-            >
-            <span class="th-icons">
-              <p-sortIcon field="createdAt"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                field="createdAt"
-                matchMode="between"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="false"
-                styleClass="cs-colfilter"
-              >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-datepicker
-                    class="w-full"
-                    csDateInputMask
-                    appendTo="body"
-                    [showIcon]="true"
-                    [ngModel]="value"
-                    selectionMode="range"
-                    dateFormat="dd/mm/yy"
-                    [readonlyInput]="true"
-                    [csDateInputMaskRange]="true"
-                    (ngModelChange)="filter($event)"
-                    [placeholder]="'common.period' | translate"
-                  ></p-datepicker>
-                </ng-template>
-              </p-columnFilter>
-            </span>
-          </div>
-        </th>
-
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'tickets.columns.duration' | translate"
-              >{{ 'tickets.columns.duration' | translate }}</span
-            >
-          </div>
-        </th>
-
-        <th class="text-center">
-          <div class="th-flex text-center justify-content-center">
-            <span
-              class="th-label"
-              tooltipPosition="top"
-              [pTooltip]="'common.actions' | translate"
-              >{{ 'common.actions' | translate }}</span
-            >
-          </div>
-        </th>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-row>
-      <tr class="cs-clickable-row" (click)="goDetail(row)">
-        <td class="mobile-card-title">
-          <span class="cs-table-cell-numero">{{ formatNumero(row.numero) }}</span>
-          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.title">{{
-            row.title
-          }}</span>
-          @if (row.type === 'ALERT') {
-            <i class="pi pi-exclamation-triangle mobile-card-alert-icon"></i>
-          }
-        </td>
-        <td class="text-center" [attr.data-label]="'tickets.columns.type' | translate">
-          {{ 'tickets.type.' + row.type | translate }}
-        </td>
-        <td class="text-center" [attr.data-label]="'tickets.columns.priority' | translate">
-          <app-status-badge
-            [tone]="priorityTone(row.priority)"
-            [label]="'tickets.priority.' + row.priority | translate"
-          ></app-status-badge>
-        </td>
-        <td class="text-center" [attr.data-label]="'tickets.columns.work' | translate">
-          <span
-            class="cs-table-cell-ellipsis"
-            tooltipPosition="top"
-            [pTooltip]="row.workName ?? '-'"
-            >{{ row.workName ?? '-' }}</span
-          >
-        </td>
-        <td class="text-center" [attr.data-label]="'tickets.columns.status' | translate">
-          <app-status-badge
-            [tone]="tone(row.status)"
-            [label]="'tickets.status.' + row.status | translate"
-          ></app-status-badge>
-        </td>
-        <td class="text-center" [attr.data-label]="'tickets.columns.reportedBy' | translate">
-          <span
-            class="desktop-only cs-table-cell-ellipsis"
-            tooltipPosition="top"
-            [pTooltip]="row.reportedByName ?? '-'"
-            >{{ row.reportedByName ?? '-' }}</span
-          >
-          <span class="mobile-only">{{
+<div class="ticket-cards-wrap mt-2">
+  @if (facade.loading()) {
+    <div class="surface-card border-round text-center py-5 opacity-70">
+      {{ 'common.loading' | translate }}
+    </div>
+  } @else if (!tickets().length) {
+    <div class="surface-card border-round text-center py-5 opacity-70">
+      {{ 'tickets.empty.title' | translate }}
+    </div>
+  } @else {
+    @for (row of tickets(); track row.id) {
+      <div
+        class="ticket-card"
+        (click)="goDetail(row)"
+        [style.--ticket-accent]="cardAccentColor(row.status)"
+      >
+        <div class="ticket-card-created-by">
+          {{
             'tickets.mobile.createdBy'
               | translate
                 : {
                     name: row.reportedByName ?? '-',
                     date: row.createdAt ? formatDate(row.createdAt) : '-',
                   }
-          }}</span>
-        </td>
+          }}
+        </div>
 
-        <td class="text-center" [attr.data-label]="'tickets.columns.target' | translate">
-          <span class="target-cell">
-            <i
-              class="pi target-cell-icon"
-              [class.pi-user]="row.targetType === 'USER'"
-              [class.text-red-400]="row.targetType === 'USER'"
-              [class.pi-sitemap]="row.targetType === 'DEPARTMENT'"
-              [class.text-indigo-400]="row.targetType === 'DEPARTMENT'"
-            ></i>
-            <span
-              tooltipPosition="top"
-              class="cs-table-cell-ellipsis"
-              [pTooltip]="
-                (row.targetType === 'USER' ? row.targetUserName : row.targetDepartmentName) ?? '-'
-              "
-              >{{
-                (row.targetType === 'USER' ? row.targetUserName : row.targetDepartmentName) ?? '-'
-              }}</span
-            >
-          </span>
-        </td>
-        <td class="text-center" [attr.data-label]="'tickets.columns.createdAt' | translate">
-          {{ row.createdAt ? (row.createdAt | csDate: 'short') : '-' }}
-        </td>
-        <td class="text-center" [attr.data-label]="'tickets.columns.duration' | translate">
-          {{ ticketDuration(row) }}
-        </td>
-        <td
-          class="text-center mobile-card-actions"
-          [attr.data-label]="'common.actions' | translate"
-        >
-          <div class="table-actions">
+        <div class="ticket-card-content">
+          <div class="ticket-card-main">
+            <div class="ticket-card-title-row">
+              @if (row.type === 'ALERT') {
+                <i class="pi pi-exclamation-triangle ticket-card-alert-icon"></i>
+              }
+              <span class="ticket-card-title-text" tooltipPosition="top" [pTooltip]="row.title">{{
+                row.title
+              }}</span>
+            </div>
+            <div class="ticket-card-subtitle">
+              {{ formatNumero(row.numero) }}{{ company()?.name ? ' - ' + company()!.name : '' }}
+            </div>
+          </div>
+
+          <div class="ticket-card-badges">
+            <app-status-badge
+              [tone]="priorityTone(row.priority)"
+              [label]="'tickets.priority.' + row.priority | translate"
+            ></app-status-badge>
+            <app-status-badge
+              [tone]="tone(row.status)"
+              [label]="'tickets.status.' + row.status | translate"
+            ></app-status-badge>
+          </div>
+
+          <div class="ticket-card-duration">
+            <span class="ticket-card-duration-label">{{ 'tickets.columns.duration' | translate }}:</span>
+            <span class="ticket-card-duration-value">{{ ticketDuration(row) }}</span>
+          </div>
+
+          <div class="ticket-card-avatar">
+            <span class="cs-mini-avatar" [style.background]="avatarColor(responsavelName(row))">{{
+              initials(responsavelName(row))
+            }}</span>
+            <span class="ticket-card-avatar-label">{{ 'tickets.avatarLabel' | translate }}</span>
+          </div>
+
+          <div class="ticket-card-actions" (click)="$event.stopPropagation()">
             @if (row.workId === null) {
               <button
                 pButton
                 type="button"
                 icon="pi pi-building"
-                (click)="$event.stopPropagation(); goOpenWorkFront(row)"
-                class="p-button-text p-button-sm mobile-hide-disabled"
+                (click)="goOpenWorkFront(row)"
+                class="p-button-text p-button-sm"
                 [disabled]="!canOpenWorkFront(row)"
                 [pTooltip]="'tickets.action.openWorkFront' | translate"
                 [attr.aria-label]="'tickets.action.openWorkFront' | translate"
@@ -526,7 +259,7 @@
                 type="button"
                 icon="pi pi-unlock"
                 class="p-button-text p-button-sm p-button-danger"
-                (click)="$event.stopPropagation(); confirmUnlinkWork(row)"
+                (click)="confirmUnlinkWork(row)"
                 [disabled]="!canUnlinkWork(row)"
                 [pTooltip]="'tickets.action.unlinkWork' | translate"
                 [attr.aria-label]="'tickets.action.unlinkWork' | translate"
@@ -537,8 +270,8 @@
               pButton
               type="button"
               icon="pi pi-arrow-right-arrow-left"
-              (click)="$event.stopPropagation(); goConvert(row)"
-              class="p-button-text p-button-sm mobile-hide-disabled"
+              (click)="goConvert(row)"
+              class="p-button-text p-button-sm"
               [disabled]="!canConvert(row)"
               [pTooltip]="'tickets.action.convert' | translate"
               [attr.aria-label]="'tickets.action.convert' | translate"
@@ -548,7 +281,7 @@
               pButton
               type="button"
               icon="pi pi-check"
-              (click)="$event.stopPropagation(); goClose(row)"
+              (click)="goClose(row)"
               class="p-button-text p-button-sm"
               [disabled]="!canClose(row)"
               [pTooltip]="'tickets.action.close' | translate"
@@ -560,27 +293,30 @@
               type="button"
               icon="pi pi-times"
               class="p-button-text p-button-sm p-button-danger"
-              (click)="$event.stopPropagation(); confirmCancel(row)"
+              (click)="confirmCancel(row)"
               [disabled]="!canCancel(row)"
               [pTooltip]="'tickets.action.cancel' | translate"
               [attr.aria-label]="'tickets.action.cancel' | translate"
               tooltipPosition="top"
             ></button>
           </div>
-        </td>
-      </tr>
-    </ng-template>
 
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="10" class="text-center py-5 opacity-70">
-          {{
-            facade.loadedOnce()
-              ? ('tickets.empty.title' | translate)
-              : ('common.loading' | translate)
-          }}
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+          <i class="pi pi-chevron-right ticket-card-chevron"></i>
+        </div>
+      </div>
+    }
+
+    <div class="ticket-cards-paginator surface-card border-round">
+      <p-paginator
+        [rows]="rows"
+        [first]="paginatorFirst()"
+        [totalRecords]="totalRecords()"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (onPageChange)="onCardPageChange($event)"
+        [appendTo]="'body'"
+        [showCurrentPageReport]="true"
+        [currentPageReportTemplate]="'pagination.report' | translate"
+      ></p-paginator>
+    </div>
+  }
 </div>

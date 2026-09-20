@@ -1,5 +1,3 @@
-<p-confirmDialog key="ticketDetail" />
-
 <app-page-header
   [subtitle]="ticket()?.title ?? ''"
   [breadcrumb]="[
@@ -18,9 +16,6 @@
   }
   @if (canClose()) {
     <button pButton type="button" icon="pi pi-check" (click)="goClose()" class="p-button-sm" [label]="'tickets.action.close' | translate"></button>
-  }
-  @if (canCancel()) {
-    <button pButton type="button" icon="pi pi-times" (click)="confirmCancel()" class="p-button-text p-button-sm p-button-danger" [label]="'tickets.action.cancel' | translate"></button>
   }
 </app-page-header>
 

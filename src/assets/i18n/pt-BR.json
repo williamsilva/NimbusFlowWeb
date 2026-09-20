@@ -1707,6 +1707,7 @@
     "mobile": {
       "createdBy": "Criado por {name} em {date}"
     },
+    "avatarLabel": "Responsável",
     "detail": {
       "target": "Direcionado para",
       "tabContent": "Conteúdo",

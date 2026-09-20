@@ -1,212 +1,170 @@
-@use '../../../../assets/styles/mobile-card-table' as mct;
+// Lista de Chamados em cartões (não mais <p-table>) - pedido do usuário 2026-09-20, print de
+// referência com cartões horizontais. Cada chamado é 1 <div class="ticket-card"> próprio, sem
+// depender de nenhuma técnica de reposicionar <td>/<tr> via CSS - muito mais simples e robusto.
 
-// Mobile: tabela vira lista de cards - ver mobile-card-table.scss pro que isso faz e por quê.
-// mobile-card-title/mobile-card-actions marcados manualmente no <td> certo, no HTML desta tela.
-@include mct.mobile-card-table;
-
-// Alterna o texto "Relatado por" (desktop, só o nome) x "Criado por X em Y" (mobile, frase
-// composta com a data - ver span.mobile-only no <td> de reportedBy). Os próprios <span> são
-// deste componente (não renderizados pelo p-table), então dispensam ::ng-deep.
-.mobile-only {
-  display: none;
+.ticket-cards-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
-// Linha inteira navega pro detalhe (/tickets/:id) - stopPropagation nos botões de ação evita
-// abrir o detalhe ao clicar neles (ver tickets-list.component.html).
-.cs-clickable-row {
+// Borda colorida por status (--ticket-accent, ver cardAccentColor() no componente) - diferencia
+// um cartão do outro de relance, pedido do usuário 2026-09-20. Borda inteira num tom suave da
+// cor + detalhe mais forte só na lateral esquerda.
+.ticket-card {
   cursor: pointer;
+  background: var(--surface-card);
+  border: 1px solid color-mix(in srgb, var(--ticket-accent, var(--surface-border)) 45%, var(--surface-border));
+  border-left: 4px solid var(--ticket-accent, var(--surface-border));
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
 
   &:hover {
     background: var(--surface-100);
   }
 }
 
-// Número sequencial do chamado, antes do título (mesmo espírito dos prints de referência,
-// 2026-09-19) - inline pra não interferir no grid mobile (mobile-card-title continua sendo
-// 1 <td> só, ver colgroup/nth-child abaixo).
-.cs-table-cell-numero {
-  font-weight: 700;
-  opacity: 0.6;
-  margin-right: 0.4rem;
+.ticket-card-created-by {
+  font-size: 0.72rem;
+  opacity: 0.65;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--surface-border);
 }
 
-// Coluna "Direcionado para": ícone (USER/DEPARTMENT) + nome. Sem isso o ícone (inline) fica
-// acima do nome (cs-table-cell-ellipsis é display:block), um em cima do outro.
-.target-cell {
-  display: inline-flex;
+// Grid com larguras FIXAS de propósito (não "auto"): cada <div class="ticket-card"> é o seu
+// próprio grid isolado - "auto" mediria a largura da coluna com base só no conteúdo DAQUELE
+// cartão, então 2 cartões com badges de tamanhos diferentes ficavam com a coluna de duração em
+// posições diferentes (achado real 2026-09-20, pedido do usuário: "de cima com os de baixo").
+// Largura fixa é a única forma de garantir a mesma posição em todos os cartões sem depender de
+// 1 grid só pra lista inteira (subgrid).
+.ticket-card-content {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) 13rem 6rem 9rem 8rem 1.2rem;
+  align-items: center;
+  column-gap: 1.75rem;
+  row-gap: 0.5rem;
+}
+
+// Título + selo de alerta (mesma linha) e "numero - empresa" embaixo.
+.ticket-card-main {
+  min-width: 0;
+}
+
+.ticket-card-title-row {
+  display: flex;
+  align-items: center;
   gap: 0.4rem;
   min-width: 0;
-  max-width: 100%;
+}
+
+.ticket-card-title-text {
+  min-width: 0;
+  font-weight: 700;
+}
+
+.ticket-card-alert-icon {
+  flex: 0 0 auto;
+  color: #f59e0b;
+  font-size: 0.9rem;
+}
+
+.ticket-card-subtitle {
+  font-size: 0.72rem;
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+.ticket-card-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ticket-card-duration {
+  text-align: center;
+}
+
+.ticket-card-duration-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  opacity: 0.65;
+}
+
+.ticket-card-duration-value {
+  font-weight: 700;
+}
+
+// Avatar colorido por iniciais + rótulo "Responsável".
+.ticket-card-avatar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cs-mini-avatar {
+  width: 1.8rem;
+  height: 1.8rem;
+  min-width: 1.8rem;
+  border-radius: 9999px;
+  display: flex;
   align-items: center;
   justify-content: center;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
 }
 
-.target-cell .cs-table-cell-ellipsis {
-  min-width: 0;
-  flex: 0 1 auto;
+.ticket-card-avatar-label {
+  font-size: 0.72rem;
+  opacity: 0.65;
+  white-space: nowrap;
 }
 
-// Mesmo tamanho dos ícones de ação da tabela (.cs-admin-table .table-actions .p-button .pi,
-// ver table.scss) - só o tamanho é compartilhado, a cor diverge por tipo (mesma convenção
-// de menu.data.ts: pi-user vermelho, pi-sitemap índigo).
-.target-cell-icon {
-  flex: 0 0 auto;
-  font-size: 0.58rem;
+.ticket-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
-@media (max-width: 768px) {
-  .mobile-only {
-    display: inline;
-  }
-
-  .desktop-only {
-    display: none;
-  }
+.ticket-card-actions .p-button.p-button-sm {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  padding: 0 !important;
 }
 
-// Layout mais próximo da referência pedida pelo usuário (badges lado a lado, bloco de
-// rodapé com separador, selo pro tipo Alerta) - só nesta tela. Não entra no mixin genérico
-// (mobile-card-table.scss), que é reaproveitado por mais 12 telas com o padrão simples
-// rótulo/valor - mudar o mixin quebraria todas elas.
-@media (max-width: 768px) {
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr {
-    display: grid !important;
-    grid-template-columns: auto 1fr;
-    row-gap: 4px;
-    column-gap: 10px;
-    position: relative;
+.ticket-card-actions .p-button .pi {
+  font-size: 0.72rem !important;
+}
+
+.ticket-card-chevron {
+  opacity: 0.4;
+  font-size: 0.85rem;
+}
+
+.ticket-cards-paginator {
+  padding: 0.25rem 0.5rem;
+}
+
+// Celular: 1 coluna só - cada bloco (título, badges, duração, avatar, ações) empilha na própria
+// linha em vez de tentar caber lado a lado.
+@media (max-width: 640px) {
+  .ticket-card-content {
+    grid-template-columns: 1fr;
   }
 
-  // Título ocupa a linha toda - sem a borda que o mixin genérico aplica (na referência não tem
-  // separador logo abaixo do título, só antes do bloco de duração/criado por).
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td.mobile-card-title {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    border-bottom: none !important;
-    margin-bottom: 0;
-    padding-bottom: 2px !important;
+  .ticket-card-duration,
+  .ticket-card-avatar {
+    text-align: left;
   }
 
-  // Tipo (badge) + Frente de Serviço, lado a lado
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(2) {
-    grid-column: 1;
-    grid-row: 2;
-    justify-self: start;
-    padding: 2px 8px !important;
-    border-radius: 999px;
-    background: var(--surface-100);
-    font-size: 0.68rem !important;
-    font-weight: 600;
+  .ticket-card-actions {
+    justify-content: flex-end;
   }
 
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(4) {
-    grid-column: 2;
-    grid-row: 2;
-    justify-self: start;
-    opacity: 0.75;
-  }
-
-  // Prioridade + Status, lado a lado (cs-status-badge já é um badge colorido - só precisa
-  // ficar lado a lado em vez de empilhado)
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(3) {
-    grid-column: 1;
-    grid-row: 3;
-    justify-self: start;
-  }
-
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(5) {
-    grid-column: 2;
-    grid-row: 3;
-    justify-self: start;
-  }
-
-  // Badges/meta não precisam do rótulo (data-label) que o mixin genérico mostra - o próprio
-  // texto/badge já é autoexplicativo, igual na referência.
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(2)::before,
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(3)::before,
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(4)::before,
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(5)::before {
+  .ticket-card-chevron {
     display: none;
-  }
-
-  // Direcionado para - linha própria, em forma de frase (rótulo não fica em negrito)
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(7) {
-    grid-column: 1 / -1;
-    grid-row: 4;
-    justify-content: flex-start;
-    gap: 4px;
-    opacity: 0.75;
-  }
-
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(7)::before {
-    font-weight: 500;
-    opacity: 1;
-    content: attr(data-label) ':';
-  }
-
-  // Registrado em - já embutido na frase "Criado por X em Y" (td de reportedBy, nth-child(6))
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(8) {
-    display: none;
-  }
-
-  // Duração - separador antes, em forma de frase (mesmo espírito do rodapé da referência)
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(9) {
-    grid-column: 1 / -1;
-    grid-row: 5;
-    justify-content: flex-start;
-    gap: 4px;
-    margin-top: 4px;
-    padding-top: 8px !important;
-    border-top: 1px solid var(--surface-border);
-    opacity: 0.75;
-  }
-
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(9)::before {
-    font-weight: 500;
-    opacity: 1;
-    content: attr(data-label) ':';
-  }
-
-  // Relatado por - vira a frase "Criado por X em Y" (ver .mobile-only no HTML) - sem o rótulo
-  // do mixin genérico, que ficaria redundante.
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(6) {
-    grid-column: 1 / -1;
-    grid-row: 6;
-    justify-content: flex-start;
-    opacity: 0.75;
-  }
-
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td:nth-child(6)::before {
-    display: none;
-  }
-
-  // Ações, por último
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td.mobile-card-actions {
-    grid-column: 1 / -1;
-    grid-row: 7;
-  }
-
-  // "Abrir Frente de Serviço"/"Converter em plano de ação" desabilitados (sem OBRA_MANAGE/
-  // PLANO_ACAO_MANAGE) ficam ocultos no celular em vez de acinzentados (pedido do usuário
-  // 2026-09-19) - diferente de Editar/Fechar/Cancelar/Desfazer, que continuam visíveis mesmo
-  // desabilitados (esses dependem também do status do chamado, não só de permissão do usuário).
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td.mobile-card-actions .mobile-hide-disabled:disabled {
-    display: none;
-  }
-
-  // Selo de alerta (só pra chamados do tipo Alerta - ver row.type na <td> do título)
-  :host ::ng-deep .cs-admin-table .p-datatable-tbody > tr > td.mobile-card-title .mobile-card-alert-icon {
-    position: absolute;
-    right: 6px;
-    bottom: 6px;
-    width: 26px;
-    height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(245, 158, 11, 0.85);
-    color: #fff;
-    font-size: 0.8rem;
   }
 }

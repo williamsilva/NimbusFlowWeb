@@ -10,8 +10,6 @@ import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { TextareaModule } from 'primeng/textarea';
 import { TranslateModule } from '@ngx-translate/core';
-import { ConfirmationService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
@@ -54,7 +52,6 @@ import { TicketModel, TicketCommentModel, formatTicketNumero } from '@models/tic
     TextareaModule,
     TranslateModule,
     NgTemplateOutlet,
-    ConfirmDialogModule,
     PageHeaderComponent,
     StatusBadgeComponent,
     TicketsEditDialogComponent,
@@ -66,7 +63,6 @@ export class TicketDetailComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly toast = inject(MessageService);
-  private readonly confirm = inject(ConfirmationService);
   private readonly companySettingsApi = inject(CompanySettingsApiService);
 
   readonly i18n = inject(I18nService);
@@ -182,11 +178,6 @@ export class TicketDetailComponent implements OnInit {
     );
   }
 
-  canCancel(): boolean {
-    const t = this.ticket();
-    return !!t && this.policy.canCancel() && t.workId == null && this.isOpenLike(t.status);
-  }
-
   goEdit(): void {
     if (!this.canEdit()) return;
     this.editVisible.set(true);
@@ -234,38 +225,6 @@ export class TicketDetailComponent implements OnInit {
 
   onClosed(): void {
     this.refresh();
-  }
-
-  confirmCancel(): void {
-    if (!this.canCancel()) return;
-
-    this.confirm.confirm({
-      key: 'ticketDetail',
-      header: this.i18n.tUi('tickets.cancelConfirm.header'),
-      message: this.i18n.tUi('tickets.cancelConfirm.message'),
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.facade
-          .cancel(this.ticketId())
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe({
-            next: () => {
-              this.toast.add({
-                severity: 'success',
-                summary: this.i18n.tUi('common.success'),
-                detail: this.i18n.tUi('tickets.status.cancelled' as never),
-              });
-              this.refresh();
-            },
-            error: () =>
-              this.toast.add({
-                severity: 'error',
-                summary: this.i18n.tUi('common.error'),
-                detail: this.i18n.tUi('tickets.status.cancelError' as never),
-              }),
-          });
-      },
-    });
   }
 
   onCommentFilesSelected(event: Event): void {
