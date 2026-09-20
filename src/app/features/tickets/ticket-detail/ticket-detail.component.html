@@ -6,17 +6,19 @@
     { label: ticket() ? formatNumero(ticket()!.numero) : '' },
   ]"
 >
-  <a pButton icon="pi pi-arrow-left" [routerLink]="['/tickets']" class="p-button-text p-button-sm" [label]="'common.back' | translate"></a>
+  <div class="ticket-detail-header-actions">
+    <a pButton icon="pi pi-arrow-left" [routerLink]="['/tickets']" class="p-button-text p-button-sm" [label]="'common.back' | translate"></a>
 
-  @if (canEdit()) {
-    <button pButton type="button" icon="pi pi-pencil" (click)="goEdit()" class="p-button-text p-button-sm" [label]="'common.edit' | translate"></button>
-  }
-  @if (canStart()) {
-    <button pButton type="button" icon="pi pi-play" (click)="goStart()" [loading]="starting()" class="p-button-text p-button-sm" [label]="'tickets.action.start' | translate"></button>
-  }
-  @if (canClose()) {
-    <button pButton type="button" icon="pi pi-check" (click)="goClose()" class="p-button-sm" [label]="'tickets.action.close' | translate"></button>
-  }
+    @if (canEdit()) {
+      <button pButton type="button" icon="pi pi-pencil" (click)="goEdit()" class="p-button-text p-button-sm" [label]="'common.edit' | translate"></button>
+    }
+    @if (canStart()) {
+      <button pButton type="button" icon="pi pi-play" (click)="goStart()" [loading]="starting()" class="p-button-text p-button-sm" [label]="'tickets.action.start' | translate"></button>
+    }
+    @if (canClose() && !isMobile()) {
+      <button pButton type="button" icon="pi pi-check" (click)="goClose()" class="p-button-sm" [label]="'tickets.action.close' | translate"></button>
+    }
+  </div>
 </app-page-header>
 
 <app-tickets-edit-dialog
@@ -126,6 +128,17 @@
       <dd>{{ t.resolutionNote }}</dd>
     }
   </dl>
+
+  @if (isMobile() && canClose()) {
+    <button
+      pButton
+      type="button"
+      icon="pi pi-check"
+      (click)="goClose()"
+      class="p-button-sm w-full mt-4"
+      [label]="'tickets.action.close' | translate"
+    ></button>
+  }
 </ng-template>
 
 <ng-template #commentsSection>

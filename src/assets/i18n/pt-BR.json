@@ -1682,7 +1682,7 @@
       "title": "Nenhum chamado encontrado"
     },
     "action": {
-      "close": "Fechar chamado",
+      "close": "Concluir",
       "cancel": "Cancelar chamado",
       "convert": "Converter em plano de ação",
       "openWorkFront": "Abrir Frente de Serviço",
@@ -1691,7 +1691,7 @@
       "unlinkWork": "Desfazer Frente de Serviço",
       "addFile": "Adicionar arquivo",
       "takePhoto": "Tirar foto",
-      "start": "Iniciar atendimento",
+      "start": "Iniciar",
       "startError": "Não foi possível iniciar o atendimento."
     },
     "cancelConfirm": {

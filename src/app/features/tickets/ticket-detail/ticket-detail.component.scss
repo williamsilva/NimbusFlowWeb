@@ -1,3 +1,14 @@
+// Espaçamento maior entre Voltar/Editar/Iniciar/Concluir no topo - ficavam grudados demais
+// (pedido do usuário 2026-09-20). app-page-header já projeta com gap-2 (0.5rem) por padrão -
+// esse wrapper é só desta tela, não muda o espaçamento padrão de outras telas que usam o mesmo
+// cabeçalho.
+.ticket-detail-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .ticket-header-card {
   .ticket-numero {
     font-size: 1.1rem;

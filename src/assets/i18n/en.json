@@ -1682,7 +1682,7 @@
       "title": "No tickets found"
     },
     "action": {
-      "close": "Close ticket",
+      "close": "Complete",
       "cancel": "Cancel ticket",
       "convert": "Convert into action plan",
       "openWorkFront": "Open Service Front",
@@ -1691,7 +1691,7 @@
       "unlinkWork": "Undo Service Front",
       "addFile": "Add file",
       "takePhoto": "Take photo",
-      "start": "Start service",
+      "start": "Start",
       "startError": "Could not start the service."
     },
     "cancelConfirm": {
