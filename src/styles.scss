@@ -321,9 +321,13 @@ a,
 /* Botão de trocar modo do menu (TopbarComponent, nimbus-web-commons) - some no celular a pedido
  * do usuário 2026-09-20; sem @Input dedicado no componente compartilhado (usado por 5 apps), a
  * forma menos invasiva de restringir só a esta tela é CSS global (o componente é encapsulado por
- * padrão, então isso não vaza pros outros apps que usam o mesmo pacote). */
+ * padrão, então isso não vaza pros outros apps que usam o mesmo pacote).
+ * !important necessário: o botão também tem a classe .cs-topbar-trigger, cujo `display:
+ * inline-flex` do próprio componente vem com o atributo de encapsulamento do Angular
+ * ([_ngcontent-xxx]), com especificidade maior que uma classe global sozinha - sem isso, o
+ * `display:none` daqui nunca vencia (achado real 2026-09-20, testado até em emulação mobile). */
 @media (max-width: 768px) {
   .cs-layout-mode-trigger {
-    display: none;
+    display: none !important;
   }
 }
