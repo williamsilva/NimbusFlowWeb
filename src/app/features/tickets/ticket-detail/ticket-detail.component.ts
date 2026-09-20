@@ -166,10 +166,12 @@ export class TicketDetailComponent implements OnInit {
     return status === TicketStatusEnum.OPEN || status === TicketStatusEnum.IN_PROGRESS;
   }
 
-  /** Mesma elegibilidade de EDITABLE_STATUSES no backend. */
+  /** Mesma elegibilidade de EDITABLE_STATUSES no backend. CHAMADO_EDIT dedicada, não
+   *  CHAMADO_MANAGE (pedido do usuário 2026-09-20, mesmo padrão de CHAMADO_CANCEL: grupo
+   *  Operacional tem CHAMADO_MANAGE mas não deve poder editar). */
   canEdit(): boolean {
     const t = this.ticket();
-    return !!t && this.policy.canManage() && t.workId == null && this.isOpenLike(t.status);
+    return !!t && this.policy.canEdit() && t.workId == null && this.isOpenLike(t.status);
   }
 
   canStart(): boolean {
