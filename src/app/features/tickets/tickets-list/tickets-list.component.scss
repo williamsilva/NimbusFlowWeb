@@ -160,8 +160,21 @@
     text-align: left;
   }
 
+  // Botões mais afastados e um pouco maiores no celular - ficavam grudados demais pra tocar com
+  // precisão (pedido do usuário 2026-09-20).
   .ticket-card-actions {
     justify-content: flex-end;
+    gap: 0.85rem;
+  }
+
+  .ticket-card-actions .p-button.p-button-sm {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+  }
+
+  .ticket-card-actions .p-button .pi {
+    font-size: 0.85rem !important;
   }
 
   .ticket-card-chevron {
