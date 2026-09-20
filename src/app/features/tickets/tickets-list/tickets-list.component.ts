@@ -38,7 +38,6 @@ import { CompanySettingsApiService } from '@features/service/company-settings.ap
 import { CompanySettingsModel } from '@models/company-settings.models';
 import { WorkModel } from '@models/works.models';
 import { TicketsCreateDialogComponent } from '@features/tickets/tickets-create/tickets-create-dialog.component';
-import { TicketsCloseDialogComponent } from '@features/tickets/tickets-close/tickets-close-dialog.component';
 import { WorksCreateDialogComponent } from '@features/works/works-create/works-create-dialog.component';
 import { ActionPlansCreateDialogComponent } from '@features/action-plans/action-plans-create/action-plans-create-dialog.component';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
@@ -74,7 +73,6 @@ import {
     FiltersPanelComponent,
     StatusBadgeComponent,
     TicketsCreateDialogComponent,
-    TicketsCloseDialogComponent,
     WorksCreateDialogComponent,
     ActionPlansCreateDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
@@ -112,8 +110,6 @@ export class TicketsListComponent extends StatefulListPage<
   periodCreatedAt = signal<PeriodEnum | null>(null);
 
   newVisible = signal(false);
-  closeTicketId = signal<string | null>(null);
-  closeVisible = signal(false);
   convertVisible = signal(false);
   convertingTicket = signal<TicketModel | null>(null);
 
@@ -328,14 +324,6 @@ export class TicketsListComponent extends StatefulListPage<
     this.reloadWithCurrentState();
   }
 
-  canClose(row: TicketModel): boolean {
-    return (
-      this.canManage() &&
-      row.workId == null &&
-      (this.isOpenLike(row) || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
-    );
-  }
-
   /** CHAMADO_CANCEL dedicada, não CHAMADO_MANAGE (achado real 2026-09-19, pedido do usuário:
    *  grupo Operacional pode editar/fechar chamados mas não deve poder cancelar). */
   canCancel(row: TicketModel): boolean {
@@ -356,9 +344,9 @@ export class TicketsListComponent extends StatefulListPage<
     );
   }
 
-  /** Mesma elegibilidade de canClose - um chamado já convertido em plano ainda pode precisar de
-   *  uma Frente de Serviço pra executar (ver TicketService.WORK_LINKABLE_STATUSES no backend).
-   *  workId==null porque, uma vez vinculado, o chamado fica bloqueado (ver TicketDetailComponent) - o próprio
+  /** Um chamado já convertido em plano ainda pode precisar de uma Frente de Serviço pra executar
+   *  (ver TicketService.WORK_LINKABLE_STATUSES no backend). workId==null porque, uma vez
+   *  vinculado, o chamado fica bloqueado (ver TicketDetailComponent) - o próprio
    *  backend agora rejeita vincular de novo sem desfazer antes (TicketService.linkWork), não é só
    *  restrição de tela. Exige também OBRA_MANAGE (não só CHAMADO_MANAGE) - abrir Frente de
    *  Serviço cria uma Work de verdade (WorkService.create exige OBRA_MANAGE) e o próprio
@@ -382,20 +370,6 @@ export class TicketsListComponent extends StatefulListPage<
       row.workId != null &&
       (this.isOpenLike(row) || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
     );
-  }
-
-  goClose(row: TicketModel): void {
-    this.closeTicketId.set(row.id);
-    this.closeVisible.set(true);
-  }
-
-  onCloseVisibleChange(v: boolean): void {
-    this.closeVisible.set(v);
-    if (!v) this.closeTicketId.set(null);
-  }
-
-  onClosed(): void {
-    this.refresh();
   }
 
   goConvert(row: TicketModel): void {

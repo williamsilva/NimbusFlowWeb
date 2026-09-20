@@ -31,13 +31,6 @@
   (visibleChange)="onNewVisibleChange($event)"
 ></app-tickets-create-dialog>
 
-<app-tickets-close-dialog
-  [visible]="closeVisible()"
-  [ticketId]="closeTicketId()"
-  (closed)="onClosed()"
-  (visibleChange)="onCloseVisibleChange($event)"
-></app-tickets-close-dialog>
-
 <app-action-plans-create-dialog
   [visible]="convertVisible()"
   [fromTicket]="convertingTicket()"
@@ -275,17 +268,6 @@
               [disabled]="!canConvert(row)"
               [pTooltip]="'tickets.action.convert' | translate"
               [attr.aria-label]="'tickets.action.convert' | translate"
-              tooltipPosition="top"
-            ></button>
-            <button
-              pButton
-              type="button"
-              icon="pi pi-check"
-              (click)="goClose(row)"
-              class="p-button-text p-button-sm"
-              [disabled]="!canClose(row)"
-              [pTooltip]="'tickets.action.close' | translate"
-              [attr.aria-label]="'tickets.action.close' | translate"
               tooltipPosition="top"
             ></button>
             <button
