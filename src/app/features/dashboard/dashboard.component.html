@@ -1,5 +1,6 @@
 <app-page-header [subtitle]="'dashboard.subtitle' | translate" [compact]="false"></app-page-header>
 
+@if (worksPolicy.canView()) {
 <cs-filters-panel
   [collapsed]="true"
   (clear)="clear()"
@@ -123,12 +124,14 @@
     </div>
   </div>
 
-  <div class="col-12 md:col-3 p-2">
-    <div class="surface-card border-round p-3 h-full">
-      <div class="text-sm opacity-70 mb-1">{{ 'dashboard.kpi.projects' | translate }}</div>
-      <div class="text-2xl font-bold">{{ projects().length }}</div>
+  @if (projectsPolicy.canView()) {
+    <div class="col-12 md:col-3 p-2">
+      <div class="surface-card border-round p-3 h-full">
+        <div class="text-sm opacity-70 mb-1">{{ 'dashboard.kpi.projects' | translate }}</div>
+        <div class="text-2xl font-bold">{{ projects().length }}</div>
+      </div>
     </div>
-  </div>
+  }
 
   <div class="col-12 md:col-3 p-2">
     <div class="surface-card border-round p-3 h-full">
@@ -191,7 +194,9 @@
     </div>
   </div>
 </div>
+}
 
+@if (tasksPolicy.canView()) {
 <div class="grid formgrid gap-0">
   <div class="col-12 p-2">
     <div class="surface-card border-round p-3">
@@ -202,7 +207,9 @@
     </div>
   </div>
 </div>
+}
 
+@if (projectsPolicy.canView()) {
 <div class="grid formgrid gap-0">
   <div class="col-12 p-2">
     <div class="surface-card border-round p-3">
@@ -251,3 +258,4 @@
     </div>
   </div>
 </div>
+}

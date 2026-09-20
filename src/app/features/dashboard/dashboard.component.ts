@@ -18,6 +18,9 @@ import { SuppliersFacade } from '@features/facade/suppliers.facade';
 import { DashboardFilterInput } from '@models/dashboard.models';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
+import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
+import { ProjectsPermissionPolicy } from '@features/projects/projects-permission.policy';
+import { TasksPermissionPolicy } from '@features/tasks/tasks-permission.policy';
 import { projectStatusTone } from '@models/enums/project-status.enum';
 import { WorkStatusEnum, workStatusTone } from '@models/enums/work-status.enum';
 import {
@@ -78,6 +81,12 @@ export class DashboardComponent implements OnInit {
   readonly projectsFacade = inject(ProjectsFacade);
   readonly suppliersFacade = inject(SuppliersFacade);
   readonly worksFacade = inject(WorksFacade);
+
+  /** Achado real 2026-09-20: os widgets financeiros/de Obras e Projetos apareciam pra qualquer
+   *  usuário, mesmo sem permissão de ver Obras/Projetos (grupo Operacional só tem CHAMADO/TAREFA). */
+  readonly worksPolicy = inject(WorksPermissionPolicy);
+  readonly projectsPolicy = inject(ProjectsPermissionPolicy);
+  readonly tasksPolicy = inject(TasksPermissionPolicy);
 
   readonly projects = this.projectsFacade.items;
   readonly projectOptions = this.projectsFacade.options;
@@ -158,15 +167,24 @@ export class DashboardComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.facade.load();
-    this.projectsFacade.loadAll();
-    this.projectsFacade.loadOptions();
-    this.suppliersFacade.loadSupplierOptions();
-    this.worksFacade.loadOptions();
+    this.facade.load(undefined, this.loadOptions());
+
+    if (this.worksPolicy.canView()) {
+      this.suppliersFacade.loadSupplierOptions();
+      this.worksFacade.loadOptions();
+    }
+    if (this.projectsPolicy.canView()) {
+      this.projectsFacade.loadAll();
+      this.projectsFacade.loadOptions();
+    }
+  }
+
+  private loadOptions() {
+    return { loadWorks: this.worksPolicy.canView(), loadTasks: this.tasksPolicy.canView() };
   }
 
   search(): void {
-    this.facade.load(this.buildFilter());
+    this.facade.load(this.buildFilter(), this.loadOptions());
   }
 
   clear(): void {
@@ -175,7 +193,7 @@ export class DashboardComponent implements OnInit {
     this.workId.set(null);
     this.totalAmountFrom.set(null);
     this.totalAmountTo.set(null);
-    this.facade.load();
+    this.facade.load(undefined, this.loadOptions());
   }
 
   private buildFilter(): DashboardFilterInput {
