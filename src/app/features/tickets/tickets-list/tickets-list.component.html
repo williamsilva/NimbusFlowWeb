@@ -31,13 +31,6 @@
   (visibleChange)="onNewVisibleChange($event)"
 ></app-tickets-create-dialog>
 
-<app-tickets-edit-dialog
-  (updated)="onUpdated()"
-  [visible]="editVisible()"
-  [ticket]="editingTicket()"
-  (visibleChange)="onEditVisibleChange($event)"
-></app-tickets-edit-dialog>
-
 <app-tickets-close-dialog
   [visible]="closeVisible()"
   [ticketId]="closeTicketId()"
@@ -206,7 +199,7 @@
     [paginatorDropdownAppendTo]="'body'"
     (onPage)="onPageChange($event)"
     [rowsPerPageOptions]="rowsPerPageOptions"
-    [tableStyle]="{ width: '100%', 'min-width': '84.5rem' }"
+    [tableStyle]="{ width: '100%', 'min-width': '82rem' }"
     [currentPageReportTemplate]="'pagination.report' | translate"
   >
     <ng-template pTemplate="colgroup">
@@ -220,7 +213,7 @@
         <col style="width: 170px" />
         <col style="width: 150px" />
         <col style="width: 110px" />
-        <col style="width: 132px" />
+        <col style="width: 90px" />
       </colgroup>
     </ng-template>
 
@@ -515,28 +508,6 @@
           [attr.data-label]="'common.actions' | translate"
         >
           <div class="table-actions">
-            <button
-              pButton
-              type="button"
-              icon="pi pi-pencil"
-              (click)="$event.stopPropagation(); goEdit(row)"
-              class="p-button-text p-button-sm"
-              [disabled]="!canEdit(row)"
-              [pTooltip]="'common.edit' | translate"
-              [attr.aria-label]="'common.edit' | translate"
-              tooltipPosition="top"
-            ></button>
-            <button
-              pButton
-              type="button"
-              icon="pi pi-play"
-              (click)="$event.stopPropagation(); goStart(row)"
-              class="p-button-text p-button-sm"
-              [disabled]="!canStart(row)"
-              [pTooltip]="'tickets.action.start' | translate"
-              [attr.aria-label]="'tickets.action.start' | translate"
-              tooltipPosition="top"
-            ></button>
             @if (row.workId === null) {
               <button
                 pButton

@@ -39,7 +39,6 @@ import { TICKET_PRIORITY_VALUES, ticketPriorityTone } from '@models/enums/ticket
 import { TicketModel, TicketsFiltersState, formatTicketNumero } from '@models/tickets.models';
 import { WorkModel } from '@models/works.models';
 import { TicketsCreateDialogComponent } from '@features/tickets/tickets-create/tickets-create-dialog.component';
-import { TicketsEditDialogComponent } from '@features/tickets/tickets-edit/tickets-edit-dialog.component';
 import { TicketsCloseDialogComponent } from '@features/tickets/tickets-close/tickets-close-dialog.component';
 import { WorksCreateDialogComponent } from '@features/works/works-create/works-create-dialog.component';
 import { ActionPlansCreateDialogComponent } from '@features/action-plans/action-plans-create/action-plans-create-dialog.component';
@@ -77,7 +76,6 @@ import {
     FiltersPanelComponent,
     StatusBadgeComponent,
     TicketsCreateDialogComponent,
-    TicketsEditDialogComponent,
     TicketsCloseDialogComponent,
     WorksCreateDialogComponent,
     ActionPlansCreateDialogComponent,
@@ -114,8 +112,6 @@ export class TicketsListComponent extends StatefulListPage<
   periodCreatedAt = signal<PeriodEnum | null>(null);
 
   newVisible = signal(false);
-  editVisible = signal(false);
-  editingTicket = signal<TicketModel | null>(null);
   closeTicketId = signal<string | null>(null);
   closeVisible = signal(false);
   convertVisible = signal(false);
@@ -251,63 +247,12 @@ export class TicketsListComponent extends StatefulListPage<
     return row.status === TicketStatusEnum.OPEN || row.status === TicketStatusEnum.IN_PROGRESS;
   }
 
-  /** Mesma elegibilidade de EDITABLE_STATUSES no backend (TicketService#update). workId!=null
-   *  bloqueia (chamado vinculado a uma Frente de Serviço passa a ser tratado só por ela - ver
-   *  TicketService.requireNotLinkedToWork no backend); usar "Desfazer Frente de Serviço" pra
-   *  liberar de novo. */
-  canEdit(row: TicketModel): boolean {
-    return this.canManage() && row.workId == null && this.isOpenLike(row);
-  }
-
-  /** "Iniciar atendimento" (OPEN -> IN_PROGRESS) - só sai de OPEN, não faz sentido iniciar de
-   *  novo um chamado já em andamento. Pedido do usuário 2026-09-19. */
-  canStart(row: TicketModel): boolean {
-    return this.canManage() && row.workId == null && row.status === TicketStatusEnum.OPEN;
-  }
-
-  goStart(row: TicketModel): void {
-    if (!this.canStart(row)) return;
-
-    this.facade
-      .start(row.id)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: () =>
-          this.toast.add({
-            severity: 'success',
-            summary: this.i18n.tUi('common.success'),
-            detail: this.i18n.tUi('tickets.status.IN_PROGRESS' as never),
-          }),
-        error: () =>
-          this.toast.add({
-            severity: 'error',
-            summary: this.i18n.tUi('common.error'),
-            detail: this.i18n.tUi('tickets.action.startError' as never),
-          }),
-      });
-  }
-
   goDetail(row: TicketModel): void {
     void this.router.navigate(['/tickets', row.id]);
   }
 
   formatNumero(numero: number): string {
     return formatTicketNumero(numero);
-  }
-
-  goEdit(row: TicketModel): void {
-    if (!this.canEdit(row)) return;
-    this.editingTicket.set(row);
-    this.editVisible.set(true);
-  }
-
-  onEditVisibleChange(v: boolean): void {
-    this.editVisible.set(v);
-    if (!v) this.editingTicket.set(null);
-  }
-
-  onUpdated(): void {
-    this.refresh();
   }
 
   canClose(row: TicketModel): boolean {
@@ -340,7 +285,7 @@ export class TicketsListComponent extends StatefulListPage<
 
   /** Mesma elegibilidade de canClose - um chamado já convertido em plano ainda pode precisar de
    *  uma Frente de Serviço pra executar (ver TicketService.WORK_LINKABLE_STATUSES no backend).
-   *  workId==null porque, uma vez vinculado, o chamado fica bloqueado (ver canEdit) - o próprio
+   *  workId==null porque, uma vez vinculado, o chamado fica bloqueado (ver TicketDetailComponent) - o próprio
    *  backend agora rejeita vincular de novo sem desfazer antes (TicketService.linkWork), não é só
    *  restrição de tela. Exige também OBRA_MANAGE (não só CHAMADO_MANAGE) - abrir Frente de
    *  Serviço cria uma Work de verdade (WorkService.create exige OBRA_MANAGE) e o próprio
