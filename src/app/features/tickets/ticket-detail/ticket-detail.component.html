@@ -91,6 +91,21 @@
   <div class="section-title mb-2">{{ 'tickets.detail.tabContent' | translate }}</div>
   <p class="ticket-description">{{ t.description }}</p>
 
+  @if (t.attachmentUrl) {
+    <div class="ticket-attachment-card mt-3">
+      @if (isImageAttachment(t.attachmentUrl)) {
+        <a [href]="t.attachmentUrl" target="_blank" rel="noopener">
+          <img [src]="t.attachmentUrl" [alt]="'tickets.detail.attachment' | translate" class="ticket-attachment-image" />
+        </a>
+      } @else {
+        <a [href]="t.attachmentUrl" target="_blank" rel="noopener" class="ticket-attachment-link">
+          <i class="pi pi-paperclip"></i>
+          {{ 'tickets.detail.attachment' | translate }}
+        </a>
+      }
+    </div>
+  }
+
   <dl class="cs-detail-list mt-3">
     <dt>{{ 'tickets.columns.type' | translate }}</dt>
     <dd>{{ 'tickets.type.' + t.type | translate }}</dd>

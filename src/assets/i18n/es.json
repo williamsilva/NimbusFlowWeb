@@ -1712,7 +1712,8 @@
       "target": "Dirigido a",
       "tabContent": "Contenido",
       "tabComments": "Comentarios",
-      "resolutionNote": "Nota de resolución"
+      "resolutionNote": "Nota de resolución",
+      "attachment": "Adjunto"
     },
     "comments": {
       "placeholder": "Escriba un comentario...",

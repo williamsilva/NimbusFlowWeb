@@ -1712,7 +1712,8 @@
       "target": "Directed to",
       "tabContent": "Content",
       "tabComments": "Comments",
-      "resolutionNote": "Resolution note"
+      "resolutionNote": "Resolution note",
+      "attachment": "Attachment"
     },
     "comments": {
       "placeholder": "Write a comment...",

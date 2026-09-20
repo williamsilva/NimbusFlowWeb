@@ -149,6 +149,15 @@ export class TicketDetailComponent implements OnInit {
     return formatTicketNumero(numero);
   }
 
+  /** attachmentUrl não guarda contentType (só o path pré-assinado) - infere pela extensão do
+   *  arquivo, mesma limitação já aceita pros anexos de comentário (ver TicketCommentAttachment
+   *  no backend, que aí sim guarda contentType, mas essa tela usa só a URL). */
+  private static readonly IMAGE_EXTENSIONS = /\.(png|jpe?g|gif|webp|bmp|svg)(\?|$)/i;
+
+  isImageAttachment(url: string | null): boolean {
+    return !!url && TicketDetailComponent.IMAGE_EXTENSIONS.test(url);
+  }
+
   goBack(): void {
     this.router.navigate(['/tickets']);
   }
