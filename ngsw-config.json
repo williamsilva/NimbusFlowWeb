@@ -16,14 +16,6 @@
       }
     },
     {
-      "name": "lazy-chunks",
-      "installMode": "lazy",
-      "updateMode": "lazy",
-      "resources": {
-        "files": ["/*.js", "/*.css"]
-      }
-    },
-    {
       "name": "assets",
       "installMode": "lazy",
       "updateMode": "prefetch",
