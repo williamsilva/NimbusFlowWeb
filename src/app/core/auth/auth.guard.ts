@@ -24,7 +24,12 @@ export const authGuard: CanActivateFn = async (_route, state: RouterStateSnapsho
 
   const returnUrl = auth.consumeReturnUrl();
   if (returnUrl && returnUrl !== state.url) {
-    return router.parseUrl(returnUrl);
+    // navigateByUrl (não retornar o UrlTree direto do guard) garante que a navegação passa de
+    // novo por applyRedirects - importante pra um returnUrl antigo, salvo no sessionStorage antes
+    // de um deploy que mudou as rotas (ex.: "/dashboard" virou redirect pra "/dashboard/works"),
+    // continuar resolvendo pro destino atual em vez de ficar preso na rota antiga.
+    void router.navigateByUrl(returnUrl);
+    return false;
   }
 
   return true;

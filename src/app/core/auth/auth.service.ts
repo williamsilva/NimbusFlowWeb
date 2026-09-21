@@ -106,6 +106,12 @@ export class AuthService {
   consumeReturnUrl(): string | null {
     const url = sessionStorage.getItem(AuthService.RETURN_URL_KEY);
     if (url) sessionStorage.removeItem(AuthService.RETURN_URL_KEY);
+
+    // Compatibilidade com um returnUrl salvo antes da separação do dashboard em 4 (2026-09-21):
+    // "/dashboard" era rota terminal, hoje é só redirect - sem isso, quem tinha esse valor preso
+    // no sessionStorage no momento do deploy volta pra uma URL que não resolve mais sozinha.
+    if (url === '/dashboard') return '/dashboard/works';
+
     return url;
   }
 
