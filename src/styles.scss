@@ -23,14 +23,20 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Botões de ação do cs-page-header (Atualizar/Novo.../etc, projetados via <ng-content> - cada
- * tela declara os próprios botões, cs-page-header não controla o conteúdo diretamente, por
+/* Botões de ação do app-page-header (Atualizar/Novo.../etc, projetados via <ng-content> - cada
+ * tela declara os próprios botões, app-page-header não controla o conteúdo diretamente, por
  * isso é global e não um estilo do próprio componente) viram só ícone no mobile - cara de app
  * (barra de ações compacta), não de site. "Visually hidden" (não display:none) pra manter o
  * texto acessível pra leitor de tela - só o rótulo VISUAL some, o nome acessível do botão
- * continua o mesmo. */
+ * continua o mesmo.
+ * Seletor corrigido pra "app-page-header" (2026-09-21) - a regra usava "cs-page-header", uma tag
+ * que não existe neste app (a tag real é "app-page-header"), então nunca era aplicada de verdade;
+ * o "Novo X" continuava aparecendo grande no celular (achado real, reportado pelo usuário na tela
+ * de Chamados). Aproveitado pra deixar a ação primária ("Novo X", classe p-button-info - único uso
+ * dessa classe nos cabeçalhos, sempre o botão de criar) redonda e empurrada pra direita da linha,
+ * distinta do Atualizar (ação secundária, quadrado discreto). */
 @media (max-width: 768px) {
-  cs-page-header .p-button-label {
+  app-page-header .p-button-label {
     position: absolute !important;
     width: 1px !important;
     height: 1px !important;
@@ -42,11 +48,17 @@ body {
     border: 0 !important;
   }
 
-  cs-page-header .p-button {
+  app-page-header .p-button {
     width: 2.25rem;
+    height: 2.25rem;
     padding-left: 0 !important;
     padding-right: 0 !important;
     justify-content: center;
+  }
+
+  app-page-header .p-button-info {
+    margin-left: auto;
+    border-radius: 50%;
   }
 }
 
