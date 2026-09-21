@@ -1157,7 +1157,9 @@
       "projects": "Projects",
       "overdueWorks": "Overdue service fronts",
       "pending": "Pending items",
-      "pendingBreakdown": "{addendums, plural, one {# addendum} other {# addendums}} • {measurements, plural, one {# measurement} other {# measurements}}"
+      "pendingBreakdown": "{addendums, plural, one {# addendum} other {# addendums}} • {measurements, plural, one {# measurement} other {# measurements}}",
+      "teamCompletedTasks": "Tasks completed by the team",
+      "myCompletedTasks": "My completed tasks"
     },
     "charts": {
       "valueByStatus": {

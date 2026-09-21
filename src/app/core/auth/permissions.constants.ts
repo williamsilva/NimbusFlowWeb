@@ -225,6 +225,16 @@ export const PERMISSIONS = {
   },
 
   /**
+   * Ranking NOMINAL de funcionários por tarefas concluídas (dashboard) - permissão dedicada, só
+   * ADMINISTRADOR (pedido do usuário 2026-09-20, preocupação legal/trabalhista com expor
+   * desempenho individual comparativo pro resto da equipe). Colaboradores comuns (TAREFA_CONSULT/
+   * EXECUTE) continuam vendo métricas agregadas sem nome (ver DashboardComponent).
+   */
+  DASHBOARD: {
+    RANKING_VIEW: 'DASHBOARD_RANKING_CONSULT',
+  },
+
+  /**
    * Aditivo contratual e Parcela/Pagamento de Obra (com.nimbusflow.works.core.
    * AddendumApprovalService/InstallmentService) - diferente de OBRA/FORNECEDOR/SUGESTAO, aqui há
    * variantes distintas por ação de escrita (a alçada de aprovação de Aditivo depende do valor
@@ -332,6 +342,7 @@ export const ALL_PERMISSIONS: Permission[] = [
   ...Object.values(PERMISSIONS.CHAMADO),
   ...Object.values(PERMISSIONS.PLANO_ACAO),
   ...Object.values(PERMISSIONS.TAREFA),
+  ...Object.values(PERMISSIONS.DASHBOARD),
   ...Object.values(PERMISSIONS.EQUIPAMENTO),
   ...Object.values(PERMISSIONS.MANUTENCAO),
   ...Object.values(PERMISSIONS.AGENDA_MANUTENCAO),

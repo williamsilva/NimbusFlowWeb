@@ -53,6 +53,15 @@ export interface EmployeeTaskRankingModel {
   completedTasksCount: number;
 }
 
+/** Espelha com.nimbusflow.works.dto.response.TeamTaskProgressResponse - métricas agregadas de
+ *  tarefas concluídas, sem quebrar por funcionário nominalmente. Disponível pra qualquer um com
+ *  TAREFA_CONSULT ou TAREFA_EXECUTE, diferente do ranking nominal acima (DASHBOARD_RANKING_CONSULT,
+ *  só ADMINISTRADOR - pedido do usuário 2026-09-20, preocupação legal/trabalhista). */
+export interface TeamTaskProgressModel {
+  teamCompletedTasksCount: number;
+  myCompletedTasksCount: number;
+}
+
 /** Filtro opcional da página inicial - espelha com.nimbusflow.works.dto.request.DashboardFilterRequest. */
 export interface DashboardFilterInput {
   projectIds?: string[] | null;
@@ -81,4 +90,10 @@ export function mapEmployeeTaskRankingApiModels(
   items: EmployeeTaskRankingModel[] | null | undefined,
 ): EmployeeTaskRankingModel[] {
   return items ?? [];
+}
+
+export function mapTeamTaskProgressApiModel(
+  input: TeamTaskProgressModel | null | undefined,
+): TeamTaskProgressModel | null {
+  return input ?? null;
 }

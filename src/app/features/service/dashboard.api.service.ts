@@ -9,9 +9,11 @@ import {
   DashboardFilterInput,
   DashboardSummaryModel,
   EmployeeTaskRankingModel,
+  TeamTaskProgressModel,
   mapDashboardAnalyticsApiModel,
   mapDashboardSummaryApiModel,
   mapEmployeeTaskRankingApiModels,
+  mapTeamTaskProgressApiModel,
 } from '@models/dashboard.models';
 
 @Injectable({ providedIn: 'root' })
@@ -31,12 +33,21 @@ export class DashboardApiService {
       .pipe(map(mapDashboardAnalyticsApiModel));
   }
 
-  /** Ranking de funcionários por tarefas concluídas - sem filtro (não tem correspondência com
-   *  DashboardFilterRequest hoje, já que Task não tem workId/projectId próprio). */
+  /** Ranking NOMINAL de funcionários por tarefas concluídas - requer DASHBOARD_RANKING_CONSULT
+   *  (só ADMINISTRADOR). Sem filtro (não tem correspondência com DashboardFilterRequest hoje, já
+   *  que Task não tem workId/projectId próprio). */
   employeeTaskRanking() {
     return this.http
       .get<EmployeeTaskRankingModel[]>(`${this.baseUrl}/employee-task-ranking`)
       .pipe(map(mapEmployeeTaskRankingApiModels));
+  }
+
+  /** Métricas agregadas (sem nome) de tarefas concluídas - aberto a TAREFA_CONSULT/EXECUTE, pra
+   *  colaboradores comuns que não têm DASHBOARD_RANKING_CONSULT. */
+  teamTaskProgress() {
+    return this.http
+      .get<TeamTaskProgressModel>(`${this.baseUrl}/team-task-progress`)
+      .pipe(map(mapTeamTaskProgressApiModel));
   }
 
   private buildParams(filter?: DashboardFilterInput): HttpParams {

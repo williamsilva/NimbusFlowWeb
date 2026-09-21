@@ -21,6 +21,7 @@ import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge
 import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
 import { ProjectsPermissionPolicy } from '@features/projects/projects-permission.policy';
 import { TasksPermissionPolicy } from '@features/tasks/tasks-permission.policy';
+import { DashboardPermissionPolicy } from '@features/dashboard/dashboard-permission.policy';
 import { projectStatusTone } from '@models/enums/project-status.enum';
 import { WorkStatusEnum, workStatusTone } from '@models/enums/work-status.enum';
 import {
@@ -87,6 +88,7 @@ export class DashboardComponent implements OnInit {
   readonly worksPolicy = inject(WorksPermissionPolicy);
   readonly projectsPolicy = inject(ProjectsPermissionPolicy);
   readonly tasksPolicy = inject(TasksPermissionPolicy);
+  readonly dashboardPolicy = inject(DashboardPermissionPolicy);
 
   readonly projects = this.projectsFacade.items;
   readonly projectOptions = this.projectsFacade.options;
@@ -158,6 +160,11 @@ export class DashboardComponent implements OnInit {
     return Object.values(byStatus).reduce((sum, count) => sum + (count ?? 0), 0);
   });
 
+  /** Métricas agregadas (sem nome), disponíveis pra qualquer um com TAREFA_CONSULT/EXECUTE - ver
+   *  DashboardPermissionPolicy/dashboard.facade.ts loadEmployeeRanking vs loadTasks. */
+  readonly teamCompletedTasksCount = computed(() => this.facade.teamTaskProgress()?.teamCompletedTasksCount ?? 0);
+  readonly myCompletedTasksCount = computed(() => this.facade.teamTaskProgress()?.myCompletedTasksCount ?? 0);
+
   readonly worksByStatusEntries = computed(() => {
     this.i18n.getAppliedLang();
     const byStatus = this.facade.summary()?.worksByStatus ?? {};
@@ -180,7 +187,11 @@ export class DashboardComponent implements OnInit {
   }
 
   private loadOptions() {
-    return { loadWorks: this.worksPolicy.canView(), loadTasks: this.tasksPolicy.canView() };
+    return {
+      loadWorks: this.worksPolicy.canView(),
+      loadTasks: this.tasksPolicy.canView(),
+      loadEmployeeRanking: this.dashboardPolicy.canViewEmployeeRanking(),
+    };
   }
 
   search(): void {
