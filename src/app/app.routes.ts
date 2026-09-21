@@ -1,9 +1,8 @@
-import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
 
 import { authGuard } from '@core/auth/auth.guard';
+import { dashboardHomeGuard } from '@core/auth/dashboard-home.guard';
 import { permissionGuard } from '@core/auth/permission.guard';
-import { PermissionService } from '@core/auth/permission.service';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { LayoutComponent } from '@layout/layout.component';
 
@@ -15,34 +14,16 @@ export const appRoutes: Routes = [
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
 
-      // Dashboard virou 4 (pedido do usuário 2026-09-21) - /dashboard não pode mais mandar todo
-      // mundo pro de Obras de forma fixa: quem não tem OBRA_CONSULT batia direto no /forbidden
-      // assim que logava. RedirectFunction (roda em injection context, pode usar inject()) escolhe
-      // o primeiro dashboard que o usuário realmente enxerga, na mesma ordem do menu; só cai em
-      // /forbidden se o usuário não tiver acesso a nenhum dos 4.
+      // Dashboard virou 4 (pedido do usuário 2026-09-21) - dashboardHomeGuard escolhe o primeiro
+      // dashboard que o usuário realmente enxerga (Obras -> Chamados -> Tarefas -> Planos de Ação),
+      // só caindo em /forbidden se ele não tiver acesso a nenhum dos 4. Ver comentário no próprio
+      // guard sobre por que isso tem que ser canActivate e não uma `redirectTo` function.
       {
         path: 'dashboard',
         pathMatch: 'full',
-        redirectTo: () => {
-          const perms = inject(PermissionService);
-
-          if (perms.canAccess([PERMISSIONS.SUPPORT, PERMISSIONS.OBRA.VIEW])) {
-            return 'dashboard/works';
-          }
-          if (perms.canAccess([PERMISSIONS.SUPPORT, PERMISSIONS.CHAMADO.VIEW])) {
-            return 'dashboard/tickets';
-          }
-          if (
-            perms.canAccess([PERMISSIONS.SUPPORT, PERMISSIONS.TAREFA.VIEW, PERMISSIONS.TAREFA.EXECUTE])
-          ) {
-            return 'dashboard/tasks';
-          }
-          if (perms.canAccess([PERMISSIONS.SUPPORT, PERMISSIONS.PLANO_ACAO.VIEW])) {
-            return 'dashboard/action-plans';
-          }
-
-          return '/forbidden';
-        },
+        canActivate: [dashboardHomeGuard],
+        loadComponent: () =>
+          import('./features/error/forbidden/forbidden.page').then((m) => m.ForbiddenPage),
       },
 
       {
