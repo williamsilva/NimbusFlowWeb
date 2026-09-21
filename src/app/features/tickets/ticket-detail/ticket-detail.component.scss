@@ -64,6 +64,31 @@
   font-size: 0.85rem;
 }
 
+// Galeria de evidências fotográficas do fechamento (pedido do usuário 2026-09-21: até aqui
+// closePhotos vinha no TicketModel mas não era exibido em lugar nenhum na consulta do chamado).
+// Miniaturas fixas (várias fotos possíveis, ao contrário do anexo único da criação acima).
+.ticket-close-photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ticket-close-photo-thumb {
+  display: block;
+  width: 90px;
+  height: 90px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--surface-border);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
 .cs-detail-list {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -95,6 +120,21 @@
   font-size: 0.8rem;
   text-decoration: none;
   color: var(--primary-color);
+}
+
+// Anexo de comentário que é imagem de verdade (contentType image/*, ver isImageContentType no
+// componente) - mostra a miniatura em vez de só o nome do arquivo (pedido do usuário 2026-09-21).
+.comment-attachment-image-link {
+  display: block;
+}
+
+.comment-attachment-image {
+  max-width: 160px;
+  max-height: 120px;
+  border-radius: 8px;
+  border: 1px solid var(--surface-border);
+  object-fit: cover;
+  display: block;
 }
 
 .comment-file-chip {

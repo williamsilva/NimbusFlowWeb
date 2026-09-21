@@ -149,13 +149,24 @@ export class TicketDetailComponent implements OnInit {
     return formatTicketNumero(numero);
   }
 
-  /** attachmentUrl não guarda contentType (só o path pré-assinado) - infere pela extensão do
-   *  arquivo, mesma limitação já aceita pros anexos de comentário (ver TicketCommentAttachment
-   *  no backend, que aí sim guarda contentType, mas essa tela usa só a URL). */
+  /** attachmentUrl (anexo da criação) e closePhotos (evidência do fechamento) não guardam
+   *  contentType - só o path pré-assinado - então infere pela extensão do arquivo. Evidência
+   *  fotográfica é sempre imagem por regra de negócio (upload restrito a image/* no diálogo de
+   *  fechamento, ver TicketsCloseDialogComponent), mas a checagem é mantida por defesa em
+   *  profundidade. Anexo de comentário já guarda contentType de verdade - ver
+   *  isImageContentType abaixo, não usa esta regex. */
   private static readonly IMAGE_EXTENSIONS = /\.(png|jpe?g|gif|webp|bmp|svg)(\?|$)/i;
 
   isImageAttachment(url: string | null): boolean {
     return !!url && TicketDetailComponent.IMAGE_EXTENSIONS.test(url);
+  }
+
+  /** Anexo de comentário aceita qualquer tipo de arquivo (não só foto, ver
+   *  TicketCommentService#create) - diferente do anexo da criação/evidência do fechamento, aqui
+   *  dá pra confiar no contentType de verdade (pedido do usuário 2026-09-21: mostrar as imagens
+   *  de comentário/fechamento na consulta do chamado, não só o nome do arquivo). */
+  isImageContentType(contentType: string | null | undefined): boolean {
+    return !!contentType && contentType.startsWith('image/');
   }
 
   goBack(): void {
