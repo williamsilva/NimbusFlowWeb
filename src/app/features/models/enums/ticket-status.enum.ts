@@ -8,6 +8,9 @@ export enum TicketStatusEnum {
    *  "ainda ativo" nos mesmos lugares que hoje só aceitam OPEN. Pedido do usuário 2026-09-19. */
   IN_PROGRESS = 'IN_PROGRESS',
   CONVERTED_TO_ACTION_PLAN = 'CONVERTED_TO_ACTION_PLAN',
+  /** Vinculado a uma Frente de Serviço (ver TicketsListComponent#goOpenWorkFront) - antes não
+   *  mudava o status, só workId (pedido do usuário 2026-09-21). */
+  CONVERTED_TO_WORK = 'CONVERTED_TO_WORK',
   CLOSED = 'CLOSED',
   CANCELLED = 'CANCELLED',
 }
@@ -16,6 +19,7 @@ export const TICKET_STATUS_VALUES: TicketStatusEnum[] = [
   TicketStatusEnum.OPEN,
   TicketStatusEnum.IN_PROGRESS,
   TicketStatusEnum.CONVERTED_TO_ACTION_PLAN,
+  TicketStatusEnum.CONVERTED_TO_WORK,
   TicketStatusEnum.CLOSED,
   TicketStatusEnum.CANCELLED,
 ];
@@ -24,6 +28,7 @@ const TONE_MAP: Record<TicketStatusEnum, StatusTone> = {
   [TicketStatusEnum.OPEN]: 'info',
   [TicketStatusEnum.IN_PROGRESS]: 'warn',
   [TicketStatusEnum.CONVERTED_TO_ACTION_PLAN]: 'warn',
+  [TicketStatusEnum.CONVERTED_TO_WORK]: 'warn',
   [TicketStatusEnum.CLOSED]: 'success',
   [TicketStatusEnum.CANCELLED]: 'danger',
 };

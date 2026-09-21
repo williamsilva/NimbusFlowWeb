@@ -1667,6 +1667,7 @@
       "OPEN": "Open",
       "IN_PROGRESS": "In progress",
       "CONVERTED_TO_ACTION_PLAN": "Converted to plan",
+      "CONVERTED_TO_WORK": "Converted to service front",
       "CLOSED": "Closed",
       "CANCELLED": "Cancelled",
       "closed": "Ticket closed successfully.",
@@ -1692,6 +1693,7 @@
       "workLinked": "Service Front linked successfully.",
       "workLinkError": "Could not link the Service Front.",
       "unlinkWork": "Undo Service Front",
+      "unlinkActionPlan": "Undo plan conversion",
       "addFile": "Add file",
       "takePhoto": "Take photo",
       "start": "Start",
@@ -1706,6 +1708,12 @@
       "message": "Undo the Service Front \"{workName}\"? It will be deleted (only possible with no addendums, measurements or payments).",
       "success": "Service Front undone and deleted successfully.",
       "error": "Could not undo: the Service Front already has addendums, measurements or payments linked."
+    },
+    "unlinkActionPlanConfirm": {
+      "header": "Undo plan conversion",
+      "message": "Undo this ticket's conversion into an action plan? The plan will be deleted (only possible while it hasn't started and has no tasks yet).",
+      "success": "Conversion undone and action plan deleted successfully.",
+      "error": "Could not undo: the action plan has already started or already has tasks linked."
     },
     "mobile": {
       "createdBy": "Created by {name} on {date}"

@@ -19,8 +19,9 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { STATE_KEY } from '@features/state-key.constants';
-import { WorksFacade } from '@features/facade/works.facade';
+import { UsersFacade } from '@features/facade/users.facade';
 import { TicketsFacade } from '@features/facade/tickets.facade';
+import { DepartmentsFacade } from '@features/facade/departments.facade';
 import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
@@ -84,7 +85,8 @@ export class TicketsListComponent extends StatefulListPage<
 > implements OnInit {
   protected override readonly i18n = inject(I18nService);
   readonly facade = inject(TicketsFacade);
-  readonly worksFacade = inject(WorksFacade);
+  readonly usersFacade = inject(UsersFacade);
+  readonly departmentsFacade = inject(DepartmentsFacade);
   protected readonly toast = inject(MessageService);
   protected readonly confirm = inject(ConfirmationService);
   protected readonly policy = inject(TicketsPermissionPolicy);
@@ -102,10 +104,11 @@ export class TicketsListComponent extends StatefulListPage<
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
 
   title = signal('');
-  status = signal<string[] | null>(null);
+  status = signal<string[] | null>(this.defaultStatus());
   types = signal<string[] | null>(null);
   priorities = signal<string[] | null>(null);
-  workIds = signal<string[] | null>(null);
+  targetDepartmentIds = signal<string[] | null>(null);
+  targetUserIds = signal<string[] | null>(null);
   createdAt = signal<string | string[] | null>(null);
   periodCreatedAt = signal<PeriodEnum | null>(null);
 
@@ -146,7 +149,8 @@ export class TicketsListComponent extends StatefulListPage<
     return allPeriodEnum().map((value) => ({ label: periodEnumLabel(value, this.i18n), value }));
   });
 
-  readonly workOptions = this.worksFacade.options;
+  readonly departmentOptions = this.departmentsFacade.options;
+  readonly userOptions = this.usersFacade.options;
   /** Pré-preenche o nome da Frente ao criar uma nova a partir do chamado (ver
    *  WorksCreateDialogComponent#initialName) - deriva do id compartilhado em vez de um signal
    *  próprio, já que workFrontTicketId já identifica o chamado em uso nesse fluxo. */
@@ -167,7 +171,6 @@ export class TicketsListComponent extends StatefulListPage<
     const status = this.status();
     const types = this.types();
     const priorities = this.priorities();
-    const workIds = this.workIds();
 
     if (title) {
       items.push({ label: this.i18n.tUi('tickets.fields.title'), value: title });
@@ -193,12 +196,21 @@ export class TicketsListComponent extends StatefulListPage<
         .join(', ');
       items.push({ label: this.i18n.tUi('tickets.fields.priority'), value: labels });
     }
-    if (workIds?.length) {
-      const labels = this.workOptions()
-        .filter((opt) => workIds.includes(opt.value))
+    const targetDepartmentIds = this.targetDepartmentIds();
+    if (targetDepartmentIds?.length) {
+      const labels = this.departmentOptions()
+        .filter((opt) => targetDepartmentIds.includes(opt.value))
         .map((opt) => opt.label)
         .join(', ');
-      items.push({ label: this.i18n.tUi('tickets.fields.work'), value: labels || workIds.join(', ') });
+      items.push({ label: this.i18n.tUi('tickets.fields.targetDepartment'), value: labels || targetDepartmentIds.join(', ') });
+    }
+    const targetUserIds = this.targetUserIds();
+    if (targetUserIds?.length) {
+      const labels = this.userOptions()
+        .filter((opt) => targetUserIds.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+      items.push({ label: this.i18n.tUi('tickets.fields.targetUser'), value: labels || targetUserIds.join(', ') });
     }
     const createdAtLabel = this.formatActiveFilterPeriodDateValue(
       this.periodCreatedAt(),
@@ -213,12 +225,25 @@ export class TicketsListComponent extends StatefulListPage<
   });
 
   ngOnInit() {
-    this.worksFacade.loadOptions();
+    this.departmentsFacade.loadOptions();
+    this.usersFacade.loadUsersOptions();
     this.initStatefulList();
     this.companyApi
       .getDisplaySettings()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({ next: (c) => this.company.set(c) });
+  }
+
+  /** "Aberto" + "Em andamento" pré-selecionados, mas só quando o painel de filtros está vazio de
+   *  verdade (nem restaurado do localStorage, nem definido pelo usuário) - pedido do usuário
+   *  2026-09-21, mesmo padrão de WorksListComponent#defaultStatus (ver
+   *  applyDefaultAdvancedFiltersIfEmpty em StatefulListPage). */
+  private defaultStatus(): string[] {
+    return [TicketStatusEnum.OPEN, TicketStatusEnum.IN_PROGRESS];
+  }
+
+  protected override applyDefaultAdvancedFilters(): void {
+    this.status.set(this.defaultStatus());
   }
 
   tone(status: string): ReturnType<typeof ticketStatusTone> {
@@ -344,32 +369,44 @@ export class TicketsListComponent extends StatefulListPage<
     );
   }
 
-  /** Um chamado já convertido em plano ainda pode precisar de uma Frente de Serviço pra executar
-   *  (ver TicketService.WORK_LINKABLE_STATUSES no backend). workId==null porque, uma vez
-   *  vinculado, o chamado fica bloqueado (ver TicketDetailComponent) - o próprio
-   *  backend agora rejeita vincular de novo sem desfazer antes (TicketService.linkWork), não é só
-   *  restrição de tela. Exige também OBRA_MANAGE (não só CHAMADO_MANAGE) - abrir Frente de
-   *  Serviço cria uma Work de verdade (WorkService.create exige OBRA_MANAGE) e o próprio
-   *  TicketService.linkWork passou a exigir OBRA_MANAGE também (achado real 2026-09-19, pedido do
-   *  usuário: grupo Operacional não pode abrir Frente de Serviço a partir de um chamado). */
+  /** As duas conversões (Frente/Plano de Ação) são mutuamente exclusivas (pedido do usuário
+   *  2026-09-21) - um chamado já convertido em plano NÃO pode mais abrir Frente de Serviço (nem
+   *  o contrário, ver canConvert). row.workId == null porque, uma vez vinculado, o chamado fica
+   *  bloqueado (ver TicketDetailComponent) - o próprio backend rejeita vincular de novo sem
+   *  desfazer antes (TicketService.linkWork), não é só restrição de tela. Exige também
+   *  OBRA_MANAGE (não só CHAMADO_MANAGE) - abrir Frente de Serviço cria uma Work de verdade
+   *  (WorkService.create exige OBRA_MANAGE) e o próprio TicketService.linkWork passou a exigir
+   *  OBRA_MANAGE também (achado real 2026-09-19, pedido do usuário: grupo Operacional não pode
+   *  abrir Frente de Serviço a partir de um chamado). */
   canOpenWorkFront(row: TicketModel): boolean {
-    return (
-      this.canManage() &&
-      this.worksPolicy.canManage() &&
-      row.workId == null &&
-      (this.isOpenLike(row) || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
-    );
+    return this.canManage() && this.worksPolicy.canManage() && row.workId == null && this.isOpenLike(row);
   }
 
   /** "Desfazer Frente de Serviço" - solta o vínculo e libera o chamado pra edição/fechamento/
-   *  cancelamento/conversão direto de novo (ver TicketService.unlinkWork no backend). Mesma
-   *  elegibilidade de status de canOpenWorkFront, só invertendo a condição de workId. */
+   *  cancelamento/conversão direto de novo (ver TicketService.unlinkWork no backend). Um chamado
+   *  com workId != null está sempre em CONVERTED_TO_WORK (ver TicketService.linkWork, pedido do
+   *  usuário 2026-09-21 - antes vincular não mudava o status nenhum). */
   canUnlinkWork(row: TicketModel): boolean {
-    return (
-      this.canManage() &&
-      row.workId != null &&
-      (this.isOpenLike(row) || row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
-    );
+    return this.canManage() && row.workId != null && row.status === TicketStatusEnum.CONVERTED_TO_WORK;
+  }
+
+  /** Toggle do botão "Converter em plano"/"Desfazer conversão" no card (ver template) - baseado
+   *  só no status, não em canUnlinkActionPlan/canConvert (que também checam permissão): senão um
+   *  usuário sem permissão veria o botão errado (ex.: "Converter" desabilitado num chamado que já
+   *  foi convertido) em vez do botão certo, só que desabilitado. Um chamado com actionPlanId
+   *  != null mas já CONVERTED_TO_WORK (convertido em plano e DEPOIS vinculado a uma Frente, ver
+   *  TicketService.WORK_LINKABLE_STATUSES no backend) não conta - nesse caso quem manda é o botão
+   *  de Frente. */
+  isConvertedToActionPlan(row: TicketModel): boolean {
+    return row.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN;
+  }
+
+  /** "Desfazer conversão em Plano de Ação" - simétrico a canUnlinkWork acima (pedido do usuário
+   *  2026-09-21). Gate CHAMADO_MANAGE só, mesma decisão já tomada pra unlinkWork (ver
+   *  ActionPlanService.unlinkFromTicket no backend: desfazer pertence ao fluxo do Chamado, não à
+   *  gestão do Plano em si). */
+  canUnlinkActionPlan(row: TicketModel): boolean {
+    return this.canManage() && this.isConvertedToActionPlan(row);
   }
 
   goConvert(row: TicketModel): void {
@@ -456,6 +493,36 @@ export class TicketsListComponent extends StatefulListPage<
     });
   }
 
+  confirmUnlinkActionPlan(row: TicketModel): void {
+    if (!this.canUnlinkActionPlan(row)) return;
+
+    this.confirm.confirm({
+      key: 'tickets',
+      header: this.i18n.tUi('tickets.unlinkActionPlanConfirm.header' as never),
+      message: this.i18n.tUi('tickets.unlinkActionPlanConfirm.message' as never),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.facade
+          .unlinkActionPlan(row.id)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: () =>
+              this.toast.add({
+                severity: 'success',
+                summary: this.i18n.tUi('common.success'),
+                detail: this.i18n.tUi('tickets.unlinkActionPlanConfirm.success' as never),
+              }),
+            error: () =>
+              this.toast.add({
+                severity: 'error',
+                summary: this.i18n.tUi('common.error'),
+                detail: this.i18n.tUi('tickets.unlinkActionPlanConfirm.error' as never),
+              }),
+          });
+      },
+    });
+  }
+
   confirmCancel(row: TicketModel): void {
     if (!this.canCancel(row)) return;
 
@@ -534,9 +601,11 @@ export class TicketsListComponent extends StatefulListPage<
     this.status.set(null);
     this.types.set(null);
     this.priorities.set(null);
-    this.workIds.set(null);
+    this.targetDepartmentIds.set(null);
+    this.targetUserIds.set(null);
     this.createdAt.set(null);
     this.periodCreatedAt.set(null);
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   protected override toFiltersState(): TicketsFiltersState {
@@ -545,7 +614,8 @@ export class TicketsListComponent extends StatefulListPage<
       status: this.status()?.length ? this.status() : null,
       types: this.types()?.length ? this.types() : null,
       priorities: this.priorities()?.length ? this.priorities() : null,
-      workIds: this.workIds()?.length ? this.workIds() : null,
+      targetDepartmentIds: this.targetDepartmentIds()?.length ? this.targetDepartmentIds() : null,
+      targetUserIds: this.targetUserIds()?.length ? this.targetUserIds() : null,
       createdAt: this.createdAt(),
       periodCreatedAt: this.periodCreatedAt(),
     };
@@ -556,9 +626,12 @@ export class TicketsListComponent extends StatefulListPage<
     this.status.set(state.status ?? null);
     this.types.set(state.types ?? null);
     this.priorities.set(state.priorities ?? null);
-    this.workIds.set(state.workIds ?? null);
+    this.targetDepartmentIds.set(state.targetDepartmentIds ?? null);
+    this.targetUserIds.set(state.targetUserIds ?? null);
     this.createdAt.set(state.createdAt ?? null);
     this.periodCreatedAt.set(state.periodCreatedAt ?? null);
+
+    this.applyDefaultAdvancedFiltersIfEmpty();
   }
 
   protected override buildAdvancedFilters(): Partial<TicketsAdvancedFilters> {
@@ -567,7 +640,8 @@ export class TicketsListComponent extends StatefulListPage<
       status: this.status()?.length ? this.status() : undefined,
       types: this.types()?.length ? this.types() : undefined,
       priorities: this.priorities()?.length ? this.priorities() : undefined,
-      workIds: this.workIds()?.length ? this.workIds() : undefined,
+      targetDepartmentIds: this.targetDepartmentIds()?.length ? this.targetDepartmentIds() : undefined,
+      targetUserIds: this.targetUserIds()?.length ? this.targetUserIds() : undefined,
       createdAt: this.createdAt() ?? undefined,
       periodCreatedAt: this.periodCreatedAt() ?? undefined,
     };

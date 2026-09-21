@@ -147,6 +147,19 @@ export class TicketsApiService {
       .pipe(map(mapTicketApiModel));
   }
 
+  /** "Desfazer conversão em Plano de Ação" - simétrico a unlinkWork acima (pedido do usuário
+   *  2026-09-21), exclui o Plano de Ação criado junto, se ainda estiver vazio (DRAFT, sem
+   *  Tarefa) - ver ActionPlanService.unlinkFromTicket no backend. Chamador
+   *  (TicketsListComponent#confirmUnlinkActionPlan) já mostra tickets.unlinkActionPlanConfirm.error
+   *  com o motivo exato. */
+  unlinkActionPlan(id: string) {
+    return this.http
+      .put<TicketApiModel>(`${this.baseUrl}/${id}/unlink-action-plan`, {}, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
+      .pipe(map(mapTicketApiModel));
+  }
+
   /** "Iniciar atendimento" (OPEN -> IN_PROGRESS) - pedido do usuário 2026-09-19. Chamador
    *  (TicketsListComponent#goStart) já mostra tickets.action.startError - ver comentário de
    *  create(). */

@@ -83,7 +83,8 @@ export interface TicketsFiltersState {
   status: string[] | null;
   types: string[] | null;
   priorities: string[] | null;
-  workIds: string[] | null;
+  targetDepartmentIds: string[] | null;
+  targetUserIds: string[] | null;
   createdAt: string | string[] | null;
   periodCreatedAt: PeriodEnum | null;
 }

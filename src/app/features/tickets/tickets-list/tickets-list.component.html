@@ -131,22 +131,43 @@
       </p-floatLabel>
     </div>
 
-    <div class="col-12 md:col-3 p-1">
+    <div class="col-12 md:col-2 p-1">
       <p-floatLabel variant="on" class="w-full">
         <p-multiSelect
           size="small"
           class="w-full"
+          [filter]="true"
           appendTo="body"
-          inputId="workIds"
           [showClear]="true"
+          inputId="targetDepartmentIds"
           optionLabel="label"
           optionValue="value"
-          [ngModel]="workIds()"
+          [ngModel]="targetDepartmentIds()"
           [showToggleAll]="false"
-          [options]="workOptions()"
-          (ngModelChange)="workIds.set($event?.length ? $event : null)"
+          [options]="departmentOptions()"
+          (ngModelChange)="targetDepartmentIds.set($event?.length ? $event : null)"
         ></p-multiSelect>
-        <label for="workIds">{{ 'tickets.fields.work' | translate }}</label>
+        <label for="targetDepartmentIds">{{ 'tickets.fields.targetDepartment' | translate }}</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 md:col-2 p-1">
+      <p-floatLabel variant="on" class="w-full">
+        <p-multiSelect
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          [showClear]="true"
+          inputId="targetUserIds"
+          optionLabel="label"
+          optionValue="value"
+          [ngModel]="targetUserIds()"
+          [showToggleAll]="false"
+          [options]="userOptions()"
+          (ngModelChange)="targetUserIds.set($event?.length ? $event : null)"
+        ></p-multiSelect>
+        <label for="targetUserIds">{{ 'tickets.fields.targetUser' | translate }}</label>
       </p-floatLabel>
     </div>
 
@@ -259,17 +280,31 @@
                 tooltipPosition="top"
               ></button>
             }
-            <button
-              pButton
-              type="button"
-              icon="pi pi-arrow-right-arrow-left"
-              (click)="goConvert(row)"
-              class="p-button-text p-button-sm"
-              [disabled]="!canConvert(row)"
-              [pTooltip]="'tickets.action.convert' | translate"
-              [attr.aria-label]="'tickets.action.convert' | translate"
-              tooltipPosition="top"
-            ></button>
+            @if (!isConvertedToActionPlan(row)) {
+              <button
+                pButton
+                type="button"
+                icon="pi pi-arrow-right-arrow-left"
+                (click)="goConvert(row)"
+                class="p-button-text p-button-sm"
+                [disabled]="!canConvert(row)"
+                [pTooltip]="'tickets.action.convert' | translate"
+                [attr.aria-label]="'tickets.action.convert' | translate"
+                tooltipPosition="top"
+              ></button>
+            } @else {
+              <button
+                pButton
+                type="button"
+                icon="pi pi-undo"
+                class="p-button-text p-button-sm p-button-danger"
+                (click)="confirmUnlinkActionPlan(row)"
+                [disabled]="!canUnlinkActionPlan(row)"
+                [pTooltip]="'tickets.action.unlinkActionPlan' | translate"
+                [attr.aria-label]="'tickets.action.unlinkActionPlan' | translate"
+                tooltipPosition="top"
+              ></button>
+            }
             <button
               pButton
               type="button"

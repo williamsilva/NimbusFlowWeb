@@ -396,10 +396,11 @@ export const UI_KEYS = {
       type: 'tickets.fields.type',
       priority: 'tickets.fields.priority',
       status: 'tickets.fields.status',
-      work: 'tickets.fields.work',
       createdAt: 'tickets.fields.createdAt',
       periodCreatedAt: 'tickets.fields.periodCreatedAt',
       targetType: 'tickets.fields.targetType',
+      targetUser: 'tickets.fields.targetUser',
+      targetDepartment: 'tickets.fields.targetDepartment',
     },
     form: {
       invalid: 'tickets.form.invalid',

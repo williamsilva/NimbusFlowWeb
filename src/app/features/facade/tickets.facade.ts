@@ -94,6 +94,10 @@ export class TicketsFacade {
     return this.api.unlinkWork(id).pipe(tap(() => this.reloadLast()));
   }
 
+  unlinkActionPlan(id: string): Observable<TicketModel> {
+    return this.api.unlinkActionPlan(id).pipe(tap(() => this.reloadLast()));
+  }
+
   start(id: string): Observable<TicketModel> {
     return this.api.start(id).pipe(tap(() => this.reloadLast()));
   }

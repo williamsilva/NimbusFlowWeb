@@ -1667,6 +1667,7 @@
       "OPEN": "Abierto",
       "IN_PROGRESS": "En curso",
       "CONVERTED_TO_ACTION_PLAN": "Convertido en plan",
+      "CONVERTED_TO_WORK": "Convertido en Frente",
       "CLOSED": "Cerrado",
       "CANCELLED": "Cancelado",
       "closed": "Llamado cerrado con éxito.",
@@ -1692,6 +1693,7 @@
       "workLinked": "Frente de Servicio vinculada con éxito.",
       "workLinkError": "No se pudo vincular la Frente de Servicio.",
       "unlinkWork": "Deshacer Frente de Servicio",
+      "unlinkActionPlan": "Deshacer conversión en plan",
       "addFile": "Agregar archivo",
       "takePhoto": "Tomar foto",
       "start": "Iniciar",
@@ -1706,6 +1708,12 @@
       "message": "¿Deshacer la Frente \"{workName}\"? Será eliminada (solo es posible sin adicionales, mediciones o pagos).",
       "success": "Frente de Servicio deshecha y eliminada con éxito.",
       "error": "No se pudo deshacer: la Frente de Servicio ya tiene adicionales, mediciones o pagos vinculados."
+    },
+    "unlinkActionPlanConfirm": {
+      "header": "Deshacer conversión en plan de acción",
+      "message": "¿Deshacer la conversión de este llamado en plan de acción? El plan será eliminado (solo es posible mientras no haya sido iniciado ni tenga tareas).",
+      "success": "Conversión deshecha y plan de acción eliminado con éxito.",
+      "error": "No se pudo deshacer: el plan de acción ya fue iniciado o ya tiene tareas vinculadas."
     },
     "mobile": {
       "createdBy": "Creado por {name} el {date}"
