@@ -56,9 +56,21 @@ body {
     justify-content: center;
   }
 
+  /* "margin-left: auto" sozinho não empurrava pra direita de verdade (2026-09-21, reportado pelo
+     usuário): a linha de botões do cabeçalho encolhe pro tamanho do conteúdo no mobile
+     (align-items-start no container pai do app-page-header), sem sobra de espaço pra empurrar.
+     FAB (floating action button) tira o botão do fluxo normal e resolve isso de vez - também mais
+     alcançável com o polegar, padrão comum em apps/PWA instalados. Distância do fundo cobre a
+     altura do bottom-nav (~72px incluindo safe-area) + respiro. */
   app-page-header .p-button-info {
-    margin-left: auto;
+    position: fixed;
+    right: calc(16px + env(safe-area-inset-right));
+    bottom: calc(84px + env(safe-area-inset-bottom));
+    z-index: 110;
+    width: 3.25rem;
+    height: 3.25rem;
     border-radius: 50%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
   }
 }
 
