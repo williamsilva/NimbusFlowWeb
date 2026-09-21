@@ -143,6 +143,7 @@
       "suppliers": "Suppliers",
       "projects": "Projects",
       "works": "Service Fronts",
+      "worksShort": "Fronts",
       "addendums": "Addendums",
       "installments": "Released Installments",
       "payments": "Payments",

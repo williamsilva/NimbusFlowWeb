@@ -143,6 +143,7 @@
       "suppliers": "Proveedores",
       "projects": "Proyectos",
       "works": "Frentes de Servicio",
+      "worksShort": "Frentes",
       "addendums": "Adicionales",
       "installments": "Cuotas Liberadas",
       "payments": "Pagos",
