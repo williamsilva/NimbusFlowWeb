@@ -190,7 +190,7 @@
     }
   </div>
 
-  @if (policy.canManage()) {
+  @if (canComment()) {
     <div class="flex flex-column gap-2">
       <textarea
         pTextarea
@@ -225,5 +225,7 @@
         ></button>
       </div>
     </div>
+  } @else if (policy.canManage()) {
+    <div class="text-sm opacity-70 text-center py-2">{{ 'tickets.comments.notStarted' | translate }}</div>
   }
 </ng-template>

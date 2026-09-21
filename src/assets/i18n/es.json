@@ -1730,7 +1730,8 @@
       "placeholder": "Escriba un comentario...",
       "send": "Enviar",
       "empty": "Aún no hay comentarios.",
-      "saveError": "No se pudo enviar el comentario."
+      "saveError": "No se pudo enviar el comentario.",
+      "notStarted": "Inicie la atención para poder comentar."
     }
   },
   "actionPlans": {

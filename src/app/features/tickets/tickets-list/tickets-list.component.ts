@@ -319,9 +319,17 @@ export class TicketsListComponent extends StatefulListPage<
   }
 
   /** OPEN e IN_PROGRESS contam como "ainda ativo" (mesmo racional de OPEN_LIKE_STATUSES no
-   *  backend) - pedido do usuário 2026-09-19 (status novo "Em andamento"). */
+   *  backend) - pedido do usuário 2026-09-19 (status novo "Em andamento"). Usado só por
+   *  editar/cancelar - converter/abrir Frente exigem #isStarted abaixo (mais restrito). */
   private isOpenLike(row: TicketModel): boolean {
     return row.status === TicketStatusEnum.OPEN || row.status === TicketStatusEnum.IN_PROGRESS;
+  }
+
+  /** Atendimento iniciado (ver TicketService.STARTED_ONLY_STATUSES no backend) - achado real
+   *  2026-09-21, pedido do usuário: converter em plano/abrir Frente de Serviço exigem que alguém
+   *  já tenha clicado "Iniciar", OPEN sozinho não basta mais. */
+  private isStarted(row: TicketModel): boolean {
+    return row.status === TicketStatusEnum.IN_PROGRESS;
   }
 
   goDetail(row: TicketModel): void {
@@ -365,21 +373,22 @@ export class TicketsListComponent extends StatefulListPage<
       this.canManage() &&
       this.actionPlansPolicy.canManage() &&
       row.workId == null &&
-      this.isOpenLike(row)
+      this.isStarted(row)
     );
   }
 
   /** As duas conversões (Frente/Plano de Ação) são mutuamente exclusivas (pedido do usuário
    *  2026-09-21) - um chamado já convertido em plano NÃO pode mais abrir Frente de Serviço (nem
-   *  o contrário, ver canConvert). row.workId == null porque, uma vez vinculado, o chamado fica
-   *  bloqueado (ver TicketDetailComponent) - o próprio backend rejeita vincular de novo sem
-   *  desfazer antes (TicketService.linkWork), não é só restrição de tela. Exige também
-   *  OBRA_MANAGE (não só CHAMADO_MANAGE) - abrir Frente de Serviço cria uma Work de verdade
-   *  (WorkService.create exige OBRA_MANAGE) e o próprio TicketService.linkWork passou a exigir
-   *  OBRA_MANAGE também (achado real 2026-09-19, pedido do usuário: grupo Operacional não pode
-   *  abrir Frente de Serviço a partir de um chamado). */
+   *  o contrário, ver canConvert). Exige atendimento iniciado (isStarted, não isOpenLike) - mesmo
+   *  achado real 2026-09-21: OPEN sozinho não basta mais. row.workId == null porque, uma vez
+   *  vinculado, o chamado fica bloqueado (ver TicketDetailComponent) - o próprio backend rejeita
+   *  vincular de novo sem desfazer antes (TicketService.linkWork), não é só restrição de tela.
+   *  Exige também OBRA_MANAGE (não só CHAMADO_MANAGE) - abrir Frente de Serviço cria uma Work de
+   *  verdade (WorkService.create exige OBRA_MANAGE) e o próprio TicketService.linkWork passou a
+   *  exigir OBRA_MANAGE também (achado real 2026-09-19, pedido do usuário: grupo Operacional não
+   *  pode abrir Frente de Serviço a partir de um chamado). */
   canOpenWorkFront(row: TicketModel): boolean {
-    return this.canManage() && this.worksPolicy.canManage() && row.workId == null && this.isOpenLike(row);
+    return this.canManage() && this.worksPolicy.canManage() && row.workId == null && this.isStarted(row);
   }
 
   /** "Desfazer Frente de Serviço" - solta o vínculo e libera o chamado pra edição/fechamento/

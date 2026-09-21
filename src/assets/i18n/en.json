@@ -1730,7 +1730,8 @@
       "placeholder": "Write a comment...",
       "send": "Send",
       "empty": "No comments yet.",
-      "saveError": "Could not send the comment."
+      "saveError": "Could not send the comment.",
+      "notStarted": "Start the service to be able to comment."
     }
   },
   "actionPlans": {

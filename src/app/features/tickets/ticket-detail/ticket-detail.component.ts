@@ -190,13 +190,28 @@ export class TicketDetailComponent implements OnInit {
     return !!t && this.policy.canManage() && t.workId == null && t.status === TicketStatusEnum.OPEN;
   }
 
+  /** Achado real 2026-09-21, pedido do usuário: fechar (e comentar, ver canComment abaixo) exige
+   *  atendimento iniciado - OPEN sozinho não basta mais (mesma regra nova de
+   *  TicketService.COMMENTABLE_AND_CLOSABLE_STATUSES no backend). CONVERTED_TO_ACTION_PLAN
+   *  continua elegível porque só se chega lá vindo de IN_PROGRESS. */
   canClose(): boolean {
     const t = this.ticket();
     return (
       !!t &&
       this.policy.canManage() &&
       t.workId == null &&
-      (this.isOpenLike(t.status) || t.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
+      (t.status === TicketStatusEnum.IN_PROGRESS || t.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
+    );
+  }
+
+  /** Mesma elegibilidade de status de canClose (ver TicketService.requireCommentable no backend)
+   *  - achado real 2026-09-21, pedido do usuário: comentar também exige atendimento iniciado. */
+  canComment(): boolean {
+    const t = this.ticket();
+    return (
+      !!t &&
+      this.policy.canManage() &&
+      (t.status === TicketStatusEnum.IN_PROGRESS || t.status === TicketStatusEnum.CONVERTED_TO_ACTION_PLAN)
     );
   }
 
