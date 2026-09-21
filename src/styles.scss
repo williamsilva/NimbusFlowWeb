@@ -34,9 +34,14 @@ body {
  * o "Novo X" continuava aparecendo grande no celular (achado real, reportado pelo usuário na tela
  * de Chamados). Aproveitado pra deixar a ação primária ("Novo X", classe p-button-info - único uso
  * dessa classe nos cabeçalhos, sempre o botão de criar) redonda e empurrada pra direita da linha,
- * distinta do Atualizar (ação secundária, quadrado discreto). */
+ * distinta do Atualizar (ação secundária, quadrado discreto).
+ * .cs-embedded-list-actions cobre Medições/Aditivos quando embutidos na tela de Detalhes da Frente
+ * (MeasurementsListComponent/AddendumsListComponent com [embedded]="true") - nesse modo os mesmos
+ * botões não ficam dentro de <app-page-header>, e sim de uma div solta própria (ver os
+ * componentes), então precisam do próprio marcador pra pegar o mesmo tratamento mobile. */
 @media (max-width: 768px) {
-  app-page-header .p-button-label {
+  app-page-header .p-button-label,
+  .cs-embedded-list-actions .p-button-label {
     position: absolute !important;
     width: 1px !important;
     height: 1px !important;
@@ -48,7 +53,8 @@ body {
     border: 0 !important;
   }
 
-  app-page-header .p-button {
+  app-page-header .p-button,
+  .cs-embedded-list-actions .p-button {
     width: 2.25rem;
     height: 2.25rem;
     padding-left: 0 !important;
@@ -62,7 +68,8 @@ body {
      FAB (floating action button) tira o botão do fluxo normal e resolve isso de vez - também mais
      alcançável com o polegar, padrão comum em apps/PWA instalados. Distância do fundo cobre a
      altura do bottom-nav (~72px incluindo safe-area) + respiro. */
-  app-page-header .p-button-info {
+  app-page-header .p-button-info,
+  .cs-embedded-list-actions .p-button-info {
     position: fixed;
     right: calc(16px + env(safe-area-inset-right));
     bottom: calc(84px + env(safe-area-inset-bottom));
