@@ -159,4 +159,14 @@
   .content {
     padding-bottom: calc(70px + env(safe-area-inset-bottom));
   }
+
+  /* backdrop-filter (herdado de .cs-glass) cria um novo containing block pra position:fixed -
+     o FAB do cabeçalho (app-page-header .p-button-info, ver styles.scss) passava a se posicionar
+     relativo a ESTE elemento em vez do viewport, e como .content-inner cresce junto com a lista
+     (sem altura própria, quem rola é o .content pai), o botão só aparecia depois de rolar até o
+     fim (achado real 2026-09-21, reportado pelo usuário numa lista grande de Chamados). Sem
+     backdrop-filter no mobile, o FAB volta a ficar fixo de verdade na tela. */
+  .content-inner {
+    backdrop-filter: none;
+  }
 }
