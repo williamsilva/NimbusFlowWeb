@@ -13,11 +13,69 @@ export const appRoutes: Routes = [
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
 
+      // Dashboard virou 4 (pedido do usuário 2026-09-21) - /dashboard redireciona pro de Obras
+      // (mantém bookmarks/atalhos antigos funcionando), cada um com sua própria permissão de
+      // visualização, mesma lista de `permissions` da tela correspondente.
+      { path: 'dashboard', pathMatch: 'full', redirectTo: 'dashboard/works' },
+
       {
-        path: 'dashboard',
-        title: 'routes.dashboard.title',
+        path: 'dashboard/works',
+        title: 'routes.dashboard.works.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.OBRA.VIEW],
+        },
         loadComponent: () =>
-          import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+          import('./features/works/works-dashboard/works-dashboard.component').then(
+            (m) => m.WorksDashboardComponent,
+          ),
+      },
+
+      {
+        path: 'dashboard/tickets',
+        title: 'routes.dashboard.tickets.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CHAMADO.VIEW],
+        },
+        loadComponent: () =>
+          import('./features/tickets/tickets-dashboard/tickets-dashboard.component').then(
+            (m) => m.TicketsDashboardComponent,
+          ),
+      },
+
+      {
+        path: 'dashboard/tasks',
+        title: 'routes.dashboard.tasks.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.TAREFA.VIEW, PERMISSIONS.TAREFA.EXECUTE],
+        },
+        loadComponent: () =>
+          import('./features/tasks/tasks-dashboard/tasks-dashboard.component').then(
+            (m) => m.TasksDashboardComponent,
+          ),
+      },
+
+      {
+        path: 'dashboard/action-plans',
+        title: 'routes.dashboard.actionPlans.title',
+        canActivate: [permissionGuard],
+        data: {
+          requireAll: false,
+          redirectTo: '/forbidden',
+          permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PLANO_ACAO.VIEW],
+        },
+        loadComponent: () =>
+          import('./features/action-plans/action-plans-dashboard/action-plans-dashboard.component').then(
+            (m) => m.ActionPlansDashboardComponent,
+          ),
       },
 
       {

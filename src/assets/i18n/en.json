@@ -26,7 +26,18 @@
       }
     },
     "dashboard": {
-      "title": "Dashboard"
+      "works": {
+        "title": "Works Dashboard"
+      },
+      "tickets": {
+        "title": "Tickets Dashboard"
+      },
+      "tasks": {
+        "title": "Tasks Dashboard"
+      },
+      "actionPlans": {
+        "title": "Action Plans Dashboard"
+      }
     },
     "forbidden": {
       "title": "Access denied"
@@ -126,7 +137,13 @@
   },
   "menu": {
     "me": "My account",
-    "dashboard": "Dashboard",
+    "dashboard": {
+      "title": "Dashboard",
+      "works": "Works",
+      "tickets": "Tickets",
+      "tasks": "Tasks",
+      "actionPlans": "Action Plans"
+    },
     "more": "More",
     "security": {
       "changePassword": "Change Password"
@@ -1073,6 +1090,50 @@
     }
   },
   "works": {
+    "dashboard": {
+      "subtitle": "Overview of projects and service fronts",
+      "filters": {
+        "project": "Project",
+        "supplier": "Supplier",
+        "work": "Service front",
+        "totalAmount": "Contracted amount"
+      },
+      "kpi": {
+        "totalPaid": "Total paid",
+        "totalContracted": "Total contracted",
+        "totalBalance": "Balance to pay",
+        "works": "Service fronts",
+        "projects": "Projects",
+        "overdueWorks": "Overdue fronts",
+        "pending": "Pending items",
+        "pendingBreakdown": "{addendums, plural, one {# addendum} other {# addendums}} • {measurements, plural, one {# measurement} other {# measurements}}",
+        "avgExecutionDuration": "Average execution duration",
+        "avgDelay": "Average delay",
+        "days": "{count, plural, one {# day} other {# days}}",
+        "basedOnCompletedWorks": "{count, plural, one {based on # completed front} other {based on # completed fronts}}"
+      },
+      "charts": {
+        "valueByStatus": {
+          "title": "Contracted amount by status"
+        },
+        "weeklyDisbursement": {
+          "title": "Weekly disbursement",
+          "series": "Paid in the week"
+        },
+        "topWorks": {
+          "title": "Top fronts by amount paid",
+          "others": "{count, plural, one {# other front} other {# other fronts}}"
+        }
+      },
+      "projects": {
+        "title": "Projects",
+        "empty": "No projects registered yet.",
+        "contracted": "Contracted",
+        "paid": "Paid",
+        "remaining": "Balance",
+        "serviceFronts": "{count, plural, one {# service front} other {# service fronts}}"
+      }
+    },
     "subtitle": "Manage the service fronts registry",
     "new": {
       "title": "New service front"
@@ -1140,52 +1201,6 @@
       "message": "Are you sure you want to delete service front {name}? This action cannot be undone.",
       "success": "Service front deleted successfully.",
       "error": "Could not delete the service front."
-    }
-  },
-  "dashboard": {
-    "subtitle": "Overview of projects and service fronts",
-    "filters": {
-      "project": "Project",
-      "supplier": "Supplier",
-      "work": "Service front",
-      "totalAmount": "Contracted amount"
-    },
-    "kpi": {
-      "totalPaid": "Total paid",
-      "totalContracted": "Total contracted",
-      "totalBalance": "Balance to pay",
-      "works": "Service fronts",
-      "projects": "Projects",
-      "overdueWorks": "Overdue service fronts",
-      "pending": "Pending items",
-      "pendingBreakdown": "{addendums, plural, one {# addendum} other {# addendums}} • {measurements, plural, one {# measurement} other {# measurements}}",
-      "teamCompletedTasks": "Tasks completed by the team",
-      "myCompletedTasks": "My completed tasks"
-    },
-    "charts": {
-      "valueByStatus": {
-        "title": "Contracted value by status"
-      },
-      "weeklyDisbursement": {
-        "title": "Weekly disbursement",
-        "series": "Paid that week"
-      },
-      "topWorks": {
-        "title": "Top service fronts by amount paid",
-        "others": "{count, plural, one {Other # front} other {Other # fronts}}"
-      },
-      "employeeTaskRanking": {
-        "title": "Employee ranking by completed tasks",
-        "others": "{count, plural, one {Other # employee} other {Other # employees}}"
-      }
-    },
-    "projects": {
-      "title": "Projects",
-      "empty": "No projects registered yet.",
-      "contracted": "Contracted",
-      "paid": "Paid",
-      "remaining": "Balance",
-      "serviceFronts": "{count, plural, one {# service front} other {# service fronts}}"
     }
   },
   "projects": {
@@ -1616,6 +1631,19 @@
     }
   },
   "tickets": {
+    "dashboard": {
+      "subtitle": "Average ticket resolution time",
+      "kpi": {
+        "avgResolutionDuration": "Average resolution time",
+        "resolvedCount": "Resolved tickets",
+        "days": "{count, plural, one {# day} other {# days}}"
+      },
+      "charts": {
+        "durationByPriority": {
+          "title": "Average resolution time by priority"
+        }
+      }
+    },
     "subtitle": "Tickets manually reported by users - first link of the Ticket → Action Plan → Task chain",
     "new": {
       "title": "New ticket"
@@ -1735,6 +1763,15 @@
     }
   },
   "actionPlans": {
+    "dashboard": {
+      "subtitle": "Count by status and average action plan execution time",
+      "kpi": {
+        "total": "Action plans",
+        "avgExecutionDuration": "Average execution time",
+        "days": "{count, plural, one {# day} other {# days}}",
+        "basedOnCompletedPlans": "{count, plural, one {based on # completed plan} other {based on # completed plans}}"
+      }
+    },
     "subtitle": "Action plans (5W2H methodology) - second link of the Ticket → Action Plan → Task chain",
     "new": {
       "title": "New action plan"
@@ -1810,6 +1847,21 @@
     }
   },
   "tasks": {
+    "dashboard": {
+      "subtitle": "Team progress and average task completion time",
+      "kpi": {
+        "teamCompletedTasks": "Tasks completed by the team",
+        "myCompletedTasks": "My completed tasks",
+        "avgCompletionDuration": "Average completion time",
+        "days": "{count, plural, one {# day} other {# days}}"
+      },
+      "charts": {
+        "employeeTaskRanking": {
+          "title": "Employee ranking by completed tasks",
+          "others": "{count, plural, one {# other employee} other {# other employees}}"
+        }
+      }
+    },
     "subtitle": "Tasks across all action plans - third link of the Ticket → Action Plan → Task chain",
     "new": {
       "title": "New task"

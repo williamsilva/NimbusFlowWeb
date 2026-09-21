@@ -14,7 +14,13 @@ export const UI_KEYS = {
   },
   menu: {
     me: 'menu.me',
-    dashboard: 'menu.dashboard',
+    dashboard: {
+      title: 'menu.dashboard.title',
+      works: 'menu.dashboard.works',
+      tickets: 'menu.dashboard.tickets',
+      tasks: 'menu.dashboard.tasks',
+      actionPlans: 'menu.dashboard.actionPlans',
+    },
     security: {
       changePassword: 'menu.security.changePassword',
     },

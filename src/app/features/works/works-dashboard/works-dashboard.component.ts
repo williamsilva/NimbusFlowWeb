@@ -12,16 +12,14 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { ThemeService } from '@williamsilva/nimbus-web-commons';
 import { WorksFacade } from '@features/facade/works.facade';
 import { CsCurrencyPipe } from '@shared/pipes/cs-currency.pipe';
-import { DashboardFacade } from '@features/facade/dashboard.facade';
 import { ProjectsFacade } from '@features/facade/projects.facade';
 import { SuppliersFacade } from '@features/facade/suppliers.facade';
+import { WorksDashboardFacade } from '@features/facade/works-dashboard.facade';
 import { DashboardFilterInput } from '@models/dashboard.models';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
 import { ProjectsPermissionPolicy } from '@features/projects/projects-permission.policy';
-import { TasksPermissionPolicy } from '@features/tasks/tasks-permission.policy';
-import { DashboardPermissionPolicy } from '@features/dashboard/dashboard-permission.policy';
 import { projectStatusTone } from '@models/enums/project-status.enum';
 import { WorkStatusEnum, workStatusTone } from '@models/enums/work-status.enum';
 import {
@@ -50,15 +48,18 @@ const BRL_COMPACT_FORMAT = new Intl.NumberFormat('pt-BR', {
   notation: 'compact',
 });
 
-/** Mesmo corte "top N + Demais" de topWorks acima - aqui feito no componente porque
- *  DashboardService.getEmployeeTaskRanking() devolve a lista completa, sem cortar (ver seu
- *  javadoc no backend). */
-const TOP_EMPLOYEES_LIMIT = 7;
-
+/**
+ * Dashboard de Obras (pedido do usuário 2026-09-21, separação dos 4 dashboards) - renomeado/
+ * migrado de features/dashboard/dashboard.component.ts, mantendo só o conteúdo de Obras/Projetos
+ * (widgets de Tarefas migraram pro dashboard de Tarefas, ver TasksDashboardComponent). Página
+ * inteira já fica atrás de permissionGuard (OBRA_CONSULT) na rota (/dashboard/works) - não
+ * precisa mais decidir em runtime se chama a API (ver antigo loadOptions/DashboardLoadOptions,
+ * que não existem mais).
+ */
 @Component({
   standalone: true,
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
+  selector: 'app-works-dashboard',
+  templateUrl: './works-dashboard.component.html',
   imports: [
     DecimalPipe,
     FormsModule,
@@ -74,21 +75,16 @@ const TOP_EMPLOYEES_LIMIT = 7;
     CsCurrencyRangeFilterComponent,
   ],
 })
-export class DashboardComponent implements OnInit {
+export class WorksDashboardComponent implements OnInit {
   private readonly i18n = inject(I18nService);
   private readonly theme = inject(ThemeService);
 
-  readonly facade = inject(DashboardFacade);
+  readonly facade = inject(WorksDashboardFacade);
   readonly projectsFacade = inject(ProjectsFacade);
   readonly suppliersFacade = inject(SuppliersFacade);
   readonly worksFacade = inject(WorksFacade);
 
-  /** Achado real 2026-09-20: os widgets financeiros/de Obras e Projetos apareciam pra qualquer
-   *  usuário, mesmo sem permissão de ver Obras/Projetos (grupo Operacional só tem CHAMADO/TAREFA). */
-  readonly worksPolicy = inject(WorksPermissionPolicy);
   readonly projectsPolicy = inject(ProjectsPermissionPolicy);
-  readonly tasksPolicy = inject(TasksPermissionPolicy);
-  readonly dashboardPolicy = inject(DashboardPermissionPolicy);
 
   readonly projects = this.projectsFacade.items;
   readonly projectOptions = this.projectsFacade.options;
@@ -116,7 +112,7 @@ export class DashboardComponent implements OnInit {
         .filter((opt) => projectId.includes(opt.value))
         .map((opt) => opt.label)
         .join(', ');
-      items.push({ label: this.i18n.tUi('dashboard.filters.project' as never), value: labels });
+      items.push({ label: this.i18n.tUi('works.dashboard.filters.project' as never), value: labels });
     }
 
     const supplierId = this.supplierId();
@@ -125,7 +121,7 @@ export class DashboardComponent implements OnInit {
         .filter((opt) => supplierId.includes(opt.value))
         .map((opt) => opt.label)
         .join(', ');
-      items.push({ label: this.i18n.tUi('dashboard.filters.supplier' as never), value: labels });
+      items.push({ label: this.i18n.tUi('works.dashboard.filters.supplier' as never), value: labels });
     }
 
     const workId = this.workId();
@@ -134,22 +130,17 @@ export class DashboardComponent implements OnInit {
         .filter((opt) => workId.includes(opt.value))
         .map((opt) => opt.label)
         .join(', ');
-      items.push({ label: this.i18n.tUi('dashboard.filters.work' as never), value: labels });
+      items.push({ label: this.i18n.tUi('works.dashboard.filters.work' as never), value: labels });
     }
 
     const amountLabel = currencyRangeLabel(this.i18n, this.totalAmountFrom(), this.totalAmountTo());
     if (amountLabel) {
-      items.push({ label: this.i18n.tUi('dashboard.filters.totalAmount' as never), value: amountLabel });
+      items.push({ label: this.i18n.tUi('works.dashboard.filters.totalAmount' as never), value: amountLabel });
     }
 
     return items;
   });
 
-  /** Só 1 grupo aqui (sem "Filtros da tabela") - este dashboard não tem p-table/p-columnFilter,
-   *  só os filtros do painel (projeto/fornecedor/frente/valor) alimentando os gráficos - não há
-   *  uma segunda fonte de filtro de tabela pra separar, mesmo motivo de file-processing-dashboard/
-   *  management-dashboard (CardSyncWeb). Ainda assim usa o mesmo componente/visual de grupo com
-   *  título das outras telas (StatefulListPage), em vez da lista plana sem título de antes. */
   readonly activeFilterGroups = computed<ActiveFilterGroup[]>(() => {
     const filters = this.activeFilters();
     return filters.length ? [{ title: this.i18n.tUi('common.advancedFilters'), filters }] : [];
@@ -160,11 +151,6 @@ export class DashboardComponent implements OnInit {
     return Object.values(byStatus).reduce((sum, count) => sum + (count ?? 0), 0);
   });
 
-  /** Métricas agregadas (sem nome), disponíveis pra qualquer um com TAREFA_CONSULT/EXECUTE - ver
-   *  DashboardPermissionPolicy/dashboard.facade.ts loadEmployeeRanking vs loadTasks. */
-  readonly teamCompletedTasksCount = computed(() => this.facade.teamTaskProgress()?.teamCompletedTasksCount ?? 0);
-  readonly myCompletedTasksCount = computed(() => this.facade.teamTaskProgress()?.myCompletedTasksCount ?? 0);
-
   readonly worksByStatusEntries = computed(() => {
     this.i18n.getAppliedLang();
     const byStatus = this.facade.summary()?.worksByStatus ?? {};
@@ -174,28 +160,17 @@ export class DashboardComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.facade.load(undefined, this.loadOptions());
-
-    if (this.worksPolicy.canView()) {
-      this.suppliersFacade.loadSupplierOptions();
-      this.worksFacade.loadOptions();
-    }
+    this.facade.load();
+    this.suppliersFacade.loadSupplierOptions();
+    this.worksFacade.loadOptions();
     if (this.projectsPolicy.canView()) {
       this.projectsFacade.loadAll();
       this.projectsFacade.loadOptions();
     }
   }
 
-  private loadOptions() {
-    return {
-      loadWorks: this.worksPolicy.canView(),
-      loadTasks: this.tasksPolicy.canView(),
-      loadEmployeeRanking: this.dashboardPolicy.canViewEmployeeRanking(),
-    };
-  }
-
   search(): void {
-    this.facade.load(this.buildFilter(), this.loadOptions());
+    this.facade.load(this.buildFilter());
   }
 
   clear(): void {
@@ -204,7 +179,7 @@ export class DashboardComponent implements OnInit {
     this.workId.set(null);
     this.totalAmountFrom.set(null);
     this.totalAmountTo.set(null);
-    this.facade.load(undefined, this.loadOptions());
+    this.facade.load();
   }
 
   private buildFilter(): DashboardFilterInput {
@@ -282,7 +257,7 @@ export class DashboardComponent implements OnInit {
       labels: items.map((item) => this.formatWeekLabel(item.weekStart)),
       datasets: [
         {
-          label: this.i18n.tUi('dashboard.charts.weeklyDisbursement.series' as never),
+          label: this.i18n.tUi('works.dashboard.charts.weeklyDisbursement.series' as never),
           data: items.map((item) => item.amount),
           backgroundColor: color,
           borderRadius: 4,
@@ -328,7 +303,7 @@ export class DashboardComponent implements OnInit {
 
     if (analytics && analytics.othersCount > 0) {
       labels.push(
-        this.i18n.tUi('dashboard.charts.topWorks.others' as never, { count: analytics.othersCount }),
+        this.i18n.tUi('works.dashboard.charts.topWorks.others' as never, { count: analytics.othersCount }),
       );
       data.push(analytics.othersAmount);
     }
@@ -358,54 +333,6 @@ export class DashboardComponent implements OnInit {
       scales: {
         x: {
           ticks: { color: text, callback: (value: number) => BRL_COMPACT_FORMAT.format(value) },
-          grid: { color: grid },
-        },
-        y: { ticks: { color: text }, grid: { display: false } },
-      },
-    };
-  });
-
-  /** Ranking de funcionários por tarefas concluídas - mesmo espírito de topWorksChartData/
-   *  Options, só que sem formatação monetária (eixo/tooltip mostram contagem simples). */
-  readonly employeeTaskRankingChartData = computed(() => {
-    this.i18n.getAppliedLang();
-    const ranking = this.facade.employeeTaskRanking();
-    const top = ranking.slice(0, TOP_EMPLOYEES_LIMIT);
-    const others = ranking.slice(TOP_EMPLOYEES_LIMIT);
-    const color = this.primaryColor();
-
-    const labels = top.map((item) => item.employeeName);
-    const data = top.map((item) => item.completedTasksCount);
-
-    if (others.length > 0) {
-      labels.push(
-        this.i18n.tUi('dashboard.charts.employeeTaskRanking.others' as never, {
-          count: others.length,
-        }),
-      );
-      data.push(others.reduce((sum, item) => sum + item.completedTasksCount, 0));
-    }
-
-    return {
-      labels,
-      datasets: [{ data, backgroundColor: color, borderRadius: 4, maxBarThickness: 28 }],
-    };
-  });
-
-  readonly employeeTaskRankingChartOptions = computed(() => {
-    const text = this.textColor();
-    const grid = this.gridColor();
-
-    return {
-      indexAxis: 'y' as const,
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-      },
-      scales: {
-        x: {
-          ticks: { color: text, precision: 0 },
           grid: { color: grid },
         },
         y: { ticks: { color: text }, grid: { display: false } },

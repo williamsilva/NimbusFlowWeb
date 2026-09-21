@@ -1,0 +1,27 @@
+<app-page-header [subtitle]="'actionPlans.dashboard.subtitle' | translate" [compact]="false"></app-page-header>
+
+<div class="grid formgrid gap-0">
+  <div class="col-12 md:col-4 p-2">
+    <div class="surface-card border-round p-3 h-full">
+      <div class="text-sm opacity-70 mb-1">{{ 'actionPlans.dashboard.kpi.total' | translate }}</div>
+      <div class="text-2xl font-bold mb-2">{{ totalCount() }}</div>
+      <div class="flex flex-wrap gap-1">
+        @for (entry of byStatusEntries(); track entry.status) {
+          <app-status-badge [tone]="tone(entry.status)" [label]="entry.count + ' ' + statusLabel(entry.status)" />
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 md:col-4 p-2">
+    <div class="surface-card border-round p-3 h-full">
+      <div class="text-sm opacity-70 mb-1">{{ 'actionPlans.dashboard.kpi.avgExecutionDuration' | translate }}</div>
+      <div class="text-3xl font-bold">
+        {{ 'actionPlans.dashboard.kpi.days' | translate: { count: facade.summary()?.avgExecutionDays ?? 0 } }}
+      </div>
+      <div class="text-xs opacity-70">
+        {{ 'actionPlans.dashboard.kpi.basedOnCompletedPlans' | translate: { count: facade.summary()?.completedCount ?? 0 } }}
+      </div>
+    </div>
+  </div>
+</div>

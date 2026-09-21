@@ -3,11 +3,43 @@ import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { AppMenuItem } from './menu.model';
 
 export const APP_MENU: AppMenuItem[] = [
+  /* Dashboard virou dropdown com 1 sub-item por domínio (pedido do usuário 2026-09-21, separação
+   * dos dashboards de Obras/Chamados/Tarefas/Planos de Ação) - cada filho exige sua própria
+   * permissão de visualização, mesma lista de `permissions` da rota correspondente (ver
+   * app.routes.ts). */
   {
     icon: 'pi pi-home text-blue-600',
-    labelKey: 'menu.dashboard',
-    route: '/dashboard',
-    exact: true,
+    labelKey: 'menu.dashboard.title',
+    children: [
+      {
+        labelKey: 'menu.dashboard.works',
+        icon: 'pi pi-building text-blue-400',
+        route: '/dashboard/works',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.OBRA.VIEW],
+      },
+      {
+        labelKey: 'menu.dashboard.tickets',
+        icon: 'pi pi-megaphone text-blue-400',
+        route: '/dashboard/tickets',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.CHAMADO.VIEW],
+      },
+      {
+        labelKey: 'menu.dashboard.tasks',
+        icon: 'pi pi-check-square text-blue-400',
+        route: '/dashboard/tasks',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.TAREFA.VIEW, PERMISSIONS.TAREFA.EXECUTE],
+      },
+      {
+        labelKey: 'menu.dashboard.actionPlans',
+        icon: 'pi pi-map text-blue-400',
+        route: '/dashboard/action-plans',
+        exact: false,
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.PLANO_ACAO.VIEW],
+      },
+    ],
   },
   /* Cadeia 5W2H Chamado -> Plano de Ação -> Tarefa (com.nimbusflow.tickets/actionplans/tasks) -
    * itens soltos (sem submenu), acima do grupo Fornecedor/Obra/Sugestão a pedido do usuário. Cada

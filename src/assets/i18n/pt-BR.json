@@ -26,7 +26,18 @@
       }
     },
     "dashboard": {
-      "title": "Dashboard"
+      "works": {
+        "title": "Dashboard de Obras"
+      },
+      "tickets": {
+        "title": "Dashboard de Chamados"
+      },
+      "tasks": {
+        "title": "Dashboard de Tarefas"
+      },
+      "actionPlans": {
+        "title": "Dashboard de Planos de Ação"
+      }
     },
     "forbidden": {
       "title": "Acesso negado"
@@ -126,7 +137,13 @@
   },
   "menu": {
     "me": "Minha conta",
-    "dashboard": "Dashboard",
+    "dashboard": {
+      "title": "Dashboard",
+      "works": "Obras",
+      "tickets": "Chamados",
+      "tasks": "Tarefas",
+      "actionPlans": "Planos de Ação"
+    },
     "more": "Mais",
     "security": {
       "changePassword": "Alterar Senha"
@@ -1073,6 +1090,50 @@
     }
   },
   "works": {
+    "dashboard": {
+      "subtitle": "Visão geral dos projetos e frentes de serviço",
+      "filters": {
+        "project": "Projeto",
+        "supplier": "Fornecedor",
+        "work": "Frente de serviço",
+        "totalAmount": "Valor contratado"
+      },
+      "kpi": {
+        "totalPaid": "Total pago",
+        "totalContracted": "Total contratado",
+        "totalBalance": "Saldo a pagar",
+        "works": "Frentes de serviço",
+        "projects": "Projetos",
+        "overdueWorks": "Frentes atrasadas",
+        "pending": "Pendências",
+        "pendingBreakdown": "{addendums, plural, one {# aditivo} other {# aditivos}} • {measurements, plural, one {# medição} other {# medições}}",
+        "avgExecutionDuration": "Duração média de execução",
+        "avgDelay": "Atraso médio",
+        "days": "{count, plural, one {# dia} other {# dias}}",
+        "basedOnCompletedWorks": "{count, plural, one {com base em # frente concluída} other {com base em # frentes concluídas}}"
+      },
+      "charts": {
+        "valueByStatus": {
+          "title": "Valor contratado por status"
+        },
+        "weeklyDisbursement": {
+          "title": "Desembolso por semana",
+          "series": "Pago na semana"
+        },
+        "topWorks": {
+          "title": "Maiores frentes por valor pago",
+          "others": "{count, plural, one {Demais # frente} other {Demais # frentes}}"
+        }
+      },
+      "projects": {
+        "title": "Projetos",
+        "empty": "Nenhum projeto cadastrado ainda.",
+        "contracted": "Contratado",
+        "paid": "Pago",
+        "remaining": "Saldo",
+        "serviceFronts": "{count, plural, one {# frente de serviço} other {# frentes de serviço}}"
+      }
+    },
     "subtitle": "Gerencie o cadastro de frentes de serviço",
     "new": {
       "title": "Nova frente de serviço"
@@ -1140,52 +1201,6 @@
       "message": "Tem certeza que deseja excluir a frente de serviço {name}? Esta ação não pode ser desfeita.",
       "success": "Frente de serviço excluída com sucesso.",
       "error": "Não foi possível excluir a frente de serviço."
-    }
-  },
-  "dashboard": {
-    "subtitle": "Visão geral dos projetos e frentes de serviço",
-    "filters": {
-      "project": "Projeto",
-      "supplier": "Fornecedor",
-      "work": "Frente de serviço",
-      "totalAmount": "Valor contratado"
-    },
-    "kpi": {
-      "totalPaid": "Total pago",
-      "totalContracted": "Total contratado",
-      "totalBalance": "Saldo a pagar",
-      "works": "Frentes de serviço",
-      "projects": "Projetos",
-      "overdueWorks": "Frentes atrasadas",
-      "pending": "Pendências",
-      "pendingBreakdown": "{addendums, plural, one {# aditivo} other {# aditivos}} • {measurements, plural, one {# medição} other {# medições}}",
-      "teamCompletedTasks": "Tarefas concluídas pela equipe",
-      "myCompletedTasks": "Minhas tarefas concluídas"
-    },
-    "charts": {
-      "valueByStatus": {
-        "title": "Valor contratado por status"
-      },
-      "weeklyDisbursement": {
-        "title": "Desembolso por semana",
-        "series": "Pago na semana"
-      },
-      "topWorks": {
-        "title": "Maiores frentes por valor pago",
-        "others": "{count, plural, one {Demais # frente} other {Demais # frentes}}"
-      },
-      "employeeTaskRanking": {
-        "title": "Ranking de funcionários por tarefas concluídas",
-        "others": "{count, plural, one {Demais # funcionário} other {Demais # funcionários}}"
-      }
-    },
-    "projects": {
-      "title": "Projetos",
-      "empty": "Nenhum projeto cadastrado ainda.",
-      "contracted": "Contratado",
-      "paid": "Pago",
-      "remaining": "Saldo",
-      "serviceFronts": "{count, plural, one {# frente de serviço} other {# frentes de serviço}}"
     }
   },
   "projects": {
@@ -1616,6 +1631,19 @@
     }
   },
   "tickets": {
+    "dashboard": {
+      "subtitle": "Tempo médio de resolução dos chamados",
+      "kpi": {
+        "avgResolutionDuration": "Tempo médio de resolução",
+        "resolvedCount": "Chamados resolvidos",
+        "days": "{count, plural, one {# dia} other {# dias}}"
+      },
+      "charts": {
+        "durationByPriority": {
+          "title": "Tempo médio de resolução por prioridade"
+        }
+      }
+    },
     "subtitle": "Chamados registrados manualmente pelos usuários - primeiro elo da cadeia Chamado → Plano de Ação → Tarefa",
     "new": {
       "title": "Novo chamado"
@@ -1735,6 +1763,15 @@
     }
   },
   "actionPlans": {
+    "dashboard": {
+      "subtitle": "Contagem por status e tempo médio de execução dos planos de ação",
+      "kpi": {
+        "total": "Planos de ação",
+        "avgExecutionDuration": "Tempo médio de execução",
+        "days": "{count, plural, one {# dia} other {# dias}}",
+        "basedOnCompletedPlans": "{count, plural, one {com base em # plano concluído} other {com base em # planos concluídos}}"
+      }
+    },
     "subtitle": "Planos de ação (metodologia 5W2H) - segundo elo da cadeia Chamado → Plano de Ação → Tarefa",
     "new": {
       "title": "Novo plano de ação"
@@ -1810,6 +1847,21 @@
     }
   },
   "tasks": {
+    "dashboard": {
+      "subtitle": "Progresso da equipe e tempo médio de conclusão das tarefas",
+      "kpi": {
+        "teamCompletedTasks": "Tarefas concluídas pela equipe",
+        "myCompletedTasks": "Minhas tarefas concluídas",
+        "avgCompletionDuration": "Tempo médio de conclusão",
+        "days": "{count, plural, one {# dia} other {# dias}}"
+      },
+      "charts": {
+        "employeeTaskRanking": {
+          "title": "Ranking de funcionários por tarefas concluídas",
+          "others": "{count, plural, one {Demais # funcionário} other {Demais # funcionários}}"
+        }
+      }
+    },
     "subtitle": "Tarefas de todos os planos de ação - terceiro elo da cadeia Chamado → Plano de Ação → Tarefa",
     "new": {
       "title": "Nova tarefa"

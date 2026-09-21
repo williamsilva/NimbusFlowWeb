@@ -1,4 +1,6 @@
 import { WorkStatusEnum } from '@models/enums/work-status.enum';
+import { TicketPriorityEnum } from '@models/enums/ticket-priority.enum';
+import { ActionPlanStatusEnum } from '@models/enums/action-plan-status.enum';
 
 /**
  * Espelha com.nimbusflow.works.dto.response.DashboardSummaryResponse do NimbusFlowServer.
@@ -96,4 +98,69 @@ export function mapTeamTaskProgressApiModel(
   input: TeamTaskProgressModel | null | undefined,
 ): TeamTaskProgressModel | null {
   return input ?? null;
+}
+
+/** Espelha com.nimbusflow.works.dto.response.WorkDurationAnalysisResponse - "Duração média de
+ *  execução"/"Atraso médio" (dashboard de Obras). avgDelayDays pode ser negativo (concluída antes
+ *  do previsto). */
+export interface WorkDurationAnalysisModel {
+  avgExecutionDays: number;
+  avgDelayDays: number;
+  completedWorksCount: number;
+}
+
+/** Espelha com.nimbusflow.works.dto.response.TaskDurationAnalysisResponse - "Tempo médio de
+ *  conclusão" (dashboard de Tarefas), agregado, sem quebrar por assigneeId (mesma preocupação
+ *  legal/trabalhista já aplicada ao ranking nominal - ver EmployeeTaskRankingModel). */
+export interface TaskDurationAnalysisModel {
+  avgCompletionDays: number;
+  completedTasksCount: number;
+}
+
+/** Espelha com.nimbusflow.tickets.dto.response.TicketPriorityDurationResponse. */
+export interface TicketPriorityDurationModel {
+  priority: TicketPriorityEnum;
+  avgResolutionDays: number;
+  count: number;
+}
+
+/** Espelha com.nimbusflow.tickets.dto.response.TicketDashboardSummaryResponse - "Tempo médio de
+ *  resolução" (dashboard de Chamados), só chamados terminais (CLOSED/CANCELLED). */
+export interface TicketDashboardSummaryModel {
+  avgResolutionDays: number;
+  resolvedTicketsCount: number;
+  byPriority: TicketPriorityDurationModel[];
+}
+
+/** Espelha com.nimbusflow.actionplans.dto.response.ActionPlanDashboardSummaryResponse - contagem
+ *  por status + "Tempo médio de execução" (dashboard de Planos de Ação, só COMPLETED). byStatus
+ *  vem do backend como Map<ActionPlanStatus, Long> (serializado como objeto JSON). */
+export interface ActionPlanDashboardSummaryModel {
+  byStatus: Partial<Record<ActionPlanStatusEnum, number>>;
+  avgExecutionDays: number;
+  completedCount: number;
+}
+
+export function mapWorkDurationAnalysisApiModel(
+  input: WorkDurationAnalysisModel | null | undefined,
+): WorkDurationAnalysisModel | null {
+  return input ?? null;
+}
+
+export function mapTaskDurationAnalysisApiModel(
+  input: TaskDurationAnalysisModel | null | undefined,
+): TaskDurationAnalysisModel | null {
+  return input ?? null;
+}
+
+export function mapTicketDashboardSummaryApiModel(
+  input: TicketDashboardSummaryModel | null | undefined,
+): TicketDashboardSummaryModel | null {
+  return input ? { ...input, byPriority: input.byPriority ?? [] } : null;
+}
+
+export function mapActionPlanDashboardSummaryApiModel(
+  input: ActionPlanDashboardSummaryModel | null | undefined,
+): ActionPlanDashboardSummaryModel | null {
+  return input ? { ...input, byStatus: input.byStatus ?? {} } : null;
 }

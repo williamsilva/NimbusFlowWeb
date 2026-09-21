@@ -6,9 +6,11 @@ import { PermissionService } from '@core/auth/permission.service';
 /** Ranking NOMINAL de funcionários por tarefas concluídas - permissão dedicada, só ADMINISTRADOR
  *  (pedido do usuário 2026-09-20, preocupação legal/trabalhista com expor desempenho individual
  *  comparativo pro resto da equipe). Colaboradores comuns continuam vendo as métricas agregadas
- *  (sem nome) - ver DashboardComponent. */
+ *  (sem nome) - ver TasksDashboardComponent. Movida/renomeada de DashboardPermissionPolicy
+ *  (features/dashboard) pra dentro de features/tasks (pedido do usuário 2026-09-21, separação dos
+ *  dashboards) - único consumidor é o widget de ranking, que migrou pro dashboard de Tarefas. */
 @Injectable({ providedIn: 'root' })
-export class DashboardPermissionPolicy {
+export class TasksDashboardPermissionPolicy {
   private readonly perms = inject(PermissionService);
 
   canViewEmployeeRanking(): boolean {

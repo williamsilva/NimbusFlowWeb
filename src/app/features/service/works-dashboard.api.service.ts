@@ -8,16 +8,17 @@ import {
   DashboardAnalyticsModel,
   DashboardFilterInput,
   DashboardSummaryModel,
-  EmployeeTaskRankingModel,
-  TeamTaskProgressModel,
+  WorkDurationAnalysisModel,
   mapDashboardAnalyticsApiModel,
   mapDashboardSummaryApiModel,
-  mapEmployeeTaskRankingApiModels,
-  mapTeamTaskProgressApiModel,
+  mapWorkDurationAnalysisApiModel,
 } from '@models/dashboard.models';
 
+/** Dashboard de Obras - renomeado de DashboardApiService (pedido do usuário 2026-09-21, separação
+ *  dos dashboards) - employeeTaskRanking()/teamTaskProgress() mudaram de dono, ver
+ *  TasksDashboardApiService. */
 @Injectable({ providedIn: 'root' })
-export class DashboardApiService {
+export class WorksDashboardApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API.bff}/v1/dashboard`;
 
@@ -33,21 +34,13 @@ export class DashboardApiService {
       .pipe(map(mapDashboardAnalyticsApiModel));
   }
 
-  /** Ranking NOMINAL de funcionários por tarefas concluídas - requer DASHBOARD_RANKING_CONSULT
-   *  (só ADMINISTRADOR). Sem filtro (não tem correspondência com DashboardFilterRequest hoje, já
-   *  que Task não tem workId/projectId próprio). */
-  employeeTaskRanking() {
+  /** "Duração média de execução"/"Atraso médio" - só obras COMPLETED com actualEndDate
+   *  preenchido, sem filtro (mesmo motivo de employeeTaskRanking no dashboard de Tarefas: não tem
+   *  correspondência direta com DashboardFilterRequest). */
+  workDurationAnalysis() {
     return this.http
-      .get<EmployeeTaskRankingModel[]>(`${this.baseUrl}/employee-task-ranking`)
-      .pipe(map(mapEmployeeTaskRankingApiModels));
-  }
-
-  /** Métricas agregadas (sem nome) de tarefas concluídas - aberto a TAREFA_CONSULT/EXECUTE, pra
-   *  colaboradores comuns que não têm DASHBOARD_RANKING_CONSULT. */
-  teamTaskProgress() {
-    return this.http
-      .get<TeamTaskProgressModel>(`${this.baseUrl}/team-task-progress`)
-      .pipe(map(mapTeamTaskProgressApiModel));
+      .get<WorkDurationAnalysisModel>(`${this.baseUrl}/work-duration-analysis`)
+      .pipe(map(mapWorkDurationAnalysisApiModel));
   }
 
   private buildParams(filter?: DashboardFilterInput): HttpParams {
