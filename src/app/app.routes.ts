@@ -1,7 +1,9 @@
+import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
 
 import { authGuard } from '@core/auth/auth.guard';
 import { permissionGuard } from '@core/auth/permission.guard';
+import { PermissionService } from '@core/auth/permission.service';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { LayoutComponent } from '@layout/layout.component';
 
@@ -13,10 +15,35 @@ export const appRoutes: Routes = [
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
 
-      // Dashboard virou 4 (pedido do usuário 2026-09-21) - /dashboard redireciona pro de Obras
-      // (mantém bookmarks/atalhos antigos funcionando), cada um com sua própria permissão de
-      // visualização, mesma lista de `permissions` da tela correspondente.
-      { path: 'dashboard', pathMatch: 'full', redirectTo: 'dashboard/works' },
+      // Dashboard virou 4 (pedido do usuário 2026-09-21) - /dashboard não pode mais mandar todo
+      // mundo pro de Obras de forma fixa: quem não tem OBRA_CONSULT batia direto no /forbidden
+      // assim que logava. RedirectFunction (roda em injection context, pode usar inject()) escolhe
+      // o primeiro dashboard que o usuário realmente enxerga, na mesma ordem do menu; só cai em
+      // /forbidden se o usuário não tiver acesso a nenhum dos 4.
+      {
+        path: 'dashboard',
+        pathMatch: 'full',
+        redirectTo: () => {
+          const perms = inject(PermissionService);
+
+          if (perms.canAccess([PERMISSIONS.SUPPORT, PERMISSIONS.OBRA.VIEW])) {
+            return 'dashboard/works';
+          }
+          if (perms.canAccess([PERMISSIONS.SUPPORT, PERMISSIONS.CHAMADO.VIEW])) {
+            return 'dashboard/tickets';
+          }
+          if (
+            perms.canAccess([PERMISSIONS.SUPPORT, PERMISSIONS.TAREFA.VIEW, PERMISSIONS.TAREFA.EXECUTE])
+          ) {
+            return 'dashboard/tasks';
+          }
+          if (perms.canAccess([PERMISSIONS.SUPPORT, PERMISSIONS.PLANO_ACAO.VIEW])) {
+            return 'dashboard/action-plans';
+          }
+
+          return '/forbidden';
+        },
+      },
 
       {
         path: 'dashboard/works',
