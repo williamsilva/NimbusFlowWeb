@@ -79,6 +79,16 @@ body {
     border-radius: 50%;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
   }
+
+  /* "Atualizar" some no mobile/PWA (pedido do usuário 2026-09-21) - substituído por
+     app-pull-to-refresh (puxar a lista pra baixo), ver layout.component.html. Seleciona pelo
+     ícone (:has(.pi-refresh)), não por classe (p-button-text também é usada por outros botões
+     secundários que não devem sumir) - continua funcionando em telas sem esse botão (sem match,
+     sem efeito) e no desktop, onde esta media query nem se aplica. */
+  app-page-header .p-button:has(.pi-refresh),
+  .cs-embedded-list-actions .p-button:has(.pi-refresh) {
+    display: none;
+  }
 }
 
 /* Remove o delay de ~300ms + double-tap-to-zoom em áreas clicáveis - mantém o pinch-zoom geral

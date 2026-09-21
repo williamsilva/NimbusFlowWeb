@@ -10,6 +10,7 @@ import {
 } from '@williamsilva/nimbus-web-commons';
 import { LayoutStateService } from './layout-state.service';
 import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
+import { PullToRefreshComponent } from '@shared/features/pull-to-refresh/pull-to-refresh.component';
 
 @Component({
   standalone: true,
@@ -17,7 +18,14 @@ import { BottomNavComponent } from './bottom-nav/bottom-nav.component';
   styleUrl: './layout.component.css',
   templateUrl: './layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, TopbarComponent, SidebarComponent, FooterComponent, BottomNavComponent],
+  imports: [
+    RouterOutlet,
+    TopbarComponent,
+    SidebarComponent,
+    FooterComponent,
+    BottomNavComponent,
+    PullToRefreshComponent,
+  ],
 })
 export class LayoutComponent {
   private readonly layout = inject(LayoutStateService);

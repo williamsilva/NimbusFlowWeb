@@ -1,0 +1,35 @@
+/* height:0 - não ocupa espaço/empurra o conteúdo quando parado (state 'idle'); o indicador ancora
+   via position:absolute exatamente no topo da área que rola (ver .content em layout.component). */
+:host {
+  display: block;
+  position: relative;
+  height: 0;
+}
+
+.ptr-indicator {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+
+  background: var(--surface-card);
+  color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  z-index: 5;
+  pointer-events: none;
+}
+
+.ptr-indicator i {
+  transition: transform 150ms ease;
+}
+
+.ptr-indicator i.ptr-ready {
+  transform: rotate(180deg);
+}

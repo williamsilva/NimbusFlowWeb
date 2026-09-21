@@ -1,0 +1,9 @@
+@if (state() !== 'idle') {
+  <div class="ptr-indicator" [style.top.px]="pullDistance() - 40">
+    @if (state() === 'refreshing') {
+      <i class="pi pi-spin pi-spinner"></i>
+    } @else {
+      <i class="pi pi-arrow-down" [class.ptr-ready]="state() === 'ready'"></i>
+    }
+  </div>
+}
