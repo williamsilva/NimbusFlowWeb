@@ -1912,6 +1912,13 @@
         "DONE": "Complete task"
       },
       "blockedByDependency": "Blocked until \"{title}\" is completed"
+    },
+    "viewMode": {
+      "list": "View as list",
+      "kanban": "View as board"
+    },
+    "kanban": {
+      "empty": "No tasks in this column"
     }
   }
 }

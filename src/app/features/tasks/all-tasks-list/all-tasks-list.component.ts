@@ -29,6 +29,10 @@ import { TasksAdvancedFilters } from '@features/filter/tasks.filters';
 import { TasksPermissionPolicy } from '@features/tasks/tasks-permission.policy';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import {
+  TaskKanbanDropEvent,
+  TasksKanbanBoardComponent,
+} from '@features/tasks/tasks-kanban-board/tasks-kanban-board.component';
+import {
   TASK_STATUS_VALUES,
   TaskStatusEnum,
   taskStatusTone,
@@ -67,6 +71,7 @@ import {
     PageHeaderComponent,
     FiltersPanelComponent,
     StatusBadgeComponent,
+    TasksKanbanBoardComponent,
     CsAdvancedPeriodDateFilterComponent,
   ],
 })
@@ -83,6 +88,16 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
 
   override rows =
     Number(localStorage.getItem(this.tableRowsKey())) || StatefulListPage.DEFAULT_ROWS;
+
+  /** Tamanho de página bem maior no Kanban (pedido do usuário 2026-09-21) - diferente da tabela,
+   *  paginada por natureza, o quadro precisa ver as tarefas de cada coluna de uma vez. Sem
+   *  paginação própria por coluna por simplicidade - suficiente pro volume desta empresa. */
+  private static readonly KANBAN_PAGE_SIZE = 500;
+
+  readonly viewMode = signal<'list' | 'kanban'>(
+    (localStorage.getItem(STATE_KEY.NIMBUSFLOW.WORKS.ALL_TASKS.VIEW_MODE.V1) as 'list' | 'kanban' | null) ??
+      'list',
+  );
 
   title = signal('');
   status = signal<string[] | null>(null);
@@ -189,6 +204,58 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
 
     this.facade
       .updateStatus(row.id, { status: next })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () =>
+          this.toast.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi('tasks.status.updated' as never),
+          }),
+        error: () =>
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('tasks.status.updateError' as never),
+          }),
+      });
+  }
+
+  /** Alterna Lista/Kanban (pedido do usuário 2026-09-21) - trocar pra 'list' não recarrega nada
+   *  aqui de propósito: o próprio <p-table [lazy]="true"> volta a existir no DOM (ver @if no
+   *  template) e dispara o onLazyLoad inicial sozinho, com a paginação normal de sempre. */
+  setViewMode(mode: 'list' | 'kanban'): void {
+    this.viewMode.set(mode);
+    localStorage.setItem(STATE_KEY.NIMBUSFLOW.WORKS.ALL_TASKS.VIEW_MODE.V1, mode);
+
+    if (mode === 'kanban') {
+      this.loadKanbanData();
+    }
+  }
+
+  private loadKanbanData(): void {
+    this.facade.loadPage(
+      buildListQuery<TasksAdvancedFilters>(
+        { page: 0, size: AllTasksListComponent.KANBAN_PAGE_SIZE },
+        this.buildAdvancedFilters(),
+      ),
+    );
+  }
+
+  /** Mesma regra de autorização do backend (TaskService#updateStatus): TAREFA_MANAGE muda pra
+   *  qualquer status; sem ela, só o próprio assignee (TAREFA_EXECUTE) avançando um passo por vez,
+   *  respeitando dependência - nunca envolvendo CANCELLED. */
+  canDropTask = (task: TaskWithActionPlanModel, status: TaskStatusEnum): boolean => {
+    if (task.status === status) return false;
+    if (this.policy.canManage()) return true;
+    if (!this.policy.canExecuteOwn(task)) return false;
+    if (nextForwardTaskStatus(task.status) !== status) return false;
+    return this.isDependencySatisfied(task);
+  };
+
+  onKanbanDrop(event: TaskKanbanDropEvent): void {
+    this.facade
+      .updateStatus(event.task.id, { status: event.status })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () =>

@@ -23,6 +23,31 @@
     class="p-button-secondary p-button-sm"
     [label]="'tasks.action.mine' | translate"
   ></button>
+
+  <div class="cs-view-toggle">
+    <button
+      pButton
+      type="button"
+      icon="pi pi-list"
+      tooltipPosition="top"
+      (click)="setViewMode('list')"
+      class="p-button-sm"
+      [class.p-button-outlined]="viewMode() !== 'list'"
+      [pTooltip]="'tasks.viewMode.list' | translate"
+      [attr.aria-label]="'tasks.viewMode.list' | translate"
+    ></button>
+    <button
+      pButton
+      type="button"
+      icon="pi pi-th-large"
+      tooltipPosition="top"
+      (click)="setViewMode('kanban')"
+      class="p-button-sm"
+      [class.p-button-outlined]="viewMode() !== 'kanban'"
+      [pTooltip]="'tasks.viewMode.kanban' | translate"
+      [attr.aria-label]="'tasks.viewMode.kanban' | translate"
+    ></button>
+  </div>
 </app-page-header>
 
 <cs-filters-panel
@@ -105,6 +130,16 @@
     </div>
   </cs-filters-panel>
 
+  @if (viewMode() === 'kanban') {
+    <div class="mt-2">
+      <app-tasks-kanban-board
+        [tasks]="tasks()"
+        [canDrop]="canDropTask"
+        [loading]="facade.loading()"
+        (drop)="onKanbanDrop($event)"
+      ></app-tasks-kanban-board>
+    </div>
+  } @else {
   <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
     <p-table
       #dt
@@ -276,3 +311,4 @@
     </ng-template>
   </p-table>
 </div>
+  }

@@ -118,6 +118,7 @@ export const STATE_KEY = {
           STATE: { V1: 'nimbusflow.all-tasks.table.state.v1' },
         },
         FILTERS: { V1: 'nimbusflow.all-tasks.filters.v1' },
+        VIEW_MODE: { V1: 'nimbusflow.all-tasks.view-mode.v1' },
       },
     },
 

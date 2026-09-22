@@ -1912,6 +1912,13 @@
         "DONE": "Concluir tarefa"
       },
       "blockedByDependency": "Bloqueada até \"{title}\" ser concluída"
+    },
+    "viewMode": {
+      "list": "Ver em lista",
+      "kanban": "Ver em quadro"
+    },
+    "kanban": {
+      "empty": "Nenhuma tarefa nesta coluna"
     }
   }
 }
