@@ -1,5 +1,7 @@
 import { TaskStatusEnum } from '@models/enums/task-status.enum';
 import { PeriodEnum } from '@models/enums/period.enum';
+import { TaskAssigneeTypeEnum } from '@models/enums/task-assignee-type.enum';
+import { TaskRecurrenceFrequencyEnum } from '@models/enums/task-recurrence-frequency.enum';
 
 /** Espelha com.nimbusflow.tasks.dto.response.TaskResponse do NimbusFlowServer. */
 export interface TaskModel {
@@ -8,10 +10,24 @@ export interface TaskModel {
   actionPlanId: string | null;
   title: string;
   description: string | null;
-  assigneeId: string;
+  /** USER usa assigneeId/assigneeName, DEPARTMENT usa assigneeDepartmentId/assigneeDepartmentName -
+   *  exatamente um dos dois preenchido (pedido do usuário 2026-09-22, mesmo padrão de
+   *  Ticket.targetType). */
+  assigneeType: TaskAssigneeTypeEnum;
+  assigneeId: string | null;
   assigneeName: string | null;
+  assigneeDepartmentId: string | null;
+  assigneeDepartmentName: string | null;
   status: TaskStatusEnum;
   dueDate: string | null;
+  /** Método alternativo de definir o prazo (Data de início + Dias para executar) - quando os dois
+   *  vêm preenchidos, o servidor recalcula dueDate; nulos = tarefa criada só com dueDate direto
+   *  (compatibilidade) ou ocorrência gerada por recorrência (ver TaskService#createNextOccurrence). */
+  startDate: string | null;
+  durationDays: number | null;
+  /** Repetição automática (pedido do usuário 2026-09-22) - a próxima ocorrência só nasce quando
+   *  esta é marcada Concluída (ver TaskService#updateStatus). NONE = não repete. */
+  recurrenceFrequency: TaskRecurrenceFrequencyEnum;
   /** Vínculo opcional com outra Tarefa do MESMO Plano de Ação - nulo = sem dependência.
    *  dependsOnTaskStatus já vem resolvido pelo backend (evita uma segunda chamada só pra saber
    *  se a dependência já foi concluída, ver TasksListComponent#canAdvance). */
@@ -38,8 +54,19 @@ export type TaskWithActionPlanApiModel = TaskWithActionPlanModel;
 export interface TaskUpsertInput {
   title: string;
   description: string | null;
-  assigneeId: string;
+  assigneeType: TaskAssigneeTypeEnum;
+  /** Obrigatório só quando assigneeType=USER - ver TaskService#resolveAssignee no backend. */
+  assigneeId: string | null;
+  /** Obrigatório só quando assigneeType=DEPARTMENT. */
+  assigneeDepartmentId: string | null;
+  /** Preservado tal como veio do TaskModel quando o usuário não mexe em startDate/durationDays
+   *  (edição de tarefa antiga sem esses dois campos) - o servidor só recalcula quando ambos vêm
+   *  preenchidos, ver TaskService#computeDueDate. */
   dueDate: string | null;
+  startDate: string | null;
+  durationDays: number | null;
+  recurrenceFrequency: TaskRecurrenceFrequencyEnum;
+  notifyAssigneeOnRecurrence: boolean;
   dependsOnTaskId: string | null;
   /** Só lido pela criação avulsa (TasksApiService#createStandalone) - a criação aninhada por
    *  plano ignora este campo e usa o actionPlanId da própria rota. */
@@ -57,6 +84,13 @@ export interface TasksFiltersState {
   actionPlanIds: string[] | null;
   createdAt: string | string[] | null;
   periodCreatedAt: PeriodEnum | null;
+}
+
+/** Nome de exibição do responsável - pessoa (assigneeName) ou departamento inteiro
+ *  (assigneeDepartmentName), de acordo com assigneeType (pedido do usuário 2026-09-22, ver
+ *  TasksListComponent/AllTasksListComponent/TasksKanbanBoardComponent). */
+export function taskAssigneeDisplayName(task: TaskModel): string | null {
+  return task.assigneeType === TaskAssigneeTypeEnum.DEPARTMENT ? task.assigneeDepartmentName : task.assigneeName;
 }
 
 export function mapTaskApiModel(input: TaskApiModel): TaskModel {

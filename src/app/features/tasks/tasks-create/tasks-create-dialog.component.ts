@@ -8,19 +8,33 @@ import { SelectModule } from 'primeng/select';
 import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
 import { TextareaModule } from 'primeng/textarea';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { DatePickerModule } from 'primeng/datepicker';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { UsersFacade } from '@features/facade/users.facade';
 import { TasksFacade } from '@features/facade/tasks.facade';
 import { TasksGlobalFacade } from '@features/facade/tasks-global.facade';
+import { DepartmentsFacade } from '@features/facade/departments.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { TaskModel, TaskUpsertInput } from '@models/tasks.models';
+import {
+  TASK_ASSIGNEE_TYPE_VALUES,
+  TaskAssigneeTypeEnum,
+  taskAssigneeTypeLabel,
+} from '@models/enums/task-assignee-type.enum';
+import {
+  TASK_RECURRENCE_FREQUENCY_VALUES,
+  TaskRecurrenceFrequencyEnum,
+  taskRecurrenceFrequencyLabel,
+} from '@models/enums/task-recurrence-frequency.enum';
 
 function toDateOnlyString(value: Date | null): string | null {
   if (!value) return null;
@@ -46,11 +60,14 @@ function fromDateOnlyString(value: string | null | undefined): Date | null {
     SelectModule,
     DialogModule,
     ButtonModule,
+    CheckboxModule,
     TextareaModule,
     TranslateModule,
     InputTextModule,
+    InputNumberModule,
     DatePickerModule,
     FloatLabelModule,
+    SelectButtonModule,
     ErrorMsgComponent,
     DateInputMaskDirective,
     ReactiveFormsModule,
@@ -72,15 +89,30 @@ export class TasksCreateDialogComponent {
   private readonly fb = inject(FormBuilder);
   private readonly toast = inject(MessageService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly departmentsFacade = inject(DepartmentsFacade);
 
   readonly i18n = inject(I18nService);
   readonly tasks = inject(TasksFacade);
   readonly globalTasks = inject(TasksGlobalFacade);
   readonly usersFacade = inject(UsersFacade);
   readonly assigneeOptions = this.usersFacade.options;
+  readonly departmentOptions = this.departmentsFacade.options;
 
   readonly isEditMode = computed(() => !!this.task());
   readonly saving = signal(false);
+
+  readonly assigneeTypeOptions = TASK_ASSIGNEE_TYPE_VALUES.map((value) => ({
+    value,
+    label: taskAssigneeTypeLabel(value, this.i18n),
+  }));
+
+  readonly recurrenceFrequencyOptions = TASK_RECURRENCE_FREQUENCY_VALUES.map((value) => ({
+    value,
+    label: taskRecurrenceFrequencyLabel(value, this.i18n),
+  }));
+
+  readonly TaskAssigneeTypeEnum = TaskAssigneeTypeEnum;
+  readonly TaskRecurrenceFrequencyEnum = TaskRecurrenceFrequencyEnum;
 
   /** Opções de dependência: dentro de um plano (actionPlanId presente), outras tarefas do MESMO
    *  plano (já carregadas por TasksListComponent, ver TasksFacade.items); sem plano (tarefa
@@ -104,13 +136,29 @@ export class TasksCreateDialogComponent {
   readonly form = this.fb.nonNullable.group({
     title: ['', [Validators.required, Validators.maxLength(200)]],
     description: this.fb.control<string | null>(null, [Validators.maxLength(1000)]),
-    assigneeId: ['', [Validators.required]],
-    dueDate: this.fb.control<Date | null>(null),
+    assigneeType: this.fb.nonNullable.control<TaskAssigneeTypeEnum>(TaskAssigneeTypeEnum.USER, [Validators.required]),
+    assigneeId: this.fb.control<string | null>(null, [Validators.required]),
+    assigneeDepartmentId: this.fb.control<string | null>(null),
+    startDate: this.fb.control<Date | null>(null),
+    durationDays: this.fb.control<number | null>(null),
+    recurrenceFrequency: this.fb.nonNullable.control<TaskRecurrenceFrequencyEnum>(
+      TaskRecurrenceFrequencyEnum.NONE,
+      [Validators.required],
+    ),
+    notifyAssigneeOnRecurrence: this.fb.nonNullable.control<boolean>(false),
     dependsOnTaskId: this.fb.control<string | null>(null),
   });
 
   constructor() {
     this.usersFacade.loadUsersOptions();
+    this.departmentsFacade.loadOptions();
+
+    // Só um dos dois (assigneeId/assigneeDepartmentId) é obrigatório por vez, de acordo com o
+    // toggle - o outro é limpo e perde a validação, pra não bloquear o save com um campo escondido
+    // e vazio (mesma obrigatoriedade cruzada validada de novo no backend, ver TaskRequest).
+    this.form.controls.assigneeType.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((assigneeType) => {
+      this.applyAssigneeValidators(assigneeType);
+    });
 
     effect(() => {
       if (!this.visible()) {
@@ -143,11 +191,31 @@ export class TasksCreateDialogComponent {
       this.form.reset({
         title: task.title,
         description: task.description,
+        assigneeType: task.assigneeType,
         assigneeId: task.assigneeId,
-        dueDate: fromDateOnlyString(task.dueDate),
+        assigneeDepartmentId: task.assigneeDepartmentId,
+        startDate: fromDateOnlyString(task.startDate),
+        durationDays: task.durationDays,
+        recurrenceFrequency: task.recurrenceFrequency,
+        notifyAssigneeOnRecurrence: false,
         dependsOnTaskId: task.dependsOnTaskId,
       });
+      this.applyAssigneeValidators(task.assigneeType);
     });
+  }
+
+  private applyAssigneeValidators(assigneeType: TaskAssigneeTypeEnum): void {
+    if (assigneeType === TaskAssigneeTypeEnum.USER) {
+      this.form.controls.assigneeDepartmentId.setValue(null);
+      this.form.controls.assigneeDepartmentId.clearValidators();
+      this.form.controls.assigneeId.setValidators([Validators.required]);
+    } else {
+      this.form.controls.assigneeId.setValue(null);
+      this.form.controls.assigneeId.clearValidators();
+      this.form.controls.assigneeDepartmentId.setValidators([Validators.required]);
+    }
+    this.form.controls.assigneeId.updateValueAndValidity();
+    this.form.controls.assigneeDepartmentId.updateValueAndValidity();
   }
 
   onHide(): void {
@@ -163,7 +231,19 @@ export class TasksCreateDialogComponent {
   }
 
   private resetFormForCreate(): void {
-    this.form.reset({ title: '', description: null, assigneeId: '', dueDate: null, dependsOnTaskId: null });
+    this.form.reset({
+      title: '',
+      description: null,
+      assigneeType: TaskAssigneeTypeEnum.USER,
+      assigneeId: null,
+      assigneeDepartmentId: null,
+      startDate: null,
+      durationDays: null,
+      recurrenceFrequency: TaskRecurrenceFrequencyEnum.NONE,
+      notifyAssigneeOnRecurrence: false,
+      dependsOnTaskId: null,
+    });
+    this.applyAssigneeValidators(TaskAssigneeTypeEnum.USER);
   }
 
   save(): void {
@@ -180,13 +260,24 @@ export class TasksCreateDialogComponent {
     }
 
     const v = this.form.getRawValue();
-    const id = this.task()?.id;
+    const task = this.task();
+    const id = task?.id;
 
     const payload: TaskUpsertInput = {
       title: v.title.trim(),
       description: v.description?.trim() || null,
-      assigneeId: v.assigneeId,
-      dueDate: toDateOnlyString(v.dueDate),
+      assigneeType: v.assigneeType,
+      assigneeId: v.assigneeType === TaskAssigneeTypeEnum.USER ? v.assigneeId : null,
+      assigneeDepartmentId: v.assigneeType === TaskAssigneeTypeEnum.DEPARTMENT ? v.assigneeDepartmentId : null,
+      // Preservado tal como já estava quando o usuário não mexe em Data de início/Dias para
+      // executar (ex.: edição de uma tarefa antiga, ou de uma ocorrência gerada por recorrência) -
+      // o servidor só recalcula o prazo quando os dois campos abaixo vêm preenchidos juntos, ver
+      // TaskService#computeDueDate.
+      dueDate: task?.dueDate ?? null,
+      startDate: toDateOnlyString(v.startDate),
+      durationDays: v.durationDays,
+      recurrenceFrequency: v.recurrenceFrequency,
+      notifyAssigneeOnRecurrence: v.notifyAssigneeOnRecurrence,
       dependsOnTaskId: v.dependsOnTaskId,
     };
 

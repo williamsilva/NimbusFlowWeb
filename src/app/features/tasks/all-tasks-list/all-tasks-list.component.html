@@ -275,7 +275,7 @@
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.actionPlanTitle">{{ row.actionPlanTitle }}</span>
         </td>
         <td class="text-center" [attr.data-label]="'tasks.columns.assignee' | translate">
-          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.assigneeName ?? '-'">{{ row.assigneeName ?? '-' }}</span>
+          <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="assigneeDisplay(row)">{{ assigneeDisplay(row) }}</span>
         </td>
         <td class="text-center" [attr.data-label]="'tasks.columns.dependsOnTask' | translate">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.dependsOnTaskTitle">{{ row.dependsOnTaskTitle ?? '-' }}</span>

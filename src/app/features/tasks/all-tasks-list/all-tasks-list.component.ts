@@ -40,7 +40,7 @@ import {
   taskStatusTone,
   nextForwardTaskStatus,
 } from '@models/enums/task-status.enum';
-import { TaskWithActionPlanModel, TasksFiltersState } from '@models/tasks.models';
+import { TaskWithActionPlanModel, TasksFiltersState, taskAssigneeDisplayName } from '@models/tasks.models';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
@@ -180,6 +180,10 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
 
   tone(status: string): ReturnType<typeof taskStatusTone> {
     return taskStatusTone(status);
+  }
+
+  assigneeDisplay(row: TaskWithActionPlanModel): string {
+    return taskAssigneeDisplayName(row) ?? '-';
   }
 
   /** Atalho "Minhas tarefas" - reaproveita o filtro de assignee já existente em vez de um modo à

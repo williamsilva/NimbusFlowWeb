@@ -1873,7 +1873,13 @@
       "title": "Título",
       "description": "Descripción",
       "assignee": "Responsable de la ejecución",
+      "assigneeType": "Asignar a",
+      "assigneeDepartment": "Departamento",
       "dueDate": "Plazo",
+      "startDate": "Fecha de inicio",
+      "durationDays": "Días para ejecutar",
+      "recurrenceFrequency": "Repetición",
+      "notifyAssigneeOnRecurrence": "Notificar al responsable en cada repetición",
       "dependsOnTask": "Depende de la conclusión de (opcional)",
       "status": "Estado",
       "createdAt": "Creada el",
@@ -1894,6 +1900,16 @@
       "CANCELLED": "Cancelada",
       "updated": "Estado de la tarea actualizado con éxito.",
       "updateError": "No se pudo actualizar el estado de la tarea."
+    },
+    "assigneeType": {
+      "USER": "Colaborador",
+      "DEPARTMENT": "Departamento"
+    },
+    "recurrenceFrequency": {
+      "NONE": "No se repite",
+      "DAILY": "Diaria",
+      "WEEKLY": "Semanal",
+      "MONTHLY": "Mensual"
     },
     "form": {
       "invalid": "Complete el título y el responsable antes de enviar.",

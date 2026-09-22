@@ -42,14 +42,25 @@
                 <span></span>
               }
 
-              <span
-                class="kanban-card-avatar"
-                tooltipPosition="top"
-                [pTooltip]="task.assigneeName ?? '-'"
-                [style.background]="avatarColor(task.assigneeName)"
-              >
-                {{ initials(task.assigneeName) }}
-              </span>
+              @if (task.assigneeType === TaskAssigneeTypeEnum.DEPARTMENT) {
+                <span
+                  class="kanban-card-avatar"
+                  tooltipPosition="top"
+                  [pTooltip]="assigneeDisplay(task) ?? '-'"
+                  [style.background]="avatarColor(assigneeDisplay(task))"
+                >
+                  <i class="pi pi-building"></i>
+                </span>
+              } @else {
+                <span
+                  class="kanban-card-avatar"
+                  tooltipPosition="top"
+                  [pTooltip]="assigneeDisplay(task) ?? '-'"
+                  [style.background]="avatarColor(assigneeDisplay(task))"
+                >
+                  {{ initials(assigneeDisplay(task)) }}
+                </span>
+              }
             </div>
           </div>
         } @empty {

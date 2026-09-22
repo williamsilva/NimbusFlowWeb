@@ -5,8 +5,9 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { TaskWithActionPlanModel } from '@models/tasks.models';
+import { TaskWithActionPlanModel, taskAssigneeDisplayName } from '@models/tasks.models';
 import { TASK_STATUS_VALUES, TaskStatusEnum, taskStatusTone } from '@models/enums/task-status.enum';
+import { TaskAssigneeTypeEnum } from '@models/enums/task-assignee-type.enum';
 
 export interface TaskKanbanDropEvent {
   task: TaskWithActionPlanModel;
@@ -71,6 +72,14 @@ export class TasksKanbanBoardComponent {
 
   statusLabel(status: TaskStatusEnum): string {
     return this.i18n.tUi(`tasks.status.${status}` as never);
+  }
+
+  readonly TaskAssigneeTypeEnum = TaskAssigneeTypeEnum;
+
+  /** Departamento inteiro (pedido do usuário 2026-09-22) não tem uma única pessoa pra mostrar
+   *  iniciais/cor de avatar - ver isDepartmentAssignee no template, que troca por um ícone fixo. */
+  assigneeDisplay(task: TaskWithActionPlanModel): string | null {
+    return taskAssigneeDisplayName(task);
   }
 
   /** "1ª letra de até 2 palavras" - mesmo padrão de TicketsListComponent#initials (pedido do

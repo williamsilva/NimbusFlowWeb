@@ -6,7 +6,7 @@
   [draggable]="false"
   [resizable]="false"
   [visible]="visible()"
-  [style]="{ width: '560px', maxWidth: '95vw' }"
+  [style]="{ width: '640px', maxWidth: '95vw' }"
   [header]="isEditMode() ? ('tasks.edit.title' | translate) : ('tasks.new.title' | translate)"
 >
   <form [formGroup]="form" class="cs-dialog-form">
@@ -30,44 +30,124 @@
         </p-floatLabel>
       </div>
 
-      <div class="col-12 md:col-6 p-2">
-        <p-floatLabel variant="on" class="w-full">
-          <p-select
-            size="small"
-            class="w-full"
-            [filter]="true"
-            appendTo="body"
-            inputId="assigneeId"
-            optionLabel="label"
-            optionValue="value"
-            formControlName="assigneeId"
-            [options]="assigneeOptions()"
-          ></p-select>
-          <app-error-msg
-            [field]="'assigneeId'"
-            [forId]="'assigneeId'"
-            [control]="form.controls.assigneeId"
-            [label]="'tasks.fields.assignee' | translate"
-          />
-        </p-floatLabel>
+      <div class="col-12 p-2">
+        <label for="assigneeType" id="assigneeType-label" class="block mb-2 text-sm opacity-80">
+          {{ 'tasks.fields.assigneeType' | translate }}
+        </label>
+        <p-selectButton
+          [options]="assigneeTypeOptions"
+          optionLabel="label"
+          optionValue="value"
+          formControlName="assigneeType"
+          aria-labelledby="assigneeType-label"
+        ></p-selectButton>
       </div>
+
+      @if (form.controls.assigneeType.value === TaskAssigneeTypeEnum.USER) {
+        <div class="col-12 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              [filter]="true"
+              appendTo="body"
+              inputId="assigneeId"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="assigneeId"
+              [options]="assigneeOptions()"
+            ></p-select>
+            <app-error-msg
+              [field]="'assigneeId'"
+              [forId]="'assigneeId'"
+              [control]="form.controls.assigneeId"
+              [label]="'tasks.fields.assignee' | translate"
+            />
+          </p-floatLabel>
+        </div>
+      } @else {
+        <div class="col-12 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              [filter]="true"
+              appendTo="body"
+              inputId="assigneeDepartmentId"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="assigneeDepartmentId"
+              [options]="departmentOptions()"
+            ></p-select>
+            <app-error-msg
+              [field]="'assigneeDepartmentId'"
+              [forId]="'assigneeDepartmentId'"
+              [control]="form.controls.assigneeDepartmentId"
+              [label]="'tasks.fields.assigneeDepartment' | translate"
+            />
+          </p-floatLabel>
+        </div>
+      }
 
       <div class="col-12 md:col-6 p-2">
         <p-floatLabel variant="on" class="w-full">
           <p-datepicker
             csDateInputMask
-            inputId="dueDate"
+            inputId="startDate"
             class="w-full"
             appendTo="body"
             [showIcon]="true"
             [dateFormat]="i18n.getDateFormat()"
             [readonlyInput]="false"
-            formControlName="dueDate"
+            formControlName="startDate"
             [csDateInputMaskFormat]="i18n.getDateFormat()"
           ></p-datepicker>
-          <label for="dueDate">{{ 'tasks.fields.dueDate' | translate }}</label>
+          <label for="startDate">{{ 'tasks.fields.startDate' | translate }}</label>
         </p-floatLabel>
       </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputnumber
+            [min]="1"
+            class="w-full"
+            [useGrouping]="false"
+            inputId="durationDays"
+            inputStyleClass="w-full"
+            formControlName="durationDays"
+          ></p-inputnumber>
+          <label for="durationDays">{{ 'tasks.fields.durationDays' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            inputId="recurrenceFrequency"
+            optionLabel="label"
+            optionValue="value"
+            [options]="recurrenceFrequencyOptions"
+            formControlName="recurrenceFrequency"
+          ></p-select>
+          <label for="recurrenceFrequency">{{ 'tasks.fields.recurrenceFrequency' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      @if (form.controls.recurrenceFrequency.value !== TaskRecurrenceFrequencyEnum.NONE) {
+        <div class="col-12 md:col-6 p-2 flex align-items-center">
+          <p-checkbox
+            [binary]="true"
+            inputId="notifyAssigneeOnRecurrence"
+            formControlName="notifyAssigneeOnRecurrence"
+          ></p-checkbox>
+          <label for="notifyAssigneeOnRecurrence" class="ml-2">
+            {{ 'tasks.fields.notifyAssigneeOnRecurrence' | translate }}
+          </label>
+        </div>
+      }
 
       <div class="col-12 p-2">
         <p-floatLabel variant="on" class="w-full">

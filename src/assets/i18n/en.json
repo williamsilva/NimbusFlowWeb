@@ -1873,7 +1873,13 @@
       "title": "Title",
       "description": "Description",
       "assignee": "Assignee",
+      "assigneeType": "Assign to",
+      "assigneeDepartment": "Department",
       "dueDate": "Due date",
+      "startDate": "Start date",
+      "durationDays": "Days to complete",
+      "recurrenceFrequency": "Recurrence",
+      "notifyAssigneeOnRecurrence": "Notify assignee on every recurrence",
       "dependsOnTask": "Depends on completion of (optional)",
       "status": "Status",
       "createdAt": "Created at",
@@ -1894,6 +1900,16 @@
       "CANCELLED": "Cancelled",
       "updated": "Task status updated successfully.",
       "updateError": "Could not update the task status."
+    },
+    "assigneeType": {
+      "USER": "Employee",
+      "DEPARTMENT": "Department"
+    },
+    "recurrenceFrequency": {
+      "NONE": "Does not repeat",
+      "DAILY": "Daily",
+      "WEEKLY": "Weekly",
+      "MONTHLY": "Monthly"
     },
     "form": {
       "invalid": "Fill in the title and assignee before submitting.",

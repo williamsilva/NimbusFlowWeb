@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { PERMISSIONS } from '@core/auth/permissions.constants';
 import { PermissionService } from '@core/auth/permission.service';
 import { TaskModel } from '@models/tasks.models';
+import { TaskAssigneeTypeEnum } from '@models/enums/task-assignee-type.enum';
 
 /** TAREFA_MANAGE edita/reatribui/muda status de qualquer tarefa (não mais criar - ver
  *  TAREFA_CREATE, dedicada, pedido do usuário 2026-09-21, mesmo padrão de CHAMADO_CREATE).
@@ -26,9 +27,15 @@ export class TasksPermissionPolicy {
     return this.perms.hasSupportOr(PERMISSIONS.TAREFA.MANAGE);
   }
 
+  /** Otimista pra tarefa de Departamento (pedido do usuário 2026-09-22, decisão assumida no
+   *  plano): sem um "meus departamentos" exposto no frontend hoje, libera o botão pra qualquer
+   *  usuário com TAREFA_EXECUTE sem checar localmente se ele é membro - o backend continua sendo a
+   *  autoridade final (TaskService#isOwnTask), na pior hipótese alguém fora do departamento vê o
+   *  botão habilitado e recebe 403 ao tentar. */
   canExecuteOwn(task: TaskModel): boolean {
     if (this.canManage()) return true;
     if (!this.perms.hasSupportOr(PERMISSIONS.TAREFA.EXECUTE)) return false;
+    if (task.assigneeType === TaskAssigneeTypeEnum.DEPARTMENT) return true;
     return task.assigneeId === this.perms.currentUserId();
   }
 }

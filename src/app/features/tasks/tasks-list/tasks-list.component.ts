@@ -17,7 +17,7 @@ import { ActionPlansFacade } from '@features/facade/action-plans.facade';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { TasksPermissionPolicy } from '@features/tasks/tasks-permission.policy';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
-import { TaskModel } from '@models/tasks.models';
+import { TaskModel, taskAssigneeDisplayName } from '@models/tasks.models';
 import { ActionPlanModel } from '@models/action-plans.models';
 import {
   TaskStatusEnum,
@@ -85,6 +85,10 @@ export class TasksListComponent implements OnInit {
 
   tone(status: string): ReturnType<typeof taskStatusTone> {
     return taskStatusTone(status);
+  }
+
+  assigneeDisplay(row: TaskModel): string {
+    return taskAssigneeDisplayName(row) ?? '-';
   }
 
   refresh(): void {
