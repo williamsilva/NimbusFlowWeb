@@ -11,30 +11,45 @@
     >
       <div class="kanban-column-header">
         <span class="kanban-column-title">{{ statusLabel(column.status) }}</span>
-        <span class="kanban-column-count">{{ column.tasks.length }}</span>
+        <span [class]="'kanban-column-count kanban-column-count-' + tone(column.status)">
+          {{ column.tasks.length }}
+        </span>
       </div>
 
       <div class="kanban-column-body">
         @for (task of column.tasks; track task.id) {
-          <div
-            draggable="true"
-            [class]="'kanban-card kanban-card-tone-' + tone(task.status)"
-            (dragstart)="onDragStart(task)"
-            (dragend)="onDragEnd()"
-          >
+          <div draggable="true" class="kanban-card" (dragstart)="onDragStart(task)" (dragend)="onDragEnd()">
             <div class="kanban-card-title" tooltipPosition="top" [pTooltip]="task.title">
               {{ task.title }}
             </div>
 
-            <div class="kanban-card-subtitle" tooltipPosition="top" [pTooltip]="task.actionPlanTitle">
-              {{ task.actionPlanTitle }}
+            <div class="kanban-card-field">
+              <span class="kanban-card-field-label">{{ 'tasks.columns.actionPlan' | translate }}</span>
+              <span class="kanban-card-field-value" tooltipPosition="top" [pTooltip]="task.actionPlanTitle">
+                {{ task.actionPlanTitle }}
+              </span>
             </div>
 
             <div class="kanban-card-footer">
-              <span class="kanban-card-assignee">{{ task.assigneeName ?? '-' }}</span>
               @if (task.dueDate) {
-                <span class="kanban-card-due">{{ task.dueDate | csDate: 'short' }}</span>
+                <div class="kanban-card-field">
+                  <span class="kanban-card-field-label">{{ 'tasks.columns.dueDate' | translate }}</span>
+                  <span class="kanban-card-due" [class.kanban-card-due-overdue]="isOverdue(task)">
+                    {{ task.dueDate | csDate: 'short' }}
+                  </span>
+                </div>
+              } @else {
+                <span></span>
               }
+
+              <span
+                class="kanban-card-avatar"
+                tooltipPosition="top"
+                [pTooltip]="task.assigneeName ?? '-'"
+                [style.background]="avatarColor(task.assigneeName)"
+              >
+                {{ initials(task.assigneeName) }}
+              </span>
             </div>
           </div>
         } @empty {

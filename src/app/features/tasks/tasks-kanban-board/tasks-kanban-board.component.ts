@@ -65,6 +65,44 @@ export class TasksKanbanBoardComponent {
     return this.i18n.tUi(`tasks.status.${status}` as never);
   }
 
+  /** "1ª letra de até 2 palavras" - mesmo padrão de TicketsListComponent#initials (pedido do
+   *  usuário 2026-09-22, referência visual dos cartões de Chamados). */
+  initials(name: string | null): string {
+    const trimmed = name?.trim();
+    return trimmed ? trimmed.slice(0, 2).toUpperCase() : '?';
+  }
+
+  private static readonly AVATAR_PALETTE = [
+    '#7c3aed',
+    '#0891b2',
+    '#059669',
+    '#d97706',
+    '#dc2626',
+    '#4f46e5',
+    '#0d9488',
+    '#65a30d',
+  ];
+
+  /** Mesma técnica de hash de TicketsListComponent#avatarColor - mesmo nome sempre cai na mesma
+   *  cor, paleta fixa. */
+  avatarColor(name: string | null): string {
+    if (!name) return TasksKanbanBoardComponent.AVATAR_PALETTE[0];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+    }
+    return TasksKanbanBoardComponent.AVATAR_PALETTE[hash % TasksKanbanBoardComponent.AVATAR_PALETTE.length];
+  }
+
+  /** Prazo vencido vira um destaque vermelho no cartão - mesmo racional do card de "Data de
+   *  vencimento" na referência visual, mas orientado a dado (atrasado vs não) em vez de cor fixa. */
+  isOverdue(task: TaskWithActionPlanModel): boolean {
+    if (!task.dueDate || task.status === TaskStatusEnum.DONE || task.status === TaskStatusEnum.CANCELLED) {
+      return false;
+    }
+    return new Date(task.dueDate) < new Date(new Date().toDateString());
+  }
+
   isDropAllowed(status: TaskStatusEnum): boolean {
     const task = this.draggingTask();
     return !!task && this.canDrop(task, status);
