@@ -226,6 +226,10 @@ export const PERMISSIONS = {
     MANAGE: 'TAREFA_MANAGE',
     EXECUTE: 'TAREFA_EXECUTE',
     VIEW: 'TAREFA_CONSULT',
+    /** Dedicada, não reaproveita MANAGE (pedido do usuário 2026-09-21, mesmo padrão de
+     *  CHAMADO_CREATE) - MANAGE continua cobrindo editar/reatribuir/mudar status de qualquer
+     *  tarefa, mas não mais criar. Migration no NimbusCore só concedeu pro ADMINISTRADOR. */
+    CREATE: 'TAREFA_CREATE',
   },
 
   /**

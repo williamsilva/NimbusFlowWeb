@@ -62,6 +62,7 @@ export class TasksListComponent implements OnInit {
   readonly loading = computed(() => this.facade.loading());
   readonly loadedOnce = computed(() => this.facade.loadedOnce());
   readonly canManage = computed(() => this.policy.canManage());
+  readonly canCreate = computed(() => this.policy.canCreate());
 
   ngOnInit(): void {
     const actionPlanId = this.route.snapshot.paramMap.get('actionPlanId');
