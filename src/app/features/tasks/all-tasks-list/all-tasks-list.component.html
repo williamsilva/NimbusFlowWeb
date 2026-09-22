@@ -24,30 +24,16 @@
     [label]="'tasks.action.mine' | translate"
   ></button>
 
-  <div class="cs-view-toggle">
-    <button
-      pButton
-      type="button"
-      icon="pi pi-list"
-      tooltipPosition="top"
-      (click)="setViewMode('list')"
-      class="p-button-sm"
-      [class.p-button-outlined]="viewMode() !== 'list'"
-      [pTooltip]="'tasks.viewMode.list' | translate"
-      [attr.aria-label]="'tasks.viewMode.list' | translate"
-    ></button>
-    <button
-      pButton
-      type="button"
-      icon="pi pi-th-large"
-      tooltipPosition="top"
-      (click)="setViewMode('kanban')"
-      class="p-button-sm"
-      [class.p-button-outlined]="viewMode() !== 'kanban'"
-      [pTooltip]="'tasks.viewMode.kanban' | translate"
-      [attr.aria-label]="'tasks.viewMode.kanban' | translate"
-    ></button>
-  </div>
+  <p-selectButton
+    size="small"
+    [options]="viewModeOptions"
+    optionLabel="label"
+    optionValue="value"
+    [ngModel]="viewMode()"
+    [allowEmpty]="false"
+    (onChange)="setViewMode($event.value)"
+    [attr.aria-label]="'tasks.viewMode.title' | translate"
+  ></p-selectButton>
 </app-page-header>
 
 <cs-filters-panel

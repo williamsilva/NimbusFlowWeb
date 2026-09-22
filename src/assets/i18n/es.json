@@ -1914,8 +1914,9 @@
       "blockedByDependency": "Bloqueada hasta que \"{title}\" se complete"
     },
     "viewMode": {
-      "list": "Ver en lista",
-      "kanban": "Ver en tablero"
+      "title": "Tipo de visualización",
+      "list": "Lista",
+      "kanban": "Tablero Kanban"
     },
     "kanban": {
       "empty": "Ninguna tarea en esta columna"

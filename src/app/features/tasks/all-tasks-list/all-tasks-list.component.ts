@@ -9,6 +9,7 @@ import { TableModule } from 'primeng/table';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -64,6 +65,7 @@ import {
     TableModule,
     ButtonModule,
     TooltipModule,
+    SelectButtonModule,
     InputTextModule,
     TranslateModule,
     DatePickerModule,
@@ -98,6 +100,11 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     (localStorage.getItem(STATE_KEY.NIMBUSFLOW.WORKS.ALL_TASKS.VIEW_MODE.V1) as 'list' | 'kanban' | null) ??
       'list',
   );
+
+  readonly viewModeOptions: { label: string; value: 'list' | 'kanban' }[] = [
+    { label: this.i18n.tUi('tasks.viewMode.kanban' as never), value: 'kanban' },
+    { label: this.i18n.tUi('tasks.viewMode.list' as never), value: 'list' },
+  ];
 
   title = signal('');
   status = signal<string[] | null>(null);

@@ -3,11 +3,3 @@
 // Mobile: tabela vira lista de cards - ver mobile-card-table.scss pro que isso faz e por quê.
 // mobile-card-title/mobile-card-actions marcados manualmente no <td> certo, no HTML desta tela.
 @include mct.mobile-card-table;
-
-// Alternância Lista/Kanban (pedido do usuário 2026-09-21) - só o layout do agrupamento dos 2
-// botões; encapsulamento normal já alcança (a div é escrita neste template, só passa por
-// <ng-content> dentro de app-page-header - não precisa de ::ng-deep).
-.cs-view-toggle {
-  display: inline-flex;
-  gap: 2px;
-}

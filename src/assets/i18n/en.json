@@ -1914,8 +1914,9 @@
       "blockedByDependency": "Blocked until \"{title}\" is completed"
     },
     "viewMode": {
-      "list": "View as list",
-      "kanban": "View as board"
+      "title": "View type",
+      "list": "List",
+      "kanban": "Kanban board"
     },
     "kanban": {
       "empty": "No tasks in this column"
