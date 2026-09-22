@@ -111,7 +111,12 @@ export class TasksListComponent implements OnInit {
   }
 
   canEdit(row: TaskModel): boolean {
-    return this.canManage() && row.status !== TaskStatusEnum.DONE && row.status !== TaskStatusEnum.CANCELLED;
+    return (
+      this.canManage() &&
+      row.status !== TaskStatusEnum.DONE &&
+      row.status !== TaskStatusEnum.CANCELLED &&
+      row.status !== TaskStatusEnum.NOT_DONE
+    );
   }
 
   /** Quem só executa (não gerencia) fica travado enquanto a dependência não estiver DONE - quem

@@ -1906,6 +1906,7 @@
       "notifyAssigneeOnRecurrence": "Notificación al responsable",
       "releaseTimeEnabled": "Horario de liberación de la tarea",
       "releaseTime": "Horario de liberación",
+      "autoMoveOverdueToNotDone": "Si la tarea está vencida, moverla automáticamente al estado \"No la hizo\"",
       "scheduleHint": {
         "empty": "Defina la fecha de inicio y los días de ejecución para ver el cronograma de entregas.",
         "availableFrom": "La tarea estará disponible en el Kanban y en la app a partir de",
@@ -1931,6 +1932,7 @@
       "IN_PROGRESS": "En curso",
       "DONE": "Concluida",
       "CANCELLED": "Cancelada",
+      "NOT_DONE": "No la hizo",
       "updated": "Estado de la tarea actualizado con éxito.",
       "updateError": "No se pudo actualizar el estado de la tarea."
     },

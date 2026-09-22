@@ -193,6 +193,7 @@ export class TasksCreateDialogComponent {
     notifyAssigneeOnRecurrence: this.fb.nonNullable.control<boolean>(false),
     releaseTimeEnabled: this.fb.nonNullable.control<boolean>(false),
     releaseTime: this.fb.control<Date | null>(null),
+    autoMoveOverdueToNotDone: this.fb.nonNullable.control<boolean>(false),
     dependsOnTaskId: this.fb.control<string | null>(null),
   });
 
@@ -294,6 +295,7 @@ export class TasksCreateDialogComponent {
         notifyAssigneeOnRecurrence: task.notifyAssigneeOnRecurrence,
         releaseTimeEnabled,
         releaseTime: fromTimeOnlyString(task.releaseTime),
+        autoMoveOverdueToNotDone: task.autoMoveOverdueToNotDone,
         dependsOnTaskId: task.dependsOnTaskId,
       });
       this.applyAssigneeValidators(task.assigneeType);
@@ -411,6 +413,7 @@ export class TasksCreateDialogComponent {
       notifyAssigneeOnRecurrence: false,
       releaseTimeEnabled: false,
       releaseTime: null,
+      autoMoveOverdueToNotDone: false,
       dependsOnTaskId: null,
     });
     this.applyAssigneeValidators(TaskAssigneeTypeEnum.USER);
@@ -458,6 +461,7 @@ export class TasksCreateDialogComponent {
       recurrenceExpiresAt: v.neverExpires ? null : toDateOnlyString(v.recurrenceExpiresAt),
       notifyAssigneeOnRecurrence: v.notifyAssigneeOnRecurrence,
       releaseTime: v.releaseTimeEnabled ? toTimeOnlyString(v.releaseTime) : null,
+      autoMoveOverdueToNotDone: v.autoMoveOverdueToNotDone,
       dependsOnTaskId: v.dependsOnTaskId,
     };
 

@@ -271,6 +271,15 @@
             </p-floatLabel>
           </div>
         }
+
+        <div class="col-12 p-2 flex align-items-center gap-2">
+          <p-checkbox
+            [binary]="true"
+            inputId="autoMoveOverdueToNotDone"
+            formControlName="autoMoveOverdueToNotDone"
+          ></p-checkbox>
+          <label for="autoMoveOverdueToNotDone">{{ 'tasks.fields.autoMoveOverdueToNotDone' | translate }}</label>
+        </div>
       }
 
       <div class="col-12 p-2">

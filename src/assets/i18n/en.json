@@ -1906,6 +1906,7 @@
       "notifyAssigneeOnRecurrence": "Notify assignee",
       "releaseTimeEnabled": "Task release time",
       "releaseTime": "Release time",
+      "autoMoveOverdueToNotDone": "If the task is overdue, automatically move it to the \"Not done\" status",
       "scheduleHint": {
         "empty": "Set the start date and the number of days to see the delivery schedule.",
         "availableFrom": "The task will be available on the Kanban board and in the app starting",
@@ -1931,6 +1932,7 @@
       "IN_PROGRESS": "In progress",
       "DONE": "Done",
       "CANCELLED": "Cancelled",
+      "NOT_DONE": "Not done",
       "updated": "Task status updated successfully.",
       "updateError": "Could not update the task status."
     },

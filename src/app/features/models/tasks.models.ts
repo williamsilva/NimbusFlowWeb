@@ -40,6 +40,9 @@ export interface TaskModel {
   /** Horário de liberação da tarefa (pedido do usuário 2026-09-23) - nulo = sempre visível; senão
    *  a tarefa fica escondida das listagens até este horário passar, só no dia do vencimento. */
   releaseTime: string | null;
+  /** "Se a tarefa estiver vencida, movê-la automaticamente para o status 'Não fez'" (pedido do
+   *  usuário 2026-09-23) - aplicável a qualquer tarefa, não só recorrente. */
+  autoMoveOverdueToNotDone: boolean;
   /** Vínculo opcional com outra Tarefa do MESMO Plano de Ação - nulo = sem dependência.
    *  dependsOnTaskStatus já vem resolvido pelo backend (evita uma segunda chamada só pra saber
    *  se a dependência já foi concluída, ver TasksListComponent#canAdvance). */
@@ -89,6 +92,7 @@ export interface TaskUpsertInput {
   notifyAssigneeOnRecurrence: boolean;
   /** Nulo = sempre visível - ver TaskModel.releaseTime. */
   releaseTime: string | null;
+  autoMoveOverdueToNotDone: boolean;
   dependsOnTaskId: string | null;
   /** Só lido pela criação avulsa (TasksApiService#createStandalone) - a criação aninhada por
    *  plano ignora este campo e usa o actionPlanId da própria rota. */

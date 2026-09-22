@@ -114,7 +114,12 @@ export class TasksKanbanBoardComponent {
   /** Prazo vencido vira um destaque vermelho no cartão - mesmo racional do card de "Data de
    *  vencimento" na referência visual, mas orientado a dado (atrasado vs não) em vez de cor fixa. */
   isOverdue(task: TaskWithActionPlanModel): boolean {
-    if (!task.dueDate || task.status === TaskStatusEnum.DONE || task.status === TaskStatusEnum.CANCELLED) {
+    if (
+      !task.dueDate ||
+      task.status === TaskStatusEnum.DONE ||
+      task.status === TaskStatusEnum.CANCELLED ||
+      task.status === TaskStatusEnum.NOT_DONE
+    ) {
       return false;
     }
     return new Date(task.dueDate) < new Date(new Date().toDateString());
