@@ -24,6 +24,17 @@
     [label]="'tasks.action.mine' | translate"
   ></button>
 
+  @if (policy.canCreate()) {
+    <button
+      pButton
+      type="button"
+      (click)="goNew()"
+      icon="pi pi-plus"
+      class="p-button-info p-button-sm"
+      [label]="'tasks.new.title' | translate"
+    ></button>
+  }
+
   <p-selectButton
     size="small"
     [options]="viewModeOptions"
@@ -35,6 +46,12 @@
     [attr.aria-label]="'tasks.viewMode.title' | translate"
   ></p-selectButton>
 </app-page-header>
+
+<app-tasks-create-dialog
+  [visible]="newVisible()"
+  (created)="onCreated()"
+  (visibleChange)="onNewVisibleChange($event)"
+></app-tasks-create-dialog>
 
 <cs-filters-panel
   [collapsed]="true"

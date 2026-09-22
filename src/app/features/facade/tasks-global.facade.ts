@@ -100,6 +100,13 @@ export class TasksGlobalFacade {
       });
   }
 
+  /** Tarefa avulsa (pedido do usuário 2026-09-21) - única forma de criar sem estar dentro de um
+   *  Plano de Ação; TasksFacade (a versão aninhada) continua sendo quem cria vinculada a um
+   *  plano específico. */
+  create(input: TaskUpsertInput): Observable<TaskModel> {
+    return this.api.createStandalone(input).pipe(tap(() => this.reloadLast()));
+  }
+
   update(id: string, input: TaskUpsertInput): Observable<TaskModel> {
     return this.api.update(id, input).pipe(tap(() => this.reloadLast()));
   }

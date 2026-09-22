@@ -17,6 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { I18nService } from '@core/i18n/i18n.service';
 import { UsersFacade } from '@features/facade/users.facade';
 import { TasksFacade } from '@features/facade/tasks.facade';
+import { TasksGlobalFacade } from '@features/facade/tasks-global.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { TaskModel, TaskUpsertInput } from '@models/tasks.models';
@@ -57,7 +58,10 @@ function fromDateOnlyString(value: string | null | undefined): Date | null {
 })
 export class TasksCreateDialogComponent {
   visible = input.required<boolean>();
-  actionPlanId = input.required<string>();
+  /** Opcional (pedido do usuário 2026-09-21 - tarefa avulsa, sem Plano de Ação): ausente quando
+   *  este diálogo é aberto pela lista geral de Tarefas (AllTasksListComponent), presente quando
+   *  aberto de dentro de um plano específico (TasksListComponent). Ver `save()`. */
+  actionPlanId = input<string | null>(null);
   task = input<TaskModel | null>(null);
 
   @Output() saved = new EventEmitter<void>();
@@ -71,21 +75,25 @@ export class TasksCreateDialogComponent {
 
   readonly i18n = inject(I18nService);
   readonly tasks = inject(TasksFacade);
+  readonly globalTasks = inject(TasksGlobalFacade);
   readonly usersFacade = inject(UsersFacade);
   readonly assigneeOptions = this.usersFacade.options;
 
   readonly isEditMode = computed(() => !!this.task());
   readonly saving = signal(false);
 
-  /** Outras tarefas do MESMO plano (já carregadas por TasksListComponent antes de abrir este
-   *  diálogo, ver TasksFacade.items) pra escolher como dependência - exclui a própria tarefa em
-   *  modo edição (não pode depender de si mesma). */
+  /** Opções de dependência: dentro de um plano (actionPlanId presente), outras tarefas do MESMO
+   *  plano (já carregadas por TasksListComponent, ver TasksFacade.items); sem plano (tarefa
+   *  avulsa), só outras tarefas TAMBÉM avulsas (mesma regra do backend, ver
+   *  TaskService#resolveDependency - Objects.equals dos dois actionPlanId nulos). Exclui a
+   *  própria tarefa em modo edição (não pode depender de si mesma). */
   readonly dependencyOptions = computed(() => {
     const currentId = this.task()?.id;
-    return this.tasks
-      .items()
-      .filter((t) => t.id !== currentId)
-      .map((t) => ({ label: t.title, value: t.id }));
+    const source = this.actionPlanId()
+      ? this.tasks.items()
+      : this.globalTasks.tasks().filter((t) => t.actionPlanId == null);
+
+    return source.filter((t) => t.id !== currentId).map((t) => ({ label: t.title, value: t.id }));
   });
 
   private lastLoadedId: string | null = null;
@@ -184,7 +192,12 @@ export class TasksCreateDialogComponent {
 
     this.saving.set(true);
 
-    const req$ = id ? this.tasks.update(id, payload) : this.tasks.create(this.actionPlanId(), payload);
+    const actionPlanId = this.actionPlanId();
+    const req$ = id
+      ? this.tasks.update(id, payload)
+      : actionPlanId
+        ? this.tasks.create(actionPlanId, payload)
+        : this.globalTasks.create(payload);
 
     req$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {

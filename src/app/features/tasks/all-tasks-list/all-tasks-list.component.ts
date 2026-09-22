@@ -33,6 +33,7 @@ import {
   TaskKanbanDropEvent,
   TasksKanbanBoardComponent,
 } from '@features/tasks/tasks-kanban-board/tasks-kanban-board.component';
+import { TasksCreateDialogComponent } from '@features/tasks/tasks-create/tasks-create-dialog.component';
 import {
   TASK_STATUS_VALUES,
   TaskStatusEnum,
@@ -74,6 +75,7 @@ import {
     FiltersPanelComponent,
     StatusBadgeComponent,
     TasksKanbanBoardComponent,
+    TasksCreateDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
   ],
 })
@@ -105,6 +107,8 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     { label: this.i18n.tUi('tasks.viewMode.kanban' as never), value: 'kanban' },
     { label: this.i18n.tUi('tasks.viewMode.list' as never), value: 'list' },
   ];
+
+  newVisible = signal(false);
 
   title = signal('');
   status = signal<string[] | null>(null);
@@ -301,8 +305,26 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     return STATE_KEY.NIMBUSFLOW.WORKS.ALL_TASKS.FILTERS.V1;
   }
 
+  /** Kanban-aware (pedido do usuário 2026-09-21, ver setViewMode) - nesse modo a <p-table> nem
+   *  está no DOM, reloadWithCurrentState() (que depende dela) não faria nada. */
   protected override refresh(): void {
+    if (this.viewMode() === 'kanban') {
+      this.loadKanbanData();
+      return;
+    }
     this.reloadWithCurrentState();
+  }
+
+  goNew(): void {
+    this.newVisible.set(true);
+  }
+
+  onCreated(): void {
+    this.refresh();
+  }
+
+  onNewVisibleChange(visible: boolean): void {
+    this.newVisible.set(visible);
   }
 
   protected override resetFilters(): void {

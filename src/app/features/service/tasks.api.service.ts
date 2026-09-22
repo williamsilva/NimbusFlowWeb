@@ -35,6 +35,12 @@ export class TasksApiService {
       .pipe(map(mapTaskApiModel));
   }
 
+  /** Tarefa avulsa (pedido do usuário 2026-09-21) - sem Plano de Ação; actionPlanId vai opcional
+   *  dentro do próprio `input`, não como segmento de rota (ver TaskController#create no backend). */
+  createStandalone(input: TaskUpsertInput) {
+    return this.http.post<TaskApiModel>(this.baseUrl, input).pipe(map(mapTaskApiModel));
+  }
+
   searchPaged(body: ListQueryDto<TasksAdvancedFilters>) {
     return this.http
       .post<HalPagedResponse<TaskWithActionPlanApiModel>>(`${this.baseUrl}/search`, body)

@@ -4,7 +4,8 @@ import { PeriodEnum } from '@models/enums/period.enum';
 /** Espelha com.nimbusflow.tasks.dto.response.TaskResponse do NimbusFlowServer. */
 export interface TaskModel {
   id: string;
-  actionPlanId: string;
+  /** Nulo = tarefa avulsa, sem vínculo com nenhum Plano de Ação (pedido do usuário 2026-09-21). */
+  actionPlanId: string | null;
   title: string;
   description: string | null;
   assigneeId: string;
@@ -40,6 +41,9 @@ export interface TaskUpsertInput {
   assigneeId: string;
   dueDate: string | null;
   dependsOnTaskId: string | null;
+  /** Só lido pela criação avulsa (TasksApiService#createStandalone) - a criação aninhada por
+   *  plano ignora este campo e usa o actionPlanId da própria rota. */
+  actionPlanId?: string | null;
 }
 
 export interface TaskStatusInput {
