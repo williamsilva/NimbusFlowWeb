@@ -13,12 +13,17 @@
   }
 }
 
+/* Cor fixa (não var(--surface-*)) de propósito - pedido do usuário 2026-09-22 pra bater exatamente
+   com a referência visual em AMBOS os temas; variáveis de tema já causaram achados reais aqui
+   (--yellow-500/--green-500/etc. sem fallback ficavam invisíveis quando o preset não as define).
+   Cinza neutro claro no claro, cinza neutro escuro no escuro - mesmo contraste em relação ao
+   cartão (branco/quase-branco) nos dois casos. */
 .kanban-column {
   display: flex;
   flex-direction: column;
   min-width: 0;
   border-radius: 14px;
-  background: var(--surface-100);
+  background: #eceef0;
   border: 1px solid transparent;
   transition: background-color 120ms ease, border-color 120ms ease;
 }
@@ -27,7 +32,7 @@
    ver memória do bug recorrente neste código); :host-context(.dark) é a forma que funciona de
    verdade pra estilo condicional a tema escuro num componente. */
 :host-context(.dark) .kanban-column {
-  background: color-mix(in srgb, var(--surface-800) 70%, transparent);
+  background: #26262b;
 }
 
 .kanban-column-over {
@@ -94,23 +99,22 @@
   opacity: 0.55;
 }
 
+/* Mesma lógica de cor fixa da coluna acima - branco puro no claro (contraste máximo contra o
+   #eceef0 da coluna), cinza claro-mas-mais-claro-que-a-coluna no escuro (contraste equivalente). */
 .kanban-card {
   padding: 0.85rem 0.9rem;
   border-radius: 12px;
-  background: var(--surface-card);
-  border: 1px solid var(--surface-border);
+  background: #fff;
+  border: 1px solid #d7dade;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
   cursor: grab;
 }
 
-/* --surface-border fica escura demais perto de --surface-card no tema escuro (as duas ficam bem
-   próximas, a borda praticamente some) - borda clara semi-transparente em vez da borda "de tema".
-   :host-context(.dark), não :root.dark - View Encapsulation prefixa :root.dark e ele nunca casa
-   com nada dentro de um *.component.scss (ver memória do bug recorrente neste código; o fix
-   anterior aqui usava :root.dark por engano e não tinha efeito nenhum). Opacidade bem mais alta
-   que a primeira tentativa (0.14 -> 0.35) - a diferença ficava sutil demais pra notar. */
+/* :host-context(.dark), não :root.dark - View Encapsulation prefixa :root.dark e ele nunca casa
+   com nada dentro de um *.component.scss (ver memória do bug recorrente neste código). */
 :host-context(.dark) .kanban-card {
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: #38383f;
+  border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -168,12 +172,12 @@
   font-size: 0.72rem;
   font-weight: 700;
   color: #fff;
-  background: var(--blue-500);
+  background: var(--blue-500, #3b82f6);
   white-space: nowrap;
 }
 
 .kanban-card-due-overdue {
-  background: var(--red-500);
+  background: var(--red-500, #ef4444);
 }
 
 .kanban-card-avatar {
