@@ -519,6 +519,15 @@
       "noPlan": "No site plan uploaded for this project yet.",
       "hint": "Click the image to mark the position."
     },
+    "dayOfWeek": {
+      "MONDAY": "Monday",
+      "TUESDAY": "Tuesday",
+      "WEDNESDAY": "Wednesday",
+      "THURSDAY": "Thursday",
+      "FRIDAY": "Friday",
+      "SATURDAY": "Saturday",
+      "SUNDAY": "Sunday"
+    },
     "filters": {
       "final": "Final Value",
       "initial": "Initial Value"
@@ -668,6 +677,16 @@
       "runTimeHint": "Time of day (São Paulo time) the job runs daily.",
       "saved": "Supplier auto-deactivation settings saved successfully.",
       "saveError": "Could not save the Supplier auto-deactivation settings."
+    }
+  },
+  "taskRecurrence": {
+    "settings": {
+      "cardTitle": "Task Recurrence",
+      "cardSubtitle": "Generates the next occurrence daily for Tasks with recurrence configured.",
+      "runTime": "Time",
+      "runTimeHint": "Time of day (Brasília time) the job runs daily.",
+      "saved": "Task recurrence settings saved successfully.",
+      "saveError": "Could not save the task recurrence settings."
     }
   },
   "companySettings": {
@@ -1878,8 +1897,15 @@
       "dueDate": "Due date",
       "startDate": "Start date",
       "durationDays": "Days to complete",
-      "recurrenceFrequency": "Recurrence",
-      "notifyAssigneeOnRecurrence": "Notify assignee on every recurrence",
+      "recurrenceFrequency": "Frequency",
+      "recurrenceInterval": "Interval",
+      "recurrenceWeekDays": "Days of the week",
+      "recurrenceMonthDays": "Days of the month",
+      "recurrenceExpiresAt": "Expiration date",
+      "neverExpires": "Never expires",
+      "notifyAssigneeOnRecurrence": "Notify assignee",
+      "releaseTimeEnabled": "Task release time",
+      "releaseTime": "Release time",
       "scheduleHint": {
         "empty": "Set the start date and the number of days to see the delivery schedule.",
         "availableFrom": "The task will be available on the Kanban board and in the app starting",
@@ -1916,7 +1942,20 @@
       "NONE": "Does not repeat",
       "DAILY": "Daily",
       "WEEKLY": "Weekly",
-      "MONTHLY": "Monthly"
+      "MONTHLY": "Monthly",
+      "YEARLY": "Yearly",
+      "WEEKLY_DAYS": "Days of the week",
+      "MONTHLY_DAYS": "Days of the month"
+    },
+    "recurrenceOption": {
+      "NONE": "Does not repeat",
+      "DAILY_EVERY": "Every day",
+      "DAILY_INTERVAL": "Every X days",
+      "WEEKLY": "Every X weeks",
+      "MONTHLY": "Every X months",
+      "YEARLY": "Every X years",
+      "WEEKLY_DAYS": "Days of the week",
+      "MONTHLY_DAYS": "Days of the month"
     },
     "form": {
       "invalid": "Fill in the title and assignee before submitting.",

@@ -18,6 +18,7 @@ import { PageHeaderComponent } from '@shared/features/page-header/page-header.co
 import { WorkAutoCompleteSettingsApiService } from '@features/service/work-auto-complete-settings.api.service';
 import { ProjectAutoCompleteSettingsApiService } from '@features/service/project-auto-complete-settings.api.service';
 import { SupplierAutoDeactivateSettingsApiService } from '@features/service/supplier-auto-deactivate-settings.api.service';
+import { TaskRecurrenceSettingsApiService } from '@features/service/task-recurrence-settings.api.service';
 
 /** Página "Configurações > Conclusão Automática" - 1 aba por job (Frente de Serviço, Projeto,
  *  Fornecedor), cada uma com sua própria carência/horário/permissão (decisão do usuário
@@ -48,6 +49,7 @@ export class WorkAutoCompleteSettingsComponent {
   private readonly workService = inject(WorkAutoCompleteSettingsApiService);
   private readonly projectService = inject(ProjectAutoCompleteSettingsApiService);
   private readonly supplierService = inject(SupplierAutoDeactivateSettingsApiService);
+  private readonly taskRecurrenceService = inject(TaskRecurrenceSettingsApiService);
 
   protected readonly canViewWork = computed(() =>
     this.perms.hasSupportOr(PERMISSIONS.SETTINGS.WORK_AUTO_COMPLETE_VIEW),
@@ -67,6 +69,12 @@ export class WorkAutoCompleteSettingsComponent {
   protected readonly canEditSupplier = computed(() =>
     this.perms.hasSupportOr(PERMISSIONS.SETTINGS.SUPPLIER_AUTO_DEACTIVATE_CHANGE),
   );
+  protected readonly canViewTaskRecurrence = computed(() =>
+    this.perms.hasSupportOr(PERMISSIONS.SETTINGS.TASK_RECURRENCE_VIEW),
+  );
+  protected readonly canEditTaskRecurrence = computed(() =>
+    this.perms.hasSupportOr(PERMISSIONS.SETTINGS.TASK_RECURRENCE_CHANGE),
+  );
 
   protected readonly loadingWork = signal(false);
   protected readonly savingWork = signal(false);
@@ -74,6 +82,8 @@ export class WorkAutoCompleteSettingsComponent {
   protected readonly savingProject = signal(false);
   protected readonly loadingSupplier = signal(false);
   protected readonly savingSupplier = signal(false);
+  protected readonly loadingTaskRecurrence = signal(false);
+  protected readonly savingTaskRecurrence = signal(false);
 
   readonly workForm = this.fb.group({
     daysSinceLastPayment: [5, [Validators.required, Validators.min(0), Validators.max(365)]],
@@ -90,6 +100,10 @@ export class WorkAutoCompleteSettingsComponent {
     runTime: [this.timeOf(9, 0), Validators.required],
   });
 
+  readonly taskRecurrenceForm = this.fb.group({
+    runTime: [this.timeOf(0, 5), Validators.required],
+  });
+
   constructor() {
     if (this.canViewWork()) {
       this.loadWork();
@@ -100,14 +114,18 @@ export class WorkAutoCompleteSettingsComponent {
     if (this.canViewSupplier()) {
       this.loadSupplier();
     }
+    if (this.canViewTaskRecurrence()) {
+      this.loadTaskRecurrence();
+    }
   }
 
-  /** Aba padrão: a primeira, entre Frente/Projeto/Fornecedor, que o usuário de fato tem permissão
-   *  de ver - mesmo racional de WorksDetailComponent.defaultTab(). */
+  /** Aba padrão: a primeira, entre Frente/Projeto/Fornecedor/Recorrência de Tarefas, que o usuário
+   *  de fato tem permissão de ver - mesmo racional de WorksDetailComponent.defaultTab(). */
   protected defaultTab(): string {
     if (this.canViewWork()) return 'work';
     if (this.canViewProject()) return 'project';
     if (this.canViewSupplier()) return 'supplier';
+    if (this.canViewTaskRecurrence()) return 'taskRecurrence';
     return 'work';
   }
 
@@ -262,6 +280,49 @@ export class WorkAutoCompleteSettingsComponent {
             severity: 'error',
             summary: this.i18n.tUi('common.error'),
             detail: this.i18n.tUi('supplierAutoDeactivate.settings.saveError'),
+          });
+        },
+      });
+  }
+
+  protected loadTaskRecurrence(): void {
+    this.loadingTaskRecurrence.set(true);
+    this.taskRecurrenceService.getSettings().subscribe({
+      next: (s) => {
+        this.taskRecurrenceForm.patchValue({ runTime: this.timeOf(s.runHour, s.runMinute) });
+        if (!this.canEditTaskRecurrence()) {
+          this.taskRecurrenceForm.disable();
+        }
+      },
+      error: () => this.loadingTaskRecurrence.set(false),
+      complete: () => this.loadingTaskRecurrence.set(false),
+    });
+  }
+
+  protected saveTaskRecurrence(): void {
+    this.taskRecurrenceForm.markAllAsTouched();
+    if (this.taskRecurrenceForm.invalid) return;
+
+    const v = this.taskRecurrenceForm.getRawValue();
+    const runTime = v.runTime ?? this.timeOf(0, 5);
+    this.savingTaskRecurrence.set(true);
+    this.taskRecurrenceService
+      .updateSettings({ runHour: runTime.getHours(), runMinute: runTime.getMinutes() })
+      .subscribe({
+        next: () => {
+          this.savingTaskRecurrence.set(false);
+          this.toast.add({
+            severity: 'success',
+            summary: this.i18n.tUi('common.success'),
+            detail: this.i18n.tUi('taskRecurrence.settings.saved'),
+          });
+        },
+        error: () => {
+          this.savingTaskRecurrence.set(false);
+          this.toast.add({
+            severity: 'error',
+            summary: this.i18n.tUi('common.error'),
+            detail: this.i18n.tUi('taskRecurrence.settings.saveError'),
           });
         },
       });

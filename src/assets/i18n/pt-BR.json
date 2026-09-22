@@ -519,6 +519,15 @@
       "noPlan": "Nenhuma planta cadastrada pra este projeto.",
       "hint": "Clique na imagem pra marcar a posição."
     },
+    "dayOfWeek": {
+      "MONDAY": "Segunda",
+      "TUESDAY": "Terça",
+      "WEDNESDAY": "Quarta",
+      "THURSDAY": "Quinta",
+      "FRIDAY": "Sexta",
+      "SATURDAY": "Sábado",
+      "SUNDAY": "Domingo"
+    },
     "filters": {
       "final": "Valor Final",
       "initial": "Valor Incial"
@@ -668,6 +677,16 @@
       "runTimeHint": "Horário do dia (horário de Brasília) em que o job roda diariamente.",
       "saved": "Configuração de desativação automática de Fornecedor salva com sucesso.",
       "saveError": "Não foi possível salvar a configuração de desativação automática de Fornecedor."
+    }
+  },
+  "taskRecurrence": {
+    "settings": {
+      "cardTitle": "Recorrência de Tarefas",
+      "cardSubtitle": "Gera diariamente a próxima ocorrência das Tarefas com repetição configurada.",
+      "runTime": "Horário",
+      "runTimeHint": "Horário do dia (horário de Brasília) em que o job roda diariamente.",
+      "saved": "Configuração de recorrência de Tarefas salva com sucesso.",
+      "saveError": "Não foi possível salvar a configuração de recorrência de Tarefas."
     }
   },
   "companySettings": {
@@ -1878,8 +1897,15 @@
       "dueDate": "Prazo",
       "startDate": "Data de início",
       "durationDays": "Dias para executar",
-      "recurrenceFrequency": "Repetição",
-      "notifyAssigneeOnRecurrence": "Notificar o responsável a cada repetição",
+      "recurrenceFrequency": "Frequência",
+      "recurrenceInterval": "Intervalo",
+      "recurrenceWeekDays": "Dias da semana",
+      "recurrenceMonthDays": "Dias do mês",
+      "recurrenceExpiresAt": "Data de expiração",
+      "neverExpires": "Nunca expirar",
+      "notifyAssigneeOnRecurrence": "Notificação ao responsável",
+      "releaseTimeEnabled": "Horário de liberação da tarefa",
+      "releaseTime": "Horário de liberação",
       "scheduleHint": {
         "empty": "Defina a data de início e os dias de execução para visualizar o cronograma de entregas.",
         "availableFrom": "A tarefa ficará disponível no Kanban e no app a partir de",
@@ -1916,7 +1942,20 @@
       "NONE": "Não repete",
       "DAILY": "Diária",
       "WEEKLY": "Semanal",
-      "MONTHLY": "Mensal"
+      "MONTHLY": "Mensal",
+      "YEARLY": "Anual",
+      "WEEKLY_DAYS": "Dias da semana",
+      "MONTHLY_DAYS": "Dias do mês"
+    },
+    "recurrenceOption": {
+      "NONE": "Não repete",
+      "DAILY_EVERY": "Todos os dias",
+      "DAILY_INTERVAL": "A cada X dias",
+      "WEEKLY": "A cada X semanas",
+      "MONTHLY": "A cada X meses",
+      "YEARLY": "A cada X anos",
+      "WEEKLY_DAYS": "Dias da semana",
+      "MONTHLY_DAYS": "Dias do mês"
     },
     "form": {
       "invalid": "Preencha o título e o responsável antes de enviar.",

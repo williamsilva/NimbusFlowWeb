@@ -18,6 +18,9 @@
       @if (canViewSupplier()) {
         <p-tab value="supplier">{{ 'supplierAutoDeactivate.settings.cardTitle' | translate }}</p-tab>
       }
+      @if (canViewTaskRecurrence()) {
+        <p-tab value="taskRecurrence">{{ 'taskRecurrence.settings.cardTitle' | translate }}</p-tab>
+      }
     </p-tablist>
 
     <p-tabpanels>
@@ -218,6 +221,51 @@
                   [loading]="savingSupplier()"
                   [label]="'common.save' | translate"
                   [disabled]="loadingSupplier() || supplierForm.invalid"
+                ></p-button>
+              </div>
+            }
+          </form>
+        </p-tabpanel>
+      }
+
+      @if (canViewTaskRecurrence()) {
+        <p-tabpanel value="taskRecurrence">
+          <p class="mb-3 text-color-secondary">{{ 'taskRecurrence.settings.cardSubtitle' | translate }}</p>
+
+          <form [formGroup]="taskRecurrenceForm" (ngSubmit)="saveTaskRecurrence()">
+            <div class="grid formgrid gap-0">
+              <div class="col-12 md:col-6 p-2">
+                <p-floatLabel variant="on" class="w-full">
+                  <p-datepicker
+                    appendTo="body"
+                    class="w-full"
+                    inputId="taskRecurrenceRunTime"
+                    [timeOnly]="true"
+                    hourFormat="24"
+                    inputStyleClass="w-full p-inputtext-sm"
+                    formControlName="runTime"
+                  ></p-datepicker>
+                  <label for="taskRecurrenceRunTime">
+                    {{ 'taskRecurrence.settings.runTime' | translate }}
+                    <i
+                      class="pi pi-info-circle text-xs ml-1 text-color-secondary cursor-pointer"
+                      style="pointer-events: auto"
+                      [pTooltip]="'taskRecurrence.settings.runTimeHint' | translate"
+                      tooltipPosition="top"
+                    ></i>
+                  </label>
+                </p-floatLabel>
+              </div>
+            </div>
+
+            @if (canEditTaskRecurrence()) {
+              <div class="mt-4 px-2">
+                <p-button
+                  type="submit"
+                  icon="pi pi-save"
+                  [loading]="savingTaskRecurrence()"
+                  [label]="'common.save' | translate"
+                  [disabled]="loadingTaskRecurrence() || taskRecurrenceForm.invalid"
                 ></p-button>
               </div>
             }

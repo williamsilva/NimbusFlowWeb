@@ -479,6 +479,12 @@ export const UI_KEYS = {
       saveError: 'supplierAutoDeactivate.settings.saveError',
     },
   },
+  taskRecurrence: {
+    settings: {
+      saved: 'taskRecurrence.settings.saved',
+      saveError: 'taskRecurrence.settings.saveError',
+    },
+  },
   approvalLimits: {
     form: {
       invalid: 'approvalLimits.form.invalid',

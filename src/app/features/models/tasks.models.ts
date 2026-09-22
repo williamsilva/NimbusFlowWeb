@@ -2,6 +2,7 @@ import { TaskStatusEnum } from '@models/enums/task-status.enum';
 import { PeriodEnum } from '@models/enums/period.enum';
 import { TaskAssigneeTypeEnum } from '@models/enums/task-assignee-type.enum';
 import { TaskRecurrenceFrequencyEnum } from '@models/enums/task-recurrence-frequency.enum';
+import { DayOfWeekEnum } from '@models/enums/day-of-week.enum';
 
 /** Espelha com.nimbusflow.tasks.dto.response.TaskResponse do NimbusFlowServer. */
 export interface TaskModel {
@@ -25,9 +26,20 @@ export interface TaskModel {
    *  (compatibilidade) ou ocorrência gerada por recorrência (ver TaskService#createNextOccurrence). */
   startDate: string | null;
   durationDays: number | null;
-  /** Repetição automática (pedido do usuário 2026-09-22) - a próxima ocorrência só nasce quando
-   *  esta é marcada Concluída (ver TaskService#updateStatus). NONE = não repete. */
+  /** Repetição por calendário (pedido do usuário 2026-09-23) - gerada 1x/dia por
+   *  com.nimbusflow.tasks.recurrence.TaskRecurrenceJob, independente de conclusão. NONE = não
+   *  repete. DAILY/WEEKLY/MONTHLY/YEARLY usam recurrenceInterval; WEEKLY_DAYS/MONTHLY_DAYS usam
+   *  recurrenceWeekDays/recurrenceMonthDays. */
   recurrenceFrequency: TaskRecurrenceFrequencyEnum;
+  recurrenceInterval: number | null;
+  recurrenceWeekDays: DayOfWeekEnum[];
+  recurrenceMonthDays: number[];
+  /** Nulo = nunca expira. */
+  recurrenceExpiresAt: string | null;
+  notifyAssigneeOnRecurrence: boolean;
+  /** Horário de liberação da tarefa (pedido do usuário 2026-09-23) - nulo = sempre visível; senão
+   *  a tarefa fica escondida das listagens até este horário passar, só no dia do vencimento. */
+  releaseTime: string | null;
   /** Vínculo opcional com outra Tarefa do MESMO Plano de Ação - nulo = sem dependência.
    *  dependsOnTaskStatus já vem resolvido pelo backend (evita uma segunda chamada só pra saber
    *  se a dependência já foi concluída, ver TasksListComponent#canAdvance). */
@@ -66,7 +78,17 @@ export interface TaskUpsertInput {
   startDate: string | null;
   durationDays: number | null;
   recurrenceFrequency: TaskRecurrenceFrequencyEnum;
+  /** Obrigatório (>= 1) só quando recurrenceFrequency é DAILY/WEEKLY/MONTHLY/YEARLY. */
+  recurrenceInterval: number | null;
+  /** Obrigatório e não-vazio só quando recurrenceFrequency=WEEKLY_DAYS. */
+  recurrenceWeekDays: DayOfWeekEnum[];
+  /** Obrigatório e não-vazio (1-31) só quando recurrenceFrequency=MONTHLY_DAYS. */
+  recurrenceMonthDays: number[];
+  /** Nulo = nunca expira. */
+  recurrenceExpiresAt: string | null;
   notifyAssigneeOnRecurrence: boolean;
+  /** Nulo = sempre visível - ver TaskModel.releaseTime. */
+  releaseTime: string | null;
   dependsOnTaskId: string | null;
   /** Só lido pela criação avulsa (TasksApiService#createStandalone) - a criação aninhada por
    *  plano ignora este campo e usa o actionPlanId da própria rota. */

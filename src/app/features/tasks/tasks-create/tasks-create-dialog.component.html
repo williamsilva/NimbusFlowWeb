@@ -153,28 +153,119 @@
           <p-select
             size="small"
             class="w-full"
+            [filter]="true"
             appendTo="body"
-            inputId="recurrenceFrequency"
+            inputId="recurrenceOption"
             optionLabel="label"
             optionValue="value"
-            [options]="recurrenceFrequencyOptions"
-            formControlName="recurrenceFrequency"
+            [options]="recurrenceOptions"
+            formControlName="recurrenceOption"
           ></p-select>
-          <label for="recurrenceFrequency">{{ 'tasks.fields.recurrenceFrequency' | translate }}</label>
+          <label for="recurrenceOption">{{ 'tasks.fields.recurrenceFrequency' | translate }}</label>
         </p-floatLabel>
       </div>
 
-      @if (form.controls.recurrenceFrequency.value !== TaskRecurrenceFrequencyEnum.NONE) {
-        <div class="col-12 md:col-6 p-2 flex align-items-center">
-          <p-checkbox
-            [binary]="true"
+      @if (['DAILY_INTERVAL', 'WEEKLY', 'MONTHLY', 'YEARLY'].includes(form.controls.recurrenceOption.value)) {
+        <div class="col-12 md:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              [min]="1"
+              class="w-full"
+              [useGrouping]="false"
+              inputId="recurrenceInterval"
+              inputStyleClass="w-full"
+              formControlName="recurrenceInterval"
+            ></p-inputnumber>
+            <label for="recurrenceInterval">{{ 'tasks.fields.recurrenceInterval' | translate }}</label>
+          </p-floatLabel>
+        </div>
+      }
+
+      @if (form.controls.recurrenceOption.value === 'WEEKLY_DAYS') {
+        <div class="col-12 md:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-multiSelect
+              class="w-full"
+              appendTo="body"
+              inputId="recurrenceWeekDays"
+              optionLabel="label"
+              optionValue="value"
+              [options]="dayOfWeekOptions"
+              formControlName="recurrenceWeekDays"
+            ></p-multiSelect>
+            <label for="recurrenceWeekDays">{{ 'tasks.fields.recurrenceWeekDays' | translate }}</label>
+          </p-floatLabel>
+        </div>
+      }
+
+      @if (form.controls.recurrenceOption.value === 'MONTHLY_DAYS') {
+        <div class="col-12 md:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-multiSelect
+              class="w-full"
+              appendTo="body"
+              inputId="recurrenceMonthDays"
+              optionLabel="label"
+              optionValue="value"
+              [options]="monthDayOptions"
+              formControlName="recurrenceMonthDays"
+            ></p-multiSelect>
+            <label for="recurrenceMonthDays">{{ 'tasks.fields.recurrenceMonthDays' | translate }}</label>
+          </p-floatLabel>
+        </div>
+      }
+
+      @if (form.controls.recurrenceOption.value !== 'NONE') {
+        <div class="col-12 md:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-datepicker
+              csDateInputMask
+              inputId="recurrenceExpiresAt"
+              class="w-full"
+              appendTo="body"
+              [showIcon]="true"
+              [dateFormat]="i18n.getDateFormat()"
+              [readonlyInput]="false"
+              formControlName="recurrenceExpiresAt"
+              [csDateInputMaskFormat]="i18n.getDateFormat()"
+            ></p-datepicker>
+            <label for="recurrenceExpiresAt">{{ 'tasks.fields.recurrenceExpiresAt' | translate }}</label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-6 p-2 flex align-items-center gap-2">
+          <p-toggleswitch inputId="neverExpires" formControlName="neverExpires"></p-toggleswitch>
+          <label for="neverExpires">{{ 'tasks.fields.neverExpires' | translate }}</label>
+        </div>
+
+        <div class="col-12 md:col-6 p-2 flex align-items-center gap-2">
+          <p-toggleswitch
             inputId="notifyAssigneeOnRecurrence"
             formControlName="notifyAssigneeOnRecurrence"
-          ></p-checkbox>
-          <label for="notifyAssigneeOnRecurrence" class="ml-2">
-            {{ 'tasks.fields.notifyAssigneeOnRecurrence' | translate }}
-          </label>
+          ></p-toggleswitch>
+          <label for="notifyAssigneeOnRecurrence">{{ 'tasks.fields.notifyAssigneeOnRecurrence' | translate }}</label>
         </div>
+
+        <div class="col-12 md:col-6 p-2 flex align-items-center gap-2">
+          <p-toggleswitch inputId="releaseTimeEnabled" formControlName="releaseTimeEnabled"></p-toggleswitch>
+          <label for="releaseTimeEnabled">{{ 'tasks.fields.releaseTimeEnabled' | translate }}</label>
+        </div>
+
+        @if (form.controls.releaseTimeEnabled.value) {
+          <div class="col-12 md:col-6 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <p-datepicker
+                appendTo="body"
+                class="w-full"
+                inputId="releaseTime"
+                [timeOnly]="true"
+                hourFormat="24"
+                formControlName="releaseTime"
+              ></p-datepicker>
+              <label for="releaseTime">{{ 'tasks.fields.releaseTime' | translate }}</label>
+            </p-floatLabel>
+          </div>
+        }
       }
 
       <div class="col-12 p-2">

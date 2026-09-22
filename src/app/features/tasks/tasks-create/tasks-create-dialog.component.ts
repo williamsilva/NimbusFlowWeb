@@ -1,6 +1,6 @@
 import { computed, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { input, signal, Output, inject, Component, EventEmitter, effect } from '@angular/core';
 
 import { ToastModule } from 'primeng/toast';
@@ -14,6 +14,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DatePickerModule } from 'primeng/datepicker';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -31,11 +33,8 @@ import {
   TaskAssigneeTypeEnum,
   taskAssigneeTypeLabel,
 } from '@models/enums/task-assignee-type.enum';
-import {
-  TASK_RECURRENCE_FREQUENCY_VALUES,
-  TaskRecurrenceFrequencyEnum,
-  taskRecurrenceFrequencyLabel,
-} from '@models/enums/task-recurrence-frequency.enum';
+import { TaskRecurrenceFrequencyEnum } from '@models/enums/task-recurrence-frequency.enum';
+import { DAY_OF_WEEK_VALUES, DayOfWeekEnum, dayOfWeekLabel } from '@models/enums/day-of-week.enum';
 
 function toDateOnlyString(value: Date | null): string | null {
   if (!value) return null;
@@ -51,6 +50,43 @@ function fromDateOnlyString(value: string | null | undefined): Date | null {
   if (!y || !m || !d) return null;
   return new Date(y, m - 1, d);
 }
+
+function toTimeOnlyString(value: Date | null): string | null {
+  if (!value) return null;
+  const h = String(value.getHours()).padStart(2, '0');
+  const m = String(value.getMinutes()).padStart(2, '0');
+  return `${h}:${m}:00`;
+}
+
+function fromTimeOnlyString(value: string | null | undefined): Date | null {
+  if (!value) return null;
+  const [h, m] = value.split(':').map(Number);
+  if (h == null || m == null || Number.isNaN(h) || Number.isNaN(m)) return null;
+  const date = new Date();
+  date.setHours(h, m, 0, 0);
+  return date;
+}
+
+function nonEmptyArray(control: AbstractControl): ValidationErrors | null {
+  const value = control.value as unknown[] | null;
+  return value && value.length > 0 ? null : { required: true };
+}
+
+/** Opção do dropdown "Frequência" (pedido do usuário 2026-09-23, referência visual de um sistema
+ *  antigo) - puramente do frontend, não existe no backend. "Todos os dias"/"A cada X dias" mapeiam
+ *  pro MESMO TaskRecurrenceFrequencyEnum.DAILY (só variando recurrenceInterval); os demais valores
+ *  são 1:1 com o enum do backend - ver #toBackendFrequency/#toFormOption. */
+type RecurrenceFormOption =
+  | 'NONE'
+  | 'DAILY_EVERY'
+  | 'DAILY_INTERVAL'
+  | 'WEEKLY'
+  | 'MONTHLY'
+  | 'YEARLY'
+  | 'WEEKLY_DAYS'
+  | 'MONTHLY_DAYS';
+
+const INTERVAL_OPTIONS: RecurrenceFormOption[] = ['DAILY_INTERVAL', 'WEEKLY', 'MONTHLY', 'YEARLY'];
 
 @Component({
   standalone: true,
@@ -70,6 +106,8 @@ function fromDateOnlyString(value: string | null | undefined): Date | null {
     InputNumberModule,
     DatePickerModule,
     FloatLabelModule,
+    MultiSelectModule,
+    ToggleSwitchModule,
     SelectButtonModule,
     ErrorMsgComponent,
     DateInputMaskDirective,
@@ -109,13 +147,15 @@ export class TasksCreateDialogComponent {
     label: taskAssigneeTypeLabel(value, this.i18n),
   }));
 
-  readonly recurrenceFrequencyOptions = TASK_RECURRENCE_FREQUENCY_VALUES.map((value) => ({
-    value,
-    label: taskRecurrenceFrequencyLabel(value, this.i18n),
-  }));
+  readonly recurrenceOptions: { value: RecurrenceFormOption; label: string }[] = (
+    ['NONE', 'DAILY_EVERY', 'DAILY_INTERVAL', 'WEEKLY', 'MONTHLY', 'YEARLY', 'WEEKLY_DAYS', 'MONTHLY_DAYS'] as const
+  ).map((value) => ({ value, label: this.i18n.tUi(`tasks.recurrenceOption.${value}` as never) }));
+
+  readonly dayOfWeekOptions = DAY_OF_WEEK_VALUES.map((value) => ({ value, label: dayOfWeekLabel(value, this.i18n) }));
+
+  readonly monthDayOptions = Array.from({ length: 31 }, (_, i) => ({ value: i + 1, label: String(i + 1) }));
 
   readonly TaskAssigneeTypeEnum = TaskAssigneeTypeEnum;
-  readonly TaskRecurrenceFrequencyEnum = TaskRecurrenceFrequencyEnum;
 
   /** Opções de dependência: dentro de um plano (actionPlanId presente), outras tarefas do MESMO
    *  plano (já carregadas por TasksListComponent, ver TasksFacade.items); sem plano (tarefa
@@ -144,11 +184,15 @@ export class TasksCreateDialogComponent {
     assigneeDepartmentId: this.fb.control<string | null>(null),
     startDate: this.fb.control<Date | null>(null, [Validators.required]),
     durationDays: this.fb.control<number | null>(null, [Validators.required, Validators.min(1)]),
-    recurrenceFrequency: this.fb.nonNullable.control<TaskRecurrenceFrequencyEnum>(
-      TaskRecurrenceFrequencyEnum.NONE,
-      [Validators.required],
-    ),
+    recurrenceOption: this.fb.nonNullable.control<RecurrenceFormOption>('NONE', [Validators.required]),
+    recurrenceInterval: this.fb.control<number | null>(null),
+    recurrenceWeekDays: this.fb.nonNullable.control<DayOfWeekEnum[]>([]),
+    recurrenceMonthDays: this.fb.nonNullable.control<number[]>([]),
+    neverExpires: this.fb.nonNullable.control<boolean>(true),
+    recurrenceExpiresAt: this.fb.control<Date | null>(null),
     notifyAssigneeOnRecurrence: this.fb.nonNullable.control<boolean>(false),
+    releaseTimeEnabled: this.fb.nonNullable.control<boolean>(false),
+    releaseTime: this.fb.control<Date | null>(null),
     dependsOnTaskId: this.fb.control<string | null>(null),
   });
 
@@ -189,6 +233,18 @@ export class TasksCreateDialogComponent {
       this.applyAssigneeValidators(assigneeType);
     });
 
+    this.form.controls.recurrenceOption.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((option) => {
+      this.applyRecurrenceValidators(option);
+    });
+
+    this.form.controls.neverExpires.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((neverExpires) => {
+      this.applyExpirationState(neverExpires);
+    });
+
+    this.form.controls.releaseTimeEnabled.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((enabled) => {
+      this.applyReleaseTimeState(enabled);
+    });
+
     effect(() => {
       if (!this.visible()) {
         this.createFormInitialized = false;
@@ -217,6 +273,10 @@ export class TasksCreateDialogComponent {
 
       this.lastLoadedId = task.id;
 
+      const recurrenceOption = this.toFormOption(task.recurrenceFrequency, task.recurrenceInterval);
+      const neverExpires = !task.recurrenceExpiresAt;
+      const releaseTimeEnabled = !!task.releaseTime;
+
       this.form.reset({
         title: task.title,
         description: task.description,
@@ -225,11 +285,21 @@ export class TasksCreateDialogComponent {
         assigneeDepartmentId: task.assigneeDepartmentId,
         startDate: fromDateOnlyString(task.startDate),
         durationDays: task.durationDays,
-        recurrenceFrequency: task.recurrenceFrequency,
-        notifyAssigneeOnRecurrence: false,
+        recurrenceOption,
+        recurrenceInterval: task.recurrenceInterval,
+        recurrenceWeekDays: task.recurrenceWeekDays ?? [],
+        recurrenceMonthDays: task.recurrenceMonthDays ?? [],
+        neverExpires,
+        recurrenceExpiresAt: fromDateOnlyString(task.recurrenceExpiresAt),
+        notifyAssigneeOnRecurrence: task.notifyAssigneeOnRecurrence,
+        releaseTimeEnabled,
+        releaseTime: fromTimeOnlyString(task.releaseTime),
         dependsOnTaskId: task.dependsOnTaskId,
       });
       this.applyAssigneeValidators(task.assigneeType);
+      this.applyRecurrenceValidators(recurrenceOption);
+      this.applyExpirationState(neverExpires);
+      this.applyReleaseTimeState(releaseTimeEnabled);
     });
   }
 
@@ -245,6 +315,70 @@ export class TasksCreateDialogComponent {
     }
     this.form.controls.assigneeId.updateValueAndValidity();
     this.form.controls.assigneeDepartmentId.updateValueAndValidity();
+  }
+
+  /** Cada opção de Frequência exige um campo diferente (Intervalo/Dias da semana/Dias do mês) -
+   *  mesma disciplina de #applyAssigneeValidators: valida só o que se aplica, limpa o resto. */
+  private applyRecurrenceValidators(option: RecurrenceFormOption): void {
+    const interval = this.form.controls.recurrenceInterval;
+    const weekDays = this.form.controls.recurrenceWeekDays;
+    const monthDays = this.form.controls.recurrenceMonthDays;
+
+    interval.clearValidators();
+    weekDays.clearValidators();
+    monthDays.clearValidators();
+
+    if (option === 'DAILY_EVERY') {
+      interval.setValue(1);
+    } else if (INTERVAL_OPTIONS.includes(option)) {
+      interval.setValidators([Validators.required, Validators.min(1)]);
+      if (!interval.value || interval.value < 1) {
+        interval.setValue(2);
+      }
+    } else if (option === 'WEEKLY_DAYS') {
+      weekDays.setValidators([nonEmptyArray]);
+    } else if (option === 'MONTHLY_DAYS') {
+      monthDays.setValidators([nonEmptyArray]);
+    }
+
+    interval.updateValueAndValidity();
+    weekDays.updateValueAndValidity();
+    monthDays.updateValueAndValidity();
+  }
+
+  private applyExpirationState(neverExpires: boolean): void {
+    if (neverExpires) {
+      this.form.controls.recurrenceExpiresAt.setValue(null);
+      this.form.controls.recurrenceExpiresAt.disable();
+    } else {
+      this.form.controls.recurrenceExpiresAt.enable();
+    }
+  }
+
+  private applyReleaseTimeState(enabled: boolean): void {
+    if (enabled) {
+      this.form.controls.releaseTime.enable();
+    } else {
+      this.form.controls.releaseTime.setValue(null);
+      this.form.controls.releaseTime.disable();
+    }
+  }
+
+  /** "Todos os dias" (interval fixo 1) e "A cada X dias" (interval editável) mapeiam pro MESMO
+   *  TaskRecurrenceFrequencyEnum.DAILY - reconstrói qual dos dois mostrar no dropdown a partir do
+   *  interval salvo (edição de uma tarefa existente). */
+  private toFormOption(frequency: TaskRecurrenceFrequencyEnum, interval: number | null): RecurrenceFormOption {
+    if (frequency === TaskRecurrenceFrequencyEnum.DAILY) {
+      return interval == null || interval <= 1 ? 'DAILY_EVERY' : 'DAILY_INTERVAL';
+    }
+    return frequency as unknown as RecurrenceFormOption;
+  }
+
+  private toBackendFrequency(option: RecurrenceFormOption): TaskRecurrenceFrequencyEnum {
+    if (option === 'DAILY_EVERY' || option === 'DAILY_INTERVAL') {
+      return TaskRecurrenceFrequencyEnum.DAILY;
+    }
+    return option as unknown as TaskRecurrenceFrequencyEnum;
   }
 
   onHide(): void {
@@ -268,11 +402,21 @@ export class TasksCreateDialogComponent {
       assigneeDepartmentId: null,
       startDate: null,
       durationDays: null,
-      recurrenceFrequency: TaskRecurrenceFrequencyEnum.NONE,
+      recurrenceOption: 'NONE',
+      recurrenceInterval: null,
+      recurrenceWeekDays: [],
+      recurrenceMonthDays: [],
+      neverExpires: true,
+      recurrenceExpiresAt: null,
       notifyAssigneeOnRecurrence: false,
+      releaseTimeEnabled: false,
+      releaseTime: null,
       dependsOnTaskId: null,
     });
     this.applyAssigneeValidators(TaskAssigneeTypeEnum.USER);
+    this.applyRecurrenceValidators('NONE');
+    this.applyExpirationState(true);
+    this.applyReleaseTimeState(false);
   }
 
   save(): void {
@@ -291,6 +435,7 @@ export class TasksCreateDialogComponent {
     const v = this.form.getRawValue();
     const task = this.task();
     const id = task?.id;
+    const recurrenceFrequency = this.toBackendFrequency(v.recurrenceOption);
 
     const payload: TaskUpsertInput = {
       title: v.title.trim(),
@@ -305,8 +450,14 @@ export class TasksCreateDialogComponent {
       dueDate: task?.dueDate ?? null,
       startDate: toDateOnlyString(v.startDate),
       durationDays: v.durationDays,
-      recurrenceFrequency: v.recurrenceFrequency,
+      recurrenceFrequency,
+      recurrenceInterval: recurrenceFrequency === TaskRecurrenceFrequencyEnum.NONE ? null : v.recurrenceInterval,
+      recurrenceWeekDays: recurrenceFrequency === TaskRecurrenceFrequencyEnum.WEEKLY_DAYS ? v.recurrenceWeekDays : [],
+      recurrenceMonthDays:
+        recurrenceFrequency === TaskRecurrenceFrequencyEnum.MONTHLY_DAYS ? v.recurrenceMonthDays : [],
+      recurrenceExpiresAt: v.neverExpires ? null : toDateOnlyString(v.recurrenceExpiresAt),
       notifyAssigneeOnRecurrence: v.notifyAssigneeOnRecurrence,
+      releaseTime: v.releaseTimeEnabled ? toTimeOnlyString(v.releaseTime) : null,
       dependsOnTaskId: v.dependsOnTaskId,
     };
 
