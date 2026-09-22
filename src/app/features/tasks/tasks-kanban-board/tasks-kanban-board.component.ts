@@ -49,6 +49,11 @@ export class TasksKanbanBoardComponent {
   );
 
   @Output() readonly drop = new EventEmitter<TaskKanbanDropEvent>();
+  /** Clique no cartão (pedido do usuário 2026-09-23) - "burro" igual ao resto do componente: só
+   *  emite, quem decide o que fazer (abrir edição, checar permissão) é o pai
+   *  (AllTasksListComponent). Nunca dispara junto de um drag-and-drop - o próprio navegador não
+   *  gera "click" depois de um "dragend" real. */
+  @Output() readonly taskClick = new EventEmitter<TaskWithActionPlanModel>();
 
   readonly statuses = TASK_STATUS_VALUES;
 

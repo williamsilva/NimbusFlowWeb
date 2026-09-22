@@ -119,9 +119,9 @@ export class TasksListComponent implements OnInit {
     );
   }
 
-  /** Quem só executa (não gerencia) fica travado enquanto a dependência não estiver DONE - quem
-   *  gerencia ignora essa trava, mesmo espírito de já poder mudar pra qualquer status sem
-   *  respeitar a ordem de transição (ver TaskService#updateStatus no backend). */
+  /** Regra dura (pedido do usuário 2026-09-23): uma dependência ainda não concluída bloqueia
+   *  iniciar/concluir a tarefa dependente - vale pra QUALQUER usuário, TAREFA_MANAGE incluído, sem
+   *  bypass nenhum (mesma regra sem exceção em TaskService#updateStatus no backend). */
   isDependencySatisfied(row: TaskModel): boolean {
     return !row.dependsOnTaskId || row.dependsOnTaskStatus === TaskStatusEnum.DONE;
   }
@@ -130,7 +130,7 @@ export class TasksListComponent implements OnInit {
     if (!this.policy.canExecuteOwn(row) || nextForwardTaskStatus(row.status) === null) {
       return false;
     }
-    return this.policy.canManage() || this.isDependencySatisfied(row);
+    return this.isDependencySatisfied(row);
   }
 
   advanceLabel(row: TaskModel): string {

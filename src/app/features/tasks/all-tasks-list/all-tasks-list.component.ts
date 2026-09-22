@@ -108,7 +108,10 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     { label: this.i18n.tUi('tasks.viewMode.list' as never), value: 'list' },
   ];
 
-  newVisible = signal(false);
+  upsertVisible = signal(false);
+  /** Nulo = criando; preenchido = editando (pedido do usuário 2026-09-23 - clicar num cartão do
+   *  Kanban abre a edição, mesmo diálogo reaproveitado de criar). */
+  editingTask = signal<TaskWithActionPlanModel | null>(null);
 
   title = signal('');
   status = signal<string[] | null>(null);
@@ -186,6 +189,30 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     return taskAssigneeDisplayName(row) ?? '-';
   }
 
+  /** Mesma regra de TasksListComponent#canEdit - status terminal (DONE/CANCELLED/NOT_DONE) não
+   *  edita mais. */
+  canEdit(row: TaskWithActionPlanModel): boolean {
+    return (
+      this.policy.canManage() &&
+      row.status !== TaskStatusEnum.DONE &&
+      row.status !== TaskStatusEnum.CANCELLED &&
+      row.status !== TaskStatusEnum.NOT_DONE
+    );
+  }
+
+  /** Clique num cartão do Kanban abre a edição (pedido do usuário 2026-09-23) - sem permissão/
+   *  status editável, o clique simplesmente não faz nada (mesmo espírito de o botão "Editar" nem
+   *  aparecer na lista pra esses casos). */
+  onKanbanCardClick(row: TaskWithActionPlanModel): void {
+    if (!this.canEdit(row)) return;
+    this.goEdit(row);
+  }
+
+  goEdit(row: TaskWithActionPlanModel): void {
+    this.editingTask.set(row);
+    this.upsertVisible.set(true);
+  }
+
   /** Atalho "Minhas tarefas" - reaproveita o filtro de assignee já existente em vez de um modo à
    *  parte, então continua dentro do mesmo fluxo paginado/persistido de sempre. */
   goMine(): void {
@@ -196,8 +223,8 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     this.search();
   }
 
-  /** Mesma regra de TasksListComponent#isDependencySatisfied - quem só executa fica travado
-   *  enquanto a dependência não estiver DONE, quem gerencia ignora essa trava. */
+  /** Regra dura (pedido do usuário 2026-09-23), mesma de TasksListComponent#isDependencySatisfied:
+   *  vale pra QUALQUER usuário, TAREFA_MANAGE incluído, sem bypass nenhum. */
   isDependencySatisfied(row: TaskWithActionPlanModel): boolean {
     return !row.dependsOnTaskId || row.dependsOnTaskStatus === TaskStatusEnum.DONE;
   }
@@ -206,7 +233,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     if (!this.policy.canExecuteOwn(row) || nextForwardTaskStatus(row.status) === null) {
       return false;
     }
-    return this.policy.canManage() || this.isDependencySatisfied(row);
+    return this.isDependencySatisfied(row);
   }
 
   advanceLabel(row: TaskWithActionPlanModel): string {
@@ -262,14 +289,23 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   }
 
   /** Mesma regra de autorização do backend (TaskService#updateStatus): TAREFA_MANAGE muda pra
-   *  qualquer status; sem ela, só o próprio assignee (TAREFA_EXECUTE) avançando um passo por vez,
-   *  respeitando dependência - nunca envolvendo CANCELLED. */
+   *  qualquer status; sem ela, só o próprio assignee (TAREFA_EXECUTE) avançando um passo por vez.
+   *  As duas regras duras abaixo (pedido do usuário 2026-09-23) valem pra QUALQUER usuário,
+   *  TAREFA_MANAGE incluído, sem bypass: não pular etapas (DONE só a partir de IN_PROGRESS) e
+   *  dependência bloqueia progresso (IN_PROGRESS ou DONE) - nunca envolvendo CANCELLED. */
   canDropTask = (task: TaskWithActionPlanModel, status: TaskStatusEnum): boolean => {
     if (task.status === status) return false;
+    if (status === TaskStatusEnum.DONE && task.status !== TaskStatusEnum.IN_PROGRESS) return false;
+    if (
+      (status === TaskStatusEnum.IN_PROGRESS || status === TaskStatusEnum.DONE) &&
+      !this.isDependencySatisfied(task)
+    ) {
+      return false;
+    }
+
     if (this.policy.canManage()) return true;
     if (!this.policy.canExecuteOwn(task)) return false;
-    if (nextForwardTaskStatus(task.status) !== status) return false;
-    return this.isDependencySatisfied(task);
+    return nextForwardTaskStatus(task.status) === status;
   };
 
   onKanbanDrop(event: TaskKanbanDropEvent): void {
@@ -324,15 +360,21 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   }
 
   goNew(): void {
-    this.newVisible.set(true);
+    this.editingTask.set(null);
+    this.upsertVisible.set(true);
   }
 
   onCreated(): void {
     this.refresh();
   }
 
-  onNewVisibleChange(visible: boolean): void {
-    this.newVisible.set(visible);
+  onUpdated(): void {
+    this.refresh();
+  }
+
+  onUpsertVisibleChange(visible: boolean): void {
+    this.upsertVisible.set(visible);
+    if (!visible) this.editingTask.set(null);
   }
 
   protected override resetFilters(): void {

@@ -48,9 +48,11 @@
 </app-page-header>
 
 <app-tasks-create-dialog
-  [visible]="newVisible()"
+  [task]="editingTask()"
+  [visible]="upsertVisible()"
   (created)="onCreated()"
-  (visibleChange)="onNewVisibleChange($event)"
+  (updated)="onUpdated()"
+  (visibleChange)="onUpsertVisibleChange($event)"
 ></app-tasks-create-dialog>
 
 <cs-filters-panel
@@ -140,6 +142,7 @@
         [canDrop]="canDropTask"
         [loading]="facade.loading()"
         (drop)="onKanbanDrop($event)"
+        (taskClick)="onKanbanCardClick($event)"
       ></app-tasks-kanban-board>
     </div>
   } @else {
