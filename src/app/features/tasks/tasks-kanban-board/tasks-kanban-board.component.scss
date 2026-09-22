@@ -1,8 +1,12 @@
+/* min-height calc: aproxima o espaço já ocupado pelo resto da tela (topbar+cabeçalho+filtro+
+   rodapé) - pedido do usuário 2026-09-22 pra ocupar até o rodapé mesmo com colunas vazias.
+   align-items default (stretch, não "start") - faz as 4 colunas terem a MESMA altura (a do grid
+   inteiro), preenchendo até o fim mesmo a que só tem "Nenhuma tarefa nesta coluna". */
 .kanban-board {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(4, minmax(240px, 1fr));
-  align-items: start;
+  min-height: calc(100vh - 300px);
   overflow-x: auto;
   padding-bottom: 0.5rem;
 }
@@ -83,8 +87,13 @@
   background: var(--red-500, #ef4444);
 }
 
+/* flex: 1 (não só min-height) - a coluna (.kanban-column, flex column) agora estica pra preencher
+   a altura toda do quadro (align-items: stretch no grid pai); sem isso o body ficaria com altura
+   de conteúdo mesmo dentro de uma coluna mais alta, deixando um vão vazio embaixo em vez do fundo
+   cinza ir até o fim. */
 .kanban-column-body {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 0.65rem;
   padding: 0 0.75rem 0.85rem;
@@ -92,9 +101,16 @@
   overflow-y: auto;
 }
 
+/* flex: 1 + centralizado - já que .kanban-column-body agora estica até o fim da coluna (ver
+   acima), a mensagem de "vazio" ocupa e centraliza nesse espaço todo em vez de ficar colada no
+   topo com um vão grande embaixo. Não afeta colunas com cartões (a mensagem só existe quando não
+   há nenhum). */
 .kanban-column-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: 2rem 0;
   font-size: 0.8rem;
   opacity: 0.55;
 }
