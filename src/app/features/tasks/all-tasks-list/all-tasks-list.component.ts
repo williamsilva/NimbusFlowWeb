@@ -172,6 +172,14 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   ngOnInit() {
     this.usersFacade.loadUsersOptions();
     this.initStatefulList();
+
+    // Kanban não usa <p-table> (que dispara o próprio onLazyLoad/primeiro load sozinha) - se a
+    // preferência de view salva já é 'kanban' (ver viewMode), initStatefulList() sozinho nunca
+    // busca nada, e o quadro fica vazio até o usuário trocar pra Lista e voltar (achado real
+    // 2026-09-22). setViewMode('kanban') também chama isso, então só falta cobrir o boot direto.
+    if (this.viewMode() === 'kanban') {
+      this.loadKanbanData();
+    }
   }
 
   tone(status: string): ReturnType<typeof taskStatusTone> {
