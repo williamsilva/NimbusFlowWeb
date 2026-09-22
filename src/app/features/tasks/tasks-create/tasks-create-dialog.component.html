@@ -13,7 +13,7 @@
     <div class="grid formgrid gap-0">
       <div class="col-12 p-2">
         <p-floatLabel variant="on" class="w-full">
-          <input pInputText id="title" style="width: 100%" formControlName="title" />
+          <input pInputText id="title" class="w-full p-inputtext-sm" formControlName="title" />
           <app-error-msg
             [field]="'title'"
             [forId]="'title'"
@@ -25,7 +25,7 @@
 
       <div class="col-12 p-2">
         <p-floatLabel variant="on" class="w-full">
-          <textarea pTextarea rows="3" id="description" style="width: 100%" formControlName="description"></textarea>
+          <textarea pTextarea rows="3" id="description" class="w-full p-inputtext-sm" formControlName="description"></textarea>
           <label for="description">{{ 'tasks.fields.description' | translate }}</label>
         </p-floatLabel>
       </div>
@@ -100,6 +100,7 @@
             [dateFormat]="i18n.getDateFormat()"
             [readonlyInput]="false"
             formControlName="startDate"
+            inputStyleClass="w-full p-inputtext-sm"
             [csDateInputMaskFormat]="i18n.getDateFormat()"
           ></p-datepicker>
           <app-error-msg
@@ -118,8 +119,8 @@
             class="w-full"
             [useGrouping]="false"
             inputId="durationDays"
-            inputStyleClass="w-full"
             formControlName="durationDays"
+            inputStyleClass="w-full p-inputtext-sm"
           ></p-inputnumber>
           <app-error-msg
             [field]="'durationDays'"
@@ -173,8 +174,8 @@
               class="w-full"
               [useGrouping]="false"
               inputId="recurrenceInterval"
-              inputStyleClass="w-full"
               formControlName="recurrenceInterval"
+              inputStyleClass="w-full p-inputtext-sm"
             ></p-inputnumber>
             <label for="recurrenceInterval">{{ 'tasks.fields.recurrenceInterval' | translate }}</label>
           </p-floatLabel>
@@ -185,6 +186,7 @@
         <div class="col-12 md:col-6 p-2">
           <p-floatLabel variant="on" class="w-full">
             <p-multiSelect
+              size="small"
               class="w-full"
               appendTo="body"
               inputId="recurrenceWeekDays"
@@ -202,6 +204,7 @@
         <div class="col-12 md:col-6 p-2">
           <p-floatLabel variant="on" class="w-full">
             <p-multiSelect
+              size="small"
               class="w-full"
               appendTo="body"
               inputId="recurrenceMonthDays"
@@ -227,6 +230,7 @@
               [dateFormat]="i18n.getDateFormat()"
               [readonlyInput]="false"
               formControlName="recurrenceExpiresAt"
+              inputStyleClass="w-full p-inputtext-sm"
               [csDateInputMaskFormat]="i18n.getDateFormat()"
             ></p-datepicker>
             <label for="recurrenceExpiresAt">{{ 'tasks.fields.recurrenceExpiresAt' | translate }}</label>
@@ -261,6 +265,7 @@
                 [timeOnly]="true"
                 hourFormat="24"
                 formControlName="releaseTime"
+                inputStyleClass="w-full p-inputtext-sm"
               ></p-datepicker>
               <label for="releaseTime">{{ 'tasks.fields.releaseTime' | translate }}</label>
             </p-floatLabel>
