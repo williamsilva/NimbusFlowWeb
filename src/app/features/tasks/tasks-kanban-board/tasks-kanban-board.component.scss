@@ -104,10 +104,11 @@
    próximas, a borda praticamente some) - borda clara semi-transparente em vez da borda "de tema".
    :host-context(.dark), não :root.dark - View Encapsulation prefixa :root.dark e ele nunca casa
    com nada dentro de um *.component.scss (ver memória do bug recorrente neste código; o fix
-   anterior aqui usava :root.dark por engano e não tinha efeito nenhum). */
+   anterior aqui usava :root.dark por engano e não tinha efeito nenhum). Opacidade bem mais alta
+   que a primeira tentativa (0.14 -> 0.35) - a diferença ficava sutil demais pra notar. */
 :host-context(.dark) .kanban-card {
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .kanban-card:active {
