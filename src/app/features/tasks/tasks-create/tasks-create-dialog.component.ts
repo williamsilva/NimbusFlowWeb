@@ -56,6 +56,7 @@ function fromDateOnlyString(value: string | null | undefined): Date | null {
   standalone: true,
   selector: 'app-tasks-create-dialog',
   templateUrl: './tasks-create-dialog.component.html',
+  styleUrl: './tasks-create-dialog.component.scss',
   imports: [
     CsDatePipe,
     ToastModule,

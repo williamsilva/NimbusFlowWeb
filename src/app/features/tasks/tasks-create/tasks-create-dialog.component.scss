@@ -1,0 +1,32 @@
+// Cores fixas em vez de utilitários Tailwind (text-blue-800/surface-100) - achado real 2026-09-22:
+// eles não se adaptam ao tema escuro (surface-100 vira escuro, text-blue-800 continua um azul
+// escuro fixo, ilegível em cima de fundo escuro). :host-context(.dark) é o único jeito de alcançar
+// o <html class="dark"> real de dentro de um .scss com View Encapsulation (ver
+// project_root_dark_encapsulation_bug na memória) - :root.dark não funciona aqui.
+.cs-schedule-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e3a8a;
+
+  i {
+    margin-top: 0.15rem;
+    color: #2563eb;
+  }
+}
+
+:host-context(.dark) .cs-schedule-hint {
+  background: rgba(59, 130, 246, 0.14);
+  border-color: rgba(96, 165, 250, 0.35);
+  color: #dbeafe;
+
+  i {
+    color: #60a5fa;
+  }
+}
