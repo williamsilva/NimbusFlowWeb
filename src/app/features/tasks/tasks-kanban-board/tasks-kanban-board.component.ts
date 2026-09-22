@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, computed, inject, signal } from '@angular/core';
+import { Component, EventEmitter, Output, computed, inject, input, signal } from '@angular/core';
 
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
@@ -35,9 +35,17 @@ export interface TaskKanbanDropEvent {
 export class TasksKanbanBoardComponent {
   private readonly i18n = inject(I18nService);
 
-  @Input() tasks: TaskWithActionPlanModel[] = [];
-  @Input() loading = false;
-  @Input() canDrop: (task: TaskWithActionPlanModel, status: TaskStatusEnum) => boolean = () => false;
+  /** input() (sinal), não @Input() de propriedade simples (achado real 2026-09-22) - `columns`
+   *  abaixo é um computed() que lê `tasks()`; computed() só rastreia SINAIS como dependência, uma
+   *  propriedade simples atualizada via @Input() nunca disparava o recálculo. Na prática: o quadro
+   *  calculava as colunas UMA VEZ com a lista vazia (antes da resposta da API chegar) e nunca mais
+   *  recomputava depois que os dados reais chegavam - só "funcionava" quando o componente nascia
+   *  DEPOIS dos dados já carregados (ex.: trocar de Lista, que já tinha os dados, pra Kanban). */
+  readonly tasks = input<TaskWithActionPlanModel[]>([]);
+  readonly loading = input(false);
+  readonly canDrop = input<(task: TaskWithActionPlanModel, status: TaskStatusEnum) => boolean>(
+    () => false,
+  );
 
   @Output() readonly drop = new EventEmitter<TaskKanbanDropEvent>();
 
@@ -50,7 +58,7 @@ export class TasksKanbanBoardComponent {
     const byStatus = new Map<TaskStatusEnum, TaskWithActionPlanModel[]>();
     for (const status of this.statuses) byStatus.set(status, []);
 
-    for (const task of this.tasks) {
+    for (const task of this.tasks()) {
       byStatus.get(task.status)?.push(task);
     }
 
@@ -105,7 +113,7 @@ export class TasksKanbanBoardComponent {
 
   isDropAllowed(status: TaskStatusEnum): boolean {
     const task = this.draggingTask();
-    return !!task && this.canDrop(task, status);
+    return !!task && this.canDrop()(task, status);
   }
 
   onDragStart(task: TaskWithActionPlanModel): void {
@@ -130,7 +138,7 @@ export class TasksKanbanBoardComponent {
     this.dragOverStatus.set(null);
     this.draggingTask.set(null);
 
-    if (!task || task.status === status || !this.canDrop(task, status)) return;
+    if (!task || task.status === status || !this.canDrop()(task, status)) return;
 
     this.drop.emit({ task, status });
   }

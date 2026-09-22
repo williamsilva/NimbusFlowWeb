@@ -61,18 +61,21 @@
   color: #fff;
 }
 
+/* Fallback explícito em todas (não só --yellow-500) - achado real 2026-09-22: sem o fallback, um
+   badge cuja variável não existisse de verdade no tema ficava branco-sobre-branco (invisível),
+   só "Concluída" (--yellow-500) tinha o fallback, e foi o único badge que apareceu nos prints. */
 .kanban-column-count-neutral {
-  background: var(--green-500);
+  background: var(--green-500, #22c55e);
 }
 .kanban-column-count-info {
-  background: var(--blue-500);
+  background: var(--blue-500, #3b82f6);
 }
 .kanban-column-count-success {
   background: var(--yellow-500, #f59e0b);
   color: var(--surface-900);
 }
 .kanban-column-count-danger {
-  background: var(--red-500);
+  background: var(--red-500, #ef4444);
 }
 
 .kanban-column-body {
