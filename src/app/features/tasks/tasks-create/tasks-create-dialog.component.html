@@ -102,7 +102,12 @@
             formControlName="startDate"
             [csDateInputMaskFormat]="i18n.getDateFormat()"
           ></p-datepicker>
-          <label for="startDate">{{ 'tasks.fields.startDate' | translate }}</label>
+          <app-error-msg
+            [field]="'startDate'"
+            [forId]="'startDate'"
+            [control]="form.controls.startDate"
+            [label]="'tasks.fields.startDate' | translate"
+          />
         </p-floatLabel>
       </div>
 
@@ -116,8 +121,31 @@
             inputStyleClass="w-full"
             formControlName="durationDays"
           ></p-inputnumber>
-          <label for="durationDays">{{ 'tasks.fields.durationDays' | translate }}</label>
+          <app-error-msg
+            [field]="'durationDays'"
+            [forId]="'durationDays'"
+            [control]="form.controls.durationDays"
+            [label]="'tasks.fields.durationDays' | translate"
+          />
         </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <div class="surface-100 border-1 border-blue-300 border-round p-3 text-sm text-blue-800 flex align-items-start gap-2">
+          <i class="pi pi-info-circle mt-1"></i>
+          @if (hasSchedulePreview) {
+            <span>
+              {{ 'tasks.fields.scheduleHint.availableFrom' | translate }}
+              <strong>{{ scheduleStartDate | csDate: 'full' }}</strong>.
+              {{ 'tasks.fields.scheduleHint.hasDays' | translate }}
+              <strong>{{ 'tasks.fields.scheduleHint.daysCount' | translate: { count: scheduleDurationDays } }}</strong>
+              {{ 'tasks.fields.scheduleHint.dueUntil' | translate }}
+              <strong>{{ scheduleDueDate | csDate: 'full' }}</strong>.
+            </span>
+          } @else {
+            <span>{{ 'tasks.fields.scheduleHint.empty' | translate }}</span>
+          }
+        </div>
       </div>
 
       <div class="col-12 md:col-6 p-2">

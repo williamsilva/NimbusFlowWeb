@@ -1880,6 +1880,13 @@
       "durationDays": "Days to complete",
       "recurrenceFrequency": "Recurrence",
       "notifyAssigneeOnRecurrence": "Notify assignee on every recurrence",
+      "scheduleHint": {
+        "empty": "Set the start date and the number of days to see the delivery schedule.",
+        "availableFrom": "The task will be available on the Kanban board and in the app starting",
+        "hasDays": "The assignee will have",
+        "daysCount": "{count, plural, one {# day} other {# days}}",
+        "dueUntil": "to complete it, with a deadline of"
+      },
       "dependsOnTask": "Depends on completion of (optional)",
       "status": "Status",
       "createdAt": "Created at",

@@ -1880,6 +1880,13 @@
       "durationDays": "Dias para executar",
       "recurrenceFrequency": "Repetição",
       "notifyAssigneeOnRecurrence": "Notificar o responsável a cada repetição",
+      "scheduleHint": {
+        "empty": "Defina a data de início e os dias de execução para visualizar o cronograma de entregas.",
+        "availableFrom": "A tarefa ficará disponível no Kanban e no app a partir de",
+        "hasDays": "O responsável terá",
+        "daysCount": "{count, plural, one {# dia} other {# dias}}",
+        "dueUntil": "para realizá-la, com prazo limite para conclusão até"
+      },
       "dependsOnTask": "Depende da conclusão de (opcional)",
       "status": "Status",
       "createdAt": "Criada em",

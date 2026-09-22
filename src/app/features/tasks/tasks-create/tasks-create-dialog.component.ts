@@ -18,6 +18,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
+import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { UsersFacade } from '@features/facade/users.facade';
 import { TasksFacade } from '@features/facade/tasks.facade';
 import { TasksGlobalFacade } from '@features/facade/tasks-global.facade';
@@ -56,6 +57,7 @@ function fromDateOnlyString(value: string | null | undefined): Date | null {
   selector: 'app-tasks-create-dialog',
   templateUrl: './tasks-create-dialog.component.html',
   imports: [
+    CsDatePipe,
     ToastModule,
     SelectModule,
     DialogModule,
@@ -139,8 +141,8 @@ export class TasksCreateDialogComponent {
     assigneeType: this.fb.nonNullable.control<TaskAssigneeTypeEnum>(TaskAssigneeTypeEnum.USER, [Validators.required]),
     assigneeId: this.fb.control<string | null>(null, [Validators.required]),
     assigneeDepartmentId: this.fb.control<string | null>(null),
-    startDate: this.fb.control<Date | null>(null),
-    durationDays: this.fb.control<number | null>(null),
+    startDate: this.fb.control<Date | null>(null, [Validators.required]),
+    durationDays: this.fb.control<number | null>(null, [Validators.required, Validators.min(1)]),
     recurrenceFrequency: this.fb.nonNullable.control<TaskRecurrenceFrequencyEnum>(
       TaskRecurrenceFrequencyEnum.NONE,
       [Validators.required],
@@ -148,6 +150,32 @@ export class TasksCreateDialogComponent {
     notifyAssigneeOnRecurrence: this.fb.nonNullable.control<boolean>(false),
     dependsOnTaskId: this.fb.control<string | null>(null),
   });
+
+  /** Prévia do cronograma (pedido do usuário 2026-09-22, referência visual de um sistema antigo) -
+   *  getters simples, não signal/computed: lidos diretamente no template, que já reavalia a cada
+   *  ciclo de detecção de mudanças disparado pelos próprios eventos do formulário (input/change),
+   *  sem precisar de valueChanges->toSignal aqui. */
+  get scheduleStartDate(): Date | null {
+    return this.form.controls.startDate.value;
+  }
+
+  get scheduleDurationDays(): number | null {
+    return this.form.controls.durationDays.value;
+  }
+
+  get scheduleDueDate(): Date | null {
+    const start = this.scheduleStartDate;
+    const days = this.scheduleDurationDays;
+    if (!start || !days || days <= 0) return null;
+
+    const due = new Date(start);
+    due.setDate(due.getDate() + days);
+    return due;
+  }
+
+  get hasSchedulePreview(): boolean {
+    return !!this.scheduleStartDate && !!this.scheduleDurationDays && this.scheduleDurationDays > 0;
+  }
 
   constructor() {
     this.usersFacade.loadUsersOptions();
