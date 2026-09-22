@@ -328,6 +328,32 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
       });
   }
 
+  /** Drop recusado no Kanban (pedido do usuário 2026-09-23) - explica o motivo exato, na mesma
+   *  ordem de prioridade das regras checadas em #canDropTask. */
+  onKanbanDropRejected(event: TaskKanbanDropEvent): void {
+    this.toast.add({
+      severity: 'warn',
+      summary: this.i18n.tUi('common.warning'),
+      detail: this.kanbanDropRejectedReason(event.task, event.status),
+    });
+  }
+
+  private kanbanDropRejectedReason(task: TaskWithActionPlanModel, status: TaskStatusEnum): string {
+    if (status === TaskStatusEnum.DONE && task.status !== TaskStatusEnum.IN_PROGRESS) {
+      return this.i18n.tUi('tasks.action.blockedBySkipSteps' as never);
+    }
+    if (
+      (status === TaskStatusEnum.IN_PROGRESS || status === TaskStatusEnum.DONE) &&
+      !this.isDependencySatisfied(task)
+    ) {
+      return this.i18n.tUi('tasks.action.blockedByDependency' as never, { title: task.dependsOnTaskTitle });
+    }
+    if (!this.policy.canManage() && !this.policy.canExecuteOwn(task)) {
+      return this.i18n.tUi('tasks.action.blockedByPermission' as never);
+    }
+    return this.i18n.tUi('tasks.action.blockedGeneric' as never);
+  }
+
   clear() {
     this.clearTableAndReload(this.dt);
   }

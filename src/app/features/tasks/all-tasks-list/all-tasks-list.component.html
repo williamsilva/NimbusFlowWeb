@@ -142,6 +142,7 @@
         [canDrop]="canDropTask"
         [loading]="facade.loading()"
         (drop)="onKanbanDrop($event)"
+        (dropRejected)="onKanbanDropRejected($event)"
         (taskClick)="onKanbanCardClick($event)"
       ></app-tasks-kanban-board>
     </div>

@@ -1975,7 +1975,10 @@
         "IN_PROGRESS": "Start task",
         "DONE": "Complete task"
       },
-      "blockedByDependency": "Blocked until \"{title}\" is completed"
+      "blockedByDependency": "Blocked until \"{title}\" is completed",
+      "blockedBySkipSteps": "The task must be \"In progress\" before it can be completed",
+      "blockedByPermission": "You don't have permission to move this task",
+      "blockedGeneric": "This task cannot be moved to this status"
     },
     "viewMode": {
       "title": "View type",

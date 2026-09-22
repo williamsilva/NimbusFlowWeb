@@ -141,7 +141,15 @@
   cursor: grabbing;
 }
 
+.kanban-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.55rem;
+}
+
 .kanban-card-title {
+  min-width: 0;
   font-weight: 800;
   font-size: 0.82rem;
   text-transform: uppercase;
@@ -149,7 +157,19 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 0.55rem;
+}
+
+/* Pedido do usuário 2026-09-23: indicar no próprio cartão que a tarefa está travada por
+   dependência ainda não concluída - cor fixa (mesmo racional de .kanban-card-due-overdue) pra
+   bater igual nos dois temas. */
+.kanban-card-lock-icon {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--red-500, #ef4444);
+}
+
+.kanban-card-field-value-blocked {
+  color: var(--red-500, #ef4444);
 }
 
 .kanban-card-field {

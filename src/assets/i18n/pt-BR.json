@@ -1975,7 +1975,10 @@
         "IN_PROGRESS": "Iniciar tarefa",
         "DONE": "Concluir tarefa"
       },
-      "blockedByDependency": "Bloqueada até \"{title}\" ser concluída"
+      "blockedByDependency": "Bloqueada até \"{title}\" ser concluída",
+      "blockedBySkipSteps": "A tarefa precisa estar \"Em andamento\" antes de poder ser concluída",
+      "blockedByPermission": "Você não tem permissão para mover esta tarefa",
+      "blockedGeneric": "Não é possível mover a tarefa para este status"
     },
     "viewMode": {
       "title": "Tipo de visualização",

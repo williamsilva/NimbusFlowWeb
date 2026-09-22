@@ -54,6 +54,10 @@ export class TasksKanbanBoardComponent {
    *  (AllTasksListComponent). Nunca dispara junto de um drag-and-drop - o próprio navegador não
    *  gera "click" depois de um "dragend" real. */
   @Output() readonly taskClick = new EventEmitter<TaskWithActionPlanModel>();
+  /** Drop recusado (pedido do usuário 2026-09-23 - o usuário precisa saber POR QUE não pôde
+   *  mover) - "burro" igual ao resto: só avisa QUE foi recusado, quem decide o motivo exato (texto
+   *  traduzido) é o pai, que já tem toda a regra de negócio via canDrop/isDependencySatisfied. */
+  @Output() readonly dropRejected = new EventEmitter<TaskKanbanDropEvent>();
 
   readonly statuses = TASK_STATUS_VALUES;
 
@@ -157,8 +161,20 @@ export class TasksKanbanBoardComponent {
     this.dragOverStatus.set(null);
     this.draggingTask.set(null);
 
-    if (!task || task.status === status || !this.canDrop()(task, status)) return;
+    if (!task || task.status === status) return;
+
+    if (!this.canDrop()(task, status)) {
+      this.dropRejected.emit({ task, status });
+      return;
+    }
 
     this.drop.emit({ task, status });
+  }
+
+  /** Sem dependência = nunca bloqueia. Pura leitura de dado (dependsOnTaskStatus já vem resolvido
+   *  pelo backend), diferente de canDrop - não depende de permissão, então não precisa ser
+   *  injetada de fora (pedido do usuário 2026-09-23 - indicar no próprio cartão). */
+  isDependencyBlocking(task: TaskWithActionPlanModel): boolean {
+    return !!task.dependsOnTaskId && task.dependsOnTaskStatus !== TaskStatusEnum.DONE;
   }
 }

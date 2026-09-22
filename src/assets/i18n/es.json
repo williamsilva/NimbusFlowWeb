@@ -1975,7 +1975,10 @@
         "IN_PROGRESS": "Iniciar tarea",
         "DONE": "Concluir tarea"
       },
-      "blockedByDependency": "Bloqueada hasta que \"{title}\" se complete"
+      "blockedByDependency": "Bloqueada hasta que \"{title}\" se complete",
+      "blockedBySkipSteps": "La tarea debe estar \"En curso\" antes de poder concluirse",
+      "blockedByPermission": "No tiene permiso para mover esta tarea",
+      "blockedGeneric": "No es posible mover la tarea a este estado"
     },
     "viewMode": {
       "title": "Tipo de visualización",
