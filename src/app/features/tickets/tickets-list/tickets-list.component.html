@@ -15,14 +15,16 @@
     [label]="'common.update' | translate"
   ></button>
 
-  <button
-    pButton
-    type="button"
-    (click)="goNew()"
-    icon="pi pi-plus"
-    class="p-button-info p-button-sm"
-    [label]="'tickets.new.title' | translate"
-  ></button>
+  @if (policy.canCreate()) {
+    <button
+      pButton
+      type="button"
+      (click)="goNew()"
+      icon="pi pi-plus"
+      class="p-button-info p-button-sm"
+      [label]="'tickets.new.title' | translate"
+    ></button>
+  }
 </app-page-header>
 
 <app-tickets-create-dialog

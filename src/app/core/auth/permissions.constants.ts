@@ -211,6 +211,10 @@ export const PERMISSIONS = {
      *  fechar/converter/vincular Frente (MANAGE) de quem pode cancelar ou editar. */
     CANCEL: 'CHAMADO_CANCEL',
     EDIT: 'CHAMADO_EDIT',
+    /** Dedicada, não reaproveita MANAGE/VIEW (pedido do usuário 2026-09-21) - criar chamado deixou
+     *  de ser livre pra qualquer autenticado. Migration no NimbusCore só concedeu pro
+     *  ADMINISTRADOR por enquanto; outros grupos recebem por decisão manual. */
+    CREATE: 'CHAMADO_CREATE',
   },
 
   PLANO_ACAO: {
