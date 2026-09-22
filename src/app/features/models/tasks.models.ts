@@ -7,6 +7,9 @@ import { DayOfWeekEnum } from '@models/enums/day-of-week.enum';
 /** Espelha com.nimbusflow.tasks.dto.response.TaskResponse do NimbusFlowServer. */
 export interface TaskModel {
   id: string;
+  /** Número sequencial exibido ao usuário (pedido do usuário 2026-09-23, mesma técnica de
+   *  TicketModel.numero) - ver formatTaskNumero. */
+  numero: number;
   /** Nulo = tarefa avulsa, sem vínculo com nenhum Plano de Ação (pedido do usuário 2026-09-21). */
   actionPlanId: string | null;
   title: string;
@@ -117,6 +120,12 @@ export interface TasksFiltersState {
  *  TasksListComponent/AllTasksListComponent/TasksKanbanBoardComponent). */
 export function taskAssigneeDisplayName(task: TaskModel): string | null {
   return task.assigneeType === TaskAssigneeTypeEnum.DEPARTMENT ? task.assigneeDepartmentName : task.assigneeName;
+}
+
+/** Sempre com 3 dígitos no mínimo (ex.: 40 -> "040") - mesma convenção de
+ *  TicketModel#formatTicketNumero, pedido do usuário 2026-09-23. */
+export function formatTaskNumero(numero: number): string {
+  return String(numero).padStart(3, '0');
 }
 
 export function mapTaskApiModel(input: TaskApiModel): TaskModel {

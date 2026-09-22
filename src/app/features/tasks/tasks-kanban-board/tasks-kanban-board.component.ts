@@ -5,7 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
-import { TaskWithActionPlanModel, taskAssigneeDisplayName } from '@models/tasks.models';
+import { TaskWithActionPlanModel, formatTaskNumero, taskAssigneeDisplayName } from '@models/tasks.models';
 import { TASK_STATUS_VALUES, TaskStatusEnum, taskStatusTone } from '@models/enums/task-status.enum';
 import { TaskAssigneeTypeEnum } from '@models/enums/task-assignee-type.enum';
 
@@ -81,6 +81,10 @@ export class TasksKanbanBoardComponent {
 
   statusLabel(status: TaskStatusEnum): string {
     return this.i18n.tUi(`tasks.status.${status}` as never);
+  }
+
+  formatNumero(numero: number): string {
+    return formatTaskNumero(numero);
   }
 
   readonly TaskAssigneeTypeEnum = TaskAssigneeTypeEnum;

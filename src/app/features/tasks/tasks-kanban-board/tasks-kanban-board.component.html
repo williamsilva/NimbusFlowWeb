@@ -29,6 +29,8 @@
             (dragstart)="onDragStart(task)"
             (dragend)="onDragEnd()"
           >
+            <span class="kanban-card-numero">{{ formatNumero(task.numero) }}</span>
+
             <div class="kanban-card-title-row">
               @if (isDependencyBlocking(task)) {
                 <i

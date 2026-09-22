@@ -141,6 +141,16 @@
   cursor: grabbing;
 }
 
+/* Número sequencial (pedido do usuário 2026-09-23) - acima do título, discreto (mesmo espírito de
+   .kanban-card-field-label). */
+.kanban-card-numero {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  opacity: 0.55;
+  margin-bottom: 0.2rem;
+}
+
 .kanban-card-title-row {
   display: flex;
   align-items: center;
