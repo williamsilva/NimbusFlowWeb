@@ -18,8 +18,6 @@ import { TranslateModule } from '@ngx-translate/core';
       <span class="cs-signature-hint">{{ 'tasks.execution.signatureHint' | translate }}</span>
       <canvas
         #canvas
-        width="500"
-        height="140"
         class="cs-signature-canvas"
         (pointerdown)="onPointerDown($event)"
         (pointermove)="onPointerMove($event)"
@@ -57,8 +55,8 @@ import { TranslateModule } from '@ngx-translate/core';
          :host-context(.dark) funciona normal aqui, diferente do próprio TaskExecutionDialogComponent
          (que hospeda o <p-dialog appendTo="body"> - ver project_nimbusflow_dialog_appendto_body_host_context_bug). */
       .cs-signature-canvas {
+        display: block;
         width: 100%;
-        max-width: 420px;
         height: 140px;
         touch-action: none;
         cursor: crosshair;
@@ -88,6 +86,16 @@ export class SignaturePadComponent implements AfterViewInit {
     const canvas = this.canvasRef.nativeElement;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+    /* canvas.width/height fixos (ex. "500") + CSS "width:100%" deixa a área de desenho ocupar a
+       largura toda (pedido do usuário 2026-09-23), mas sem isto o mapeamento de coordenadas de
+       relativeCoords() (baseado no tamanho RENDERIZADO via getBoundingClientRect) fica errado -
+       a resolução interna do canvas precisa bater com o tamanho real na tela. devicePixelRatio
+       evita borrão em telas de alta densidade. */
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
     const isDark = document.documentElement.classList.contains('dark');
     ctx.strokeStyle = isDark ? '#e5e7eb' : '#1f2937';
     ctx.lineWidth = 2;
