@@ -36,6 +36,7 @@ import {
   TasksKanbanBoardComponent,
 } from '@features/tasks/tasks-kanban-board/tasks-kanban-board.component';
 import { TasksCreateDialogComponent } from '@features/tasks/tasks-create/tasks-create-dialog.component';
+import { TaskExecutionDialogComponent } from '@features/tasks/tasks-execution/task-execution-dialog.component';
 import {
   TASK_STATUS_VALUES,
   TaskStatusEnum,
@@ -89,6 +90,7 @@ import {
     FiltersPanelComponent,
     TasksKanbanBoardComponent,
     TasksCreateDialogComponent,
+    TaskExecutionDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
   ],
 })
@@ -124,9 +126,14 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   ];
 
   upsertVisible = signal(false);
-  /** Nulo = criando; preenchido = editando (pedido do usuário 2026-09-23 - clicar num cartão do
-   *  Kanban abre a edição, mesmo diálogo reaproveitado de criar). */
+  /** Nulo = criando; preenchido = editando (pedido do usuário 2026-09-23 - botão de lápis do
+   *  cartão do Kanban abre a edição, mesmo diálogo reaproveitado de criar). */
   editingTask = signal<TaskWithActionPlanModel | null>(null);
+
+  /** Tela de execução (pedido do usuário 2026-09-23) - clicar no resto do cartão do Kanban abre
+   *  isto, diferente do botão de lápis (edição, ver editingTask acima). */
+  executionDialogVisible = signal(false);
+  executingTask = signal<TaskWithActionPlanModel | null>(null);
 
   title = signal('');
   status = signal<string[] | null>(null);
@@ -438,12 +445,27 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     );
   }
 
-  /** Clique num cartão do Kanban abre a edição (pedido do usuário 2026-09-23) - sem permissão/
-   *  status editável, o clique simplesmente não faz nada (mesmo espírito de o botão "Editar" nem
-   *  aparecer na lista pra esses casos). */
+  /** Clique num cartão do Kanban abre a EXECUÇÃO (pedido do usuário 2026-09-23, mudou de "abre a
+   *  edição" - agora é o botão de lápis, ver #onKanbanEditClick, que abre a edição). Sem gate de
+   *  permissão aqui de propósito - mesmo quem não pode responder as atividades pode ABRIR pra ver
+   *  em modo leitura (TaskExecutionDialogComponent#canAnswer decide isso internamente, por
+   *  atividade). */
   onKanbanCardClick(row: TaskWithActionPlanModel): void {
+    this.executingTask.set(row);
+    this.executionDialogVisible.set(true);
+  }
+
+  /** Botão de lápis no cartão do Kanban (pedido do usuário 2026-09-23) - mesmo gate de #canEdit
+   *  de antes; sem permissão/status editável, simplesmente não faz nada (mesmo espírito de o
+   *  botão "Editar" nem aparecer na lista pra esses casos). */
+  onKanbanEditClick(row: TaskWithActionPlanModel): void {
     if (!this.canEdit(row)) return;
     this.goEdit(row);
+  }
+
+  onExecutionDialogVisibleChange(visible: boolean): void {
+    this.executionDialogVisible.set(visible);
+    if (!visible) this.executingTask.set(null);
   }
 
   goEdit(row: TaskWithActionPlanModel): void {

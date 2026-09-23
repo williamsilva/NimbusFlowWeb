@@ -29,9 +29,20 @@
             (dragstart)="onDragStart(task)"
             (dragend)="onDragEnd()"
           >
-            <span class="kanban-card-numero">
-              {{ 'tasks.kanban.numero' | translate: { number: formatNumero(task.numero) } }}
-            </span>
+            <div class="kanban-card-numero-row">
+              <span class="kanban-card-numero">
+                {{ 'tasks.kanban.numero' | translate: { number: formatNumero(task.numero) } }}
+              </span>
+              <button
+                pButton
+                type="button"
+                icon="pi pi-pencil"
+                (click)="onEditClick($event, task)"
+                [pTooltip]="'common.edit' | translate"
+                [attr.aria-label]="'common.edit' | translate"
+                class="p-button-text p-button-sm kanban-card-edit-button"
+              ></button>
+            </div>
 
             <div class="kanban-card-title-row">
               @if (isDependencyBlocking(task)) {

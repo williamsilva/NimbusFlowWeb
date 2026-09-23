@@ -55,6 +55,13 @@
   (visibleChange)="onUpsertVisibleChange($event)"
 ></app-tasks-create-dialog>
 
+<app-task-execution-dialog
+  [task]="executingTask()"
+  [visible]="executionDialogVisible()"
+  (updated)="onUpdated()"
+  (visibleChange)="onExecutionDialogVisibleChange($event)"
+></app-task-execution-dialog>
+
 <cs-filters-panel
   [collapsed]="true"
   (clear)="clear()"
@@ -146,6 +153,7 @@
         (drop)="onKanbanDrop($event)"
         (dropRejected)="onKanbanDropRejected($event)"
         (taskClick)="onKanbanCardClick($event)"
+        (editClick)="onKanbanEditClick($event)"
       ></app-tasks-kanban-board>
     </div>
   } @else {

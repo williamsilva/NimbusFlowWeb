@@ -2020,6 +2020,8 @@
     "activities": {
       "title": "Actividades de la tarea",
       "subtitle": "Mantenga presionado y arrastre una actividad para definir el orden de ejecución.",
+      "lockedSubtitle": "La lista está bloqueada - alguna actividad ya fue respondida en la ejecución.",
+      "lockedTooltip": "No es posible modificar las actividades después de que la ejecución haya comenzado.",
       "empty": "Ninguna actividad agregada."
     },
     "activityType": {
@@ -2071,6 +2073,28 @@
       "invalidOptionLabel": "Complete el texto de todas las respuestas antes de guardar.",
       "invalidNoOptions": "Agregue al menos una respuesta antes de guardar.",
       "invalidCriticalCondition": "Seleccione la condición crítica antes de guardar."
+    },
+    "execution": {
+      "taskLabel": "Tarea",
+      "infoTitle": "Información",
+      "completedAt": "Fecha de conclusión",
+      "creator": "Creador",
+      "notDoneReason": "Justificación de tarea no realizada",
+      "executionOrder": "Orden de ejecución",
+      "saved": "Actividad guardada con éxito.",
+      "saveError": "No se pudo guardar la actividad.",
+      "viewDocument": "Ver documento",
+      "criticalJustification": "Justificación para el crítico",
+      "observation": "Observación",
+      "executedAt": "Ejecutado el {date} por {name}",
+      "answerDate": "Fecha",
+      "answerNumber": "Valor",
+      "selectAlternative": "Seleccione una alternativa",
+      "reportObservation": "Informar una no conformidad u observación",
+      "attachDocument": "Adjuntar documento",
+      "attachImage": "Adjuntar foto",
+      "pendingNote": "Esperando ejecución.",
+      "signatureClear": "Limpiar"
     }
   }
 }

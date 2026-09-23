@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output, computed, inject, input, signal } from '@angular/core';
 
+import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -31,7 +32,7 @@ export interface TaskKanbanDropEvent {
   selector: 'app-tasks-kanban-board',
   templateUrl: './tasks-kanban-board.component.html',
   styleUrl: './tasks-kanban-board.component.scss',
-  imports: [CsDatePipe, TooltipModule, TranslateModule],
+  imports: [CsDatePipe, ButtonModule, TooltipModule, TranslateModule],
 })
 export class TasksKanbanBoardComponent {
   private readonly i18n = inject(I18nService);
@@ -49,11 +50,17 @@ export class TasksKanbanBoardComponent {
   );
 
   @Output() readonly drop = new EventEmitter<TaskKanbanDropEvent>();
-  /** Clique no cartão (pedido do usuário 2026-09-23) - "burro" igual ao resto do componente: só
-   *  emite, quem decide o que fazer (abrir edição, checar permissão) é o pai
+  /** Clique no cartão (pedido do usuário 2026-09-23, redefinido 2026-09-23 pra abrir a EXECUÇÃO
+   *  em vez da edição - ver #editClick abaixo pro botão novo de lápis) - "burro" igual ao resto do
+   *  componente: só emite, quem decide o que fazer (abrir execução, checar permissão) é o pai
    *  (AllTasksListComponent). Nunca dispara junto de um drag-and-drop - o próprio navegador não
    *  gera "click" depois de um "dragend" real. */
   @Output() readonly taskClick = new EventEmitter<TaskWithActionPlanModel>();
+  /** Botão de lápis no canto superior direito do cartão, mesma linha do número (pedido do usuário
+   *  2026-09-23) - abre a EDIÇÃO/configuração (o clique no resto do cartão abre a execução, ver
+   *  #taskClick). Precisa de stopPropagation no template - é um elemento dentro da área
+   *  clicável do cartão inteiro. */
+  @Output() readonly editClick = new EventEmitter<TaskWithActionPlanModel>();
   /** Drop recusado (pedido do usuário 2026-09-23 - o usuário precisa saber POR QUE não pôde
    *  mover) - "burro" igual ao resto: só avisa QUE foi recusado, quem decide o motivo exato (texto
    *  traduzido) é o pai, que já tem toda a regra de negócio via canDrop/isDependencySatisfied. */
@@ -85,6 +92,13 @@ export class TasksKanbanBoardComponent {
 
   formatNumero(numero: number): string {
     return formatTaskNumero(numero);
+  }
+
+  /** stopPropagation pra não também disparar #taskClick (o botão fica DENTRO da área clicável do
+   *  cartão inteiro, ver template) - pedido do usuário 2026-09-23. */
+  onEditClick(event: Event, task: TaskWithActionPlanModel): void {
+    event.stopPropagation();
+    this.editClick.emit(task);
   }
 
   readonly TaskAssigneeTypeEnum = TaskAssigneeTypeEnum;

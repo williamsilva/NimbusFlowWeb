@@ -2020,6 +2020,8 @@
     "activities": {
       "title": "Atividades da tarefa",
       "subtitle": "Segure e arraste uma atividade para colocar em qual ordem deve ser executada.",
+      "lockedSubtitle": "A lista está travada - alguma atividade já foi respondida na execução.",
+      "lockedTooltip": "Não é possível alterar as atividades depois que a execução começou.",
       "empty": "Nenhuma atividade adicionada."
     },
     "activityType": {
@@ -2071,6 +2073,28 @@
       "invalidOptionLabel": "Preencha o texto de todas as respostas antes de salvar.",
       "invalidNoOptions": "Adicione ao menos uma resposta antes de salvar.",
       "invalidCriticalCondition": "Selecione a condição crítica antes de salvar."
+    },
+    "execution": {
+      "taskLabel": "Tarefa",
+      "infoTitle": "Informações",
+      "completedAt": "Data de Conclusão",
+      "creator": "Criador",
+      "notDoneReason": "Justificativa de tarefa não realizada",
+      "executionOrder": "Ordem de execução",
+      "saved": "Atividade salva com sucesso.",
+      "saveError": "Não foi possível salvar a atividade.",
+      "viewDocument": "Ver documento",
+      "criticalJustification": "Justificativa para o crítico",
+      "observation": "Observação",
+      "executedAt": "Executado em {date} por {name}",
+      "answerDate": "Data",
+      "answerNumber": "Valor",
+      "selectAlternative": "Selecione uma alternativa",
+      "reportObservation": "Relatar não conformidade ou observação",
+      "attachDocument": "Anexar documento",
+      "attachImage": "Anexar foto",
+      "pendingNote": "Aguardando execução.",
+      "signatureClear": "Limpar"
     }
   }
 }

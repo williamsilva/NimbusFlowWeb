@@ -396,6 +396,23 @@ export class TasksActivityConfigDialogComponent {
       numberCriticalMin: isNumber ? v.numberCriticalMin : null,
       numberCriticalMax: isNumber ? v.numberCriticalMax : null,
       multipleChoiceCriticalCondition: isMultipleChoice ? v.multipleChoiceCriticalCondition : null,
+      // Campos de resposta/execução (pedido do usuário 2026-09-23) - este diálogo é só de
+      // CONFIGURAÇÃO, nunca os altera; preserva o que já veio (na prática sempre vazio, já que a
+      // lista trava assim que qualquer atividade é respondida - ver saveActivities no backend).
+      answerText: existing?.answerText ?? null,
+      answerDate: existing?.answerDate ?? null,
+      answerNumber: existing?.answerNumber ?? null,
+      answerOptionId: existing?.answerOptionId ?? null,
+      answerOptionIds: existing?.answerOptionIds ?? [],
+      answerSignatureUrl: existing?.answerSignatureUrl ?? null,
+      answerDocumentUrl: existing?.answerDocumentUrl ?? null,
+      answerImageUrl: existing?.answerImageUrl ?? null,
+      justification: existing?.justification ?? null,
+      observationReported: existing?.observationReported ?? false,
+      observationText: existing?.observationText ?? null,
+      executedAt: existing?.executedAt ?? null,
+      executedById: existing?.executedById ?? null,
+      executedByName: existing?.executedByName ?? null,
       options: (isSingleChoice || isMultipleChoice)
         ? this.options().map((o) => ({
             ...o,

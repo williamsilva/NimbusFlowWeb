@@ -8,6 +8,7 @@ import { SelectModule } from 'primeng/select';
 import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TextareaModule } from 'primeng/textarea';
 import { InputTextModule } from 'primeng/inputtext';
@@ -106,6 +107,7 @@ const INTERVAL_OPTIONS: RecurrenceFormOption[] = ['DAILY_INTERVAL', 'WEEKLY', 'M
     SelectModule,
     DialogModule,
     ButtonModule,
+    TooltipModule,
     CheckboxModule,
     TextareaModule,
     TranslateModule,
@@ -174,6 +176,13 @@ export class TasksCreateDialogComponent {
   /** Nulo = adicionando uma atividade nova (ver TasksActivityConfigDialogComponent#activity). */
   readonly editingActivity = signal<TaskActivityDraft | null>(null);
   private draggingActivityIndex: number | null = null;
+
+  /** Trava de reconfiguração (pedido do usuário 2026-09-23, tela de execução) - assim que
+   *  QUALQUER atividade já foi respondida, a lista inteira congela (mesma regra de
+   *  TaskService#saveActivities no backend, que ignora silenciosamente qualquer tentativa de
+   *  reenviar as atividades nesse caso - isto aqui é só a UI refletindo a mesma trava,
+   *  desabilitando os controles antes mesmo de tentar salvar). */
+  readonly activitiesLocked = computed(() => this.activities().some((a) => !!a.executedAt));
 
   readonly taskActivityDataTypeLabel = (type: TaskActivityDataTypeEnum) => taskActivityDataTypeLabel(type, this.i18n);
   readonly taskActivityDataTypeIconOf = (type: TaskActivityDataTypeEnum) => taskActivityDataTypeIcon(type);
@@ -411,13 +420,17 @@ export class TasksCreateDialogComponent {
   }
 
   /** "Atividades da tarefa" (pedido do usuário 2026-09-23) - abre o sub-diálogo de configuração
-   *  pra adicionar (activity=null) ou editar (activity=draft) um item da lista. */
+   *  pra adicionar (activity=null) ou editar (activity=draft) um item da lista. Guard de
+   *  #activitiesLocked aqui é defensivo (o template já esconde/desabilita os botões que chamam
+   *  isto) - a garantia de verdade é o backend (TaskService#saveActivities). */
   openAddActivity(): void {
+    if (this.activitiesLocked()) return;
     this.editingActivity.set(null);
     this.activityDialogVisible.set(true);
   }
 
   openEditActivity(draft: TaskActivityDraft): void {
+    if (this.activitiesLocked()) return;
     this.editingActivity.set(draft);
     this.activityDialogVisible.set(true);
   }
@@ -442,10 +455,12 @@ export class TasksCreateDialogComponent {
   }
 
   removeActivity(clientId: string): void {
+    if (this.activitiesLocked()) return;
     this.activities.update((activities) => activities.filter((a) => a.clientId !== clientId));
   }
 
   onActivityDragStart(index: number): void {
+    if (this.activitiesLocked()) return;
     this.draggingActivityIndex = index;
   }
 
@@ -455,7 +470,7 @@ export class TasksCreateDialogComponent {
   onActivityDrop(targetIndex: number): void {
     const sourceIndex = this.draggingActivityIndex;
     this.draggingActivityIndex = null;
-    if (sourceIndex === null || sourceIndex === targetIndex) return;
+    if (sourceIndex === null || sourceIndex === targetIndex || this.activitiesLocked()) return;
 
     this.activities.update((activities) => {
       const next = [...activities];

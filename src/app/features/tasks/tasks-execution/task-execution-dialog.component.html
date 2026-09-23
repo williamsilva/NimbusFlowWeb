@@ -1,0 +1,104 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  styleClass="cs-execution-dialog"
+  [style]="{ width: '1000px', maxWidth: '96vw', height: '85vh' }"
+  [contentStyle]="{ padding: '0', height: '100%', overflow: 'hidden' }"
+>
+  @if (task(); as task) {
+    <div class="cs-execution-layout">
+      <div class="cs-execution-sidebar">
+        <div class="cs-execution-sidebar-header">
+          <span class="cs-execution-task-label">
+            {{ 'tasks.execution.taskLabel' | translate }} - {{ formatNumero(task.numero) }}
+          </span>
+          <span class="cs-execution-sidebar-title">{{ 'tasks.execution.infoTitle' | translate }}</span>
+        </div>
+
+        <div class="cs-execution-field">
+          <span class="cs-execution-field-label">{{ 'tasks.fields.assignee' | translate }}</span>
+          <span class="cs-execution-field-value">{{ assigneeDisplay() }}</span>
+        </div>
+
+        <div class="cs-execution-field">
+          <span class="cs-execution-field-label">{{ 'tasks.columns.status' | translate }}</span>
+          <span class="cs-execution-status-pill cs-execution-status-{{ statusTone() }}">{{ statusLabel() }}</span>
+        </div>
+
+        <div class="cs-execution-field">
+          <span class="cs-execution-field-label">{{ 'tasks.fields.createdAt' | translate }}</span>
+          <span class="cs-execution-field-value">{{ task.createdAt | csDate }}</span>
+        </div>
+
+        @if (task.dueDate) {
+          <div class="cs-execution-field">
+            <span class="cs-execution-field-label">{{ 'tasks.columns.dueDate' | translate }}</span>
+            <span class="cs-execution-field-value">{{ task.dueDate | csDate }}</span>
+          </div>
+        }
+
+        @if (task.completedAt) {
+          <div class="cs-execution-field">
+            <span class="cs-execution-field-label">{{ 'tasks.execution.completedAt' | translate }}</span>
+            <span class="cs-execution-field-value">{{ task.completedAt | csDate }}</span>
+          </div>
+        }
+
+        <div class="cs-execution-field">
+          <span class="cs-execution-field-label">{{ 'tasks.execution.creator' | translate }}</span>
+          <span class="cs-execution-field-value">{{ creatorName() }}</span>
+        </div>
+      </div>
+
+      <div class="cs-execution-content">
+        <button
+          type="button"
+          class="cs-execution-close"
+          (click)="close()"
+          [attr.aria-label]="'common.close' | translate"
+        >
+          <i class="pi pi-times"></i>
+        </button>
+
+        <div class="cs-execution-section">
+          <span class="cs-execution-section-label"><i class="pi pi-align-left"></i> {{ 'tasks.fields.description' | translate }}</span>
+          <div class="cs-execution-section-value">{{ task.description || '-' }}</div>
+        </div>
+
+        @if (isNotDone() && task.notDoneReason) {
+          <div class="cs-execution-section">
+            <span class="cs-execution-section-label">
+              <i class="pi pi-align-left"></i> {{ 'tasks.execution.notDoneReason' | translate }}
+            </span>
+            <div class="cs-execution-section-value">{{ task.notDoneReason }}</div>
+          </div>
+        }
+
+        <div class="cs-execution-activities-header">
+          <span class="cs-execution-section-label">{{ 'tasks.activities.title' | translate }}</span>
+          <span class="cs-execution-order-label">
+            {{ 'tasks.execution.executionOrder' | translate }} <i class="pi pi-sort-alt"></i>
+          </span>
+        </div>
+
+        @if (!activities().length) {
+          <div class="cs-execution-activities-empty">{{ 'tasks.activities.empty' | translate }}</div>
+        } @else {
+          @for (activity of activities(); track activity.id) {
+            <app-task-activity-execution-card
+              [activity]="activity"
+              [canAnswer]="canAnswer()"
+              [saving]="savingActivityId() === activity.id"
+              (answered)="onAnswered(activity, $event)"
+            ></app-task-activity-execution-card>
+          }
+        }
+      </div>
+    </div>
+  }
+</p-dialog>

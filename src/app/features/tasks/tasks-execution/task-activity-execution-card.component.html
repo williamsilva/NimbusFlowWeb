@@ -1,0 +1,245 @@
+<div class="cs-exec-card" [class.cs-exec-card-done]="!!activity().executedAt">
+  <div class="cs-exec-card-header">
+    <i class="pi" [class.pi-check-circle]="!!activity().executedAt" [class.pi-circle]="!activity().executedAt"></i>
+    <div class="cs-exec-card-header-text">
+      <span class="cs-exec-card-title">{{ activity().description }}</span>
+      @if (activity().instructions) {
+        <span class="cs-exec-card-instructions">{{ activity().instructions }}</span>
+      }
+    </div>
+  </div>
+
+  @if (activity().executedAt) {
+    <!-- Já respondida: só leitura (pedido do usuário 2026-09-23, "igual ao print") -->
+    <div class="cs-exec-card-body">
+      @switch (activity().dataCollectionType) {
+        @case (TaskActivityDataTypeEnum.TEXT) {
+          <div class="cs-exec-answer-readonly">{{ activity().answerText }}</div>
+        }
+        @case (TaskActivityDataTypeEnum.DATE) {
+          <div class="cs-exec-answer-readonly">{{ activity().answerDate | csDate }}</div>
+        }
+        @case (TaskActivityDataTypeEnum.NUMBER) {
+          <div class="cs-exec-answer-readonly">{{ activity().answerNumber }}</div>
+        }
+        @case (TaskActivityDataTypeEnum.LINEAR_SCALE) {
+          <div class="cs-exec-answer-readonly">{{ activity().answerNumber }}</div>
+        }
+        @case (TaskActivityDataTypeEnum.SINGLE_CHOICE) {
+          <div class="cs-exec-answer-readonly">{{ selectedSingleChoiceLabel() }}</div>
+        }
+        @case (TaskActivityDataTypeEnum.MULTIPLE_CHOICE) {
+          <div class="cs-exec-answer-readonly">{{ selectedMultipleChoiceLabels() }}</div>
+        }
+        @case (TaskActivityDataTypeEnum.SIGNATURE) {
+          @if (activity().answerSignatureUrl) {
+            <img [src]="activity().answerSignatureUrl" class="cs-exec-answer-image" alt="" />
+          }
+        }
+        @case (TaskActivityDataTypeEnum.DOCUMENT) {
+          @if (activity().answerDocumentUrl) {
+            <a [href]="activity().answerDocumentUrl" target="_blank" rel="noopener" class="cs-exec-answer-link">
+              <i class="pi pi-file"></i> {{ 'tasks.execution.viewDocument' | translate }}
+            </a>
+          }
+        }
+        @case (TaskActivityDataTypeEnum.IMAGE) {
+          @if (activity().answerImageUrl) {
+            <img [src]="activity().answerImageUrl" class="cs-exec-answer-image" alt="" />
+          }
+        }
+      }
+
+      @if (activity().justification) {
+        <div class="cs-exec-justification-box">
+          <span class="cs-exec-justification-label">
+            <i class="pi pi-exclamation-triangle"></i> {{ 'tasks.execution.criticalJustification' | translate }}
+          </span>
+          <span>{{ activity().justification }}</span>
+        </div>
+      }
+
+      @if (activity().observationReported) {
+        <div class="cs-exec-observation-box">
+          <span class="cs-exec-observation-label">
+            <i class="pi pi-comment"></i> {{ 'tasks.execution.observation' | translate }}
+          </span>
+          <span>{{ activity().observationText }}</span>
+        </div>
+      }
+
+      <div class="cs-exec-card-footer">
+        {{ 'tasks.execution.executedAt' | translate: { date: (activity().executedAt | csDate: 'short'), name: activity().executedByName } }}
+      </div>
+    </div>
+  } @else if (canAnswer()) {
+    <!-- Ainda não respondida, e o usuário pode responder -->
+    <div class="cs-exec-card-body">
+      @switch (activity().dataCollectionType) {
+        @case (TaskActivityDataTypeEnum.TEXT) {
+          <textarea
+            rows="3"
+            pTextarea
+            class="w-full p-inputtext-sm"
+            [ngModel]="answerText()"
+            (ngModelChange)="answerText.set($event)"
+          ></textarea>
+        }
+        @case (TaskActivityDataTypeEnum.DATE) {
+          <p-floatLabel variant="on" class="w-full">
+            <p-datepicker
+              appendTo="body"
+              class="w-full"
+              inputId="answerDate"
+              [showIcon]="true"
+              [dateFormat]="i18n.getDateFormat()"
+              [ngModel]="answerDate()"
+              (ngModelChange)="answerDate.set($event)"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-datepicker>
+            <label for="answerDate">{{ 'tasks.execution.answerDate' | translate }}</label>
+          </p-floatLabel>
+        }
+        @case (TaskActivityDataTypeEnum.NUMBER) {
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              inputId="answerNumber"
+              [ngModel]="answerNumber()"
+              (ngModelChange)="answerNumber.set($event)"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="answerNumber">{{ 'tasks.execution.answerNumber' | translate }}</label>
+          </p-floatLabel>
+        }
+        @case (TaskActivityDataTypeEnum.LINEAR_SCALE) {
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              inputId="answerScale"
+              [min]="activity().scaleMinValue ?? undefined"
+              [max]="activity().scaleMaxValue ?? undefined"
+              [ngModel]="answerNumber()"
+              (ngModelChange)="answerNumber.set($event)"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="answerScale">
+              {{ activity().scaleMinLabel }} ({{ activity().scaleMinValue }}) - {{ activity().scaleMaxLabel }} ({{ activity().scaleMaxValue }})
+            </label>
+          </p-floatLabel>
+        }
+        @case (TaskActivityDataTypeEnum.SINGLE_CHOICE) {
+          <p-floatLabel variant="on" class="w-full">
+            <p-select
+              size="small"
+              class="w-full"
+              appendTo="body"
+              inputId="answerOption"
+              optionLabel="label"
+              optionValue="value"
+              [options]="singleChoiceOptions()"
+              [ngModel]="answerOptionId()"
+              (ngModelChange)="answerOptionId.set($event)"
+            ></p-select>
+            <label for="answerOption">{{ 'tasks.execution.selectAlternative' | translate }}</label>
+          </p-floatLabel>
+        }
+        @case (TaskActivityDataTypeEnum.MULTIPLE_CHOICE) {
+          <div class="cs-exec-multiple-choice">
+            @for (option of singleChoiceOptions(); track option.value) {
+              <div class="flex align-items-center gap-2">
+                <p-checkbox
+                  [binary]="true"
+                  [inputId]="'answerOption-' + option.value"
+                  [ngModel]="answerOptionIds().includes(option.value)"
+                  (ngModelChange)="toggleMultipleChoiceOption(option.value)"
+                ></p-checkbox>
+                <label [for]="'answerOption-' + option.value">{{ option.label }}</label>
+              </div>
+            }
+          </div>
+        }
+        @case (TaskActivityDataTypeEnum.SIGNATURE) {
+          <app-signature-pad (changed)="onSignatureChanged($event)"></app-signature-pad>
+        }
+        @case (TaskActivityDataTypeEnum.DOCUMENT) {
+          <input #fileInput type="file" accept="application/pdf,.zip,image/*" (change)="onFileSelected($event)" class="hidden" />
+          <button
+            pButton
+            type="button"
+            icon="pi pi-upload"
+            (click)="fileInput.click()"
+            class="p-button-outlined p-button-sm"
+            [label]="file()?.name || ('tasks.execution.attachDocument' | translate)"
+          ></button>
+        }
+        @case (TaskActivityDataTypeEnum.IMAGE) {
+          <input #imageInput type="file" accept="image/*" (change)="onFileSelected($event)" class="hidden" />
+          <button
+            pButton
+            type="button"
+            icon="pi pi-camera"
+            (click)="imageInput.click()"
+            class="p-button-outlined p-button-sm"
+            [label]="file()?.name || ('tasks.execution.attachImage' | translate)"
+          ></button>
+        }
+      }
+
+      @if (isCriticalAnswer()) {
+        <div class="cs-exec-justification-box">
+          <p-floatLabel variant="on" class="w-full">
+            <textarea
+              rows="2"
+              pTextarea
+              id="justification"
+              class="w-full p-inputtext-sm"
+              [ngModel]="justification()"
+              (ngModelChange)="justification.set($event)"
+            ></textarea>
+            <label for="justification">
+              <i class="pi pi-exclamation-triangle"></i> {{ 'tasks.execution.criticalJustification' | translate }}
+            </label>
+          </p-floatLabel>
+        </div>
+      }
+
+      <div class="cs-exec-observation-toggle">
+        <p-toggleswitch
+          inputId="observationReported"
+          [ngModel]="observationReported()"
+          (ngModelChange)="observationReported.set($event)"
+        ></p-toggleswitch>
+        <label for="observationReported">{{ 'tasks.execution.reportObservation' | translate }}</label>
+      </div>
+
+      @if (observationReported()) {
+        <textarea
+          rows="2"
+          pTextarea
+          class="w-full p-inputtext-sm"
+          [ngModel]="observationText()"
+          (ngModelChange)="observationText.set($event)"
+          [placeholder]="'tasks.execution.observation' | translate"
+        ></textarea>
+      }
+
+      <div class="cs-exec-card-actions">
+        <button
+          pButton
+          type="button"
+          icon="pi pi-save"
+          class="p-button-sm"
+          [loading]="saving()"
+          [disabled]="!canSave()"
+          (click)="save()"
+          [label]="'common.save' | translate"
+        ></button>
+      </div>
+    </div>
+  } @else {
+    <div class="cs-exec-card-body">
+      <span class="cs-exec-pending-note">{{ 'tasks.execution.pendingNote' | translate }}</span>
+    </div>
+  }
+</div>

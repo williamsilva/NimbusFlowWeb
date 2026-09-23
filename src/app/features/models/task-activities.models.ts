@@ -15,9 +15,12 @@ export interface TaskActivityOptionModel {
 
 export type TaskActivityOptionApiModel = TaskActivityOptionModel;
 
-/** Espelha com.nimbusflow.tasks.dto.response.TaskActivityResponse. Campos específicos de cada
- *  dataCollectionType vêm nulos quando não se aplicam - ver TaskActivityDataTypeEnum. */
-export interface TaskActivityModel {
+/** Campos de CONFIGURAÇÃO de uma atividade (pedido do usuário 2026-09-23) - separados dos campos
+ *  de resposta/execução abaixo de propósito: é a partir DESTA interface (não de TaskActivityModel
+ *  inteira) que TaskActivityInput é derivado via Omit, pra nunca "vazar" um campo de resposta
+ *  (answerText/executedAt/etc.) pro payload de salvar a lista de atividades (TasksApiService#
+ *  update), que só entende configuração. */
+export interface TaskActivityConfigModel {
   id: string;
   position: number;
   description: string;
@@ -37,15 +40,53 @@ export interface TaskActivityModel {
   options: TaskActivityOptionModel[];
 }
 
+/** Espelha com.nimbusflow.tasks.dto.response.TaskActivityResponse por completo (configuração +
+ *  resposta de execução, pedido do usuário 2026-09-23). */
+export interface TaskActivityModel extends TaskActivityConfigModel {
+  /** Preenchida só depois de respondida via TasksApiService#answerActivity - nula/vazia enquanto
+   *  dataCollectionType não corresponder. */
+  answerText: string | null;
+  answerDate: string | null;
+  answerNumber: number | null;
+  answerOptionId: string | null;
+  answerOptionIds: string[];
+  /** URLs assinadas (temporárias) - nunca guardar/cachear além da sessão de tela. */
+  answerSignatureUrl: string | null;
+  answerDocumentUrl: string | null;
+  answerImageUrl: string | null;
+  justification: string | null;
+  observationReported: boolean;
+  observationText: string | null;
+  /** Nulo = ainda não respondida - ver AllTasksListComponent/TaskExecutionDialogComponent. */
+  executedAt: string | null;
+  executedById: string | null;
+  executedByName: string | null;
+}
+
 export type TaskActivityApiModel = TaskActivityModel;
+
+/** Payload de UMA resposta na tela de execução (pedido do usuário 2026-09-23) - espelha
+ *  com.nimbusflow.tasks.dto.request.TaskActivityAnswerRequest. SIGNATURE/DOCUMENT/IMAGE mandam o
+ *  arquivo à parte (multipart), não aqui - ver TasksApiService#answerActivity. */
+export interface TaskActivityAnswerInput {
+  answerText: string | null;
+  answerDate: string | null;
+  answerNumber: number | null;
+  answerOptionId: string | null;
+  answerOptionIds: string[] | null;
+  justification: string | null;
+  observationReported: boolean;
+  observationText: string | null;
+}
 
 /** Payload de uma opção nova/editada (pedido do usuário 2026-09-23) - sem id, a lista inteira é
  *  substituída a cada save da Tarefa (ver TaskService#saveActivities no backend). */
 export type TaskActivityOptionInput = Omit<TaskActivityOptionModel, 'id'>;
 
 /** Payload de uma atividade nova/editada - sem id/position (a ordem no array É a posição, ver
- *  TasksCreateDialogComponent#save). */
-export type TaskActivityInput = Omit<TaskActivityModel, 'id' | 'position' | 'options'> & {
+ *  TasksCreateDialogComponent#save). Derivado de TaskActivityConfigModel (não de
+ *  TaskActivityModel inteira) - nunca inclui campo de resposta/execução algum. */
+export type TaskActivityInput = Omit<TaskActivityConfigModel, 'id' | 'position' | 'options'> & {
   options: TaskActivityOptionInput[];
 };
 
@@ -89,7 +130,7 @@ export function toActivityInput(draft: TaskActivityDraft): TaskActivityInput {
 }
 
 export function mapTaskActivityApiModel(input: TaskActivityApiModel): TaskActivityModel {
-  return { ...input, options: input.options ?? [] };
+  return { ...input, options: input.options ?? [], answerOptionIds: input.answerOptionIds ?? [] };
 }
 
 export function mapTaskActivityApiModels(items: TaskActivityApiModel[] | null | undefined): TaskActivityModel[] {

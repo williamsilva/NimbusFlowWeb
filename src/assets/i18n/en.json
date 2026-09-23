@@ -2020,6 +2020,8 @@
     "activities": {
       "title": "Task activities",
       "subtitle": "Hold and drag an activity to set the order it should be performed in.",
+      "lockedSubtitle": "The list is locked - an activity has already been answered during execution.",
+      "lockedTooltip": "Activities can no longer be changed once execution has started.",
       "empty": "No activity added."
     },
     "activityType": {
@@ -2071,6 +2073,28 @@
       "invalidOptionLabel": "Fill in the text of every response before saving.",
       "invalidNoOptions": "Add at least one response before saving.",
       "invalidCriticalCondition": "Select the critical condition before saving."
+    },
+    "execution": {
+      "taskLabel": "Task",
+      "infoTitle": "Information",
+      "completedAt": "Completion date",
+      "creator": "Creator",
+      "notDoneReason": "Task not done justification",
+      "executionOrder": "Execution order",
+      "saved": "Activity saved successfully.",
+      "saveError": "Could not save the activity.",
+      "viewDocument": "View document",
+      "criticalJustification": "Justification for the critical value",
+      "observation": "Observation",
+      "executedAt": "Executed on {date} by {name}",
+      "answerDate": "Date",
+      "answerNumber": "Value",
+      "selectAlternative": "Select an alternative",
+      "reportObservation": "Report a non-conformity or observation",
+      "attachDocument": "Attach document",
+      "attachImage": "Attach photo",
+      "pendingNote": "Awaiting execution.",
+      "signatureClear": "Clear"
     }
   }
 }

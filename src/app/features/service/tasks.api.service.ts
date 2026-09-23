@@ -18,6 +18,7 @@ import {
   mapTaskApiModels,
   mapTaskWithActionPlanApiModels,
 } from '@models/tasks.models';
+import { TaskActivityAnswerInput, TaskActivityApiModel, mapTaskActivityApiModel } from '@models/task-activities.models';
 
 @Injectable({ providedIn: 'root' })
 export class TasksApiService {
@@ -84,5 +85,21 @@ export class TasksApiService {
     return this.http
       .put<TaskApiModel>(`${this.baseUrl}/${id}/assignee`, input)
       .pipe(map(mapTaskApiModel));
+  }
+
+  /** Tela de execução (pedido do usuário 2026-09-23) - grava a resposta de UMA atividade, nunca a
+   *  Tarefa inteira. Mesmo padrão multipart de TicketsApiService#close: uma part "data" (JSON) +
+   *  uma part "file" opcional (só SIGNATURE/DOCUMENT/IMAGE mandam arquivo, ver
+   *  TaskController#answerActivity no backend). */
+  answerActivity(taskId: string, activityId: string, input: TaskActivityAnswerInput, file: File | null) {
+    const formData = new FormData();
+    formData.append('data', new Blob([JSON.stringify(input)], { type: 'application/json' }));
+    if (file) {
+      formData.append('file', file);
+    }
+
+    return this.http
+      .put<TaskActivityApiModel>(`${this.baseUrl}/${taskId}/activities/${activityId}/answer`, formData)
+      .pipe(map(mapTaskActivityApiModel));
   }
 }

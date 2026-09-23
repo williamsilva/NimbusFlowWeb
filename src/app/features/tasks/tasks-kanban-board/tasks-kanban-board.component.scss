@@ -148,7 +148,26 @@
   font-size: 0.68rem;
   font-weight: 700;
   opacity: 0.55;
+}
+
+/* Botão de lápis (pedido do usuário 2026-09-23) - mesma linha do número, canto superior direito;
+   abre a edição/configuração, diferente do clique no resto do cartão (abre a execução). */
+.kanban-card-numero-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 0.2rem;
+}
+
+.kanban-card-edit-button {
+  padding: 0.1rem !important;
+  width: 1.5rem;
+  height: 1.5rem;
+  opacity: 0.6;
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .kanban-card-title-row {
