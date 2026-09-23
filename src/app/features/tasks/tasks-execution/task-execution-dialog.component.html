@@ -80,12 +80,7 @@
           </div>
         }
 
-        <div class="cs-execution-activities-header">
-          <span class="cs-execution-section-label">{{ 'tasks.activities.title' | translate }}</span>
-          <span class="cs-execution-order-label">
-            {{ 'tasks.execution.executionOrder' | translate }} <i class="pi pi-sort-alt"></i>
-          </span>
-        </div>
+        <span class="cs-execution-section-label">{{ 'tasks.activities.title' | translate }}</span>
 
         @if (!activities().length) {
           <div class="cs-execution-activities-empty">{{ 'tasks.activities.empty' | translate }}</div>

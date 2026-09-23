@@ -2080,7 +2080,6 @@
       "completedAt": "Data de Conclusão",
       "creator": "Criador",
       "notDoneReason": "Justificativa de tarefa não realizada",
-      "executionOrder": "Ordem de execução",
       "saved": "Atividade salva com sucesso.",
       "saveError": "Não foi possível salvar a atividade.",
       "viewDocument": "Ver documento",

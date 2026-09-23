@@ -2080,7 +2080,6 @@
       "completedAt": "Completion date",
       "creator": "Creator",
       "notDoneReason": "Task not done justification",
-      "executionOrder": "Execution order",
       "saved": "Activity saved successfully.",
       "saveError": "Could not save the activity.",
       "viewDocument": "View document",
