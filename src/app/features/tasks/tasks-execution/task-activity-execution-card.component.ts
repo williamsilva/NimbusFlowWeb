@@ -77,6 +77,14 @@ export class TaskActivityExecutionCardComponent {
   readonly i18n = inject(I18nService);
   readonly TaskActivityDataTypeEnum = TaskActivityDataTypeEnum;
 
+  /** Card vem minimizado por padrão (pedido do usuário 2026-09-23, muitas atividades numa
+   *  lista só - deixava a rolagem enorme) - só o cabeçalho aparece até o usuário clicar. */
+  readonly expanded = signal(false);
+
+  toggleExpanded(): void {
+    this.expanded.update((value) => !value);
+  }
+
   readonly answerText = signal('');
   readonly answerDate = signal<Date | null>(null);
   readonly answerNumber = signal<number | null>(null);

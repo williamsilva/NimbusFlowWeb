@@ -20,10 +20,21 @@
   border-color: var(--green-400, #4ade80);
 }
 
+/* <button> nativo, não <div> (pedido do usuário 2026-09-23: card minimizado por padrão, clica
+   no cabeçalho pra expandir) - reset dos estilos padrão de botão pra não parecer um botão. */
 .cs-exec-card-header {
   display: flex;
   align-items: flex-start;
   gap: 0.6rem;
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
 
   i {
     margin-top: 0.15rem;
@@ -33,6 +44,12 @@
   .pi-check-circle {
     color: var(--green-500, #22c55e);
   }
+}
+
+.cs-exec-card-header .cs-exec-card-chevron {
+  margin-left: auto;
+  margin-top: 0;
+  opacity: 0.5;
 }
 
 .cs-exec-card-header-text {

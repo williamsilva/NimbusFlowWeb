@@ -1,5 +1,10 @@
 <div class="cs-exec-card" [class.cs-exec-card-done]="!!activity().executedAt">
-  <div class="cs-exec-card-header">
+  <button
+    type="button"
+    class="cs-exec-card-header"
+    (click)="toggleExpanded()"
+    [attr.aria-expanded]="expanded()"
+  >
     <i class="pi" [class.pi-check-circle]="!!activity().executedAt" [class.pi-circle]="!activity().executedAt"></i>
     <div class="cs-exec-card-header-text">
       <span class="cs-exec-card-title">{{ activity().description }}</span>
@@ -7,9 +12,11 @@
         <span class="cs-exec-card-instructions">{{ activity().instructions }}</span>
       }
     </div>
-  </div>
+    <i class="pi cs-exec-card-chevron" [class.pi-chevron-down]="expanded()" [class.pi-chevron-right]="!expanded()"></i>
+  </button>
 
-  @if (activity().executedAt) {
+  @if (expanded()) {
+    @if (activity().executedAt) {
     <!-- Já respondida: só leitura (pedido do usuário 2026-09-23, "igual ao print") -->
     <div class="cs-exec-card-body">
       @switch (activity().dataCollectionType) {
@@ -244,5 +251,6 @@
     <div class="cs-exec-card-body">
       <span class="cs-exec-pending-note">{{ 'tasks.execution.pendingNote' | translate }}</span>
     </div>
+  }
   }
 </div>
