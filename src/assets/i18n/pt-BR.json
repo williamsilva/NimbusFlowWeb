@@ -2094,6 +2094,7 @@
       "attachDocument": "Anexar documento",
       "attachImage": "Anexar foto",
       "pendingNote": "Aguardando execução.",
+      "signatureHint": "Assine com o dedo ou o mouse no campo abaixo",
       "signatureClear": "Limpar"
     }
   }

@@ -2094,6 +2094,7 @@
       "attachDocument": "Attach document",
       "attachImage": "Attach photo",
       "pendingNote": "Awaiting execution.",
+      "signatureHint": "Sign with your finger or mouse in the field below",
       "signatureClear": "Clear"
     }
   }

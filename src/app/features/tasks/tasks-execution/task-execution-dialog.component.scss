@@ -86,7 +86,16 @@
   position: relative;
   padding: 1.5rem 1.75rem;
   overflow-y: auto;
-  background: var(--surface-card, #fff);
+  background: #fff;
+}
+
+/* --surface-card não existe no preset Lara/PrimeNG deste app (nunca é redefinida por
+   ".dark") - por isso o fundo do painel ficava sempre branco no tema escuro, e junto com
+   "color-scheme: dark" em :root.dark (styles.scss) fazia o texto sem cor explícita virar
+   branco-sobre-branco (invisível). :host-context(.dark), não :root.dark - ver memória
+   project_root_dark_encapsulation_bug. */
+:host-context(.dark) .cs-execution-content {
+  background: #26262b;
 }
 
 .cs-execution-close {
@@ -143,11 +152,15 @@
 .cs-execution-activities-empty {
   padding: 1.5rem;
   text-align: center;
-  border: 1px dashed var(--surface-border);
+  border: 1px dashed #cbd5e1;
   border-radius: 6px;
   opacity: 0.7;
 }
 
 :host-context(.dark) .cs-execution-section-value {
   background: rgba(255, 255, 255, 0.06);
+}
+
+:host-context(.dark) .cs-execution-activities-empty {
+  border-color: rgba(255, 255, 255, 0.2);
 }

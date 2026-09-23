@@ -15,6 +15,7 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [ButtonModule, TranslateModule],
   template: `
     <div class="cs-signature-pad">
+      <span class="cs-signature-hint">{{ 'tasks.execution.signatureHint' | translate }}</span>
       <canvas
         #canvas
         width="500"
@@ -45,14 +46,30 @@ import { TranslateModule } from '@ngx-translate/core';
         gap: 0.4rem;
       }
 
+      .cs-signature-hint {
+        font-size: 0.8rem;
+        opacity: 0.65;
+      }
+
+      /* Fundo sempre branco (mesmo no tema escuro) - a tinta do traço é fixa em #1f2937
+         (ver ngAfterViewInit), então o campo precisa continuar claro pra ficar legível,
+         igual uma folha de assinatura de verdade. Só a borda muda com o tema. */
       .cs-signature-canvas {
         width: 100%;
         max-width: 500px;
         height: 180px;
         touch-action: none;
-        border-radius: 6px;
+        cursor: crosshair;
+        border-radius: 8px;
         background: #fff;
-        border: 1px dashed var(--surface-border);
+        border: 1px solid #cbd5e1;
+      }
+
+      /* :host-context(.dark), não :root.dark - View Encapsulation prefixa :root.dark e ele nunca
+         casa com nada dentro de um *.component.ts (ver memória project_root_dark_encapsulation_bug). */
+      :host-context(.dark) .cs-signature-canvas {
+        border-color: rgba(255, 255, 255, 0.35);
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4);
       }
     `,
   ],

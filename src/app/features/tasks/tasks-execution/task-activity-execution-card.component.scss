@@ -1,8 +1,19 @@
+/* --surface-border não existe no preset Lara/PrimeNG deste app (nem em light nem em dark) -
+   sem fallback, "border" inteiro virava inválido e nenhuma borda aparecia. Cores fixas +
+   :host-context(.dark), mesma técnica já usada em tasks-kanban-board.component.scss (ver
+   memória project_root_dark_encapsulation_bug: :root.dark não funciona dentro de um
+   *.component.scss). */
 .cs-exec-card {
-  border: 1px solid var(--surface-border);
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   padding: 0.85rem 1rem;
   margin-bottom: 0.75rem;
+  background: #fff;
+}
+
+:host-context(.dark) .cs-exec-card {
+  background: #313138;
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 .cs-exec-card-done {
@@ -60,7 +71,11 @@
   max-width: 240px;
   max-height: 180px;
   border-radius: 6px;
-  border: 1px solid var(--surface-border);
+  border: 1px solid #e2e8f0;
+}
+
+:host-context(.dark) .cs-exec-answer-image {
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .cs-exec-answer-link {
