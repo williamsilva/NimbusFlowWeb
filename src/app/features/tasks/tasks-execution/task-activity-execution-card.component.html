@@ -105,6 +105,9 @@
             <p-inputnumber
               class="w-full"
               inputId="answerNumber"
+              [useGrouping]="false"
+              [minFractionDigits]="0"
+              [maxFractionDigits]="2"
               [ngModel]="answerNumber()"
               (ngModelChange)="answerNumber.set($event)"
               inputStyleClass="w-full p-inputtext-sm"

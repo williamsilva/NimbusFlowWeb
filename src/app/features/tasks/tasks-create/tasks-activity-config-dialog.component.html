@@ -198,6 +198,9 @@
           <p-floatLabel variant="on" class="w-full">
             <p-inputnumber
               class="w-full"
+              [useGrouping]="false"
+              [minFractionDigits]="0"
+              [maxFractionDigits]="2"
               inputId="numberCriticalMin"
               formControlName="numberCriticalMin"
               inputStyleClass="w-full p-inputtext-sm"
@@ -210,6 +213,9 @@
           <p-floatLabel variant="on" class="w-full">
             <p-inputnumber
               class="w-full"
+              [useGrouping]="false"
+              [minFractionDigits]="0"
+              [maxFractionDigits]="2"
               inputId="numberCriticalMax"
               formControlName="numberCriticalMax"
               inputStyleClass="w-full p-inputtext-sm"
