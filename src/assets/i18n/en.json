@@ -546,6 +546,7 @@
     "logout": "Log out",
     "close": "Close",
     "clear": "Clear",
+    "reset": "Reset",
     "quantity": "Qty.",
     "search": {
       "line": "Line",
@@ -563,6 +564,7 @@
     "apply": "Apply",
     "actions": "Actions",
     "filter": "Filter",
+    "add": "Add",
     "remove": "Remove",
     "period": "Period",
     "delete": "Delete",
@@ -2014,6 +2016,61 @@
       "transferSuccess": "{count, plural, one {# task transferred successfully.} other {# tasks transferred successfully.}}",
       "transferAllFailed": "{count, plural, one {Could not transfer the selected task.} other {Could not transfer any of the # selected tasks.}}",
       "transferPartial": "{succeeded, plural, one {# task transferred} other {# tasks transferred}}, {failed, plural, one {# failed} other {# failed}} - check the status of each one in the table."
+    },
+    "activities": {
+      "title": "Task activities",
+      "subtitle": "Hold and drag an activity to set the order it should be performed in.",
+      "empty": "No activity added."
+    },
+    "activityType": {
+      "SIGNATURE": "Signature",
+      "DATE": "Date",
+      "DOCUMENT": "Document",
+      "LINEAR_SCALE": "Linear scale",
+      "SINGLE_CHOICE": "Single choice",
+      "IMAGE": "Image",
+      "MULTIPLE_CHOICE": "Multiple choice",
+      "NUMBER": "Number",
+      "TEXT": "Text"
+    },
+    "activityCriticalCondition": {
+      "SELECTED": "Selected",
+      "NOT_SELECTED": "Not selected"
+    },
+    "activityConfig": {
+      "title": "Activity configuration",
+      "description": "Activity description",
+      "dataCollectionType": "Data collection type",
+      "instructions": "Activity instructions",
+      "scaleMinLabel": "Minimum value description",
+      "scaleMaxLabel": "Maximum value description",
+      "scaleMinValue": "Minimum value",
+      "scaleMaxValue": "Maximum value",
+      "criticalValues": "Critical values",
+      "criticalValuesHint": "Values outside this range will be considered critical.",
+      "criticalMinValue": "Critical minimum value",
+      "criticalMaxValue": "Critical maximum value",
+      "dateCriticalMin": "Minimum date",
+      "dateCriticalMax": "Maximum date",
+      "dateCriticalMinHint": "Any date below the one entered above will be considered critical.",
+      "dateCriticalMaxHint": "Any date above the one entered above will be considered critical.",
+      "numberCriticalMinHint": "Any value below the one entered above will be considered critical.",
+      "numberCriticalMaxHint": "Any value above the one entered above will be considered critical.",
+      "responses": "Responses",
+      "criticalTooltip": "Mark as critical",
+      "requiresPhotoTooltip": "Require photo",
+      "requiresDocumentTooltip": "Require document",
+      "requiresJustificationTooltip": "Require justification",
+      "configureCollection": "Configure collection",
+      "newResponsePlaceholder": "Response for the activity",
+      "criticalCheckboxHint": "Check the CHECKBOX if the response is critical",
+      "criticalCondition": "Critical conditions",
+      "critical": "Critical",
+      "invalid": "Fill in the description and data collection type before saving.",
+      "invalidLinearScale": "Fill in the scale values and descriptions correctly (minimum less than maximum).",
+      "invalidOptionLabel": "Fill in the text of every response before saving.",
+      "invalidNoOptions": "Add at least one response before saving.",
+      "invalidCriticalCondition": "Select the critical condition before saving."
     }
   }
 }

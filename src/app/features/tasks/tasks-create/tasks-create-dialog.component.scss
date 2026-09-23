@@ -30,3 +30,68 @@
     color: #60a5fa;
   }
 }
+
+// "Atividades da tarefa" (pedido do usuário 2026-09-23) - mesma técnica de :host-context(.dark)
+// documentada acima, cores fixas em vez de utilitários Tailwind.
+.cs-activities-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.cs-activities-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4rem;
+  border: 1px dashed var(--surface-border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.cs-activities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cs-activity-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
+}
+
+.cs-activity-drag-handle {
+  cursor: grab;
+  opacity: 0.6;
+}
+
+.cs-activity-type-icon {
+  opacity: 0.75;
+}
+
+.cs-activity-row-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cs-activity-row-description {
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cs-activity-row-type {
+  font-size: 0.78rem;
+  opacity: 0.65;
+}

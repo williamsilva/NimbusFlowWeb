@@ -546,6 +546,7 @@
     "logout": "Salir",
     "close": "Cerrar",
     "clear": "Limpiar",
+    "reset": "Restablecer",
     "quantity": "Cant.",
     "search": {
       "line": "Línea",
@@ -563,6 +564,7 @@
     "apply": "Aplicar",
     "actions": "Acciones",
     "filter": "Filtrar",
+    "add": "Agregar",
     "remove": "Eliminar",
     "period": "Periodo",
     "delete": "Eliminar",
@@ -2014,6 +2016,61 @@
       "transferSuccess": "{count, plural, one {# tarea transferida con éxito.} other {# tareas transferidas con éxito.}}",
       "transferAllFailed": "{count, plural, one {No se pudo transferir la tarea seleccionada.} other {No se pudo transferir ninguna de las # tareas seleccionadas.}}",
       "transferPartial": "{succeeded, plural, one {# tarea transferida} other {# tareas transferidas}}, {failed, plural, one {# falló} other {# fallaron}} - revise el estado de cada una en la tabla."
+    },
+    "activities": {
+      "title": "Actividades de la tarea",
+      "subtitle": "Mantenga presionado y arrastre una actividad para definir el orden de ejecución.",
+      "empty": "Ninguna actividad agregada."
+    },
+    "activityType": {
+      "SIGNATURE": "Firma",
+      "DATE": "Fecha",
+      "DOCUMENT": "Documento",
+      "LINEAR_SCALE": "Escala lineal",
+      "SINGLE_CHOICE": "Selección única",
+      "IMAGE": "Imagen",
+      "MULTIPLE_CHOICE": "Selección múltiple",
+      "NUMBER": "Número",
+      "TEXT": "Texto"
+    },
+    "activityCriticalCondition": {
+      "SELECTED": "Seleccionado",
+      "NOT_SELECTED": "No seleccionado"
+    },
+    "activityConfig": {
+      "title": "Configuración de la actividad",
+      "description": "Descripción de la actividad",
+      "dataCollectionType": "Tipo de recolección de datos",
+      "instructions": "Instrucciones de la actividad",
+      "scaleMinLabel": "Descripción del valor mínimo",
+      "scaleMaxLabel": "Descripción del valor máximo",
+      "scaleMinValue": "Valor mínimo",
+      "scaleMaxValue": "Valor máximo",
+      "criticalValues": "Valores críticos",
+      "criticalValuesHint": "Los valores fuera de este rango serán considerados críticos.",
+      "criticalMinValue": "Valor mínimo crítico",
+      "criticalMaxValue": "Valor máximo crítico",
+      "dateCriticalMin": "Fecha mínima",
+      "dateCriticalMax": "Fecha máxima",
+      "dateCriticalMinHint": "Cualquier fecha por debajo de la indicada arriba será considerada crítica.",
+      "dateCriticalMaxHint": "Cualquier fecha por encima de la indicada arriba será considerada crítica.",
+      "numberCriticalMinHint": "Cualquier valor por debajo del indicado arriba será considerado crítico.",
+      "numberCriticalMaxHint": "Cualquier valor por encima del indicado arriba será considerado crítico.",
+      "responses": "Respuestas",
+      "criticalTooltip": "Marcar como crítica",
+      "requiresPhotoTooltip": "Exigir foto",
+      "requiresDocumentTooltip": "Exigir documento",
+      "requiresJustificationTooltip": "Exigir justificación",
+      "configureCollection": "Configurar recolección",
+      "newResponsePlaceholder": "Respuesta para la actividad",
+      "criticalCheckboxHint": "Marque la CASILLA si la respuesta es crítica",
+      "criticalCondition": "Condiciones críticas",
+      "critical": "Crítica",
+      "invalid": "Complete la descripción y el tipo de recolección de datos antes de guardar.",
+      "invalidLinearScale": "Complete correctamente los valores y descripciones de la escala (mínimo menor que el máximo).",
+      "invalidOptionLabel": "Complete el texto de todas las respuestas antes de guardar.",
+      "invalidNoOptions": "Agregue al menos una respuesta antes de guardar.",
+      "invalidCriticalCondition": "Seleccione la condición crítica antes de guardar."
     }
   }
 }

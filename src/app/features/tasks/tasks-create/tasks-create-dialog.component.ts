@@ -35,6 +35,13 @@ import {
 } from '@models/enums/task-assignee-type.enum';
 import { TaskRecurrenceFrequencyEnum } from '@models/enums/task-recurrence-frequency.enum';
 import { DAY_OF_WEEK_VALUES, DayOfWeekEnum, dayOfWeekLabel } from '@models/enums/day-of-week.enum';
+import {
+  TaskActivityDataTypeEnum,
+  taskActivityDataTypeIcon,
+  taskActivityDataTypeLabel,
+} from '@models/enums/task-activity-data-type.enum';
+import { TaskActivityDraft, toActivityDraft, toActivityInput } from '@models/task-activities.models';
+import { TasksActivityConfigDialogComponent } from '@features/tasks/tasks-create/tasks-activity-config-dialog.component';
 
 function toDateOnlyString(value: Date | null): string | null {
   if (!value) return null;
@@ -112,6 +119,7 @@ const INTERVAL_OPTIONS: RecurrenceFormOption[] = ['DAILY_INTERVAL', 'WEEKLY', 'M
     ErrorMsgComponent,
     DateInputMaskDirective,
     ReactiveFormsModule,
+    TasksActivityConfigDialogComponent,
   ],
 })
 export class TasksCreateDialogComponent {
@@ -156,6 +164,19 @@ export class TasksCreateDialogComponent {
   readonly monthDayOptions = Array.from({ length: 31 }, (_, i) => ({ value: i + 1, label: String(i + 1) }));
 
   readonly TaskAssigneeTypeEnum = TaskAssigneeTypeEnum;
+
+  /** "Atividades da tarefa" (pedido do usuário 2026-09-23) - fora do form reativo de propósito
+   *  (é uma lista dinâmica com sub-diálogo próprio de configuração, não campos simples). Nunca
+   *  vazia dos dois lados do fluxo: populada tanto ao abrir pra edição (task().activities) quanto
+   *  resetada ao abrir pra criação, no mesmo effect() que já cuida do resto do form abaixo. */
+  readonly activities = signal<TaskActivityDraft[]>([]);
+  readonly activityDialogVisible = signal(false);
+  /** Nulo = adicionando uma atividade nova (ver TasksActivityConfigDialogComponent#activity). */
+  readonly editingActivity = signal<TaskActivityDraft | null>(null);
+  private draggingActivityIndex: number | null = null;
+
+  readonly taskActivityDataTypeLabel = (type: TaskActivityDataTypeEnum) => taskActivityDataTypeLabel(type, this.i18n);
+  readonly taskActivityDataTypeIconOf = (type: TaskActivityDataTypeEnum) => taskActivityDataTypeIcon(type);
 
   /** Opções de dependência: dentro de um plano (actionPlanId presente), outras tarefas do MESMO
    *  plano (já carregadas por TasksListComponent, ver TasksFacade.items); sem plano (tarefa
@@ -264,6 +285,7 @@ export class TasksCreateDialogComponent {
         this.createFormInitialized = true;
         this.lastLoadedId = null;
         this.resetFormForCreate();
+        this.activities.set([]);
         return;
       }
 
@@ -302,6 +324,7 @@ export class TasksCreateDialogComponent {
       this.applyRecurrenceValidators(recurrenceOption);
       this.applyExpirationState(neverExpires);
       this.applyReleaseTimeState(releaseTimeEnabled);
+      this.activities.set(task.activities.map(toActivityDraft));
     });
   }
 
@@ -387,11 +410,67 @@ export class TasksCreateDialogComponent {
     this.close();
   }
 
+  /** "Atividades da tarefa" (pedido do usuário 2026-09-23) - abre o sub-diálogo de configuração
+   *  pra adicionar (activity=null) ou editar (activity=draft) um item da lista. */
+  openAddActivity(): void {
+    this.editingActivity.set(null);
+    this.activityDialogVisible.set(true);
+  }
+
+  openEditActivity(draft: TaskActivityDraft): void {
+    this.editingActivity.set(draft);
+    this.activityDialogVisible.set(true);
+  }
+
+  onActivityDialogVisibleChange(visible: boolean): void {
+    this.activityDialogVisible.set(visible);
+    if (!visible) this.editingActivity.set(null);
+  }
+
+  /** Substitui pelo clientId se já existia (edição) ou acrescenta no fim (nova) - a POSIÇÃO real
+   *  só é recalculada no #save, a partir da ordem final do array (ver toActivityInput). */
+  onActivitySaved(draft: TaskActivityDraft): void {
+    this.activities.update((activities) => {
+      const index = activities.findIndex((a) => a.clientId === draft.clientId);
+      if (index === -1) return [...activities, draft];
+      const next = [...activities];
+      next[index] = draft;
+      return next;
+    });
+    this.activityDialogVisible.set(false);
+    this.editingActivity.set(null);
+  }
+
+  removeActivity(clientId: string): void {
+    this.activities.update((activities) => activities.filter((a) => a.clientId !== clientId));
+  }
+
+  onActivityDragStart(index: number): void {
+    this.draggingActivityIndex = index;
+  }
+
+  /** "Segure e arraste uma atividade para colocar em qual ordem deve ser executada" (pedido do
+   *  usuário 2026-09-23, print de referência) - drag-and-drop HTML5 nativo, mesma técnica de
+   *  TasksKanbanBoardComponent (sem Angular CDK instalado no projeto). */
+  onActivityDrop(targetIndex: number): void {
+    const sourceIndex = this.draggingActivityIndex;
+    this.draggingActivityIndex = null;
+    if (sourceIndex === null || sourceIndex === targetIndex) return;
+
+    this.activities.update((activities) => {
+      const next = [...activities];
+      const [moved] = next.splice(sourceIndex, 1);
+      next.splice(targetIndex, 0, moved);
+      return next;
+    });
+  }
+
   close(): void {
     this.saving.set(false);
     this.lastLoadedId = null;
     this.createFormInitialized = false;
     this.resetFormForCreate();
+    this.activities.set([]);
     this.visibleChange.emit(false);
   }
 
@@ -463,6 +542,7 @@ export class TasksCreateDialogComponent {
       releaseTime: v.releaseTimeEnabled ? toTimeOnlyString(v.releaseTime) : null,
       autoMoveOverdueToNotDone: v.autoMoveOverdueToNotDone,
       dependsOnTaskId: v.dependsOnTaskId,
+      activities: this.activities().map(toActivityInput),
     };
 
     this.saving.set(true);

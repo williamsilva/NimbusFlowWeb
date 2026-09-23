@@ -299,8 +299,71 @@
           <label for="dependsOnTaskId">{{ 'tasks.fields.dependsOnTask' | translate }}</label>
         </p-floatLabel>
       </div>
+
+      <div class="col-12 p-2">
+        <div class="cs-activities-header">
+          <div>
+            <span class="block text-sm font-semibold">{{ 'tasks.activities.title' | translate }}</span>
+            <span class="block text-sm opacity-70">{{ 'tasks.activities.subtitle' | translate }}</span>
+          </div>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-plus"
+            (click)="openAddActivity()"
+            class="p-button-sm"
+            [label]="'common.add' | translate"
+          ></button>
+        </div>
+
+        @if (!activities().length) {
+          <div class="cs-activities-empty">{{ 'tasks.activities.empty' | translate }}</div>
+        } @else {
+          <div class="cs-activities-list">
+            @for (activity of activities(); track activity.clientId; let i = $index) {
+              <div
+                class="cs-activity-row"
+                draggable="true"
+                (dragover)="$event.preventDefault()"
+                (dragstart)="onActivityDragStart(i)"
+                (drop)="onActivityDrop(i)"
+              >
+                <i class="pi pi-bars cs-activity-drag-handle"></i>
+                <i class="cs-activity-type-icon {{ taskActivityDataTypeIconOf(activity.dataCollectionType) }}"></i>
+                <div class="cs-activity-row-text">
+                  <span class="cs-activity-row-description">{{ activity.description }}</span>
+                  <span class="cs-activity-row-type">{{ taskActivityDataTypeLabel(activity.dataCollectionType) }}</span>
+                </div>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-pencil"
+                  (click)="openEditActivity(activity)"
+                  [attr.aria-label]="'common.edit' | translate"
+                  class="p-button-text p-button-sm"
+                ></button>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  (click)="removeActivity(activity.clientId)"
+                  [attr.aria-label]="'common.remove' | translate"
+                  class="p-button-text p-button-danger p-button-sm"
+                ></button>
+              </div>
+            }
+          </div>
+        }
+      </div>
     </div>
   </form>
+
+  <app-tasks-activity-config-dialog
+    [activity]="editingActivity()"
+    [visible]="activityDialogVisible()"
+    (saved)="onActivitySaved($event)"
+    (visibleChange)="onActivityDialogVisibleChange($event)"
+  ></app-tasks-activity-config-dialog>
 
   <ng-template pTemplate="footer">
     <button

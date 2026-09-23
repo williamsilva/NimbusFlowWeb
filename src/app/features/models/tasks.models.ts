@@ -3,6 +3,7 @@ import { PeriodEnum } from '@models/enums/period.enum';
 import { TaskAssigneeTypeEnum } from '@models/enums/task-assignee-type.enum';
 import { TaskRecurrenceFrequencyEnum } from '@models/enums/task-recurrence-frequency.enum';
 import { DayOfWeekEnum } from '@models/enums/day-of-week.enum';
+import { TaskActivityInput, TaskActivityModel, mapTaskActivityApiModels } from '@models/task-activities.models';
 
 /** Espelha com.nimbusflow.tasks.dto.response.TaskResponse do NimbusFlowServer. */
 export interface TaskModel {
@@ -60,6 +61,9 @@ export interface TaskModel {
   createdById: string;
   createdAt: string | null;
   updatedAt: string | null;
+  /** "Atividades da tarefa" (pedido do usuário 2026-09-23, só configuração por agora), já
+   *  ordenadas por position. */
+  activities: TaskActivityModel[];
 }
 
 export type TaskApiModel = TaskModel;
@@ -103,6 +107,10 @@ export interface TaskUpsertInput {
   /** Só lido pela criação avulsa (TasksApiService#createStandalone) - a criação aninhada por
    *  plano ignora este campo e usa o actionPlanId da própria rota. */
   actionPlanId?: string | null;
+  /** "Atividades da tarefa" (pedido do usuário 2026-09-23) - substitui a lista inteira a cada
+   *  save (ver TaskService#saveActivities no backend); vazio = sem atividades. A ordem no array É
+   *  a ordem de execução. */
+  activities: TaskActivityInput[];
 }
 
 export interface TaskStatusInput {
@@ -144,7 +152,7 @@ export function formatTaskNumero(numero: number): string {
 }
 
 export function mapTaskApiModel(input: TaskApiModel): TaskModel {
-  return { ...input };
+  return { ...input, activities: mapTaskActivityApiModels(input.activities) };
 }
 
 export function mapTaskApiModels(items: TaskApiModel[] | null | undefined): TaskModel[] {
@@ -154,7 +162,7 @@ export function mapTaskApiModels(items: TaskApiModel[] | null | undefined): Task
 export function mapTaskWithActionPlanApiModel(
   input: TaskWithActionPlanApiModel,
 ): TaskWithActionPlanModel {
-  return { ...input };
+  return { ...input, activities: mapTaskActivityApiModels(input.activities) };
 }
 
 export function mapTaskWithActionPlanApiModels(

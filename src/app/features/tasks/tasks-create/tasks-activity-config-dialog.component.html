@@ -1,0 +1,431 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="true"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '620px', maxWidth: '95vw' }"
+  [header]="'tasks.activityConfig.title' | translate"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="activityDescription" class="w-full p-inputtext-sm" formControlName="description" />
+          <app-error-msg
+            [field]="'description'"
+            [forId]="'activityDescription'"
+            [control]="form.controls.description"
+            [label]="'tasks.activityConfig.description' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            inputId="dataCollectionType"
+            optionLabel="label"
+            optionValue="value"
+            [options]="dataTypeOptions"
+            formControlName="dataCollectionType"
+          ></p-select>
+          <label for="dataCollectionType">{{ 'tasks.activityConfig.dataCollectionType' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      @if (form.controls.dataCollectionType.value === TaskActivityDataTypeEnum.LINEAR_SCALE) {
+        <div class="col-12 p-2">
+          <div class="cs-activity-scale-preview">
+            <p-slider
+              [disabled]="true"
+              [ngModelOptions]="{ standalone: true }"
+              [ngModel]="form.controls.scaleMaxValue.value"
+              [min]="form.controls.scaleMinValue.value ?? 0"
+              [max]="form.controls.scaleMaxValue.value ?? 10"
+            ></p-slider>
+            <div class="cs-activity-scale-labels">
+              <span>{{ form.controls.scaleMinLabel.value }}</span>
+              <span>{{ form.controls.scaleMaxValue.value }}</span>
+              <span>{{ form.controls.scaleMaxLabel.value }}</span>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea
+            rows="3"
+            pTextarea
+            id="activityInstructions"
+            class="w-full p-inputtext-sm"
+            formControlName="instructions"
+          ></textarea>
+          <label for="activityInstructions">{{ 'tasks.activityConfig.instructions' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      @if (form.controls.dataCollectionType.value === TaskActivityDataTypeEnum.LINEAR_SCALE) {
+        <div class="col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <input pInputText id="scaleMinLabel" class="w-full p-inputtext-sm" formControlName="scaleMinLabel" />
+            <label for="scaleMinLabel">{{ 'tasks.activityConfig.scaleMinLabel' | translate }}</label>
+          </p-floatLabel>
+        </div>
+        <div class="col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <input pInputText id="scaleMaxLabel" class="w-full p-inputtext-sm" formControlName="scaleMaxLabel" />
+            <label for="scaleMaxLabel">{{ 'tasks.activityConfig.scaleMaxLabel' | translate }}</label>
+          </p-floatLabel>
+        </div>
+        <div class="col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              [useGrouping]="false"
+              inputId="scaleMinValue"
+              formControlName="scaleMinValue"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="scaleMinValue">{{ 'tasks.activityConfig.scaleMinValue' | translate }}</label>
+          </p-floatLabel>
+        </div>
+        <div class="col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              [useGrouping]="false"
+              inputId="scaleMaxValue"
+              formControlName="scaleMaxValue"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="scaleMaxValue">{{ 'tasks.activityConfig.scaleMaxValue' | translate }}</label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 p-2">
+          <span class="cs-activity-section-label">
+            {{ 'tasks.activityConfig.criticalValues' | translate }}
+            <i class="pi pi-question-circle" [pTooltip]="'tasks.activityConfig.criticalValuesHint' | translate"></i>
+          </span>
+        </div>
+        <div class="col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              [useGrouping]="false"
+              inputId="scaleCriticalMinValue"
+              formControlName="scaleCriticalMinValue"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="scaleCriticalMinValue">{{ 'tasks.activityConfig.criticalMinValue' | translate }}</label>
+          </p-floatLabel>
+        </div>
+        <div class="col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              [useGrouping]="false"
+              inputId="scaleCriticalMaxValue"
+              formControlName="scaleCriticalMaxValue"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="scaleCriticalMaxValue">{{ 'tasks.activityConfig.criticalMaxValue' | translate }}</label>
+          </p-floatLabel>
+        </div>
+      }
+
+      @if (form.controls.dataCollectionType.value === TaskActivityDataTypeEnum.DATE) {
+        <div class="col-12 p-2">
+          <span class="cs-activity-section-label">
+            {{ 'tasks.activityConfig.criticalValues' | translate }}
+            <i class="pi pi-question-circle" [pTooltip]="'tasks.activityConfig.criticalValuesHint' | translate"></i>
+          </span>
+        </div>
+        <div class="col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-datepicker
+              csDateInputMask
+              [showIcon]="true"
+              class="w-full"
+              appendTo="body"
+              [readonlyInput]="false"
+              inputId="dateCriticalMin"
+              [dateFormat]="i18n.getDateFormat()"
+              formControlName="dateCriticalMin"
+              inputStyleClass="w-full p-inputtext-sm"
+              [csDateInputMaskFormat]="i18n.getDateFormat()"
+            ></p-datepicker>
+            <label for="dateCriticalMin">{{ 'tasks.activityConfig.dateCriticalMin' | translate }}</label>
+          </p-floatLabel>
+          <small class="cs-activity-hint">{{ 'tasks.activityConfig.dateCriticalMinHint' | translate }}</small>
+        </div>
+        <div class="col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-datepicker
+              csDateInputMask
+              [showIcon]="true"
+              class="w-full"
+              appendTo="body"
+              [readonlyInput]="false"
+              inputId="dateCriticalMax"
+              [dateFormat]="i18n.getDateFormat()"
+              formControlName="dateCriticalMax"
+              inputStyleClass="w-full p-inputtext-sm"
+              [csDateInputMaskFormat]="i18n.getDateFormat()"
+            ></p-datepicker>
+            <label for="dateCriticalMax">{{ 'tasks.activityConfig.dateCriticalMax' | translate }}</label>
+          </p-floatLabel>
+          <small class="cs-activity-hint">{{ 'tasks.activityConfig.dateCriticalMaxHint' | translate }}</small>
+        </div>
+      }
+
+      @if (form.controls.dataCollectionType.value === TaskActivityDataTypeEnum.NUMBER) {
+        <div class="col-12 p-2">
+          <span class="cs-activity-section-label">
+            {{ 'tasks.activityConfig.criticalValues' | translate }}
+            <i class="pi pi-question-circle" [pTooltip]="'tasks.activityConfig.criticalValuesHint' | translate"></i>
+          </span>
+        </div>
+        <div class="col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              inputId="numberCriticalMin"
+              formControlName="numberCriticalMin"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="numberCriticalMin">{{ 'tasks.activityConfig.criticalMinValue' | translate }}</label>
+          </p-floatLabel>
+          <small class="cs-activity-hint">{{ 'tasks.activityConfig.numberCriticalMinHint' | translate }}</small>
+        </div>
+        <div class="col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-inputnumber
+              class="w-full"
+              inputId="numberCriticalMax"
+              formControlName="numberCriticalMax"
+              inputStyleClass="w-full p-inputtext-sm"
+            ></p-inputnumber>
+            <label for="numberCriticalMax">{{ 'tasks.activityConfig.criticalMaxValue' | translate }}</label>
+          </p-floatLabel>
+          <small class="cs-activity-hint">{{ 'tasks.activityConfig.numberCriticalMaxHint' | translate }}</small>
+        </div>
+      }
+
+      @if (form.controls.dataCollectionType.value === TaskActivityDataTypeEnum.SINGLE_CHOICE) {
+        <div class="col-12 p-2">
+          <span class="cs-activity-section-label">{{ 'tasks.activityConfig.responses' | translate }}</span>
+          <div class="cs-activity-options">
+            <div class="cs-activity-option-header">
+              <span></span>
+              <span></span>
+              <i class="pi pi-exclamation-triangle" [pTooltip]="'tasks.activityConfig.criticalTooltip' | translate"></i>
+              <i class="pi pi-camera" [pTooltip]="'tasks.activityConfig.requiresPhotoTooltip' | translate"></i>
+              <i class="pi pi-file" [pTooltip]="'tasks.activityConfig.requiresDocumentTooltip' | translate"></i>
+              <i class="pi pi-exclamation-circle" [pTooltip]="'tasks.activityConfig.requiresJustificationTooltip' | translate"></i>
+              <span></span>
+            </div>
+            @for (option of options(); track option.id; let i = $index) {
+              <div
+                class="cs-activity-option-row"
+                draggable="true"
+                (dragover)="$event.preventDefault()"
+                (dragstart)="onOptionDragStart(i)"
+                (drop)="onOptionDrop(i)"
+              >
+                <i class="pi pi-bars cs-activity-drag-handle"></i>
+                <input
+                  pInputText
+                  class="w-full p-inputtext-sm"
+                  [ngModel]="option.label"
+                  [ngModelOptions]="{ standalone: true }"
+                  (ngModelChange)="updateOption(i, { label: $event })"
+                />
+                <p-checkbox
+                  [binary]="true"
+                  [ngModel]="option.critical"
+                  [ngModelOptions]="{ standalone: true }"
+                  (ngModelChange)="updateOption(i, { critical: $event })"
+                ></p-checkbox>
+                <p-checkbox
+                  [binary]="true"
+                  [ngModel]="option.requiresPhoto"
+                  [ngModelOptions]="{ standalone: true }"
+                  (ngModelChange)="updateOption(i, { requiresPhoto: $event })"
+                ></p-checkbox>
+                <p-checkbox
+                  [binary]="true"
+                  [ngModel]="option.requiresDocument"
+                  [ngModelOptions]="{ standalone: true }"
+                  (ngModelChange)="updateOption(i, { requiresDocument: $event })"
+                ></p-checkbox>
+                <p-checkbox
+                  [binary]="true"
+                  [ngModel]="option.requiresJustification"
+                  [ngModelOptions]="{ standalone: true }"
+                  (ngModelChange)="updateOption(i, { requiresJustification: $event })"
+                ></p-checkbox>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  (click)="removeOption(i)"
+                  [attr.aria-label]="'common.remove' | translate"
+                  class="p-button-text p-button-danger p-button-sm"
+                ></button>
+              </div>
+            }
+            <button
+              pButton
+              type="button"
+              icon="pi pi-plus"
+              (click)="addOption()"
+              class="p-button-text p-button-sm"
+              [label]="'common.add' | translate"
+            ></button>
+          </div>
+        </div>
+      }
+
+      @if (form.controls.dataCollectionType.value === TaskActivityDataTypeEnum.MULTIPLE_CHOICE) {
+        <div class="col-12 p-2">
+          <span class="cs-activity-section-label">{{ 'tasks.activityConfig.configureCollection' | translate }}</span>
+          <div class="flex gap-2 align-items-start mt-2">
+            <input
+              pInputText
+              class="w-full p-inputtext-sm"
+              [ngModel]="newOptionLabel()"
+              [ngModelOptions]="{ standalone: true }"
+              (ngModelChange)="newOptionLabel.set($event)"
+              [placeholder]="'tasks.activityConfig.newResponsePlaceholder' | translate"
+            />
+            <button
+              pButton
+              type="button"
+              icon="pi pi-plus"
+              (click)="addMultipleChoiceOption()"
+              [attr.aria-label]="'common.add' | translate"
+              class="p-button-sm"
+            ></button>
+          </div>
+          <div class="flex align-items-center gap-2 mt-2">
+            <p-checkbox
+              [binary]="true"
+              inputId="newOptionCritical"
+              [ngModel]="newOptionCritical()"
+              [ngModelOptions]="{ standalone: true }"
+              (ngModelChange)="newOptionCritical.set($event)"
+            ></p-checkbox>
+            <label for="newOptionCritical" class="text-sm opacity-80">
+              {{ 'tasks.activityConfig.criticalCheckboxHint' | translate }}
+            </label>
+          </div>
+
+          <span class="cs-activity-section-label block mt-3">
+            {{ 'tasks.activityConfig.criticalCondition' | translate }}
+          </span>
+          <div class="flex align-items-center gap-3 mt-2">
+            @for (option of criticalConditionOptions; track option.value) {
+              <div class="flex align-items-center gap-1">
+                <p-radioButton
+                  name="multipleChoiceCriticalCondition"
+                  [value]="option.value"
+                  [inputId]="'criticalCondition-' + option.value"
+                  formControlName="multipleChoiceCriticalCondition"
+                ></p-radioButton>
+                <label [for]="'criticalCondition-' + option.value">{{ option.label }}</label>
+              </div>
+            }
+            <button
+              pButton
+              type="button"
+              icon="pi pi-refresh"
+              class="p-button-text p-button-sm"
+              [attr.aria-label]="'common.reset' | translate"
+              (click)="form.controls.multipleChoiceCriticalCondition.setValue(null)"
+            ></button>
+          </div>
+
+          @if (options().length) {
+            <table class="cs-activity-options-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>{{ 'tasks.activityConfig.responses' | translate }}</th>
+                  <th>{{ 'tasks.activityConfig.critical' | translate }}</th>
+                  <th>{{ 'common.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (option of options(); track option.id; let i = $index) {
+                  <tr
+                    draggable="true"
+                    (dragover)="$event.preventDefault()"
+                    (dragstart)="onOptionDragStart(i)"
+                    (drop)="onOptionDrop(i)"
+                  >
+                    <td><i class="pi pi-bars cs-activity-drag-handle"></i></td>
+                    <td>{{ option.label }}</td>
+                    <td>
+                      {{
+                        option.critical && form.controls.multipleChoiceCriticalCondition.value
+                          ? ('tasks.activityCriticalCondition.' + form.controls.multipleChoiceCriticalCondition.value | translate)
+                          : '-'
+                      }}
+                    </td>
+                    <td class="cs-activity-options-table-actions">
+                      <button
+                        pButton
+                        type="button"
+                        icon="pi pi-pencil"
+                        (click)="editMultipleChoiceOption(i)"
+                        [attr.aria-label]="'common.edit' | translate"
+                        class="p-button-text p-button-sm"
+                      ></button>
+                      <button
+                        pButton
+                        type="button"
+                        icon="pi pi-trash"
+                        (click)="removeOption(i)"
+                        [attr.aria-label]="'common.remove' | translate"
+                        class="p-button-text p-button-danger p-button-sm"
+                      ></button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        </div>
+      }
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [label]="'common.save' | translate"
+    ></button>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,86 @@
+.cs-activity-section-label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-bottom: 0.4rem;
+
+  i {
+    cursor: help;
+    opacity: 0.7;
+    margin-left: 0.25rem;
+  }
+}
+
+.cs-activity-hint {
+  display: block;
+  opacity: 0.65;
+  margin-top: 0.2rem;
+}
+
+.cs-activity-scale-preview {
+  padding: 0.5rem 0.25rem 0;
+}
+
+.cs-activity-scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  opacity: 0.75;
+  margin-top: 0.4rem;
+}
+
+.cs-activity-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cs-activity-option-header {
+  display: grid;
+  grid-template-columns: 1.4rem 1fr repeat(4, 2rem) 2.4rem;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  opacity: 0.7;
+
+  i {
+    text-align: center;
+    cursor: help;
+  }
+}
+
+.cs-activity-option-row {
+  display: grid;
+  grid-template-columns: 1.4rem 1fr repeat(4, 2rem) 2.4rem;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cs-activity-drag-handle {
+  cursor: grab;
+  opacity: 0.6;
+}
+
+.cs-activity-options-table {
+  width: 100%;
+  margin-top: 0.75rem;
+  border-collapse: collapse;
+
+  th {
+    text-align: left;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    padding: 0.3rem;
+  }
+
+  td {
+    padding: 0.3rem;
+    border-top: 1px solid var(--surface-border);
+  }
+}
+
+.cs-activity-options-table-actions {
+  display: flex;
+  gap: 0.2rem;
+}
