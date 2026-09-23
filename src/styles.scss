@@ -372,3 +372,33 @@ a,
     display: none !important;
   }
 }
+
+/* Tema escuro do painel da tela de execução de Tarefa (TaskExecutionDialogComponent). Precisa
+ * ficar AQUI, global, e não em ":host-context(.dark)" dentro do .scss do componente - achado real
+ * 2026-09-23: esse componente hospeda diretamente um <p-dialog appendTo="body">, e o PrimeNG
+ * reanexa o PAINEL do dialog (com todo o conteúdo do template dentro) como filho direto de
+ * <body>; o host <app-task-execution-dialog> (o "_nghost" que :host-context(.dark) precisa
+ * encontrar como ancestral) NÃO viaja junto nessa realocação - só o painel viaja. A regra
+ * :host-context(.dark) compilada nunca casa com nada, silenciosamente (sem erro, sem warning),
+ * deixando o fundo sempre branco no tema escuro mesmo com a regra certinha no bundle. Global
+ * funciona porque ".cs-execution-dialog" (via [styleClass] no <p-dialog>) e ".cs-execution-*"
+ * continuam com a MESMA relação de ancestralidade real no DOM, não importa pra onde o painel
+ * inteiro se mude - só o link com o _nghost ORIGINAL do componente Angular é que se perde.
+ * Componentes FILHOS renderizados dentro do conteúdo do dialog (ex.:
+ * app-task-activity-execution-card) não sofrem disso - o host deles viaja junto com o próprio
+ * conteúdo, então ":host-context(.dark)" no .scss deles funciona normalmente. */
+:root.dark .cs-execution-dialog .cs-execution-content {
+  background: #26262b;
+}
+
+:root.dark .cs-execution-dialog .cs-execution-section-value {
+  background: #313138;
+}
+
+:root.dark .cs-execution-dialog .cs-execution-activities-empty {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+:root.dark .cs-execution-dialog .cs-execution-close {
+  color: rgba(255, 255, 255, 0.85);
+}

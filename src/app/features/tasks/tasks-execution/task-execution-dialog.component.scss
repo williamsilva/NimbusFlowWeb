@@ -81,21 +81,22 @@
   background: #6b7280;
 }
 
+/* Fundo/overrides de tema escuro deste componente NÃO ficam aqui - ver bloco em styles.scss
+   (".cs-execution-dialog", busca por "app-task-execution-dialog") - :host-context(.dark) não
+   funciona pra estilo do PRÓPRIO conteúdo de um componente cujo template hospeda diretamente um
+   <p-dialog appendTo="body">: o PrimeNG reanexa o PAINEL do dialog (com todo o nosso conteúdo
+   dentro) como filho de <body>, mas o host <app-task-execution-dialog> (o "_nghost" que o
+   :host-context precisa como ancestral) NÃO viaja junto - só o painel viaja. O resultado é uma
+   regra que nunca casa com nada, silenciosamente (achado real 2026-09-23, print do usuário
+   mostrando fundo branco mesmo com a regra certinha no bundle). Componentes FILHOS renderizados
+   DENTRO do conteúdo do dialog (ex.: app-task-activity-execution-card) não têm esse problema -
+   o host deles viaja junto com o próprio conteúdo. */
 .cs-execution-content {
   flex: 1 1 auto;
   position: relative;
   padding: 1.5rem 1.75rem;
   overflow-y: auto;
   background: #fff;
-}
-
-/* --surface-card não existe no preset Lara/PrimeNG deste app (nunca é redefinida por
-   ".dark") - por isso o fundo do painel ficava sempre branco no tema escuro, e junto com
-   "color-scheme: dark" em :root.dark (styles.scss) fazia o texto sem cor explícita virar
-   branco-sobre-branco (invisível). :host-context(.dark), não :root.dark - ver memória
-   project_root_dark_encapsulation_bug. */
-:host-context(.dark) .cs-execution-content {
-  background: #26262b;
 }
 
 .cs-execution-close {
@@ -106,6 +107,7 @@
   border: none;
   cursor: pointer;
   font-size: 1.1rem;
+  color: #1f2937;
   opacity: 0.6;
 
   &:hover {
@@ -155,12 +157,4 @@
   border: 1px dashed #cbd5e1;
   border-radius: 6px;
   opacity: 0.7;
-}
-
-:host-context(.dark) .cs-execution-section-value {
-  background: #313138;
-}
-
-:host-context(.dark) .cs-execution-activities-empty {
-  border-color: rgba(255, 255, 255, 0.2);
 }
