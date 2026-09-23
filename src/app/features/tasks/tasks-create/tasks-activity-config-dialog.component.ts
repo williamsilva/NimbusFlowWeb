@@ -150,12 +150,30 @@ export class TasksActivityConfigDialogComponent {
     return type != null && CHOICE_TYPES.includes(type);
   });
 
+  private lastLoadedClientId: string | null = null;
+  /** Evita resetar o form de novo em modo criação a cada re-execução espúria do effect() (ex.:
+   *  change detection disparada pelo p-select de "Tipo de coleta de dados" ao selecionar uma
+   *  opção) - mesmo bug/fix já usado em TasksCreateDialogComponent#createFormInitialized (achado
+   *  2x antes disso, ver feedback_create_edit_dialog_effect_reset_bug_pattern). Sem isto, trocar o
+   *  tipo de coleta apagava a descrição inteira que o usuário já tinha digitado. */
+  private createFormInitialized = false;
+
   constructor() {
     effect(() => {
-      if (!this.visible()) return;
+      if (!this.visible()) {
+        this.createFormInitialized = false;
+        return;
+      }
 
       const activity = this.activity();
+
       if (!activity) {
+        if (this.createFormInitialized) {
+          return;
+        }
+        this.createFormInitialized = true;
+        this.lastLoadedClientId = null;
+
         this.form.reset({
           description: '',
           dataCollectionType: null,
@@ -177,6 +195,12 @@ export class TasksActivityConfigDialogComponent {
         this.newOptionCritical.set(false);
         return;
       }
+
+      this.createFormInitialized = false;
+      if (this.lastLoadedClientId === activity.clientId) {
+        return;
+      }
+      this.lastLoadedClientId = activity.clientId;
 
       this.form.reset({
         description: activity.description,
@@ -209,6 +233,7 @@ export class TasksActivityConfigDialogComponent {
   }
 
   close(): void {
+    this.lastLoadedClientId = null;
     this.visibleChange.emit(false);
   }
 
