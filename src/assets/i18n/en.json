@@ -1986,7 +1986,8 @@
       "kanban": "Kanban board"
     },
     "kanban": {
-      "empty": "No tasks in this column"
+      "empty": "No tasks in this column",
+      "numero": "Task - {number}"
     }
   }
 }

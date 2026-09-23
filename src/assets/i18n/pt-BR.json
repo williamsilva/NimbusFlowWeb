@@ -1986,7 +1986,8 @@
       "kanban": "Quadro Kanban"
     },
     "kanban": {
-      "empty": "Nenhuma tarefa nesta coluna"
+      "empty": "Nenhuma tarefa nesta coluna",
+      "numero": "Tarefa - {number}"
     }
   }
 }

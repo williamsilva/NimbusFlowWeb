@@ -1986,7 +1986,8 @@
       "kanban": "Tablero Kanban"
     },
     "kanban": {
-      "empty": "Ninguna tarea en esta columna"
+      "empty": "Ninguna tarea en esta columna",
+      "numero": "Tarea - {number}"
     }
   }
 }
