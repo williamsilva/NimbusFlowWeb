@@ -10,13 +10,14 @@ import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { TextareaModule } from 'primeng/textarea';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
@@ -78,6 +79,7 @@ import {
     DialogModule,
     ButtonModule,
     TooltipModule,
+    TextareaModule,
     SelectButtonModule,
     InputTextModule,
     TranslateModule,
@@ -98,6 +100,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   readonly usersFacade = inject(UsersFacade);
   readonly departmentsFacade = inject(DepartmentsFacade);
   protected readonly toast = inject(MessageService);
+  private readonly confirmationService = inject(ConfirmationService);
   protected readonly policy = inject(TasksPermissionPolicy);
   private readonly perms = inject(PermissionService);
   private readonly destroyRef = inject(DestroyRef);
@@ -164,6 +167,14 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
 
   readonly changeStatusDialogVisible = signal(false);
   readonly transferDialogVisible = signal(false);
+
+  /** Justificativa obrigatória de "Não fez" (pedido do usuário 2026-09-23) - segundo passo do
+   *  mesmo fluxo de "Alterar status", tanto pelo botão em lote quanto por um drop no Kanban (ver
+   *  #requestStatusChange, ponto único de entrada dos dois). `pendingStatusChangeTaskIds` guarda
+   *  pra quais tarefas aplicar quando o usuário confirmar o texto. */
+  readonly notDoneJustificationVisible = signal(false);
+  readonly notDoneJustificationText = signal('');
+  readonly pendingStatusChangeTaskIds = signal<string[]>([]);
   readonly transferAssigneeType = signal<TaskAssigneeTypeEnum>(TaskAssigneeTypeEnum.USER);
   readonly transferAssigneeId = signal<string | null>(null);
   readonly transferAssigneeDepartmentId = signal<string | null>(null);
@@ -191,6 +202,8 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
       ? !!this.transferAssigneeId()
       : !!this.transferAssigneeDepartmentId(),
   );
+
+  readonly canConfirmNotDoneJustification = computed(() => this.notDoneJustificationText().trim().length > 0);
 
   protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
     const items: ActiveFilterItem[] = [];
@@ -271,20 +284,71 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     this.changeStatusDialogVisible.set(false);
   }
 
-  /** Clicar na opção JÁ executa (pedido do usuário 2026-09-23, "igual ao print" - sem um segundo
-   *  botão de confirmar dentro do diálogo de escolha). */
+  /** Clique na opção da lista do diálogo "Alterar status" (pedido do usuário 2026-09-23) - não
+   *  executa mais direto, passa por #requestStatusChange (mesmo ponto de entrada usado pelo drop
+   *  no Kanban) pra aplicar confirmação/justificativa antes. */
   applyBulkStatusChange(status: TaskStatusEnum): void {
-    const ids = this.selection().map((t) => t.id);
+    this.requestStatusChange(
+      this.selection().map((t) => t.id),
+      status,
+    );
+  }
+
+  /** Ponto único de entrada pra qualquer mudança de status que possa terminar em
+   *  CANCELLED/NOT_DONE (pedido do usuário 2026-09-23) - usado tanto pelo diálogo "Alterar
+   *  status" (lista de escolhas em lote) quanto por um drop no Kanban (uma única tarefa). CANCELLED
+   *  pede confirmação simples (mesmo padrão de TicketsListComponent#confirm cancelamento de
+   *  chamado); NOT_DONE pede justificativa de verdade, texto obrigatório (backend rejeita sem
+   *  isso, ver TaskService#updateStatus) - outros status seguem direto, sem gate nenhum aqui. */
+  private requestStatusChange(taskIds: string[], status: TaskStatusEnum): void {
+    if (!taskIds.length) return;
+
+    if (status === TaskStatusEnum.CANCELLED) {
+      this.changeStatusDialogVisible.set(false);
+      this.confirmationService.confirm({
+        icon: 'pi pi-exclamation-triangle',
+        header: this.i18n.tUi('tasks.bulk.cancelConfirmHeader' as never),
+        message: this.i18n.tUi('tasks.bulk.cancelConfirmMessage' as never, { count: taskIds.length }),
+        accept: () => this.executeStatusChange(taskIds, status, null),
+      });
+      return;
+    }
+
+    if (status === TaskStatusEnum.NOT_DONE) {
+      this.changeStatusDialogVisible.set(false);
+      this.pendingStatusChangeTaskIds.set(taskIds);
+      this.notDoneJustificationText.set('');
+      this.notDoneJustificationVisible.set(true);
+      return;
+    }
+
+    this.executeStatusChange(taskIds, status, null);
+  }
+
+  closeNotDoneJustification(): void {
+    this.notDoneJustificationVisible.set(false);
+    this.pendingStatusChangeTaskIds.set([]);
+  }
+
+  confirmNotDoneJustification(): void {
+    const reason = this.notDoneJustificationText().trim();
+    if (!reason || this.bulkBusy()) return;
+
+    const ids = this.pendingStatusChangeTaskIds();
+    this.notDoneJustificationVisible.set(false);
+    this.executeStatusChange(ids, TaskStatusEnum.NOT_DONE, reason);
+  }
+
+  private executeStatusChange(ids: string[], status: TaskStatusEnum, notDoneReason: string | null): void {
     if (!ids.length || this.bulkBusy()) return;
 
     this.bulkBusy.set(true);
     this.facade
-      .updateStatusMany(ids, { status })
+      .updateStatusMany(ids, { status, notDoneReason })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (results) => {
           this.bulkBusy.set(false);
-          this.changeStatusDialogVisible.set(false);
           this.selection.set([]);
           this.reportBulkResult(results, 'statusChange');
         },
@@ -489,7 +553,16 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     return nextForwardTaskStatus(task.status) === status;
   };
 
+  /** CANCELLED/NOT_DONE passam por #requestStatusChange (pedido do usuário 2026-09-23) - mesma
+   *  confirmação/justificativa do botão em lote, só que pra uma única tarefa. O card não "volta"
+   *  visualmente enquanto isso: a fonte da verdade é `tasks()`, que só muda depois que a
+   *  requisição de fato é confirmada e a lista recarrega. */
   onKanbanDrop(event: TaskKanbanDropEvent): void {
+    if (event.status === TaskStatusEnum.CANCELLED || event.status === TaskStatusEnum.NOT_DONE) {
+      this.requestStatusChange([event.task.id], event.status);
+      return;
+    }
+
     this.facade
       .updateStatus(event.task.id, { status: event.status })
       .pipe(takeUntilDestroyed(this.destroyRef))

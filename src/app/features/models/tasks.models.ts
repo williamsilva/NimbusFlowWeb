@@ -54,6 +54,9 @@ export interface TaskModel {
   dependsOnTaskStatus: TaskStatusEnum | null;
   completedAt: string | null;
   completedById: string | null;
+  /** Preenchido só quando NOT_DONE veio de uma mudança manual (pedido do usuário 2026-09-23, ver
+   *  AllTasksListComponent) - nulo pro resto dos status e também quando foi o job automático. */
+  notDoneReason: string | null;
   createdById: string;
   createdAt: string | null;
   updatedAt: string | null;
@@ -104,6 +107,9 @@ export interface TaskUpsertInput {
 
 export interface TaskStatusInput {
   status: TaskStatusEnum;
+  /** Obrigatório (não-vazio) só quando status=NOT_DONE - ver TaskService#updateStatus no
+   *  backend, que rejeita NOT_DONE manual sem justificativa (pedido do usuário 2026-09-23). */
+  notDoneReason?: string | null;
 }
 
 /** "Transferir" (pedido do usuário 2026-09-23, ver AllTasksListComponent) - troca só o
