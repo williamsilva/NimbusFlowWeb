@@ -1920,6 +1920,7 @@
       "periodCreatedAt": "Período de creación"
     },
     "columns": {
+      "numero": "N° Tarea",
       "title": "Título",
       "actionPlan": "Plan de Acción",
       "assignee": "Asignada a",
@@ -1930,6 +1931,7 @@
     "status": {
       "TODO": "Por hacer",
       "IN_PROGRESS": "En curso",
+      "REVIEW": "En revisión",
       "DONE": "Concluida",
       "CANCELLED": "Cancelada",
       "NOT_DONE": "No la hizo",
@@ -1973,10 +1975,12 @@
       "advance": "Avanzar estado",
       "advanceTo": {
         "IN_PROGRESS": "Iniciar tarea",
-        "DONE": "Concluir tarea"
+        "REVIEW": "Enviar a revisión",
+        "DONE": "Aprobar tarea"
       },
       "blockedByDependency": "Bloqueada hasta que \"{title}\" se complete",
-      "blockedBySkipSteps": "La tarea debe estar \"En curso\" antes de poder concluirse",
+      "blockedBySkipSteps": "La tarea debe estar \"{requiredStatus}\" antes de poder pasar a \"{targetStatus}\"",
+      "blockedByApprovalRequired": "Solo alguien con permiso de gestión puede aprobar esta tarea",
       "blockedByPermission": "No tiene permiso para mover esta tarea",
       "blockedGeneric": "No es posible mover la tarea a este estado"
     },
@@ -1988,6 +1992,22 @@
     "kanban": {
       "empty": "Ninguna tarea en esta columna",
       "numero": "Tarea - {number}"
+    },
+    "bulk": {
+      "selectedCount": "{count, plural, one {# seleccionada} other {# seleccionadas}}",
+      "changeStatus": "Cambiar estado",
+      "changeStatusTitle": "Cambiar estado",
+      "changeStatusSubtitle": "{count, plural, one {Seleccione el nuevo estado para la tarea seleccionada.} other {Seleccione el nuevo estado para las # tareas seleccionadas.}}",
+      "statusChangeSuccess": "{count, plural, one {# tarea tuvo el estado cambiado con éxito.} other {# tareas tuvieron el estado cambiado con éxito.}}",
+      "statusChangeAllFailed": "{count, plural, one {No se pudo cambiar el estado de la tarea seleccionada.} other {No se pudo cambiar el estado de ninguna de las # tareas seleccionadas.}}",
+      "statusChangePartial": "{succeeded, plural, one {# tarea actualizada} other {# tareas actualizadas}}, {failed, plural, one {# falló} other {# fallaron}} - revise el estado de cada una en la tabla.",
+      "transfer": "Transferir",
+      "transferTitle": "Transferir tareas",
+      "transferSubtitle": "{count, plural, one {Seleccione el nuevo responsable para la tarea seleccionada.} other {Seleccione el nuevo responsable para las # tareas seleccionadas.}}",
+      "transferConfirm": "Transferir",
+      "transferSuccess": "{count, plural, one {# tarea transferida con éxito.} other {# tareas transferidas con éxito.}}",
+      "transferAllFailed": "{count, plural, one {No se pudo transferir la tarea seleccionada.} other {No se pudo transferir ninguna de las # tareas seleccionadas.}}",
+      "transferPartial": "{succeeded, plural, one {# tarea transferida} other {# tareas transferidas}}, {failed, plural, one {# falló} other {# fallaron}} - revise el estado de cada una en la tabla."
     }
   }
 }

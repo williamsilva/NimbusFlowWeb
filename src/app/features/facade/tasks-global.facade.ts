@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 
-import { Observable, finalize, tap } from 'rxjs';
+import { Observable, catchError, finalize, from, concatMap, map, of, tap, toArray } from 'rxjs';
 
 import { TasksApiService } from '@features/service/tasks.api.service';
 import { TasksAdvancedFilters } from '@features/filter/tasks.filters';
@@ -8,11 +8,20 @@ import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import {
   TaskModel,
   TaskStatusInput,
+  TaskAssigneeInput,
   TaskUpsertInput,
   TaskWithActionPlanModel,
 } from '@models/tasks.models';
 
 type LastQuery = ListQueryDto<TasksAdvancedFilters>;
+
+/** Resultado de uma operação em lote (pedido do usuário 2026-09-23, ver #updateStatusMany/
+ *  #updateAssigneeMany) - mesmo formato de MeasurementBatchApproveResult. */
+export interface TaskBatchResult {
+  id: string;
+  success: boolean;
+  error?: unknown;
+}
 
 /** Listagem global (menu "Tarefas", através de todos os planos) + atalho "Minhas tarefas" - mesmo
  *  par AddendumsFacade/AddendumsGlobalFacade, aqui só o lado global (a versão aninhada por plano
@@ -113,5 +122,39 @@ export class TasksGlobalFacade {
 
   updateStatus(id: string, input: TaskStatusInput): Observable<TaskModel> {
     return this.api.updateStatus(id, input).pipe(tap(() => this.reloadLast()));
+  }
+
+  updateAssignee(id: string, input: TaskAssigneeInput): Observable<TaskModel> {
+    return this.api.updateAssignee(id, input).pipe(tap(() => this.reloadLast()));
+  }
+
+  /** "Alterar status" em lote (pedido do usuário 2026-09-23, tela de lista de Tarefas) - mesma
+   *  técnica de MeasurementsGlobalFacade#approveMany: best-effort, um request por tarefa (não
+   *  existe endpoint de bulk no backend), reloadLast() só UMA vez ao final. */
+  updateStatusMany(ids: string[], input: TaskStatusInput): Observable<TaskBatchResult[]> {
+    return from(ids).pipe(
+      concatMap((id) =>
+        this.api.updateStatus(id, input).pipe(
+          map((): TaskBatchResult => ({ id, success: true })),
+          catchError((error) => of<TaskBatchResult>({ id, success: false, error })),
+        ),
+      ),
+      toArray(),
+      tap(() => this.reloadLast()),
+    );
+  }
+
+  /** "Transferir" em lote (pedido do usuário 2026-09-23) - mesma técnica de #updateStatusMany. */
+  updateAssigneeMany(ids: string[], input: TaskAssigneeInput): Observable<TaskBatchResult[]> {
+    return from(ids).pipe(
+      concatMap((id) =>
+        this.api.updateAssignee(id, input).pipe(
+          map((): TaskBatchResult => ({ id, success: true })),
+          catchError((error) => of<TaskBatchResult>({ id, success: false, error })),
+        ),
+      ),
+      toArray(),
+      tap(() => this.reloadLast()),
+    );
   }
 }

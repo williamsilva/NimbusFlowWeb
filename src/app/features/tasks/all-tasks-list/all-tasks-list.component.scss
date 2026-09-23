@@ -3,3 +3,75 @@
 // Mobile: tabela vira lista de cards - ver mobile-card-table.scss pro que isso faz e por quê.
 // mobile-card-title/mobile-card-actions marcados manualmente no <td> certo, no HTML desta tela.
 @include mct.mobile-card-table;
+
+// Abas de status da visualização em Lista (pedido do usuário 2026-09-23, "igual ao print") -
+// customizado em vez de p-tabs (aquele componente é usado no resto do sistema pra navegação
+// entre seções de formulário, não como filtro de lista - ver skill cs-filters-panel).
+.task-status-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.task-status-tab {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.6rem 1rem;
+}
+
+.task-status-tab-active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+.task-bulk-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.5rem 0.25rem;
+}
+
+.task-bulk-bar-count {
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.task-bulk-bar-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+// Lista de opções do diálogo "Alterar status" (pedido do usuário 2026-09-23, "igual ao print") -
+// clicar na opção já executa, sem confirmação separada.
+.task-status-choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.task-status-choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--primary-color);
+  background: var(--primary-50, #eff6ff);
+  border: none;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}

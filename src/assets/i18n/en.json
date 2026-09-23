@@ -1920,6 +1920,7 @@
       "periodCreatedAt": "Creation period"
     },
     "columns": {
+      "numero": "Task #",
       "title": "Title",
       "actionPlan": "Action Plan",
       "assignee": "Assigned to",
@@ -1930,6 +1931,7 @@
     "status": {
       "TODO": "To do",
       "IN_PROGRESS": "In progress",
+      "REVIEW": "In review",
       "DONE": "Done",
       "CANCELLED": "Cancelled",
       "NOT_DONE": "Not done",
@@ -1973,10 +1975,12 @@
       "advance": "Advance status",
       "advanceTo": {
         "IN_PROGRESS": "Start task",
-        "DONE": "Complete task"
+        "REVIEW": "Send to review",
+        "DONE": "Approve task"
       },
       "blockedByDependency": "Blocked until \"{title}\" is completed",
-      "blockedBySkipSteps": "The task must be \"In progress\" before it can be completed",
+      "blockedBySkipSteps": "The task must be \"{requiredStatus}\" before it can move to \"{targetStatus}\"",
+      "blockedByApprovalRequired": "Only someone with management permission can approve this task",
       "blockedByPermission": "You don't have permission to move this task",
       "blockedGeneric": "This task cannot be moved to this status"
     },
@@ -1988,6 +1992,22 @@
     "kanban": {
       "empty": "No tasks in this column",
       "numero": "Task - {number}"
+    },
+    "bulk": {
+      "selectedCount": "{count, plural, one {# selected} other {# selected}}",
+      "changeStatus": "Change status",
+      "changeStatusTitle": "Change status",
+      "changeStatusSubtitle": "{count, plural, one {Select the new status for the selected task.} other {Select the new status for the # selected tasks.}}",
+      "statusChangeSuccess": "{count, plural, one {# task had its status changed successfully.} other {# tasks had their status changed successfully.}}",
+      "statusChangeAllFailed": "{count, plural, one {Could not change the status of the selected task.} other {Could not change the status of any of the # selected tasks.}}",
+      "statusChangePartial": "{succeeded, plural, one {# task updated} other {# tasks updated}}, {failed, plural, one {# failed} other {# failed}} - check the status of each one in the table.",
+      "transfer": "Transfer",
+      "transferTitle": "Transfer tasks",
+      "transferSubtitle": "{count, plural, one {Select the new assignee for the selected task.} other {Select the new assignee for the # selected tasks.}}",
+      "transferConfirm": "Transfer",
+      "transferSuccess": "{count, plural, one {# task transferred successfully.} other {# tasks transferred successfully.}}",
+      "transferAllFailed": "{count, plural, one {Could not transfer the selected task.} other {Could not transfer any of the # selected tasks.}}",
+      "transferPartial": "{succeeded, plural, one {# task transferred} other {# tasks transferred}}, {failed, plural, one {# failed} other {# failed}} - check the status of each one in the table."
     }
   }
 }

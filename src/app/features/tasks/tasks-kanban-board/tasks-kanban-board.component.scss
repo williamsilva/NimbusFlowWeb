@@ -5,7 +5,7 @@
 .kanban-board {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(5, minmax(240px, 1fr));
+  grid-template-columns: repeat(6, minmax(240px, 1fr));
   min-height: calc(100vh - 300px);
   overflow-x: auto;
   padding-bottom: 0.5rem;
@@ -13,7 +13,7 @@
 
 @media (max-width: 1024px) {
   .kanban-board {
-    grid-template-columns: repeat(5, minmax(240px, 85vw));
+    grid-template-columns: repeat(6, minmax(240px, 85vw));
   }
 }
 

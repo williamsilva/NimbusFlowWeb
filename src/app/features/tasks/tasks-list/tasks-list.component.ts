@@ -113,6 +113,7 @@ export class TasksListComponent implements OnInit {
   canEdit(row: TaskModel): boolean {
     return (
       this.canManage() &&
+      row.status !== TaskStatusEnum.REVIEW &&
       row.status !== TaskStatusEnum.DONE &&
       row.status !== TaskStatusEnum.CANCELLED &&
       row.status !== TaskStatusEnum.NOT_DONE
@@ -126,10 +127,12 @@ export class TasksListComponent implements OnInit {
     return !row.dependsOnTaskId || row.dependsOnTaskStatus === TaskStatusEnum.DONE;
   }
 
+  /** REVIEW->DONE é aprovação (pedido do usuário 2026-09-23) - só quem tem TAREFA_MANAGE avança
+   *  esse passo específico, mesmo sendo "dono" da tarefa - mesma regra de AllTasksListComponent. */
   canAdvance(row: TaskModel): boolean {
-    if (!this.policy.canExecuteOwn(row) || nextForwardTaskStatus(row.status) === null) {
-      return false;
-    }
+    if (nextForwardTaskStatus(row.status) === null) return false;
+    if (row.status === TaskStatusEnum.REVIEW && !this.policy.canManage()) return false;
+    if (!this.policy.canExecuteOwn(row)) return false;
     return this.isDependencySatisfied(row);
   }
 

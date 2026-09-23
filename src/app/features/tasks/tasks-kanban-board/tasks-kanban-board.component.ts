@@ -129,6 +129,7 @@ export class TasksKanbanBoardComponent {
   isOverdue(task: TaskWithActionPlanModel): boolean {
     if (
       !task.dueDate ||
+      task.status === TaskStatusEnum.REVIEW ||
       task.status === TaskStatusEnum.DONE ||
       task.status === TaskStatusEnum.CANCELLED ||
       task.status === TaskStatusEnum.NOT_DONE

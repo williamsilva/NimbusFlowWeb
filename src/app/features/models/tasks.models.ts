@@ -106,6 +106,15 @@ export interface TaskStatusInput {
   status: TaskStatusEnum;
 }
 
+/** "Transferir" (pedido do usuário 2026-09-23, ver AllTasksListComponent) - troca só o
+ *  responsável, sem os demais campos de TaskUpsertInput (título, prazo etc.). Espelha
+ *  com.nimbusflow.tasks.dto.request.TaskAssigneeRequest. */
+export interface TaskAssigneeInput {
+  assigneeType: TaskAssigneeTypeEnum;
+  assigneeId: string | null;
+  assigneeDepartmentId: string | null;
+}
+
 export interface TasksFiltersState {
   title: string;
   status: string[] | null;

@@ -6,6 +6,7 @@ import { Component, ViewChild, computed, inject, signal, OnInit } from '@angular
 
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -22,13 +23,13 @@ import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { STATE_KEY } from '@features/state-key.constants';
 import { UsersFacade } from '@features/facade/users.facade';
 import { PermissionService } from '@core/auth/permission.service';
-import { TasksGlobalFacade } from '@features/facade/tasks-global.facade';
+import { DepartmentsFacade } from '@features/facade/departments.facade';
+import { TasksGlobalFacade, TaskBatchResult } from '@features/facade/tasks-global.facade';
 import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { TasksAdvancedFilters } from '@features/filter/tasks.filters';
 import { TasksPermissionPolicy } from '@features/tasks/tasks-permission.policy';
-import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import {
   TaskKanbanDropEvent,
   TasksKanbanBoardComponent,
@@ -37,10 +38,20 @@ import { TasksCreateDialogComponent } from '@features/tasks/tasks-create/tasks-c
 import {
   TASK_STATUS_VALUES,
   TaskStatusEnum,
-  taskStatusTone,
   nextForwardTaskStatus,
 } from '@models/enums/task-status.enum';
-import { TaskWithActionPlanModel, TasksFiltersState, taskAssigneeDisplayName } from '@models/tasks.models';
+import {
+  TaskAssigneeTypeEnum,
+  TASK_ASSIGNEE_TYPE_VALUES,
+  taskAssigneeTypeLabel,
+} from '@models/enums/task-assignee-type.enum';
+import {
+  TaskAssigneeInput,
+  TaskWithActionPlanModel,
+  TasksFiltersState,
+  formatTaskNumero,
+  taskAssigneeDisplayName,
+} from '@models/tasks.models';
 import { PeriodEnum, allPeriodEnum, periodEnumLabel } from '@models/enums/period.enum';
 import { CsAdvancedPeriodDateFilterComponent } from '@williamsilva/nimbus-web-commons';
 import {
@@ -64,6 +75,7 @@ import {
     FormsModule,
     SelectModule,
     TableModule,
+    DialogModule,
     ButtonModule,
     TooltipModule,
     SelectButtonModule,
@@ -73,7 +85,6 @@ import {
     MultiSelectModule,
     PageHeaderComponent,
     FiltersPanelComponent,
-    StatusBadgeComponent,
     TasksKanbanBoardComponent,
     TasksCreateDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
@@ -85,6 +96,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   protected override readonly i18n = inject(I18nService);
   readonly facade = inject(TasksGlobalFacade);
   readonly usersFacade = inject(UsersFacade);
+  readonly departmentsFacade = inject(DepartmentsFacade);
   protected readonly toast = inject(MessageService);
   protected readonly policy = inject(TasksPermissionPolicy);
   private readonly perms = inject(PermissionService);
@@ -130,8 +142,55 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   });
 
   readonly assigneeOptions = this.usersFacade.options;
+  readonly departmentOptions = this.departmentsFacade.options;
   readonly totalRecords = computed(() => this.facade.totalRecords());
   readonly tasks = computed<TaskWithActionPlanModel[]>(() => this.facade.tasks());
+
+  /** Aba ativa da visualização em Lista (pedido do usuário 2026-09-23, "igual ao print") - cada
+   *  aba É um status, sempre exatamente um por vez; diferente do multiSelect "status" do painel de
+   *  filtros avançados acima, que só é exibido/aplicado no Kanban (ver template/buildAdvancedFilters
+   *  - lá sim faz sentido combinar vários status de uma vez, já que o quadro mostra todos juntos).
+   *  Não é persistido (sempre volta pra "A fazer" ao recarregar a página) - simplicidade
+   *  deliberada, evita migrar o schema já salvo de TasksFiltersState no localStorage dos usuários. */
+  readonly activeStatusTab = signal<TaskStatusEnum>(TaskStatusEnum.TODO);
+  readonly statusTabs = TASK_STATUS_VALUES;
+
+  /** Seleção em lote (pedido do usuário 2026-09-23, "igual ao print") - checkbox por linha,
+   *  mesma técnica de AllMeasurementsListComponent (dataKey="id" + PrimeNG reconciliando quem
+   *  está marcado). Só faz sentido pra quem tem TAREFA_MANAGE (ver template), já que as duas
+   *  ações em lote (Alterar status/Transferir) exigem essa permissão no backend. */
+  readonly selection = signal<TaskWithActionPlanModel[]>([]);
+  readonly bulkBusy = signal(false);
+
+  readonly changeStatusDialogVisible = signal(false);
+  readonly transferDialogVisible = signal(false);
+  readonly transferAssigneeType = signal<TaskAssigneeTypeEnum>(TaskAssigneeTypeEnum.USER);
+  readonly transferAssigneeId = signal<string | null>(null);
+  readonly transferAssigneeDepartmentId = signal<string | null>(null);
+
+  readonly assigneeTypeOptions = TASK_ASSIGNEE_TYPE_VALUES.map((value) => ({
+    value,
+    label: taskAssigneeTypeLabel(value, this.i18n),
+  }));
+
+  readonly TaskAssigneeTypeEnum = TaskAssigneeTypeEnum;
+
+  /** Só CANCELLED/NOT_DONE (pedido do usuário 2026-09-23, "igual ao print" - o diálogo só mostra
+   *  essas duas opções, nunca "Em andamento" etc.): transições "pra frente" já têm o botão
+   *  individual "Avançar status"/aprovação pra isso, um salto em lote não se aplicaria a todas as
+   *  selecionadas por igual (dependem de cada tarefa estar exatamente no passo anterior).
+   *  CANCELLED/NOT_DONE, ao contrário, são sempre válidas de QUALQUER status via TAREFA_MANAGE
+   *  (nenhuma das duas regras duras do backend as restringe) - por isso são as únicas oferecidas,
+   *  sempre as mesmas duas, só excluindo a que já é a aba atual. */
+  readonly bulkStatusOptions = computed(() =>
+    [TaskStatusEnum.CANCELLED, TaskStatusEnum.NOT_DONE].filter((s) => s !== this.activeStatusTab()),
+  );
+
+  readonly canConfirmTransfer = computed(() =>
+    this.transferAssigneeType() === TaskAssigneeTypeEnum.USER
+      ? !!this.transferAssigneeId()
+      : !!this.transferAssigneeDepartmentId(),
+  );
 
   protected override readonly advancedActiveFilters = computed<ActiveFilterItem[]>(() => {
     const items: ActiveFilterItem[] = [];
@@ -143,7 +202,10 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     if (title) {
       items.push({ label: this.i18n.tUi('tasks.fields.title'), value: title });
     }
-    if (status?.length) {
+    // "status" só é um filtro de verdade no Kanban (pedido do usuário 2026-09-23) - na Lista
+    // quem decide o status é a aba ativa (activeStatusTab), não este multiSelect (ver template/
+    // buildAdvancedFilters), então não faz sentido contar como filtro "ativo" aqui.
+    if (this.viewMode() === 'kanban' && status?.length) {
       const labels = this.statusOptions
         .filter((opt) => status.includes(opt.value))
         .map((opt) => opt.label)
@@ -174,6 +236,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
 
   ngOnInit() {
     this.usersFacade.loadUsersOptions();
+    this.departmentsFacade.loadOptions();
     // initStatefulList() -> loadOnInit() -> this.refresh() (ver StatefulListPage na lib) já cobre
     // o boot direto em modo kanban sozinho, via o próprio override de refresh() logo abaixo - uma
     // chamada extra e redundante aqui só arriscava confundir (competindo com esta, bloqueada pelo
@@ -181,8 +244,118 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     this.initStatefulList();
   }
 
-  tone(status: string): ReturnType<typeof taskStatusTone> {
-    return taskStatusTone(status);
+  formatNumero(numero: number): string {
+    return formatTaskNumero(numero);
+  }
+
+  /** Troca de aba (pedido do usuário 2026-09-23) - cada aba é um status; muda activeStatusTab
+   *  (lido por #buildAdvancedFilters) e recarrega. Seleção em lote é limpa - os checkboxes eram
+   *  de tarefas de OUTRO status, não fazem mais sentido na tabela nova. */
+  selectStatusTab(status: TaskStatusEnum): void {
+    if (this.activeStatusTab() === status) return;
+    this.activeStatusTab.set(status);
+    this.selection.set([]);
+    this.search();
+  }
+
+  onSelectionChange(selection: TaskWithActionPlanModel[]): void {
+    this.selection.set(selection);
+  }
+
+  openChangeStatusDialog(): void {
+    if (!this.selection().length) return;
+    this.changeStatusDialogVisible.set(true);
+  }
+
+  closeChangeStatusDialog(): void {
+    this.changeStatusDialogVisible.set(false);
+  }
+
+  /** Clicar na opção JÁ executa (pedido do usuário 2026-09-23, "igual ao print" - sem um segundo
+   *  botão de confirmar dentro do diálogo de escolha). */
+  applyBulkStatusChange(status: TaskStatusEnum): void {
+    const ids = this.selection().map((t) => t.id);
+    if (!ids.length || this.bulkBusy()) return;
+
+    this.bulkBusy.set(true);
+    this.facade
+      .updateStatusMany(ids, { status })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (results) => {
+          this.bulkBusy.set(false);
+          this.changeStatusDialogVisible.set(false);
+          this.selection.set([]);
+          this.reportBulkResult(results, 'statusChange');
+        },
+        error: () => this.bulkBusy.set(false),
+      });
+  }
+
+  openTransferDialog(): void {
+    if (!this.selection().length) return;
+    this.transferAssigneeType.set(TaskAssigneeTypeEnum.USER);
+    this.transferAssigneeId.set(null);
+    this.transferAssigneeDepartmentId.set(null);
+    this.transferDialogVisible.set(true);
+  }
+
+  closeTransferDialog(): void {
+    this.transferDialogVisible.set(false);
+  }
+
+  confirmTransfer(): void {
+    const ids = this.selection().map((t) => t.id);
+    if (!ids.length || !this.canConfirmTransfer() || this.bulkBusy()) return;
+
+    const input: TaskAssigneeInput = {
+      assigneeType: this.transferAssigneeType(),
+      assigneeId: this.transferAssigneeType() === TaskAssigneeTypeEnum.USER ? this.transferAssigneeId() : null,
+      assigneeDepartmentId:
+        this.transferAssigneeType() === TaskAssigneeTypeEnum.DEPARTMENT ? this.transferAssigneeDepartmentId() : null,
+    };
+
+    this.bulkBusy.set(true);
+    this.facade
+      .updateAssigneeMany(ids, input)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (results) => {
+          this.bulkBusy.set(false);
+          this.transferDialogVisible.set(false);
+          this.selection.set([]);
+          this.reportBulkResult(results, 'transfer');
+        },
+        error: () => this.bulkBusy.set(false),
+      });
+  }
+
+  /** Toast agregado (pedido do usuário 2026-09-23) - mesmo espírito best-effort de
+   *  AllMeasurementsListComponent#confirmApproveSelected: sucesso total, falha total ou parcial
+   *  têm mensagens próprias, já que cada tarefa da seleção teve seu próprio resultado. */
+  private reportBulkResult(results: TaskBatchResult[], kind: 'statusChange' | 'transfer'): void {
+    const succeeded = results.filter((r) => r.success).length;
+    const failed = results.length - succeeded;
+
+    if (failed === 0) {
+      this.toast.add({
+        severity: 'success',
+        summary: this.i18n.tUi('common.success'),
+        detail: this.i18n.tUi(`tasks.bulk.${kind}Success` as never, { count: succeeded }),
+      });
+    } else if (succeeded === 0) {
+      this.toast.add({
+        severity: 'error',
+        summary: this.i18n.tUi('common.error'),
+        detail: this.i18n.tUi(`tasks.bulk.${kind}AllFailed` as never, { count: failed }),
+      });
+    } else {
+      this.toast.add({
+        severity: 'warn',
+        summary: this.i18n.tUi('common.warning'),
+        detail: this.i18n.tUi(`tasks.bulk.${kind}Partial` as never, { succeeded, failed }),
+      });
+    }
   }
 
   assigneeDisplay(row: TaskWithActionPlanModel): string {
@@ -190,10 +363,11 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   }
 
   /** Mesma regra de TasksListComponent#canEdit - status terminal (DONE/CANCELLED/NOT_DONE) não
-   *  edita mais. */
+   *  edita mais, nem REVIEW (mesmo espírito, mesma restrição de EDITABLE_STATUSES no backend). */
   canEdit(row: TaskWithActionPlanModel): boolean {
     return (
       this.policy.canManage() &&
+      row.status !== TaskStatusEnum.REVIEW &&
       row.status !== TaskStatusEnum.DONE &&
       row.status !== TaskStatusEnum.CANCELLED &&
       row.status !== TaskStatusEnum.NOT_DONE
@@ -229,10 +403,13 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     return !row.dependsOnTaskId || row.dependsOnTaskStatus === TaskStatusEnum.DONE;
   }
 
+  /** REVIEW->DONE é aprovação (pedido do usuário 2026-09-23) - só quem tem TAREFA_MANAGE avança
+   *  esse passo específico, mesmo sendo "dono" da tarefa (canExecuteOwn sozinho não basta aqui,
+   *  diferente dos outros passos da cadeia). */
   canAdvance(row: TaskWithActionPlanModel): boolean {
-    if (!this.policy.canExecuteOwn(row) || nextForwardTaskStatus(row.status) === null) {
-      return false;
-    }
+    if (nextForwardTaskStatus(row.status) === null) return false;
+    if (row.status === TaskStatusEnum.REVIEW && !this.policy.canManage()) return false;
+    if (!this.policy.canExecuteOwn(row)) return false;
     return this.isDependencySatisfied(row);
   }
 
@@ -273,6 +450,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   setViewMode(mode: 'list' | 'kanban'): void {
     this.viewMode.set(mode);
     localStorage.setItem(STATE_KEY.NIMBUSFLOW.WORKS.ALL_TASKS.VIEW_MODE.V1, mode);
+    this.selection.set([]);
 
     if (mode === 'kanban') {
       this.loadKanbanData();
@@ -290,12 +468,14 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
 
   /** Mesma regra de autorização do backend (TaskService#updateStatus): TAREFA_MANAGE muda pra
    *  qualquer status; sem ela, só o próprio assignee (TAREFA_EXECUTE) avançando um passo por vez.
-   *  As duas regras duras abaixo (pedido do usuário 2026-09-23) valem pra QUALQUER usuário,
-   *  TAREFA_MANAGE incluído, sem bypass: não pular etapas (DONE só a partir de IN_PROGRESS) e
-   *  dependência bloqueia progresso (IN_PROGRESS ou DONE) - nunca envolvendo CANCELLED. */
+   *  As regras duras abaixo (pedido do usuário 2026-09-23) valem pra QUALQUER usuário, TAREFA_
+   *  MANAGE incluído, sem bypass: não pular etapas (REVIEW só a partir de IN_PROGRESS, DONE só a
+   *  partir de REVIEW) e dependência bloqueia progresso (IN_PROGRESS ou DONE) - nunca envolvendo
+   *  CANCELLED/NOT_DONE. REVIEW->DONE (aprovação) exige TAREFA_MANAGE mesmo sendo dono da tarefa. */
   canDropTask = (task: TaskWithActionPlanModel, status: TaskStatusEnum): boolean => {
     if (task.status === status) return false;
-    if (status === TaskStatusEnum.DONE && task.status !== TaskStatusEnum.IN_PROGRESS) return false;
+    if (status === TaskStatusEnum.REVIEW && task.status !== TaskStatusEnum.IN_PROGRESS) return false;
+    if (status === TaskStatusEnum.DONE && task.status !== TaskStatusEnum.REVIEW) return false;
     if (
       (status === TaskStatusEnum.IN_PROGRESS || status === TaskStatusEnum.DONE) &&
       !this.isDependencySatisfied(task)
@@ -304,6 +484,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     }
 
     if (this.policy.canManage()) return true;
+    if (task.status === TaskStatusEnum.REVIEW) return false;
     if (!this.policy.canExecuteOwn(task)) return false;
     return nextForwardTaskStatus(task.status) === status;
   };
@@ -339,14 +520,26 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   }
 
   private kanbanDropRejectedReason(task: TaskWithActionPlanModel, status: TaskStatusEnum): string {
-    if (status === TaskStatusEnum.DONE && task.status !== TaskStatusEnum.IN_PROGRESS) {
-      return this.i18n.tUi('tasks.action.blockedBySkipSteps' as never);
+    if (status === TaskStatusEnum.REVIEW && task.status !== TaskStatusEnum.IN_PROGRESS) {
+      return this.i18n.tUi('tasks.action.blockedBySkipSteps' as never, {
+        requiredStatus: this.i18n.tUi(`tasks.status.${TaskStatusEnum.IN_PROGRESS}` as never),
+        targetStatus: this.i18n.tUi(`tasks.status.${TaskStatusEnum.REVIEW}` as never),
+      });
+    }
+    if (status === TaskStatusEnum.DONE && task.status !== TaskStatusEnum.REVIEW) {
+      return this.i18n.tUi('tasks.action.blockedBySkipSteps' as never, {
+        requiredStatus: this.i18n.tUi(`tasks.status.${TaskStatusEnum.REVIEW}` as never),
+        targetStatus: this.i18n.tUi(`tasks.status.${TaskStatusEnum.DONE}` as never),
+      });
     }
     if (
       (status === TaskStatusEnum.IN_PROGRESS || status === TaskStatusEnum.DONE) &&
       !this.isDependencySatisfied(task)
     ) {
       return this.i18n.tUi('tasks.action.blockedByDependency' as never, { title: task.dependsOnTaskTitle });
+    }
+    if (task.status === TaskStatusEnum.REVIEW && status === TaskStatusEnum.DONE && !this.policy.canManage()) {
+      return this.i18n.tUi('tasks.action.blockedByApprovalRequired' as never);
     }
     if (!this.policy.canManage() && !this.policy.canExecuteOwn(task)) {
       return this.i18n.tUi('tasks.action.blockedByPermission' as never);
@@ -409,6 +602,8 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     this.assigneeIds.set(null);
     this.createdAt.set(null);
     this.periodCreatedAt.set(null);
+    this.activeStatusTab.set(TaskStatusEnum.TODO);
+    this.selection.set([]);
   }
 
   protected override toFiltersState(): TasksFiltersState {
@@ -430,10 +625,12 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     this.periodCreatedAt.set(state.periodCreatedAt ?? null);
   }
 
+  /** Na Lista, o status vem SEMPRE da aba ativa (pedido do usuário 2026-09-23) - um valor só,
+   *  nunca o multiSelect de filtros avançados (que só é exibido/lido no Kanban, ver template). */
   protected override buildAdvancedFilters(): Partial<TasksAdvancedFilters> {
     return {
       title: this.title().trim() || undefined,
-      status: this.status()?.length ? this.status() : undefined,
+      status: this.viewMode() === 'list' ? [this.activeStatusTab()] : this.status()?.length ? this.status() : undefined,
       assigneeIds: this.assigneeIds()?.length ? this.assigneeIds() : undefined,
       createdAt: this.createdAt() ?? undefined,
       periodCreatedAt: this.periodCreatedAt() ?? undefined,

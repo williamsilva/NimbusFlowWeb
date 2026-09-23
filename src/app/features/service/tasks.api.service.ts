@@ -11,6 +11,7 @@ import {
   TaskApiModel,
   TaskUpsertInput,
   TaskStatusInput,
+  TaskAssigneeInput,
   TaskWithActionPlanModel,
   TaskWithActionPlanApiModel,
   mapTaskApiModel,
@@ -75,6 +76,13 @@ export class TasksApiService {
   updateStatus(id: string, input: TaskStatusInput) {
     return this.http
       .put<TaskApiModel>(`${this.baseUrl}/${id}/status`, input)
+      .pipe(map(mapTaskApiModel));
+  }
+
+  /** "Transferir" (pedido do usuário 2026-09-23) - ver TaskController#updateAssignee no backend. */
+  updateAssignee(id: string, input: TaskAssigneeInput) {
+    return this.http
+      .put<TaskApiModel>(`${this.baseUrl}/${id}/assignee`, input)
       .pipe(map(mapTaskApiModel));
   }
 }

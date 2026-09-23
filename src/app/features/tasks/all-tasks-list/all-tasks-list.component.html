@@ -78,24 +78,26 @@
         </p-floatLabel>
       </div>
 
-      <div class="col-12 md:col-3 p-1">
-        <p-floatLabel variant="on" class="w-full">
-          <p-multiSelect
-            size="small"
-            class="w-full"
-            appendTo="body"
-            [showClear]="true"
-            inputId="status"
-            optionLabel="label"
-            optionValue="value"
-            [ngModel]="status()"
-            [showToggleAll]="false"
-            [options]="statusOptions"
-            (ngModelChange)="status.set($event?.length ? $event : null)"
-          ></p-multiSelect>
-          <label for="status">{{ 'tasks.fields.status' | translate }}</label>
-        </p-floatLabel>
-      </div>
+      @if (viewMode() === 'kanban') {
+        <div class="col-12 md:col-3 p-1">
+          <p-floatLabel variant="on" class="w-full">
+            <p-multiSelect
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [showClear]="true"
+              inputId="status"
+              optionLabel="label"
+              optionValue="value"
+              [ngModel]="status()"
+              [showToggleAll]="false"
+              [options]="statusOptions"
+              (ngModelChange)="status.set($event?.length ? $event : null)"
+            ></p-multiSelect>
+            <label for="status">{{ 'tasks.fields.status' | translate }}</label>
+          </p-floatLabel>
+        </div>
+      }
 
       <div class="col-12 md:col-3 p-1">
         <p-floatLabel variant="on" class="w-full">
@@ -147,6 +149,46 @@
       ></app-tasks-kanban-board>
     </div>
   } @else {
+  <!-- Abas de status (pedido do usuário 2026-09-23, "igual ao print") - cada aba É um status,
+       sempre exatamente um por vez; substitui o multiSelect de status do painel de filtros
+       (escondido acima em modo Lista) como forma de escolher o status visível na tabela. -->
+  <div class="task-status-tabs mt-2">
+    @for (statusValue of statusTabs; track statusValue) {
+      <button
+        type="button"
+        class="task-status-tab"
+        [class.task-status-tab-active]="activeStatusTab() === statusValue"
+        (click)="selectStatusTab(statusValue)"
+      >
+        {{ 'tasks.status.' + statusValue | translate }}
+      </button>
+    }
+  </div>
+
+  @if (policy.canManage() && selection().length) {
+    <div class="task-bulk-bar mt-2">
+      <span class="task-bulk-bar-count">
+        {{ 'tasks.bulk.selectedCount' | translate: { count: selection().length } }}
+      </span>
+      <div class="task-bulk-bar-actions">
+        <button
+          pButton
+          type="button"
+          class="p-button-sm p-button-info"
+          (click)="openChangeStatusDialog()"
+          [label]="'tasks.bulk.changeStatus' | translate"
+        ></button>
+        <button
+          pButton
+          type="button"
+          class="p-button-sm p-button-warning"
+          (click)="openTransferDialog()"
+          [label]="'tasks.bulk.transfer' | translate"
+        ></button>
+      </div>
+    </div>
+  }
+
   <div class="surface-card border-round px-3 pt-2 pb-3 mt-2">
     <p-table
       #dt
@@ -165,22 +207,28 @@
       [value]="tasks()"
       [loading]="facade.loading()"
       [stateKey]="tableStateKey()"
+      selectionMode="multiple"
+      [selection]="selection()"
       [showCurrentPageReport]="true"
       [totalRecords]="totalRecords()"
       (onLazyLoad)="onLazyLoad($event)"
       [paginatorDropdownAppendTo]="'body'"
       (onPage)="onPageChange($event)"
+      (selectionChange)="onSelectionChange($event)"
       [rowsPerPageOptions]="rowsPerPageOptions"
       [tableStyle]="{ width: '100%', 'min-width': '62rem' }"
       [currentPageReportTemplate]="'pagination.report' | translate"
       >
       <ng-template pTemplate="colgroup">
         <colgroup>
+        @if (policy.canManage()) {
+          <col style="width: 3rem" />
+        }
+        <col style="width: 110px" />
         <col style="width: auto" />
         <col style="width: 200px" />
         <col style="width: 160px" />
         <col style="width: 160px" />
-        <col style="width: 130px" />
         <col style="width: 120px" />
         <col style="width: 100px" />
       </colgroup>
@@ -188,6 +236,18 @@
 
     <ng-template pTemplate="header">
       <tr>
+        @if (policy.canManage()) {
+          <th class="text-center">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+        }
+
+        <th class="text-center">
+          <div class="th-flex text-center justify-content-center">
+            <span class="th-label" tooltipPosition="top" [pTooltip]="'tasks.columns.numero' | translate">{{ 'tasks.columns.numero' | translate }}</span>
+          </div>
+        </th>
+
         <th pSortableColumn="title">
           <div class="th-flex text-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'tasks.columns.title' | translate">{{ 'tasks.columns.title' | translate }}</span>
@@ -226,38 +286,6 @@
           </div>
         </th>
 
-        <th pSortableColumn="status">
-          <div class="th-flex text-center">
-            <span class="th-label" tooltipPosition="top" [pTooltip]="'tasks.columns.status' | translate">{{ 'tasks.columns.status' | translate }}</span>
-            <span class="th-icons">
-              <p-sortIcon field="status"></p-sortIcon>
-              <p-columnFilter
-                display="menu"
-                matchMode="in"
-                field="status"
-                [showOperator]="false"
-                [showAddButton]="false"
-                [showMatchModes]="false"
-                styleClass="cs-colfilter"
-                >
-                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                  <p-multiSelect
-                    class="w-full"
-                    appendTo="body"
-                    [ngModel]="value"
-                    [showClear]="true"
-                    optionLabel="label"
-                    optionValue="value"
-                    [options]="statusOptions"
-                    (onChange)="filter($event.value)"
-                    [placeholder]="'common.all' | translate"
-                  ></p-multiSelect>
-                </ng-template>
-              </p-columnFilter>
-            </span>
-          </div>
-        </th>
-
         <th class="text-center">
           <div class="th-flex text-center justify-content-center">
             <span class="th-label" tooltipPosition="top" [pTooltip]="'tasks.columns.dueDate' | translate">{{ 'tasks.columns.dueDate' | translate }}</span>
@@ -274,6 +302,12 @@
 
     <ng-template pTemplate="body" let-row>
       <tr>
+        @if (policy.canManage()) {
+          <td class="text-center">
+            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+          </td>
+        }
+        <td class="text-center" [attr.data-label]="'tasks.columns.numero' | translate">{{ formatNumero(row.numero) }}</td>
         <td class="mobile-card-title"><span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.title">{{ row.title }}</span></td>
         <td class="text-center" [attr.data-label]="'tasks.columns.actionPlan' | translate">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.actionPlanTitle">{{ row.actionPlanTitle }}</span>
@@ -283,12 +317,6 @@
         </td>
         <td class="text-center" [attr.data-label]="'tasks.columns.dependsOnTask' | translate">
           <span class="cs-table-cell-ellipsis" tooltipPosition="top" [pTooltip]="row.dependsOnTaskTitle">{{ row.dependsOnTaskTitle ?? '-' }}</span>
-        </td>
-        <td class="text-center" [attr.data-label]="'tasks.columns.status' | translate">
-          <app-status-badge
-            [tone]="tone(row.status)"
-            [label]="('tasks.status.' + row.status) | translate"
-          ></app-status-badge>
         </td>
         <td class="text-center" [attr.data-label]="'tasks.columns.dueDate' | translate">{{ row.dueDate ? (row.dueDate | csDate: 'short') : '-' }}</td>
         <td class="text-center mobile-card-actions" [attr.data-label]="'common.actions' | translate">
@@ -311,11 +339,126 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="text-center py-5 opacity-70">
+        <td [attr.colspan]="policy.canManage() ? 8 : 7" class="text-center py-5 opacity-70">
           {{ facade.loadedOnce() ? ('tasks.empty.title' | translate) : ('common.loading' | translate) }}
         </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
+
+  <p-dialog
+    [modal]="true"
+    appendTo="body"
+    [draggable]="false"
+    [resizable]="false"
+    (onHide)="closeChangeStatusDialog()"
+    [visible]="changeStatusDialogVisible()"
+    [style]="{ width: '420px', maxWidth: '95vw' }"
+    [header]="'tasks.bulk.changeStatusTitle' | translate"
+  >
+    <p class="mb-3">{{ 'tasks.bulk.changeStatusSubtitle' | translate: { count: selection().length } }}</p>
+    <div class="task-status-choice-list">
+      @for (statusValue of bulkStatusOptions(); track statusValue) {
+        <button
+          type="button"
+          class="task-status-choice"
+          [disabled]="bulkBusy()"
+          (click)="applyBulkStatusChange(statusValue)"
+        >
+          <span>{{ 'tasks.status.' + statusValue | translate }}</span>
+          <i class="pi pi-chevron-right"></i>
+        </button>
+      }
+    </div>
+    <div class="flex justify-content-end mt-3">
+      <button
+        pButton
+        type="button"
+        class="p-button-text p-button-sm"
+        (click)="closeChangeStatusDialog()"
+        [label]="'common.cancel' | translate"
+      ></button>
+    </div>
+  </p-dialog>
+
+  <p-dialog
+    [modal]="true"
+    appendTo="body"
+    [draggable]="false"
+    [resizable]="false"
+    (onHide)="closeTransferDialog()"
+    [visible]="transferDialogVisible()"
+    [style]="{ width: '480px', maxWidth: '95vw' }"
+    [header]="'tasks.bulk.transferTitle' | translate"
+  >
+    <p class="mb-3">{{ 'tasks.bulk.transferSubtitle' | translate: { count: selection().length } }}</p>
+
+    <div class="mb-3">
+      <label for="transferAssigneeType" id="transferAssigneeType-label" class="block mb-2 text-sm opacity-80">
+        {{ 'tasks.fields.assigneeType' | translate }}
+      </label>
+      <p-selectButton
+        [options]="assigneeTypeOptions"
+        optionLabel="label"
+        optionValue="value"
+        [ngModel]="transferAssigneeType()"
+        aria-labelledby="transferAssigneeType-label"
+        (ngModelChange)="transferAssigneeType.set($event)"
+      ></p-selectButton>
+    </div>
+
+    @if (transferAssigneeType() === TaskAssigneeTypeEnum.USER) {
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          inputId="transferAssigneeId"
+          optionLabel="label"
+          optionValue="value"
+          [options]="assigneeOptions()"
+          [ngModel]="transferAssigneeId()"
+          (ngModelChange)="transferAssigneeId.set($event)"
+        ></p-select>
+        <label for="transferAssigneeId">{{ 'tasks.fields.assignee' | translate }}</label>
+      </p-floatLabel>
+    } @else {
+      <p-floatLabel variant="on" class="w-full">
+        <p-select
+          size="small"
+          class="w-full"
+          [filter]="true"
+          appendTo="body"
+          inputId="transferAssigneeDepartmentId"
+          optionLabel="label"
+          optionValue="value"
+          [options]="departmentOptions()"
+          [ngModel]="transferAssigneeDepartmentId()"
+          (ngModelChange)="transferAssigneeDepartmentId.set($event)"
+        ></p-select>
+        <label for="transferAssigneeDepartmentId">{{ 'tasks.fields.assigneeDepartment' | translate }}</label>
+      </p-floatLabel>
+    }
+
+    <div class="flex justify-content-end gap-2 mt-3">
+      <button
+        pButton
+        type="button"
+        class="p-button-text p-button-sm"
+        (click)="closeTransferDialog()"
+        [label]="'common.cancel' | translate"
+      ></button>
+      <button
+        pButton
+        type="button"
+        class="p-button-sm"
+        [loading]="bulkBusy()"
+        (click)="confirmTransfer()"
+        [disabled]="!canConfirmTransfer()"
+        [label]="'tasks.bulk.transferConfirm' | translate"
+      ></button>
+    </div>
+  </p-dialog>
   }
