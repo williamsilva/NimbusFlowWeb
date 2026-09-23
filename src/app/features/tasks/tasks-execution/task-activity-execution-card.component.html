@@ -57,12 +57,10 @@
         }
       }
 
-      @if (activity().justification) {
-        <div class="cs-exec-justification-box">
-          <span class="cs-exec-justification-label">
-            <i class="pi pi-exclamation-triangle"></i> {{ 'tasks.execution.criticalJustification' | translate }}
-          </span>
-          <span>{{ activity().justification }}</span>
+      @if (activity().critical) {
+        <div class="cs-exec-critical-notice">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>{{ 'tasks.execution.criticalNotice' | translate }}</span>
         </div>
       }
 
@@ -197,20 +195,9 @@
       }
 
       @if (isCriticalAnswer()) {
-        <div class="cs-exec-justification-box">
-          <p-floatLabel variant="on" class="w-full">
-            <textarea
-              rows="2"
-              pTextarea
-              id="justification"
-              class="w-full p-inputtext-sm"
-              [ngModel]="justification()"
-              (ngModelChange)="justification.set($event)"
-            ></textarea>
-            <label for="justification">
-              <i class="pi pi-exclamation-triangle"></i> {{ 'tasks.execution.criticalJustification' | translate }}
-            </label>
-          </p-floatLabel>
+        <div class="cs-exec-critical-notice">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>{{ 'tasks.execution.criticalNotice' | translate }}</span>
         </div>
       }
 

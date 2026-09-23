@@ -2083,7 +2083,7 @@
       "saved": "Actividad guardada con éxito.",
       "saveError": "No se pudo guardar la actividad.",
       "viewDocument": "Ver documento",
-      "criticalJustification": "Justificación para el crítico",
+      "criticalNotice": "Esta respuesta está dentro de los valores críticos.",
       "observation": "Observación",
       "executedAt": "Ejecutado el {date} por {name}",
       "answerDate": "Fecha",

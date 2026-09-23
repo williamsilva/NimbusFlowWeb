@@ -54,7 +54,10 @@ export interface TaskActivityModel extends TaskActivityConfigModel {
   answerSignatureUrl: string | null;
   answerDocumentUrl: string | null;
   answerImageUrl: string | null;
-  justification: string | null;
+  /** Calculado pelo backend na leitura, nunca enviado (pedido do usuário 2026-09-23: a
+   *  justificativa obrigatória era redundante com "Relatar não conformidade ou observação",
+   *  removida - isto virou só um aviso visual). Sempre false enquanto não respondida. */
+  critical: boolean;
   observationReported: boolean;
   observationText: string | null;
   /** Nulo = ainda não respondida - ver AllTasksListComponent/TaskExecutionDialogComponent. */
@@ -74,7 +77,6 @@ export interface TaskActivityAnswerInput {
   answerNumber: number | null;
   answerOptionId: string | null;
   answerOptionIds: string[] | null;
-  justification: string | null;
   observationReported: boolean;
   observationText: string | null;
 }

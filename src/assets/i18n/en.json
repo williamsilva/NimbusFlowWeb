@@ -2083,7 +2083,7 @@
       "saved": "Activity saved successfully.",
       "saveError": "Could not save the activity.",
       "viewDocument": "View document",
-      "criticalJustification": "Justification for the critical value",
+      "criticalNotice": "This answer is within the critical range.",
       "observation": "Observation",
       "executedAt": "Executed on {date} by {name}",
       "answerDate": "Date",

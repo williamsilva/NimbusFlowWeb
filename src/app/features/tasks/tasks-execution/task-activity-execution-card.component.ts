@@ -92,7 +92,6 @@ export class TaskActivityExecutionCardComponent {
   readonly answerOptionIds = signal<string[]>([]);
   readonly observationReported = signal(false);
   readonly observationText = signal('');
-  readonly justification = signal('');
   readonly file = signal<File | null>(null);
   readonly signatureHasContent = signal(false);
 
@@ -162,13 +161,14 @@ export class TaskActivityExecutionCardComponent {
     }
   });
 
-  /** Mesmas 2 exigências de TaskService#answerActivity no backend (duplicadas de propósito, só
-   *  pra desabilitar o botão "Salvar" antes de bater no servidor - achado real 2026-09-23: sem
-   *  isso o botão ficava clicável mesmo com a caixa de justificativa/observação vazia, e o
-   *  usuário só descobria pelo erro 400 genérico "Não foi possível salvar a atividade"). */
+  /** Mesma exigência de TaskService#answerActivity no backend (duplicada de propósito, só pra
+   *  desabilitar o botão "Salvar" antes de bater no servidor - achado real 2026-09-23: sem isso
+   *  o botão ficava clicável mesmo com a caixa de observação vazia, e o usuário só descobria pelo
+   *  erro 400 genérico "Não foi possível salvar a atividade"). Resposta crítica NÃO exige mais
+   *  nada além disso - virou só um aviso visual (isCriticalAnswer()), redundante com "Relatar não
+   *  conformidade ou observação" (pedido do usuário 2026-09-23). */
   readonly canSave = computed(() => {
     if (this.saving()) return false;
-    if (this.isCriticalAnswer() && this.justification().trim().length === 0) return false;
     if (this.observationReported() && this.observationText().trim().length === 0) return false;
     const a = this.activity();
     switch (a.dataCollectionType) {
@@ -228,7 +228,6 @@ export class TaskActivityExecutionCardComponent {
           : null,
       answerOptionId: a.dataCollectionType === TaskActivityDataTypeEnum.SINGLE_CHOICE ? this.answerOptionId() : null,
       answerOptionIds: a.dataCollectionType === TaskActivityDataTypeEnum.MULTIPLE_CHOICE ? this.answerOptionIds() : null,
-      justification: this.isCriticalAnswer() ? this.justification().trim() : null,
       observationReported: this.observationReported(),
       observationText: this.observationReported() ? this.observationText().trim() : null,
     };
@@ -244,7 +243,6 @@ export class TaskActivityExecutionCardComponent {
     this.answerOptionIds.set([]);
     this.observationReported.set(false);
     this.observationText.set('');
-    this.justification.set('');
     this.file.set(null);
     this.signatureHasContent.set(false);
   }

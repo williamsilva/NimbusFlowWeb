@@ -407,7 +407,7 @@ export class TasksActivityConfigDialogComponent {
       answerSignatureUrl: existing?.answerSignatureUrl ?? null,
       answerDocumentUrl: existing?.answerDocumentUrl ?? null,
       answerImageUrl: existing?.answerImageUrl ?? null,
-      justification: existing?.justification ?? null,
+      critical: existing?.critical ?? false,
       observationReported: existing?.observationReported ?? false,
       observationText: existing?.observationText ?? null,
       executedAt: existing?.executedAt ?? null,

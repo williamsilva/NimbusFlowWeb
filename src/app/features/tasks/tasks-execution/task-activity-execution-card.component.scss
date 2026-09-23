@@ -101,7 +101,22 @@
   gap: 0.4rem;
 }
 
-.cs-exec-justification-box,
+/* Aviso não-bloqueante quando a resposta é crítica (pedido do usuário 2026-09-23: a
+   justificativa obrigatória era redundante com "Relatar não conformidade ou observação",
+   removida - agora é só isto, um sinal visual, sempre permite salvar). */
+.cs-exec-critical-notice {
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--orange-50, #fff7ed);
+  border: 1px solid var(--orange-200, #fed7aa);
+  color: var(--orange-700, #c2410c);
+}
+
 .cs-exec-observation-box {
   padding: 0.6rem 0.75rem;
   border-radius: 6px;
@@ -109,22 +124,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-}
-
-.cs-exec-justification-box {
-  background: var(--orange-50, #fff7ed);
-  border: 1px solid var(--orange-200, #fed7aa);
-}
-
-.cs-exec-justification-label {
-  font-weight: 600;
-  color: var(--orange-700, #c2410c);
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.cs-exec-observation-box {
   background: var(--blue-50, #eff6ff);
   border: 1px solid var(--blue-200, #bfdbfe);
 }
@@ -170,7 +169,7 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
-:host-context(.dark) .cs-exec-justification-box {
+:host-context(.dark) .cs-exec-critical-notice {
   background: rgba(249, 115, 22, 0.12);
   border-color: rgba(251, 146, 60, 0.35);
 }

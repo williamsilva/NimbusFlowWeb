@@ -2083,7 +2083,7 @@
       "saved": "Atividade salva com sucesso.",
       "saveError": "Não foi possível salvar a atividade.",
       "viewDocument": "Ver documento",
-      "criticalJustification": "Justificativa para o crítico",
+      "criticalNotice": "Esta resposta está entre os valores críticos.",
       "observation": "Observação",
       "executedAt": "Executado em {date} por {name}",
       "answerDate": "Data",
