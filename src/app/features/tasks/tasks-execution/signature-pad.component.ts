@@ -19,7 +19,7 @@ import { TranslateModule } from '@ngx-translate/core';
       <canvas
         #canvas
         width="500"
-        height="180"
+        height="140"
         class="cs-signature-canvas"
         (pointerdown)="onPointerDown($event)"
         (pointermove)="onPointerMove($event)"
@@ -51,13 +51,15 @@ import { TranslateModule } from '@ngx-translate/core';
         opacity: 0.65;
       }
 
-      /* Fundo sempre branco (mesmo no tema escuro) - a tinta do traço é fixa em #1f2937
-         (ver ngAfterViewInit), então o campo precisa continuar claro pra ficar legível,
-         igual uma folha de assinatura de verdade. Só a borda muda com o tema. */
+      /* Fundo claro + tinta escura no tema claro; fundo escuro + tinta clara no tema escuro (ver
+         ngAfterViewInit) - pedido do usuário 2026-09-23 ("fundo branco" destoava do resto da tela
+         já escurecida). Componente FILHO (renderizado dentro do conteúdo do dialog de execução) -
+         :host-context(.dark) funciona normal aqui, diferente do próprio TaskExecutionDialogComponent
+         (que hospeda o <p-dialog appendTo="body"> - ver project_nimbusflow_dialog_appendto_body_host_context_bug). */
       .cs-signature-canvas {
         width: 100%;
-        max-width: 500px;
-        height: 180px;
+        max-width: 420px;
+        height: 140px;
         touch-action: none;
         cursor: crosshair;
         border-radius: 8px;
@@ -65,11 +67,9 @@ import { TranslateModule } from '@ngx-translate/core';
         border: 1px solid #cbd5e1;
       }
 
-      /* :host-context(.dark), não :root.dark - View Encapsulation prefixa :root.dark e ele nunca
-         casa com nada dentro de um *.component.ts (ver memória project_root_dark_encapsulation_bug). */
       :host-context(.dark) .cs-signature-canvas {
-        border-color: rgba(255, 255, 255, 0.35);
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4);
+        background: #1f2937;
+        border-color: rgba(255, 255, 255, 0.2);
       }
     `,
   ],
@@ -88,7 +88,8 @@ export class SignaturePadComponent implements AfterViewInit {
     const canvas = this.canvasRef.nativeElement;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    ctx.strokeStyle = '#1f2937';
+    const isDark = document.documentElement.classList.contains('dark');
+    ctx.strokeStyle = isDark ? '#e5e7eb' : '#1f2937';
     ctx.lineWidth = 2;
     ctx.lineCap = 'round';
     this.ctx = ctx;
