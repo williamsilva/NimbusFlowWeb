@@ -162,8 +162,14 @@ export class TaskActivityExecutionCardComponent {
     }
   });
 
+  /** Mesmas 2 exigências de TaskService#answerActivity no backend (duplicadas de propósito, só
+   *  pra desabilitar o botão "Salvar" antes de bater no servidor - achado real 2026-09-23: sem
+   *  isso o botão ficava clicável mesmo com a caixa de justificativa/observação vazia, e o
+   *  usuário só descobria pelo erro 400 genérico "Não foi possível salvar a atividade"). */
   readonly canSave = computed(() => {
     if (this.saving()) return false;
+    if (this.isCriticalAnswer() && this.justification().trim().length === 0) return false;
+    if (this.observationReported() && this.observationText().trim().length === 0) return false;
     const a = this.activity();
     switch (a.dataCollectionType) {
       case TaskActivityDataTypeEnum.TEXT:
