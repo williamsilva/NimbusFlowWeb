@@ -1,4 +1,4 @@
-import { DestroyRef } from '@angular/core';
+import { DestroyRef, ElementRef, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { input, signal, Output, inject, Component, EventEmitter, effect } from '@angular/core';
@@ -51,6 +51,12 @@ export class TicketsCreateDialogComponent {
   @Output() saved = new EventEmitter<void>();
   @Output() created = new EventEmitter<void>();
   @Output() visibleChange = new EventEmitter<boolean>();
+
+  /** Só o signal `selectedFile` não basta - resetá-lo não limpa o texto exibido pelo próprio
+   *  `<input type="file">` nativo (o dialog fica no DOM entre aberturas, PrimeNG só esconde via
+   *  CSS), então o nome do arquivo escolhido "grudava" visualmente mesmo depois de salvar (achado
+   *  do usuário 2026-09-24). */
+  @ViewChild('attachmentInput') private attachmentInputRef?: ElementRef<HTMLInputElement>;
 
   private readonly fb = inject(FormBuilder);
   private readonly toast = inject(MessageService);
@@ -154,6 +160,9 @@ export class TicketsCreateDialogComponent {
     });
     this.applyTargetValidators(TicketTargetTypeEnum.USER);
     this.selectedFile.set(null);
+    if (this.attachmentInputRef) {
+      this.attachmentInputRef.nativeElement.value = '';
+    }
   }
 
   save(): void {

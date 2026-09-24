@@ -147,7 +147,7 @@
         <label for="attachment" class="block mb-2 text-sm opacity-80">
           {{ 'tickets.fields.attachment' | translate }}
         </label>
-        <input id="attachment" type="file" (change)="onFileSelected($event)" />
+        <input #attachmentInput id="attachment" type="file" (change)="onFileSelected($event)" />
       </div>
     </div>
   </form>
