@@ -66,21 +66,39 @@ export class TasksKanbanBoardComponent {
    *  traduzido) é o pai, que já tem toda a regra de negócio via canDrop/isDependencySatisfied. */
   @Output() readonly dropRejected = new EventEmitter<TaskKanbanDropEvent>();
 
-  readonly statuses = TASK_STATUS_VALUES;
+  /** Cancelada não vira coluna aqui (pedido do usuário 2026-09-24) - o Kanban é uma visão de
+   *  trabalho ativo/do dia, não um histórico; a aba "Cancelada" continua disponível na Lista (ver
+   *  AllTasksListComponent.statusTabs, que usa TASK_STATUS_VALUES cheio). */
+  readonly statuses = TASK_STATUS_VALUES.filter((status) => status !== TaskStatusEnum.CANCELLED);
 
   private readonly draggingTask = signal<TaskWithActionPlanModel | null>(null);
   readonly dragOverStatus = signal<TaskStatusEnum | null>(null);
 
+  /** Concluída/Não fez só mostram o que aconteceu HOJE (pedido do usuário 2026-09-24) - sem isto
+   *  as duas colunas só cresceriam pra sempre, acumulando todo o histórico. DONE usa completedAt
+   *  (setado só na transição pra DONE, ver TaskService#updateStatus); NOT_DONE não tem um campo
+   *  equivalente (completedAt só é setado quando completingNow, nunca em NOT_DONE) - usa updatedAt
+   *  como proxy, seguro porque NOT_DONE é terminal (fora de EDITABLE_STATUSES no backend, nunca
+   *  mais editado depois, então updatedAt fica congelado no exato momento da transição). */
   readonly columns = computed(() => {
     const byStatus = new Map<TaskStatusEnum, TaskWithActionPlanModel[]>();
     for (const status of this.statuses) byStatus.set(status, []);
 
+    const todayKey = new Date().toDateString();
     for (const task of this.tasks()) {
-      byStatus.get(task.status)?.push(task);
+      const bucket = byStatus.get(task.status);
+      if (!bucket) continue;
+      if (task.status === TaskStatusEnum.DONE && !this.isSameDay(task.completedAt, todayKey)) continue;
+      if (task.status === TaskStatusEnum.NOT_DONE && !this.isSameDay(task.updatedAt, todayKey)) continue;
+      bucket.push(task);
     }
 
     return this.statuses.map((status) => ({ status, tasks: byStatus.get(status) ?? [] }));
   });
+
+  private isSameDay(dateStr: string | null, todayKey: string): boolean {
+    return !!dateStr && new Date(dateStr).toDateString() === todayKey;
+  }
 
   tone(status: TaskStatusEnum): ReturnType<typeof taskStatusTone> {
     return taskStatusTone(status);
