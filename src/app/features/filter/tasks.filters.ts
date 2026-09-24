@@ -5,6 +5,7 @@ export interface TasksAdvancedFilters {
 
   status?: string[] | null;
   assigneeIds?: string[] | null;
+  departmentIds?: string[] | null;
   actionPlanIds?: string[] | null;
 
   createdAt?: string | string[];

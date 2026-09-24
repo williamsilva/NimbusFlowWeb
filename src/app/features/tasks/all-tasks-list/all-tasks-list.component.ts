@@ -153,6 +153,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   title = signal('');
   status = signal<string[] | null>(null);
   assigneeIds = signal<string[] | null>(null);
+  departmentIds = signal<string[] | null>(null);
   createdAt = signal<string | string[] | null>(null);
   periodCreatedAt = signal<PeriodEnum | null>(null);
 
@@ -233,6 +234,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     const title = this.title().trim();
     const status = this.status();
     const assigneeIds = this.assigneeIds();
+    const departmentIds = this.departmentIds();
 
     if (title) {
       items.push({ label: this.i18n.tUi('tasks.fields.title'), value: title });
@@ -255,6 +257,16 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
       items.push({
         label: this.i18n.tUi('tasks.fields.assignee'),
         value: labels || assigneeIds.join(', '),
+      });
+    }
+    if (departmentIds?.length) {
+      const labels = this.departmentOptions()
+        .filter((opt) => departmentIds.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+      items.push({
+        label: this.i18n.tUi('tasks.fields.assigneeDepartment'),
+        value: labels || departmentIds.join(', '),
       });
     }
     const createdAtLabel = this.formatActiveFilterPeriodDateValue(
@@ -787,6 +799,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     this.title.set('');
     this.status.set(null);
     this.assigneeIds.set(null);
+    this.departmentIds.set(null);
     this.createdAt.set(null);
     this.periodCreatedAt.set(null);
     this.activeStatusTab.set(TaskStatusEnum.TODO);
@@ -798,6 +811,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
       title: this.title(),
       status: this.status()?.length ? this.status() : null,
       assigneeIds: this.assigneeIds()?.length ? this.assigneeIds() : null,
+      departmentIds: this.departmentIds()?.length ? this.departmentIds() : null,
       actionPlanIds: null,
       createdAt: this.createdAt(),
       periodCreatedAt: this.periodCreatedAt(),
@@ -808,6 +822,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     this.title.set(state.title ?? '');
     this.status.set(state.status ?? null);
     this.assigneeIds.set(state.assigneeIds ?? null);
+    this.departmentIds.set(state.departmentIds ?? null);
     this.createdAt.set(state.createdAt ?? null);
     this.periodCreatedAt.set(state.periodCreatedAt ?? null);
   }
@@ -819,6 +834,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
       title: this.title().trim() || undefined,
       status: this.viewMode() === 'list' ? [this.activeStatusTab()] : this.status()?.length ? this.status() : undefined,
       assigneeIds: this.assigneeIds()?.length ? this.assigneeIds() : undefined,
+      departmentIds: this.departmentIds()?.length ? this.departmentIds() : undefined,
       createdAt: this.createdAt() ?? undefined,
       periodCreatedAt: this.periodCreatedAt() ?? undefined,
     };

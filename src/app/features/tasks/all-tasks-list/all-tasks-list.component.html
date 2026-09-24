@@ -142,6 +142,26 @@
         </p-floatLabel>
       </div>
 
+      <div class="col-12 md:col-3 p-1">
+        <p-floatLabel variant="on" class="w-full">
+          <p-multiSelect
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            [showClear]="true"
+            inputId="departmentIds"
+            optionLabel="label"
+            optionValue="value"
+            [ngModel]="departmentIds()"
+            [showToggleAll]="false"
+            [options]="departmentOptions()"
+            (ngModelChange)="departmentIds.set($event?.length ? $event : null)"
+          ></p-multiSelect>
+          <label for="departmentIds">{{ 'tasks.fields.assigneeDepartment' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
       <cs-advanced-period-date-filter
         dateInputId="createdAt"
         periodInputId="periodCreatedAt"

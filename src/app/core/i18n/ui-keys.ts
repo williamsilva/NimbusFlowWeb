@@ -449,6 +449,7 @@ export const UI_KEYS = {
       title: 'tasks.fields.title',
       status: 'tasks.fields.status',
       assignee: 'tasks.fields.assignee',
+      assigneeDepartment: 'tasks.fields.assigneeDepartment',
       createdAt: 'tasks.fields.createdAt',
       periodCreatedAt: 'tasks.fields.periodCreatedAt',
     },
