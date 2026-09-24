@@ -180,7 +180,20 @@ export class TasksKanbanBoardComponent {
     ) {
       return false;
     }
-    return new Date(task.dueDate) < new Date(new Date().toDateString());
+    return this.parseLocalDate(task.dueDate) < new Date(new Date().toDateString());
+  }
+
+  /** Achado real 2026-09-24 (pedido do usuário 2026-09-24, tarefa de hoje aparecendo "atrasada")
+   *  - `new Date("2026-09-24")` (string "yyyy-MM-dd" pura, sem hora) é interpretada como meia-noite
+   *  UTC, não meia-noite local; num fuso negativo (America/Sao_Paulo, UTC-3) isso cai no dia
+   *  ANTERIOR em horário local, fazendo uma tarefa com prazo HOJE parecer vencida já na criação.
+   *  Nunca dava pra notar antes porque toda Tarefa manual empurra o prazo pra pelo menos amanhã
+   *  (Dias para executar >= 1) - só a criação em lote a partir de Modelo (que usa prazo = hoje, ver
+   *  AllTasksListComponent#onBatchCreateRequested) expôs o bug. Mesma técnica segura já usada em
+   *  CsDatePipe#parseLocalDateString/TasksCreateDialogComponent#fromDateOnlyString. */
+  private parseLocalDate(value: string): Date {
+    const [year, month, day] = value.split('-').map(Number);
+    return new Date(year, month - 1, day);
   }
 
   isDropAllowed(status: TaskStatusEnum): boolean {
