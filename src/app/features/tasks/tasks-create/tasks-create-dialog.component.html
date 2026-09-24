@@ -74,6 +74,41 @@
         </p-floatLabel>
       </div>
 
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            [showClear]="true"
+            inputId="locationId"
+            optionLabel="label"
+            optionValue="value"
+            formControlName="locationId"
+            [options]="locationOptions()"
+          ></p-select>
+          <label for="locationId">{{ 'tasks.fields.location' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            appendTo="body"
+            [showClear]="true"
+            inputId="shift"
+            optionLabel="label"
+            optionValue="value"
+            formControlName="shift"
+            [options]="shiftOptions"
+          ></p-select>
+          <label for="shift">{{ 'tasks.fields.shift' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
       <div class="col-12 p-2">
         <label for="assigneeType" id="assigneeType-label" class="block mb-2 text-sm opacity-80">
           {{ 'tasks.fields.assigneeType' | translate }}

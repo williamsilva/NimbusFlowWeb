@@ -60,6 +60,7 @@
   [visible]="pickerDialogVisible()"
   (templateSelected)="onTemplateSelected($event)"
   (visibleChange)="onPickerVisibleChange($event)"
+  (batchCreateRequested)="onBatchCreateRequested($event)"
 ></app-task-template-picker-dialog>
 
 <app-tasks-create-dialog
@@ -159,6 +160,45 @@
             (ngModelChange)="departmentIds.set($event?.length ? $event : null)"
           ></p-multiSelect>
           <label for="departmentIds">{{ 'tasks.fields.assigneeDepartment' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-3 p-1">
+        <p-floatLabel variant="on" class="w-full">
+          <p-multiSelect
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            [showClear]="true"
+            inputId="locationIds"
+            optionLabel="label"
+            optionValue="value"
+            [ngModel]="locationIds()"
+            [showToggleAll]="false"
+            [options]="locationOptions()"
+            (ngModelChange)="locationIds.set($event?.length ? $event : null)"
+          ></p-multiSelect>
+          <label for="locationIds">{{ 'tasks.fields.location' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-3 p-1">
+        <p-floatLabel variant="on" class="w-full">
+          <p-multiSelect
+            size="small"
+            class="w-full"
+            appendTo="body"
+            [showClear]="true"
+            inputId="shift"
+            optionLabel="label"
+            optionValue="value"
+            [ngModel]="shift()"
+            [showToggleAll]="false"
+            [options]="shiftFilterOptions"
+            (ngModelChange)="shift.set($event?.length ? $event : null)"
+          ></p-multiSelect>
+          <label for="shift">{{ 'tasks.fields.shift' | translate }}</label>
         </p-floatLabel>
       </div>
 

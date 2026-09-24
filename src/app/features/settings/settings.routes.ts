@@ -46,6 +46,20 @@ export const SETTINGS_ROUTES: Routes = [
       import('./cargos/cargos-list.component').then((m) => m.CargosListComponent),
   },
   {
+    path: 'task-locations',
+    title: 'routes.settings.taskLocations.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.TASK_LOCATION_VIEW],
+    },
+    loadComponent: () =>
+      import('./task-locations/task-locations-list.component').then(
+        (m) => m.TaskLocationsListComponent,
+      ),
+  },
+  {
     path: 'task-templates',
     title: 'routes.settings.taskTemplates.title',
     canActivate: [permissionGuard],

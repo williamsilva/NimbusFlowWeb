@@ -2,6 +2,7 @@ import { TaskStatusEnum } from '@models/enums/task-status.enum';
 import { PeriodEnum } from '@models/enums/period.enum';
 import { TaskAssigneeTypeEnum } from '@models/enums/task-assignee-type.enum';
 import { TaskRecurrenceFrequencyEnum } from '@models/enums/task-recurrence-frequency.enum';
+import { TaskShiftEnum } from '@models/enums/task-shift.enum';
 import { DayOfWeekEnum } from '@models/enums/day-of-week.enum';
 import { TaskActivityInput, TaskActivityModel, mapTaskActivityApiModels } from '@models/task-activities.models';
 
@@ -21,6 +22,11 @@ export interface TaskModel {
   categoryName: string | null;
   subcategoryId: string | null;
   subcategoryName: string | null;
+  /** Local de execução e Turno (pedido do usuário 2026-09-24) - sempre opcionais, diferente de
+   *  categoryId/subcategoryId acima. */
+  locationId: string | null;
+  locationName: string | null;
+  shift: TaskShiftEnum | null;
   /** USER usa assigneeId/assigneeName, DEPARTMENT usa assigneeDepartmentId/assigneeDepartmentName -
    *  exatamente um dos dois preenchido (pedido do usuário 2026-09-22, mesmo padrão de
    *  Ticket.targetType). */
@@ -89,6 +95,9 @@ export interface TaskUpsertInput {
    *  subcategoryId. */
   categoryId: string | null;
   subcategoryId: string | null;
+  /** Sempre opcionais (pedido do usuário 2026-09-24) - ver TaskModel.locationId/shift. */
+  locationId: string | null;
+  shift: TaskShiftEnum | null;
   assigneeType: TaskAssigneeTypeEnum;
   /** Obrigatório só quando assigneeType=USER - ver TaskService#resolveAssignee no backend. */
   assigneeId: string | null;
@@ -144,6 +153,8 @@ export interface TasksFiltersState {
   status: string[] | null;
   assigneeIds: string[] | null;
   departmentIds: string[] | null;
+  locationIds: string[] | null;
+  shift: string[] | null;
   actionPlanIds: string[] | null;
   createdAt: string | string[] | null;
   periodCreatedAt: PeriodEnum | null;

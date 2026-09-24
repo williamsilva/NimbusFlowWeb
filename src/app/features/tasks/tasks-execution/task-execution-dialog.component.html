@@ -43,6 +43,13 @@
           </div>
         }
 
+        @if (task.locationName || task.shift) {
+          <div class="cs-execution-field">
+            <span class="cs-execution-field-label">{{ 'tasks.columns.locationShift' | translate }}</span>
+            <span class="cs-execution-field-value">{{ locationShiftDisplay() }}</span>
+          </div>
+        }
+
         @if (task.completedAt) {
           <div class="cs-execution-field">
             <span class="cs-execution-field-label">{{ 'tasks.execution.completedAt' | translate }}</span>

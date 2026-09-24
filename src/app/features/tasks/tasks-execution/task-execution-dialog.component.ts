@@ -16,6 +16,7 @@ import { TaskActivityExecutionCardComponent } from '@features/tasks/tasks-execut
 import { TaskActivityAnswerInput, TaskActivityModel } from '@models/task-activities.models';
 import { TaskStatusEnum, taskStatusLabel, taskStatusTone } from '@models/enums/task-status.enum';
 import { TaskWithActionPlanModel, formatTaskNumero, taskAssigneeDisplayName } from '@models/tasks.models';
+import { taskShiftLabel } from '@models/enums/task-shift.enum';
 
 const TERMINAL_STATUSES = [TaskStatusEnum.DONE, TaskStatusEnum.CANCELLED, TaskStatusEnum.NOT_DONE];
 
@@ -110,6 +111,15 @@ export class TaskExecutionDialogComponent {
   assigneeDisplay(): string {
     const task = this.task();
     return task ? (taskAssigneeDisplayName(task) ?? '-') : '-';
+  }
+
+  /** Local/Turno sempre opcionais (pedido do usuário 2026-09-24) - mostra só as partes presentes. */
+  locationShiftDisplay(): string {
+    const task = this.task();
+    if (!task) return '-';
+    return [task.locationName, task.shift ? taskShiftLabel(task.shift, this.i18n) : null]
+      .filter((part): part is string => !!part)
+      .join(' - ');
   }
 
   creatorName(): string {

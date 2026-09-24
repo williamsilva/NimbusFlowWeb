@@ -29,6 +29,7 @@ export const UI_KEYS = {
       approvalLimits: 'menu.settings.approvalLimits',
       departments: 'menu.settings.departments',
       cargos: 'menu.settings.cargos',
+      taskLocations: 'menu.settings.taskLocations',
       taskTemplates: 'menu.settings.taskTemplates',
       workAutoComplete: 'menu.settings.workAutoComplete',
       company: 'menu.settings.company',
@@ -450,6 +451,8 @@ export const UI_KEYS = {
       status: 'tasks.fields.status',
       assignee: 'tasks.fields.assignee',
       assigneeDepartment: 'tasks.fields.assigneeDepartment',
+      location: 'tasks.fields.location',
+      shift: 'tasks.fields.shift',
       createdAt: 'tasks.fields.createdAt',
       periodCreatedAt: 'tasks.fields.periodCreatedAt',
     },
@@ -539,6 +542,20 @@ export const UI_KEYS = {
       message: 'cargos.deleteConfirm.message',
       success: 'cargos.deleteConfirm.success',
       error: 'cargos.deleteConfirm.error',
+    },
+  },
+  taskLocations: {
+    form: {
+      invalid: 'taskLocations.form.invalid',
+      created: 'taskLocations.form.created',
+      updated: 'taskLocations.form.updated',
+      saveError: 'taskLocations.form.saveError',
+    },
+    deleteConfirm: {
+      header: 'taskLocations.deleteConfirm.header',
+      message: 'taskLocations.deleteConfirm.message',
+      success: 'taskLocations.deleteConfirm.success',
+      error: 'taskLocations.deleteConfirm.error',
     },
   },
   taskCategories: {

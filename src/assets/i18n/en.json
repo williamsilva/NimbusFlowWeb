@@ -21,6 +21,9 @@
       "cargos": {
         "title": "Roles"
       },
+      "taskLocations": {
+        "title": "Locations"
+      },
       "taskTemplates": {
         "title": "Task Templates"
       },
@@ -159,6 +162,7 @@
       "approvalLimits": "Approval limits",
       "departments": "Departments",
       "cargos": "Roles",
+      "taskLocations": "Locations",
       "taskTemplates": "Task Templates",
       "workAutoComplete": "Auto Completion",
       "company": "Company"
@@ -799,6 +803,31 @@
       "error": "Could not delete the role"
     }
   },
+  "taskLocations": {
+    "subtitle": "Task execution locations (e.g. pools), used when creating Tasks and Templates.",
+    "new": { "title": "New location" },
+    "edit": { "title": "Edit location" },
+    "columns": {
+      "name": "Name"
+    },
+    "fields": {
+      "name": "Name"
+    },
+    "empty": { "title": "No locations registered" },
+    "action": { "noPermission": "You don't have permission to manage locations" },
+    "form": {
+      "invalid": "Fill in the location name",
+      "created": "Location created successfully",
+      "updated": "Location updated successfully",
+      "saveError": "Could not save the location"
+    },
+    "deleteConfirm": {
+      "header": "Delete location",
+      "message": "Are you sure you want to delete this location?",
+      "success": "Location deleted successfully",
+      "error": "Could not delete the location"
+    }
+  },
   "taskCategories": {
     "columns": { "title": "Categories" },
     "searchPlaceholder": "Search category",
@@ -908,10 +937,16 @@
     "fields": {
       "category": "Category",
       "subcategory": "Subcategory",
-      "template": "Template"
+      "template": "Template",
+      "locations": "Location(s)",
+      "shifts": "Shift(s)"
     },
     "empty": "No templates available for this subcategory",
-    "invalid": "Select a template"
+    "invalid": "Select a template",
+    "batch": {
+      "hint": "Optional: check Location(s) and/or Shift(s) to create one task per combination at once.",
+      "missingAssignee": "Select an assignee to create the tasks in batch"
+    }
   },
   "notFound": {
     "attemptedUrl": "Accessed URL",
@@ -2047,6 +2082,8 @@
       "assignee": "Assignee",
       "assigneeType": "Assign to",
       "assigneeDepartment": "Department",
+      "location": "Location",
+      "shift": "Shift",
       "dueDate": "Due date",
       "startDate": "Start date",
       "durationDays": "Days to complete",
@@ -2080,7 +2117,8 @@
       "assignee": "Assigned to",
       "dependsOnTask": "Depends on",
       "status": "Status",
-      "dueDate": "Due date"
+      "dueDate": "Due date",
+      "locationShift": "Location/Shift"
     },
     "status": {
       "TODO": "To do",
@@ -2095,6 +2133,11 @@
     "assigneeType": {
       "USER": "Employee",
       "DEPARTMENT": "Department"
+    },
+    "shift": {
+      "MORNING": "Morning",
+      "AFTERNOON": "Afternoon",
+      "EVENING": "Evening"
     },
     "recurrenceFrequency": {
       "NONE": "Does not repeat",
@@ -2176,7 +2219,10 @@
       "transferConfirm": "Transfer",
       "transferSuccess": "{count, plural, one {# task transferred successfully.} other {# tasks transferred successfully.}}",
       "transferAllFailed": "{count, plural, one {Could not transfer the selected task.} other {Could not transfer any of the # selected tasks.}}",
-      "transferPartial": "{succeeded, plural, one {# task transferred} other {# tasks transferred}}, {failed, plural, one {# failed} other {# failed}} - check the status of each one in the table."
+      "transferPartial": "{succeeded, plural, one {# task transferred} other {# tasks transferred}}, {failed, plural, one {# failed} other {# failed}} - check the status of each one in the table.",
+      "templateBatchSuccess": "{count, plural, one {# task created successfully.} other {# tasks created successfully.}}",
+      "templateBatchAllFailed": "{count, plural, one {Could not create the task.} other {Could not create any of the # tasks.}}",
+      "templateBatchPartial": "{succeeded, plural, one {# task created} other {# tasks created}}, {failed, plural, one {# failed} other {# failed}}."
     },
     "activities": {
       "title": "Task activities",

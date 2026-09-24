@@ -21,6 +21,9 @@
       "cargos": {
         "title": "Cargos"
       },
+      "taskLocations": {
+        "title": "Locais"
+      },
       "taskTemplates": {
         "title": "Modelos de Tarefas"
       },
@@ -159,6 +162,7 @@
       "approvalLimits": "Alçada",
       "departments": "Departamentos",
       "cargos": "Cargos",
+      "taskLocations": "Locais",
       "taskTemplates": "Modelos de Tarefas",
       "workAutoComplete": "Conclusão Automática",
       "company": "Empresa"
@@ -799,6 +803,31 @@
       "error": "Não foi possível excluir o cargo"
     }
   },
+  "taskLocations": {
+    "subtitle": "Locais de execução de Tarefa (ex.: piscinas), usados na criação de Tarefas e Modelos.",
+    "new": { "title": "Novo local" },
+    "edit": { "title": "Editar local" },
+    "columns": {
+      "name": "Nome"
+    },
+    "fields": {
+      "name": "Nome"
+    },
+    "empty": { "title": "Nenhum local cadastrado" },
+    "action": { "noPermission": "Você não tem permissão pra gerenciar locais" },
+    "form": {
+      "invalid": "Preencha o nome do local",
+      "created": "Local criado com sucesso",
+      "updated": "Local atualizado com sucesso",
+      "saveError": "Não foi possível salvar o local"
+    },
+    "deleteConfirm": {
+      "header": "Excluir local",
+      "message": "Tem certeza que deseja excluir este local?",
+      "success": "Local excluído com sucesso",
+      "error": "Não foi possível excluir o local"
+    }
+  },
   "taskCategories": {
     "columns": { "title": "Categorias" },
     "searchPlaceholder": "Buscar categoria",
@@ -908,10 +937,16 @@
     "fields": {
       "category": "Categoria",
       "subcategory": "Subcategoria",
-      "template": "Modelo"
+      "template": "Modelo",
+      "locations": "Local(is)",
+      "shifts": "Turno(s)"
     },
     "empty": "Nenhum modelo disponível para esta subcategoria",
-    "invalid": "Selecione um modelo"
+    "invalid": "Selecione um modelo",
+    "batch": {
+      "hint": "Opcional: marque Local(is) e/ou Turno(s) para criar uma tarefa pra cada combinação de uma vez.",
+      "missingAssignee": "Selecione um responsável para criar as tarefas em lote"
+    }
   },
   "notFound": {
     "attemptedUrl": "URL acessada",
@@ -2047,6 +2082,8 @@
       "assignee": "Responsável pela execução",
       "assigneeType": "Atribuir para",
       "assigneeDepartment": "Departamento",
+      "location": "Local",
+      "shift": "Turno",
       "dueDate": "Prazo",
       "startDate": "Data de início",
       "durationDays": "Dias para executar",
@@ -2080,7 +2117,8 @@
       "assignee": "Atribuída a",
       "dependsOnTask": "Depende de",
       "status": "Status",
-      "dueDate": "Prazo"
+      "dueDate": "Prazo",
+      "locationShift": "Local/Turno"
     },
     "status": {
       "TODO": "A fazer",
@@ -2095,6 +2133,11 @@
     "assigneeType": {
       "USER": "Colaborador",
       "DEPARTMENT": "Departamento"
+    },
+    "shift": {
+      "MORNING": "Manhã",
+      "AFTERNOON": "Tarde",
+      "EVENING": "Noite"
     },
     "recurrenceFrequency": {
       "NONE": "Não repete",
@@ -2176,7 +2219,10 @@
       "transferConfirm": "Transferir",
       "transferSuccess": "{count, plural, one {# tarefa transferida com sucesso.} other {# tarefas transferidas com sucesso.}}",
       "transferAllFailed": "{count, plural, one {Não foi possível transferir a tarefa selecionada.} other {Não foi possível transferir nenhuma das # tarefas selecionadas.}}",
-      "transferPartial": "{succeeded, plural, one {# tarefa transferida} other {# tarefas transferidas}}, {failed, plural, one {# falhou} other {# falharam}} - confira o status de cada uma na tabela."
+      "transferPartial": "{succeeded, plural, one {# tarefa transferida} other {# tarefas transferidas}}, {failed, plural, one {# falhou} other {# falharam}} - confira o status de cada uma na tabela.",
+      "templateBatchSuccess": "{count, plural, one {# tarefa criada com sucesso.} other {# tarefas criadas com sucesso.}}",
+      "templateBatchAllFailed": "{count, plural, one {Não foi possível criar a tarefa.} other {Não foi possível criar nenhuma das # tarefas.}}",
+      "templateBatchPartial": "{succeeded, plural, one {# tarefa criada} other {# tarefas criadas}}, {failed, plural, one {# falhou} other {# falharam}}."
     },
     "activities": {
       "title": "Atividades da tarefa",

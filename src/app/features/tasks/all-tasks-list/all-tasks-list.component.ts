@@ -25,6 +25,7 @@ import { STATE_KEY } from '@features/state-key.constants';
 import { UsersFacade } from '@features/facade/users.facade';
 import { PermissionService } from '@core/auth/permission.service';
 import { DepartmentsFacade } from '@features/facade/departments.facade';
+import { TaskLocationsFacade } from '@features/facade/task-locations.facade';
 import { TasksGlobalFacade, TaskBatchResult } from '@features/facade/tasks-global.facade';
 import { StatefulListPage } from '@williamsilva/nimbus-web-commons';
 import { buildListQuery } from '@williamsilva/nimbus-web-commons';
@@ -38,10 +39,13 @@ import {
 } from '@features/tasks/tasks-kanban-board/tasks-kanban-board.component';
 import { TasksCreateDialogComponent } from '@features/tasks/tasks-create/tasks-create-dialog.component';
 import { TaskCreationChoiceDialogComponent } from '@features/tasks/tasks-create/task-creation-choice-dialog.component';
-import { TaskTemplatePickerDialogComponent } from '@features/tasks/tasks-create/task-template-picker-dialog.component';
+import {
+  TaskTemplatePickerDialogComponent,
+  TaskTemplateBatchRequest,
+} from '@features/tasks/tasks-create/task-template-picker-dialog.component';
 import { TaskExecutionDialogComponent } from '@features/tasks/tasks-execution/task-execution-dialog.component';
 import { TaskTemplateModel } from '@models/task-templates.models';
-import { allActivitiesAnswered } from '@models/task-activities.models';
+import { allActivitiesAnswered, toActivityDraftFromConfig, toActivityInput } from '@models/task-activities.models';
 import {
   TASK_STATUS_VALUES,
   TaskStatusEnum,
@@ -52,8 +56,11 @@ import {
   TASK_ASSIGNEE_TYPE_VALUES,
   taskAssigneeTypeLabel,
 } from '@models/enums/task-assignee-type.enum';
+import { TASK_SHIFT_VALUES, TaskShiftEnum, taskShiftLabel } from '@models/enums/task-shift.enum';
+import { TaskRecurrenceFrequencyEnum } from '@models/enums/task-recurrence-frequency.enum';
 import {
   TaskAssigneeInput,
+  TaskUpsertInput,
   TaskWithActionPlanModel,
   TasksFiltersState,
   formatTaskNumero,
@@ -108,6 +115,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   readonly facade = inject(TasksGlobalFacade);
   readonly usersFacade = inject(UsersFacade);
   readonly departmentsFacade = inject(DepartmentsFacade);
+  readonly taskLocationsFacade = inject(TaskLocationsFacade);
   protected readonly toast = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
   protected readonly policy = inject(TasksPermissionPolicy);
@@ -154,6 +162,8 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   status = signal<string[] | null>(null);
   assigneeIds = signal<string[] | null>(null);
   departmentIds = signal<string[] | null>(null);
+  locationIds = signal<string[] | null>(null);
+  shift = signal<string[] | null>(null);
   createdAt = signal<string | string[] | null>(null);
   periodCreatedAt = signal<PeriodEnum | null>(null);
 
@@ -169,6 +179,11 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
 
   readonly assigneeOptions = this.usersFacade.options;
   readonly departmentOptions = this.departmentsFacade.options;
+  readonly locationOptions = this.taskLocationsFacade.options;
+  readonly shiftFilterOptions = TASK_SHIFT_VALUES.map((value) => ({
+    value,
+    label: taskShiftLabel(value, this.i18n),
+  }));
   readonly totalRecords = computed(() => this.facade.totalRecords());
   readonly tasks = computed<TaskWithActionPlanModel[]>(() => this.facade.tasks());
 
@@ -235,6 +250,8 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     const status = this.status();
     const assigneeIds = this.assigneeIds();
     const departmentIds = this.departmentIds();
+    const locationIds = this.locationIds();
+    const shift = this.shift();
 
     if (title) {
       items.push({ label: this.i18n.tUi('tasks.fields.title'), value: title });
@@ -269,6 +286,23 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
         value: labels || departmentIds.join(', '),
       });
     }
+    if (locationIds?.length) {
+      const labels = this.locationOptions()
+        .filter((opt) => locationIds.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+      items.push({
+        label: this.i18n.tUi('tasks.fields.location'),
+        value: labels || locationIds.join(', '),
+      });
+    }
+    if (shift?.length) {
+      const labels = this.shiftFilterOptions
+        .filter((opt) => shift.includes(opt.value))
+        .map((opt) => opt.label)
+        .join(', ');
+      items.push({ label: this.i18n.tUi('tasks.fields.shift'), value: labels });
+    }
     const createdAtLabel = this.formatActiveFilterPeriodDateValue(
       this.periodCreatedAt(),
       this.createdAt(),
@@ -284,6 +318,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   ngOnInit() {
     this.usersFacade.loadUsersOptions();
     this.departmentsFacade.loadOptions();
+    this.taskLocationsFacade.loadOptions();
     // initStatefulList() -> loadOnInit() -> this.refresh() (ver StatefulListPage na lib) já cobre
     // o boot direto em modo kanban sozinho, via o próprio override de refresh() logo abaixo - uma
     // chamada extra e redundante aqui só arriscava confundir (competindo com esta, bloqueada pelo
@@ -431,7 +466,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   /** Toast agregado (pedido do usuário 2026-09-23) - mesmo espírito best-effort de
    *  AllMeasurementsListComponent#confirmApproveSelected: sucesso total, falha total ou parcial
    *  têm mensagens próprias, já que cada tarefa da seleção teve seu próprio resultado. */
-  private reportBulkResult(results: TaskBatchResult[], kind: 'statusChange' | 'transfer'): void {
+  private reportBulkResult(results: TaskBatchResult[], kind: 'statusChange' | 'transfer' | 'templateBatch'): void {
     const succeeded = results.filter((r) => r.success).length;
     const failed = results.length - succeeded;
 
@@ -779,6 +814,63 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     this.upsertVisible.set(true);
   }
 
+  /** Criação em lote a partir de um Modelo (pedido do usuário 2026-09-24, "Análise da água" por
+   *  piscina/local x turno) - monta 1 TaskUpsertInput por combinação Local x Turno (dimensão vazia
+   *  = 1 única passagem com aquele campo nulo, pra não impedir "só por local, sem turno" ou
+   *  vice-versa) e dispara via TasksGlobalFacade#createMany (best-effort, mesmo padrão de
+   *  "Alterar status"/"Transferir" em lote). Título de cada combinação ganha o sufixo
+   *  " - {Local} - {Turno}" só nas partes que realmente variam - mesma convenção já antecipada no
+   *  próprio javadoc de TaskTemplate.name (ex.: "Coral - Análise da água - Manhã"). */
+  onBatchCreateRequested(request: TaskTemplateBatchRequest): void {
+    const { template, locationIds, shifts, assigneeType, assigneeId, assigneeDepartmentId } = request;
+    const locationNameById = new Map(this.taskLocationsFacade.options().map((o) => [o.value, o.label]));
+    const locations: (string | null)[] = locationIds.length ? locationIds : [null];
+    const shiftValues: (TaskShiftEnum | null)[] = shifts.length ? shifts : [null];
+    const activities = template.activities.map(toActivityDraftFromConfig).map(toActivityInput);
+
+    const inputs: TaskUpsertInput[] = [];
+    for (const locationId of locations) {
+      for (const shift of shiftValues) {
+        const titleSuffix = [locationId ? locationNameById.get(locationId) : null, shift ? taskShiftLabel(shift, this.i18n) : null]
+          .filter((part): part is string => !!part)
+          .join(' - ');
+        inputs.push({
+          title: titleSuffix ? `${template.title} - ${titleSuffix}` : template.title,
+          description: template.description,
+          categoryId: template.categoryId,
+          subcategoryId: template.subcategoryId,
+          locationId,
+          shift,
+          assigneeType,
+          assigneeId: assigneeType === TaskAssigneeTypeEnum.USER ? assigneeId : null,
+          assigneeDepartmentId: assigneeType === TaskAssigneeTypeEnum.DEPARTMENT ? assigneeDepartmentId : null,
+          dueDate: null,
+          startDate: null,
+          durationDays: template.durationDays,
+          recurrenceFrequency: TaskRecurrenceFrequencyEnum.NONE,
+          recurrenceInterval: null,
+          recurrenceWeekDays: [],
+          recurrenceMonthDays: [],
+          recurrenceExpiresAt: null,
+          notifyAssigneeOnRecurrence: false,
+          releaseTime: null,
+          autoMoveOverdueToNotDone: false,
+          dependsOnTaskId: null,
+          activities,
+        });
+      }
+    }
+
+    this.bulkBusy.set(true);
+    this.facade.createMany(inputs).subscribe({
+      next: (results) => {
+        this.bulkBusy.set(false);
+        this.reportBulkResult(results, 'templateBatch');
+      },
+      error: () => this.bulkBusy.set(false),
+    });
+  }
+
   onCreated(): void {
     this.refresh();
   }
@@ -800,6 +892,8 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     this.status.set(null);
     this.assigneeIds.set(null);
     this.departmentIds.set(null);
+    this.locationIds.set(null);
+    this.shift.set(null);
     this.createdAt.set(null);
     this.periodCreatedAt.set(null);
     this.activeStatusTab.set(TaskStatusEnum.TODO);
@@ -812,6 +906,8 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
       status: this.status()?.length ? this.status() : null,
       assigneeIds: this.assigneeIds()?.length ? this.assigneeIds() : null,
       departmentIds: this.departmentIds()?.length ? this.departmentIds() : null,
+      locationIds: this.locationIds()?.length ? this.locationIds() : null,
+      shift: this.shift()?.length ? this.shift() : null,
       actionPlanIds: null,
       createdAt: this.createdAt(),
       periodCreatedAt: this.periodCreatedAt(),
@@ -823,6 +919,8 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     this.status.set(state.status ?? null);
     this.assigneeIds.set(state.assigneeIds ?? null);
     this.departmentIds.set(state.departmentIds ?? null);
+    this.locationIds.set(state.locationIds ?? null);
+    this.shift.set(state.shift ?? null);
     this.createdAt.set(state.createdAt ?? null);
     this.periodCreatedAt.set(state.periodCreatedAt ?? null);
   }
@@ -835,6 +933,8 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
       status: this.viewMode() === 'list' ? [this.activeStatusTab()] : this.status()?.length ? this.status() : undefined,
       assigneeIds: this.assigneeIds()?.length ? this.assigneeIds() : undefined,
       departmentIds: this.departmentIds()?.length ? this.departmentIds() : undefined,
+      locationIds: this.locationIds()?.length ? this.locationIds() : undefined,
+      shift: this.shift()?.length ? this.shift() : undefined,
       createdAt: this.createdAt() ?? undefined,
       periodCreatedAt: this.periodCreatedAt() ?? undefined,
     };

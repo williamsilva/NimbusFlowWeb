@@ -214,6 +214,13 @@ export const APP_MENU: AppMenuItem[] = [
       },
       {
         exact: false,
+        route: '/settings/task-locations',
+        labelKey: 'menu.settings.taskLocations',
+        icon: 'pi pi-map-marker text-orange-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.TASK_LOCATION_VIEW],
+      },
+      {
+        exact: false,
         route: '/settings/task-templates',
         labelKey: 'menu.settings.taskTemplates',
         icon: 'pi pi-list-check text-indigo-400',

@@ -157,4 +157,23 @@ export class TasksGlobalFacade {
       tap(() => this.reloadLast()),
     );
   }
+
+  /** Criação em lote a partir de um Modelo (pedido do usuário 2026-09-24, "Análise da água" por
+   *  piscina/local x turno) - mesma técnica best-effort de #updateStatusMany/#updateAssigneeMany:
+   *  não existe endpoint de bulk no backend, então 1 POST por combinação (ver
+   *  TaskTemplatePickerDialogComponent/AllTasksListComponent#onBatchCreateRequested, que monta
+   *  cada `TaskUpsertInput` a partir do Modelo + 1 combinação Local/Turno). `id` do resultado é o
+   *  título já sufixado (só informativo pro toast agregado - #reportBulkResult usa só `.success`). */
+  createMany(inputs: TaskUpsertInput[]): Observable<TaskBatchResult[]> {
+    return from(inputs).pipe(
+      concatMap((input) =>
+        this.api.createStandalone(input).pipe(
+          map((): TaskBatchResult => ({ id: input.title, success: true })),
+          catchError((error) => of<TaskBatchResult>({ id: input.title, success: false, error })),
+        ),
+      ),
+      toArray(),
+      tap(() => this.reloadLast()),
+    );
+  }
 }

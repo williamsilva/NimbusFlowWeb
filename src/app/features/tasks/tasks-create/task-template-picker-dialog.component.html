@@ -64,6 +64,96 @@
           <span class="block text-sm opacity-70 mt-1">{{ 'taskTemplatePicker.empty' | translate }}</span>
         }
       </div>
+
+      @if (form.controls.templateId.value) {
+        <div class="col-12">
+          <span class="block text-sm opacity-70 mb-1">{{ 'taskTemplatePicker.batch.hint' | translate }}</span>
+        </div>
+
+        <div class="col-12 md:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-multiSelect
+              size="small"
+              class="w-full"
+              [filter]="true"
+              appendTo="body"
+              [showClear]="true"
+              inputId="locationIds"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="locationIds"
+              [options]="locationOptions()"
+            ></p-multiSelect>
+            <label for="locationIds">{{ 'taskTemplatePicker.fields.locations' | translate }}</label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 md:col-6 p-2">
+          <p-floatLabel variant="on" class="w-full">
+            <p-multiSelect
+              size="small"
+              class="w-full"
+              appendTo="body"
+              [showClear]="true"
+              inputId="shifts"
+              optionLabel="label"
+              optionValue="value"
+              formControlName="shifts"
+              [options]="shiftOptions"
+            ></p-multiSelect>
+            <label for="shifts">{{ 'taskTemplatePicker.fields.shifts' | translate }}</label>
+          </p-floatLabel>
+        </div>
+
+        <div class="col-12 p-2">
+          <label for="batchAssigneeType" id="batchAssigneeType-label" class="block mb-2 text-sm opacity-80">
+            {{ 'tasks.fields.assigneeType' | translate }}
+          </label>
+          <p-selectButton
+            [options]="assigneeTypeOptions"
+            optionLabel="label"
+            optionValue="value"
+            formControlName="assigneeType"
+            aria-labelledby="batchAssigneeType-label"
+          ></p-selectButton>
+        </div>
+
+        @if (form.controls.assigneeType.value === TaskAssigneeTypeEnum.USER) {
+          <div class="col-12 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <p-select
+                size="small"
+                class="w-full"
+                [filter]="true"
+                appendTo="body"
+                inputId="batchAssigneeId"
+                optionLabel="label"
+                optionValue="value"
+                formControlName="assigneeId"
+                [options]="assigneeOptions()"
+              ></p-select>
+              <label for="batchAssigneeId">{{ 'tasks.fields.assignee' | translate }}</label>
+            </p-floatLabel>
+          </div>
+        } @else {
+          <div class="col-12 p-2">
+            <p-floatLabel variant="on" class="w-full">
+              <p-select
+                size="small"
+                class="w-full"
+                [filter]="true"
+                appendTo="body"
+                inputId="batchAssigneeDepartmentId"
+                optionLabel="label"
+                optionValue="value"
+                formControlName="assigneeDepartmentId"
+                [options]="departmentOptions()"
+              ></p-select>
+              <label for="batchAssigneeDepartmentId">{{ 'tasks.fields.assigneeDepartment' | translate }}</label>
+            </p-floatLabel>
+          </div>
+        }
+      }
     </div>
   </form>
 

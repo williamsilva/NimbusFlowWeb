@@ -27,6 +27,7 @@ import { UsersFacade } from '@features/facade/users.facade';
 import { TasksFacade } from '@features/facade/tasks.facade';
 import { TasksGlobalFacade } from '@features/facade/tasks-global.facade';
 import { DepartmentsFacade } from '@features/facade/departments.facade';
+import { TaskLocationsFacade } from '@features/facade/task-locations.facade';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { DateInputMaskDirective } from '@williamsilva/nimbus-web-commons';
 import { TaskModel, TaskUpsertInput } from '@models/tasks.models';
@@ -36,6 +37,7 @@ import {
   taskAssigneeTypeLabel,
 } from '@models/enums/task-assignee-type.enum';
 import { TaskRecurrenceFrequencyEnum } from '@models/enums/task-recurrence-frequency.enum';
+import { TASK_SHIFT_VALUES, TaskShiftEnum, taskShiftLabel } from '@models/enums/task-shift.enum';
 import { DAY_OF_WEEK_VALUES, DayOfWeekEnum, dayOfWeekLabel } from '@models/enums/day-of-week.enum';
 import {
   TaskActivityDataTypeEnum,
@@ -153,6 +155,7 @@ export class TasksCreateDialogComponent {
   private readonly toast = inject(MessageService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly departmentsFacade = inject(DepartmentsFacade);
+  private readonly taskLocationsFacade = inject(TaskLocationsFacade);
   private readonly templatesApi = inject(TasksTemplatesApiService);
 
   readonly i18n = inject(I18nService);
@@ -161,6 +164,10 @@ export class TasksCreateDialogComponent {
   readonly usersFacade = inject(UsersFacade);
   readonly assigneeOptions = this.usersFacade.options;
   readonly departmentOptions = this.departmentsFacade.options;
+  /** Local sempre opcional (pedido do usuário 2026-09-24, diferente de categoria/subcategoria) -
+   *  já vem no formato {label,value} de TaskLocationsFacade, sem precisar de transform. */
+  readonly locationOptions = this.taskLocationsFacade.options;
+  readonly shiftOptions = TASK_SHIFT_VALUES.map((value) => ({ value, label: taskShiftLabel(value, this.i18n) }));
 
   /** Categoria/Subcategoria obrigatórias em Tarefas novas (pedido do usuário 2026-09-24) -
    *  categoryOptions já vem filtrado por permissão do usuário atual (ver
@@ -241,6 +248,8 @@ export class TasksCreateDialogComponent {
     description: this.fb.control<string | null>(null, [Validators.maxLength(1000)]),
     categoryId: this.fb.control<string | null>(null, [Validators.required]),
     subcategoryId: this.fb.control<string | null>(null, [Validators.required]),
+    locationId: this.fb.control<string | null>(null),
+    shift: this.fb.control<TaskShiftEnum | null>(null),
     assigneeType: this.fb.nonNullable.control<TaskAssigneeTypeEnum>(TaskAssigneeTypeEnum.USER, [Validators.required]),
     assigneeId: this.fb.control<string | null>(null, [Validators.required]),
     assigneeDepartmentId: this.fb.control<string | null>(null),
@@ -288,6 +297,7 @@ export class TasksCreateDialogComponent {
   constructor() {
     this.usersFacade.loadUsersOptions();
     this.departmentsFacade.loadOptions();
+    this.taskLocationsFacade.loadOptions();
     this.templatesApi
       .categoryOptions()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -375,6 +385,8 @@ export class TasksCreateDialogComponent {
         description: task.description,
         categoryId: task.categoryId,
         subcategoryId: task.subcategoryId,
+        locationId: task.locationId,
+        shift: task.shift,
         assigneeType: task.assigneeType,
         assigneeId: task.assigneeId,
         assigneeDepartmentId: task.assigneeDepartmentId,
@@ -573,6 +585,8 @@ export class TasksCreateDialogComponent {
       description: null,
       categoryId: null,
       subcategoryId: null,
+      locationId: null,
+      shift: null,
       assigneeType: TaskAssigneeTypeEnum.USER,
       assigneeId: null,
       assigneeDepartmentId: null,
@@ -619,6 +633,8 @@ export class TasksCreateDialogComponent {
       description: v.description?.trim() || null,
       categoryId: v.categoryId,
       subcategoryId: v.subcategoryId,
+      locationId: v.locationId,
+      shift: v.shift,
       assigneeType: v.assigneeType,
       assigneeId: v.assigneeType === TaskAssigneeTypeEnum.USER ? v.assigneeId : null,
       assigneeDepartmentId: v.assigneeType === TaskAssigneeTypeEnum.DEPARTMENT ? v.assigneeDepartmentId : null,

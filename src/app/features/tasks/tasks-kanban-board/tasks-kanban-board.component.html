@@ -64,6 +64,13 @@
               </span>
             </div>
 
+            @if (task.locationName || task.shift) {
+              <div class="kanban-card-field">
+                <span class="kanban-card-field-label">{{ 'tasks.columns.locationShift' | translate }}</span>
+                <span class="kanban-card-field-value">{{ locationShiftDisplay(task) }}</span>
+              </div>
+            }
+
             @if (task.dependsOnTaskId) {
               <div class="kanban-card-field">
                 <span class="kanban-card-field-label">{{ 'tasks.columns.dependsOnTask' | translate }}</span>
