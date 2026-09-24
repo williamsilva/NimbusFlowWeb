@@ -870,7 +870,11 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
           recurrenceExpiresAt: null,
           notifyAssigneeOnRecurrence: false,
           releaseTime: null,
-          autoMoveOverdueToNotDone: false,
+          // true (pedido do usuário 2026-09-24) - tarefa de rotina gerada em lote (Local x Turno)
+          // deve fechar sozinha em "Não fez" quando não concluída até o fim do Turno/dia (ver
+          // TaskService#moveExpiredShiftTasksToNotDone/#moveOverdueTasksToNotDone no backend),
+          // sem depender de alguém lembrar de marcar essa opção depois, tarefa por tarefa.
+          autoMoveOverdueToNotDone: true,
           dependsOnTaskId: null,
           activities,
         });
