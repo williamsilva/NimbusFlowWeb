@@ -78,6 +78,17 @@ import {
   readDateRangeFilterValue,
 } from '@williamsilva/nimbus-web-commons';
 
+/** Mesma técnica de toDateOnlyString em TasksCreateDialogComponent, só que sempre "agora" - usada
+ *  pra dar um prazo padrão (hoje) às tarefas geradas em lote a partir de um Modelo, ver
+ *  #onBatchCreateRequested. */
+function todayDateOnlyString(): string {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
 @Component({
   standalone: true,
   selector: 'app-all-tasks-list',
@@ -827,6 +838,11 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     const locations: (string | null)[] = locationIds.length ? locationIds : [null];
     const shiftValues: (TaskShiftEnum | null)[] = shifts.length ? shifts : [null];
     const activities = template.activities.map(toActivityDraftFromConfig).map(toActivityInput);
+    /** Achado real 2026-09-24 (relatado pelo usuário): sem prazo, a janela de horário do Turno
+     *  (TaskService#isReleased) nunca chega a ser aplicada - ela só entra em ação no PRÓPRIO dia
+     *  do vencimento. Tarefa gerada em lote é, por definição, "pra fazer agora/hoje" - prazo hoje
+     *  é o default certo, não deixar em branco. */
+    const todayDueDate = todayDateOnlyString();
 
     const inputs: TaskUpsertInput[] = [];
     for (const locationId of locations) {
@@ -844,7 +860,7 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
           assigneeType,
           assigneeId: assigneeType === TaskAssigneeTypeEnum.USER ? assigneeId : null,
           assigneeDepartmentId: assigneeType === TaskAssigneeTypeEnum.DEPARTMENT ? assigneeDepartmentId : null,
-          dueDate: null,
+          dueDate: todayDueDate,
           startDate: null,
           durationDays: template.durationDays,
           recurrenceFrequency: TaskRecurrenceFrequencyEnum.NONE,
