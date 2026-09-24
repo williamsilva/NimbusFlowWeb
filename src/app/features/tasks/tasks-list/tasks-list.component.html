@@ -105,7 +105,7 @@
             [label]="('tasks.status.' + row.status) | translate"
           ></app-status-badge>
         </td>
-        <td class="text-center" [attr.data-label]="'tasks.columns.dueDate' | translate">{{ row.dueDate ? (row.dueDate | csDate: 'short') : '-' }}</td>
+        <td class="text-center" [attr.data-label]="'tasks.columns.dueDate' | translate">{{ row.dueDate ? (row.dueDate | csDate: 'date') : '-' }}</td>
         <td class="text-center mobile-card-actions" [attr.data-label]="'common.actions' | translate">
           <div class="table-actions">
             <button

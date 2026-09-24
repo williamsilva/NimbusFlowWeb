@@ -90,7 +90,7 @@
                 <div class="kanban-card-field">
                   <span class="kanban-card-field-label">{{ 'tasks.columns.dueDate' | translate }}</span>
                   <span class="kanban-card-due" [class.kanban-card-due-overdue]="isOverdue(task)">
-                    {{ task.dueDate | csDate: 'short' }}
+                    {{ task.dueDate | csDate: 'date' }}
                   </span>
                 </div>
               } @else {

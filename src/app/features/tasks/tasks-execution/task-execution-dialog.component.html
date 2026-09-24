@@ -39,7 +39,7 @@
         @if (task.dueDate) {
           <div class="cs-execution-field">
             <span class="cs-execution-field-label">{{ 'tasks.columns.dueDate' | translate }}</span>
-            <span class="cs-execution-field-value">{{ task.dueDate | csDate }}</span>
+            <span class="cs-execution-field-value">{{ task.dueDate | csDate: 'date' }}</span>
           </div>
         }
 
