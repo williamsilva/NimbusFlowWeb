@@ -8,8 +8,9 @@ import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
 import { TaskWithActionPlanModel, formatTaskNumero, taskAssigneeDisplayName } from '@models/tasks.models';
 import { TASK_STATUS_VALUES, TaskStatusEnum, taskStatusTone } from '@models/enums/task-status.enum';
-import { taskShiftLabel } from '@models/enums/task-shift.enum';
+import { taskShiftRangeLabel } from '@models/enums/task-shift.enum';
 import { TaskAssigneeTypeEnum } from '@models/enums/task-assignee-type.enum';
+import { TaskShiftSettingsFacade } from '@features/facade/task-shift-settings.facade';
 
 export interface TaskKanbanDropEvent {
   task: TaskWithActionPlanModel;
@@ -37,6 +38,11 @@ export interface TaskKanbanDropEvent {
 })
 export class TasksKanbanBoardComponent {
   private readonly i18n = inject(I18nService);
+  private readonly taskShiftSettingsFacade = inject(TaskShiftSettingsFacade);
+
+  constructor() {
+    this.taskShiftSettingsFacade.load();
+  }
 
   /** input() (sinal), não @Input() de propriedade simples (achado real 2026-09-22) - `columns`
    *  abaixo é um computed() que lê `tasks()`; computed() só rastreia SINAIS como dependência, uma
@@ -119,9 +125,10 @@ export class TasksKanbanBoardComponent {
   /** Local/Turno sempre opcionais (pedido do usuário 2026-09-24) - mostra só as partes presentes,
    *  unidas por " - " (mesma convenção de título usada na criação em lote a partir de Modelo). */
   locationShiftDisplay(task: TaskWithActionPlanModel): string {
-    return [task.locationName, task.shift ? taskShiftLabel(task.shift, this.i18n) : null]
-      .filter((part): part is string => !!part)
-      .join(' - ');
+    const shiftLabel = task.shift
+      ? taskShiftRangeLabel(task.shift, this.taskShiftSettingsFacade.settings(), this.i18n)
+      : null;
+    return [task.locationName, shiftLabel].filter((part): part is string => !!part).join(' - ');
   }
 
   /** stopPropagation pra não também disparar #taskClick (o botão fica DENTRO da área clicável do

@@ -16,7 +16,8 @@ import { TaskActivityExecutionCardComponent } from '@features/tasks/tasks-execut
 import { TaskActivityAnswerInput, TaskActivityModel } from '@models/task-activities.models';
 import { TaskStatusEnum, taskStatusLabel, taskStatusTone } from '@models/enums/task-status.enum';
 import { TaskWithActionPlanModel, formatTaskNumero, taskAssigneeDisplayName } from '@models/tasks.models';
-import { taskShiftLabel } from '@models/enums/task-shift.enum';
+import { taskShiftRangeLabel } from '@models/enums/task-shift.enum';
+import { TaskShiftSettingsFacade } from '@features/facade/task-shift-settings.facade';
 
 const TERMINAL_STATUSES = [TaskStatusEnum.DONE, TaskStatusEnum.CANCELLED, TaskStatusEnum.NOT_DONE];
 
@@ -56,6 +57,7 @@ export class TaskExecutionDialogComponent {
 
   readonly i18n = inject(I18nService);
   readonly policy = inject(TasksPermissionPolicy);
+  private readonly taskShiftSettingsFacade = inject(TaskShiftSettingsFacade);
 
   readonly activities = signal<TaskActivityModel[]>([]);
   readonly savingActivityId = signal<string | null>(null);
@@ -83,6 +85,8 @@ export class TaskExecutionDialogComponent {
   readonly canEditAnswered = computed(() => this.currentStatus() === TaskStatusEnum.IN_PROGRESS && this.canAnswer());
 
   constructor() {
+    this.taskShiftSettingsFacade.load();
+
     effect(() => {
       const task = this.task();
       this.activities.set(task ? [...task.activities].sort((a, b) => a.position - b.position) : []);
@@ -117,9 +121,10 @@ export class TaskExecutionDialogComponent {
   locationShiftDisplay(): string {
     const task = this.task();
     if (!task) return '-';
-    return [task.locationName, task.shift ? taskShiftLabel(task.shift, this.i18n) : null]
-      .filter((part): part is string => !!part)
-      .join(' - ');
+    const shiftLabel = task.shift
+      ? taskShiftRangeLabel(task.shift, this.taskShiftSettingsFacade.settings(), this.i18n)
+      : null;
+    return [task.locationName, shiftLabel].filter((part): part is string => !!part).join(' - ');
   }
 
   creatorName(): string {
