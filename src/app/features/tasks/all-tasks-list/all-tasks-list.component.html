@@ -20,7 +20,9 @@
     type="button"
     (click)="goMine()"
     icon="pi pi-user"
-    class="p-button-secondary p-button-sm"
+    class="p-button-sm"
+    [class.p-button-info]="isMineActive()"
+    [class.p-button-secondary]="!isMineActive()"
     [label]="'tasks.action.mine' | translate"
   ></button>
 

@@ -489,13 +489,23 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   }
 
   /** Atalho "Minhas tarefas" - reaproveita o filtro de assignee já existente em vez de um modo à
-   *  parte, então continua dentro do mesmo fluxo paginado/persistido de sempre. */
+   *  parte, então continua dentro do mesmo fluxo paginado/persistido de sempre. Alterna: clique
+   *  aplica o filtro, clique de novo (com o filtro já só nesse usuário) remove (pedido do
+   *  usuário 2026-09-24) - antes só aplicava, sem jeito de desfazer pelo próprio botão. */
   goMine(): void {
     const userId = this.perms.currentUserId();
     if (!userId) return;
 
-    this.assigneeIds.set([userId]);
+    this.assigneeIds.set(this.isMineActive() ? null : [userId]);
     this.search();
+  }
+
+  /** Usado tanto por #goMine (decidir se alterna pra ligado ou desligado) quanto pelo template
+   *  (destacar visualmente o botão quando o filtro atual é exatamente "só eu"). */
+  isMineActive(): boolean {
+    const userId = this.perms.currentUserId();
+    const ids = this.assigneeIds();
+    return !!userId && !!ids && ids.length === 1 && ids[0] === userId;
   }
 
   /** Regra dura (pedido do usuário 2026-09-23), mesma de TasksListComponent#isDependencySatisfied:
