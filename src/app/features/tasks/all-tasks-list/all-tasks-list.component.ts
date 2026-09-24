@@ -31,6 +31,7 @@ import { buildListQuery } from '@williamsilva/nimbus-web-commons';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { TasksAdvancedFilters } from '@features/filter/tasks.filters';
 import { TasksPermissionPolicy } from '@features/tasks/tasks-permission.policy';
+import { translateTasksErrorDetail } from '@features/tasks/tasks-error.util';
 import {
   TaskKanbanDropEvent,
   TasksKanbanBoardComponent,
@@ -40,6 +41,7 @@ import { TaskCreationChoiceDialogComponent } from '@features/tasks/tasks-create/
 import { TaskTemplatePickerDialogComponent } from '@features/tasks/tasks-create/task-template-picker-dialog.component';
 import { TaskExecutionDialogComponent } from '@features/tasks/tasks-execution/task-execution-dialog.component';
 import { TaskTemplateModel } from '@models/task-templates.models';
+import { allActivitiesAnswered } from '@models/task-activities.models';
 import {
   TASK_STATUS_VALUES,
   TaskStatusEnum,
@@ -506,7 +508,9 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
    *  esse passo específico, mesmo sendo "dono" da tarefa (canExecuteOwn sozinho não basta aqui,
    *  diferente dos outros passos da cadeia). */
   canAdvance(row: TaskWithActionPlanModel): boolean {
-    if (nextForwardTaskStatus(row.status) === null) return false;
+    const next = nextForwardTaskStatus(row.status);
+    if (next === null) return false;
+    if (next === TaskStatusEnum.REVIEW && !allActivitiesAnswered(row.activities)) return false;
     if (row.status === TaskStatusEnum.REVIEW && !this.policy.canManage()) return false;
     if (!this.policy.canExecuteOwn(row)) return false;
     return this.isDependencySatisfied(row);
@@ -517,6 +521,9 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
       return this.i18n.tUi('tasks.action.blockedByDependency' as never, { title: row.dependsOnTaskTitle });
     }
     const next = nextForwardTaskStatus(row.status);
+    if (next === TaskStatusEnum.REVIEW && !allActivitiesAnswered(row.activities)) {
+      return this.i18n.tUi('tasks.action.blockedByUnansweredActivities' as never);
+    }
     return next ? this.i18n.tUi(`tasks.action.advanceTo.${next}` as never) : '';
   }
 
@@ -534,11 +541,11 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
             summary: this.i18n.tUi('common.success'),
             detail: this.i18n.tUi('tasks.status.updated' as never),
           }),
-        error: () =>
+        error: (err) =>
           this.toast.add({
             severity: 'error',
             summary: this.i18n.tUi('common.error'),
-            detail: this.i18n.tUi('tasks.status.updateError' as never),
+            detail: translateTasksErrorDetail(err, this.i18n) ?? this.i18n.tUi('tasks.status.updateError' as never),
           }),
       });
   }
@@ -570,12 +577,15 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
    *  qualquer status; sem ela, só o próprio assignee (TAREFA_EXECUTE) avançando um passo por vez.
    *  As regras duras abaixo (pedido do usuário 2026-09-23) valem pra QUALQUER usuário, TAREFA_
    *  MANAGE incluído, sem bypass: não pular etapas (REVIEW só a partir de IN_PROGRESS, DONE só a
-   *  partir de REVIEW), dependência bloqueia progresso (IN_PROGRESS ou DONE) - nunca envolvendo
+   *  partir de REVIEW), REVIEW exige todas as atividades respondidas (achado real 2026-09-24 -
+   *  faltava esta checagem aqui, o Kanban deixava soltar o card e o backend rejeitava com um erro
+   *  confuso), dependência bloqueia progresso (IN_PROGRESS ou DONE) - nunca envolvendo
    *  CANCELLED/NOT_DONE -, e reabrir IN_PROGRESS->TODO só é permitido se nenhuma atividade tiver
    *  sido respondida. REVIEW->DONE (aprovação) exige TAREFA_MANAGE mesmo sendo dono da tarefa. */
   canDropTask = (task: TaskWithActionPlanModel, status: TaskStatusEnum): boolean => {
     if (task.status === status) return false;
     if (status === TaskStatusEnum.REVIEW && task.status !== TaskStatusEnum.IN_PROGRESS) return false;
+    if (status === TaskStatusEnum.REVIEW && !allActivitiesAnswered(task.activities)) return false;
     if (status === TaskStatusEnum.DONE && task.status !== TaskStatusEnum.REVIEW) return false;
     if (
       (status === TaskStatusEnum.IN_PROGRESS || status === TaskStatusEnum.DONE) &&
@@ -617,11 +627,11 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
             summary: this.i18n.tUi('common.success'),
             detail: this.i18n.tUi('tasks.status.updated' as never),
           }),
-        error: () =>
+        error: (err) =>
           this.toast.add({
             severity: 'error',
             summary: this.i18n.tUi('common.error'),
-            detail: this.i18n.tUi('tasks.status.updateError' as never),
+            detail: translateTasksErrorDetail(err, this.i18n) ?? this.i18n.tUi('tasks.status.updateError' as never),
           }),
       });
   }
@@ -642,6 +652,9 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
         requiredStatus: this.i18n.tUi(`tasks.status.${TaskStatusEnum.IN_PROGRESS}` as never),
         targetStatus: this.i18n.tUi(`tasks.status.${TaskStatusEnum.REVIEW}` as never),
       });
+    }
+    if (status === TaskStatusEnum.REVIEW && !allActivitiesAnswered(task.activities)) {
+      return this.i18n.tUi('tasks.action.blockedByUnansweredActivities' as never);
     }
     if (status === TaskStatusEnum.DONE && task.status !== TaskStatusEnum.REVIEW) {
       return this.i18n.tUi('tasks.action.blockedBySkipSteps' as never, {

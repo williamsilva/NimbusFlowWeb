@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
 import { map } from 'rxjs/operators';
 
 import { API } from '@core/api/api.config';
+import { SKIP_GLOBAL_ERROR_TOAST } from '@core/interceptors/error.interceptor';
 import { HalPagedResponse } from '@core/api/page.model';
 import { ListQueryDto } from '@williamsilva/nimbus-web-commons';
 import { TasksAdvancedFilters } from '@features/filter/tasks.filters';
@@ -31,16 +32,26 @@ export class TasksApiService {
       .pipe(map(mapTaskApiModels));
   }
 
+  /** SKIP_GLOBAL_ERROR_TOAST em todo método de escrita deste service (achado real 2026-09-24,
+   *  ver error.interceptor.ts) - TasksCreateDialogComponent/AllTasksListComponent/TasksListComponent/
+   *  TaskExecutionDialogComponent já mostram sua própria mensagem específica em cada `error:` de
+   *  subscribe; sem este token, o interceptor global TAMBÉM mostrava um toast genérico
+   *  ("Ocorreu um erro inesperado") pra qualquer erro não tratado (400/404/409/500), duplicando a
+   *  notificação - reproduzido soltando uma tarefa no Kanban com atividade pendente. */
   create(actionPlanId: string, input: TaskUpsertInput) {
     return this.http
-      .post<TaskApiModel>(`${API.bff}/v1/action-plans/${actionPlanId}/tasks`, input)
+      .post<TaskApiModel>(`${API.bff}/v1/action-plans/${actionPlanId}/tasks`, input, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
       .pipe(map(mapTaskApiModel));
   }
 
   /** Tarefa avulsa (pedido do usuário 2026-09-21) - sem Plano de Ação; actionPlanId vai opcional
    *  dentro do próprio `input`, não como segmento de rota (ver TaskController#create no backend). */
   createStandalone(input: TaskUpsertInput) {
-    return this.http.post<TaskApiModel>(this.baseUrl, input).pipe(map(mapTaskApiModel));
+    return this.http
+      .post<TaskApiModel>(this.baseUrl, input, { context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true) })
+      .pipe(map(mapTaskApiModel));
   }
 
   searchPaged(body: ListQueryDto<TasksAdvancedFilters>) {
@@ -71,19 +82,27 @@ export class TasksApiService {
   }
 
   update(id: string, input: TaskUpsertInput) {
-    return this.http.put<TaskApiModel>(`${this.baseUrl}/${id}`, input).pipe(map(mapTaskApiModel));
+    return this.http
+      .put<TaskApiModel>(`${this.baseUrl}/${id}`, input, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
+      .pipe(map(mapTaskApiModel));
   }
 
   updateStatus(id: string, input: TaskStatusInput) {
     return this.http
-      .put<TaskApiModel>(`${this.baseUrl}/${id}/status`, input)
+      .put<TaskApiModel>(`${this.baseUrl}/${id}/status`, input, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
       .pipe(map(mapTaskApiModel));
   }
 
   /** "Transferir" (pedido do usuário 2026-09-23) - ver TaskController#updateAssignee no backend. */
   updateAssignee(id: string, input: TaskAssigneeInput) {
     return this.http
-      .put<TaskApiModel>(`${this.baseUrl}/${id}/assignee`, input)
+      .put<TaskApiModel>(`${this.baseUrl}/${id}/assignee`, input, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
       .pipe(map(mapTaskApiModel));
   }
 
@@ -99,7 +118,9 @@ export class TasksApiService {
     }
 
     return this.http
-      .put<TaskActivityApiModel>(`${this.baseUrl}/${taskId}/activities/${activityId}/answer`, formData)
+      .put<TaskActivityApiModel>(`${this.baseUrl}/${taskId}/activities/${activityId}/answer`, formData, {
+        context: new HttpContext().set(SKIP_GLOBAL_ERROR_TOAST, true),
+      })
       .pipe(map(mapTaskActivityApiModel));
   }
 }

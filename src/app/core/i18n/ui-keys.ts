@@ -458,6 +458,15 @@ export const UI_KEYS = {
       updated: 'tasks.form.updated',
       saveError: 'tasks.form.saveError',
     },
+    action: {
+      requiresAllActivitiesAnswered: 'tasks.action.requiresAllActivitiesAnswered',
+      requiresInProgress: 'tasks.action.requiresInProgress',
+      requiresReview: 'tasks.action.requiresReview',
+      dependencyNotDone: 'tasks.action.dependencyNotDone',
+      cannotReopenAnswered: 'tasks.action.cannotReopenAnswered',
+      notDoneReasonRequired: 'tasks.action.notDoneReasonRequired',
+      notEditable: 'tasks.action.notEditable',
+    },
   },
   workAutoComplete: {
     settings: {

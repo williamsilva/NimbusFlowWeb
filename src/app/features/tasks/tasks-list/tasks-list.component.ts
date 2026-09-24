@@ -16,8 +16,10 @@ import { TasksFacade } from '@features/facade/tasks.facade';
 import { ActionPlansFacade } from '@features/facade/action-plans.facade';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { TasksPermissionPolicy } from '@features/tasks/tasks-permission.policy';
+import { translateTasksErrorDetail } from '@features/tasks/tasks-error.util';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
 import { TaskModel, taskAssigneeDisplayName } from '@models/tasks.models';
+import { allActivitiesAnswered } from '@models/task-activities.models';
 import { ActionPlanModel } from '@models/action-plans.models';
 import {
   TaskStatusEnum,
@@ -130,7 +132,9 @@ export class TasksListComponent implements OnInit {
   /** REVIEW->DONE é aprovação (pedido do usuário 2026-09-23) - só quem tem TAREFA_MANAGE avança
    *  esse passo específico, mesmo sendo "dono" da tarefa - mesma regra de AllTasksListComponent. */
   canAdvance(row: TaskModel): boolean {
-    if (nextForwardTaskStatus(row.status) === null) return false;
+    const next = nextForwardTaskStatus(row.status);
+    if (next === null) return false;
+    if (next === TaskStatusEnum.REVIEW && !allActivitiesAnswered(row.activities)) return false;
     if (row.status === TaskStatusEnum.REVIEW && !this.policy.canManage()) return false;
     if (!this.policy.canExecuteOwn(row)) return false;
     return this.isDependencySatisfied(row);
@@ -141,6 +145,9 @@ export class TasksListComponent implements OnInit {
       return this.i18n.tUi('tasks.action.blockedByDependency' as never, { title: row.dependsOnTaskTitle });
     }
     const next = nextForwardTaskStatus(row.status);
+    if (next === TaskStatusEnum.REVIEW && !allActivitiesAnswered(row.activities)) {
+      return this.i18n.tUi('tasks.action.blockedByUnansweredActivities' as never);
+    }
     return next ? this.i18n.tUi(`tasks.action.advanceTo.${next}` as never) : '';
   }
 
@@ -158,11 +165,11 @@ export class TasksListComponent implements OnInit {
             summary: this.i18n.tUi('common.success'),
             detail: this.i18n.tUi('tasks.status.updated' as never),
           }),
-        error: () =>
+        error: (err) =>
           this.toast.add({
             severity: 'error',
             summary: this.i18n.tUi('common.error'),
-            detail: this.i18n.tUi('tasks.status.updateError' as never),
+            detail: translateTasksErrorDetail(err, this.i18n) ?? this.i18n.tUi('tasks.status.updateError' as never),
           }),
       });
   }

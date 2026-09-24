@@ -2136,8 +2136,16 @@
       "blockedBySkipSteps": "La tarea debe estar \"{requiredStatus}\" antes de poder pasar a \"{targetStatus}\"",
       "blockedByApprovalRequired": "Solo alguien con permiso de gestión puede aprobar esta tarea",
       "blockedByAnsweredActivities": "No se puede volver a \"Por hacer\" - al menos una actividad ya fue respondida",
+      "blockedByUnansweredActivities": "Todas las actividades deben ser respondidas antes de enviar a revisión",
       "blockedByPermission": "No tiene permiso para mover esta tarea",
-      "blockedGeneric": "No es posible mover la tarea a este estado"
+      "blockedGeneric": "No es posible mover la tarea a este estado",
+      "requiresAllActivitiesAnswered": "Todas las actividades deben ser respondidas antes de enviar a revisión",
+      "requiresInProgress": "La tarea debe estar \"En curso\" antes de poder ir a revisión",
+      "requiresReview": "La tarea debe estar \"En revisión\" antes de poder completarse",
+      "dependencyNotDone": "La tarea de la que esta depende aún no fue completada",
+      "cannotReopenAnswered": "No se puede volver a \"Por hacer\" - al menos una actividad ya fue respondida",
+      "notDoneReasonRequired": "Es necesario informar el motivo para marcar como \"No hecho\"",
+      "notEditable": "El estado actual de la tarea ya no acepta ediciones"
     },
     "viewMode": {
       "title": "Tipo de visualización",

@@ -165,3 +165,13 @@ export function mapTaskActivityApiModel(input: TaskActivityApiModel): TaskActivi
 export function mapTaskActivityApiModels(items: TaskActivityApiModel[] | null | undefined): TaskActivityModel[] {
   return (items ?? []).map(mapTaskActivityApiModel);
 }
+
+/** Mesma regra de TaskService#allActivitiesAnswered no backend (exigida pra IN_PROGRESS->REVIEW,
+ *  ver TaskService#updateStatus) - Tarefa sem nenhuma atividade configurada não é afetada
+ *  (vacuosamente "true"). Usado pra bloquear o drop/avanço no cliente ANTES de tentar a chamada
+ *  (achado real 2026-09-24: faltava esta checagem em canDropTask/canAdvance, então o Kanban
+ *  deixava arrastar pra "Em revisão" com atividade pendente e o backend rejeitava com um erro
+ *  confuso). */
+export function allActivitiesAnswered(activities: TaskActivityModel[]): boolean {
+  return activities.every((a) => a.executedAt != null);
+}

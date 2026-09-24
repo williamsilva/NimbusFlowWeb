@@ -2136,8 +2136,16 @@
       "blockedBySkipSteps": "A tarefa precisa estar \"{requiredStatus}\" antes de poder ir para \"{targetStatus}\"",
       "blockedByApprovalRequired": "Apenas quem tem permissão de gestão pode aprovar esta tarefa",
       "blockedByAnsweredActivities": "Não é possível voltar para \"A fazer\" - pelo menos uma atividade já foi respondida",
+      "blockedByUnansweredActivities": "Todas as atividades precisam ser respondidas antes de enviar para revisão",
       "blockedByPermission": "Você não tem permissão para mover esta tarefa",
-      "blockedGeneric": "Não é possível mover a tarefa para este status"
+      "blockedGeneric": "Não é possível mover a tarefa para este status",
+      "requiresAllActivitiesAnswered": "Todas as atividades precisam ser respondidas antes de enviar para revisão",
+      "requiresInProgress": "A tarefa precisa estar \"Em andamento\" antes de ir para revisão",
+      "requiresReview": "A tarefa precisa estar \"Em revisão\" antes de ser concluída",
+      "dependencyNotDone": "A tarefa da qual esta depende ainda não foi concluída",
+      "cannotReopenAnswered": "Não é possível voltar para \"A fazer\" - pelo menos uma atividade já foi respondida",
+      "notDoneReasonRequired": "É preciso informar o motivo pra marcar como \"Não fez\"",
+      "notEditable": "O status atual da tarefa não aceita mais edições"
     },
     "viewMode": {
       "title": "Tipo de visualização",

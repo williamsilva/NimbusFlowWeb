@@ -2136,8 +2136,16 @@
       "blockedBySkipSteps": "The task must be \"{requiredStatus}\" before it can move to \"{targetStatus}\"",
       "blockedByApprovalRequired": "Only someone with management permission can approve this task",
       "blockedByAnsweredActivities": "Cannot move back to \"To do\" - at least one activity has already been answered",
+      "blockedByUnansweredActivities": "All activities must be answered before sending to review",
       "blockedByPermission": "You don't have permission to move this task",
-      "blockedGeneric": "This task cannot be moved to this status"
+      "blockedGeneric": "This task cannot be moved to this status",
+      "requiresAllActivitiesAnswered": "All activities must be answered before sending to review",
+      "requiresInProgress": "The task must be \"In progress\" before it can go to review",
+      "requiresReview": "The task must be \"In review\" before it can be completed",
+      "dependencyNotDone": "The task this one depends on hasn't been completed yet",
+      "cannotReopenAnswered": "Cannot move back to \"To do\" - at least one activity has already been answered",
+      "notDoneReasonRequired": "A reason is required to mark this task as \"Not done\"",
+      "notEditable": "The task's current status no longer accepts edits"
     },
     "viewMode": {
       "title": "View type",
