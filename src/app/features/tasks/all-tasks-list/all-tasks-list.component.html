@@ -346,6 +346,17 @@
             <button
               pButton
               type="button"
+              icon="pi pi-pencil"
+              (click)="goEdit(row)"
+              class="p-button-text p-button-sm"
+              [disabled]="!canEdit(row)"
+              [pTooltip]="'common.edit' | translate"
+              [attr.aria-label]="'common.edit' | translate"
+              tooltipPosition="top"
+            ></button>
+            <button
+              pButton
+              type="button"
               icon="pi pi-arrow-right"
               (click)="advance(row)"
               class="p-button-text p-button-sm"
