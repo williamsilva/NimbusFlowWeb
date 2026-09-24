@@ -556,8 +556,9 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
    *  qualquer status; sem ela, só o próprio assignee (TAREFA_EXECUTE) avançando um passo por vez.
    *  As regras duras abaixo (pedido do usuário 2026-09-23) valem pra QUALQUER usuário, TAREFA_
    *  MANAGE incluído, sem bypass: não pular etapas (REVIEW só a partir de IN_PROGRESS, DONE só a
-   *  partir de REVIEW) e dependência bloqueia progresso (IN_PROGRESS ou DONE) - nunca envolvendo
-   *  CANCELLED/NOT_DONE. REVIEW->DONE (aprovação) exige TAREFA_MANAGE mesmo sendo dono da tarefa. */
+   *  partir de REVIEW), dependência bloqueia progresso (IN_PROGRESS ou DONE) - nunca envolvendo
+   *  CANCELLED/NOT_DONE -, e reabrir IN_PROGRESS->TODO só é permitido se nenhuma atividade tiver
+   *  sido respondida. REVIEW->DONE (aprovação) exige TAREFA_MANAGE mesmo sendo dono da tarefa. */
   canDropTask = (task: TaskWithActionPlanModel, status: TaskStatusEnum): boolean => {
     if (task.status === status) return false;
     if (status === TaskStatusEnum.REVIEW && task.status !== TaskStatusEnum.IN_PROGRESS) return false;
@@ -565,6 +566,13 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     if (
       (status === TaskStatusEnum.IN_PROGRESS || status === TaskStatusEnum.DONE) &&
       !this.isDependencySatisfied(task)
+    ) {
+      return false;
+    }
+    if (
+      status === TaskStatusEnum.TODO &&
+      task.status === TaskStatusEnum.IN_PROGRESS &&
+      task.activities.some((a) => !!a.executedAt)
     ) {
       return false;
     }
@@ -632,6 +640,13 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
       !this.isDependencySatisfied(task)
     ) {
       return this.i18n.tUi('tasks.action.blockedByDependency' as never, { title: task.dependsOnTaskTitle });
+    }
+    if (
+      status === TaskStatusEnum.TODO &&
+      task.status === TaskStatusEnum.IN_PROGRESS &&
+      task.activities.some((a) => !!a.executedAt)
+    ) {
+      return this.i18n.tUi('tasks.action.blockedByAnsweredActivities' as never);
     }
     if (task.status === TaskStatusEnum.REVIEW && status === TaskStatusEnum.DONE && !this.policy.canManage()) {
       return this.i18n.tUi('tasks.action.blockedByApprovalRequired' as never);

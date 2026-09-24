@@ -1984,6 +1984,7 @@
       "blockedByDependency": "Bloqueada até \"{title}\" ser concluída",
       "blockedBySkipSteps": "A tarefa precisa estar \"{requiredStatus}\" antes de poder ir para \"{targetStatus}\"",
       "blockedByApprovalRequired": "Apenas quem tem permissão de gestão pode aprovar esta tarefa",
+      "blockedByAnsweredActivities": "Não é possível voltar para \"A fazer\" - pelo menos uma atividade já foi respondida",
       "blockedByPermission": "Você não tem permissão para mover esta tarefa",
       "blockedGeneric": "Não é possível mover a tarefa para este status"
     },

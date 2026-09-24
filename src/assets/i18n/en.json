@@ -1984,6 +1984,7 @@
       "blockedByDependency": "Blocked until \"{title}\" is completed",
       "blockedBySkipSteps": "The task must be \"{requiredStatus}\" before it can move to \"{targetStatus}\"",
       "blockedByApprovalRequired": "Only someone with management permission can approve this task",
+      "blockedByAnsweredActivities": "Cannot move back to \"To do\" - at least one activity has already been answered",
       "blockedByPermission": "You don't have permission to move this task",
       "blockedGeneric": "This task cannot be moved to this status"
     },

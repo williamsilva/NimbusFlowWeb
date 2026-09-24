@@ -1984,6 +1984,7 @@
       "blockedByDependency": "Bloqueada hasta que \"{title}\" se complete",
       "blockedBySkipSteps": "La tarea debe estar \"{requiredStatus}\" antes de poder pasar a \"{targetStatus}\"",
       "blockedByApprovalRequired": "Solo alguien con permiso de gestión puede aprobar esta tarea",
+      "blockedByAnsweredActivities": "No se puede volver a \"Por hacer\" - al menos una actividad ya fue respondida",
       "blockedByPermission": "No tiene permiso para mover esta tarea",
       "blockedGeneric": "No es posible mover la tarea a este estado"
     },
