@@ -2138,6 +2138,7 @@
       "blockedByAnsweredActivities": "Não é possível voltar para \"A fazer\" - pelo menos uma atividade já foi respondida",
       "blockedByUnansweredActivities": "Todas as atividades precisam ser respondidas antes de enviar para revisão",
       "blockedByPermission": "Você não tem permissão para mover esta tarefa",
+      "blockedByTerminalStatus": "A tarefa já está \"{status}\" e não pode ser movida para outro status",
       "blockedGeneric": "Não é possível mover a tarefa para este status",
       "requiresAllActivitiesAnswered": "Todas as atividades precisam ser respondidas antes de enviar para revisão",
       "requiresInProgress": "A tarefa precisa estar \"Em andamento\" antes de ir para revisão",

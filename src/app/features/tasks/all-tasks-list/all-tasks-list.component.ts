@@ -576,14 +576,23 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   /** Mesma regra de autorização do backend (TaskService#updateStatus): TAREFA_MANAGE muda pra
    *  qualquer status; sem ela, só o próprio assignee (TAREFA_EXECUTE) avançando um passo por vez.
    *  As regras duras abaixo (pedido do usuário 2026-09-23) valem pra QUALQUER usuário, TAREFA_
-   *  MANAGE incluído, sem bypass: não pular etapas (REVIEW só a partir de IN_PROGRESS, DONE só a
-   *  partir de REVIEW), REVIEW exige todas as atividades respondidas (achado real 2026-09-24 -
-   *  faltava esta checagem aqui, o Kanban deixava soltar o card e o backend rejeitava com um erro
-   *  confuso), dependência bloqueia progresso (IN_PROGRESS ou DONE) - nunca envolvendo
-   *  CANCELLED/NOT_DONE -, e reabrir IN_PROGRESS->TODO só é permitido se nenhuma atividade tiver
-   *  sido respondida. REVIEW->DONE (aprovação) exige TAREFA_MANAGE mesmo sendo dono da tarefa. */
+   *  MANAGE incluído, sem bypass: DONE/CANCELLED/NOT_DONE são terminais de verdade, não aceitam
+   *  ser arrastadas pra NENHUM outro status (achado real 2026-09-24 - faltava esta checagem, uma
+   *  tarefa Concluída conseguia ser solta em "Em revisão"/"Não fez" sem nenhum aviso claro, cada
+   *  destino caindo numa regra genérica diferente ou nem sendo bloqueado no cliente); não pular
+   *  etapas (REVIEW só a partir de IN_PROGRESS, DONE só a partir de REVIEW), REVIEW exige todas as
+   *  atividades respondidas, dependência bloqueia progresso (IN_PROGRESS ou DONE), e reabrir
+   *  IN_PROGRESS->TODO só é permitido se nenhuma atividade tiver sido respondida. REVIEW->DONE
+   *  (aprovação) exige TAREFA_MANAGE mesmo sendo dono da tarefa. */
+  private static readonly TERMINAL_STATUSES = new Set<TaskStatusEnum>([
+    TaskStatusEnum.DONE,
+    TaskStatusEnum.CANCELLED,
+    TaskStatusEnum.NOT_DONE,
+  ]);
+
   canDropTask = (task: TaskWithActionPlanModel, status: TaskStatusEnum): boolean => {
     if (task.status === status) return false;
+    if (AllTasksListComponent.TERMINAL_STATUSES.has(task.status)) return false;
     if (status === TaskStatusEnum.REVIEW && task.status !== TaskStatusEnum.IN_PROGRESS) return false;
     if (status === TaskStatusEnum.REVIEW && !allActivitiesAnswered(task.activities)) return false;
     if (status === TaskStatusEnum.DONE && task.status !== TaskStatusEnum.REVIEW) return false;
@@ -647,6 +656,11 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   }
 
   private kanbanDropRejectedReason(task: TaskWithActionPlanModel, status: TaskStatusEnum): string {
+    if (AllTasksListComponent.TERMINAL_STATUSES.has(task.status)) {
+      return this.i18n.tUi('tasks.action.blockedByTerminalStatus' as never, {
+        status: this.i18n.tUi(`tasks.status.${task.status}` as never),
+      });
+    }
     if (status === TaskStatusEnum.REVIEW && task.status !== TaskStatusEnum.IN_PROGRESS) {
       return this.i18n.tUi('tasks.action.blockedBySkipSteps' as never, {
         requiredStatus: this.i18n.tUi(`tasks.status.${TaskStatusEnum.IN_PROGRESS}` as never),

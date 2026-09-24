@@ -2138,6 +2138,7 @@
       "blockedByAnsweredActivities": "Cannot move back to \"To do\" - at least one activity has already been answered",
       "blockedByUnansweredActivities": "All activities must be answered before sending to review",
       "blockedByPermission": "You don't have permission to move this task",
+      "blockedByTerminalStatus": "This task is already \"{status}\" and cannot be moved to another status",
       "blockedGeneric": "This task cannot be moved to this status",
       "requiresAllActivitiesAnswered": "All activities must be answered before sending to review",
       "requiresInProgress": "The task must be \"In progress\" before it can go to review",

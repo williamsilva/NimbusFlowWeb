@@ -2138,6 +2138,7 @@
       "blockedByAnsweredActivities": "No se puede volver a \"Por hacer\" - al menos una actividad ya fue respondida",
       "blockedByUnansweredActivities": "Todas las actividades deben ser respondidas antes de enviar a revisión",
       "blockedByPermission": "No tiene permiso para mover esta tarea",
+      "blockedByTerminalStatus": "La tarea ya está \"{status}\" y no puede moverse a otro estado",
       "blockedGeneric": "No es posible mover la tarea a este estado",
       "requiresAllActivitiesAnswered": "Todas las actividades deben ser respondidas antes de enviar a revisión",
       "requiresInProgress": "La tarea debe estar \"En curso\" antes de poder ir a revisión",
