@@ -2088,13 +2088,13 @@
       },
       "parameters": {
         "title": "Parâmetros",
-        "subtitle": "Histórico de parâmetros numéricos respondidos nas Atividades das Tarefas (ex.: Cloro, Alcalinidade, pH).",
+        "subtitle": "Histórico de parâmetros numéricos respondidos nas Atividades das Tarefas (ex.: Cloro, Alcalinidade, pH), todos juntos.",
         "empty": "Nenhum parâmetro numérico configurado ainda.",
-        "fields": {
-          "parameter": "Parâmetro"
-        },
+        "noAnswers": "Nenhuma análise respondida ainda.",
         "answeredCount": "Análises realizadas",
-        "pendingCount": "Não analisadas"
+        "pendingCount": "Não analisadas",
+        "inConformity": "Em conformidade",
+        "outOfConformity": "Fora de conformidade"
       }
     },
     "subtitle": "Tarefas de todos os planos de ação - terceiro elo da cadeia Chamado → Plano de Ação → Tarefa",

@@ -2088,13 +2088,13 @@
       },
       "parameters": {
         "title": "Parameters",
-        "subtitle": "History of numeric parameters answered in Task Activities (e.g., Chlorine, Alkalinity, pH).",
+        "subtitle": "History of numeric parameters answered in Task Activities (e.g., Chlorine, Alkalinity, pH), all together.",
         "empty": "No numeric parameter configured yet.",
-        "fields": {
-          "parameter": "Parameter"
-        },
+        "noAnswers": "No analysis answered yet.",
         "answeredCount": "Completed analyses",
-        "pendingCount": "Pending analyses"
+        "pendingCount": "Pending analyses",
+        "inConformity": "In compliance",
+        "outOfConformity": "Out of compliance"
       }
     },
     "subtitle": "Tasks across all action plans - third link of the Ticket → Action Plan → Task chain",

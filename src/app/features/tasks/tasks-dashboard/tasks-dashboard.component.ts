@@ -7,7 +7,6 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { ThemeService } from '@williamsilva/nimbus-web-commons';
-import { SelectOption } from '@models/select-option.model';
 import { TasksDashboardFacade } from '@features/facade/tasks-dashboard.facade';
 import { TaskLocationsFacade } from '@features/facade/task-locations.facade';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
@@ -15,11 +14,17 @@ import { TasksDashboardPermissionPolicy } from '@features/tasks/tasks-dashboard-
 import { TaskStatusCountsModel } from '@models/dashboard.models';
 import { TASK_STATUS_VALUES, TaskStatusEnum, taskStatusLabel } from '@models/enums/task-status.enum';
 import { TaskActivityAnalyticsApiService } from '@features/service/task-activity-analytics.api.service';
-import { TaskActivityHistoryModel } from '@models/task-activity-analytics.models';
+import { TaskParameterHistoryModel } from '@models/task-activity-analytics.models';
 
 /** Mesmo corte "top N + Demais" de topWorks no dashboard de Obras - aqui feito no componente
  *  porque DashboardService.getEmployeeTaskRanking() devolve a lista completa, sem cortar. */
 const TOP_EMPLOYEES_LIMIT = 7;
+
+/** Cores fixas (não dependem de tema) pra colorir cada ponto do histórico de parâmetro conforme
+ *  TaskActivityHistoryPointModel#inConformity (pedido do usuário 2026-09-24: "mostrando também se
+ *  estavam em conformidade ou não"). */
+const IN_CONFORMITY_COLOR = '#22c55e';
+const OUT_OF_CONFORMITY_COLOR = '#ef4444';
 
 /** Uma cor sólida fixa por status (não depende de tema claro/escuro, diferente de
  *  primaryColor()/textColor() abaixo) - só pra distinguir visualmente as 6 barras entre si. */
@@ -60,8 +65,11 @@ function statusCountValue(counts: TaskStatusCountsModel | null, status: TaskStat
  *
  * Pedido do usuário 2026-09-24: + contagem de Tarefas por status (gráfico de barras) e uma seção
  * "Parâmetros" com histórico de Atividades do tipo NÚMERO (ex.: Cloro/Alcalinidade/pH) respondidas
- * em execuções de Tarefa - seletor flexível (não fixo nesses 3 nomes), sem gate extra (mesmo nível
- * das outras métricas já aqui, protegido pela própria rota).
+ * em execuções de Tarefa - descoberta flexível dos nomes (não fixo nesses 3), sem gate extra
+ * (mesmo nível das outras métricas já aqui, protegido pela própria rota). Ajuste do mesmo dia:
+ * TODOS os parâmetros aparecem juntos (um mini-gráfico por parâmetro, não mais um seletor +
+ * gráfico único), cada ponto colorido conforme dentro/fora dos limites de conformidade
+ * configurados na Atividade (mesma fórmula de TaskService#computeCritical).
  */
 @Component({
   standalone: true,
@@ -81,69 +89,39 @@ export class TasksDashboardComponent implements OnInit {
   readonly teamCompletedTasksCount = computed(() => this.facade.teamTaskProgress()?.teamCompletedTasksCount ?? 0);
   readonly myCompletedTasksCount = computed(() => this.facade.teamTaskProgress()?.myCompletedTasksCount ?? 0);
 
-  private readonly _parameterOptions = signal<SelectOption<string>[]>([]);
-  private readonly _parameterOptionsLoadedOnce = signal(false);
-  private readonly _selectedParameter = signal<string | null>(null);
   private readonly _selectedLocationId = signal<string | null>(null);
-  private readonly _history = signal<TaskActivityHistoryModel | null>(null);
-  private readonly _historyLoading = signal(false);
+  private readonly _parameterHistories = signal<TaskParameterHistoryModel[]>([]);
+  private readonly _parameterHistoriesLoadedOnce = signal(false);
+  private readonly _parameterHistoriesLoading = signal(false);
 
-  readonly parameterOptions = this._parameterOptions.asReadonly();
-  readonly parameterOptionsLoadedOnce = this._parameterOptionsLoadedOnce.asReadonly();
-  readonly selectedParameter = this._selectedParameter.asReadonly();
   readonly selectedLocationId = this._selectedLocationId.asReadonly();
-  readonly history = this._history.asReadonly();
-  readonly historyLoading = this._historyLoading.asReadonly();
-
-  readonly answeredCount = computed(() => this.history()?.answeredCount ?? 0);
-  readonly pendingCount = computed(() => this.history()?.pendingCount ?? 0);
+  readonly parameterHistories = this._parameterHistories.asReadonly();
+  readonly parameterHistoriesLoadedOnce = this._parameterHistoriesLoadedOnce.asReadonly();
+  readonly parameterHistoriesLoading = this._parameterHistoriesLoading.asReadonly();
 
   ngOnInit(): void {
     this.facade.load(this.dashboardPolicy.canViewEmployeeRanking());
     this.taskLocationsFacade.loadOptions();
-    this.loadParameterOptions();
-  }
-
-  private loadParameterOptions(): void {
-    this.activityAnalyticsApi.numericActivityNames().subscribe({
-      next: (names) => {
-        this._parameterOptions.set((names ?? []).map((name) => ({ label: name, value: name })));
-        this._parameterOptionsLoadedOnce.set(true);
-        if (names && names.length > 0) {
-          this._selectedParameter.set(names[0]);
-          this.loadHistory();
-        }
-      },
-      error: () => this._parameterOptionsLoadedOnce.set(true),
-    });
-  }
-
-  onParameterChange(value: string | null): void {
-    this._selectedParameter.set(value);
-    this.loadHistory();
+    this.loadParameterHistories();
   }
 
   onLocationChange(value: string | null): void {
     this._selectedLocationId.set(value);
-    this.loadHistory();
+    this.loadParameterHistories();
   }
 
-  private loadHistory(): void {
-    const parameter = this._selectedParameter();
-    if (!parameter) {
-      this._history.set(null);
-      return;
-    }
-
-    this._historyLoading.set(true);
-    this.activityAnalyticsApi.history(parameter, this._selectedLocationId()).subscribe({
+  private loadParameterHistories(): void {
+    this._parameterHistoriesLoading.set(true);
+    this.activityAnalyticsApi.historyAll(this._selectedLocationId()).subscribe({
       next: (result) => {
-        this._history.set(result);
-        this._historyLoading.set(false);
+        this._parameterHistories.set(result);
+        this._parameterHistoriesLoadedOnce.set(true);
+        this._parameterHistoriesLoading.set(false);
       },
       error: () => {
-        this._history.set(null);
-        this._historyLoading.set(false);
+        this._parameterHistories.set([]);
+        this._parameterHistoriesLoadedOnce.set(true);
+        this._parameterHistoriesLoading.set(false);
       },
     });
   }
@@ -260,40 +238,61 @@ export class TasksDashboardComponent implements OnInit {
     }
   }
 
-  readonly parameterHistoryChartData = computed(() => {
+  /** Um mini-gráfico por parâmetro (pedido do usuário 2026-09-24: "todos juntos") - cor do PONTO
+   *  (não da linha) marca conformidade, já que a linha em si é só a tendência de um único
+   *  parâmetro (sem problema de escala entre parâmetros diferentes, cada um tem seu próprio
+   *  gráfico/eixo). */
+  parameterChartData(history: TaskParameterHistoryModel) {
     this.i18n.getAppliedLang();
-    const points = this.history()?.points ?? [];
     const color = this.primaryColor();
+    const pointColors = history.points.map((point) => (point.inConformity ? IN_CONFORMITY_COLOR : OUT_OF_CONFORMITY_COLOR));
 
     return {
-      labels: points.map((point) => this.formatHistoryPointLabel(point.executedAt)),
+      labels: history.points.map((point) => this.formatHistoryPointLabel(point.executedAt)),
       datasets: [
         {
-          data: points.map((point) => point.value),
+          data: history.points.map((point) => point.value),
           borderColor: color,
           backgroundColor: color,
+          pointBackgroundColor: pointColors,
+          pointBorderColor: pointColors,
+          pointRadius: 4,
           tension: 0.3,
-          pointRadius: 3,
           fill: false,
         },
       ],
     };
-  });
+  }
 
-  readonly parameterHistoryChartOptions = computed(() => {
+  parameterChartOptions(history: TaskParameterHistoryModel) {
     const text = this.textColor();
     const grid = this.gridColor();
+    const points = history.points;
+    const i18n = this.i18n;
 
     return {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
+        tooltip: {
+          callbacks: {
+            afterLabel: (ctx: { dataIndex: number }) => {
+              const point = points[ctx.dataIndex];
+              if (!point) return '';
+              return i18n.tUi(
+                (point.inConformity
+                  ? 'tasks.dashboard.parameters.inConformity'
+                  : 'tasks.dashboard.parameters.outOfConformity') as never,
+              );
+            },
+          },
+        },
       },
       scales: {
         x: { ticks: { color: text, maxRotation: 0, autoSkip: true }, grid: { display: false } },
         y: { ticks: { color: text }, grid: { color: grid } },
       },
     };
-  });
+  }
 }
