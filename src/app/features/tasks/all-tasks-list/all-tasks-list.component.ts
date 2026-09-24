@@ -543,17 +543,18 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
       });
   }
 
-  /** Alterna Lista/Kanban (pedido do usuário 2026-09-21) - trocar pra 'list' não recarrega nada
-   *  aqui de propósito: o próprio <p-table [lazy]="true"> volta a existir no DOM (ver @if no
-   *  template) e dispara o onLazyLoad inicial sozinho, com a paginação normal de sempre. */
+  /** Alterna Lista/Kanban (pedido do usuário 2026-09-21) - SEMPRE recarrega os dados na troca, nos
+   *  dois sentidos (pedido do usuário 2026-09-24: confiar só no <p-table [lazy]="true"> voltar a
+   *  existir no DOM e disparar o onLazyLoad inicial sozinho não bastava - a lista podia ficar
+   *  desatualizada em relação ao que mudou enquanto o usuário estava no Kanban, ex.: um drop que
+   *  moveu uma tarefa de status). #refresh() já é "view-mode-aware" (loadKanbanData no Kanban,
+   *  reloadWithCurrentState na Lista) e não depende da <p-table> estar no DOM - reloadWithCurrentState
+   *  só lê lastLazyEvent/rows (estado próprio, não a referência @ViewChild) e chama loadPage. */
   setViewMode(mode: 'list' | 'kanban'): void {
     this.viewMode.set(mode);
     localStorage.setItem(STATE_KEY.NIMBUSFLOW.WORKS.ALL_TASKS.VIEW_MODE.V1, mode);
     this.selection.set([]);
-
-    if (mode === 'kanban') {
-      this.loadKanbanData();
-    }
+    this.refresh();
   }
 
   private loadKanbanData(): void {
