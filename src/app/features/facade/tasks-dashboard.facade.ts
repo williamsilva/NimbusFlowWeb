@@ -3,7 +3,12 @@ import { Injectable, inject, signal } from '@angular/core';
 import { forkJoin, of } from 'rxjs';
 
 import { TasksDashboardApiService } from '@features/service/tasks-dashboard.api.service';
-import { EmployeeTaskRankingModel, TaskDurationAnalysisModel, TeamTaskProgressModel } from '@models/dashboard.models';
+import {
+  EmployeeTaskRankingModel,
+  TaskDurationAnalysisModel,
+  TaskStatusCountsModel,
+  TeamTaskProgressModel,
+} from '@models/dashboard.models';
 
 /** Dashboard de Tarefas - herda employeeTaskRanking/teamTaskProgress do antigo DashboardFacade
  *  (pedido do usuário 2026-09-21, separação dos dashboards). loadEmployeeRanking continua
@@ -19,12 +24,14 @@ export class TasksDashboardFacade {
   private readonly _employeeTaskRanking = signal<EmployeeTaskRankingModel[]>([]);
   private readonly _teamTaskProgress = signal<TeamTaskProgressModel | null>(null);
   private readonly _durationAnalysis = signal<TaskDurationAnalysisModel | null>(null);
+  private readonly _statusCounts = signal<TaskStatusCountsModel | null>(null);
 
   readonly loading = this._loading.asReadonly();
   readonly loadedOnce = this._loadedOnce.asReadonly();
   readonly employeeTaskRanking = this._employeeTaskRanking.asReadonly();
   readonly teamTaskProgress = this._teamTaskProgress.asReadonly();
   readonly durationAnalysis = this._durationAnalysis.asReadonly();
+  readonly statusCounts = this._statusCounts.asReadonly();
 
   load(loadEmployeeRanking: boolean): void {
     this._loading.set(true);
@@ -33,11 +40,13 @@ export class TasksDashboardFacade {
       employeeTaskRanking: loadEmployeeRanking ? this.api.employeeTaskRanking() : of([]),
       teamTaskProgress: this.api.teamTaskProgress(),
       durationAnalysis: this.api.taskDurationAnalysis(),
+      statusCounts: this.api.taskStatusCounts(),
     }).subscribe({
-      next: ({ employeeTaskRanking, teamTaskProgress, durationAnalysis }) => {
+      next: ({ employeeTaskRanking, teamTaskProgress, durationAnalysis, statusCounts }) => {
         this._employeeTaskRanking.set(employeeTaskRanking);
         this._teamTaskProgress.set(teamTaskProgress);
         this._durationAnalysis.set(durationAnalysis);
+        this._statusCounts.set(statusCounts);
         this._loading.set(false);
         this._loadedOnce.set(true);
       },

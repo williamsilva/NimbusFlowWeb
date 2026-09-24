@@ -7,9 +7,11 @@ import { API } from '@core/api/api.config';
 import {
   EmployeeTaskRankingModel,
   TaskDurationAnalysisModel,
+  TaskStatusCountsModel,
   TeamTaskProgressModel,
   mapEmployeeTaskRankingApiModels,
   mapTaskDurationAnalysisApiModel,
+  mapTaskStatusCountsApiModel,
   mapTeamTaskProgressApiModel,
 } from '@models/dashboard.models';
 
@@ -42,5 +44,13 @@ export class TasksDashboardApiService {
     return this.http
       .get<TaskDurationAnalysisModel>(`${this.baseUrl}/task-duration-analysis`)
       .pipe(map(mapTaskDurationAnalysisApiModel));
+  }
+
+  /** Contagem de Tarefas por status - aberto a TAREFA_CONSULT/EXECUTE (pedido do usuário
+   *  2026-09-24). */
+  taskStatusCounts() {
+    return this.http
+      .get<TaskStatusCountsModel>(`${this.baseUrl}/task-status-counts`)
+      .pipe(map(mapTaskStatusCountsApiModel));
   }
 }

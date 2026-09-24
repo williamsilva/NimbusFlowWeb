@@ -117,6 +117,18 @@ export interface TaskDurationAnalysisModel {
   completedTasksCount: number;
 }
 
+/** Espelha com.nimbusflow.works.dto.response.TaskStatusCountsResponse - contagem de Tarefas por
+ *  status (dashboard de Tarefas, pedido do usuário 2026-09-24), mesmo gate/módulo de
+ *  TaskDurationAnalysisModel acima. */
+export interface TaskStatusCountsModel {
+  todo: number;
+  inProgress: number;
+  review: number;
+  done: number;
+  cancelled: number;
+  notDone: number;
+}
+
 /** Espelha com.nimbusflow.tickets.dto.response.TicketPriorityDurationResponse. */
 export interface TicketPriorityDurationModel {
   priority: TicketPriorityEnum;
@@ -150,6 +162,12 @@ export function mapWorkDurationAnalysisApiModel(
 export function mapTaskDurationAnalysisApiModel(
   input: TaskDurationAnalysisModel | null | undefined,
 ): TaskDurationAnalysisModel | null {
+  return input ?? null;
+}
+
+export function mapTaskStatusCountsApiModel(
+  input: TaskStatusCountsModel | null | undefined,
+): TaskStatusCountsModel | null {
   return input ?? null;
 }
 

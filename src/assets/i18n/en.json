@@ -2081,7 +2081,20 @@
         "employeeTaskRanking": {
           "title": "Employee ranking by completed tasks",
           "others": "{count, plural, one {# other employee} other {# other employees}}"
+        },
+        "taskStatusCounts": {
+          "title": "Tasks by status"
         }
+      },
+      "parameters": {
+        "title": "Parameters",
+        "subtitle": "History of numeric parameters answered in Task Activities (e.g., Chlorine, Alkalinity, pH).",
+        "empty": "No numeric parameter configured yet.",
+        "fields": {
+          "parameter": "Parameter"
+        },
+        "answeredCount": "Completed analyses",
+        "pendingCount": "Pending analyses"
       }
     },
     "subtitle": "Tasks across all action plans - third link of the Ticket → Action Plan → Task chain",

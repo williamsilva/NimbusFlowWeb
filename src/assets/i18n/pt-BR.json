@@ -2081,7 +2081,20 @@
         "employeeTaskRanking": {
           "title": "Ranking de funcionários por tarefas concluídas",
           "others": "{count, plural, one {Demais # funcionário} other {Demais # funcionários}}"
+        },
+        "taskStatusCounts": {
+          "title": "Tarefas por status"
         }
+      },
+      "parameters": {
+        "title": "Parâmetros",
+        "subtitle": "Histórico de parâmetros numéricos respondidos nas Atividades das Tarefas (ex.: Cloro, Alcalinidade, pH).",
+        "empty": "Nenhum parâmetro numérico configurado ainda.",
+        "fields": {
+          "parameter": "Parâmetro"
+        },
+        "answeredCount": "Análises realizadas",
+        "pendingCount": "Não analisadas"
       }
     },
     "subtitle": "Tarefas de todos os planos de ação - terceiro elo da cadeia Chamado → Plano de Ação → Tarefa",

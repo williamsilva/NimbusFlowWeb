@@ -25,6 +25,17 @@
   </div>
 </div>
 
+<div class="grid formgrid gap-0">
+  <div class="col-12 p-2">
+    <div class="surface-card border-round p-3">
+      <div class="font-semibold mb-2">{{ 'tasks.dashboard.charts.taskStatusCounts.title' | translate }}</div>
+      <div style="height: 260px">
+        <p-chart type="bar" [data]="taskStatusCountsChartData()" [options]="taskStatusCountsChartOptions()"></p-chart>
+      </div>
+    </div>
+  </div>
+</div>
+
 @if (dashboardPolicy.canViewEmployeeRanking()) {
 <div class="grid formgrid gap-0">
   <div class="col-12 p-2">
@@ -37,3 +48,75 @@
   </div>
 </div>
 }
+
+<div class="grid formgrid gap-0">
+  <div class="col-12 p-2">
+    <div class="surface-card border-round p-3">
+      <div class="font-semibold mb-1">{{ 'tasks.dashboard.parameters.title' | translate }}</div>
+      <div class="text-sm opacity-70 mb-3">{{ 'tasks.dashboard.parameters.subtitle' | translate }}</div>
+
+      @if (parameterOptionsLoadedOnce() && parameterOptions().length === 0) {
+        <p class="opacity-70">{{ 'tasks.dashboard.parameters.empty' | translate }}</p>
+      } @else {
+        <div class="grid formgrid gap-0 align-items-end mb-3">
+          <div class="col-12 md:col-4 p-1">
+            <label for="parameterSelect" class="block mb-2 text-sm opacity-80">
+              {{ 'tasks.dashboard.parameters.fields.parameter' | translate }}
+            </label>
+            <p-select
+              size="small"
+              class="w-full"
+              [filter]="true"
+              appendTo="body"
+              inputId="parameterSelect"
+              optionLabel="label"
+              optionValue="value"
+              [options]="parameterOptions()"
+              [ngModel]="selectedParameter()"
+              (ngModelChange)="onParameterChange($event)"
+            ></p-select>
+          </div>
+
+          <div class="col-12 md:col-4 p-1">
+            <label for="parameterLocationSelect" class="block mb-2 text-sm opacity-80">
+              {{ 'tasks.fields.location' | translate }}
+            </label>
+            <p-select
+              size="small"
+              class="w-full"
+              [filter]="true"
+              [showClear]="true"
+              appendTo="body"
+              inputId="parameterLocationSelect"
+              optionLabel="label"
+              optionValue="value"
+              [options]="taskLocationsFacade.options()"
+              [ngModel]="selectedLocationId()"
+              (ngModelChange)="onLocationChange($event)"
+            ></p-select>
+          </div>
+        </div>
+
+        <div class="grid formgrid gap-0 mb-3">
+          <div class="col-6 md:col-3 p-2">
+            <div class="surface-card border-round p-3 h-full">
+              <div class="text-sm opacity-70 mb-1">{{ 'tasks.dashboard.parameters.answeredCount' | translate }}</div>
+              <div class="text-3xl font-bold">{{ answeredCount() }}</div>
+            </div>
+          </div>
+
+          <div class="col-6 md:col-3 p-2">
+            <div class="surface-card border-round p-3 h-full">
+              <div class="text-sm opacity-70 mb-1">{{ 'tasks.dashboard.parameters.pendingCount' | translate }}</div>
+              <div class="text-3xl font-bold">{{ pendingCount() }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height: 260px">
+          <p-chart type="line" [data]="parameterHistoryChartData()" [options]="parameterHistoryChartOptions()"></p-chart>
+        </div>
+      }
+    </div>
+  </div>
+</div>
