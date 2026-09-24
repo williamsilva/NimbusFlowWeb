@@ -24,6 +24,9 @@
       "taskLocations": {
         "title": "Ubicaciones"
       },
+      "taskShiftSettings": {
+        "title": "Turnos"
+      },
       "taskTemplates": {
         "title": "Modelos de Tareas"
       },
@@ -163,6 +166,7 @@
       "departments": "Departamentos",
       "cargos": "Cargos",
       "taskLocations": "Ubicaciones",
+      "taskShiftSettings": "Turnos",
       "taskTemplates": "Modelos de Tareas",
       "workAutoComplete": "Conclusión Automática",
       "company": "Empresa"
@@ -827,6 +831,19 @@
       "success": "Ubicación eliminada con éxito",
       "error": "No fue posible eliminar la ubicación"
     }
+  },
+  "taskShiftSettings": {
+    "subtitle": "Horario de inicio/fin de cada Turno - una Tarea con Turno definido solo queda disponible dentro de esa ventana, en la fecha de vencimiento.",
+    "fields": {
+      "morningStart": "Mañana - Inicio",
+      "morningEnd": "Mañana - Fin",
+      "afternoonStart": "Tarde - Inicio",
+      "afternoonEnd": "Tarde - Fin",
+      "eveningStart": "Noche - Inicio",
+      "eveningEnd": "Noche - Fin"
+    },
+    "saved": "Horarios de los turnos guardados con éxito",
+    "saveError": "No fue posible guardar los horarios de los turnos"
   },
   "taskCategories": {
     "columns": { "title": "Categorías" },
@@ -2096,6 +2113,7 @@
       "notifyAssigneeOnRecurrence": "Notificación al responsable",
       "releaseTimeEnabled": "Horario de liberación de la tarea",
       "releaseTime": "Horario de liberación",
+      "releaseTimeDisabledByShift": "La disponibilidad la define el Turno (Configuraciones > Turnos), no el horario de liberación manual.",
       "autoMoveOverdueToNotDone": "Si la tarea está vencida, moverla automáticamente al estado \"No la hizo\"",
       "scheduleHint": {
         "empty": "Defina la fecha de inicio y los días de ejecución para ver el cronograma de entregas.",

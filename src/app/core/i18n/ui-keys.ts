@@ -30,6 +30,7 @@ export const UI_KEYS = {
       departments: 'menu.settings.departments',
       cargos: 'menu.settings.cargos',
       taskLocations: 'menu.settings.taskLocations',
+      taskShiftSettings: 'menu.settings.taskShiftSettings',
       taskTemplates: 'menu.settings.taskTemplates',
       workAutoComplete: 'menu.settings.workAutoComplete',
       company: 'menu.settings.company',
@@ -557,6 +558,10 @@ export const UI_KEYS = {
       success: 'taskLocations.deleteConfirm.success',
       error: 'taskLocations.deleteConfirm.error',
     },
+  },
+  taskShiftSettings: {
+    saved: 'taskShiftSettings.saved',
+    saveError: 'taskShiftSettings.saveError',
   },
   taskCategories: {
     form: {

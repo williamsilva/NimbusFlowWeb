@@ -60,6 +60,20 @@ export const SETTINGS_ROUTES: Routes = [
       ),
   },
   {
+    path: 'task-shift-settings',
+    title: 'routes.settings.taskShiftSettings.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.TASK_SHIFT_SETTINGS_VIEW],
+    },
+    loadComponent: () =>
+      import('./task-shift-settings/task-shift-settings.component').then(
+        (m) => m.TaskShiftSettingsComponent,
+      ),
+  },
+  {
     path: 'task-templates',
     title: 'routes.settings.taskTemplates.title',
     canActivate: [permissionGuard],

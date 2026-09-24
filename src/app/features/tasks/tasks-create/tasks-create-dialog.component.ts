@@ -333,6 +333,10 @@ export class TasksCreateDialogComponent {
       this.applyReleaseTimeState(enabled);
     });
 
+    this.form.controls.shift.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((shift) => {
+      this.applyShiftReleaseTimeInteraction(shift);
+    });
+
     effect(() => {
       if (!this.visible()) {
         this.createFormInitialized = false;
@@ -408,6 +412,7 @@ export class TasksCreateDialogComponent {
       this.applyRecurrenceValidators(recurrenceOption);
       this.applyExpirationState(neverExpires);
       this.applyReleaseTimeState(releaseTimeEnabled);
+      this.applyShiftReleaseTimeInteraction(task.shift);
       this.loadSubcategoryOptions(task.categoryId);
       this.activities.set(task.activities.map(toActivityDraft));
     });
@@ -485,6 +490,19 @@ export class TasksCreateDialogComponent {
     } else {
       this.form.controls.releaseTime.setValue(null);
       this.form.controls.releaseTime.disable();
+    }
+  }
+
+  /** Turno manda SOZINHO na disponibilidade da Tarefa (pedido do usuário 2026-09-24) - com Turno
+   *  preenchido, o Horário de liberação manual fica desabilitado/zerado (mesma regra aplicada no
+   *  backend, ver TaskService#isReleased, que ignora releaseTime quando task.shift != null). */
+  private applyShiftReleaseTimeInteraction(shift: TaskShiftEnum | null): void {
+    if (shift) {
+      this.form.controls.releaseTimeEnabled.setValue(false);
+      this.form.controls.releaseTimeEnabled.disable();
+      this.applyReleaseTimeState(false);
+    } else {
+      this.form.controls.releaseTimeEnabled.enable();
     }
   }
 
@@ -608,6 +626,7 @@ export class TasksCreateDialogComponent {
     this.applyRecurrenceValidators('NONE');
     this.applyExpirationState(true);
     this.applyReleaseTimeState(false);
+    this.applyShiftReleaseTimeInteraction(null);
   }
 
   save(): void {

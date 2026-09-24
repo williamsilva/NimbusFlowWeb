@@ -334,6 +334,12 @@
           <label for="releaseTimeEnabled">{{ 'tasks.fields.releaseTimeEnabled' | translate }}</label>
         </div>
 
+        @if (form.controls.shift.value) {
+          <div class="col-12 p-2 -mt-2">
+            <span class="text-sm opacity-70">{{ 'tasks.fields.releaseTimeDisabledByShift' | translate }}</span>
+          </div>
+        }
+
         @if (form.controls.releaseTimeEnabled.value) {
           <div class="col-12 md:col-6 p-2">
             <p-floatLabel variant="on" class="w-full">

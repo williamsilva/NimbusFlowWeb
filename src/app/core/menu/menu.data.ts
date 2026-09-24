@@ -221,6 +221,13 @@ export const APP_MENU: AppMenuItem[] = [
       },
       {
         exact: false,
+        route: '/settings/task-shift-settings',
+        labelKey: 'menu.settings.taskShiftSettings',
+        icon: 'pi pi-clock text-cyan-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.TASK_SHIFT_SETTINGS_VIEW],
+      },
+      {
+        exact: false,
         route: '/settings/task-templates',
         labelKey: 'menu.settings.taskTemplates',
         icon: 'pi pi-list-check text-indigo-400',
