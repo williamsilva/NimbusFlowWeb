@@ -39,7 +39,7 @@ export class PullToRefreshComponent implements OnInit, OnDestroy {
   private scrollEl: HTMLElement | null = null;
   private startY = 0;
   private tracking = false;
-  private readonly unlisten: Array<() => void> = [];
+  private readonly unlisten: (() => void)[] = [];
 
   readonly state = signal<PullState>('idle');
   readonly pullDistance = signal(0);

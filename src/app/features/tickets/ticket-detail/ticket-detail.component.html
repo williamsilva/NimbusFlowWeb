@@ -207,7 +207,14 @@
         @for (file of commentFiles(); track $index) {
           <span class="comment-file-chip">
             {{ file.name }}
-            <i class="pi pi-times ml-1 cursor-pointer" (click)="removeCommentFile($index)"></i>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-times"
+              (click)="removeCommentFile($index)"
+              class="p-button-text p-button-sm p-button-danger comment-file-chip-remove"
+              [attr.aria-label]="'common.remove' | translate"
+            ></button>
           </span>
         }
       </div>

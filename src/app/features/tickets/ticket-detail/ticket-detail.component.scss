@@ -143,3 +143,16 @@
   border-radius: 999px;
   padding: 0.15rem 0.6rem;
 }
+
+/* Botão nativo (troca do <i (click)> antigo, achado real 2026-09-24 no lint - acessibilidade
+ * exige elemento focável/com teclado) precisa encolher pra caber no chip como o ícone antigo. */
+.comment-file-chip-remove.p-button {
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  margin-left: 0.25rem;
+
+  ::ng-deep .p-button-icon {
+    font-size: 0.7rem;
+  }
+}

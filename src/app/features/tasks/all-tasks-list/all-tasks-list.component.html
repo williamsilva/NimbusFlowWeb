@@ -186,7 +186,7 @@
         [tasks]="tasks()"
         [canDrop]="canDropTask"
         [loading]="facade.loading()"
-        (drop)="onKanbanDrop($event)"
+        (taskDrop)="onKanbanDrop($event)"
         (dropRejected)="onKanbanDropRejected($event)"
         (taskClick)="onKanbanCardClick($event)"
         (editClick)="onKanbanEditClick($event)"

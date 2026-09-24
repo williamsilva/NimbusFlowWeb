@@ -49,7 +49,10 @@ export class TasksKanbanBoardComponent {
     () => false,
   );
 
-  @Output() readonly drop = new EventEmitter<TaskKanbanDropEvent>();
+  /** Nome "drop" batia com o evento nativo do DOM (@angular-eslint/no-output-native) - o
+   *  <div (drop)="onDropOnColumn(...)"> no template é o listener NATIVO de drag-and-drop HTML5,
+   *  sem relação com este @Output (notificação pro pai depois que canDrop() já aprovou). */
+  @Output() readonly taskDrop = new EventEmitter<TaskKanbanDropEvent>();
   /** Clique no cartão (pedido do usuário 2026-09-23, redefinido 2026-09-23 pra abrir a EXECUÇÃO
    *  em vez da edição - ver #editClick abaixo pro botão novo de lápis) - "burro" igual ao resto do
    *  componente: só emite, quem decide o que fazer (abrir execução, checar permissão) é o pai
@@ -205,7 +208,7 @@ export class TasksKanbanBoardComponent {
       return;
     }
 
-    this.drop.emit({ task, status });
+    this.taskDrop.emit({ task, status });
   }
 
   /** Sem dependência = nunca bloqueia. Pura leitura de dado (dependsOnTaskStatus já vem resolvido

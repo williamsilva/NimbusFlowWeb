@@ -203,9 +203,13 @@
   } @else {
     @for (row of tickets(); track row.id) {
       <div
+        role="button"
+        tabindex="0"
         class="ticket-card"
         (click)="goDetail(row)"
+        (keydown.enter)="goDetail(row)"
         [style.--ticket-accent]="cardAccentColor(row.status)"
+        (keydown.space)="$event.preventDefault(); goDetail(row)"
       >
         <div class="ticket-card-created-by">
           {{
@@ -256,7 +260,12 @@
             <span class="ticket-card-avatar-label">{{ 'tickets.avatarLabel' | translate }}</span>
           </div>
 
-          <div class="ticket-card-actions" (click)="$event.stopPropagation()">
+          <div
+            tabindex="-1"
+            class="ticket-card-actions"
+            (click)="$event.stopPropagation()"
+            (keydown)="$event.stopPropagation()"
+          >
             @if (row.workId === null) {
               <button
                 pButton

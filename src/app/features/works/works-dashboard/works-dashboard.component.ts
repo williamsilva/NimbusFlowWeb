@@ -18,7 +18,6 @@ import { WorksDashboardFacade } from '@features/facade/works-dashboard.facade';
 import { DashboardFilterInput } from '@models/dashboard.models';
 import { PageHeaderComponent } from '@shared/features/page-header/page-header.component';
 import { StatusBadgeComponent } from '@shared/features/status-badge/status-badge.component';
-import { WorksPermissionPolicy } from '@features/works/works-permission.policy';
 import { ProjectsPermissionPolicy } from '@features/projects/projects-permission.policy';
 import { projectStatusTone } from '@models/enums/project-status.enum';
 import { WorkStatusEnum, workStatusTone } from '@models/enums/work-status.enum';
