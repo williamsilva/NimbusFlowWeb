@@ -12,6 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 
 import { I18nService } from '@core/i18n/i18n.service';
+import { SelectOption } from '@models/select-option.model';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import { TaskCategoryModel, TaskSubcategoryModel } from '@models/task-templates.models';
 import { TasksTemplatesApiService } from '@features/service/tasks-templates.api.service';
@@ -53,6 +54,14 @@ export class TaskSubcategoryFormDialogComponent {
   readonly saving = signal(false);
 
   readonly isEditing = computed(() => this.editing() != null);
+
+  /** p-select aqui precisa de {label, value} (mesma convenção já usada em todo o app pros
+   *  seletores dinâmicos, ex. DepartmentsApiService#options) - achado real 2026-09-24: bindar
+   *  optionLabel/optionValue direto num objeto {id, name} cru fazia o valor selecionado não
+   *  refletir visualmente no p-select (cascata funcionava, mas a caixa ficava sempre em branco). */
+  readonly categorySelectOptions = computed<SelectOption<string>[]>(() =>
+    this.categoryOptions().map((c) => ({ label: c.name, value: c.id })),
+  );
 
   readonly form = this.fb.nonNullable.group({
     categoryId: this.fb.control<string | null>(null, [Validators.required]),

@@ -1,4 +1,4 @@
-import { Component, DestroyRef, EventEmitter, Output, effect, inject, input, signal } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, Output, computed, effect, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
@@ -10,6 +10,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
+import { SelectOption } from '@models/select-option.model';
 import {
   TaskCategoryOptionModel,
   TaskSubcategoryOptionModel,
@@ -44,6 +45,19 @@ export class TaskTemplatePickerDialogComponent {
   readonly categoryOptions = signal<TaskCategoryOptionModel[]>([]);
   readonly subcategoryOptions = signal<TaskSubcategoryOptionModel[]>([]);
   readonly templateOptions = signal<TaskTemplateModel[]>([]);
+
+  /** p-select aqui precisa de {label, value} (mesma convenção já usada em todo o app pros
+   *  seletores dinâmicos) - achado real 2026-09-24: bindar optionLabel/optionValue direto num
+   *  objeto {id, name} cru fazia o valor selecionado não refletir visualmente no p-select. */
+  readonly categorySelectOptions = computed<SelectOption<string>[]>(() =>
+    this.categoryOptions().map((c) => ({ label: c.name, value: c.id })),
+  );
+  readonly subcategorySelectOptions = computed<SelectOption<string>[]>(() =>
+    this.subcategoryOptions().map((s) => ({ label: s.name, value: s.id })),
+  );
+  readonly templateSelectOptions = computed<SelectOption<string>[]>(() =>
+    this.templateOptions().map((t) => ({ label: t.name, value: t.id })),
+  );
 
   readonly form = this.fb.nonNullable.group({
     categoryId: this.fb.control<string | null>(null),
@@ -103,12 +117,23 @@ export class TaskTemplatePickerDialogComponent {
     this.templateOptions.set([]);
   }
 
+  /** Só emitido em #onHide (depois que a animação de fechar este diálogo termina de verdade) -
+   *  mesmo motivo de TaskCreationChoiceDialogComponent#pendingChoice: abrir TasksCreateDialogComponent
+   *  (com os p-select de Categoria/Subcategoria pré-preenchidos do modelo) na MESMA hora em que
+   *  este diálogo ainda está fechando reproduzia o mesmo bug visual (seleção não refletida). */
+  private pendingTemplate: TaskTemplateModel | null = null;
+
   close(): void {
     this.visibleChange.emit(false);
   }
 
   onHide(): void {
     this.close();
+    const template = this.pendingTemplate;
+    this.pendingTemplate = null;
+    if (template) {
+      this.templateSelected.emit(template);
+    }
   }
 
   /** O Modelo completo (com Atividades) já vem na própria lista de opções (ver
@@ -126,7 +151,7 @@ export class TaskTemplatePickerDialogComponent {
       return;
     }
 
-    this.templateSelected.emit(template);
+    this.pendingTemplate = template;
     this.close();
   }
 }

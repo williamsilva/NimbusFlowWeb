@@ -14,6 +14,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
+import { SelectOption } from '@models/select-option.model';
 import { ErrorMsgComponent } from '@shared/error-msg/error-msg.component';
 import {
   taskActivityDataTypeIcon,
@@ -69,6 +70,16 @@ export class TaskTemplateFormDialogComponent {
   readonly isEditing = computed(() => this.editing() != null);
 
   readonly subcategoryOptions = signal<TaskSubcategoryModel[]>([]);
+
+  /** p-select aqui precisa de {label, value} (mesma convenção já usada em todo o app pros
+   *  seletores dinâmicos) - achado real 2026-09-24: bindar optionLabel/optionValue direto num
+   *  objeto {id, name} cru fazia o valor selecionado não refletir visualmente no p-select. */
+  readonly categorySelectOptions = computed<SelectOption<string>[]>(() =>
+    this.categoryOptions().map((c) => ({ label: c.name, value: c.id })),
+  );
+  readonly subcategorySelectOptions = computed<SelectOption<string>[]>(() =>
+    this.subcategoryOptions().map((s) => ({ label: s.name, value: s.id })),
+  );
 
   readonly activities = signal<TaskActivityDraft[]>([]);
   readonly editingActivity = signal<TaskActivityDraft | null>(null);

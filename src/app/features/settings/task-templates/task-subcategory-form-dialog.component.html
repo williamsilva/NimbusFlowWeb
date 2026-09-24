@@ -19,10 +19,10 @@
             [filter]="true"
             appendTo="body"
             inputId="categoryId"
-            optionLabel="name"
-            optionValue="id"
+            optionLabel="label"
+            optionValue="value"
             formControlName="categoryId"
-            [options]="categoryOptions()"
+            [options]="categorySelectOptions()"
           ></p-select>
           <label for="categoryId">{{ 'taskSubcategories.fields.category' | translate }}</label>
         </p-floatLabel>

@@ -38,10 +38,10 @@
             [filter]="true"
             appendTo="body"
             inputId="categoryId"
-            optionLabel="name"
-            optionValue="id"
+            optionLabel="label"
+            optionValue="value"
             formControlName="categoryId"
-            [options]="categoryOptions()"
+            [options]="categorySelectOptions()"
           ></p-select>
           <app-error-msg
             [field]="'categoryId'"
@@ -60,10 +60,10 @@
             [filter]="true"
             appendTo="body"
             inputId="subcategoryId"
-            optionLabel="name"
-            optionValue="id"
+            optionLabel="label"
+            optionValue="value"
             formControlName="subcategoryId"
-            [options]="subcategoryOptions()"
+            [options]="subcategorySelectOptions()"
           ></p-select>
           <app-error-msg
             [field]="'subcategoryId'"
