@@ -841,7 +841,16 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
     /** Achado real 2026-09-24 (relatado pelo usuário): sem prazo, a janela de horário do Turno
      *  (TaskService#isReleased) nunca chega a ser aplicada - ela só entra em ação no PRÓPRIO dia
      *  do vencimento. Tarefa gerada em lote é, por definição, "pra fazer agora/hoje" - prazo hoje
-     *  é o default certo, não deixar em branco. */
+     *  é o default certo, não deixar em branco.
+     *
+     *  Vai via Data de início=hoje + Dias para executar=0 (não `dueDate` direto) - achado real
+     *  2026-09-24 (2ª rodada, relatado pelo usuário: "na edição o prazo não vem preenchido"):
+     *  TasksCreateDialogComponent#save SEMPRE manda startDate+durationDays juntos (os dois são
+     *  campos obrigatórios do formulário), e o backend prioriza esse par sobre o dueDate cru
+     *  sempre que os dois vêm preenchidos (ver TaskService#computeDueDate) - uma Tarefa criada só
+     *  com dueDate (sem startDate) reabre com "Data de início" vazio, e ao salvar de novo o
+     *  prazo seria recalculado do zero. "0 dias" = vence no mesmo dia que começa, único jeito de
+     *  expressar "prazo hoje" nesse mecanismo (ver Validators.min(0) no formulário). */
     const todayDueDate = todayDateOnlyString();
 
     const inputs: TaskUpsertInput[] = [];
@@ -860,9 +869,9 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
           assigneeType,
           assigneeId: assigneeType === TaskAssigneeTypeEnum.USER ? assigneeId : null,
           assigneeDepartmentId: assigneeType === TaskAssigneeTypeEnum.DEPARTMENT ? assigneeDepartmentId : null,
-          dueDate: todayDueDate,
-          startDate: null,
-          durationDays: template.durationDays,
+          dueDate: null,
+          startDate: todayDueDate,
+          durationDays: 0,
           recurrenceFrequency: TaskRecurrenceFrequencyEnum.NONE,
           recurrenceInterval: null,
           recurrenceWeekDays: [],

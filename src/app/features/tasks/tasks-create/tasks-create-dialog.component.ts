@@ -254,7 +254,13 @@ export class TasksCreateDialogComponent {
     assigneeId: this.fb.control<string | null>(null, [Validators.required]),
     assigneeDepartmentId: this.fb.control<string | null>(null),
     startDate: this.fb.control<Date | null>(null, [Validators.required]),
-    durationDays: this.fb.control<number | null>(null, [Validators.required, Validators.min(1)]),
+    /** min(0), não min(1) (achado real 2026-09-24) - uma tarefa com Turno definido (ver
+     *  shift acima) é pra HOJE, dentro da janela do turno; "0 dias para executar" = vence no
+     *  mesmo dia da Data de início, único jeito de expressar isso no mecanismo já existente
+     *  (dueDate = startDate.plusDays(durationDays), ver TaskService#computeDueDate) sem criar um
+     *  campo de Prazo direto só pra esse caso. Ver AllTasksListComponent#onBatchCreateRequested,
+     *  que já usa 0 pras tarefas geradas em lote a partir de Modelo. */
+    durationDays: this.fb.control<number | null>(null, [Validators.required, Validators.min(0)]),
     recurrenceOption: this.fb.nonNullable.control<RecurrenceFormOption>('NONE', [Validators.required]),
     recurrenceInterval: this.fb.control<number | null>(null),
     recurrenceWeekDays: this.fb.nonNullable.control<DayOfWeekEnum[]>([]),
@@ -283,15 +289,17 @@ export class TasksCreateDialogComponent {
   get scheduleDueDate(): Date | null {
     const start = this.scheduleStartDate;
     const days = this.scheduleDurationDays;
-    if (!start || !days || days <= 0) return null;
+    if (!start || days == null || days < 0) return null;
 
     const due = new Date(start);
     due.setDate(due.getDate() + days);
     return due;
   }
 
+  /** days === 0 (achado real 2026-09-24, tarefa de Turno com "0 dias para executar" - vence no
+   *  próprio dia da Data de início) ainda conta como prévia válida, não só days > 0. */
   get hasSchedulePreview(): boolean {
-    return !!this.scheduleStartDate && !!this.scheduleDurationDays && this.scheduleDurationDays > 0;
+    return !!this.scheduleStartDate && this.scheduleDurationDays != null && this.scheduleDurationDays >= 0;
   }
 
   constructor() {
