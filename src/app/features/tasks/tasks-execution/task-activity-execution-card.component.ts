@@ -9,7 +9,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { TranslateModule } from '@ngx-translate/core';
-import { Component, EventEmitter, Output, ViewChild, computed, inject, input, signal } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, computed, effect, inject, input, signal } from '@angular/core';
 
 import { I18nService } from '@core/i18n/i18n.service';
 import { CsDatePipe } from '@shared/pipes/cs-date.pipe';
@@ -27,6 +27,16 @@ function toDateOnlyString(value: Date | null): string | null {
   const m = String(value.getMonth() + 1).padStart(2, '0');
   const d = String(value.getDate()).padStart(2, '0');
   return `${y}-${m}-${d}`;
+}
+
+/** Inverso de toDateOnlyString - usado só ao reabrir uma atividade DATE já respondida pra editar
+ *  (pedido do usuário 2026-09-23). Monta a partir dos componentes ano/mês/dia em vez de
+ *  `new Date(value)` de propósito - este último interpreta "YYYY-MM-DD" como UTC meia-noite, que
+ *  em fusos negativos (Brasil) volta um dia ao converter pra local. */
+function parseDateOnlyString(value: string | null): Date | null {
+  if (!value) return null;
+  const [y, m, d] = value.split('-').map(Number);
+  return new Date(y, m - 1, d);
 }
 
 /**
@@ -65,6 +75,9 @@ export class TaskActivityExecutionCardComponent {
   /** false quando a Tarefa está num status terminal ou o usuário não tem permissão de execução
    *  (ver TaskExecutionDialogComponent#canAnswer) - trava tudo, mesmo já tendo sido respondida. */
   canAnswer = input(true);
+  /** true só com a Tarefa IN_PROGRESS (ver TaskExecutionDialogComponent#canEditAnswered) - libera
+   *  o botão "Editar" na leitura de uma atividade JÁ respondida (pedido do usuário 2026-09-23). */
+  canEditAnswered = input(false);
   saving = input(false);
 
   @Output() readonly answered = new EventEmitter<{ input: TaskActivityAnswerInput; file: File | null }>();
@@ -83,6 +96,22 @@ export class TaskActivityExecutionCardComponent {
 
   toggleExpanded(): void {
     this.expanded.update((value) => !value);
+  }
+
+  /** true = reabriu uma atividade JÁ respondida pra editar de novo (pedido do usuário 2026-09-23,
+   *  só possível com canEditAnswered()) - troca a leitura pelo mesmo formulário editável de
+   *  primeira resposta, pré-preenchido com o valor salvo. */
+  readonly editing = signal(false);
+
+  constructor() {
+    /** activity() só troca de referência de verdade após um "Salvar" bem-sucedido (o pai substitui
+     *  só o item afetado no array, ver TaskExecutionDialogComponent#onAnswered) - volta pra leitura
+     *  sozinho quando isso acontece. Roda também na primeira renderização (editing já começa
+     *  false, inofensivo). */
+    effect(() => {
+      this.activity();
+      this.editing.set(false);
+    });
   }
 
   readonly answerText = signal('');
@@ -245,5 +274,26 @@ export class TaskActivityExecutionCardComponent {
     this.observationText.set('');
     this.file.set(null);
     this.signatureHasContent.set(false);
+  }
+
+  /** Reabre uma atividade JÁ respondida pra editar de novo (pedido do usuário 2026-09-23, só
+   *  chamado quando canEditAnswered() é true) - pré-preenche os signals com o valor salvo, mesmo
+   *  formulário editável de primeira resposta a partir daqui. SIGNATURE/DOCUMENT/IMAGE não dá pra
+   *  pré-preencher (é um arquivo) - precisa fornecer um novo antes de conseguir salvar de novo. */
+  startEdit(): void {
+    const a = this.activity();
+    this.answerText.set(a.answerText ?? '');
+    this.answerDate.set(parseDateOnlyString(a.answerDate));
+    this.answerNumber.set(a.answerNumber);
+    this.answerOptionId.set(a.answerOptionId);
+    this.answerOptionIds.set(a.answerOptionIds ?? []);
+    this.observationReported.set(a.observationReported);
+    this.observationText.set(a.observationText ?? '');
+    this.editing.set(true);
+  }
+
+  cancelEdit(): void {
+    this.reset();
+    this.editing.set(false);
   }
 }

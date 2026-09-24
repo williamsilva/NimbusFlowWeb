@@ -148,6 +148,13 @@
   gap: 0.4rem;
 }
 
+.cs-exec-card-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
 .cs-exec-card-footer {
   font-size: 0.78rem;
   opacity: 0.6;
@@ -157,6 +164,7 @@
 .cs-exec-card-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 0.4rem;
 }
 
 .cs-exec-pending-note {

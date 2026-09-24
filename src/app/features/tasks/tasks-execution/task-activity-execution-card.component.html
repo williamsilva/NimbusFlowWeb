@@ -16,8 +16,8 @@
   </button>
 
   @if (expanded()) {
-    @if (activity().executedAt) {
-    <!-- Já respondida: só leitura (pedido do usuário 2026-09-23, "igual ao print") -->
+    @if (activity().executedAt && !editing()) {
+    <!-- Já respondida e não está sendo reeditada: só leitura (pedido do usuário 2026-09-23) -->
     <div class="cs-exec-card-body">
       @switch (activity().dataCollectionType) {
         @case (TaskActivityDataTypeEnum.TEXT) {
@@ -73,11 +73,23 @@
         </div>
       }
 
-      <div class="cs-exec-card-footer">
-        {{ 'tasks.execution.executedAt' | translate: { date: (activity().executedAt | csDate: 'short'), name: activity().executedByName } }}
+      <div class="cs-exec-card-footer-row">
+        <div class="cs-exec-card-footer">
+          {{ 'tasks.execution.executedAt' | translate: { date: (activity().executedAt | csDate: 'short'), name: activity().executedByName } }}
+        </div>
+        @if (canEditAnswered()) {
+          <button
+            pButton
+            type="button"
+            icon="pi pi-pencil"
+            (click)="startEdit()"
+            class="p-button-text p-button-sm"
+            [label]="'common.edit' | translate"
+          ></button>
+        }
       </div>
     </div>
-  } @else if (canAnswer()) {
+  } @else if (editing() || canAnswer()) {
     <!-- Ainda não respondida, e o usuário pode responder -->
     <div class="cs-exec-card-body">
       @switch (activity().dataCollectionType) {
@@ -222,6 +234,16 @@
       }
 
       <div class="cs-exec-card-actions">
+        @if (editing()) {
+          <button
+            pButton
+            type="button"
+            [disabled]="saving()"
+            (click)="cancelEdit()"
+            class="p-button-text p-button-sm"
+            [label]="'common.cancel' | translate"
+          ></button>
+        }
         <button
           pButton
           type="button"

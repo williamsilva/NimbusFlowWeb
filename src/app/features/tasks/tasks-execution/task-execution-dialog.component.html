@@ -89,6 +89,7 @@
             <app-task-activity-execution-card
               [activity]="activity"
               [canAnswer]="canAnswer()"
+              [canEditAnswered]="canEditAnswered()"
               [saving]="savingActivityId() === activity.id"
               (answered)="onAnswered(activity, $event)"
             ></app-task-activity-execution-card>

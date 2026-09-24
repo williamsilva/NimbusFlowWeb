@@ -60,17 +60,32 @@ export class TaskExecutionDialogComponent {
   readonly savingActivityId = signal<string | null>(null);
   private hasAnyAnswer = false;
 
+  /** Status "ao vivo" da Tarefa durante a sessão do diálogo (pedido do usuário 2026-09-23:
+   *  responder uma atividade pode mover TODO->IN_PROGRESS no backend - ver TaskService
+   *  #answerActivity - sem isto o pill de status e canAnswer()/canEditAnswered() ficariam presos
+   *  no valor de quando o diálogo abriu até o próximo reload da lista inteira). Inicializado a
+   *  partir de task() e atualizado otimisticamente em #onAnswered (mesma regra determinística do
+   *  backend: só sai de TODO). */
+  readonly currentStatus = signal<TaskStatusEnum | null>(null);
+
   readonly canAnswer = computed(() => {
     const task = this.task();
-    if (!task) return false;
-    if (TERMINAL_STATUSES.includes(task.status)) return false;
+    const status = this.currentStatus();
+    if (!task || !status) return false;
+    if (TERMINAL_STATUSES.includes(status)) return false;
     return this.policy.canExecuteOwn(task);
   });
+
+  /** Reabrir uma atividade já respondida só é permitido com a Tarefa ainda IN_PROGRESS (pedido do
+   *  usuário 2026-09-23) - uma vez em REVIEW (que agora exige todas as atividades respondidas,
+   *  ver TaskService#allActivitiesAnswered), as respostas ficam travadas pro revisor. */
+  readonly canEditAnswered = computed(() => this.currentStatus() === TaskStatusEnum.IN_PROGRESS && this.canAnswer());
 
   constructor() {
     effect(() => {
       const task = this.task();
       this.activities.set(task ? [...task.activities].sort((a, b) => a.position - b.position) : []);
+      this.currentStatus.set(task?.status ?? null);
       if (!this.visible()) {
         this.hasAnyAnswer = false;
       }
@@ -104,17 +119,17 @@ export class TaskExecutionDialogComponent {
   }
 
   statusLabel(): string {
-    const task = this.task();
-    return task ? taskStatusLabel(task.status, this.i18n) : '';
+    const status = this.currentStatus();
+    return status ? taskStatusLabel(status, this.i18n) : '';
   }
 
   statusTone(): ReturnType<typeof taskStatusTone> {
-    const task = this.task();
-    return task ? taskStatusTone(task.status) : 'neutral';
+    const status = this.currentStatus();
+    return status ? taskStatusTone(status) : 'neutral';
   }
 
   isNotDone(): boolean {
-    return this.task()?.status === TaskStatusEnum.NOT_DONE;
+    return this.currentStatus() === TaskStatusEnum.NOT_DONE;
   }
 
   onAnswered(activity: TaskActivityModel, event: { input: TaskActivityAnswerInput; file: File | null }): void {
@@ -130,6 +145,9 @@ export class TaskExecutionDialogComponent {
           this.savingActivityId.set(null);
           this.hasAnyAnswer = true;
           this.activities.update((activities) => activities.map((a) => (a.id === saved.id ? saved : a)));
+          if (this.currentStatus() === TaskStatusEnum.TODO) {
+            this.currentStatus.set(TaskStatusEnum.IN_PROGRESS);
+          }
           this.toast.add({
             severity: 'success',
             summary: this.i18n.tUi('common.success'),
