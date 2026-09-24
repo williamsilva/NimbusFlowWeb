@@ -1,0 +1,89 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '520px', maxWidth: '95vw' }"
+  [header]="'taskTemplatePicker.title' | translate"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            inputId="categoryId"
+            optionLabel="name"
+            optionValue="id"
+            formControlName="categoryId"
+            [options]="categoryOptions()"
+          ></p-select>
+          <label for="categoryId">{{ 'taskTemplatePicker.fields.category' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            inputId="subcategoryId"
+            optionLabel="name"
+            optionValue="id"
+            formControlName="subcategoryId"
+            [options]="subcategoryOptions()"
+          ></p-select>
+          <label for="subcategoryId">{{ 'taskTemplatePicker.fields.subcategory' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            inputId="templateId"
+            optionLabel="name"
+            optionValue="id"
+            formControlName="templateId"
+            [options]="templateOptions()"
+          ></p-select>
+          <label for="templateId">{{ 'taskTemplatePicker.fields.template' | translate }}</label>
+        </p-floatLabel>
+        @if (form.controls.subcategoryId.value && !templateOptions().length) {
+          <span class="block text-sm opacity-70 mt-1">{{ 'taskTemplatePicker.empty' | translate }}</span>
+        }
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="confirm()"
+      icon="pi pi-check"
+      class="p-button-sm"
+      [label]="'common.confirm' | translate"
+    ></button>
+  </ng-template>
+</p-dialog>

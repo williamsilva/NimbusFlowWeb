@@ -47,9 +47,23 @@
   ></p-selectButton>
 </app-page-header>
 
+<app-task-creation-choice-dialog
+  [visible]="choiceDialogVisible()"
+  (chooseBlank)="onChooseBlank()"
+  (chooseFromTemplate)="onChooseFromTemplate()"
+  (visibleChange)="onChoiceVisibleChange($event)"
+></app-task-creation-choice-dialog>
+
+<app-task-template-picker-dialog
+  [visible]="pickerDialogVisible()"
+  (templateSelected)="onTemplateSelected($event)"
+  (visibleChange)="onPickerVisibleChange($event)"
+></app-task-template-picker-dialog>
+
 <app-tasks-create-dialog
   [task]="editingTask()"
   [visible]="upsertVisible()"
+  [prefillFromTemplate]="templateToPrefill()"
   (created)="onCreated()"
   (updated)="onUpdated()"
   (visibleChange)="onUpsertVisibleChange($event)"

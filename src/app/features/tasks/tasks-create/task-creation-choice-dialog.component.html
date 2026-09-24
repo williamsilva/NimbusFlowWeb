@@ -1,0 +1,25 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '620px', maxWidth: '95vw' }"
+  [header]="'taskCreationChoice.title' | translate"
+>
+  <div class="cs-choice-grid">
+    <button type="button" class="cs-choice-card" (click)="selectBlank()">
+      <i class="pi pi-file cs-choice-card-icon"></i>
+      <span class="cs-choice-card-title">{{ 'taskCreationChoice.blank.title' | translate }}</span>
+      <span class="cs-choice-card-description">{{ 'taskCreationChoice.blank.description' | translate }}</span>
+    </button>
+
+    <button type="button" class="cs-choice-card" (click)="selectFromTemplate()">
+      <i class="pi pi-copy cs-choice-card-icon"></i>
+      <span class="cs-choice-card-title">{{ 'taskCreationChoice.fromTemplate.title' | translate }}</span>
+      <span class="cs-choice-card-description">{{ 'taskCreationChoice.fromTemplate.description' | translate }}</span>
+    </button>
+  </div>
+</p-dialog>

@@ -28,6 +28,8 @@ export const UI_KEYS = {
       title: 'menu.settings.title',
       approvalLimits: 'menu.settings.approvalLimits',
       departments: 'menu.settings.departments',
+      cargos: 'menu.settings.cargos',
+      taskTemplates: 'menu.settings.taskTemplates',
       workAutoComplete: 'menu.settings.workAutoComplete',
       company: 'menu.settings.company',
     },
@@ -514,6 +516,69 @@ export const UI_KEYS = {
       success: 'departments.deleteConfirm.success',
       error: 'departments.deleteConfirm.error',
     },
+  },
+  cargos: {
+    form: {
+      invalid: 'cargos.form.invalid',
+      created: 'cargos.form.created',
+      updated: 'cargos.form.updated',
+      saveError: 'cargos.form.saveError',
+    },
+    deleteConfirm: {
+      header: 'cargos.deleteConfirm.header',
+      message: 'cargos.deleteConfirm.message',
+      success: 'cargos.deleteConfirm.success',
+      error: 'cargos.deleteConfirm.error',
+    },
+  },
+  taskCategories: {
+    form: {
+      invalid: 'taskCategories.form.invalid',
+      created: 'taskCategories.form.created',
+      updated: 'taskCategories.form.updated',
+      saveError: 'taskCategories.form.saveError',
+    },
+    deleteConfirm: {
+      header: 'taskCategories.deleteConfirm.header',
+      message: 'taskCategories.deleteConfirm.message',
+      success: 'taskCategories.deleteConfirm.success',
+      error: 'taskCategories.deleteConfirm.error',
+    },
+    permissions: {
+      saved: 'taskCategories.permissions.saved',
+      saveError: 'taskCategories.permissions.saveError',
+    },
+  },
+  taskSubcategories: {
+    form: {
+      invalid: 'taskSubcategories.form.invalid',
+      created: 'taskSubcategories.form.created',
+      updated: 'taskSubcategories.form.updated',
+      saveError: 'taskSubcategories.form.saveError',
+    },
+    deleteConfirm: {
+      header: 'taskSubcategories.deleteConfirm.header',
+      message: 'taskSubcategories.deleteConfirm.message',
+      success: 'taskSubcategories.deleteConfirm.success',
+      error: 'taskSubcategories.deleteConfirm.error',
+    },
+  },
+  taskTemplates: {
+    form: {
+      invalid: 'taskTemplates.form.invalid',
+      created: 'taskTemplates.form.created',
+      updated: 'taskTemplates.form.updated',
+      saveError: 'taskTemplates.form.saveError',
+    },
+    deleteConfirm: {
+      header: 'taskTemplates.deleteConfirm.header',
+      message: 'taskTemplates.deleteConfirm.message',
+      success: 'taskTemplates.deleteConfirm.success',
+      error: 'taskTemplates.deleteConfirm.error',
+    },
+  },
+  taskTemplatePicker: {
+    invalid: 'taskTemplatePicker.invalid',
   },
   validation: {
     required: 'validation.required',

@@ -15,6 +15,12 @@ export interface TaskModel {
   actionPlanId: string | null;
   title: string;
   description: string | null;
+  /** Nulos em Tarefas criadas antes de 2026-09-24 (sem backfill, decisão do usuário) - ver
+   *  TaskRequest.categoryId/subcategoryId no backend. Obrigatórios em Tarefas NOVAS. */
+  categoryId: string | null;
+  categoryName: string | null;
+  subcategoryId: string | null;
+  subcategoryName: string | null;
   /** USER usa assigneeId/assigneeName, DEPARTMENT usa assigneeDepartmentId/assigneeDepartmentName -
    *  exatamente um dos dois preenchido (pedido do usuário 2026-09-22, mesmo padrão de
    *  Ticket.targetType). */
@@ -79,6 +85,10 @@ export type TaskWithActionPlanApiModel = TaskWithActionPlanModel;
 export interface TaskUpsertInput {
   title: string;
   description: string | null;
+  /** Obrigatórios em Tarefas NOVAS (pedido do usuário 2026-09-24) - ver TaskModel.categoryId/
+   *  subcategoryId. */
+  categoryId: string | null;
+  subcategoryId: string | null;
   assigneeType: TaskAssigneeTypeEnum;
   /** Obrigatório só quando assigneeType=USER - ver TaskService#resolveAssignee no backend. */
   assigneeId: string | null;

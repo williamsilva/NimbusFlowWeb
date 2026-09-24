@@ -34,6 +34,32 @@ export const SETTINGS_ROUTES: Routes = [
       ),
   },
   {
+    path: 'cargos',
+    title: 'routes.settings.cargos.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.CARGO_VIEW],
+    },
+    loadComponent: () =>
+      import('./cargos/cargos-list.component').then((m) => m.CargosListComponent),
+  },
+  {
+    path: 'task-templates',
+    title: 'routes.settings.taskTemplates.title',
+    canActivate: [permissionGuard],
+    data: {
+      requireAll: false,
+      redirectTo: '/forbidden',
+      permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.TASK_TEMPLATE_VIEW],
+    },
+    loadComponent: () =>
+      import('./task-templates/task-templates-settings.component').then(
+        (m) => m.TaskTemplatesSettingsComponent,
+      ),
+  },
+  {
     path: 'work-auto-complete',
     title: 'routes.settings.workAutoComplete.title',
     canActivate: [permissionGuard],

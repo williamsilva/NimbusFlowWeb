@@ -207,6 +207,20 @@ export const APP_MENU: AppMenuItem[] = [
       },
       {
         exact: false,
+        route: '/settings/cargos',
+        labelKey: 'menu.settings.cargos',
+        icon: 'pi pi-id-card text-indigo-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.CARGO_VIEW],
+      },
+      {
+        exact: false,
+        route: '/settings/task-templates',
+        labelKey: 'menu.settings.taskTemplates',
+        icon: 'pi pi-list-check text-indigo-400',
+        permissions: [PERMISSIONS.SUPPORT, PERMISSIONS.SETTINGS.TASK_TEMPLATE_VIEW],
+      },
+      {
+        exact: false,
         route: '/settings/work-auto-complete',
         labelKey: 'menu.settings.workAutoComplete',
         icon: 'pi pi-clock text-indigo-400',

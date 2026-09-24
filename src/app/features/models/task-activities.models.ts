@@ -105,6 +105,33 @@ export function toActivityDraft(activity: TaskActivityModel): TaskActivityDraft 
   return { ...activity, clientId: crypto.randomUUID() };
 }
 
+/** Converte uma atividade de CONFIGURAÇÃO (Modelo de Tarefa, sem campos de resposta - pedido do
+ *  usuário 2026-09-24) num TaskActivityDraft, preenchendo os campos de resposta/execução com
+ *  valores em branco - TasksActivityConfigDialogComponent nunca os lê nem os altera (é só de
+ *  configuração), então são inofensivos aqui. Usado tanto por TaskTemplateFormDialogComponent
+ *  (editar as atividades do próprio Modelo) quanto por TasksCreateDialogComponent
+ *  (#prefillFromTemplate - pré-carrega a lista ao criar uma Tarefa a partir de um Modelo). */
+export function toActivityDraftFromConfig(config: TaskActivityConfigModel): TaskActivityDraft {
+  return {
+    ...config,
+    clientId: crypto.randomUUID(),
+    answerText: null,
+    answerDate: null,
+    answerNumber: null,
+    answerOptionId: null,
+    answerOptionIds: [],
+    answerSignatureUrl: null,
+    answerDocumentUrl: null,
+    answerImageUrl: null,
+    critical: false,
+    observationReported: false,
+    observationText: null,
+    executedAt: null,
+    executedById: null,
+    executedByName: null,
+  };
+}
+
 export function toActivityInput(draft: TaskActivityDraft): TaskActivityInput {
   return {
     description: draft.description,

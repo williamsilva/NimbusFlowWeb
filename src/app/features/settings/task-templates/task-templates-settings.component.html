@@ -1,0 +1,256 @@
+<app-page-header
+  [subtitle]="'taskTemplates.pageSubtitle' | translate"
+  [breadcrumb]="[
+    { label: ('menu.settings.title' | translate), url: '/settings' },
+    { label: ('routes.settings.taskTemplates.title' | translate) },
+  ]"
+></app-page-header>
+
+<app-task-category-form-dialog
+  [editing]="editingCategory()"
+  [visible]="categoryFormVisible()"
+  (saved)="onCategorySaved()"
+  (visibleChange)="onCategoryFormVisibleChange($event)"
+></app-task-category-form-dialog>
+
+<app-task-category-permissions-dialog
+  [category]="categoryForPermissions()"
+  [visible]="permissionsDialogVisible()"
+  (saved)="onPermissionsSaved()"
+  (visibleChange)="onPermissionsDialogVisibleChange($event)"
+></app-task-category-permissions-dialog>
+
+<app-task-subcategory-form-dialog
+  [editing]="editingSubcategory()"
+  [visible]="subcategoryFormVisible()"
+  [categoryOptions]="categories()"
+  [defaultCategoryId]="selectedCategoryId()"
+  (saved)="onSubcategorySaved()"
+  (visibleChange)="onSubcategoryFormVisibleChange($event)"
+></app-task-subcategory-form-dialog>
+
+<app-task-template-form-dialog
+  [editing]="editingTemplate()"
+  [visible]="templateFormVisible()"
+  [categoryOptions]="categories()"
+  [defaultCategoryId]="selectedCategoryId()"
+  [defaultSubcategoryId]="selectedSubcategoryId()"
+  (saved)="onTemplateSaved()"
+  (visibleChange)="onTemplateFormVisibleChange($event)"
+></app-task-template-form-dialog>
+
+<div class="cs-templates-grid mt-2">
+  <!-- Coluna 1: Categorias -->
+  <div class="surface-card border-round p-3 cs-templates-column">
+    <div class="cs-templates-column-header">
+      <span class="font-semibold">{{ 'taskCategories.columns.title' | translate }}</span>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        (click)="goNewCategory()"
+        tooltipPosition="top"
+        [disabled]="!canChange()"
+        class="p-button-text p-button-sm"
+        [pTooltip]="!canChange() ? ('taskCategories.action.noPermission' | translate) : ''"
+        [attr.aria-label]="'taskCategories.new.title' | translate"
+      ></button>
+    </div>
+
+    <input
+      pInputText
+      class="w-full mb-2"
+      [ngModel]="categorySearch()"
+      (ngModelChange)="categorySearch.set($event)"
+      [placeholder]="'taskCategories.searchPlaceholder' | translate"
+    />
+
+    <div class="cs-templates-list">
+      @for (row of filteredCategories(); track row.id) {
+        <div class="cs-templates-item" [class.cs-templates-item-selected]="selectedCategoryId() === row.id">
+          <span
+            role="button"
+            tabindex="0"
+            class="cs-templates-item-label"
+            (click)="selectCategory(row)"
+            (keydown.enter)="selectCategory(row)"
+            (keydown.space)="$event.preventDefault(); selectCategory(row)"
+            >{{ row.name }}</span
+          >
+          <div class="cs-templates-item-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-shield"
+              (click)="goManagePermissions(row)"
+              tooltipPosition="top"
+              [disabled]="!canChange()"
+              class="p-button-text p-button-sm"
+              [pTooltip]="'taskCategories.action.managePermissions' | translate"
+              [attr.aria-label]="'taskCategories.action.managePermissions' | translate"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="goEditCategory(row)"
+              [disabled]="!canChange()"
+              class="p-button-text p-button-sm"
+              [attr.aria-label]="'common.edit' | translate"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              (click)="confirmDeleteCategory(row)"
+              [disabled]="!canChange()"
+              class="p-button-text p-button-sm p-button-danger"
+              [attr.aria-label]="'common.delete' | translate"
+            ></button>
+          </div>
+        </div>
+      } @empty {
+        <div class="cs-templates-empty">
+          {{ loadingCategories() ? ('common.loading' | translate) : ('taskCategories.empty.title' | translate) }}
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Coluna 2: Subcategorias -->
+  <div class="surface-card border-round p-3 cs-templates-column">
+    <div class="cs-templates-column-header">
+      <span class="font-semibold">{{ 'taskSubcategories.columns.title' | translate }}</span>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        (click)="goNewSubcategory()"
+        tooltipPosition="top"
+        [disabled]="!canChange() || !selectedCategoryId()"
+        class="p-button-text p-button-sm"
+        [pTooltip]="
+          !canChange()
+            ? ('taskSubcategories.action.noPermission' | translate)
+            : !selectedCategoryId()
+              ? ('taskSubcategories.action.selectCategoryFirst' | translate)
+              : ''
+        "
+        [attr.aria-label]="'taskSubcategories.new.title' | translate"
+      ></button>
+    </div>
+
+    <input
+      pInputText
+      class="w-full mb-2"
+      [ngModel]="subcategorySearch()"
+      (ngModelChange)="subcategorySearch.set($event)"
+      [placeholder]="'taskSubcategories.searchPlaceholder' | translate"
+    />
+
+    <div class="cs-templates-list">
+      @for (row of filteredSubcategories(); track row.id) {
+        <div class="cs-templates-item" [class.cs-templates-item-selected]="selectedSubcategoryId() === row.id">
+          <span
+            role="button"
+            tabindex="0"
+            class="cs-templates-item-label"
+            (click)="selectSubcategory(row)"
+            (keydown.enter)="selectSubcategory(row)"
+            (keydown.space)="$event.preventDefault(); selectSubcategory(row)"
+            >{{ row.name }}</span
+          >
+          <div class="cs-templates-item-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              (click)="goEditSubcategory(row)"
+              [disabled]="!canChange()"
+              class="p-button-text p-button-sm"
+              [attr.aria-label]="'common.edit' | translate"
+            ></button>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              (click)="confirmDeleteSubcategory(row)"
+              [disabled]="!canChange()"
+              class="p-button-text p-button-sm p-button-danger"
+              [attr.aria-label]="'common.delete' | translate"
+            ></button>
+          </div>
+        </div>
+      } @empty {
+        <div class="cs-templates-empty">
+          {{ loadingSubcategories() ? ('common.loading' | translate) : ('taskSubcategories.empty.title' | translate) }}
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Coluna 3: Modelos de Tarefas -->
+  <div class="surface-card border-round p-3 cs-templates-column">
+    <div class="cs-templates-column-header">
+      <span class="font-semibold">{{ 'taskTemplates.columns.title' | translate }}</span>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        (click)="goNewTemplate()"
+        tooltipPosition="top"
+        [disabled]="!canChange() || !selectedSubcategoryId()"
+        class="p-button-text p-button-sm"
+        [pTooltip]="
+          !canChange()
+            ? ('taskTemplates.action.noPermission' | translate)
+            : !selectedSubcategoryId()
+              ? ('taskTemplates.action.selectSubcategoryFirst' | translate)
+              : ''
+        "
+        [attr.aria-label]="'taskTemplates.new.title' | translate"
+      ></button>
+    </div>
+
+    <input
+      pInputText
+      class="w-full mb-2"
+      [ngModel]="templateSearch()"
+      (ngModelChange)="templateSearch.set($event)"
+      [placeholder]="'taskTemplates.searchPlaceholder' | translate"
+    />
+
+    <div class="cs-templates-list">
+      @for (row of filteredTemplates(); track row.id) {
+        <div
+          role="button"
+          tabindex="0"
+          (click)="goEditTemplate(row)"
+          (keydown.enter)="goEditTemplate(row)"
+          class="cs-templates-item cs-templates-item-template"
+          (keydown.space)="$event.preventDefault(); goEditTemplate(row)"
+        >
+          <div class="cs-templates-item-label">
+            <span>{{ row.name }}</span>
+            <span class="cs-templates-item-subtext">{{ row.categoryName }} &gt; {{ row.subcategoryName }}</span>
+          </div>
+          <div class="cs-templates-item-actions">
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              (click)="confirmDeleteTemplate(row); $event.stopPropagation()"
+              [disabled]="!canChange()"
+              class="p-button-text p-button-sm p-button-danger"
+              [attr.aria-label]="'common.delete' | translate"
+            ></button>
+          </div>
+        </div>
+      } @empty {
+        <div class="cs-templates-empty">
+          {{ loadingTemplates() ? ('common.loading' | translate) : ('taskTemplates.empty.title' | translate) }}
+        </div>
+      }
+    </div>
+  </div>
+</div>

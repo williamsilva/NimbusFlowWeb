@@ -18,6 +18,12 @@
       "departments": {
         "title": "Departamentos"
       },
+      "cargos": {
+        "title": "Cargos"
+      },
+      "taskTemplates": {
+        "title": "Modelos de Tarefas"
+      },
       "workAutoComplete": {
         "title": "Conclusão Automática"
       },
@@ -152,6 +158,8 @@
       "title": "Configurações",
       "approvalLimits": "Alçada",
       "departments": "Departamentos",
+      "cargos": "Cargos",
+      "taskTemplates": "Modelos de Tarefas",
       "workAutoComplete": "Conclusão Automática",
       "company": "Empresa"
     },
@@ -763,6 +771,147 @@
       "success": "Departamento excluído com sucesso",
       "error": "Não foi possível excluir o departamento"
     }
+  },
+  "cargos": {
+    "subtitle": "Cargos usados na permissão de Categoria de Tarefa (menu Configurações > Modelos de Tarefas).",
+    "new": { "title": "Novo cargo" },
+    "edit": { "title": "Editar cargo" },
+    "columns": {
+      "name": "Nome",
+      "users": "Usuários"
+    },
+    "fields": {
+      "name": "Nome",
+      "users": "Usuários"
+    },
+    "empty": { "title": "Nenhum cargo cadastrado" },
+    "action": { "noPermission": "Você não tem permissão pra gerenciar cargos" },
+    "form": {
+      "invalid": "Preencha o nome e selecione ao menos um usuário",
+      "created": "Cargo criado com sucesso",
+      "updated": "Cargo atualizado com sucesso",
+      "saveError": "Não foi possível salvar o cargo"
+    },
+    "deleteConfirm": {
+      "header": "Excluir cargo",
+      "message": "Tem certeza que deseja excluir este cargo?",
+      "success": "Cargo excluído com sucesso",
+      "error": "Não foi possível excluir o cargo"
+    }
+  },
+  "taskCategories": {
+    "columns": { "title": "Categorias" },
+    "searchPlaceholder": "Buscar categoria",
+    "new": { "title": "Nova categoria" },
+    "edit": { "title": "Editar categoria" },
+    "fields": { "name": "Nome" },
+    "empty": { "title": "Nenhuma categoria cadastrada" },
+    "action": {
+      "noPermission": "Você não tem permissão pra gerenciar categorias de tarefa",
+      "managePermissions": "Gerenciar permissões"
+    },
+    "form": {
+      "invalid": "Preencha o nome da categoria",
+      "created": "Categoria criada com sucesso",
+      "updated": "Categoria atualizada com sucesso",
+      "saveError": "Não foi possível salvar a categoria"
+    },
+    "deleteConfirm": {
+      "header": "Excluir categoria",
+      "message": "Tem certeza que deseja excluir esta categoria? Todas as subcategorias e modelos de tarefa vinculados a ela também serão excluídos.",
+      "success": "Categoria excluída com sucesso",
+      "error": "Não foi possível excluir a categoria"
+    },
+    "permissions": {
+      "title": "Gerenciar permissões",
+      "subtitle": "Defina quem poderá visualizar a categoria \"{name}\", acessar seus modelos e acompanhar todas as tarefas vinculadas a ela.",
+      "administrators": "Administradores",
+      "administratorsHint": "Administradores sempre têm acesso total, mesmo sem marcar nada aqui.",
+      "fields": {
+        "departments": "Departamentos",
+        "cargos": "Cargos",
+        "users": "Colaboradores"
+      },
+      "saved": "Permissões salvas com sucesso",
+      "saveError": "Não foi possível salvar as permissões"
+    }
+  },
+  "taskSubcategories": {
+    "columns": { "title": "Subcategorias" },
+    "searchPlaceholder": "Buscar subcategoria",
+    "new": { "title": "Nova subcategoria" },
+    "edit": { "title": "Editar subcategoria" },
+    "fields": { "category": "Categoria", "name": "Nome" },
+    "empty": { "title": "Nenhuma subcategoria cadastrada" },
+    "action": {
+      "noPermission": "Você não tem permissão pra gerenciar subcategorias de tarefa",
+      "selectCategoryFirst": "Selecione uma categoria primeiro"
+    },
+    "form": {
+      "invalid": "Selecione a categoria e preencha o nome",
+      "created": "Subcategoria criada com sucesso",
+      "updated": "Subcategoria atualizada com sucesso",
+      "saveError": "Não foi possível salvar a subcategoria"
+    },
+    "deleteConfirm": {
+      "header": "Excluir subcategoria",
+      "message": "Tem certeza que deseja excluir esta subcategoria? Todos os modelos de tarefa vinculados a ela também serão excluídos.",
+      "success": "Subcategoria excluída com sucesso",
+      "error": "Não foi possível excluir a subcategoria"
+    }
+  },
+  "taskTemplates": {
+    "pageSubtitle": "Cadastre categorias, subcategorias e modelos de tarefa - os modelos aparecem na hora de criar uma nova tarefa.",
+    "columns": { "title": "Modelos de Tarefas" },
+    "searchPlaceholder": "Buscar modelo",
+    "new": { "title": "Novo modelo" },
+    "edit": { "title": "Editar modelo" },
+    "fields": {
+      "category": "Categoria",
+      "subcategory": "Subcategoria",
+      "name": "Nome do modelo",
+      "title": "Título da tarefa",
+      "description": "Descrição",
+      "durationDays": "Dias para executar"
+    },
+    "empty": { "title": "Nenhum modelo cadastrado" },
+    "action": {
+      "noPermission": "Você não tem permissão pra gerenciar modelos de tarefa",
+      "selectSubcategoryFirst": "Selecione uma subcategoria primeiro"
+    },
+    "form": {
+      "invalid": "Preencha a categoria, subcategoria, nome e título",
+      "created": "Modelo criado com sucesso",
+      "updated": "Modelo atualizado com sucesso",
+      "saveError": "Não foi possível salvar o modelo"
+    },
+    "deleteConfirm": {
+      "header": "Excluir modelo",
+      "message": "Tem certeza que deseja excluir este modelo de tarefa?",
+      "success": "Modelo excluído com sucesso",
+      "error": "Não foi possível excluir o modelo"
+    }
+  },
+  "taskCreationChoice": {
+    "title": "O que você deseja fazer?",
+    "blank": {
+      "title": "Criar tarefa em branco",
+      "description": "Comece do zero, preenchendo todos os campos manualmente."
+    },
+    "fromTemplate": {
+      "title": "Criar a partir de um modelo",
+      "description": "Escolha um modelo já configurado e pré-preencha a tarefa automaticamente."
+    }
+  },
+  "taskTemplatePicker": {
+    "title": "Selecionar modelo",
+    "fields": {
+      "category": "Categoria",
+      "subcategory": "Subcategoria",
+      "template": "Modelo"
+    },
+    "empty": "Nenhum modelo disponível para esta subcategoria",
+    "invalid": "Selecione um modelo"
   },
   "notFound": {
     "attemptedUrl": "URL acessada",
@@ -1893,6 +2042,8 @@
     "fields": {
       "title": "Título",
       "description": "Descrição",
+      "category": "Categoria",
+      "subcategory": "Subcategoria",
       "assignee": "Responsável pela execução",
       "assigneeType": "Atribuir para",
       "assigneeDepartment": "Departamento",

@@ -1,0 +1,175 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '640px', maxWidth: '95vw' }"
+  [header]="(isEditing() ? 'taskTemplates.edit.title' : 'taskTemplates.new.title') | translate"
+>
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            inputId="categoryId"
+            optionLabel="name"
+            optionValue="id"
+            formControlName="categoryId"
+            [options]="categoryOptions()"
+          ></p-select>
+          <label for="categoryId">{{ 'taskTemplates.fields.category' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            inputId="subcategoryId"
+            optionLabel="name"
+            optionValue="id"
+            formControlName="subcategoryId"
+            [options]="subcategoryOptions()"
+          ></p-select>
+          <label for="subcategoryId">{{ 'taskTemplates.fields.subcategory' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="name" class="w-full" formControlName="name" />
+          <label for="name">{{ 'taskTemplates.fields.name' | translate }}</label>
+          <app-error-msg
+            [field]="'name'"
+            [forId]="'name'"
+            [control]="form.controls.name"
+            [label]="'taskTemplates.fields.name' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <input pInputText id="title" class="w-full" formControlName="title" />
+          <label for="title">{{ 'taskTemplates.fields.title' | translate }}</label>
+          <app-error-msg
+            [field]="'title'"
+            [forId]="'title'"
+            [control]="form.controls.title"
+            [label]="'taskTemplates.fields.title' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <textarea pTextarea id="description" class="w-full" rows="3" formControlName="description"></textarea>
+          <label for="description">{{ 'taskTemplates.fields.description' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-inputNumber inputId="durationDays" class="w-full" [min]="0" formControlName="durationDays" />
+          <label for="durationDays">{{ 'taskTemplates.fields.durationDays' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <div class="cs-activities-header">
+          <div>
+            <span class="block text-sm font-semibold">{{ 'tasks.activities.title' | translate }}</span>
+            <span class="block text-sm opacity-70">{{ 'tasks.activities.subtitle' | translate }}</span>
+          </div>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-plus"
+            (click)="openAddActivity()"
+            class="p-button-sm"
+            [label]="'common.add' | translate"
+          ></button>
+        </div>
+
+        @if (!activities().length) {
+          <div class="cs-activities-empty">{{ 'tasks.activities.empty' | translate }}</div>
+        } @else {
+          <div class="cs-activities-list">
+            @for (activity of activities(); track activity.clientId; let i = $index) {
+              <div
+                class="cs-activity-row"
+                draggable="true"
+                (dragover)="$event.preventDefault()"
+                (dragstart)="onActivityDragStart(i)"
+                (drop)="onActivityDrop(i)"
+              >
+                <i class="pi pi-bars cs-activity-drag-handle"></i>
+                <i class="cs-activity-type-icon {{ taskActivityDataTypeIconOf(activity.dataCollectionType) }}"></i>
+                <div class="cs-activity-row-text">
+                  <span class="cs-activity-row-description">{{ activity.description }}</span>
+                  <span class="cs-activity-row-type">{{ taskActivityDataTypeLabel(activity.dataCollectionType) }}</span>
+                </div>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-pencil"
+                  (click)="openEditActivity(activity)"
+                  [attr.aria-label]="'common.edit' | translate"
+                  class="p-button-text p-button-sm"
+                ></button>
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  (click)="removeActivity(activity.clientId)"
+                  [attr.aria-label]="'common.remove' | translate"
+                  class="p-button-text p-button-danger p-button-sm"
+                ></button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </form>
+
+  <app-tasks-activity-config-dialog
+    [activity]="editingActivity()"
+    [visible]="activityDialogVisible()"
+    (saved)="onActivitySaved($event)"
+    (visibleChange)="onActivityDialogVisibleChange($event)"
+  ></app-tasks-activity-config-dialog>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

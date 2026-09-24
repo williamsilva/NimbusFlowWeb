@@ -1,0 +1,89 @@
+// Master-detail de 3 colunas (pedido do usuário 2026-09-24) - primeiro desse tipo no portfólio,
+// grid CSS simples em vez de reaproveitar algum componente de terceiros (não existe nada parecido
+// pra copiar). Empilha em telas estreitas, mesmo breakpoint md (768px) já usado no resto do app
+// via PrimeFlex (col-12 md:col-*).
+.cs-templates-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 767px) {
+  .cs-templates-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cs-templates-column {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.cs-templates-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.cs-templates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.cs-templates-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+
+  &:hover {
+    background: var(--surface-hover);
+  }
+}
+
+.cs-templates-item-selected {
+  border-color: var(--primary-color);
+  background: var(--primary-50, var(--surface-hover));
+}
+
+.cs-templates-item-template {
+  cursor: pointer;
+}
+
+.cs-templates-item-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.cs-templates-item-subtext {
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
+.cs-templates-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  flex-shrink: 0;
+}
+
+.cs-templates-empty {
+  padding: 1.5rem 0.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}

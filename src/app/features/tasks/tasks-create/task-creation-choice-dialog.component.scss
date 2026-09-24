@@ -1,0 +1,46 @@
+.cs-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 575px) {
+  .cs-choice-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cs-choice-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-card);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--primary-color);
+    background: var(--surface-hover);
+  }
+}
+
+.cs-choice-card-icon {
+  font-size: 1.75rem;
+  color: var(--primary-color);
+}
+
+.cs-choice-card-title {
+  font-weight: 600;
+}
+
+.cs-choice-card-description {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}

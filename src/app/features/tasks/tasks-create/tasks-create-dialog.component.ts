@@ -41,8 +41,14 @@ import {
   taskActivityDataTypeIcon,
   taskActivityDataTypeLabel,
 } from '@models/enums/task-activity-data-type.enum';
-import { TaskActivityDraft, toActivityDraft, toActivityInput } from '@models/task-activities.models';
+import { TaskActivityDraft, toActivityDraft, toActivityDraftFromConfig, toActivityInput } from '@models/task-activities.models';
 import { TasksActivityConfigDialogComponent } from '@features/tasks/tasks-create/tasks-activity-config-dialog.component';
+import {
+  TaskCategoryOptionModel,
+  TaskSubcategoryOptionModel,
+  TaskTemplateModel,
+} from '@models/task-templates.models';
+import { TasksTemplatesApiService } from '@features/service/tasks-templates.api.service';
 
 function toDateOnlyString(value: Date | null): string | null {
   if (!value) return null;
@@ -131,6 +137,11 @@ export class TasksCreateDialogComponent {
    *  aberto de dentro de um plano específico (TasksListComponent). Ver `save()`. */
   actionPlanId = input<string | null>(null);
   task = input<TaskModel | null>(null);
+  /** Pré-preenchimento a partir de um Modelo de Tarefa (pedido do usuário 2026-09-24, "Criar a
+   *  partir de um modelo") - só lido na ABERTURA do diálogo em modo criação (ver #resetFormForCreate);
+   *  usuário continua podendo editar tudo depois. Puramente um preenchimento inicial do MESMO
+   *  formulário - sem nenhum vínculo persistido entre a Tarefa criada e o Modelo usado. */
+  prefillFromTemplate = input<TaskTemplateModel | null>(null);
 
   @Output() saved = new EventEmitter<void>();
   @Output() updated = new EventEmitter<void>();
@@ -141,6 +152,7 @@ export class TasksCreateDialogComponent {
   private readonly toast = inject(MessageService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly departmentsFacade = inject(DepartmentsFacade);
+  private readonly templatesApi = inject(TasksTemplatesApiService);
 
   readonly i18n = inject(I18nService);
   readonly tasks = inject(TasksFacade);
@@ -148,6 +160,13 @@ export class TasksCreateDialogComponent {
   readonly usersFacade = inject(UsersFacade);
   readonly assigneeOptions = this.usersFacade.options;
   readonly departmentOptions = this.departmentsFacade.options;
+
+  /** Categoria/Subcategoria obrigatórias em Tarefas novas (pedido do usuário 2026-09-24) -
+   *  categoryOptions já vem filtrado por permissão do usuário atual (ver
+   *  TaskCategoryService#options no backend); subcategoryOptions recarrega em cascata (ver
+   *  #loadSubcategoryOptions), mesma técnica de TaskTemplateFormDialogComponent. */
+  readonly categoryOptions = signal<TaskCategoryOptionModel[]>([]);
+  readonly subcategoryOptions = signal<TaskSubcategoryOptionModel[]>([]);
 
   readonly isEditMode = computed(() => !!this.task());
   readonly saving = signal(false);
@@ -209,6 +228,8 @@ export class TasksCreateDialogComponent {
   readonly form = this.fb.nonNullable.group({
     title: ['', [Validators.required, Validators.maxLength(200)]],
     description: this.fb.control<string | null>(null, [Validators.maxLength(1000)]),
+    categoryId: this.fb.control<string | null>(null, [Validators.required]),
+    subcategoryId: this.fb.control<string | null>(null, [Validators.required]),
     assigneeType: this.fb.nonNullable.control<TaskAssigneeTypeEnum>(TaskAssigneeTypeEnum.USER, [Validators.required]),
     assigneeId: this.fb.control<string | null>(null, [Validators.required]),
     assigneeDepartmentId: this.fb.control<string | null>(null),
@@ -256,6 +277,21 @@ export class TasksCreateDialogComponent {
   constructor() {
     this.usersFacade.loadUsersOptions();
     this.departmentsFacade.loadOptions();
+    this.templatesApi
+      .categoryOptions()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (items) => this.categoryOptions.set(items),
+        error: () => this.categoryOptions.set([]),
+      });
+
+    // Trocar de Categoria (usuário, não o form.reset() do effect() abaixo - ver
+    // #loadSubcategoryOptions ali) limpa a Subcategoria e recarrega as opções, mesma cascata de
+    // TaskTemplateFormDialogComponent.
+    this.form.controls.categoryId.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((categoryId) => {
+      this.form.controls.subcategoryId.setValue(null);
+      this.loadSubcategoryOptions(categoryId);
+    });
 
     // Só um dos dois (assigneeId/assigneeDepartmentId) é obrigatório por vez, de acordo com o
     // toggle - o outro é limpo e perde a validação, pra não bloquear o save com um campo escondido
@@ -294,7 +330,21 @@ export class TasksCreateDialogComponent {
         this.createFormInitialized = true;
         this.lastLoadedId = null;
         this.resetFormForCreate();
-        this.activities.set([]);
+
+        const template = this.prefillFromTemplate();
+        if (template) {
+          this.form.patchValue({
+            title: template.title,
+            description: template.description,
+            categoryId: template.categoryId,
+            subcategoryId: template.subcategoryId,
+            durationDays: template.durationDays,
+          });
+          this.loadSubcategoryOptions(template.categoryId);
+          this.activities.set(template.activities.map(toActivityDraftFromConfig));
+        } else {
+          this.activities.set([]);
+        }
         return;
       }
 
@@ -312,6 +362,8 @@ export class TasksCreateDialogComponent {
       this.form.reset({
         title: task.title,
         description: task.description,
+        categoryId: task.categoryId,
+        subcategoryId: task.subcategoryId,
         assigneeType: task.assigneeType,
         assigneeId: task.assigneeId,
         assigneeDepartmentId: task.assigneeDepartmentId,
@@ -333,8 +385,23 @@ export class TasksCreateDialogComponent {
       this.applyRecurrenceValidators(recurrenceOption);
       this.applyExpirationState(neverExpires);
       this.applyReleaseTimeState(releaseTimeEnabled);
+      this.loadSubcategoryOptions(task.categoryId);
       this.activities.set(task.activities.map(toActivityDraft));
     });
+  }
+
+  private loadSubcategoryOptions(categoryId: string | null): void {
+    if (!categoryId) {
+      this.subcategoryOptions.set([]);
+      return;
+    }
+    this.templatesApi
+      .subcategoryOptions(categoryId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (items) => this.subcategoryOptions.set(items),
+        error: () => this.subcategoryOptions.set([]),
+      });
   }
 
   private applyAssigneeValidators(assigneeType: TaskAssigneeTypeEnum): void {
@@ -493,6 +560,8 @@ export class TasksCreateDialogComponent {
     this.form.reset({
       title: '',
       description: null,
+      categoryId: null,
+      subcategoryId: null,
       assigneeType: TaskAssigneeTypeEnum.USER,
       assigneeId: null,
       assigneeDepartmentId: null,
@@ -537,6 +606,8 @@ export class TasksCreateDialogComponent {
     const payload: TaskUpsertInput = {
       title: v.title.trim(),
       description: v.description?.trim() || null,
+      categoryId: v.categoryId,
+      subcategoryId: v.subcategoryId,
       assigneeType: v.assigneeType,
       assigneeId: v.assigneeType === TaskAssigneeTypeEnum.USER ? v.assigneeId : null,
       assigneeDepartmentId: v.assigneeType === TaskAssigneeTypeEnum.DEPARTMENT ? v.assigneeDepartmentId : null,

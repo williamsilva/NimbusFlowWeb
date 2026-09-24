@@ -1,0 +1,104 @@
+<p-dialog
+  [modal]="true"
+  appendTo="body"
+  [closable]="false"
+  (onHide)="onHide()"
+  [draggable]="false"
+  [resizable]="false"
+  [visible]="visible()"
+  [style]="{ width: '620px', maxWidth: '95vw' }"
+  [header]="'taskCategories.permissions.title' | translate"
+>
+  <p class="text-sm opacity-80 mt-0 mb-3">
+    {{ 'taskCategories.permissions.subtitle' | translate: { name: category()?.name ?? '' } }}
+  </p>
+
+  <div class="surface-100 border-round p-3 mb-3 flex align-items-start gap-2">
+    <i class="pi pi-shield mt-1"></i>
+    <div>
+      <div class="font-medium">{{ 'taskCategories.permissions.administrators' | translate }}</div>
+      <div class="text-sm opacity-80">{{ 'taskCategories.permissions.administratorsHint' | translate }}</div>
+    </div>
+  </div>
+
+  <form [formGroup]="form" class="cs-dialog-form">
+    <div class="grid formgrid gap-0">
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-multiSelect
+            display="chip"
+            appendTo="body"
+            [filter]="true"
+            optionValue="value"
+            [showClear]="true"
+            optionLabel="label"
+            inputId="allowedDepartmentIds"
+            class="w-full"
+            [options]="departmentOptions()"
+            formControlName="allowedDepartmentIds"
+          ></p-multiSelect>
+          <label for="allowedDepartmentIds">{{ 'taskCategories.permissions.fields.departments' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-multiSelect
+            display="chip"
+            appendTo="body"
+            [filter]="true"
+            optionValue="value"
+            [showClear]="true"
+            optionLabel="label"
+            inputId="allowedCargoIds"
+            class="w-full"
+            [options]="cargoOptions()"
+            formControlName="allowedCargoIds"
+          ></p-multiSelect>
+          <label for="allowedCargoIds">{{ 'taskCategories.permissions.fields.cargos' | translate }}</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-multiSelect
+            display="chip"
+            appendTo="body"
+            [filter]="true"
+            optionValue="id"
+            [showClear]="true"
+            optionLabel="name"
+            inputId="allowedUserIds"
+            class="w-full"
+            [options]="userOptions()"
+            formControlName="allowedUserIds"
+          ></p-multiSelect>
+          <label for="allowedUserIds">{{ 'taskCategories.permissions.fields.users' | translate }}</label>
+        </p-floatLabel>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      (click)="close()"
+      icon="pi pi-times"
+      class="p-button-text p-button-sm"
+      [label]="'common.cancel' | translate"
+      [disabled]="saving()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      (click)="save()"
+      icon="pi pi-save"
+      class="p-button-sm"
+      [loading]="saving()"
+      [label]="'common.save' | translate"
+      [disabled]="saving()"
+    ></button>
+  </ng-template>
+</p-dialog>

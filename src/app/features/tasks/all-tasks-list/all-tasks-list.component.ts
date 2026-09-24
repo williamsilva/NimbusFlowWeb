@@ -36,7 +36,10 @@ import {
   TasksKanbanBoardComponent,
 } from '@features/tasks/tasks-kanban-board/tasks-kanban-board.component';
 import { TasksCreateDialogComponent } from '@features/tasks/tasks-create/tasks-create-dialog.component';
+import { TaskCreationChoiceDialogComponent } from '@features/tasks/tasks-create/task-creation-choice-dialog.component';
+import { TaskTemplatePickerDialogComponent } from '@features/tasks/tasks-create/task-template-picker-dialog.component';
 import { TaskExecutionDialogComponent } from '@features/tasks/tasks-execution/task-execution-dialog.component';
+import { TaskTemplateModel } from '@models/task-templates.models';
 import {
   TASK_STATUS_VALUES,
   TaskStatusEnum,
@@ -90,6 +93,8 @@ import {
     FiltersPanelComponent,
     TasksKanbanBoardComponent,
     TasksCreateDialogComponent,
+    TaskCreationChoiceDialogComponent,
+    TaskTemplatePickerDialogComponent,
     TaskExecutionDialogComponent,
     CsAdvancedPeriodDateFilterComponent,
   ],
@@ -129,6 +134,14 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   /** Nulo = criando; preenchido = editando (pedido do usuário 2026-09-23 - botão de lápis do
    *  cartão do Kanban abre a edição, mesmo diálogo reaproveitado de criar). */
   editingTask = signal<TaskWithActionPlanModel | null>(null);
+
+  /** "O que você deseja fazer?" (pedido do usuário 2026-09-24) - primeiro passo do "+ Nova
+   *  Tarefa", antes de abrir o diálogo de criação de verdade (ver #goNew/#onChooseBlank/
+   *  #onChooseFromTemplate). Só se aplica à CRIAÇÃO - o lápis do Kanban (edição) continua abrindo
+   *  app-tasks-create-dialog direto, sem passar por aqui. */
+  choiceDialogVisible = signal(false);
+  pickerDialogVisible = signal(false);
+  templateToPrefill = signal<TaskTemplateModel | null>(null);
 
   /** Tela de execução (pedido do usuário 2026-09-23) - clicar no resto do cartão do Kanban abre
    *  isto, diferente do botão de lápis (edição, ver editingTask acima). */
@@ -689,6 +702,29 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
   }
 
   goNew(): void {
+    this.choiceDialogVisible.set(true);
+  }
+
+  onChoiceVisibleChange(visible: boolean): void {
+    this.choiceDialogVisible.set(visible);
+  }
+
+  onChooseBlank(): void {
+    this.templateToPrefill.set(null);
+    this.editingTask.set(null);
+    this.upsertVisible.set(true);
+  }
+
+  onChooseFromTemplate(): void {
+    this.pickerDialogVisible.set(true);
+  }
+
+  onPickerVisibleChange(visible: boolean): void {
+    this.pickerDialogVisible.set(visible);
+  }
+
+  onTemplateSelected(template: TaskTemplateModel): void {
+    this.templateToPrefill.set(template);
     this.editingTask.set(null);
     this.upsertVisible.set(true);
   }
@@ -703,7 +739,10 @@ export class AllTasksListComponent extends StatefulListPage<TasksFiltersState, T
 
   onUpsertVisibleChange(visible: boolean): void {
     this.upsertVisible.set(visible);
-    if (!visible) this.editingTask.set(null);
+    if (!visible) {
+      this.editingTask.set(null);
+      this.templateToPrefill.set(null);
+    }
   }
 
   protected override resetFilters(): void {

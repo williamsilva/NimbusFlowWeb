@@ -30,6 +30,50 @@
         </p-floatLabel>
       </div>
 
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            inputId="categoryId"
+            optionLabel="name"
+            optionValue="id"
+            formControlName="categoryId"
+            [options]="categoryOptions()"
+          ></p-select>
+          <app-error-msg
+            [field]="'categoryId'"
+            [forId]="'categoryId'"
+            [control]="form.controls.categoryId"
+            [label]="'tasks.fields.category' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
+      <div class="col-12 md:col-6 p-2">
+        <p-floatLabel variant="on" class="w-full">
+          <p-select
+            size="small"
+            class="w-full"
+            [filter]="true"
+            appendTo="body"
+            inputId="subcategoryId"
+            optionLabel="name"
+            optionValue="id"
+            formControlName="subcategoryId"
+            [options]="subcategoryOptions()"
+          ></p-select>
+          <app-error-msg
+            [field]="'subcategoryId'"
+            [forId]="'subcategoryId'"
+            [control]="form.controls.subcategoryId"
+            [label]="'tasks.fields.subcategory' | translate"
+          />
+        </p-floatLabel>
+      </div>
+
       <div class="col-12 p-2">
         <label for="assigneeType" id="assigneeType-label" class="block mb-2 text-sm opacity-80">
           {{ 'tasks.fields.assigneeType' | translate }}
