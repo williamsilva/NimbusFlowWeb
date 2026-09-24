@@ -65,9 +65,23 @@ export class TaskTemplatePickerDialogComponent {
     templateId: this.fb.control<string | null>(null),
   });
 
+  /** Evita resetar o form de novo a cada re-execução espúria do effect() (ex.: change detection
+   *  disparada por OUTRO overlay fechando - hide() do próprio p-select ao selecionar uma opção,
+   *  ou onAfterLeave() de outro p-dialog - ver feedback_create_edit_dialog_effect_reset_bug_pattern
+   *  na memória, mesmo bug já achado 2x antes em TasksCreateDialogComponent/
+   *  TasksActivityConfigDialogComponent, faltou aplicar aqui) - achado real 2026-09-24: sem isto,
+   *  o effect() reexecutava resetState() enquanto o usuário ainda escolhia Categoria/Subcategoria/
+   *  Modelo, zerando a seleção que ele acabara de fazer. */
+  private dialogInitialized = false;
+
   constructor() {
     effect(() => {
-      if (!this.visible()) return;
+      if (!this.visible()) {
+        this.dialogInitialized = false;
+        return;
+      }
+      if (this.dialogInitialized) return;
+      this.dialogInitialized = true;
       this.resetState();
       this.api
         .categoryOptions()
