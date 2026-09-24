@@ -2,10 +2,13 @@
    rodapé) - pedido do usuário 2026-09-22 pra ocupar até o rodapé mesmo com colunas vazias.
    align-items default (stretch, não "start") - faz as 4 colunas terem a MESMA altura (a do grid
    inteiro), preenchendo até o fim mesmo a que só tem "Nenhuma tarefa nesta coluna". */
+/* 5 colunas (não 6) - Cancelada não vira coluna do Kanban (pedido do usuário 2026-09-24, ver
+   TasksKanbanBoardComponent.statuses); um repeat(6, ...) sobrando deixava um vão vazio no fim do
+   grid em vez de as 5 colunas dividirem o espaço todo. */
 .kanban-board {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(6, minmax(240px, 1fr));
+  grid-template-columns: repeat(5, minmax(240px, 1fr));
   min-height: calc(100vh - 300px);
   overflow-x: auto;
   padding-bottom: 0.5rem;
@@ -13,7 +16,7 @@
 
 @media (max-width: 1024px) {
   .kanban-board {
-    grid-template-columns: repeat(6, minmax(240px, 85vw));
+    grid-template-columns: repeat(5, minmax(240px, 85vw));
   }
 }
 
